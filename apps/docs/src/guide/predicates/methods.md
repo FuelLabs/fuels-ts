@@ -1,10 +1,10 @@
 # Interacting With Predicates
 
 The `Predicate` class extends the [`Account`](https://docs.fuel.network/docs/fuels-ts/account/) class, inheriting all its methods. Therefore, there are multiple ways to interact with predicates, but broadly speaking, we can think about three:
- - `Checking Balances`
- - `Transactions`
- - `Transfers`
 
+- `Checking Balances`
+- `Transactions`
+- `Transfers`
 
 ## Checking Balances
 
@@ -52,4 +52,4 @@ However, please remember that you can still modify the transfer request details 
 
 You can send funds to another address using the `transfer` method.
 
-<<< @/../../docs-snippets/src/guide/cookbook/transferring-assets.test.ts#transferring-assets-1{ts:line-numbers}
+<<< @/../../docs-snippets2/src/cookbook/wallet-transferring/between-accounts.ts#transferring-assets-1{ts:line-numbers}
