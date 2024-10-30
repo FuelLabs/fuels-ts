@@ -509,6 +509,9 @@ importers:
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../../packages/versions
+      ethers:
+        specifier: ^6.13.2
+        version: 6.13.4(bufferutil@4.0.8)(utf-8-validate@6.0.4)
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -525,6 +528,9 @@ importers:
       flexsearch:
         specifier: ^0.7.43
         version: 0.7.43
+      glob:
+        specifier: ^10.4.5
+        version: 10.4.5
       markdown-it:
         specifier: ^14.1.0
         version: 14.1.0
@@ -9497,10 +9503,6 @@ packages:
   foreground-child@2.0.0:
     resolution: {integrity: sha512-dCIq9FpEcyQyXKCkyzmlPTFNgrCzPudOe+mhvJU5zAtlBnGVy2yKxtfsxK2tQBThwq225jcvBjpw1Gr40uzZCA==}
     engines: {node: '>=8.0.0'}
-
-  foreground-child@3.1.1:
-    resolution: {integrity: sha512-TMKDUnIte6bfb5nWv7V/caI169OHgvwjb7V4WkeUvbQQdjr5rWKqHFiKWb/fcOwB+CzBT+qbWjvj+DVwRskpIg==}
-    engines: {node: '>=14'}
 
   foreground-child@3.3.0:
     resolution: {integrity: sha512-Ld2g8rrAyMYFXBhEqMz8ZAHBi4J4uS1i/CxGMDnjyFWddMXLVcDp051DZfu+t7+ab7Wv6SMqpWmyFIj5UbfFvg==}
@@ -28787,11 +28789,6 @@ snapshots:
       cross-spawn: 7.0.3
       signal-exit: 3.0.7
 
-  foreground-child@3.1.1:
-    dependencies:
-      cross-spawn: 7.0.3
-      signal-exit: 4.1.0
-
   foreground-child@3.3.0:
     dependencies:
       cross-spawn: 7.0.3
@@ -29045,7 +29042,7 @@ snapshots:
 
   glob@10.4.5:
     dependencies:
-      foreground-child: 3.1.1
+      foreground-child: 3.3.0
       jackspeak: 3.4.3
       minimatch: 9.0.5
       minipass: 7.1.2
