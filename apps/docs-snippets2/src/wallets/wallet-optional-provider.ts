@@ -1,7 +1,7 @@
+// #region wallet-optional-provider
 import type { WalletUnlocked } from 'fuels';
 import { Wallet } from 'fuels';
 
-// #region wallet-optional-provider
 // You can create a wallet, without a provider
 let unlockedWalletWithoutProvider: WalletUnlocked = Wallet.generate();
 unlockedWalletWithoutProvider = Wallet.fromPrivateKey(
