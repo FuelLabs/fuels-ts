@@ -1,6 +1,7 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import type { Account } from '@fuel-ts/account';
 import { Contract } from '@fuel-ts/program';
+import { exec } from 'child_process';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
@@ -14,6 +15,22 @@ import {
   runDeploy,
   runInit,
 } from '../utils/runCommands';
+
+beforeAll(async () => {
+  // Kill any existing process at port 4000
+  const killCommand = 'lsof -ti:4000 | xargs kill -9';
+
+  try {
+    await new Promise((resolve) => {
+      exec(killCommand, () => {
+        // Ignore errors since port may not be in use
+        resolve(null);
+      });
+    });
+  } catch (e) {
+    // Ignore errors since port may not be in use
+  }
+});
 
 /**
  * @group node
