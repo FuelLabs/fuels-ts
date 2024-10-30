@@ -23,5 +23,5 @@ members = [
   "sum-option-u8",
   "token-depositor",
   "return-context",
-  "transfer-to-address"
+  "transfer-to-address",
 ]
