@@ -1,5 +1,4 @@
 // #region wallet-unlocked-to-locked
-
 import type { WalletUnlocked } from 'fuels';
 import { Provider, Wallet } from 'fuels';
 
