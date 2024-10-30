@@ -59,4 +59,4 @@ Similarly, the Wallet `address` property is also of type [`AbstractAddress`](../
 
 [Asset IDs](../types/asset-id.md) are a wrapped [b256](../types/bits256.md) value. The following example shows how to create an [`Address`](../../api/Address/Address.md) from a `b256` type:
 
-<<< @/../../docs-snippets2/src/utilities/address-conversion/assets.ts#conversion-4{ts:line-numbers}
+<<< @/../../docs-snippets2/src/utilities/address-conversion/asset-id.ts#conversion-4{ts:line-numbers}
