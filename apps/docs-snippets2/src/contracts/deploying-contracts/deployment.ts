@@ -26,7 +26,7 @@ console.log('transactionResult', transactionResult);
 // #region call
 // Call the contract
 const { waitForResult: waitForCallResult } = await contract.functions
-  .test_function(10)
+  .test_function()
   .call();
 // Await the result of the call
 const { value } = await waitForCallResult();
