@@ -97,7 +97,6 @@ class WalletConnector extends FuelConnector {
     // #endregion fuel-connector-events-currentNetwork
 
     // #region fuel-connector-events-assets
-
     const assets: Array<Asset> = [
       {
         name: 'Ethereum',
