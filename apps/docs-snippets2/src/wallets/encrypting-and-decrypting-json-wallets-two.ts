@@ -3,9 +3,6 @@ import { Provider, Wallet } from 'fuels';
 
 import { LOCAL_NETWORK_URL } from '../env';
 
-/**
- * @group node
- */
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 
 const newJsonWallet = await Wallet.generate({
@@ -26,4 +23,9 @@ const decryptedWallet = await Wallet.fromEncryptedJson(
 // Use the decrypted wallet
 const myBalance = await decryptedWallet.getBalance();
 // #endregion encrypting-and-decrypting-json-wallets-2
+
+/**
+ * @group node
+ */
+
 console.log('myBalance', myBalance);
