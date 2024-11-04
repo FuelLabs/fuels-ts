@@ -1,3 +1,4 @@
+// #region custom-transactions-contract-calls
 import { bn, buildFunctionResult, Contract, Provider, Wallet } from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
@@ -10,7 +11,6 @@ const { contract } = await deploy.waitForResult();
 
 const receiverWallet = Wallet.generate({ provider });
 
-// #region custom-transactions-contract-calls
 const amountToRecipient = bn(10_000); // 0x2710
 // Connect to the contract
 const contractInstance = new Contract(contract.id, contract.interface, wallet);

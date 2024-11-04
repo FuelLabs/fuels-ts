@@ -1,3 +1,4 @@
+// #region transferring-assets-3
 import { bn, Provider, Wallet } from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY, WALLET_PVT_KEY_2 } from '../../env';
@@ -6,7 +7,6 @@ const provider = await Provider.create(LOCAL_NETWORK_URL);
 const sender = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const destination = Wallet.fromPrivateKey(WALLET_PVT_KEY_2, provider);
 
-// #region transferring-assets-3
 const amountToTransfer = 200;
 const assetId = provider.getBaseAssetId();
 

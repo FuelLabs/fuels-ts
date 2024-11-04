@@ -1,3 +1,4 @@
+// #region deposit-and-withdraw-cookbook-3
 import { Provider, Wallet } from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../env';
@@ -17,7 +18,6 @@ const { contract } = await deploy.waitForResult();
 const depositAmount = 100_000;
 const liquidityOwner = Wallet.generate({ provider });
 
-// #region deposit-and-withdraw-cookbook-3
 const { waitForResult } = await contract.functions
   .withdraw({ bits: liquidityOwner.address.toB256() })
   .callParams({ forward: [depositAmount, provider.getBaseAssetId()] })

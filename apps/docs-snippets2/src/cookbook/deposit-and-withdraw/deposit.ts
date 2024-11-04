@@ -1,3 +1,4 @@
+// #region deposit-and-withdraw-cookbook-2
 import { getMintedAssetId, Provider, Wallet, ZeroBytes32 } from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../env';
@@ -14,7 +15,6 @@ const deploy = await LiquidityPoolFactory.deploy(wallet, {
 
 const { contract } = await deploy.waitForResult();
 
-// #region deposit-and-withdraw-cookbook-2
 const depositAmount = 100_000;
 const liquidityOwner = Wallet.generate({ provider });
 
