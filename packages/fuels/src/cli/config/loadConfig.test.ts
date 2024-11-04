@@ -1,6 +1,7 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
+import { mockCheckForUpdates } from '../../../test/utils/mockCheckForUpdates';
 import {
   runInit,
   bootstrapProject,
@@ -18,6 +19,10 @@ import { loadConfig } from './loadConfig';
  */
 describe('loadConfig', () => {
   const paths = bootstrapProject(__filename);
+
+  beforeEach(() => {
+    mockCheckForUpdates();
+  });
 
   afterEach(() => {
     resetConfigAndMocks(paths.fuelsConfigPath);
