@@ -10,7 +10,6 @@
     "@fuel-ts/account": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
-    "ethers": "^6.13.2",
     "fuels": "workspace:*",
     "vitest": "~2.0.5"
   },

@@ -58,4 +58,6 @@ The same method is also accessible within a function invocation scope, so it can
 
 ## Full Example
 
+Here is the full example of the transaction parameters:
+
 <<< @/../../docs-snippets2/src/transactions/transaction-parameters.ts#full{ts:line-numbers}
