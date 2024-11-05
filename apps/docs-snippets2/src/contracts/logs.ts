@@ -23,7 +23,6 @@ const { waitForResult } = await contract.functions
   .call();
 
 const { logs } = await waitForResult();
-console.log(logs);
 // #endregion full
 console.log('log[0]', logs[0].toNumber() === value1);
 console.log('log[1]', logs[1] === value2);
