@@ -442,4 +442,4 @@ For a deeper understanding of `Fuel Connectors` and how to start using them in y
 
 For a full example of how to use connectors, see the snippet below:
 
-<<< @/../../docs-snippets2/src/wallets/connectors.ts#full{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/full-connectors.ts#full{ts:line-numbers}
