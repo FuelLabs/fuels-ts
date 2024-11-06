@@ -12,6 +12,24 @@ const wrapperFnContents = readFileSync(wrapperFnFilepath, 'utf-8');
 export const wrapSnippet = (filepath: string) => {
   const snippetContents = readFileSync(filepath, 'utf8');
 
+  /**
+   * Test environment
+   */
+  let testEnvironments = '';
+
+  // Check if the file contains 'node' or 'browser' groups at the top of the file
+  const fileContents = readFileSync(filepath, 'utf8');
+  const hasNodeComment = fileContents.includes('@group node');
+  const hasBrowserComment = fileContents.includes('@group browser');
+
+  if (hasNodeComment && !hasBrowserComment) {
+    testEnvironments = '/**\n * @group node\n */';
+  } else if (hasBrowserComment && !hasNodeComment) {
+    testEnvironments = '/**\n * @group browser\n */';
+  } else {
+    testEnvironments = '/**\n * @group node\n * @group browser\n */';
+  }
+
   /*
     Filter all imports from file.
   */
@@ -22,12 +40,12 @@ export const wrapSnippet = (filepath: string) => {
   const snippetsNoImports = imports.length ? snippetContents.split(imports)[1] : snippetContents;
 
   // Does the snippet requires node launcher?
-  const requiresNodeLauncher = /NETWORK_URL/.test(imports);
+  const requiresNodeLauncher = /NETWORK_URL/.test(imports) || /WALLET_/.test(imports);
 
   /*
     Removes .env file import
   */
-  const envImportReg = /\nimport.+\{.+([\s\S]+).+\}.+from.+'\.\.\/env';/gm;
+  const envImportReg = /\nimport\s*\{([^}]+)\}\s*from\s*['"](\.\.\/)+env['"];/gm;
   if (envImportReg.test(imports)) {
     const allImports = imports.match(envImportReg)?.[0];
     const envImport = `import ${allImports?.split('import ').pop()}`;
@@ -74,6 +92,7 @@ export const wrapSnippet = (filepath: string) => {
   const wrappedSnippet =
     // eslintDisableRule +
     wrapperFnContents
+      .replace('// %TEST_ENVIRONMENT%', testEnvironments)
       .replace('// %IMPORTS%', imports)
       .replace('%NAME%', basename(filepath))
       .replace('// %SNIPPET%', indented)

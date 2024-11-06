@@ -30,6 +30,12 @@ This method also creates a `ScriptTransactionRequest` and populates it with the 
 
 <<< @/../../docs-snippets/src/guide/cookbook/transferring-assets.test.ts#transferring-assets-3{ts:line-numbers}
 
+## Transferring Assets To Multiple Wallets
+
+To transfer assets to multiple wallets, use the `Account.batchTransfer` method:
+
+<<< @/../../docs-snippets2/src/wallets/transfers/batch-transfer.ts#wallet-transferring-6{ts:line-numbers}
+
 ## Transferring Assets To Contracts
 
 When transferring assets to a deployed contract, we use the `transferToContract` method, which shares a similar parameter structure with the `transfer` method.
@@ -42,15 +48,17 @@ Here's an example demonstrating how to use `transferToContract`:
 
 <<< @/../../docs-snippets/src/guide/cookbook/transferring-assets.test.ts#transferring-assets-4{ts:line-numbers}
 
+_Note: Use `transferToContract` exclusively for transfers to a contract. For transfers to an account address, use `transfer` instead._
+
+## Transferring Assets To Multiple Contracts
+
+Similar to the `Account.batchTransfer` method, you can transfer multiple assets to multiple contracts using the `Account.batchTransferToContracts` method. Here's how it works:
+
+<<< @/../../docs-snippets/src/guide/cookbook/transferring-assets.test.ts#transferring-assets-5{ts:line-numbers}
+
 Always remember to call the `waitForResult()` function on the transaction response. That ensures the transaction has been mined successfully before proceeding.
 
-## Transferring Assets To Multiple Wallets
-
-To transfer assets to multiple wallets, use the `Account.batchTransfer` method:
-
-<<< @/../../docs-snippets/src/guide/wallets/wallet-transferring.test.ts#wallet-transferring-6{ts:line-numbers}
-
-This section demonstrates additional examples of transferring assets between wallets and to contracts.
+_Note: Use `batchTransferToContracts` solely for transferring assets to contracts. Do not use account addresses with this method. For multiple account transfers, use `batchTransfer` instead._
 
 ## Checking Balances
 

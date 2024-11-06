@@ -1,6 +1,7 @@
 import * as versionsMod from '@fuel-ts/versions';
 
 import * as checkForAndDisplayUpdatesMod from './checkForAndDisplayUpdates';
+import * as getLatestFuelsVersionMod from './getLatestFuelsVersion';
 import * as loggerMod from './logger';
 
 /**
@@ -15,9 +16,9 @@ describe('checkForAndDisplayUpdates', () => {
     vi.restoreAllMocks();
   });
 
-  const mockDeps = (params: { latestVersion: string; userVersion: string }) => {
+  const mockDeps = (params: { latestVersion?: string; userVersion: string }) => {
     const { latestVersion, userVersion } = params;
-    vi.spyOn(Promise, 'race').mockReturnValue(Promise.resolve(latestVersion));
+    vi.spyOn(getLatestFuelsVersionMod, 'getLatestFuelsVersion').mockResolvedValue(latestVersion);
 
     vi.spyOn(versionsMod, 'versions', 'get').mockReturnValue({
       FUELS: userVersion,
@@ -31,38 +32,45 @@ describe('checkForAndDisplayUpdates', () => {
     return { log, warn };
   };
 
-  test('should fail gracefully if the fetch fails', async () => {
-    vi.spyOn(global, 'fetch').mockImplementation(() =>
-      Promise.reject(new Error('Failed to fetch'))
-    );
-    const log = vi.spyOn(loggerMod, 'log');
-    await expect(checkForAndDisplayUpdatesMod.checkForAndDisplayUpdates()).resolves.not.toThrow();
-    expect(log).toHaveBeenCalledWith('\n Unable to fetch latest fuels version. Skipping...\n');
+  test('unable to fetch latest fuels version', async () => {
+    const { log } = mockDeps({ latestVersion: undefined, userVersion: '0.1.0' });
+
+    await checkForAndDisplayUpdatesMod.checkForAndDisplayUpdates();
+
+    expect(log).toHaveBeenCalledWith(`\n Unable to fetch latest fuels version. Skipping...\n`);
   });
 
-  test('should log a warning if the version is outdated', async () => {
-    const { warn } = mockDeps({ latestVersion: '1.0.1', userVersion: '1.0.0' });
+  test('user fuels version outdated', async () => {
+    const latestVersion = '1.0.1';
+    const userVersion = '1.0.0';
+    const { warn } = mockDeps({ latestVersion, userVersion });
+
     await checkForAndDisplayUpdatesMod.checkForAndDisplayUpdates();
+
     expect(warn).toHaveBeenCalledWith(
-      '\n⚠️ There is a newer version of fuels available: 1.0.1. Your version is: 1.0.0\n'
+      `\n⚠️ There is a newer version of fuels available: ${latestVersion}. Your version is: ${userVersion}\n`
     );
   });
 
-  test('should log a success message if the version is up to date', async () => {
-    const { log } = mockDeps({ latestVersion: '1.0.0', userVersion: '1.0.0' });
+  test('user fuels version up to date', async () => {
+    const latestVersion = '1.0.0';
+    const userVersion = '1.0.0';
+    const { log } = mockDeps({ latestVersion, userVersion });
+
     await checkForAndDisplayUpdatesMod.checkForAndDisplayUpdates();
-    expect(log).toHaveBeenCalledWith('\n✅ Your fuels version is up to date: 1.0.0\n');
+
+    expect(log).toHaveBeenCalledWith(`\n✅ Your fuels version is up to date: ${userVersion}\n`);
   });
 
-  test('should handle fetch timing out', async () => {
-    vi.spyOn(global, 'fetch').mockImplementation(
-      () =>
-        new Promise((resolve) => {
-          setTimeout(resolve, 5000);
-        })
+  test('getLatestFuelsVersion throws', async () => {
+    vi.spyOn(getLatestFuelsVersionMod, 'getLatestFuelsVersion').mockRejectedValue(
+      new Error('Failed to fetch')
     );
+
     const log = vi.spyOn(loggerMod, 'log');
-    await expect(checkForAndDisplayUpdatesMod.checkForAndDisplayUpdates()).resolves.not.toThrow();
-    expect(log).toHaveBeenCalledWith('\n Unable to fetch latest fuels version. Skipping...\n');
+
+    await checkForAndDisplayUpdatesMod.checkForAndDisplayUpdates();
+
+    expect(log).toHaveBeenCalledWith(`\n Unable to fetch latest fuels version. Skipping...\n`);
   });
 });
