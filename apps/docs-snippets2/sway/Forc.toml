@@ -16,4 +16,5 @@ members = [
   "script-sum",
   "simple-predicate",
   "sum-option-u8",
+  "token",
 ]
