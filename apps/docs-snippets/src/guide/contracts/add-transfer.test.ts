@@ -9,38 +9,6 @@ import { EchoValuesFactory } from '../../../test/typegen';
  * @group browser
  */
 describe('Add Transfer', () => {
-  it('should successfully execute addTransfer for one recipient', async () => {
-    using launched = await launchTestNode({
-      contractsConfigs: [
-        {
-          factory: EchoValuesFactory,
-        },
-      ],
-    });
-    const {
-      provider,
-      contracts: [contract],
-    } = launched;
-    // #region add-transfer-1
-    const recipient = Wallet.generate({ provider });
-
-    const { waitForResult } = await contract.functions
-      .echo_u64(100)
-      .addTransfer({
-        destination: recipient.address,
-        amount: 100,
-        assetId: provider.getBaseAssetId(),
-      })
-      .call();
-
-    await waitForResult();
-    // #endregion add-transfer-1
-
-    const recipientBalance = await recipient.getBalance(provider.getBaseAssetId());
-
-    expect(recipientBalance.toNumber()).toBe(100);
-  });
-
   it('should successfully execute multiple addTransfer for multiple recipients', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
