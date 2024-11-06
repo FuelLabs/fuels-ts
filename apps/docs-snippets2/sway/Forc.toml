@@ -13,6 +13,7 @@ members = [
   "echo-std-string",
   "employee-data",
   "input-output-types",
+  "return-context",
   "script-sum",
   "simple-predicate",
   "sum-option-u8",
