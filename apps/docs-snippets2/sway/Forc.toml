@@ -16,6 +16,7 @@ members = [
   "return-context",
   "script-sum",
   "simple-predicate",
+  "storage-test-contract",
   "sum-option-u8",
   "token",
 ]
