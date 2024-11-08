@@ -473,3 +473,9 @@ impl Eq for StructWithEnumArray {
         self.a == other.a
     }
 }
+
+impl Eq for StructWithSingleOption {
+    fn eq(self, other: Self) -> bool {
+        self.a == other.a
+    }
+}
