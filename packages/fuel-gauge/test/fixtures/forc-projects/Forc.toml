@@ -1,9 +1,6 @@
 [workspace]
 members = [
   "abi-contract",
-  "abi-exhaustive-examples",
-  "abi-script",
-  "abi-predicate",
   "advanced-logging",
   "advanced-logging-abi",
   "advanced-logging-other-contract",

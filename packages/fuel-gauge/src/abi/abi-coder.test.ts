@@ -1,17 +1,14 @@
-import { AbiCoder } from '@fuel-ts/abi';
-import { Contract, FuelError, Interface } from 'fuels';
-import type {
-  AssetId,
-  BigNumberish,
-  DecodedValue,
-  EvmAddress,
-  RawSlice,
-  WalletUnlocked,
-} from 'fuels';
+import { bn, FuelError, getRandomB256 } from 'fuels';
+import type { AssetId, BigNumberish, EvmAddress, RawSlice, WalletUnlocked } from 'fuels';
 import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
-import { AbiContract, AbiContractFactory } from '../../test/typegen';
-import { EnumWithNativeInput, ExternalEnumInput } from '../../test/typegen/contracts/AbiContract';
+import { AbiContractFactory } from '../../test/typegen';
+import type { AbiContract } from '../../test/typegen';
+import {
+  EnumWithNativeInput,
+  EnumWithNativeOutput,
+  ExternalEnumInput,
+} from '../../test/typegen/contracts/AbiContract';
 import type {
   EnumWithBuiltinTypeInput,
   EnumWithBuiltinTypeOutput,
@@ -25,7 +22,16 @@ import type {
   StructWithGenericArrayInput,
   StructWithMultiOptionInput,
   StructWithMultiOptionOutput,
-  type StructCInput,
+  StructCInput,
+  StructWithNestedArrayInput,
+  StructWithNestedTupleInput,
+  StructSingleGenericInput,
+  StructWithImplicitGenericsInput,
+  AssetIdInput,
+  StructWithEnumArrayInput,
+  StructWithEnumArrayOutput,
+  StructWithSingleOptionOutput,
+  StructWithSingleOptionInput,
 } from '../../test/typegen/contracts/AbiContract';
 import type { Option, Result, Vec } from '../../test/typegen/contracts/common';
 
@@ -58,37 +64,57 @@ describe('AbiCoder', () => {
       contractsConfigs: [{ factory: AbiContractFactory }],
     });
 
-    const oldAbi = new Interface(AbiContract.abi);
-    const newAbi = AbiCoder.fromAbi({ ...AbiContract.abi, specVersion: '1' });
+    const { contracts, wallets } = launched;
 
-    // vi.spyOn(Interface.prototype, 'getFunction').mockImplementation((name) => {
-    //   const fn = newAbi.functions[name];
-    //   const oldFn = oldAbi.functions[name];
-
-    //   return {
-    //     ...oldFn,
-    //     name,
-    //     encodeArguments: (values) => {
-    //       const encoded = fn.arguments.encode(values);
-    //       return encoded;
-    //     },
-    //     decodeOutput: (data) => {
-    //       const input = arrayify(data);
-    //       const decoded = fn.output.decode(input) as DecodedValue;
-    //       return [decoded, 0];
-    //     },
-    //   };
-    // });
-
-    // const newAbi = adapter(AbiCoder.fromAbi({ ...AbiContract.abi, specVersion: '1' }));
-
-    wallet = launched.wallets[0];
-    contract = new Contract(launched.contracts[0].id, oldAbi, wallet) as AbiContract;
+    wallet = wallets[0];
+    contract = contracts[0] as AbiContract;
     cleanup = launched.cleanup;
   });
 
   afterAll(() => {
     cleanup();
+  });
+
+  describe('configurables', () => {
+    it('should encode/decode just fine', async () => {
+      const EXPECTED = {
+        U8_VALUE: 10,
+        BOOL_VALUE: true,
+        B256_VALUE: '0x38966262edb5997574be45f94c665aedb41a1663f5b0528e765f355086eebf96',
+        OPTION_U8_VALUE: undefined,
+        GENERIC_STRUCT_VALUE: {
+          a: { a: 4, b: 257 },
+          b: 57000,
+        },
+      };
+
+      const { waitForResult } = await contract.functions.configurables().call();
+
+      const { value } = await waitForResult();
+      expect(value).toEqual(EXPECTED);
+    });
+
+    it('should set configurables', async () => {
+      const NEW_CONFIGURABLES = {
+        U8_VALUE: 123,
+        BOOL_VALUE: false,
+        B256_VALUE: getRandomB256(),
+        OPTION_U8_VALUE: 11,
+        GENERIC_STRUCT_VALUE: {
+          a: { a: 234, b: 12 },
+          b: 3525,
+        },
+      };
+
+      const { waitForResult: waitForDeploy } = await AbiContractFactory.deploy(wallet, {
+        configurableConstants: NEW_CONFIGURABLES,
+      });
+
+      const { contract: contractWithConfigurables } = await waitForDeploy();
+      const { waitForResult } = await contractWithConfigurables.functions.configurables().call();
+      const { value } = await waitForResult();
+      expect(value).toEqual(NEW_CONFIGURABLES);
+    });
   });
 
   describe('types_u8', () => {
@@ -104,7 +130,7 @@ describe('AbiCoder', () => {
       expect(value).toBe(expected);
     });
 
-    test.skip('should fail to encode/decode [min - 1]', async () => {
+    test('should fail to encode/decode [min - 1]', async () => {
       const input = U8_MIN - 1;
 
       await expectToThrowFuelError(
@@ -113,12 +139,12 @@ describe('AbiCoder', () => {
       );
     });
 
-    test.skip('should fail to encode/decode [max + 1]', async () => {
-      const input = U8_MAX - 1;
+    test('should fail to encode/decode [max + 1]', async () => {
+      const input = U8_MAX + 1;
 
       await expectToThrowFuelError(
         () => contract.functions.types_u8(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u8.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u8, too many bytes.')
       );
     });
   });
@@ -405,6 +431,7 @@ describe('AbiCoder', () => {
       );
     });
   });
+
   describe('types_str_slice', () => {
     it('should encode/decode just fine', async () => {
       const input = 'Input';
@@ -416,17 +443,7 @@ describe('AbiCoder', () => {
       expect(value).toBe(expected);
     });
   });
-  describe('types_std_string', () => {
-    it('should encode/decode just fine', async () => {
-      const input = 'Input';
-      const expected = 'Output';
 
-      const { waitForResult } = await contract.functions.types_std_string(input).call();
-
-      const { value } = await waitForResult();
-      expect(value).toBe(expected);
-    });
-  });
   describe('types_raw_slice', () => {
     it('should encode/decode just fine', async () => {
       const input: RawSlice = [1, 2, 3];
@@ -436,6 +453,18 @@ describe('AbiCoder', () => {
       const { value } = await waitForResult();
 
       expect(value).toStrictEqual(expected);
+    });
+  });
+
+  describe('types_std_string', () => {
+    it('should encode/decode just fine', async () => {
+      const input = 'Input';
+      const expected = 'Output';
+
+      const { waitForResult } = await contract.functions.types_std_string(input).call();
+
+      const { value } = await waitForResult();
+      expect(value).toBe(expected);
     });
   });
 
@@ -469,7 +498,7 @@ describe('AbiCoder', () => {
         { a: true, b: 10 },
         { a: true, b: 10 },
         { a: true, b: 10 },
-      ] as [{ a: boolean; b: number }, { a: boolean; b: number }, { a: boolean; b: number }]; // @TODO removed once typegen remastered
+      ] as [{ a: boolean; b: number }, { a: boolean; b: number }, { a: boolean; b: number }];
       const expected = [
         { a: false, b: 30 },
         { a: false, b: 30 },
@@ -491,10 +520,14 @@ describe('AbiCoder', () => {
         },
         b: 'A',
       };
-      const input = [INPUT_STRUCT, INPUT_STRUCT];
+      const input = [INPUT_STRUCT, INPUT_STRUCT] as [
+        StructDoubleGenericInput<StructSingleGenericInput<BigNumberish>, string>,
+        StructDoubleGenericInput<StructSingleGenericInput<BigNumberish>, string>,
+      ];
 
       const EXPECTED_STRUCT = {
         a: {
+          // @ts-expect-error: Custom matcher 'toEqualBn'
           a: expect.toEqualBn(20),
         },
         b: 'B',
@@ -502,7 +535,6 @@ describe('AbiCoder', () => {
       const expected = [EXPECTED_STRUCT, EXPECTED_STRUCT];
 
       const { waitForResult } = await contract.functions
-        // @ts-expect-error - @TODO remove once typegen remastered
         .types_array_with_generic_struct(input)
         .call();
 
@@ -513,78 +545,10 @@ describe('AbiCoder', () => {
 
   describe('types_array_with_vector', () => {
     it('should encode/decode just fine', async () => {
-      const input = [[1, 2, 3]];
+      const input = [[1, 2, 3]] as [Vec<BigNumberish>];
       const expected = [[3, 2, 1]];
 
-      // @ts-expect-error - @TODO remove once typegen remastered
       const { waitForResult } = await contract.functions.types_array_with_vector(input).call();
-
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
-    });
-  });
-
-  /**
-   * Tuples
-   */
-  describe('types_tuple', () => {
-    it('should encode/decode just fine', async () => {
-      const input = [1, 2, 3] as [number, number, number];
-      const expected = [3, 2, 1] as [number, number, number];
-
-      const { waitForResult } = await contract.functions.types_tuple(input).call();
-
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
-    });
-  });
-  describe('types_tuple_complex', () => {
-    it('should encode/decode just fine', async () => {
-      const input = [1, { a: { a: 10 } }, 'ABC'];
-      const expected = [3, { a: { a: expect.toEqualBn(30) } }, 'CBA'];
-
-      // @ts-expect-error - @TODO remove once typegen remastered
-      const { waitForResult } = await contract.functions.types_tuple_complex(input).call();
-
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
-    });
-  });
-  describe('types_tuple_with_native_types', () => {
-    it('should encode/decode just fine', async () => {
-      const A: AssetId = {
-        bits: '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-      };
-      const B: AssetId = {
-        bits: '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
-      };
-      const input = [A, B, true];
-      const expected = [B, A, false];
-
-      const { waitForResult } = await contract.functions
-        // @ts-expect-error - @TODO remove once typegen remastered
-        .types_tuple_with_native_types(input)
-        .call();
-
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
-    });
-  });
-  describe('types_alias_tuple_with_native_types', () => {
-    it('should encode/decode just fine', async () => {
-      const A: AssetId = {
-        bits: '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-      };
-      const B: AssetId = {
-        bits: '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
-      };
-      const input = [A, B, true];
-      const expected = [B, A, false];
-
-      const { waitForResult } = await contract.functions
-        // @ts-expect-error - @TODO remove once typegen remastered
-        .types_alias_tuple_with_native_types(input)
-        .call();
 
       const { value } = await waitForResult();
       expect(value).toEqual(expected);
@@ -605,6 +569,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_struct_generic', () => {
     it('should encode/decode just fine', async () => {
       const input = { a: 10 };
@@ -616,18 +581,20 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_struct_with_tuple', () => {
     it('should encode/decode just fine', async () => {
-      const input = { a: [true, 10] };
+      const input: StructSingleGenericInput<[boolean, BigNumberish]> = { a: [true, 10] };
+      // @ts-expect-error: Custom matcher 'toEqualBn'
       const expected = { a: [false, expect.toEqualBn(20)] };
 
-      // @ts-expect-error - @TODO remove once typegen remastered
       const { waitForResult } = await contract.functions.types_struct_with_tuple(input).call();
 
       const { value } = await waitForResult();
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_struct_double_generic', () => {
     it('should encode/decode just fine', async () => {
       const input = { a: 10, b: { a: 10 } };
@@ -639,87 +606,45 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
-  describe('type_struct_external', () => {
+
+  describe('types_struct_external', () => {
     it('should encode/decode just fine', async () => {
       const input = { value: 10 };
+      // @ts-expect-error: Custom matcher 'toEqualBn'
       const expected = { value: expect.toEqualBn(20) };
 
-      const { waitForResult } = await contract.functions.type_struct_external(input).call();
+      const { waitForResult } = await contract.functions.types_struct_external(input).call();
 
       const { value } = await waitForResult();
       expect(value).toEqual(expected);
     });
   });
-  describe('types_struct_with_nested_array', () => {
+
+  describe('types_struct_with_implicit_generics', () => {
     it('should encode/decode just fine', async () => {
-      const INPUT_STRUCT = { a: { a: 10 }, b: 'A' };
-      const input = { a: [INPUT_STRUCT, INPUT_STRUCT] };
-      const EXPECTED_STRUCT = { a: { a: expect.toEqualBn(20) }, b: 'B' };
-      const EXPECTED = { a: [EXPECTED_STRUCT, EXPECTED_STRUCT] };
+      const INPUT_B256 = '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+      const INPUT: StructWithImplicitGenericsInput<string, number> = {
+        a: [INPUT_B256, INPUT_B256, INPUT_B256],
+        b: [INPUT_B256, 10],
+      };
+
+      const EXPECTED_B256 = '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb';
+
+      const EXPECTED: StructWithImplicitGenericsInput<string, number> = {
+        a: [EXPECTED_B256, EXPECTED_B256, EXPECTED_B256],
+        b: [EXPECTED_B256, 25],
+      };
 
       const { waitForResult } = await contract.functions
-        .types_struct_with_nested_array(input)
+        .types_struct_with_implicit_generics(INPUT)
         .call();
 
       const { value } = await waitForResult();
       expect(value).toEqual(EXPECTED);
     });
   });
-  describe('types_struct_with_nested_tuple', () => {
-    it('should encode/decode just fine', async () => {
-      const input = { a: [10, { a: { a: 20 } }, 'ABC'] };
-      const expected = { a: [30, { a: { a: expect.toEqualBn(40) } }, 'CBA'] };
 
-      const { waitForResult } = await contract.functions
-        .types_struct_with_nested_tuple(input)
-        .call();
-
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
-    });
-  });
-  describe('types_struct_with_nested_struct', () => {
-    it('should encode/decode just fine', async () => {
-      const input = { a: { a: { a: 10 }, b: 20 } };
-      const expected = { a: { a: { a: 30 }, b: 40 } };
-
-      const { waitForResult } = await contract.functions
-        .types_struct_with_nested_struct(input)
-        .call();
-
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
-    });
-  });
-  describe.todo('types_struct_with_multiple_struct_params', () => {
-    it('should encode/decode just fine', async () => {
-      const STRUCT_A = { propA1: 10 };
-      const STRUCT_B = { propB1: STRUCT_A, propB2: 20 };
-
-      const INPUT_X = STRUCT_A;
-      const INPUT_Y = STRUCT_B;
-      const INPUT_Z: StructCInput = {
-        propC1: STRUCT_A,
-        propC2: [STRUCT_B],
-        propC3: {
-          propD1: [{ propE1: STRUCT_A, propE2: STRUCT_B, propE3: 30 }],
-          propD2: 40,
-          propD3: { propF1: 50, propF2: 'A' },
-        },
-      };
-
-      const { waitForResult } = await contract.functions
-        .types_struct_with_multiple_struct_params(INPUT_X, INPUT_Y, INPUT_Z)
-        .call();
-
-      const { value } = await waitForResult();
-      // expect(value).toEqual(expected);
-    });
-  });
-  describe.todo('types_struct_with_implicit_generics', () => {});
-
-  // @todo Investigate: returning the input as the output
-  describe.skip('types_struct_with_array', () => {
+  describe('types_struct_with_array', () => {
     it('should encode/decode just fine', async () => {
       // Inputs
       const inputB256: string =
@@ -749,10 +674,211 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
-  describe.todo('types_struct_with_vector');
-  describe.todo('types_struct_with_array_of_enums');
+
+  describe('types_struct_with_vector', () => {
+    it('should encode/decode just fine', async () => {
+      const input = { a: 1, b: [1, 2, 3] };
+      const expected = { a: 3, b: [3, 2, 1] };
+
+      const { waitForResult } = await contract.functions.types_struct_with_vector(input).call();
+
+      const { value } = await waitForResult();
+      expect(value).toEqual(expected);
+    });
+  });
+
+  /**
+   * TODO: Fix this test
+   *
+   * Currently the expected value is not correct
+   */
+  describe.todo('types_struct_with_array_of_enums', () => {
+    it('should encode/decode just fine', async () => {
+      const input: StructWithEnumArrayInput = {
+        a: [EnumWithNativeInput.Checked, EnumWithNativeInput.Checked, EnumWithNativeInput.Checked],
+      };
+      const expected: StructWithEnumArrayOutput = {
+        a: [
+          EnumWithNativeOutput.Pending,
+          EnumWithNativeOutput.Pending,
+          EnumWithNativeOutput.Pending,
+        ],
+      };
+
+      const { waitForResult } = await contract.functions
+        .types_struct_with_array_of_enums(input)
+        .call();
+
+      const { value } = await waitForResult();
+      expect(value).toEqual(expected);
+    });
+  });
+
+  describe('types_struct_with_nested_array', () => {
+    it('should encode/decode just fine', async () => {
+      const INPUT_STRUCT = { a: { a: 10 }, b: 'A' };
+      const input: StructWithNestedArrayInput = { a: [INPUT_STRUCT, INPUT_STRUCT] };
+      // @ts-expect-error: Custom matcher 'toEqualBn'
+      const EXPECTED_STRUCT = { a: { a: expect.toEqualBn(20) }, b: 'B' };
+      const EXPECTED = { a: [EXPECTED_STRUCT, EXPECTED_STRUCT] };
+
+      const { waitForResult } = await contract.functions
+        .types_struct_with_nested_array(input)
+        .call();
+
+      const { value } = await waitForResult();
+      expect(value).toEqual(EXPECTED);
+    });
+  });
+
+  describe('types_struct_with_nested_tuple', () => {
+    it('should encode/decode just fine', async () => {
+      const input: StructWithNestedTupleInput = { a: [10, { a: { a: 20 } }, 'ABC'] };
+      // @ts-expect-error: Custom matcher 'toEqualBn'
+      const expected = { a: [30, { a: { a: expect.toEqualBn(40) } }, 'CBA'] };
+
+      const { waitForResult } = await contract.functions
+        .types_struct_with_nested_tuple(input)
+        .call();
+
+      const { value } = await waitForResult();
+      expect(value).toEqual(expected);
+    });
+  });
+
+  describe('types_struct_with_nested_struct', () => {
+    it('should encode/decode just fine', async () => {
+      const input = { a: { a: { a: 10 }, b: 20 } };
+      const expected = { a: { a: { a: 30 }, b: 40 } };
+
+      const { waitForResult } = await contract.functions
+        .types_struct_with_nested_struct(input)
+        .call();
+
+      const { value } = await waitForResult();
+      expect(value).toEqual(expected);
+    });
+  });
+
+  describe.todo('types_struct_with_multiple_struct_params', () => {
+    it('should encode/decode just fine', async () => {
+      const STRUCT_A = { propA1: 10 };
+      const STRUCT_B = { propB1: STRUCT_A, propB2: 20 };
+
+      const INPUT_X = STRUCT_A;
+      const INPUT_Y = STRUCT_B;
+      const INPUT_Z: StructCInput = {
+        propC1: STRUCT_A,
+        propC2: [STRUCT_B],
+        propC3: {
+          propD1: [{ propE1: STRUCT_A, propE2: STRUCT_B, propE3: 30 }],
+          propD2: 40,
+          propD3: { propF1: 50, propF2: 'A' },
+        },
+      };
+
+      const { waitForResult } = await contract.functions
+        .types_struct_with_multiple_struct_params(INPUT_X, INPUT_Y, INPUT_Z)
+        .call();
+
+      const { value } = await waitForResult();
+      // expect(value).toEqual(expected);
+    });
+  });
+
   describe.todo('types_struct_with_complex_nested_struct');
-  describe.todo('types_struct_with_single_option');
+
+  describe('types_struct_with_single_option', () => {
+    it('should encode/decode just fine', async () => {
+      const input: StructWithSingleOptionInput = {
+        a: {
+          a: [1, undefined, 2, undefined, 3],
+        },
+      };
+      const expected: StructWithSingleOptionOutput = {
+        a: undefined,
+      };
+
+      const { waitForResult } = await contract.functions
+        .types_struct_with_single_option(input)
+        .call();
+
+      const { value } = await waitForResult();
+      expect(value).toEqual(expected);
+    });
+  });
+
+  /**
+   * Tuples
+   */
+  describe('types_tuple', () => {
+    it('should encode/decode just fine', async () => {
+      const input = [1, 2, 3] as [number, number, number];
+      const expected = [3, 2, 1] as [number, number, number];
+
+      const { waitForResult } = await contract.functions.types_tuple(input).call();
+
+      const { value } = await waitForResult();
+      expect(value).toEqual(expected);
+    });
+  });
+
+  describe('types_tuple_complex', () => {
+    it('should encode/decode just fine', async () => {
+      const input = [1, { a: { a: 10 } }, 'ABC'] as [
+        BigNumberish,
+        StructSingleGenericInput<StructSingleGenericInput<BigNumberish>>,
+        string,
+      ];
+      // @ts-expect-error: Custom matcher 'toEqualBn'
+      const expected = [3, { a: { a: expect.toEqualBn(30) } }, 'CBA'];
+
+      const { waitForResult } = await contract.functions.types_tuple_complex(input).call();
+
+      const { value } = await waitForResult();
+      expect(value).toEqual(expected);
+    });
+  });
+
+  describe('types_tuple_with_native_types', () => {
+    it('should encode/decode just fine', async () => {
+      const A: AssetId = {
+        bits: '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+      };
+      const B: AssetId = {
+        bits: '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+      };
+      const input = [A, B, true] as [AssetIdInput, AssetIdInput, boolean];
+      const expected = [B, A, false];
+
+      const { waitForResult } = await contract.functions
+        .types_tuple_with_native_types(input)
+        .call();
+
+      const { value } = await waitForResult();
+      expect(value).toEqual(expected);
+    });
+  });
+
+  describe('types_alias_tuple_with_native_types', () => {
+    it('should encode/decode just fine', async () => {
+      const A: AssetId = {
+        bits: '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+      };
+      const B: AssetId = {
+        bits: '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+      };
+      const input = [A, B, true] as [AssetIdInput, AssetIdInput, boolean];
+      const expected = [B, A, false];
+
+      const { waitForResult } = await contract.functions
+        .types_alias_tuple_with_native_types(input)
+        .call();
+
+      const { value } = await waitForResult();
+      expect(value).toEqual(expected);
+    });
+  });
 
   /**
    * Enums
@@ -768,9 +894,11 @@ describe('AbiCoder', () => {
       expect(value).toBe(expected);
     });
   });
+
   describe('types_enum_with_builtin_type', () => {
     it('should encode/decode just fine', async () => {
       const input: EnumWithBuiltinTypeInput = { a: true };
+      // @ts-expect-error: Custom matcher 'toEqualBn'
       const expected: EnumWithBuiltinTypeOutput = { b: expect.toEqualBn(20) };
 
       const { waitForResult } = await contract.functions.types_enum_with_builtin_type(input).call();
@@ -779,6 +907,7 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
+
   describe('types_enum_with_vector', () => {
     it('should encode/decode just fine', async () => {
       const input: EnumWithVectorInput = { a: 10 };
@@ -790,6 +919,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_generic_enum', () => {
     it('should encode/decode just fine', async () => {
       const input = { a: 10 };
@@ -801,11 +931,11 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_enum_external', () => {
-    // @TODO revist this one, can't return B from this Sway function.
     it('should encode/decode just fine', async () => {
       const input = ExternalEnumInput.A;
-      const expected = ExternalEnumInput.A; // Should be B
+      const expected = ExternalEnumInput.B;
 
       const { waitForResult } = await contract.functions.types_enum_external(input).call();
 
@@ -813,6 +943,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_enum_with_structs', () => {
     it('should encode/decode just fine', async () => {
       const input = { a: EnumWithNativeInput.Checked };
@@ -839,6 +970,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_vector_boolean', () => {
     it('should encode/decode just fine', async () => {
       const input = [true, false, true, false];
@@ -850,6 +982,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_vector_inside_vector', () => {
     it('should encode/decode just fine', async () => {
       const input = [[1, 2, 3]];
@@ -864,6 +997,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_vector_with_struct', () => {
     it('should encode/decode just fine', async () => {
       const input = [{ a: true, b: 10 }];
@@ -875,6 +1009,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_vector_option', () => {
     it('should encode/decode just fine', async () => {
       const input: Vec<StructWithMultiOptionInput> = [{ a: [1, 2, 3, 4, 5] }];
@@ -890,8 +1025,7 @@ describe('AbiCoder', () => {
   /**
    * Options
    */
-  // @todo Investigate: returning the input as the output
-  describe.skip('types_option', () => {
+  describe('types_option', () => {
     it('should encode/decode just fine', async () => {
       const input: Option<BigNumberish> = 10; // Some
       const expected: Option<BigNumberish> = undefined; // None
@@ -902,8 +1036,8 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
-  // @todo Investigate: returning the input as the output
-  describe.skip('types_option_geo', () => {
+
+  describe('types_option_struct', () => {
     it('should encode/decode just fine', async () => {
       const input: Option<StructSimpleInput> = {
         a: true,
@@ -911,7 +1045,7 @@ describe('AbiCoder', () => {
       };
       const expected: Option<StructSimpleOutput> = undefined;
 
-      const { waitForResult } = await contract.functions.types_option_geo(input).call();
+      const { waitForResult } = await contract.functions.types_option_struct(input).call();
 
       const { value } = await waitForResult();
       expect(value).toEqual(expected);
@@ -921,6 +1055,66 @@ describe('AbiCoder', () => {
   /**
    * Native types
    */
+  describe('types_identity_address', () => {
+    it('should encode/decode just fine', async () => {
+      const input: IdentityInput = {
+        Address: { bits: '0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' },
+      };
+      const expected: IdentityOutput = {
+        Address: { bits: '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' },
+      };
+
+      const { waitForResult } = await contract.functions.types_identity_address(input).call();
+
+      const { value } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+    });
+  });
+
+  describe('types_identity_contract_id', () => {
+    it('should encode/decode just fine', async () => {
+      const input: IdentityInput = {
+        ContractId: { bits: '0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' },
+      };
+      const expected: IdentityOutput = {
+        ContractId: { bits: '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' },
+      };
+
+      const { waitForResult } = await contract.functions.types_identity_contract_id(input).call();
+
+      const { value } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+    });
+  });
+
+  describe('types_address', () => {
+    it('should encode/decode just fine', async () => {
+      const input = { bits: '0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' };
+      const expected = {
+        bits: '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+      };
+
+      const { waitForResult } = await contract.functions.types_address(input).call();
+
+      const { value } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+    });
+  });
+
+  describe('types_contract_id', () => {
+    it('should encode/decode just fine', async () => {
+      const input = { bits: '0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' };
+      const expected = {
+        bits: '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+      };
+
+      const { waitForResult } = await contract.functions.types_contract_id(input).call();
+
+      const { value } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+    });
+  });
+
   describe('types_asset_id', () => {
     it('should encode/decode just fine', async () => {
       const input: AssetId = {
@@ -935,62 +1129,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
-  describe('type_identity_address', () => {
-    it('should encode/decode just fine', async () => {
-      const input: IdentityInput = {
-        Address: { bits: '0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' },
-      };
-      const expected: IdentityOutput = {
-        Address: { bits: '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' },
-      };
 
-      const { waitForResult } = await contract.functions.type_identity_address(input).call();
-
-      const { value } = await waitForResult();
-      expect(value).toStrictEqual(expected);
-    });
-  });
-  describe('type_identity_contract_id', () => {
-    it('should encode/decode just fine', async () => {
-      const input: IdentityInput = {
-        ContractId: { bits: '0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' },
-      };
-      const expected: IdentityOutput = {
-        ContractId: { bits: '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' },
-      };
-
-      const { waitForResult } = await contract.functions.type_identity_contract_id(input).call();
-
-      const { value } = await waitForResult();
-      expect(value).toStrictEqual(expected);
-    });
-  });
-  describe('type_address', () => {
-    it('should encode/decode just fine', async () => {
-      const input = { bits: '0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' };
-      const expected = {
-        bits: '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
-      };
-
-      const { waitForResult } = await contract.functions.type_address(input).call();
-
-      const { value } = await waitForResult();
-      expect(value).toStrictEqual(expected);
-    });
-  });
-  describe('type_contract_id', () => {
-    it('should encode/decode just fine', async () => {
-      const input = { bits: '0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' };
-      const expected = {
-        bits: '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
-      };
-
-      const { waitForResult } = await contract.functions.type_contract_id(input).call();
-
-      const { value } = await waitForResult();
-      expect(value).toStrictEqual(expected);
-    });
-  });
   describe('types_evm_address', () => {
     it('should encode/decode just fine', async () => {
       const input: EvmAddress = {
@@ -1006,12 +1145,14 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
+
   describe('types_result', () => {
     it('should accept result just fine [Ok - 10]', async () => {
       const input: Result<BigNumberish, BigNumberish> = {
         Ok: 10,
       };
       const expected: Result<BigNumberish, BigNumberish> = {
+        // @ts-expect-error: Custom matcher 'toEqualBn'
         Ok: expect.toEqualBn(2),
       };
 
@@ -1073,6 +1214,7 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
+
   describe('types_void_then_value', () => {
     it('should encode/decode just fine', async () => {
       const inputX = undefined;
@@ -1087,6 +1229,7 @@ describe('AbiCoder', () => {
       expect(value).toBe(expected);
     });
   });
+
   describe('types_value_then_void', () => {
     it('should encode/decode just fine', async () => {
       const inputX = 10;
@@ -1108,6 +1251,7 @@ describe('AbiCoder', () => {
       expect(value).toBeUndefined();
     });
   });
+
   describe('types_value_then_void_then_value', () => {
     it('should encode/decode just fine', async () => {
       const inputX = 10;
@@ -1122,6 +1266,7 @@ describe('AbiCoder', () => {
       expect(value).toBeUndefined();
     });
   });
+
   describe('types_value_then_value_then_void_then_void', () => {
     it('should encode/decode just fine', async () => {
       const inputX = 10;
@@ -1152,14 +1297,12 @@ describe('AbiCoder', () => {
 
   /**
    * Multi-arg
-   *
-   * @todo resolve the below issue.
-   * Most of these are suffering from the similar issue around returning the input as the output.
    */
   describe('multi_arg_u64_u64', () => {
     it('should encode/decode just fine', async () => {
       const inputX = 1;
       const inputY = 2;
+      // @ts-expect-error: Custom matcher 'toEqualBn'
       const expected = expect.toEqualBn(3);
 
       const { waitForResult } = await contract.functions.multi_arg_u64_u64(inputX, inputY).call();
@@ -1168,9 +1311,8 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
-  // @todo Investigate: returning the input as the output
-  describe.skip('multi_arg_b256_bool', () => {
-    // @todo investigate, this is returning the input as the output.
+
+  describe('multi_arg_b256_bool', () => {
     it('should encode/decode just fine', async () => {
       const inputX = '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
       const inputY = true;
@@ -1185,8 +1327,8 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
-  // @todo Investigate: returning the input as the output
-  describe.skip('multi_arg_vector_vector', () => {
+
+  describe('multi_arg_vector_vector', () => {
     it('should encode/decode just fine', async () => {
       const inputX = [1, 2, 3];
       const inputY = [4, 5, 6];
@@ -1203,8 +1345,8 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
-  // @todo Investigate: returning the input as the output
-  describe.skip('multi_arg_vector_b256', () => {
+
+  describe('multi_arg_vector_b256', () => {
     it('should encode/decode just fine', async () => {
       const inputX = [1, 2, 3];
       const inputY = '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
@@ -1221,8 +1363,8 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
-  // @todo Investigate: returning the input as the output
-  describe.skip('multi_arg_struct_vector', () => {
+
+  describe('multi_arg_struct_vector', () => {
     it('should encode/decode just fine', async () => {
       const inputX = { a: true, b: 1 };
       const inputY = [1, 2, 3];
@@ -1236,8 +1378,116 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
-  describe.skip('multi_arg_u64_struct');
-  describe.skip('multi_arg_str_str');
-  describe.skip('multi_arg_u32_vector_vector');
-  describe.skip('multi_arg_complex');
+
+  describe('multi_arg_u64_struct', () => {
+    it('should encode/decode just fine', async () => {
+      const inputX = bn(99);
+      const inputY: StructSimpleInput = { a: true, b: 51 };
+      const expected = [bn(3), { a: false, b: 4 }];
+
+      const { waitForResult } = await contract.functions
+        .multi_arg_u64_struct(inputX, inputY)
+        .call();
+
+      const { value } = await waitForResult();
+      expect(JSON.stringify(value)).toEqual(JSON.stringify(expected));
+    });
+  });
+
+  describe('multi_arg_str_str', () => {
+    it('should encode/decode just fine', async () => {
+      const inputX = 'Input';
+      const inputY = 'False';
+
+      const expected = ['Fuuel', 'Niice'];
+
+      const { waitForResult } = await contract.functions.multi_arg_str_str(inputX, inputY).call();
+
+      const { value } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+    });
+  });
+
+  describe('multi_arg_u32_vector_vector', () => {
+    it('should encode/decode just fine', async () => {
+      const inputX = 1;
+      const inputY = [bn(10020), bn(1231231), bn(777657)];
+      const inputZ = [bn(99), bn(101)];
+
+      const expected = [2, [bn(7), bn(8), bn(9)], [bn(10), bn(11), bn(12)]];
+
+      const { waitForResult } = await contract.functions
+        .multi_arg_u32_vector_vector(inputX, inputY, inputZ)
+        .call();
+
+      const { value } = await waitForResult();
+      expect(JSON.stringify(value)).toEqual(JSON.stringify(expected));
+    });
+  });
+
+  describe('multi_arg_complex', () => {
+    it('should encode/decode just fine', async () => {
+      const inputX: StructDoubleGenericInput<[string, string, string], number> = {
+        a: [
+          '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+          '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+          '0xcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc',
+        ],
+        b: 10,
+      };
+
+      const inputY: [
+        StructDoubleGenericInput<BigNumberish, boolean>,
+        StructDoubleGenericInput<BigNumberish, boolean>,
+        StructDoubleGenericInput<BigNumberish, boolean>,
+        StructDoubleGenericInput<BigNumberish, boolean>,
+      ] = [
+        { a: bn(99), b: false },
+        { a: bn(199), b: false },
+        { a: bn(2000), b: false },
+        { a: bn(31), b: true },
+      ];
+
+      const inputZ: [string, boolean] = ['Input', true];
+
+      const inputA = { a: true, b: 10 };
+
+      const expectedX: StructDoubleGenericInput<[string, string, string], number> = {
+        a: [
+          '0xdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd',
+          '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+        ],
+        b: 99,
+      };
+
+      const expectedY: [
+        StructDoubleGenericInput<BigNumberish, boolean>,
+        StructDoubleGenericInput<BigNumberish, boolean>,
+        StructDoubleGenericInput<BigNumberish, boolean>,
+        StructDoubleGenericInput<BigNumberish, boolean>,
+      ] = [
+        { a: bn(11), b: true },
+        { a: bn(99), b: true },
+        { a: bn(567), b: true },
+        { a: bn(971), b: false },
+      ];
+
+      const expectedZ: [string, boolean] = ['tupni', false];
+
+      const expectedA = {
+        a: false,
+        b: 57,
+      };
+
+      const { waitForResult } = await contract.functions
+        .multi_arg_complex(inputX, inputY, inputZ, inputA)
+        .call();
+
+      const { value } = await waitForResult();
+      expect(JSON.stringify(value)).toEqual(
+        JSON.stringify([expectedX, expectedY, expectedZ, expectedA])
+      );
+    });
+  });
 });
