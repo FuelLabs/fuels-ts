@@ -1,6 +1,7 @@
 [workspace]
 members = [
   "bytecode-input",
+  "configurable-pin",
   "counter",
   "echo-values",
   "script-transfer-to-contract",
@@ -14,9 +15,13 @@ members = [
   "employee-data",
   "input-output-types",
   "return-context",
+  "predicate-main-args-struct",
+  "predicate-multi-args",
+  "return-true-predicate",
   "script-sum",
   "simple-predicate",
   "storage-test-contract",
   "sum-option-u8",
   "token",
+  "whitelisted-address-predicate",
 ]
