@@ -1,8 +1,9 @@
-import { bn, Contract, FuelError, Interface } from 'fuels';
+import { bn, FuelError, getRandomB256 } from 'fuels';
 import type { AssetId, BigNumberish, EvmAddress, RawSlice, WalletUnlocked } from 'fuels';
 import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
-import { AbiContract, AbiContractFactory } from '../../test/typegen';
+import { AbiContractFactory } from '../../test/typegen';
+import type { AbiContract } from '../../test/typegen';
 import {
   EnumWithNativeInput,
   EnumWithNativeOutput,
@@ -63,10 +64,10 @@ describe('AbiCoder', () => {
       contractsConfigs: [{ factory: AbiContractFactory }],
     });
 
-    const oldAbi = new Interface(AbiContract.abi);
+    const { contracts, wallets } = launched;
 
-    wallet = launched.wallets[0];
-    contract = new Contract(launched.contracts[0].id, oldAbi, wallet) as AbiContract;
+    wallet = wallets[0];
+    contract = contracts[0] as AbiContract;
     cleanup = launched.cleanup;
   });
 
@@ -74,7 +75,47 @@ describe('AbiCoder', () => {
     cleanup();
   });
 
-  describe.todo('configurables');
+  describe('configurables', () => {
+    it('should encode/decode just fine', async () => {
+      const EXPECTED = {
+        U8_VALUE: 10,
+        BOOL_VALUE: true,
+        B256_VALUE: '0x38966262edb5997574be45f94c665aedb41a1663f5b0528e765f355086eebf96',
+        OPTION_U8_VALUE: undefined,
+        GENERIC_STRUCT_VALUE: {
+          a: { a: 4, b: 257 },
+          b: 57000,
+        },
+      };
+
+      const { waitForResult } = await contract.functions.configurables().call();
+
+      const { value } = await waitForResult();
+      expect(value).toEqual(EXPECTED);
+    });
+
+    it('should set configurables', async () => {
+      const NEW_CONFIGURABLES = {
+        U8_VALUE: 123,
+        BOOL_VALUE: false,
+        B256_VALUE: getRandomB256(),
+        OPTION_U8_VALUE: 11,
+        GENERIC_STRUCT_VALUE: {
+          a: { a: 234, b: 12 },
+          b: 3525,
+        },
+      };
+
+      const { waitForResult: waitForDeploy } = await AbiContractFactory.deploy(wallet, {
+        configurableConstants: NEW_CONFIGURABLES,
+      });
+
+      const { contract: contractWithConfigurables } = await waitForDeploy();
+      const { waitForResult } = await contractWithConfigurables.functions.configurables().call();
+      const { value } = await waitForResult();
+      expect(value).toEqual(NEW_CONFIGURABLES);
+    });
+  });
 
   describe('types_u8', () => {
     test('should encode/decode just fine', async () => {
