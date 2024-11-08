@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 
 /*
-  Fuels version: 0.94.7
+  Fuels version: 0.96.0
 */
 
 import { Contract, Interface } from "../../../../..";

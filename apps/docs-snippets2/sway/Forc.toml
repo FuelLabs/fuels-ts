@@ -1,2 +1,24 @@
 [workspace]
-members = ["counter", "script-sum"]
+members = [
+  "bytecode-input",
+  "configurable-pin",
+  "counter",
+  "echo-values",
+  "script-transfer-to-contract",
+  "echo-asset-id",
+  "echo-bytes",
+  "echo-employee-data-vector",
+  "echo-enum",
+  "echo-evm-address",
+  "echo-raw-slice",
+  "echo-std-string",
+  "employee-data",
+  "input-output-types",
+  "predicate-main-args-struct",
+  "predicate-multi-args",
+  "return-true-predicate",
+  "script-sum",
+  "simple-predicate",
+  "sum-option-u8",
+  "whitelisted-address-predicate",
+]

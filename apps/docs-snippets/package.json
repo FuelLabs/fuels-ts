@@ -4,15 +4,12 @@
   "description": "",
   "private": true,
   "scripts": {
-    "pretest": "run-s build:forc type:check",
-    "build:forc": "pnpm fuels build",
-    "type:check": "tsc --noEmit"
+    "pretest": "./scripts/pretest.sh"
   },
   "devDependencies": {
     "@fuel-ts/account": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
-    "ethers": "^6.13.2",
     "fuels": "workspace:*",
     "vitest": "~2.0.5"
   },
