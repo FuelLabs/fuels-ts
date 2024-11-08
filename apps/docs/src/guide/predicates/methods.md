@@ -22,7 +22,7 @@ This method is called under the hood when using [`transfer`](./methods.md#transf
 
 You may want to use this method when using a predicate in an existing transaction request.
 
-<<< @/../../docs-snippets/src/guide/predicates/interacting-with-predicates.test.ts#interacting-with-predicates-1{ts:line-numbers}
+<<< @/../../docs-snippets2/src/predicates/methods/get-resources-to-spend.ts#getResourcesToSpend{ts:line-numbers}
 
 ## Transactions
 
@@ -30,13 +30,13 @@ You may want to use this method when using a predicate in an existing transactio
 
 This is used to send a transaction to the node.
 
-<<< @/../../docs-snippets/src/guide/predicates/interacting-with-predicates.test.ts#interacting-with-predicates-2{ts:line-numbers}
+<<< @/../../docs-snippets2/src/predicates/methods/send-transaction.ts#sendTransaction{ts:line-numbers}
 
 ### `simulateTransaction`
 
 You can use the `simulateTransaction` method to dry-run a predicate call without consuming resources. A typical use case of a dry-run call is to validate that sufficient funds are available to cover the transaction fees.
 
-<<< @/../../docs-snippets/src/guide/predicates/interacting-with-predicates.test.ts#interacting-with-predicates-3{ts:line-numbers}
+<<< @/../../docs-snippets2/src/predicates/methods/simulate-transaction.ts#simulateTransaction{ts:line-numbers}
 
 ## Transfers
 
@@ -46,10 +46,10 @@ The `createTransfer` method creates a transaction request with all the necessary
 
 However, please remember that you can still modify the transfer request details and use its properties before submitting it to the node.
 
-<<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-8{ts:line-numbers}
+<<< @/../../docs-snippets2/src/predicates/methods/create-transfer.ts#createTransfer{ts:line-numbers}
 
 ### `transfer`
 
 You can send funds to another address using the `transfer` method.
 
-<<< @/../../docs-snippets2/src/cookbook/wallet-transferring/between-accounts.ts#transferring-assets-1{ts:line-numbers}
+<<< @/../../docs-snippets2/src/predicates/methods/transfer.ts#transfer{ts:line-numbers}
