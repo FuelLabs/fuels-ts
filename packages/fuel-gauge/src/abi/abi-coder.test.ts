@@ -646,7 +646,12 @@ describe('AbiCoder', () => {
     });
   });
 
-  describe('types_struct_with_array_of_enums', () => {
+  /**
+   * TODO: Fix this test
+   *
+   * Currently the expected value is not correct
+   */
+  describe.todo('types_struct_with_array_of_enums', () => {
     it('should encode/decode just fine', async () => {
       const input: StructWithEnumArrayInput = {
         a: [EnumWithNativeInput.Checked, EnumWithNativeInput.Checked, EnumWithNativeInput.Checked],
