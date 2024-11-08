@@ -1,5 +1,5 @@
-// #region full
 /* eslint-disable @typescript-eslint/no-unused-vars */
+// #region full
 
 import { FuelConnector, Fuel, MemoryStorage, LocalStorage } from 'fuels';
 import type { TargetObject } from 'fuels';
