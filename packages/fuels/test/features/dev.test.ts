@@ -3,6 +3,7 @@ import * as chokidar from 'chokidar';
 import * as buildMod from '../../src/cli/commands/build/index';
 import * as deployMod from '../../src/cli/commands/deploy/index';
 import { mockStartFuelCore } from '../utils/mockAutoStartFuelCore';
+import { mockCheckForUpdates } from '../utils/mockCheckForUpdates';
 import { mockLogger } from '../utils/mockLogger';
 import { resetDiskAndMocks } from '../utils/resetDiskAndMocks';
 import { runInit, runDev, bootstrapProject, resetConfigAndMocks } from '../utils/runCommands';
@@ -21,6 +22,10 @@ vi.mock('chokidar', async () => {
 describe('dev', () => {
   const paths = bootstrapProject(__filename);
 
+  beforeEach(() => {
+    mockCheckForUpdates();
+  });
+
   afterEach(() => {
     resetConfigAndMocks(paths.fuelsConfigPath);
   });
@@ -35,7 +40,13 @@ describe('dev', () => {
     const { autoStartFuelCore, killChildProcess } = mockStartFuelCore();
 
     const build = vi.spyOn(buildMod, 'build').mockReturnValue(Promise.resolve());
-    const deploy = vi.spyOn(deployMod, 'deploy').mockReturnValue(Promise.resolve([]));
+    const deploy = vi.spyOn(deployMod, 'deploy').mockReturnValue(
+      Promise.resolve({
+        contracts: [],
+        scripts: [],
+        predicates: [],
+      })
+    );
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const on: any = vi.fn(() => ({ on }));

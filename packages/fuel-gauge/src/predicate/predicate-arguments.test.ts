@@ -156,7 +156,6 @@ describe('Predicate', () => {
       );
       await fundTx.waitForResult();
 
-      // #region predicate-struct-arg
       const predicate = new PredicateMainArgsStruct({
         provider,
         data: [{ has_account: true, total_complete: 100 }],
@@ -171,7 +170,6 @@ describe('Predicate', () => {
         }
       );
       const { isStatusSuccess } = await tx.waitForResult();
-      // #endregion predicate-struct-arg
 
       await assertBalances(receiver, initialReceiverBalance, amountToReceiver);
       expect(isStatusSuccess).toBeTruthy();
@@ -241,7 +239,6 @@ describe('Predicate', () => {
       const receiver = Wallet.generate({ provider });
       const initialReceiverBalance = await receiver.getBalance();
 
-      // #region predicate-multi-args
       const predicate = new PredicateMultiArgs({ provider, data: [20, 30] });
 
       // fund the predicate
@@ -256,7 +253,6 @@ describe('Predicate', () => {
         }
       );
       const { isStatusSuccess } = await tx.waitForResult();
-      // #endregion predicate-multi-args
 
       await assertBalances(receiver, initialReceiverBalance, amountToReceiver);
       expect(isStatusSuccess).toBeTruthy();

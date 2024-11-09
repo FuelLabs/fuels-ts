@@ -32,6 +32,7 @@ importers:
       '@codspeed/vitest-plugin':
         specifier: ^3.1.1
         version: 3.1.1(vite@5.4.10(@types/node@22.5.5)(terser@5.34.1))(vitest@2.0.5(@types/node@22.5.5)(@vitest/browser@2.0.5)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.34.1))
+        version: 3.1.1(vite@5.4.10(@types/node@22.5.5)(terser@5.34.1))(vitest@2.0.5(@types/node@22.5.5)(@vitest/browser@2.0.5)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.34.1))
       '@elasticpath/textlint-rule-no-dead-relative-link':
         specifier: ^1.1.1
         version: 1.1.1
@@ -3961,9 +3962,6 @@ packages:
   '@jridgewell/set-array@1.2.1':
     resolution: {integrity: sha512-R8gLRTZeyp03ymzP/6Lil/28tGeGEzhx1q2k703KGWRAI1VdvPIXdG70VJc2pAMw3NA6JKL5hhFu1sJX0Mnn/A==}
     engines: {node: '>=6.0.0'}
-
-  '@jridgewell/source-map@0.3.3':
-    resolution: {integrity: sha512-b+fsZXeLYi9fEULmfBrhxn4IrPlINf8fiNarzTof004v3lFdntdwa9PF7vFJqm3mg7s+ScJMxXaE3Acp1irZcg==}
 
   '@jridgewell/source-map@0.3.6':
     resolution: {integrity: sha512-1ZJTZebgqllO79ue2bm3rIGud/bOe0pP5BjSRCRxxYkEZS8STV7zN84UBbiYu7jy+eCKSnVIUgoWWE/tt+shMQ==}
@@ -19515,11 +19513,6 @@ snapshots:
 
   '@jridgewell/set-array@1.2.1': {}
 
-  '@jridgewell/source-map@0.3.3':
-    dependencies:
-      '@jridgewell/gen-mapping': 0.3.5
-      '@jridgewell/trace-mapping': 0.3.25
-
   '@jridgewell/source-map@0.3.6':
     dependencies:
       '@jridgewell/gen-mapping': 0.3.5
@@ -33769,7 +33762,7 @@ snapshots:
 
   terser@5.18.2:
     dependencies:
-      '@jridgewell/source-map': 0.3.3
+      '@jridgewell/source-map': 0.3.6
       acorn: 8.12.1
       commander: 2.20.3
       source-map-support: 0.5.21

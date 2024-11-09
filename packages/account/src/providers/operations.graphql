@@ -12,9 +12,6 @@ fragment SubmittedStatusFragment on SubmittedStatus {
 
 fragment SuccessStatusFragment on SuccessStatus {
   type: __typename
-  block {
-    id
-  }
   time
   programState {
     returnType
@@ -27,17 +24,28 @@ fragment SuccessStatusFragment on SuccessStatus {
   totalFee
 }
 
-fragment FailureStatusFragment on FailureStatus {
-  type: __typename
+fragment SuccessStatusWithBlockIdFragment on SuccessStatus {
+  ...SuccessStatusFragment
   block {
     id
   }
+}
+
+fragment FailureStatusFragment on FailureStatus {
+  type: __typename
   totalGas
   totalFee
   time
   reason
   receipts {
     ...receiptFragment
+  }
+}
+
+fragment FailureStatusWithBlockIdFragment on FailureStatus {
+  ...FailureStatusFragment
+  block {
+    id
   }
 }
 
@@ -106,13 +114,13 @@ fragment transactionStatusSubscriptionFragment on TransactionStatus {
     ...SubmittedStatusFragment
   }
   ... on SuccessStatus {
-    ...SuccessStatusFragment
+    ...SuccessStatusWithBlockIdFragment
     transaction {
       ...malleableTransactionFieldsFragment
     }
   }
   ... on FailureStatus {
-    ...FailureStatusFragment
+    ...FailureStatusWithBlockIdFragment
     transaction {
       ...malleableTransactionFieldsFragment
     }
@@ -128,6 +136,11 @@ fragment transactionFragment on Transaction {
   status {
     ...transactionStatusFragment
   }
+}
+
+fragment transactionRawPayloadFragment on Transaction {
+  id
+  rawPayload
 }
 
 fragment inputEstimatePredicatesFragment on Input {
@@ -238,7 +251,6 @@ fragment blockFragment on Block {
 fragment coinFragment on Coin {
   type: __typename
   utxoId
-  owner
   amount
   assetId
   blockCreated
@@ -260,8 +272,12 @@ fragment messageFragment on Message {
   sender
   recipient
   data
-  nonce
   daHeight
+}
+
+fragment getMessageFragment on Message {
+  ...messageFragment
+  nonce
 }
 
 fragment messageProofFragment on MessageProof {
@@ -307,7 +323,6 @@ fragment messageProofFragment on MessageProof {
   }
   sender
   recipient
-  nonce
   amount
   data
 }
@@ -474,7 +489,22 @@ query getTransaction($transactionId: TransactionId!) {
 
 query getTransactionWithReceipts($transactionId: TransactionId!) {
   transaction(id: $transactionId) {
-    ...transactionFragment
+    id
+    rawPayload
+    status {
+      ... on SubmittedStatus {
+        ...SubmittedStatusFragment
+      }
+      ... on SuccessStatus {
+        ...SuccessStatusWithBlockIdFragment
+      }
+      ... on FailureStatus {
+        ...FailureStatusWithBlockIdFragment
+      }
+      ... on SqueezedOutStatus {
+        ...SqueezedOutStatusFragment
+      }
+    }
   }
 }
 
@@ -487,7 +517,7 @@ query getTransactions(
   transactions(after: $after, before: $before, first: $first, last: $last) {
     edges {
       node {
-        ...transactionFragment
+        rawPayload
       }
     }
     pageInfo {
@@ -553,7 +583,7 @@ query getBlockWithTransactions($blockId: BlockId, $blockHeight: U32) {
   block(id: $blockId, height: $blockHeight) {
     ...blockFragment
     transactions {
-      ...transactionRawPayload
+      ...transactionRawPayloadFragment
     }
   }
 }
@@ -571,14 +601,10 @@ query getBlocks($after: String, $before: String, $first: Int, $last: Int) {
   }
 }
 
-fragment transactionRawPayload on Transaction {
-  id
-  rawPayload
-}
-
 query getCoin($coinId: UtxoId!) {
   coin(utxoId: $coinId) {
     ...coinFragment
+    owner
   }
 }
 
@@ -698,7 +724,7 @@ query getMessages(
     }
     edges {
       node {
-        ...messageFragment
+        ...getMessageFragment
       }
     }
   }

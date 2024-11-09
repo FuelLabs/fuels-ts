@@ -17,9 +17,6 @@ describe('StorageTestContract', () => {
 
     const { storageSlots } = StorageTestContract;
 
-    // #region contract-deployment-storage-slots
-    // #context import storageSlots from '../your-sway-project/out/debug/your-sway-project-storage_slots.json';
-
     const factory = new ContractFactory(
       StorageTestContractFactory.bytecode,
       StorageTestContract.abi,
@@ -30,7 +27,6 @@ describe('StorageTestContract', () => {
     });
 
     const { contract } = await deploy.waitForResult();
-    // #endregion contract-deployment-storage-slots
 
     // Call contract
     const call1 = await contract.functions.initialize_counter(1300).call();
@@ -61,7 +57,6 @@ describe('StorageTestContract', () => {
       StorageTestContract.abi,
       wallet
     );
-    // #region contract-deployment-storage-slots-inline
     const { waitForResult } = await factory.deploy({
       storageSlots: [
         {
@@ -87,7 +82,7 @@ describe('StorageTestContract', () => {
       ],
     });
     const { contract } = await waitForResult();
-    // #endregion contract-deployment-storage-slots-inline
+
     const call1 = await contract.functions.initialize_counter(1300).call();
     const { value: initializeResult } = await call1.waitForResult();
     expect(initializeResult.toHex()).toEqual(toHex(1300));

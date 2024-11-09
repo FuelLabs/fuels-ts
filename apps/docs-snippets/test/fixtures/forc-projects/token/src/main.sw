@@ -11,7 +11,6 @@ abi Token {
 }
 
 impl Token for Contract {
-    // #region variable-outputs-1
     fn transfer_to_address(recipient: Address, asset_id: AssetId, amount: u64) {
         transfer(Identity::Address(recipient), asset_id, amount);
     }
@@ -19,7 +18,7 @@ impl Token for Contract {
     fn transfer_to_contract(target: ContractId, asset_id: AssetId, amount: u64) {
         transfer(Identity::ContractId(target), asset_id, amount);
     }
-    // #endregion variable-outputs-1
+
     fn mint_coins(sub_id: b256, mint_amount: u64) {
         mint(sub_id, mint_amount);
     }

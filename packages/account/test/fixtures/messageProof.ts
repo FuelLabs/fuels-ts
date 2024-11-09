@@ -56,7 +56,6 @@ export const MESSAGE_PROOF_RAW_RESPONSE: GqlGetMessageProofQuery['messageProof']
   },
   sender: '0x79c54219a5c910979e5e4c2728df163fa654a1fe03843e6af59daa2c3fcd42ea',
   recipient: '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263',
-  nonce: '0x3e87e0f44613cabecd1aad381ad41a433afb12ec5c54c172de3db25b1b4d1b53',
   amount: '10',
   data: '0x',
 };
@@ -110,7 +109,7 @@ export const MESSAGE_PROOF: MessageProof = {
   },
   sender: Address.fromAddressOrString(MESSAGE_PROOF_RAW_RESPONSE.sender),
   recipient: Address.fromAddressOrString(MESSAGE_PROOF_RAW_RESPONSE.recipient),
-  nonce: MESSAGE_PROOF_RAW_RESPONSE.nonce,
+  nonce: '0xb33895e6fdf23b5a62c92a1d45c71a11579027f9e5c4dda73c26cf140bcd6895',
   amount: bn(MESSAGE_PROOF_RAW_RESPONSE.amount),
   data: MESSAGE_PROOF_RAW_RESPONSE.data,
 };

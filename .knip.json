@@ -16,6 +16,7 @@
     "bun",
     "@/sway-api/*",
     "@fuel-ts/*",
+    "@fuels/connectors",
     "@internal/fuel-core",
     "@internal/forc",
     "@types/jest",
