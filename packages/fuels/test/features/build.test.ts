@@ -3,6 +3,7 @@ import { join } from 'path';
 
 import * as deployMod from '../../src/cli/commands/deploy/index';
 import { mockStartFuelCore } from '../utils/mockAutoStartFuelCore';
+import { mockCheckForUpdates } from '../utils/mockCheckForUpdates';
 import {
   bootstrapProject,
   resetConfigAndMocks,
@@ -16,6 +17,10 @@ import {
  */
 describe('build', { timeout: 180000 }, () => {
   const paths = bootstrapProject(__filename);
+
+  beforeEach(() => {
+    mockCheckForUpdates();
+  });
 
   afterEach(() => {
     resetConfigAndMocks(paths.fuelsConfigPath);
