@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "fuels": "workspace:*",
+    "@fuels/connectors": "^0.36.1",
     "ethers": "^6.13.2"
   },
   "devDependencies": {

@@ -1,4 +1,3 @@
-// #region full
 // #region checking-balances-1
 import type { BN } from 'fuels';
 import { Provider, Wallet } from 'fuels';

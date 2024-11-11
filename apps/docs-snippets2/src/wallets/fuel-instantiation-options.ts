@@ -1,13 +1,6 @@
 // #region fuel-options-connectors
-import { FuelConnector, Fuel } from 'fuels';
-
-class WalletConnector extends FuelConnector {
-  name: string = 'My Wallet Connector';
-}
-
-const defaultConnectors = (_opts: {
-  devMode: boolean;
-}): Array<FuelConnector> => [new WalletConnector()];
+import { defaultConnectors } from '@fuels/connectors';
+import { Fuel } from 'fuels';
 
 const sdkDevMode = await new Fuel({
   connectors: defaultConnectors({
