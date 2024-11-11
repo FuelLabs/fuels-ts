@@ -56,9 +56,9 @@
     "build:package": "tsup",
     "build:browser": "pnpm vite build",
     "build:minified": "pnpm uglifyjs --compress --mangle --output dist/browser.min.mjs -- dist/browser.mjs",
-    "postbuild": "run-s type:declarations type:check",
+    "postbuild": "run-s type:declarations",
     "type:declarations": "tsc --emitDeclarationOnly -p tsconfig.dts.json",
-    "type:check": "tsc --noEmit",
+    "lint": "tsc --noEmit",
     "prepublishOnly": "cp ../../README.md ./README.md"
   },
   "license": "Apache-2.0",
