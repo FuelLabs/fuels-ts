@@ -71,7 +71,6 @@ describe('TransactionSummary', () => {
     expect(transaction.isStatusSuccess).toBe(!isRequest);
     expect(transaction.isStatusPending).toBe(false);
     if (!isRequest) {
-      expect(transaction.blockId).toEqual(expect.any(String));
       expect(transaction.time).toEqual(expect.any(String));
       expect(transaction.status).toEqual(expect.any(String));
       expect(transaction.date).toEqual(expect.any(Date));
@@ -106,8 +105,7 @@ describe('TransactionSummary', () => {
     await adminWallet.fund(request, txCost);
 
     const tx = await adminWallet.sendTransaction(request);
-
-    const transactionResponse = await tx.waitForResult();
+    const submittedResponse = await tx.waitForResult();
 
     const transactionSummary = await getTransactionSummary({
       id: tx.id,
@@ -118,7 +116,14 @@ describe('TransactionSummary', () => {
       transaction: transactionSummary,
     });
 
-    expect(convertBnsToHex(transactionResponse)).toStrictEqual(convertBnsToHex(transactionSummary));
+    /**
+     * Ensure both the original response and the subsequently fetched singular response
+     * contain the blockId
+     */
+    expect(submittedResponse.blockId).toBeDefined();
+    expect(transactionSummary.blockId).toBeDefined();
+
+    expect(convertBnsToHex(submittedResponse)).toStrictEqual(convertBnsToHex(transactionSummary));
   });
 
   it('should ensure getTransactionsSummaries executes just fine', async () => {
@@ -170,8 +175,20 @@ describe('TransactionSummary', () => {
       });
     });
 
-    expect(convertBnsToHex(transactions[0])).toStrictEqual(convertBnsToHex(transactionResponse1));
-    expect(convertBnsToHex(transactions[1])).toStrictEqual(convertBnsToHex(transactionResponse2));
+    expect(transactionResponse1.blockId).toBeDefined();
+    expect(transactionResponse2.blockId).toBeDefined();
+
+    /**
+     * When fetching list of transactions, the blockId is not returned
+     */
+    expect(convertBnsToHex(transactions[0])).toStrictEqual({
+      ...(convertBnsToHex(transactionResponse1) as TransactionResult),
+      blockId: undefined,
+    });
+    expect(convertBnsToHex(transactions[1])).toStrictEqual({
+      ...(convertBnsToHex(transactionResponse2) as TransactionResult),
+      blockId: undefined,
+    });
   });
 
   it('should ensure getTransactionSummaryFromRequest executes just fine', async () => {
@@ -205,6 +222,53 @@ describe('TransactionSummary', () => {
     });
 
     expect(transactionSummary.transaction).toStrictEqual(transactionRequest.toTransaction());
+  });
+
+  it('should ensure submitted transaction returns block ID', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [adminWallet, receiver],
+    } = launched;
+
+    const submitted = await adminWallet.transfer(receiver.address, 1000, ASSET_A);
+    const response = await submitted.waitForResult();
+
+    verifyTransactionSummary({
+      transaction: response,
+    });
+
+    expect(response.blockId).toBeDefined();
+    expect(response.blockId).toEqual(expect.any(String));
+  });
+
+  it('should ensure listed TX summaries do not include block ID', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      provider,
+      wallets: [adminWallet, receiver],
+    } = launched;
+
+    const length = 5;
+
+    for (let i = 0; i < length; i++) {
+      const submitted = await adminWallet.transfer(receiver.address, 1000, ASSET_A);
+      await submitted.waitForResult();
+    }
+
+    const { transactions } = await getTransactionsSummaries({
+      provider,
+      filters: {
+        owner: adminWallet.address.toB256(),
+        first: 50,
+      },
+    });
+
+    expect(transactions).toHaveLength(length);
+    transactions.forEach((transaction) => {
+      expect(transaction.blockId).toBeUndefined();
+    });
   });
 
   describe('Transfer Operations', () => {
