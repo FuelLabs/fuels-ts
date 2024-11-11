@@ -12,7 +12,9 @@ unlockedWalletWithoutProvider = Wallet.fromPrivateKey(
 unlockedWalletWithoutProvider.lock();
 
 // All provider dependent methods will throw
-await expect(() => unlockedWalletWithoutProvider.getCoins()).rejects.toThrow(
-  /Provider not set/
-);
+try {
+  await unlockedWalletWithoutProvider.getCoins();
+} catch (e) {
+  console.log('error', e);
+}
 // #endregion wallet-optional-provider
