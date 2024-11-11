@@ -482,7 +482,22 @@ query getTransaction($transactionId: TransactionId!) {
 
 query getTransactionWithReceipts($transactionId: TransactionId!) {
   transaction(id: $transactionId) {
-    ...transactionFragment
+    id
+    rawPayload
+    status {
+      ... on SubmittedStatus {
+        ...SubmittedStatusFragment
+      }
+      ... on SuccessStatus {
+        ...SuccessStatusWithBlockIdFragment
+      }
+      ... on FailureStatus {
+        ...FailureStatusWithBlockIdFragment
+      }
+      ... on SqueezedOutStatus {
+        ...SqueezedOutStatusFragment
+      }
+    }
   }
 }
 
