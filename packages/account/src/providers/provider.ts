@@ -881,11 +881,9 @@ Supported fuel-core version: ${supportedVersion}.`
     { estimateTxDependencies = true }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    // #region Provider-sendTransaction
     if (estimateTxDependencies) {
       await this.estimateTxDependencies(transactionRequest);
     }
-    // #endregion Provider-sendTransaction
 
     this.validateTransaction(transactionRequest);
 
