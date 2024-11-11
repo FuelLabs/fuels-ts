@@ -12,9 +12,6 @@ fragment SubmittedStatusFragment on SubmittedStatus {
 
 fragment SuccessStatusFragment on SuccessStatus {
   type: __typename
-  block {
-    id
-  }
   time
   programState {
     returnType
@@ -27,17 +24,28 @@ fragment SuccessStatusFragment on SuccessStatus {
   totalFee
 }
 
-fragment FailureStatusFragment on FailureStatus {
-  type: __typename
+fragment SuccessStatusWithBlockIdFragment on SuccessStatus {
+  ...SuccessStatusFragment
   block {
     id
   }
+}
+
+fragment FailureStatusFragment on FailureStatus {
+  type: __typename
   totalGas
   totalFee
   time
   reason
   receipts {
     ...receiptFragment
+  }
+}
+
+fragment FailureStatusWithBlockIdFragment on FailureStatus {
+  ...FailureStatusFragment
+  block {
+    id
   }
 }
 
