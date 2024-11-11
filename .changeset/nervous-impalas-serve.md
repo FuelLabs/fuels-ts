@@ -1,5 +1,5 @@
 ---
-"@fuel-ts/account": patch
+"@fuel-ts/account": minor
 ---
 
-chore: optimize `getTransactions` query
+chore!: optimize `getTransactions` query
