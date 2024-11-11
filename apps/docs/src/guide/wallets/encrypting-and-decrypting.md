@@ -26,8 +26,3 @@ In this example, `decryptedWallet` is an instance of [`WalletUnlocked`](../../ap
 
 Remember to securely store your encrypted JSON wallet and password. If you lose them, there will be no way to recover your wallet. For security reasons, avoid sharing your private key, encrypted JSON wallet or password with anyone.
 
-## Full Example
-
-For a full example of how to encrypt and decrypt a JSON wallet, see the snippet below:
-
-<<< @/../../docs-snippets2/src/wallets/encrypting-and-decrypting-wallets.ts#full{ts:line-numbers}
