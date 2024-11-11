@@ -9,6 +9,3 @@ pnpm fuels build
 
 # Deploys projects (needed for loader bytecode)
 pnpm fuels deploy
-
-# Checks for type errors
-pnpm tsc --noEmit

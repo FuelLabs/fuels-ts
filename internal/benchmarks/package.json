@@ -5,8 +5,8 @@
     "dist"
   ],
   "scripts": {
-    "type:check": "tsc --noEmit",
-    "pretest": "run-s build:forc type:check",
+    "lint": "tsc --noEmit",
+    "pretest": "run-s build:forc ",
     "build:forc": "pnpm fuels build"
   },
   "license": "Apache-2.0",

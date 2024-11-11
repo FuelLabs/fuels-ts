@@ -15,9 +15,9 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "build": "run-s build:source type:check",
+    "build": "run-s build:source",
     "build:source": "tsup",
-    "type:check": "tsc --noEmit",
+    "lint": "tsc --noEmit",
     "prepublishOnly": "tsx ./scripts/prepublish.ts"
   },
   "dependencies": {
