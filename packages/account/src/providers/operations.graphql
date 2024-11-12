@@ -130,6 +130,11 @@ fragment transactionFragment on Transaction {
   }
 }
 
+fragment transactionRawPayloadFragment on Transaction {
+  id
+  rawPayload
+}
+
 fragment inputEstimatePredicatesFragment on Input {
   ... on InputCoin {
     predicateGasUsed
@@ -490,7 +495,7 @@ query getTransactions(
   transactions(after: $after, before: $before, first: $first, last: $last) {
     edges {
       node {
-        ...transactionFragment
+        rawPayload
       }
     }
     pageInfo {
@@ -556,7 +561,7 @@ query getBlockWithTransactions($blockId: BlockId, $blockHeight: U32) {
   block(id: $blockId, height: $blockHeight) {
     ...blockFragment
     transactions {
-      ...transactionFragment
+      ...transactionRawPayloadFragment
     }
   }
 }
@@ -765,6 +770,32 @@ mutation produceBlocks(
 query getMessageByNonce($nonce: Nonce!) {
   message(nonce: $nonce) {
     ...messageFragment
+  }
+}
+
+query isUserAccount(
+  $blobId: BlobId!
+  $contractId: ContractId!
+  $transactionId: TransactionId!
+) {
+  blob(id: $blobId) {
+    id
+  }
+  contract(id: $contractId) {
+    id
+  }
+  transaction(id: $transactionId) {
+    id
+  }
+}
+
+query getConsensusParametersVersion {
+  chain {
+    latestBlock {
+      header {
+        consensusParametersVersion
+      }
+    }
   }
 }
 
