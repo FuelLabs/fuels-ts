@@ -340,7 +340,7 @@ Several options can be passed to the `Fuel` connector manager:
 
 The `connectors` option provides a list of connectors with which the `Fuel` connector manager can interact. The manager interacts with the connectors, which in turn handle communication with the respective wallet. You can find a list of all the connectors in our [`FuelLabs/fuel-connectors`](https://github.com/FuelLabs/fuel-connectors).
 
-Below, we initialize the manager using the `defaultConnectors` method which provides an array of all the default connectors available in the `fuel-connectors` package. Supplying the `devMode` flag as `true` will enable the development wallet for the connectors (to install visit our [wallet documentation](https://docs.fuel.network/docs/wallet/install/)).
+Below, we initialize the manager using the `defaultConnectors` method which provides an array of all the default connectors available in the `fuel-connectors` package. It's being mocked here for the purposes of this example, but you can provide your own custom connectors. Supplying the `devMode` flag as `true` will enable the development wallet for the connectors (to install visit our [wallet documentation](https://docs.fuel.network/docs/wallet/install/)).
 
 <<< @/../../docs-snippets2/src/wallets/fuel-instantiation-options.ts#fuel-options-connectors{ts:line-numbers}
 
