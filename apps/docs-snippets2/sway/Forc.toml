@@ -27,7 +27,6 @@ members = [
   "simple-token-abi",
   "storage-test-contract",
   "sum-option-u8",
-  "sum-option-u8",
   "token",
   "token-depositor",
   "transfer-to-address",
