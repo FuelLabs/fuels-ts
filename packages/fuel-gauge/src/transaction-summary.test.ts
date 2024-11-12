@@ -82,29 +82,10 @@ describe('TransactionSummary', () => {
 
     const {
       provider,
-      wallets: [adminWallet],
+      wallets: [sender, destination],
     } = launched;
 
-    const destination = Wallet.generate({
-      provider,
-    });
-
-    const amountToTransfer = 100;
-
-    const request = new ScriptTransactionRequest({
-      gasLimit: 10000,
-    });
-
-    request.addCoinOutput(destination.address, amountToTransfer, provider.getBaseAssetId());
-
-    const txCost = await adminWallet.getTransactionCost(request);
-
-    request.gasLimit = txCost.gasUsed;
-    request.maxFee = txCost.maxFee;
-
-    await adminWallet.fund(request, txCost);
-
-    const tx = await adminWallet.sendTransaction(request);
+    const tx = await sender.transfer(destination.address, 1000, provider.getBaseAssetId());
     const submittedResponse = await tx.waitForResult();
 
     const transactionSummary = await getTransactionSummary({
