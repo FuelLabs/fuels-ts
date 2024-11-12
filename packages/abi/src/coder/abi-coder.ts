@@ -1,7 +1,8 @@
-import type { Abi, AbiSpecification } from '../parser';
+import type { Abi, AbiLoggedType, AbiSpecification } from '../parser';
 import { AbiParser } from '../parser';
 
 import { AbiEncoding } from './encoding/encoding';
+import { ConfigurableRepository } from './functionality/configurable-repository';
 import { FunctionRepository } from './functionality/function-repository';
 
 export class AbiCoder {
@@ -11,11 +12,13 @@ export class AbiCoder {
 
   // Exposed properties
   public readonly functions: FunctionRepository;
+  public readonly configurables: ConfigurableRepository;
 
   private constructor(abi: AbiSpecification) {
     this.abi = AbiParser.parse(abi);
     this.encoding = AbiEncoding.from(this.abi.encodingVersion);
     this.functions = new FunctionRepository(this.abi.functions, this.encoding);
+    this.configurables = new ConfigurableRepository(this.abi.configurables, this.encoding);
   }
 
   static fromAbi(abi: AbiSpecification): AbiCoder {

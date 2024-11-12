@@ -33,17 +33,23 @@ export type GetCoderParams = { name?: string; type: AbiType };
 export type GetCoderFn = (params: GetCoderParams) => Coder;
 
 export interface AbiCoderFunction {
+  // Member fields
   name: AbiFunction['name'];
   signature: string;
   selector: string;
   selectorBytes: Uint8Array;
   attributes: AbiFunction['attributes'];
 
+  // Coders
   arguments: Coder<unknown[]>;
   output: Coder<unknown>;
 }
 
 export interface AbiCoderConfigurable {
+  // Member fields
   name: AbiConfigurable['name'];
+  offset: AbiConfigurable['offset'];
+
+  // Coders
   value: Coder<unknown>;
 }
