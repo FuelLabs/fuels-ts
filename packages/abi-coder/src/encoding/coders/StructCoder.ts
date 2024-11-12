@@ -18,8 +18,8 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
   InputValueOf<TCoders>,
   DecodedValueOf<TCoders>
 > {
-  name: string;
-  coders: TCoders;
+  public override name: string;
+  public coders: TCoders;
   #hasNestedOption: boolean;
 
   constructor(name: string, coders: TCoders) {

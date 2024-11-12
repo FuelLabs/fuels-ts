@@ -21,8 +21,8 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
   InputValueOf<TCoders>,
   DecodedValueOf<TCoders>
 > {
-  name: string;
-  coders: TCoders;
+  public override name: string;
+  public coders: TCoders;
   #caseIndexCoder: BigNumberCoder;
   #encodedValueSize: number;
   #shouldValidateLength: boolean;
