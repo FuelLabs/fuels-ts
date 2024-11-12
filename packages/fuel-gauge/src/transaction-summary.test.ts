@@ -52,7 +52,7 @@ function convertBnsToHex(value: unknown): unknown {
  * @group browser
  */
 describe('TransactionSummary', () => {
-  const verifyTransactionSummary = (params: {
+  const validateTxSummary = (params: {
     transaction: TransactionResult | TransactionSummary;
     isRequest?: boolean;
   }) => {
@@ -86,25 +86,30 @@ describe('TransactionSummary', () => {
     } = launched;
 
     const tx = await sender.transfer(destination.address, 1000, provider.getBaseAssetId());
-    const submittedResponse = await tx.waitForResult();
+    const submittedTxResult = await tx.waitForResult();
 
-    const transactionSummary = await getTransactionSummary({
+    const laterFetchedResult = await getTransactionSummary({
       id: tx.id,
       provider,
     });
 
-    verifyTransactionSummary({
-      transaction: transactionSummary,
+    validateTxSummary({
+      transaction: submittedTxResult,
+    });
+
+    validateTxSummary({
+      transaction: laterFetchedResult,
     });
 
     /**
      * Ensure both the original response and the subsequently fetched singular response
      * contain the blockId
      */
-    expect(submittedResponse.blockId).toBeDefined();
-    expect(transactionSummary.blockId).toBeDefined();
+    expect(submittedTxResult.blockId).toBeDefined();
+    expect(laterFetchedResult.blockId).toBeDefined();
 
-    expect(convertBnsToHex(submittedResponse)).toStrictEqual(convertBnsToHex(transactionSummary));
+    // Ensure the two responses are the same
+    expect(convertBnsToHex(submittedTxResult)).toStrictEqual(convertBnsToHex(laterFetchedResult));
   });
 
   it('should ensure getTransactionsSummaries executes just fine', async () => {
@@ -112,35 +117,22 @@ describe('TransactionSummary', () => {
 
     const {
       provider,
-      wallets: [adminWallet],
+      wallets: [sender, destination],
     } = launched;
-
-    const sender = Wallet.generate({
-      provider,
-    });
-
-    const tx1 = await adminWallet.transfer(sender.address, 500_000, provider.getBaseAssetId(), {
-      gasLimit: 10_000,
-    });
-    const transactionResponse1 = await tx1.waitForResult();
 
     const amountToTransfer = 100;
 
-    const destination = Wallet.generate({
-      provider,
-    });
+    const tx1 = await sender.transfer(sender.address, amountToTransfer, provider.getBaseAssetId());
+    const txResult1 = await tx1.waitForResult();
 
     const tx2 = await sender.transfer(
       destination.address,
-      amountToTransfer,
-      provider.getBaseAssetId(),
-      {
-        gasLimit: 10_000,
-      }
+      amountToTransfer * 2,
+      provider.getBaseAssetId()
     );
-    const transactionResponse2 = await tx2.waitForResult();
+    const txResult2 = await tx2.waitForResult();
 
-    const { transactions } = await getTransactionsSummaries({
+    const { transactions: submittedTxResult } = await getTransactionsSummaries({
       provider,
       filters: {
         first: 2,
@@ -148,56 +140,57 @@ describe('TransactionSummary', () => {
       },
     });
 
-    expect(transactions.length).toBe(2);
+    expect(submittedTxResult.length).toBe(2);
 
-    transactions.forEach((transactionSummary) => {
-      verifyTransactionSummary({
+    submittedTxResult.forEach((transactionSummary) => {
+      validateTxSummary({
         transaction: transactionSummary,
       });
     });
 
-    expect(transactionResponse1.blockId).toBeDefined();
-    expect(transactionResponse2.blockId).toBeDefined();
+    expect(txResult1.blockId).toBeDefined();
+    expect(txResult2.blockId).toBeDefined();
 
     /**
      * When fetching list of transactions, the blockId is not returned
      */
-    expect(convertBnsToHex(transactions[0])).toStrictEqual({
-      ...(convertBnsToHex(transactionResponse1) as TransactionResult),
+    expect(convertBnsToHex(submittedTxResult[0])).toStrictEqual({
+      ...(convertBnsToHex(txResult1) as TransactionResult),
       blockId: undefined,
     });
-    expect(convertBnsToHex(transactions[1])).toStrictEqual({
-      ...(convertBnsToHex(transactionResponse2) as TransactionResult),
+    expect(convertBnsToHex(submittedTxResult[1])).toStrictEqual({
+      ...(convertBnsToHex(txResult2) as TransactionResult),
       blockId: undefined,
     });
   });
 
-  it('should ensure getTransactionSummaryFromRequest executes just fine', async () => {
+  it('should ensure getTransactionSummaryFromRequest executes just fine [TX REQUEST]', async () => {
     using launched = await launchTestNode();
 
     const {
       provider,
-      wallets: [adminWallet],
+      wallets: [sender],
     } = launched;
 
     const request = new ScriptTransactionRequest({
       gasLimit: 10000,
     });
 
-    const txCost = await adminWallet.getTransactionCost(request);
+    const txCost = await sender.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;
 
-    await adminWallet.fund(request, txCost);
+    await sender.fund(request, txCost);
 
-    const transactionRequest = await adminWallet.populateTransactionWitnessesSignature(request);
+    const transactionRequest = await sender.populateTransactionWitnessesSignature(request);
 
     const transactionSummary = await getTransactionSummaryFromRequest({
       provider,
       transactionRequest,
     });
-    verifyTransactionSummary({
+
+    validateTxSummary({
       transaction: transactionSummary,
       isRequest: true,
     });
@@ -215,7 +208,7 @@ describe('TransactionSummary', () => {
     const submitted = await adminWallet.transfer(receiver.address, 1000, ASSET_A);
     const response = await submitted.waitForResult();
 
-    verifyTransactionSummary({
+    validateTxSummary({
       transaction: response,
     });
 
@@ -228,20 +221,20 @@ describe('TransactionSummary', () => {
 
     const {
       provider,
-      wallets: [adminWallet, receiver],
+      wallets: [sender, receiver],
     } = launched;
 
     const length = 5;
 
     for (let i = 0; i < length; i++) {
-      const submitted = await adminWallet.transfer(receiver.address, 1000, ASSET_A);
+      const submitted = await sender.transfer(receiver.address, 1000, ASSET_A);
       await submitted.waitForResult();
     }
 
     const { transactions } = await getTransactionsSummaries({
       provider,
       filters: {
-        owner: adminWallet.address.toB256(),
+        owner: sender.address.toB256(),
         first: 50,
       },
     });
