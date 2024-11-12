@@ -132,7 +132,9 @@ export class Predicate<
    * @param transactionRequestLike - The transaction request-like object.
    * @returns A promise that resolves to the transaction response.
    */
-  sendTransaction(transactionRequestLike: TransactionRequestLike): Promise<TransactionResponse> {
+  override sendTransaction(
+    transactionRequestLike: TransactionRequestLike
+  ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
 
     return super.sendTransaction(transactionRequest, { estimateTxDependencies: false });
@@ -144,7 +146,9 @@ export class Predicate<
    * @param transactionRequestLike - The transaction request-like object.
    * @returns A promise that resolves to the call result.
    */
-  simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
+  override simulateTransaction(
+    transactionRequestLike: TransactionRequestLike
+  ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     return super.simulateTransaction(transactionRequest, { estimateTxDependencies: false });
   }
@@ -205,7 +209,7 @@ export class Predicate<
    * @param excludedIds - IDs of resources to be excluded from the query.
    * @returns A promise that resolves to an array of Resources.
    */
-  async getResourcesToSpend(
+  override async getResourcesToSpend(
     quantities: CoinQuantityLike[] /** IDs of coins to exclude */,
     excludedIds?: ExcludeResourcesOption
   ): Promise<Resource[]> {
@@ -227,7 +231,7 @@ export class Predicate<
    * @param coins - An array of `FakeResources` objects representing the coins.
    * @returns An array of `Resource` objects with generated properties.
    */
-  generateFakeResources(coins: FakeResources[]): Array<Resource> {
+  override generateFakeResources(coins: FakeResources[]): Array<Resource> {
     return super.generateFakeResources(coins).map((coin) => ({
       ...coin,
       predicate: hexlify(this.bytes),
