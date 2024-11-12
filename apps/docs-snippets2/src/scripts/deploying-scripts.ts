@@ -1,4 +1,4 @@
-import { ContractFactory, Provider, Wallet, hexlify } from 'fuels';
+import { Provider, Wallet, hexlify } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
@@ -16,13 +16,9 @@ const {
 const providerUrl = testProvider.url;
 const WALLET_PVT_KEY = hexlify(testWallet.privateKey);
 
-const factory = new ContractFactory(
-  TypegenScript.bytecode,
-  TypegenScript.abi,
-  testWallet
-);
+const originalScript = new TypegenScript(testWallet);
 const { waitForResult: waitForDeploy } =
-  await factory.deployAsBlobTxForScript();
+  await originalScript.deploy(testWallet);
 await waitForDeploy();
 
 // #region deploying-scripts
