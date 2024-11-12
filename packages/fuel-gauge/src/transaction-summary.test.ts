@@ -289,9 +289,9 @@ describe('TransactionSummary', () => {
         expect(operations[index].to?.address).toBe(address.toB256());
         expect(operations[index].assetsSent).toHaveLength(quantities.length);
 
-        quantities.forEach(({ amount, assetId }, qunatitiesIndex) => {
-          expect(Number(operations[index].assetsSent?.[qunatitiesIndex].amount)).toBe(amount);
-          expect(operations[index].assetsSent?.[qunatitiesIndex].assetId).toBe(assetId);
+        quantities.forEach(({ amount, assetId }, quantitiesIndex) => {
+          expect(Number(operations[index].assetsSent?.[quantitiesIndex].amount)).toBe(amount);
+          expect(operations[index].assetsSent?.[quantitiesIndex].assetId).toBe(assetId);
         });
       });
     };
@@ -332,7 +332,7 @@ describe('TransactionSummary', () => {
       const transferAmount = 1233;
       const minorAmount = 1000;
       const majorAmount = 100_000_000_000;
-      const tranferBackAmount = majorAmount - 10_000;
+      const transferBackAmount = majorAmount - 10_000;
 
       using launched = await launchTestNode({
         walletsConfig: {
@@ -367,11 +367,11 @@ describe('TransactionSummary', () => {
       });
       request.addResources([...majorResources, ...minorResources]);
 
-      // Add tranfer to recipient
+      // Add transfer to recipient
       request.addCoinOutput(recipient.address, transferAmount, provider.getBaseAssetId());
 
       // Add transfer to self
-      request.addCoinOutput(majorWallet.address, tranferBackAmount, provider.getBaseAssetId());
+      request.addCoinOutput(majorWallet.address, transferBackAmount, provider.getBaseAssetId());
 
       // Explicitly setting the Output Change address to the recipient
       const index = request.outputs.findIndex((output) => output.type === OutputType.Change);
@@ -395,7 +395,7 @@ describe('TransactionSummary', () => {
           },
           {
             address: majorWallet.address,
-            quantities: [{ amount: tranferBackAmount, assetId: provider.getBaseAssetId() }],
+            quantities: [{ amount: transferBackAmount, assetId: provider.getBaseAssetId() }],
           },
         ],
       });
