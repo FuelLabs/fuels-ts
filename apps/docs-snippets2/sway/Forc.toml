@@ -24,6 +24,7 @@ members = [
   "simple-predicate",
   "simple-token",
   "simple-token-abi",
+  "storage-test-contract",
   "sum-option-u8",
   "token-depositor",
   "return-context",
