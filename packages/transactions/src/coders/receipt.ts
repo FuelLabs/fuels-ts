@@ -480,8 +480,16 @@ export type ReceiptLogData = {
   /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
   /** Value of register $rA (u64) */
+  ra: BN;
+  /**
+   * @deprecated - This property is deprecated and it will be removed soon. Use property `ra` instead.
+   */
   val0: BN;
   /** Value of register $rB (u64) */
+  rb: BN;
+  /**
+   * @deprecated - This property is deprecated and it will be removed soon. Use property `rb` instead.
+   */
   val1: BN;
   /** Value of register $rC (u64) */
   ptr: BN;
@@ -530,9 +538,9 @@ export class ReceiptLogDataCoder extends Coder<ReceiptLogData, ReceiptLogData> {
     [decoded, o] = new B256Coder().decode(data, o);
     const id = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
-    const val0 = decoded;
+    const ra = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
-    const val1 = decoded;
+    const rb = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const ptr = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
@@ -550,8 +558,10 @@ export class ReceiptLogDataCoder extends Coder<ReceiptLogData, ReceiptLogData> {
       {
         type: ReceiptType.LogData,
         id,
-        val0,
-        val1,
+        ra,
+        rb,
+        val0: ra,
+        val1: rb,
         ptr,
         len,
         digest,
