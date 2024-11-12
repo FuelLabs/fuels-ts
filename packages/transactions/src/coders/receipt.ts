@@ -382,14 +382,30 @@ export type ReceiptLog = {
   type: ReceiptType.Log;
   /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
-  /** Value of register $rA (u64) */
+  /**
+   * @deprecated - This property is deprecated and it will be removed soon. Use property `ra` instead.
+   */
   val0: BN;
-  /** Value of register $rB (u64) */
+  /** Value of register $rA (u64) */
+  ra: BN;
+  /**
+   * @deprecated - This property is deprecated and it will be removed soon. Use property `rb` instead.
+   */
   val1: BN;
-  /** Value of register $rC (u64) */
+  /** Value of register $rB (u64) */
+  rb: BN;
+  /**
+   * @deprecated - This property is deprecated and it will be removed soon. Use property `rc` instead.
+   */
   val2: BN;
-  /** Value of register $rD (u64) */
+  /** Value of register $rC (u64) */
+  rc: BN;
+  /**
+   * @deprecated - This property is deprecated and it will be removed soon. Use property `rd` instead.
+   */
   val3: BN;
+  /** Value of register $rD (u64) */
+  rd: BN;
   /** Value of register $pc (u64) */
   pc: BN;
   /** Value of register $is (u64) */
@@ -427,13 +443,13 @@ export class ReceiptLogCoder extends Coder<ReceiptLog, ReceiptLog> {
     [decoded, o] = new B256Coder().decode(data, o);
     const id = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
-    const val0 = decoded;
+    const ra = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
-    const val1 = decoded;
+    const rb = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
-    const val2 = decoded;
+    const rc = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
-    const val3 = decoded;
+    const rd = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const pc = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
@@ -443,10 +459,14 @@ export class ReceiptLogCoder extends Coder<ReceiptLog, ReceiptLog> {
       {
         type: ReceiptType.Log,
         id,
-        val0,
-        val1,
-        val2,
-        val3,
+        ra,
+        rb,
+        rc,
+        rd,
+        val0: ra,
+        val1: rb,
+        val2: rc,
+        val3: rd,
         pc,
         is,
       },
