@@ -671,6 +671,9 @@ importers:
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
+      '@fuel-ts/interfaces':
+        specifier: workspace:*
+        version: link:../interfaces
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
