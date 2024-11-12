@@ -2,4 +2,4 @@
 "fuels": minor
 ---
 
-onDeploy callback updated to support automation with scripts and predicates additionally to contracts
+feat!: `onDeploy` callback now supports contracts, scripts and predicates
