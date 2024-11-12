@@ -4,7 +4,7 @@ You'll often want to create one or more test wallets when testing your contracts
 
 ## Create a single wallet
 
-<<< @/../../docs-snippets/src/guide/wallets/access.test.ts#wallets{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/access.ts#wallets{ts:line-numbers}
 
 ## Setting up multiple test wallets
 
