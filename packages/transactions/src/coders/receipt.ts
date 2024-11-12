@@ -652,8 +652,12 @@ export class ReceiptTransferCoder extends Coder<ReceiptTransfer, ReceiptTransfer
 
 export type ReceiptTransferOut = {
   type: ReceiptType.TransferOut;
-  /** Contract ID of current context if in an internal context, zero otherwise (b256) */
+  /**
+   * @deprecated - This property is deprecated and it will be removed soon. Use property `id` instead.
+   */
   from: string;
+  /** Contract ID of current context if in an internal context, zero otherwise (b256) */
+  id: string;
   /** Address to transfer coins to (b256) */
   to: string;
   /** Amount of coins transferred (u64) */
@@ -694,7 +698,7 @@ export class ReceiptTransferOutCoder extends Coder<ReceiptTransferOut, ReceiptTr
     let o = offset;
 
     [decoded, o] = new B256Coder().decode(data, o);
-    const from = decoded;
+    const id = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const to = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
@@ -709,7 +713,8 @@ export class ReceiptTransferOutCoder extends Coder<ReceiptTransferOut, ReceiptTr
     return [
       {
         type: ReceiptType.TransferOut,
-        from,
+        id,
+        from: id,
         to,
         amount,
         assetId,
