@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
-import { Fuel, LocalStorage, MemoryStorage, FuelConnector } from 'fuels';
-import type { TargetObject, Network, Asset, FuelABI } from 'fuels';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { MemoryStorage, FuelConnector } from 'fuels';
+import type { Network, Asset, FuelABI } from 'fuels';
 
 // prettier-ignore
 // #region fuel-connector-extends
@@ -76,8 +77,6 @@ class WalletConnector extends FuelConnector {
     // #endregion fuel-connector-events-currentAccount
 
     // #region fuel-connector-events-networks
-    // #import { Network };
-
     const network: Network = {
       chainId: 1,
       url: 'https://example.com/rpc',
@@ -87,8 +86,6 @@ class WalletConnector extends FuelConnector {
     // #endregion fuel-connector-events-networks
 
     // #region fuel-connector-events-currentNetwork
-    // #import { Network };
-
     const currentNetwork: Network = {
       chainId: 1,
       url: 'https://example.com/rpc',
@@ -98,8 +95,6 @@ class WalletConnector extends FuelConnector {
     // #endregion fuel-connector-events-currentNetwork
 
     // #region fuel-connector-events-assets
-    // #import { Asset };
-
     const assets: Array<Asset> = [
       {
         name: 'Ethereum',
@@ -137,94 +132,3 @@ class WalletConnector extends FuelConnector {
     // #endregion fuel-connector-events-abis
   }
 }
-
-/**
- * @group node
- */
-describe('connectors', () => {
-  describe('instantiation', () => {
-    test('should be able to instantiate a Fuel SDK', async () => {
-      // #region fuel-instantiation-1
-      // #import { Fuel };
-
-      const sdk = new Fuel();
-
-      /*
-        Awaits for initialization to mitigate potential race conditions
-        derived from the async nature of instantiating a connector.
-      */
-      await sdk.init();
-      // #endregion fuel-instantiation-1
-
-      expect(sdk).toBeDefined();
-    });
-
-    test('should be able to instantiate with connectors', async () => {
-      const defaultConnectors = (_opts: { devMode: boolean }): Array<FuelConnector> => [
-        new WalletConnector(),
-      ];
-
-      // #region fuel-options-connectors
-      // #import { Fuel };
-      // #context import { defaultConnectors } from '@fuels/connectors';
-
-      const sdk = await new Fuel({
-        connectors: defaultConnectors({
-          devMode: true,
-        }),
-      }).init();
-      // #endregion fuel-options-connectors
-
-      expect(sdk).toBeDefined();
-    });
-
-    test('should be able to instantiate with memory storage', async () => {
-      // #region fuel-options-storage-memory
-      // #import { Fuel, MemoryStorage };
-
-      const sdk = await new Fuel({
-        storage: new MemoryStorage(),
-      }).init();
-      // #endregion fuel-options-storage-memory
-
-      expect(sdk).toBeDefined();
-    });
-
-    test('should be able to instantiate with local storage', async () => {
-      const window = {
-        localStorage: {
-          setItem: vi.fn(),
-          getItem: vi.fn(),
-          removeItem: vi.fn(),
-          clear: vi.fn(),
-        } as unknown as Storage,
-      };
-
-      // #region fuel-options-storage-local
-      // #import { Fuel, LocalStorage };
-
-      const sdk = await new Fuel({
-        storage: new LocalStorage(window.localStorage),
-      }).init();
-      // #endregion fuel-options-storage-local
-
-      expect(sdk).toBeDefined();
-    });
-
-    test('should be able to instantiate with targetObject', async () => {
-      const window = {} as unknown as TargetObject;
-
-      // #region fuel-options-target-object
-      // #import { Fuel, TargetObject };
-
-      const targetObject: TargetObject = window || document;
-
-      const sdk = await new Fuel({
-        targetObject,
-      }).init();
-      // #endregion fuel-options-target-object
-
-      expect(sdk).toBeDefined();
-    });
-  });
-});
