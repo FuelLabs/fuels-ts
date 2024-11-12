@@ -130,6 +130,11 @@ fragment transactionFragment on Transaction {
   }
 }
 
+fragment transactionRawPayloadFragment on Transaction {
+  id
+  rawPayload
+}
+
 fragment inputEstimatePredicatesFragment on Input {
   ... on InputCoin {
     predicateGasUsed
@@ -487,7 +492,7 @@ query getTransactions(
   transactions(after: $after, before: $before, first: $first, last: $last) {
     edges {
       node {
-        ...transactionFragment
+        rawPayload
       }
     }
     pageInfo {
@@ -553,7 +558,7 @@ query getBlockWithTransactions($blockId: BlockId, $blockHeight: U32) {
   block(id: $blockId, height: $blockHeight) {
     ...blockFragment
     transactions {
-      ...transactionRawPayload
+      ...transactionRawPayloadFragment
     }
   }
 }
@@ -569,11 +574,6 @@ query getBlocks($after: String, $before: String, $first: Int, $last: Int) {
       }
     }
   }
-}
-
-fragment transactionRawPayload on Transaction {
-  id
-  rawPayload
 }
 
 query getCoin($coinId: UtxoId!) {

@@ -1878,6 +1878,48 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     });
   });
 
+  it('ensures getTransactions does not fetch unused data', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    await provider.produceBlocks(1);
+
+    const { transactions } = await provider.operations.getTransactions({
+      first: 1,
+    });
+
+    expect(transactions.edges.length).toBe(1);
+
+    const expectedData = {
+      rawPayload: expect.any(String),
+    };
+
+    expect(transactions.edges[0].node).toStrictEqual(expectedData);
+  });
+
+  it('ensures getBlockWithTransactions does not fetch unused transaction data', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    await provider.produceBlocks(1);
+
+    const blockNumber = await provider.getBlockNumber();
+
+    const { block } = await provider.operations.getBlockWithTransactions({
+      blockHeight: blockNumber.toString(),
+    });
+
+    expect(block).toBeDefined();
+    expect(block?.transactions.length).toBe(1);
+
+    const expectedData = {
+      id: expect.any(String),
+      rawPayload: expect.any(String),
+    };
+
+    expect(block?.transactions?.[0]).toStrictEqual(expectedData);
+  });
+
   describe('paginated methods', () => {
     test('can properly use getCoins', async () => {
       const totalCoins = RESOURCES_PAGE_SIZE_LIMIT + 1;
