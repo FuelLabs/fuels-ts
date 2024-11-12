@@ -1,5 +1,95 @@
 # @internal/check-imports
 
+## 0.0.14
+
+### Patch Changes
+
+- Updated dependencies [85072f7]
+- Updated dependencies [eb3b6c9]
+- Updated dependencies [6b7b6de]
+- Updated dependencies [4ae041e]
+- Updated dependencies [bdfd009]
+- Updated dependencies [b78d032]
+- Updated dependencies [987aed3]
+  - @fuel-ts/account@0.96.1
+  - @fuel-ts/versions@0.96.1
+  - @fuel-ts/address@0.96.1
+  - @fuel-ts/math@0.96.1
+  - @fuel-ts/contract@0.96.1
+  - fuels@0.96.1
+  - @fuel-ts/program@0.96.1
+  - @fuel-ts/script@0.96.1
+  - @fuel-ts/abi-typegen@0.96.1
+  - @fuel-ts/errors@0.96.1
+  - @fuel-ts/utils@0.96.1
+  - @fuel-ts/transactions@0.96.1
+  - @fuel-ts/abi-coder@0.96.1
+  - @fuel-ts/crypto@0.96.1
+  - @fuel-ts/merkle@0.96.1
+  - @fuel-ts/hasher@0.96.1
+  - @fuel-ts/interfaces@0.96.1
+
+## 0.0.13
+
+### Patch Changes
+
+- Updated dependencies [5bf6621]
+  - @fuel-ts/address@0.96.0
+  - @fuel-ts/account@0.96.0
+  - fuels@0.96.0
+  - @fuel-ts/program@0.96.0
+  - @fuel-ts/script@0.96.0
+  - @fuel-ts/transactions@0.96.0
+  - @fuel-ts/contract@0.96.0
+  - @fuel-ts/abi-coder@0.96.0
+  - @fuel-ts/abi-typegen@0.96.0
+  - @fuel-ts/crypto@0.96.0
+  - @fuel-ts/errors@0.96.0
+  - @fuel-ts/hasher@0.96.0
+  - @fuel-ts/interfaces@0.96.0
+  - @fuel-ts/math@0.96.0
+  - @fuel-ts/merkle@0.96.0
+  - @fuel-ts/utils@0.96.0
+  - @fuel-ts/versions@0.96.0
+
+## 0.0.12
+
+### Patch Changes
+
+- Updated dependencies [d4e839f]
+- Updated dependencies [95a9650]
+- Updated dependencies [b733e81]
+- Updated dependencies [74991ad]
+- Updated dependencies [fcbcc22]
+- Updated dependencies [bf14023]
+- Updated dependencies [f7afa04]
+- Updated dependencies [45f4a86]
+- Updated dependencies [55bfa6d]
+- Updated dependencies [d968532]
+- Updated dependencies [c84abb3]
+- Updated dependencies [735bb1c]
+- Updated dependencies [87da048]
+- Updated dependencies [9c70eba]
+- Updated dependencies [04578ed]
+- Updated dependencies [d1b4505]
+  - @fuel-ts/versions@0.95.0
+  - @fuel-ts/account@0.95.0
+  - fuels@0.95.0
+  - @fuel-ts/math@0.95.0
+  - @fuel-ts/address@0.95.0
+  - @fuel-ts/interfaces@0.95.0
+  - @fuel-ts/abi-typegen@0.95.0
+  - @fuel-ts/contract@0.95.0
+  - @fuel-ts/script@0.95.0
+  - @fuel-ts/errors@0.95.0
+  - @fuel-ts/utils@0.95.0
+  - @fuel-ts/program@0.95.0
+  - @fuel-ts/abi-coder@0.95.0
+  - @fuel-ts/crypto@0.95.0
+  - @fuel-ts/merkle@0.95.0
+  - @fuel-ts/transactions@0.95.0
+  - @fuel-ts/hasher@0.95.0
+
 ## 0.0.11
 
 ### Patch Changes

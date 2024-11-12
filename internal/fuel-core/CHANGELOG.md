@@ -1,5 +1,18 @@
 # @internal/fuel-core
 
+## 0.89.4
+
+### Patch Changes
+
+- eb3b6c9: chore: upgrading `fuel-core` to `0.39.0`
+
+## 0.89.3
+
+### Patch Changes
+
+- d4e839f: chore: `fuel-core@0.37.1`, `forc@0.65.1`, and `create-fuels` toolchains
+- 735bb1c: chore: update `fuel-core` to `0.38.0`
+
 ## 0.89.2
 
 ### Patch Changes

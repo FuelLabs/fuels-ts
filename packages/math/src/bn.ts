@@ -2,7 +2,6 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import BnJs from 'bn.js';
 
 import { DEFAULT_DECIMAL_UNITS, DEFAULT_MIN_PRECISION, DEFAULT_PRECISION } from './configs';
-import { toFixed } from './decimal';
 import type { FormatConfig } from './types';
 
 type CompareResult = -1 | 0 | 1;
@@ -109,37 +108,78 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
   format(options?: FormatConfig): string {
     const {
       units = DEFAULT_DECIMAL_UNITS,
-      precision = DEFAULT_PRECISION,
-      minPrecision = DEFAULT_MIN_PRECISION,
+      precision: initialPrecision = DEFAULT_PRECISION,
+      minPrecision: initialMinPrecision = DEFAULT_MIN_PRECISION,
     } = options || {};
 
-    const formattedUnits = this.formatUnits(units);
-    const formattedFixed = toFixed(formattedUnits, { precision, minPrecision });
-
-    // increase precision if formatted is zero, but has more numbers out of precision
-    if (!parseFloat(formattedFixed)) {
-      const [, originalDecimals = '0'] = formattedUnits.split('.');
-      const firstNonZero = originalDecimals.match(/[1-9]/);
-
-      if (firstNonZero && firstNonZero.index && firstNonZero.index + 1 > precision) {
-        const [valueUnits = '0'] = formattedFixed.split('.');
-        return `${valueUnits}.${originalDecimals.slice(0, firstNonZero.index + 1)}`;
-      }
+    // If units is 0, return the whole number formatted with commas
+    if (units === 0) {
+      return this.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
 
-    return formattedFixed;
+    // Adjust precision and minPrecision
+    // TODO: This really should throw an error because you can't have a precision less than the minPrecision but this would be a breaking change
+    const minPrecision =
+      initialMinPrecision > initialPrecision ? initialPrecision : initialMinPrecision;
+    const precision =
+      initialPrecision > initialMinPrecision ? initialPrecision : initialMinPrecision;
+
+    const formattedUnits = this.formatUnits(units);
+    const [integerPart, fractionalPart = ''] = formattedUnits.split('.');
+
+    const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+    // If precision is 0, return only the integer part
+    if (precision === 0) {
+      return formattedInteger;
+    }
+
+    // Remove trailing zeros and apply precision
+    let formattedFractional = fractionalPart.replace(/0+$/, '');
+
+    // Always return the first non-zero number if it exceeds the precision and the integer part is zero
+    if (formattedFractional.length > precision) {
+      if (integerPart === '0') {
+        const firstNonZeroIndex = formattedFractional.search(/[1-9]/);
+        if (firstNonZeroIndex >= 0 && firstNonZeroIndex < precision) {
+          formattedFractional = formattedFractional.slice(0, precision);
+        } else {
+          formattedFractional = formattedFractional.slice(0, firstNonZeroIndex + 1);
+        }
+      } else {
+        formattedFractional = formattedFractional.slice(0, precision);
+      }
+    } else {
+      formattedFractional = formattedFractional.slice(0, precision);
+    }
+
+    // Ensure we meet the minimum precision
+    if (formattedFractional.length < minPrecision) {
+      formattedFractional = formattedFractional.padEnd(minPrecision, '0');
+    }
+
+    // If after removing trailing zeros, the fractional part is empty and minPrecision is 0, return only the integer part
+    if (formattedFractional === '' && minPrecision === 0) {
+      return formattedInteger;
+    }
+
+    // Only add the decimal point and fractional part if there's a fractional part
+    return formattedFractional ? `${formattedInteger}.${formattedFractional}` : formattedInteger;
   }
 
   formatUnits(units: number = DEFAULT_DECIMAL_UNITS): string {
-    const valueUnits = this.toString().slice(0, units * -1);
-    const valueDecimals = this.toString().slice(units * -1);
-    const length = valueDecimals.length;
-    const defaultDecimals = Array.from({ length: units - length })
-      .fill('0')
-      .join('');
-    const integerPortion = valueUnits ? `${valueUnits}.` : '0.';
+    const valueString = this.toString();
+    const valueLength = valueString.length;
 
-    return `${integerPortion}${defaultDecimals}${valueDecimals}`;
+    if (valueLength <= units) {
+      const paddedZeros = '0'.repeat(units - valueLength);
+      return `0.${paddedZeros}${valueString}`;
+    }
+
+    const integerPart = valueString.slice(0, valueLength - units);
+    const fractionalPart = valueString.slice(valueLength - units);
+
+    return `${integerPart}.${fractionalPart}`;
   }
   // END ANCHOR: HELPERS
 
@@ -267,6 +307,10 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
     return this.gte(this.MAX_U64) ? new BN(this.MAX_U64) : this;
   }
 
+  max(num: BNInput): BN {
+    return this.gte(num) ? new BN(num) : this;
+  }
+
   normalizeZeroToOne(): BN {
     return this.isZero() ? new BN(1) : this;
   }
@@ -281,6 +325,11 @@ bn.parseUnits = (value: string, units: number = DEFAULT_DECIMAL_UNITS): BN => {
   const valueToParse = value === '.' ? '0.' : value;
   const [valueUnits = '0', valueDecimals = '0'] = valueToParse.split('.');
   const length = valueDecimals.length;
+
+  if (units === 0) {
+    const valueWithoutDecimals = valueToParse.replace(',', '').split('.')[0];
+    return bn(valueWithoutDecimals);
+  }
 
   if (length > units) {
     throw new FuelError(

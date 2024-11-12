@@ -1,5 +1,38 @@
 # @fuel-ts/abi-typegen
 
+## 0.96.1
+
+### Patch Changes
+
+- Updated dependencies [eb3b6c9]
+  - @fuel-ts/versions@0.96.1
+  - @fuel-ts/errors@0.96.1
+  - @fuel-ts/utils@0.96.1
+  - @fuel-ts/interfaces@0.96.1
+
+## 0.96.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.96.0
+- @fuel-ts/interfaces@0.96.0
+- @fuel-ts/utils@0.96.0
+- @fuel-ts/versions@0.96.0
+
+## 0.95.0
+
+### Patch Changes
+
+- 04578ed: fix: typegen factory template
+- Updated dependencies [d4e839f]
+- Updated dependencies [95a9650]
+- Updated dependencies [f7afa04]
+- Updated dependencies [735bb1c]
+  - @fuel-ts/versions@0.95.0
+  - @fuel-ts/interfaces@0.95.0
+  - @fuel-ts/errors@0.95.0
+  - @fuel-ts/utils@0.95.0
+
 ## 0.94.9
 
 ### Patch Changes

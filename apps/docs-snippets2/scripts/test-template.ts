@@ -1,17 +1,16 @@
 /* eslint-disable no-global-assign */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 
 // %IMPORTS%
 
+// @ts-ignore global assignment
 const consoleBkp = { ...console };
 
 afterAll(() => {
   console = { ...consoleBkp };
 });
 
-/**
- * @group node
- * @group browser
- */
+// %TEST_ENVIRONMENT%
 test('%NAME%', async () => {
   // TEST NODE LAUNCHER ———>>>
   // %NODE_LAUNCHER%
