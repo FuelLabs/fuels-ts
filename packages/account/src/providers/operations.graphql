@@ -570,6 +570,13 @@ query getBlocks($after: String, $before: String, $first: Int, $last: Int) {
   }
 }
 
+query getCoin($coinId: UtxoId!) {
+  coin(utxoId: $coinId) {
+    ...coinFragment
+    owner
+  }
+}
+
 query getCoins(
   $filter: CoinFilterInput!
   $after: String
