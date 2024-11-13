@@ -12,9 +12,6 @@ fragment SubmittedStatusFragment on SubmittedStatus {
 
 fragment SuccessStatusFragment on SuccessStatus {
   type: __typename
-  block {
-    id
-  }
   time
   programState {
     returnType
@@ -27,17 +24,28 @@ fragment SuccessStatusFragment on SuccessStatus {
   totalFee
 }
 
-fragment FailureStatusFragment on FailureStatus {
-  type: __typename
+fragment SuccessStatusWithBlockIdFragment on SuccessStatus {
+  ...SuccessStatusFragment
   block {
     id
   }
+}
+
+fragment FailureStatusFragment on FailureStatus {
+  type: __typename
   totalGas
   totalFee
   time
   reason
   receipts {
     ...receiptFragment
+  }
+}
+
+fragment FailureStatusWithBlockIdFragment on FailureStatus {
+  ...FailureStatusFragment
+  block {
+    id
   }
 }
 
@@ -106,13 +114,13 @@ fragment transactionStatusSubscriptionFragment on TransactionStatus {
     ...SubmittedStatusFragment
   }
   ... on SuccessStatus {
-    ...SuccessStatusFragment
+    ...SuccessStatusWithBlockIdFragment
     transaction {
       ...malleableTransactionFieldsFragment
     }
   }
   ... on FailureStatus {
-    ...FailureStatusFragment
+    ...FailureStatusWithBlockIdFragment
     transaction {
       ...malleableTransactionFieldsFragment
     }
@@ -481,7 +489,22 @@ query getTransaction($transactionId: TransactionId!) {
 
 query getTransactionWithReceipts($transactionId: TransactionId!) {
   transaction(id: $transactionId) {
-    ...transactionFragment
+    id
+    rawPayload
+    status {
+      ... on SubmittedStatus {
+        ...SubmittedStatusFragment
+      }
+      ... on SuccessStatus {
+        ...SuccessStatusWithBlockIdFragment
+      }
+      ... on FailureStatus {
+        ...FailureStatusWithBlockIdFragment
+      }
+      ... on SqueezedOutStatus {
+        ...SqueezedOutStatusFragment
+      }
+    }
   }
 }
 
