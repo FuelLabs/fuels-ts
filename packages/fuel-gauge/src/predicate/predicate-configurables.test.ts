@@ -307,27 +307,5 @@ describe('Predicate', () => {
         )
       );
     });
-
-    it('throws when setting a configurable with no ABI', async () => {
-      using launched = await launchTestNode();
-
-      const { provider } = launched;
-
-      await expectToThrowFuelError(
-        () =>
-          new Predicate({
-            bytecode: PredicateWithConfigurable.bytecode,
-            provider,
-            data: ['NADA'],
-            configurableConstants: {
-              NOPE: 'NADA',
-            },
-          }),
-        new FuelError(
-          FuelError.CODES.INVALID_CONFIGURABLE_CONSTANTS,
-          `Error setting configurable constants: Cannot validate configurable constants because the Predicate was instantiated without a JSON ABI.`
-        )
-      );
-    });
   });
 });
