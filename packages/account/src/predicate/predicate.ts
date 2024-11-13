@@ -74,8 +74,7 @@ export class Predicate<
     super(address, provider);
 
     this.bytes = predicateBytes;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    this.interface = predicateInterface!;
+    this.interface = predicateInterface;
     if (data !== undefined && data.length > 0) {
       this.predicateData = data;
     }
