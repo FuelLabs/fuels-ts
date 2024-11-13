@@ -265,8 +265,12 @@ fragment messageFragment on Message {
   sender
   recipient
   data
-  nonce
   daHeight
+}
+
+fragment getMessageFragment on Message {
+  ...messageFragment
+  nonce
 }
 
 fragment messageProofFragment on MessageProof {
@@ -312,7 +316,6 @@ fragment messageProofFragment on MessageProof {
   }
   sender
   recipient
-  nonce
   amount
   data
 }
@@ -698,7 +701,7 @@ query getMessages(
     }
     edges {
       node {
-        ...messageFragment
+        ...getMessageFragment
       }
     }
   }
