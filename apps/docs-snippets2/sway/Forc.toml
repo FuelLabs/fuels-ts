@@ -14,6 +14,7 @@ members = [
   "employee-data",
   "input-output-types",
   "script-sum",
+  "script-main-args",
   "simple-predicate",
   "sum-option-u8",
 ]
