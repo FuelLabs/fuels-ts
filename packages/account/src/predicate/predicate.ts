@@ -316,16 +316,16 @@ export class Predicate<
 
   /**
    *
-   * @param deployer - The account used to pay the deployment costs.
+   * @param account - The account used to pay the deployment costs.
    * @returns The _blobId_ and a _waitForResult_ callback that returns the deployed predicate
    * once the blob deployment transaction finishes.
    *
    * The returned loader predicate will have the same configurable constants
    * as the original predicate which was used to generate the loader predicate.
    */
-  async deploy<T = this>(deployer: Account) {
+  async deploy<T = this>(account: Account) {
     return deployScriptOrPredicate<T>({
-      deployer,
+      deployer: account,
       abi: this.interface.jsonAbi,
       bytecode: this.bytes,
       loaderInstanceCallback: (loaderBytecode, newAbi) =>
