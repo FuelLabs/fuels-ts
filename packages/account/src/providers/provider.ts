@@ -1418,7 +1418,7 @@ Supported fuel-core version: ${supportedVersion}.`
       id: node.utxoId,
       assetId: node.assetId,
       amount: bn(node.amount),
-      owner: Address.fromAddressOrString(node.owner),
+      owner: ownerAddress,
       blockCreated: bn(node.blockCreated),
       txCreatedIdx: bn(node.txCreatedIdx),
     }));
@@ -1486,7 +1486,7 @@ Supported fuel-core version: ${supportedVersion}.`
               id: coin.utxoId,
               amount: bn(coin.amount),
               assetId: coin.assetId,
-              owner: Address.fromAddressOrString(coin.owner),
+              owner: ownerAddress,
               blockCreated: bn(coin.blockCreated),
               txCreatedIdx: bn(coin.txCreatedIdx),
             } as Coin;
@@ -2068,13 +2068,13 @@ Supported fuel-core version: ${supportedVersion}.`
       messageId: InputMessageCoder.getMessageId({
         sender: rawMessage.sender,
         recipient: rawMessage.recipient,
-        nonce: rawMessage.nonce,
+        nonce,
         amount: bn(rawMessage.amount),
         data: rawMessage.data,
       }),
       sender: Address.fromAddressOrString(rawMessage.sender),
       recipient: Address.fromAddressOrString(rawMessage.recipient),
-      nonce: rawMessage.nonce,
+      nonce,
       amount: bn(rawMessage.amount),
       data: InputMessageCoder.decodeData(rawMessage.data),
       daHeight: bn(rawMessage.daHeight),
