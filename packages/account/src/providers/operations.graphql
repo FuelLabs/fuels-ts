@@ -243,7 +243,6 @@ fragment blockFragment on Block {
 fragment coinFragment on Coin {
   type: __typename
   utxoId
-  owner
   amount
   assetId
   blockCreated
@@ -582,6 +581,7 @@ query getBlocks($after: String, $before: String, $first: Int, $last: Int) {
 query getCoin($coinId: UtxoId!) {
   coin(utxoId: $coinId) {
     ...coinFragment
+    owner
   }
 }
 

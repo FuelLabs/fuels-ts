@@ -1418,7 +1418,7 @@ Supported fuel-core version: ${supportedVersion}.`
       id: node.utxoId,
       assetId: node.assetId,
       amount: bn(node.amount),
-      owner: Address.fromAddressOrString(node.owner),
+      owner: ownerAddress,
       blockCreated: bn(node.blockCreated),
       txCreatedIdx: bn(node.txCreatedIdx),
     }));
@@ -1486,7 +1486,7 @@ Supported fuel-core version: ${supportedVersion}.`
               id: coin.utxoId,
               amount: bn(coin.amount),
               assetId: coin.assetId,
-              owner: Address.fromAddressOrString(coin.owner),
+              owner: ownerAddress,
               blockCreated: bn(coin.blockCreated),
               txCreatedIdx: bn(coin.txCreatedIdx),
             } as Coin;
