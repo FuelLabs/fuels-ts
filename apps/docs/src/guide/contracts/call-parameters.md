@@ -13,7 +13,7 @@ When interacting with contracts, you can configure specific parameters for contr
 
 The contract in use in this section has the following implementation:
 
-<<< @/../../docs-snippets2/sway/return-context/src/main.sw#return-context-contract{rust:line-numbers}
+<<< @/../../docs/sway/return-context/src/main.sw#return-context-contract{rust:line-numbers}
 
 ## Forward Parameter
 
@@ -24,7 +24,7 @@ The `forward` parameter allows the sending of a specific amount of coins to a co
 
 <!-- forward:example:end -->
 
-<<< @/../../docs-snippets2/src/contracts/call-parameters/forward.ts#forward{ts:line-numbers}
+<<< @/../../docs/src/snippets/contracts/call-parameters/forward.ts#forward{ts:line-numbers}
 
 ## Gas Limit Parameter
 
@@ -35,7 +35,7 @@ The `gasLimit` refers to the maximum amount of gas that can be consumed specific
 
 <!-- gas_limit:example:end -->
 
-<<< @/../../docs-snippets2/src/contracts/call-parameters/gas-fee.ts#gas-fee{ts:line-numbers}
+<<< @/../../docs/src/snippets/contracts/call-parameters/gas-fee.ts#gas-fee{ts:line-numbers}
 
 ## Call Parameter `gasLimit` vs Transaction Parameter `gasLimit`
 
@@ -47,4 +47,4 @@ If you don't set the `gasLimit` for the call, the transaction `gasLimit` will be
 
 You can set both call parameters and transaction parameters within the same contract function call.
 
-<<< @/../../docs-snippets2/src/contracts/call-parameters/setting-both-parameters.ts#setting-both-parameters{ts:line-numbers}
+<<< @/../../docs/src/snippets/contracts/call-parameters/setting-both-parameters.ts#setting-both-parameters{ts:line-numbers}

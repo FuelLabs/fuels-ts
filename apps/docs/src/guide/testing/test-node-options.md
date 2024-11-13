@@ -7,7 +7,7 @@ This reference describes all the options of the [`launchTestNode`](./launching-a
 - [`nodeOptions`](./test-node-options.md#nodeoptions)
 - [`providerOptions`](./test-node-options.md#provideroptions)
 
-<<< @/../../docs-snippets2/src/testing/launching-a-test-node.ts#options{ts:line-numbers}
+<<< @/../../docs/src/snippets/testing/launching-a-test-node.ts#options{ts:line-numbers}
 
 Check out the [API reference](../../api/Contract/LaunchTestNodeOptions.md) for usage information on the Test Node Options.
 
@@ -26,17 +26,17 @@ Used to set the node's genesis block state (coins and messages).
 
 The `TestAssetId` utility integrates with [`walletsConfig`](./test-node-options.md#walletsconfig) and gives you an easy way to generate multiple random asset ids via the `TestAssetId.random` static method.
 
-<<< @/../../docs-snippets2/src/testing/launching-a-test-node.ts#asset-ids{ts:line-numbers}
+<<< @/../../docs/src/snippets/testing/launching-a-test-node.ts#asset-ids{ts:line-numbers}
 
 ### `walletsConfig.messages`
 
 The `TestMessage` helper class is used to create messages for testing purposes. When passed via `walletsConfig.messages`, the `recipient` field of the message is overriden to be the wallet's address.
 
-<<< @/../../docs-snippets2/src/testing/launching-a-test-node.ts#test-messages{ts:line-numbers}
+<<< @/../../docs/src/snippets/testing/launching-a-test-node.ts#test-messages{ts:line-numbers}
 
 It can also be used standalone and passed into the initial state of the chain via the `TestMessage.toChainMessage` instance method.
 
-<<< @/../../docs-snippets2/src/testing/launching-a-test-node.ts#test-messages-chain{ts:line-numbers}
+<<< @/../../docs/src/snippets/testing/launching-a-test-node.ts#test-messages-chain{ts:line-numbers}
 
 ## `contractsConfigs`
 
@@ -54,7 +54,7 @@ Options to modify the behavior of the node.
 
 For example, you can specify your own base asset id of the chain like below:
 
-<<< @/../../docs-snippets2/src/testing/launching-a-test-node.ts#custom-node-options{ts:line-numbers}
+<<< @/../../docs/src/snippets/testing/launching-a-test-node.ts#custom-node-options{ts:line-numbers}
 
 _Note: The API for these options is still not fully complete and better documentation will come in the future._
 

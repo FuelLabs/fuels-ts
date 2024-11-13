@@ -4,10 +4,10 @@ When working with an unfunded account, you can generate fake resources to perfor
 
 Below is an example script that returns the value `1337`. You can use fake resources to execute a dry-run of this script and obtain the returned value.
 
-<<< @/../../docs-snippets2/sway/return-script/src/main.sw#generate-fake-resources-1{rust:line-numbers}
+<<< @/../../docs/sway/return-script/src/main.sw#generate-fake-resources-1{rust:line-numbers}
 
 To execute a dry-run, use the `Provider.dryRun` method. Ensure you set the `utxo_validation` flag to true, as this script uses fake UTXOs:
 
-<<< @/../../docs-snippets2/src/cookbook/fake-resources.ts#generate-fake-resources-2{ts:line-numbers}
+<<< @/../../docs/src/snippets/cookbook/fake-resources.ts#generate-fake-resources-2{ts:line-numbers}
 
 By setting `utxo_validation` to `true`, you can successfully execute the dry-run and retrieve the returned value from the script without requiring actual funds.

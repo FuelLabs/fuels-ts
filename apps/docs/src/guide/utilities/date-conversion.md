@@ -8,7 +8,7 @@ Internally the transactions and other time/date assets are encoded using the [`T
 
 We have a host of static method for **instantiation** of our `DateTime` class.
 
-<<< @/../../docs-snippets2/src/utilities/date-conversion/instantiation.ts#create-from-multiple-sources{ts:line-numbers}
+<<< @/../../docs/src/snippets/utilities/date-conversion/instantiation.ts#create-from-multiple-sources{ts:line-numbers}
 
 ### TAI64
 
@@ -16,7 +16,7 @@ We have a host of static method for **instantiation** of our `DateTime` class.
 
 `toTai64` is an _instance_ method, that allows the conversion of a `DateTime` class to a `TAI64` string.
 
-<<< @/../../docs-snippets2/src/utilities/date-conversion/tai64.ts#from-tai-64-and-to-tai-64{ts:line-numbers}
+<<< @/../../docs/src/snippets/utilities/date-conversion/tai64.ts#from-tai-64-and-to-tai-64{ts:line-numbers}
 
 ### UNIX
 
@@ -24,19 +24,19 @@ We have a host of static method for **instantiation** of our `DateTime` class.
 
 `toUnixMilliseconds` is an _instance_ method, that allows the conversion of a `DateTime` class to a `UNIX` number in milliseconds.
 
-<<< @/../../docs-snippets2/src/utilities/date-conversion/unix-milliseconds.ts#from-unix-milliseconds-and-to-unix-milliseconds{ts:line-numbers}
+<<< @/../../docs/src/snippets/utilities/date-conversion/unix-milliseconds.ts#from-unix-milliseconds-and-to-unix-milliseconds{ts:line-numbers}
 
 `fromUnixSeconds` is a _static_ method, that allows the creation of `DateTime` class from a UNIX Seconds number.
 
 `toUnixSeconds` is an _instance_ method, that allows the conversion of a `DateTime` class to a `UNIX` number in seconds.
 
-<<< @/../../docs-snippets2/src/utilities/date-conversion/unix-seconds.ts#from-unix-seconds-and-to-unix-seconds{ts:line-numbers}
+<<< @/../../docs/src/snippets/utilities/date-conversion/unix-seconds.ts#from-unix-seconds-and-to-unix-seconds{ts:line-numbers}
 
 ### Date
 
 The `DateTime` class extends the functionality of the `Date` object, so all method are available for your usages.
 
-<<< @/../../docs-snippets2/src/utilities/date-conversion/date-object.ts#date-object-methods{ts:line-numbers}
+<<< @/../../docs/src/snippets/utilities/date-conversion/date-object.ts#date-object-methods{ts:line-numbers}
 
 ## Formats
 

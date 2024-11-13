@@ -8,7 +8,7 @@
 
 A more complex example showcasing genesis block state configuration with [`walletsConfig`](./test-node-options.md#walletsconfig) and deployment of multiple contracts is shown below.
 
-<<< @/../../docs-snippets2/src/testing/launching-a-test-node.ts#advanced-example{ts:line-numbers}
+<<< @/../../docs/src/snippets/testing/launching-a-test-node.ts#advanced-example{ts:line-numbers}
 
 ## Summary
 

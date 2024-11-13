@@ -2,9 +2,9 @@
 
 **docs** is a private package for the Fuel documentation site.
 
-# Table of contents
+## Table of contents
 
-- [`docs`](#docs-snippets)
+- [`docs`](#docs)
 - [Table of contents](#table-of-contents)
   - [Building](#building)
   - [Testing](#testing)

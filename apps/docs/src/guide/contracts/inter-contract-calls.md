@@ -10,18 +10,18 @@ In this example, we have a `SimpleToken` contract representing a basic token con
 
 Here's a simple token contract that allows holding balances:
 
-<<< @/../../docs-snippets2/sway/simple-token/src/main.sw#inter-contract-calls-1{rs:line-numbers}
+<<< @/../../docs/sway/simple-token/src/main.sw#inter-contract-calls-1{rs:line-numbers}
 
 ### Contract: `TokenDepositor`
 
 The `TokenDepositor` contract imports the `SimpleToken` contract and calls its `deposit` function to deposit tokens:
 
-<<< @/../../docs-snippets2/sway/token-depositor/src/main.sw#inter-contract-calls-2{rs:line-numbers}
+<<< @/../../docs/sway/token-depositor/src/main.sw#inter-contract-calls-2{rs:line-numbers}
 
 ## Inter-contract calls using the SDK
 
 Once both contracts are deployed, we can use the SDK to make the `TokenDepositor` contract to call the `SimpleToken` contract.
 
-<<< @/../../docs-snippets2/src/contracts/inter-contract-calls.ts#full{ts:line-numbers}
+<<< @/../../docs/src/snippets/contracts/inter-contract-calls.ts#full{ts:line-numbers}
 
 Pay attention to the method `addContracts` called by the `TokenDepositor` contract. This method accepts an array of instances of deployed contracts. Without calling this method, the inter-contract call will not work.

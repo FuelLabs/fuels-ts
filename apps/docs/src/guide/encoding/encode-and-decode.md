@@ -11,7 +11,7 @@ The `Interface` class requires you to pass the [ABI](https://docs.fuel.network/d
 
 Imagine we are working with the following script that returns the sum of two `u32` integers:
 
-<<< @/../../docs-snippets2/sway/script-sum/src/main.sw#encode-and-decode-1{rust:line-numbers}
+<<< @/../../docs/sway/script-sum/src/main.sw#encode-and-decode-1{rust:line-numbers}
 
 When you build this script, using:
 
@@ -21,21 +21,21 @@ forc build
 
 It will produce the following ABI:
 
-<<< @/../../docs-snippets/test/fixtures/abi/encode-and-decode.jsonc#encode-and-decode-2{json:line-numbers}
+<<< @/../../docs/src/snippets/encoding/encode-and-decode.jsonc#encode-and-decode-2{json:line-numbers}
 
 Now, let's prepare some data to pass to the `main` function to retrieve the combined integer. The function expects and returns a `u32` integer. So here, we will encode the `u32` to pass it to the function and receive the same `u32` back, as bytes, that we'll use for decoding. We can do both of these with the `Interface`.
 
 First, let's prepare the transaction:
 
-<<< @/../../docs-snippets2/src/encoding/encode-and-decode.ts#encode-and-decode-3{ts:line-numbers}
+<<< @/../../docs/src/snippets/encoding/encode-and-decode.ts#encode-and-decode-3{ts:line-numbers}
 
 Now, we can encode the script data to use in the transaction:
 
-<<< @/../../docs-snippets2/src/encoding/encode-and-decode.ts#encode-and-decode-4{ts:line-numbers}
+<<< @/../../docs/src/snippets/encoding/encode-and-decode.ts#encode-and-decode-4{ts:line-numbers}
 
 Finally, we can decode the result:
 
-<<< @/../../docs-snippets2/src/encoding/encode-and-decode.ts#encode-and-decode-5{ts:line-numbers}
+<<< @/../../docs/src/snippets/encoding/encode-and-decode.ts#encode-and-decode-5{ts:line-numbers}
 
 A similar approach can be taken with [Predicates](../predicates/index.md); however, you must set the encoded values to the `predicateData` property.
 
@@ -45,4 +45,4 @@ A similar approach can be taken with [Predicates](../predicates/index.md); howev
 
 Here is the full example of the encoding and decoding methods:
 
-<<< @/../../docs-snippets2/src/encoding/encode-and-decode.ts#full{ts:line-numbers}
+<<< @/../../docs/src/snippets/encoding/encode-and-decode.ts#full{ts:line-numbers}

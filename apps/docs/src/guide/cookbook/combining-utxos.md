@@ -8,4 +8,4 @@ One way to avoid these errors is to combine your UTXOs. This can be done by perf
 
 > **Note:** You will not be able to have a single UTXO for the base asset after combining, as one output will be for the transfer, and you will have another for the fees.
 
-<<< @/../../docs-snippets2/src/cookbook/combining-utxos.ts#combining-utxos{ts:line-numbers}
+<<< @/../../docs/src/snippets/cookbook/combining-utxos.ts#combining-utxos{ts:line-numbers}
