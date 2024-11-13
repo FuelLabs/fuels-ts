@@ -86,7 +86,7 @@ describe('TransactionSummary', () => {
 
     const expected = {
       id,
-      blockId: MOCK_SUCCESS_STATUS.block.id,
+      blockId: MOCK_SUCCESS_STATUS.block?.id,
       fee: expect.any(BN),
       gasUsed: expect.any(BN),
       isTypeCreate: false,
@@ -113,7 +113,7 @@ describe('TransactionSummary', () => {
 
     const expected = {
       id,
-      blockId: MOCK_FAILURE_STATUS.block.id,
+      blockId: MOCK_FAILURE_STATUS.block?.id,
       fee: expect.any(BN),
       gasUsed: expect.any(BN),
       isTypeCreate: false,
