@@ -21,6 +21,7 @@ members = [
   "predicate-multi-args",
   "return-true-predicate",
   "script-sum",
+  "script-main-args",
   "simple-predicate",
   "simple-token",
   "simple-token-abi",
