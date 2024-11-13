@@ -11,4 +11,4 @@ pnpm fuels build
 pnpm fuels deploy
 
 # Checks for type errors
-pnpm tsc --noEmit
+pnpm tsc --noEmit --project tsconfig.emit.json
