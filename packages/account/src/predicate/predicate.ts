@@ -33,7 +33,7 @@ export type PredicateParams<
 > = {
   bytecode: BytesLike;
   provider: Provider;
-  abi?: JsonAbi;
+  abi: JsonAbi;
   data?: TData;
   configurableConstants?: TConfigurables;
 };
@@ -154,20 +154,17 @@ export class Predicate<
    */
   private static processPredicateData(
     bytes: BytesLike,
-    jsonAbi?: JsonAbi,
+    jsonAbi: JsonAbi,
     configurableConstants?: { [name: string]: unknown }
   ) {
     let predicateBytes = arrayify(bytes);
-    let abiInterface: Interface | undefined;
+    const abiInterface: Interface = new Interface(jsonAbi);
 
-    if (jsonAbi) {
-      abiInterface = new Interface(jsonAbi);
-      if (abiInterface.functions.main === undefined) {
-        throw new FuelError(
-          ErrorCode.ABI_MAIN_METHOD_MISSING,
-          'Cannot use ABI without "main" function.'
-        );
-      }
+    if (abiInterface.functions.main === undefined) {
+      throw new FuelError(
+        ErrorCode.ABI_MAIN_METHOD_MISSING,
+        'Cannot use ABI without "main" function.'
+      );
     }
 
     if (configurableConstants && Object.keys(configurableConstants).length) {
@@ -232,18 +229,11 @@ export class Predicate<
   private static setConfigurableConstants(
     bytes: Uint8Array,
     configurableConstants: { [name: string]: unknown },
-    abiInterface?: Interface
+    abiInterface: Interface
   ) {
     const mutatedBytes = bytes;
 
     try {
-      if (!abiInterface) {
-        throw new FuelError(
-          ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
-          'Cannot validate configurable constants because the Predicate was instantiated without a JSON ABI'
-        );
-      }
-
       if (Object.keys(abiInterface.configurables).length === 0) {
         throw new FuelError(
           ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
