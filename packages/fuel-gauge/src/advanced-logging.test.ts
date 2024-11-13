@@ -280,7 +280,7 @@ describe('Advanced Logging', () => {
         wallets: [wallet],
       } = launched;
 
-      const script = new Script(ScriptCallContract.bytecode, ScriptCallContract.abi, wallet);
+      const script = new ScriptCallContract(wallet);
 
       const { waitForResult } = await script.functions
         .main(advancedLogContract.id.toB256(), otherAdvancedLogContract.id.toB256(), amount)
@@ -305,7 +305,7 @@ describe('Advanced Logging', () => {
         wallets: [wallet],
       } = launched;
 
-      const script = new Script(ScriptCallContract.bytecode, ScriptCallContract.abi, wallet);
+      const script = new ScriptCallContract(wallet);
 
       const request = await script.functions
         .main(advancedLogContract.id.toB256(), otherAdvancedLogContract.id.toB256(), amount)
