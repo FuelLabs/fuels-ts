@@ -19,7 +19,7 @@ export class OptionCoder<TCoders extends Record<string, Coder>> extends EnumCode
     return { None: [] };
   }
 
-  public override decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {
+  override decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {
     const [decoded, newOffset] = super.decode(data, offset);
     return [this.toOption(decoded) as DecodedValueOf<TCoders>, newOffset];
   }
