@@ -22,6 +22,7 @@ import { bn } from '@fuel-ts/math';
 import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { arrayify, isDefined } from '@fuel-ts/utils';
+import { mergeDeepRight } from 'ramda';
 
 import { getLoaderInstructions, getContractChunks } from './loader';
 import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
@@ -52,11 +53,12 @@ export type DeployContractResult<TContract extends Contract = Contract> = {
 /**
  * `ContractFactory` provides utilities for deploying and configuring contracts.
  */
-export default class ContractFactory {
+export default class ContractFactory<TContract extends Contract = Contract> {
   bytecode: BytesLike;
   interface: Interface;
   provider!: Provider | null;
   account!: Account | null;
+  deployOptions: DeployContractOptions;
 
   /**
    * Create a ContractFactory instance.
@@ -68,7 +70,8 @@ export default class ContractFactory {
   constructor(
     bytecode: BytesLike,
     abi: JsonAbi | Interface,
-    accountOrProvider: Account | Provider | null = null
+    accountOrProvider: Account | Provider | null = null,
+    deployOptions: DeployContractOptions = {}
   ) {
     // Force the bytecode to be a byte array
     this.bytecode = arrayify(bytecode);
@@ -99,6 +102,8 @@ export default class ContractFactory {
       this.provider = accountOrProvider;
       this.account = null;
     }
+
+    this.deployOptions = deployOptions;
   }
 
   /**
@@ -118,7 +123,8 @@ export default class ContractFactory {
    * @returns The CreateTransactionRequest object for deploying the contract.
    */
   createTransactionRequest(deployOptions?: DeployContractOptions & { bytecode?: BytesLike }) {
-    const storageSlots = deployOptions?.storageSlots
+    const mergedOptions = mergeDeepRight(this.deployOptions, deployOptions ?? {});
+    const storageSlots = mergedOptions?.storageSlots
       ?.map(({ key, value }) => ({
         key: hexlifyWithPrefix(key),
         value: hexlifyWithPrefix(value),
@@ -127,7 +133,7 @@ export default class ContractFactory {
 
     const options = {
       salt: randomBytes(32),
-      ...deployOptions,
+      ...mergedOptions,
       storageSlots: storageSlots || [],
     };
 
@@ -138,7 +144,7 @@ export default class ContractFactory {
       );
     }
 
-    const bytecode = deployOptions?.bytecode || this.bytecode;
+    const bytecode = options?.bytecode || this.bytecode;
     const stateRoot = options.stateRoot || getContractStorageRoot(options.storageSlots);
     const contractId = getContractId(bytecode, options.salt, stateRoot);
     const transactionRequest = new CreateTransactionRequest({
@@ -192,7 +198,7 @@ export default class ContractFactory {
    * @param deployOptions - Options for deploying the contract.
    * @returns A promise that resolves to the deployed contract instance.
    */
-  async deploy<TContract extends Contract = Contract>(
+  async deploy(
     deployOptions: DeployContractOptions = {}
   ): Promise<DeployContractResult<TContract>> {
     const account = this.getAccount();
@@ -210,9 +216,11 @@ export default class ContractFactory {
    * @param deployOptions - Options for deploying the contract.
    * @returns A promise that resolves to the deployed contract instance.
    */
-  async deployAsCreateTx<TContract extends Contract = Contract>(
+  async deployAsCreateTx(
     deployOptions: DeployContractOptions = {}
   ): Promise<DeployContractResult<TContract>> {
+    const options = mergeDeepRight(this.deployOptions, deployOptions);
+
     const account = this.getAccount();
     const { consensusParameters } = account.provider.getChain();
     const maxContractSize = consensusParameters.contractParameters.contractMaxSize.toNumber();
@@ -224,7 +232,7 @@ export default class ContractFactory {
       );
     }
 
-    const { contractId, transactionRequest } = await this.prepareDeploy(deployOptions);
+    const { contractId, transactionRequest } = await this.prepareDeploy(options);
 
     const transactionResponse = await account.sendTransaction(transactionRequest);
 
@@ -248,22 +256,23 @@ export default class ContractFactory {
    * @param deployOptions - Options for deploying the contract.
    * @returns A promise that resolves to the deployed contract instance.
    */
-  async deployAsBlobTx<TContract extends Contract = Contract>(
+  async deployAsBlobTx(
     deployOptions: DeployContractOptions = {
       chunkSizeMultiplier: CHUNK_SIZE_MULTIPLIER,
     }
   ): Promise<DeployContractResult<TContract>> {
+    const options = mergeDeepRight(this.deployOptions, deployOptions);
     const account = this.getAccount();
-    const { configurableConstants, chunkSizeMultiplier } = deployOptions;
+    const { configurableConstants, chunkSizeMultiplier } = options;
     if (configurableConstants) {
       this.setConfigurableConstants(configurableConstants);
     }
 
     // Generate the chunks based on the maximum chunk size and create blob txs
-    const chunkSize = this.getMaxChunkSize(deployOptions, chunkSizeMultiplier);
+    const chunkSize = this.getMaxChunkSize(options, chunkSizeMultiplier);
     const chunks = getContractChunks(arrayify(this.bytecode), chunkSize).map((c) => {
       const transactionRequest = this.blobTransactionRequest({
-        ...deployOptions,
+        ...options,
         bytecode: c.bytecode,
       });
       return {
@@ -278,7 +287,7 @@ export default class ContractFactory {
     const loaderBytecode = getLoaderInstructions(blobIds);
     const { contractId, transactionRequest: createRequest } = this.createTransactionRequest({
       bytecode: loaderBytecode,
-      ...deployOptions,
+      ...options,
     });
 
     // BlobIDs only need to be uploaded once and we can check if they exist on chain
@@ -329,10 +338,7 @@ export default class ContractFactory {
       // Deploy the chunks as blob txs
       for (const { blobId, transactionRequest } of chunks) {
         if (!uploadedBlobs.includes(blobId) && blobIdsToUpload.includes(blobId)) {
-          const fundedBlobRequest = await this.fundTransactionRequest(
-            transactionRequest,
-            deployOptions
-          );
+          const fundedBlobRequest = await this.fundTransactionRequest(transactionRequest, options);
 
           let result: TransactionResult<TransactionType.Blob>;
 
@@ -358,7 +364,7 @@ export default class ContractFactory {
         }
       }
 
-      await this.fundTransactionRequest(createRequest, deployOptions);
+      await this.fundTransactionRequest(createRequest, options);
       txIdResolver(createRequest.getTransactionId(account.provider.getChainId()));
       const transactionResponse = await account.sendTransaction(createRequest);
       const transactionResult = await transactionResponse.waitForResult<TransactionType.Create>();
