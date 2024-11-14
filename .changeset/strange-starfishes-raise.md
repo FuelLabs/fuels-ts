@@ -6,4 +6,4 @@
 "fuels": patch
 ---
 
-chore(packages): added noImplicitOverride option to config
+chore: added noImplicitOverride option to config
