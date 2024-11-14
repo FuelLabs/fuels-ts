@@ -1,4 +1,4 @@
-import { getRandomB256, WalletUnlocked, Predicate, FuelError } from 'fuels';
+import { getRandomB256, WalletUnlocked, FuelError } from 'fuels';
 import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
 import { PredicateTrue, PredicateWithConfigurable } from '../../test/typegen';
@@ -26,9 +26,7 @@ describe('Predicate', () => {
         wallets: [wallet],
       } = launched;
 
-      const predicate = new Predicate({
-        abi: PredicateWithConfigurable.abi,
-        bytecode: PredicateWithConfigurable.bytecode,
+      const predicate = new PredicateWithConfigurable({
         provider: wallet.provider,
         data: [defaultValues.FEE, defaultValues.ADDRESS], // set predicate input data to be the same as default configurable value
       });
@@ -69,9 +67,7 @@ describe('Predicate', () => {
       const configurableConstants = { FEE: 35 };
 
       expect(configurableConstants.FEE).not.toEqual(defaultValues.FEE);
-      const predicate = new Predicate({
-        abi: PredicateWithConfigurable.abi,
-        bytecode: PredicateWithConfigurable.bytecode,
+      const predicate = new PredicateWithConfigurable({
         provider,
         data: [configurableConstants.FEE, defaultValues.ADDRESS],
         configurableConstants,
@@ -114,9 +110,7 @@ describe('Predicate', () => {
       const configurableConstants = { ADDRESS: getRandomB256() };
 
       expect(configurableConstants.ADDRESS).not.toEqual(defaultValues.ADDRESS);
-      const predicate = new Predicate({
-        abi: PredicateWithConfigurable.abi,
-        bytecode: PredicateWithConfigurable.bytecode,
+      const predicate = new PredicateWithConfigurable({
         provider,
         data: [defaultValues.FEE, configurableConstants.ADDRESS],
         configurableConstants,
@@ -163,9 +157,7 @@ describe('Predicate', () => {
 
       expect(configurableConstants.FEE).not.toEqual(defaultValues.FEE);
       expect(configurableConstants.ADDRESS).not.toEqual(defaultValues.ADDRESS);
-      const predicate = new Predicate({
-        abi: PredicateWithConfigurable.abi,
-        bytecode: PredicateWithConfigurable.bytecode,
+      const predicate = new PredicateWithConfigurable({
         provider,
         data: [configurableConstants.FEE, configurableConstants.ADDRESS],
         configurableConstants,
@@ -245,9 +237,7 @@ describe('Predicate', () => {
         wallets: [wallet],
       } = launched;
 
-      const predicate = new Predicate({
-        abi: PredicateWithConfigurable.abi,
-        bytecode: PredicateWithConfigurable.bytecode,
+      const predicate = new PredicateWithConfigurable({
         provider,
       });
 
@@ -269,11 +259,9 @@ describe('Predicate', () => {
 
       await expectToThrowFuelError(
         () =>
-          new Predicate({
-            bytecode: PredicateTrue.bytecode,
-            abi: PredicateTrue.abi,
+          new PredicateTrue({
             provider,
-            data: ['NADA'],
+            // @ts-expect-error testing invalid configurable
             configurableConstants: {
               constant: 'NADA',
             },
@@ -292,12 +280,10 @@ describe('Predicate', () => {
 
       await expectToThrowFuelError(
         () =>
-          new Predicate({
-            bytecode: PredicateWithConfigurable.bytecode,
-            abi: PredicateWithConfigurable.abi,
+          new PredicateWithConfigurable({
             provider,
-            data: ['NADA'],
             configurableConstants: {
+              // @ts-expect-error testing invalid configurable
               NOPE: 'NADA',
             },
           }),
