@@ -12,7 +12,7 @@ import { BaseTransactionRequest, TransactionType } from './transaction-request';
 export interface BlobTransactionRequestLike extends BaseTransactionRequestLike {
   /** Blob ID */
   blobId: string;
-  /** Witness index of contract bytecode to create */
+  /** Witness index of the bytecode to create */
   witnessIndex?: number;
 }
 
@@ -25,7 +25,7 @@ export class BlobTransactionRequest extends BaseTransactionRequest {
   type = TransactionType.Blob as const;
   /** Blob ID */
   blobId: string;
-  /** Witness index of contract bytecode to create */
+  /** Witness index of the bytecode to create */
   witnessIndex: number;
 
   /**
