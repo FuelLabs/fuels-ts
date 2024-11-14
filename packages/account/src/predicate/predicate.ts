@@ -105,7 +105,7 @@ export class Predicate<
     configurableConstants?: TConfigurables;
     data?: TData;
   }): Predicate<TData, TConfigurables> {
-    return new Predicate({
+    return new Predicate<TData, TConfigurables>({
       bytecode: this.bytes,
       abi: this.interface?.jsonAbi,
       provider: this.provider,
