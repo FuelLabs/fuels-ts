@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { createConfig } from 'fuels';
-import type { ContractDeployOptions, DeployedContract, FuelsConfig } from 'fuels';
+import type { ContractDeployOptions, DeployedData, FuelsConfig } from 'fuels';
 
 const MY_FIRST_DEPLOYED_CONTRACT_NAME = '';
 
@@ -91,7 +91,7 @@ export default createConfig({
   // #endregion onBuild
 
   // #region onDeploy
-  onDeploy: (config: FuelsConfig, data: DeployedContract[]) => {
+  onDeploy: (config: FuelsConfig, data: DeployedData) => {
     console.log('fuels:onDeploy', { config, data });
   },
   // #endregion onDeploy
