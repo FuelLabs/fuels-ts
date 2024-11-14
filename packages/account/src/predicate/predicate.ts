@@ -96,6 +96,26 @@ export class Predicate<
   }
 
   /**
+   * Creates a new Predicate instance with updated parameters while maintaining the original bytecode and ABI
+   *
+   * @param params - Object containing optional new configurableConstants and data
+   * @returns A new Predicate instance with the updated parameters
+   */
+  toNewInstance(params: {
+    configurableConstants?: TConfigurables;
+    data?: TData;
+  }): Predicate<TData, TConfigurables> {
+    return new Predicate({
+      bytecode: this.bytes,
+      abi: this.interface?.jsonAbi,
+      provider: this.provider,
+      data: params.data ?? this.predicateData,
+      configurableConstants: params.configurableConstants,
+      loaderBytecode: this.loaderBytecode,
+    });
+  }
+
+  /**
    * Populates the transaction data with predicate data.
    *
    * @param transactionRequestLike - The transaction request-like object.

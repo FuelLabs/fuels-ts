@@ -30,5 +30,11 @@ export const predicateAbi: JsonAbi = {
   ],
   loggedTypes: [],
   messagesTypes: [],
-  configurables: [],
+  configurables: [
+    {
+      name: 'value',
+      concreteTypeId: 'b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
+      offset: 0,
+    },
+  ],
 };
