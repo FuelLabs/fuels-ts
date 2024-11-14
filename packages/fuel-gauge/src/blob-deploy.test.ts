@@ -1,190 +1,114 @@
-import type { JsonAbi } from 'fuels';
-import { bn, ContractFactory, getRandomB256, hexlify, Predicate, Script, Wallet } from 'fuels';
+import type { Script } from 'fuels';
+import { getRandomB256, hexlify, Predicate, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
-  ScriptDummy,
-  PredicateFalseConfigurable,
   ScriptMainArgBool,
   PredicateTrue,
-  PredicateWithMoreConfigurables,
   ScriptWithMoreConfigurable,
+  PredicateWithConfigurable,
+  PredicateWithMoreConfigurables,
+  ScriptWithConfigurable,
 } from '../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
-describe('first try', () => {
-  const mapToLoaderAbi = (jsonAbi: JsonAbi, configurableOffsetDiff: number) => {
-    const { configurables: readOnlyConfigurables } = jsonAbi;
-    const configurables: JsonAbi['configurables'] = [];
-    readOnlyConfigurables.forEach((config) => {
-      // @ts-expect-error shut up the read-only thing
-      configurables.push({ ...config, offset: config.offset - configurableOffsetDiff });
+describe('deploying blobs', () => {
+  function decodeConfigurables(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    program: Predicate | Script<any, any>
+  ): Record<string, unknown> {
+    const configurables: Record<string, unknown> = {};
+
+    Object.entries(program.interface.configurables).forEach(([key, { offset, concreteTypeId }]) => {
+      const data = program.bytes.slice(offset);
+      configurables[key] = program.interface.decodeType(concreteTypeId, data)[0];
     });
-    return { ...jsonAbi, configurables } as JsonAbi;
-  };
 
-  it('should ensure deploy the same blob again will not throw error', async () => {
+    return configurables;
+  }
+
+  it('script blob deployment works (NO CONFIGURABLE)', async () => {
     using launch = await launchTestNode();
 
     const {
+      provider,
       wallets: [wallet],
     } = launch;
 
-    const spy = vi.spyOn(wallet.provider, 'sendTransaction');
+    const script = new ScriptMainArgBool(wallet);
 
-    const factory = new ContractFactory(ScriptDummy.bytecode, ScriptDummy.abi, wallet);
-    const { waitForResult } = await factory.deployAsBlobTxForScript();
-    const { loaderBytecode } = await waitForResult();
+    const { waitForResult, blobId } = await script.deploy(wallet);
 
-    const { waitForResult: waitForResult2 } = await factory.deployAsBlobTxForScript();
-    const { loaderBytecode: loaderBytecode2 } = await waitForResult2();
+    const loaderScript = await waitForResult();
 
-    // Should deploy not deploy the same blob again
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(loaderBytecode).equals(loaderBytecode2);
+    const blobDeployed = (await provider.getBlobs([blobId])).length > 0;
+    expect(blobDeployed).toBe(true);
 
-    vi.restoreAllMocks();
-  });
+    expect(loaderScript.bytes).not.toEqual(script.bytes);
 
-  it('should deploy blob for a script transaction and submit it', async () => {
-    using launch = await launchTestNode();
-
-    const {
-      wallets: [wallet],
-    } = launch;
-
-    const factory = new ContractFactory(ScriptDummy.bytecode, ScriptDummy.abi, wallet);
-    const { waitForResult } = await factory.deployAsBlobTxForScript();
-
-    const { loaderBytecode } = await waitForResult();
-
-    expect(loaderBytecode).to.not.equal(hexlify(ScriptDummy.bytecode));
-  });
-
-  it('should deploy blob for a script transaction and submit it (NO CONFIGURABLE)', async () => {
-    using launch = await launchTestNode();
-
-    const {
-      wallets: [wallet],
-    } = launch;
-
-    const factory = new ContractFactory(ScriptMainArgBool.bytecode, ScriptMainArgBool.abi, wallet);
-    const { waitForResult } = await factory.deployAsBlobTxForScript();
-    const { loaderBytecode, configurableOffsetDiff } = await waitForResult();
-
-    const script = new Script(
-      loaderBytecode,
-      mapToLoaderAbi(ScriptMainArgBool.abi, configurableOffsetDiff),
-      wallet
-    );
-
-    const { waitForResult: waitForResult2 } = await script.functions.main(true).call();
+    const { waitForResult: waitForResult2 } = await loaderScript.functions.main(true).call();
     const {
       value,
       transactionResult: { transaction },
     } = await waitForResult2();
 
-    expect(transaction.script).equals(loaderBytecode);
+    expect(transaction.script).equals(hexlify(loaderScript.bytes));
     expect(value).toBe(true);
   });
 
-  it('Should work for setting the configurable constants', async () => {
+  it('script blob deployment works (CONFIGURABLE)', async () => {
     using launch = await launchTestNode();
 
     const {
       wallets: [wallet],
     } = launch;
 
-    const factory = new ContractFactory(ScriptDummy.bytecode, ScriptDummy.abi, wallet);
-    const { waitForResult } = await factory.deployAsBlobTxForScript();
+    const script = new ScriptWithConfigurable(wallet);
+    const loaderScript = await (await script.deploy(wallet)).waitForResult();
 
-    const { loaderBytecode, configurableOffsetDiff } = await waitForResult();
-    const script = new Script(
-      loaderBytecode,
-      mapToLoaderAbi(ScriptDummy.abi, configurableOffsetDiff),
-      wallet
-    );
+    expect(decodeConfigurables(loaderScript)).toEqual(decodeConfigurables(script));
 
-    const configurable = {
-      SECRET_NUMBER: 10001,
+    // Test that default configurables are included by default
+    const defaultConfigurable = {
+      FEE: 5,
     };
-    script.setConfigurableConstants(configurable);
 
-    const { waitForResult: waitForResult2 } = await script.functions.main().call();
-    const { value } = await waitForResult2();
+    const defaultResult = await (
+      await loaderScript.functions.main(defaultConfigurable.FEE).call()
+    ).waitForResult();
 
-    expect(value).toBe(true);
-  });
+    expect(defaultResult.logs[0]).toEqual(defaultConfigurable.FEE);
+    expect(defaultResult.value).toBe(true);
 
-  it('Should return false for incorrectly set configurable constants', async () => {
-    using launch = await launchTestNode();
-
-    const {
-      wallets: [wallet],
-    } = launch;
-
-    const factory = new ContractFactory(ScriptDummy.bytecode, ScriptDummy.abi, wallet);
-    const { waitForResult } = await factory.deployAsBlobTxForScript();
-
-    const { loaderBytecode, configurableOffsetDiff } = await waitForResult();
-
-    const preScript = new Script(
-      loaderBytecode,
-      mapToLoaderAbi(ScriptDummy.abi, configurableOffsetDiff),
-      wallet
-    );
+    // Test that you can update configurables of the loader script
     const configurable = {
-      SECRET_NUMBER: 299,
+      FEE: 234,
     };
-    preScript.setConfigurableConstants(configurable);
+    loaderScript.setConfigurableConstants(configurable);
 
-    const { waitForResult: waitForResult2 } = await preScript.functions.main().call();
+    const result1 = await (
+      await loaderScript.functions.main(configurable.FEE).call()
+    ).waitForResult();
 
-    const { value, logs } = await waitForResult2();
-
-    expect(logs[0].toNumber()).equal(configurable.SECRET_NUMBER);
-    expect(value).toBe(false);
+    expect(result1.logs[0]).toEqual(configurable.FEE);
+    expect(result1.value).toBe(true);
   });
 
-  it('it should return false if no configurable constants are set', async () => {
+  it('script blob deployment works (COMPLEX CONFIGURABLE)', async () => {
     using launch = await launchTestNode();
 
     const {
       wallets: [wallet],
     } = launch;
 
-    const factory = new ContractFactory(ScriptDummy.bytecode, ScriptDummy.abi, wallet);
-    const { waitForResult } = await factory.deployAsBlobTxForScript();
-    const { loaderBytecode, configurableOffsetDiff } = await waitForResult();
+    const script = new ScriptWithMoreConfigurable(wallet);
 
-    const script = new Script(
-      loaderBytecode,
-      mapToLoaderAbi(ScriptDummy.abi, configurableOffsetDiff),
-      wallet
-    );
+    const loaderScript = await (await script.deploy(wallet)).waitForResult();
 
-    const { waitForResult: waitForResult2 } = await script.functions.main().call();
-    const { value, logs } = await waitForResult2();
-    expect(logs[0].toNumber()).equal(9000);
-    expect(value).toBe(false);
-  });
-
-  it('should set configurables in complicated script', async () => {
-    using launch = await launchTestNode();
-
-    const {
-      wallets: [wallet],
-    } = launch;
-
-    const factory = new ContractFactory(
-      ScriptWithMoreConfigurable.bytecode,
-      ScriptWithMoreConfigurable.abi,
-      wallet
-    );
-    const { waitForResult } = await factory.deployAsBlobTxForScript();
-    const { loaderBytecode, configurableOffsetDiff } = await waitForResult();
+    expect(decodeConfigurables(loaderScript)).toEqual(decodeConfigurables(script));
 
     const configurable = {
       U8: 16,
@@ -207,21 +131,10 @@ describe('first try', () => {
       },
     };
 
-    const normalScript = new Script(
-      ScriptWithMoreConfigurable.bytecode,
-      ScriptWithMoreConfigurable.abi,
-      wallet
-    );
-
-    normalScript.setConfigurableConstants(configurable);
-
-    const script = new Script(
-      loaderBytecode,
-      mapToLoaderAbi(ScriptWithMoreConfigurable.abi, configurableOffsetDiff),
-      wallet
-    );
-
     script.setConfigurableConstants(configurable);
+    loaderScript.setConfigurableConstants(configurable);
+
+    expect(decodeConfigurables(loaderScript)).toEqual(decodeConfigurables(script));
 
     const { waitForResult: waitForResult2 } = await script.functions.main().call();
     const { value, logs } = await waitForResult2();
@@ -241,126 +154,64 @@ describe('first try', () => {
     expect(logs[10]).toStrictEqual(configurable.STRUCT_1);
   });
 
-  it('Should work with predicates', async () => {
+  test("deploying existing script blob doesn't throw", async () => {
     using launch = await launchTestNode();
+
     const {
-      wallets: [wallet],
       provider,
+      wallets: [wallet],
     } = launch;
 
-    const receiver = Wallet.generate({ provider });
+    const script = new ScriptMainArgBool(wallet);
 
-    const factory = new ContractFactory(
-      PredicateFalseConfigurable.bytecode,
-      PredicateFalseConfigurable.abi,
-      wallet
-    );
+    const sendTransactionSpy = vi.spyOn(provider, 'sendTransaction');
 
-    const { waitForResult } = await factory.deployAsBlobTxForScript();
-    const { loaderBytecode, configurableOffsetDiff } = await waitForResult();
+    await (await script.deploy(wallet)).waitForResult();
+    await (await script.deploy(wallet)).waitForResult();
 
-    expect(loaderBytecode).to.not.equal(hexlify(PredicateFalseConfigurable.bytecode));
-
-    const configurable = {
-      SECRET_NUMBER: 8000,
-    };
-
-    const predicate = new Predicate({
-      data: [configurable.SECRET_NUMBER],
-      bytecode: loaderBytecode,
-      abi: mapToLoaderAbi(PredicateFalseConfigurable.abi, configurableOffsetDiff),
-      provider,
-      configurableConstants: configurable,
-    });
-
-    await wallet.transfer(predicate.address, 10_000, provider.getBaseAssetId());
-
-    const tx = await predicate.transfer(receiver.address, 1000, provider.getBaseAssetId());
-    const response = await tx.waitForResult();
-    expect(response.isStatusSuccess).toBe(true);
+    expect(sendTransactionSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('Should work with predicate when not setting configurables values', async () => {
+  it('predicate blob deployment works', async () => {
     using launch = await launchTestNode();
+
     const {
-      wallets: [wallet],
       provider,
+      wallets: [deployer],
     } = launch;
 
-    const factory = new ContractFactory(
-      PredicateFalseConfigurable.bytecode,
-      PredicateFalseConfigurable.abi,
-      wallet
-    );
+    const configurableConstants = {
+      FEE: 10,
+      ADDRESS: '0x38966262edb5997574be45f94c665aedb41a1663f5b0528e765f355086eebf96',
+    };
 
-    const { waitForResult } = await factory.deployAsBlobTxForScript();
-    const { loaderBytecode, configurableOffsetDiff } = await waitForResult();
-
-    expect(loaderBytecode).to.not.equal(hexlify(PredicateFalseConfigurable.bytecode));
-
-    const SECRET_NUMBER = 9000;
-
-    const predicate = new Predicate({
-      data: [bn(SECRET_NUMBER)],
-      bytecode: loaderBytecode,
-      abi: mapToLoaderAbi(PredicateFalseConfigurable.abi, configurableOffsetDiff),
+    const predicate = new PredicateWithConfigurable({
       provider,
+      configurableConstants,
+      data: [configurableConstants.FEE, configurableConstants.ADDRESS],
     });
 
-    const transfer2 = await wallet.transfer(predicate.address, 10_000, provider.getBaseAssetId());
-    await transfer2.waitForResult();
+    const { waitForResult, blobId } = await predicate.deploy(deployer);
+    const loaderPredicate = await waitForResult();
 
-    /**
-     * When destructuring the response, we get the following error:
-     * Cannot read properties of undefined (reading 'waitForStatusChange')
-     * TODO: Fix this!
-     */
-    const transfer3 = await predicate.transfer(wallet.address, 1000, provider.getBaseAssetId());
-    const { isStatusSuccess } = await transfer3.waitForResult();
+    const blobDeployed = (await provider.getBlobs([blobId])).length > 0;
+    expect(blobDeployed).toBe(true);
+
+    expect(loaderPredicate.bytes).not.toEqual(predicate.bytes);
+    expect(loaderPredicate.address.toB256()).not.toEqual(predicate.address.toB256());
+    expect(loaderPredicate.predicateData).toEqual(predicate.predicateData);
+    expect(decodeConfigurables(loaderPredicate)).toEqual(decodeConfigurables(predicate));
+
+    await (await deployer.transfer(loaderPredicate.address, 10_000)).waitForResult();
+
+    const { isStatusSuccess } = await (
+      await loaderPredicate.transfer(deployer.address, 10)
+    ).waitForResult();
 
     expect(isStatusSuccess).toBe(true);
   });
 
-  it('Should work with predicate with no configurable constants', async () => {
-    using launch = await launchTestNode();
-    const {
-      wallets: [wallet],
-      provider,
-    } = launch;
-
-    const factory = new ContractFactory(
-      PredicateFalseConfigurable.bytecode,
-      PredicateFalseConfigurable.abi,
-      wallet
-    );
-
-    const { waitForResult } = await factory.deployAsBlobTxForScript();
-    const { loaderBytecode } = await waitForResult();
-
-    expect(loaderBytecode).to.not.equal(hexlify(PredicateTrue.bytecode));
-
-    const predicate = new Predicate({
-      bytecode: PredicateTrue.bytecode,
-      abi: PredicateTrue.abi,
-      provider,
-      loaderBytecode,
-    });
-
-    const transfer2 = await wallet.transfer(predicate.address, 10_000, provider.getBaseAssetId());
-    await transfer2.waitForResult();
-
-    /**
-     * When destructuring the response, we get the following error:
-     * Cannot read properties of undefined (reading 'waitForStatusChange')
-     * TODO: Fix this!
-     */
-    const transfer3 = await predicate.transfer(wallet.address, 1000, provider.getBaseAssetId());
-    const { isStatusSuccess } = await transfer3.waitForResult();
-
-    expect(isStatusSuccess).toBe(true);
-  });
-
-  it('can run with loader bytecode with manually modified configurables', async () => {
+  it('loader predicate can be used with different configurables', async () => {
     using launch = await launchTestNode();
     const {
       wallets: [wallet],
@@ -369,55 +220,10 @@ describe('first try', () => {
 
     const receiver = Wallet.generate({ provider });
 
-    const factory = new ContractFactory(
-      PredicateFalseConfigurable.bytecode,
-      PredicateFalseConfigurable.abi,
-      wallet
-    );
+    const loaderPredicate = await (
+      await new PredicateWithMoreConfigurables({ provider }).deploy(wallet)
+    ).waitForResult();
 
-    const { waitForResult } = await factory.deployAsBlobTxForScript();
-    const { loaderBytecode, configurableOffsetDiff } = await waitForResult();
-    expect(loaderBytecode).to.not.equal(hexlify(PredicateFalseConfigurable.bytecode));
-
-    const configurable = {
-      SECRET_NUMBER: 8000,
-    };
-
-    const newAbi = mapToLoaderAbi(PredicateFalseConfigurable.abi, configurableOffsetDiff);
-
-    const predicate = new Predicate({
-      data: [configurable.SECRET_NUMBER],
-      bytecode: loaderBytecode,
-      abi: newAbi,
-      provider,
-      configurableConstants: configurable,
-    });
-
-    await wallet.transfer(predicate.address, 10_000, provider.getBaseAssetId());
-
-    const tx = await predicate.transfer(receiver.address, 1000, provider.getBaseAssetId());
-    const response = await tx.waitForResult();
-    expect(response.isStatusSuccess).toBe(true);
-  });
-
-  it('can run with loader bytecode with many manually modified configurables', async () => {
-    using launch = await launchTestNode();
-    const {
-      wallets: [wallet],
-      provider,
-    } = launch;
-
-    const receiver = Wallet.generate({ provider });
-
-    const factory = new ContractFactory(
-      PredicateWithMoreConfigurables.bytecode,
-      PredicateWithMoreConfigurables.abi,
-      wallet
-    );
-
-    const { waitForResult } = await factory.deployAsBlobTxForScript();
-    const { loaderBytecode, configurableOffsetDiff } = await waitForResult();
-    expect(loaderBytecode).to.not.equal(hexlify(PredicateWithMoreConfigurables.bytecode));
     const configurable = {
       FEE: 99,
       ADDRESS: getRandomB256(),
@@ -427,12 +233,10 @@ describe('first try', () => {
       BOOL: false,
     };
 
-    const newAbi = mapToLoaderAbi(PredicateWithMoreConfigurables.abi, configurableOffsetDiff);
-
     const predicate = new Predicate({
       data: [configurable.FEE, configurable.ADDRESS],
-      bytecode: loaderBytecode,
-      abi: newAbi,
+      bytecode: loaderPredicate.bytes,
+      abi: loaderPredicate.interface.jsonAbi,
       provider,
       configurableConstants: configurable,
     });
@@ -442,5 +246,25 @@ describe('first try', () => {
     const tx = await predicate.transfer(receiver.address, 1000, provider.getBaseAssetId());
     const response = await tx.waitForResult();
     expect(response.isStatusSuccess).toBe(true);
+  });
+
+  test("deploying existing predicate blob doesn't throw", async () => {
+    using launch = await launchTestNode();
+
+    const {
+      provider,
+      wallets: [deployer],
+    } = launch;
+
+    const predicate = new PredicateTrue({
+      provider,
+    });
+
+    const sendTransactionSpy = vi.spyOn(provider, 'sendTransaction');
+
+    await (await predicate.deploy(deployer)).waitForResult();
+    await (await predicate.deploy(deployer)).waitForResult();
+
+    expect(sendTransactionSpy).toHaveBeenCalledTimes(1);
   });
 });
