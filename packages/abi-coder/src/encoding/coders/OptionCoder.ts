@@ -6,7 +6,7 @@ type SwayOption<T> = { None: [] } | { Some: T };
 export type Option<T> = T | undefined;
 
 export class OptionCoder<TCoders extends Record<string, Coder>> extends EnumCoder<TCoders> {
-  public override encode(value?: Option<unknown>): Uint8Array {
+  override encode(value?: Option<unknown>): Uint8Array {
     const result = super.encode(this.toSwayOption(value) as unknown as InputValueOf<TCoders>);
     return result;
   }
