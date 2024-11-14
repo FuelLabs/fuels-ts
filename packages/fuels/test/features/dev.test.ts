@@ -40,7 +40,13 @@ describe('dev', () => {
     const { autoStartFuelCore, killChildProcess } = mockStartFuelCore();
 
     const build = vi.spyOn(buildMod, 'build').mockReturnValue(Promise.resolve());
-    const deploy = vi.spyOn(deployMod, 'deploy').mockReturnValue(Promise.resolve([]));
+    const deploy = vi.spyOn(deployMod, 'deploy').mockReturnValue(
+      Promise.resolve({
+        contracts: [],
+        scripts: [],
+        predicates: [],
+      })
+    );
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const on: any = vi.fn(() => ({ on }));
