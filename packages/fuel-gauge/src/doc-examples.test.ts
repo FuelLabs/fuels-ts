@@ -249,6 +249,7 @@ describe('Doc Examples', () => {
     const { provider } = launched;
     const predicate = new Predicate({
       bytecode: PredicateTrue.bytecode,
+      abi: PredicateTrue.abi,
       provider,
     });
 

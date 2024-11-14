@@ -3,7 +3,7 @@ import { Interface } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
-import { arrayify, hexlify, concat } from '@fuel-ts/utils';
+import { arrayify, hexlify } from '@fuel-ts/utils';
 
 import type { FakeResources } from '../account';
 import { Account } from '../account';
@@ -23,6 +23,7 @@ import type {
   TransactionRequestLike,
   TransactionResponse,
 } from '../providers';
+import { deployScriptOrPredicate } from '../utils/deployScriptOrPredicate';
 
 import { getPredicateRoot } from './utils';
 
@@ -32,18 +33,10 @@ export type PredicateParams<
 > = {
   bytecode: BytesLike;
   provider: Provider;
-  abi?: JsonAbi;
+  abi: JsonAbi;
   data?: TData;
   configurableConstants?: TConfigurables;
-  loaderBytecode?: BytesLike;
 };
-
-function getDataOffset(binary: Uint8Array): number {
-  const buffer = binary.buffer.slice(binary.byteOffset + 8, binary.byteOffset + 16);
-  const dataView = new DataView(buffer);
-  const dataOffset = dataView.getBigUint64(0, false); // big-endian
-  return Number(dataOffset);
-}
 
 /**
  * `Predicate` provides methods to populate transaction data with predicate information and sending transactions with them.
@@ -54,8 +47,7 @@ export class Predicate<
 > extends Account {
   bytes: Uint8Array;
   predicateData: TData = [] as unknown as TData;
-  interface?: Interface;
-  loaderBytecode: BytesLike = '';
+  interface: Interface;
 
   /**
    * Creates an instance of the Predicate class.
@@ -72,12 +64,6 @@ export class Predicate<
     provider,
     data,
     configurableConstants,
-    /**
-     * TODO: Implement a getBytes method within the Predicate class. This method should return the loaderBytecode if it is set.
-     * The getBytes method should be used in all places where we use this.bytes.
-     * Note: Do not set loaderBytecode to a default string here; it should remain undefined when not provided.
-     */
-    loaderBytecode = '',
   }: PredicateParams<TData, TConfigurables>) {
     const { predicateBytes, predicateInterface } = Predicate.processPredicateData(
       bytecode,
@@ -89,7 +75,6 @@ export class Predicate<
 
     this.bytes = predicateBytes;
     this.interface = predicateInterface;
-    this.loaderBytecode = loaderBytecode;
     if (data !== undefined && data.length > 0) {
       this.predicateData = data;
     }
@@ -168,20 +153,17 @@ export class Predicate<
    */
   private static processPredicateData(
     bytes: BytesLike,
-    jsonAbi?: JsonAbi,
+    jsonAbi: JsonAbi,
     configurableConstants?: { [name: string]: unknown }
   ) {
     let predicateBytes = arrayify(bytes);
-    let abiInterface: Interface | undefined;
+    const abiInterface: Interface = new Interface(jsonAbi);
 
-    if (jsonAbi) {
-      abiInterface = new Interface(jsonAbi);
-      if (abiInterface.functions.main === undefined) {
-        throw new FuelError(
-          ErrorCode.ABI_MAIN_METHOD_MISSING,
-          'Cannot use ABI without "main" function.'
-        );
-      }
+    if (abiInterface.functions.main === undefined) {
+      throw new FuelError(
+        ErrorCode.ABI_MAIN_METHOD_MISSING,
+        'Cannot use ABI without "main" function.'
+      );
     }
 
     if (configurableConstants && Object.keys(configurableConstants).length) {
@@ -246,19 +228,11 @@ export class Predicate<
   private static setConfigurableConstants(
     bytes: Uint8Array,
     configurableConstants: { [name: string]: unknown },
-    abiInterface?: Interface,
-    loaderBytecode?: BytesLike
+    abiInterface: Interface
   ) {
     const mutatedBytes = bytes;
 
     try {
-      if (!abiInterface) {
-        throw new FuelError(
-          ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
-          'Cannot validate configurable constants because the Predicate was instantiated without a JSON ABI'
-        );
-      }
-
       if (Object.keys(abiInterface.configurables).length === 0) {
         throw new FuelError(
           ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
@@ -280,26 +254,6 @@ export class Predicate<
 
         mutatedBytes.set(encoded, offset);
       });
-
-      if (loaderBytecode) {
-        /**
-         * TODO: We mutate the predicate bytes here to be the loader bytes only if the configurables are being set.
-         * What we actually need to do here is to mutate the loader bytes to include the configurables.
-         */
-        const offset = getDataOffset(bytes);
-
-        // update the dataSection here as necessary (with configurables)
-        const dataSection = mutatedBytes.slice(offset);
-
-        const dataSectionLen = dataSection.length;
-
-        // Convert dataSectionLen to big-endian bytes
-        const dataSectionLenBytes = new Uint8Array(8);
-        const dataSectionLenDataView = new DataView(dataSectionLenBytes.buffer);
-        dataSectionLenDataView.setBigUint64(0, BigInt(dataSectionLen), false);
-
-        mutatedBytes.set(concat([loaderBytecode, dataSectionLenBytes, dataSection]));
-      }
     } catch (err) {
       throw new FuelError(
         ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
@@ -347,5 +301,29 @@ export class Predicate<
     }
 
     return index;
+  }
+
+  /**
+   *
+   * @param account - The account used to pay the deployment costs.
+   * @returns The _blobId_ and a _waitForResult_ callback that returns the deployed predicate
+   * once the blob deployment transaction finishes.
+   *
+   * The returned loader predicate will have the same configurable constants
+   * as the original predicate which was used to generate the loader predicate.
+   */
+  async deploy<T = this>(account: Account) {
+    return deployScriptOrPredicate<T>({
+      deployer: account,
+      abi: this.interface.jsonAbi,
+      bytecode: this.bytes,
+      loaderInstanceCallback: (loaderBytecode, newAbi) =>
+        new Predicate({
+          bytecode: loaderBytecode,
+          abi: newAbi,
+          provider: this.provider,
+          data: this.predicateData,
+        }) as T,
+    });
   }
 }
