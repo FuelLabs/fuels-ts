@@ -17,4 +17,4 @@ const { value, logs } = await waitForResult();
 // #endregion full
 
 console.log('value', value?.toString() === bn(foo).toString());
-console.log('logs', JSON.stringify(logs) === JSON.stringify(['u8 foo', 33]));
+console.log('logs', JSON.stringify(logs) === JSON.stringify(['u8 foo', 3]));
