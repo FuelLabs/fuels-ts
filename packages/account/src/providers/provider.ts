@@ -62,6 +62,7 @@ import {
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
 import { handleGqlErrorMessage } from './utils/handle-gql-error-message';
+import { validatePaginationArgs } from './utils/validate-pagination-args';
 
 const MAX_RETRIES = 10;
 
@@ -1407,7 +1408,7 @@ Supported fuel-core version: ${supportedVersion}.`
     const {
       coins: { edges, pageInfo },
     } = await this.operations.getCoins({
-      ...this.validatePaginationArgs({
+      ...validatePaginationArgs({
         paginationLimit: RESOURCES_PAGE_SIZE_LIMIT,
         inputArgs: paginationArgs,
       }),
@@ -1575,7 +1576,7 @@ Supported fuel-core version: ${supportedVersion}.`
     const {
       blocks: { edges, pageInfo },
     } = await this.operations.getBlocks({
-      ...this.validatePaginationArgs({
+      ...validatePaginationArgs({
         paginationLimit: BLOCKS_PAGE_SIZE_LIMIT,
         inputArgs: params,
       }),
@@ -1686,7 +1687,7 @@ Supported fuel-core version: ${supportedVersion}.`
     const {
       transactions: { edges, pageInfo },
     } = await this.operations.getTransactions({
-      ...this.validatePaginationArgs({
+      ...validatePaginationArgs({
         inputArgs: paginationArgs,
         paginationLimit: TRANSACTIONS_PAGE_SIZE_LIMIT,
       }),
@@ -1806,7 +1807,7 @@ Supported fuel-core version: ${supportedVersion}.`
     const {
       messages: { edges, pageInfo },
     } = await this.operations.getMessages({
-      ...this.validatePaginationArgs({
+      ...validatePaginationArgs({
         inputArgs: paginationArgs,
         paginationLimit: RESOURCES_PAGE_SIZE_LIMIT,
       }),
@@ -2101,52 +2102,6 @@ Supported fuel-core version: ${supportedVersion}.`
     }
 
     return relayedTransactionStatus;
-  }
-
-  /**
-   * @hidden
-   */
-  validatePaginationArgs(params: {
-    inputArgs?: CursorPaginationArgs;
-    paginationLimit: number;
-  }): CursorPaginationArgs {
-    const { paginationLimit, inputArgs = {} } = params;
-    const { first, last, after, before } = inputArgs;
-
-    if (after && before) {
-      throw new FuelError(
-        ErrorCode.INVALID_INPUT_PARAMETERS,
-        'Pagination arguments "after" and "before" cannot be used together'
-      );
-    }
-
-    if ((first || 0) > paginationLimit || (last || 0) > paginationLimit) {
-      throw new FuelError(
-        ErrorCode.INVALID_INPUT_PARAMETERS,
-        `Pagination limit for this query cannot exceed ${paginationLimit} items`
-      );
-    }
-
-    if (first && before) {
-      throw new FuelError(
-        ErrorCode.INVALID_INPUT_PARAMETERS,
-        'The use of pagination argument "first" with "before" is not supported'
-      );
-    }
-
-    if (last && after) {
-      throw new FuelError(
-        ErrorCode.INVALID_INPUT_PARAMETERS,
-        'The use of pagination argument "last" with "after" is not supported'
-      );
-    }
-
-    // If neither first nor last is provided, set a default first value
-    if (!first && !last) {
-      inputArgs.first = paginationLimit;
-    }
-
-    return inputArgs;
   }
 
   /**

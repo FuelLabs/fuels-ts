@@ -11,6 +11,7 @@ import type Provider from '../provider';
 import { TRANSACTIONS_PAGE_SIZE_LIMIT, type PageInfo } from '../provider';
 import type { TransactionRequest } from '../transaction-request';
 import type { TransactionResult } from '../transaction-response';
+import { validatePaginationArgs } from '../utils/validate-pagination-args';
 
 import { assembleTransactionSummary } from './assemble-transaction-summary';
 import { processGqlReceipt } from './receipt';
@@ -144,7 +145,7 @@ export async function getTransactionsSummaries(
 
   const { owner, ...inputArgs } = filters;
 
-  const validPaginationParams = provider.validatePaginationArgs({
+  const validPaginationParams = validatePaginationArgs({
     inputArgs,
     paginationLimit: TRANSACTIONS_PAGE_SIZE_LIMIT,
   });
