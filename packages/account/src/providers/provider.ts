@@ -2106,7 +2106,7 @@ Supported fuel-core version: ${supportedVersion}.`
   /**
    * @hidden
    */
-  private validatePaginationArgs(params: {
+  validatePaginationArgs(params: {
     inputArgs?: CursorPaginationArgs;
     paginationLimit: number;
   }): CursorPaginationArgs {
