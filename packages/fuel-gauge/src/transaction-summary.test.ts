@@ -210,6 +210,17 @@ describe('TransactionSummary', () => {
         'Pagination limit for this query cannot exceed 60 items'
       )
     );
+
+    // When using limit it should work
+    await expect(
+      getTransactionsSummaries({
+        provider,
+        filters: {
+          last: TRANSACTIONS_PAGE_SIZE_LIMIT,
+          owner: sender.address.toB256(),
+        },
+      })
+    ).resolves.toBeDefined();
   });
 
   it('should ensure getTransactionSummaryFromRequest executes just fine [TX REQUEST]', async () => {
