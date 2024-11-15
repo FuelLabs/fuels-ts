@@ -43,14 +43,17 @@ export interface LaunchTestNodeOptions<TContractConfigs extends DeployContractCo
 
 type ExtractDeployedContract<
   T extends DeployContractConfig,
-  DeployMethod extends DeployableContractFactory['deploy'] = T extends DeployableContractFactory
+  Deploy extends DeployableContractFactory['deploy'] = T extends DeployableContractFactory
     ? T['deploy']
     : T extends {
           factory: DeployableContractFactory;
         }
       ? T['factory']['deploy']
       : never,
-> = Awaited<ReturnType<Awaited<ReturnType<DeployMethod>>['waitForResult']>>['contract'];
+  WaitForResult extends DeployContractResult['waitForResult'] = Awaited<
+    ReturnType<Deploy>
+  >['waitForResult'],
+> = Awaited<ReturnType<WaitForResult>>['contract'];
 
 export type TContracts<T extends DeployContractConfig[]> = {
   [K in keyof T]: ExtractDeployedContract<T[K]>;
