@@ -10,13 +10,24 @@ import {
   transactionRequestify,
   Wallet,
   ContractFactory,
-  Predicate,
   PolicyType,
   buildFunctionResult,
   ReceiptType,
 } from 'fuels';
-import type { ReceiptMessageOut, ScriptTransactionRequest, TransferParams } from 'fuels';
-import { expectToThrowFuelError, ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
+import type {
+  ContractTransferParams,
+  ReceiptMessageOut,
+  ReceiptTransfer,
+  ScriptTransactionRequest,
+  TransferParams,
+} from 'fuels';
+import {
+  expectToThrowFuelError,
+  ASSET_A,
+  ASSET_B,
+  launchTestNode,
+  TestAssetId,
+} from 'fuels/test-utils';
 import type { DeployContractConfig } from 'fuels/test-utils';
 
 import {
@@ -25,6 +36,7 @@ import {
   SmoContractFactory,
   StorageTestContract,
   StorageTestContractFactory,
+  VoidFactory,
 } from '../test/typegen/contracts';
 import { PredicateTrue } from '../test/typegen/predicates/PredicateTrue';
 
@@ -667,6 +679,106 @@ describe('Contract', () => {
     expect(finalBalance).toBe(initialBalance + amountToContract.toNumber());
   });
 
+  it('should transfer asset to a deployed contract just fine (NON-NATIVE ASSET)', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs,
+    });
+    const {
+      provider,
+      wallets: [wallet],
+      contracts: [contract],
+    } = launched;
+
+    const initialBalance = new BN(await contract.getBalance(provider.getBaseAssetId())).toNumber();
+    const amountToContract = bn(10_000);
+    const assetId = TestAssetId.A.value;
+
+    const tx = await wallet.transferToContract(contract.id, amountToContract, assetId);
+
+    await tx.waitForResult();
+
+    const finalBalance = new BN(await contract.getBalance(assetId)).toNumber();
+    expect(finalBalance).toBe(initialBalance + amountToContract.toNumber());
+  });
+
+  it('should transfer assets to deployed contracts just fine', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        { factory: StorageTestContractFactory },
+        { factory: VoidFactory },
+        { factory: SmoContractFactory },
+      ],
+    });
+    const {
+      provider,
+      wallets: [wallet],
+      contracts: [storageContract, voidContract, smoContract],
+    } = launched;
+
+    const baseAssetId = provider.getBaseAssetId();
+    const assetA = TestAssetId.A.value;
+    const assetB = TestAssetId.B.value;
+
+    const storageId = storageContract.id.toB256();
+    const voidId = voidContract.id.toB256();
+    const smoId = smoContract.id.toB256();
+
+    const contractTransferParams: ContractTransferParams[] = [
+      {
+        contractId: storageId,
+        amount: 999,
+      },
+      {
+        contractId: storageId,
+        amount: 550,
+        assetId: assetA,
+      },
+      {
+        contractId: voidId,
+        amount: 200,
+        assetId: baseAssetId,
+      },
+      {
+        contractId: voidId,
+        amount: 133,
+        assetId: assetB,
+      },
+      {
+        contractId: smoId,
+        amount: 800,
+        assetId: assetA,
+      },
+      {
+        contractId: voidId,
+        amount: 166,
+        assetId: assetB,
+      },
+      {
+        contractId: storageId,
+        amount: 2278,
+        assetId: assetB,
+      },
+    ];
+
+    const submit = await wallet.batchTransferToContracts(contractTransferParams);
+
+    const { receipts } = await submit.waitForResult();
+
+    const transferReceipts = receipts.filter(
+      ({ type }) => type === ReceiptType.Transfer
+    ) as ReceiptTransfer[];
+
+    expect(transferReceipts.length).toBe(contractTransferParams.length);
+
+    contractTransferParams.forEach(({ amount, contractId, assetId = baseAssetId }) => {
+      const foundReceipt = transferReceipts.find(
+        (r) => r.amount.eq(amount) && r.to === contractId && r.assetId === assetId
+      );
+
+      expect(foundReceipt).toBeDefined();
+    });
+  });
+
   it('should set "gasLimit" and "maxFee" when transferring amounts to contract just fine', async () => {
     using launched = await launchTestNode({
       contractsConfigs,
@@ -766,10 +878,7 @@ describe('Contract', () => {
     const amountToContract = 200;
     const amountToPredicate = 500_000;
 
-    const predicate = new Predicate({
-      bytecode: PredicateTrue.bytecode,
-      provider,
-    });
+    const predicate = new PredicateTrue({ provider });
 
     const tx1 = await wallet.transfer(
       predicate.address,

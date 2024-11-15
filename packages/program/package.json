@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/program",
-  "version": "0.96.1",
+  "version": "0.97.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -34,7 +34,7 @@
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
-    "@fuels/vm-asm": "0.58.0"
+    "@fuels/vm-asm": "0.58.2"
   },
   "devDependencies": {
     "@types/ramda": "^0.30.2"
