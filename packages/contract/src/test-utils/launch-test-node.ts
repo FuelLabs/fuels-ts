@@ -12,9 +12,9 @@ import { mergeDeepRight } from 'ramda';
 
 import type { DeployContractOptions, DeployContractResult } from '../contract-factory';
 
-export type DeployableContractFactory = {
+export interface DeployableContractFactory {
   deploy(wallet: Account, options?: DeployContractOptions): Promise<DeployContractResult>;
-};
+}
 
 export type DeployContractConfig =
   | DeployableContractFactory
