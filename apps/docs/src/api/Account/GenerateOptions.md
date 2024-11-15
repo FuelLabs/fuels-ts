@@ -1,4 +1,4 @@
-[**@fuel-ts/account v0.96.1**](../index.md) • **Docs**
+[**@fuel-ts/account v0.97.0**](../index.md) • **Docs**
 
 ***
 
@@ -14,7 +14,7 @@ Additional entropy for the random bytes
 
 #### Defined in
 
-[packages/account/src/wallet/wallets.ts:19](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/wallet/wallets.ts#L19)
+[packages/account/src/wallet/wallets.ts:19](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/wallet/wallets.ts#L19)
 
 ***
 
@@ -24,4 +24,4 @@ Additional entropy for the random bytes
 
 #### Defined in
 
-[packages/account/src/wallet/wallets.ts:20](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/wallet/wallets.ts#L20)
+[packages/account/src/wallet/wallets.ts:20](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/wallet/wallets.ts#L20)

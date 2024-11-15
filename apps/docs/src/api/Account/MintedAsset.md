@@ -1,4 +1,4 @@
-[**@fuel-ts/account v0.96.1**](../index.md) • **Docs**
+[**@fuel-ts/account v0.97.0**](../index.md) • **Docs**
 
 ***
 
@@ -12,7 +12,7 @@
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:171](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L171)
+[packages/account/src/providers/transaction-summary/types.ts:203](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L203)
 
 ***
 
@@ -22,7 +22,7 @@
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:170](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L170)
+[packages/account/src/providers/transaction-summary/types.ts:202](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L202)
 
 ***
 
@@ -32,7 +32,7 @@
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:169](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L169)
+[packages/account/src/providers/transaction-summary/types.ts:201](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L201)
 
 ***
 
@@ -42,4 +42,4 @@
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:168](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L168)
+[packages/account/src/providers/transaction-summary/types.ts:200](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L200)

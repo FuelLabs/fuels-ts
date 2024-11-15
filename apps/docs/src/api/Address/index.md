@@ -1,4 +1,4 @@
-**@fuel-ts/address v0.96.1** • [**Docs**](index.md)
+**@fuel-ts/address v0.97.0** • [**Docs**](index.md)
 
 ***
 

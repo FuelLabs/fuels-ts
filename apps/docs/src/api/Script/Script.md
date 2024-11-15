@@ -1,4 +1,4 @@
-[**@fuel-ts/script v0.96.1**](../index.md) • **Docs**
+[**@fuel-ts/script v0.97.0**](../index.md) • **Docs**
 
 ***
 
@@ -48,7 +48,7 @@ The account associated with the script.
 
 #### Defined in
 
-[script.ts:70](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/script/src/script.ts#L70)
+[script/src/script.ts:70](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/script/src/script.ts#L70)
 
 ## Properties
 
@@ -64,7 +64,7 @@ The account associated with the script.
 
 #### Defined in
 
-[script.ts:46](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/script/src/script.ts#L46)
+[script/src/script.ts:46](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/script/src/script.ts#L46)
 
 ***
 
@@ -80,7 +80,7 @@ The compiled bytecode of the script.
 
 #### Defined in
 
-[script.ts:36](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/script/src/script.ts#L36)
+[script/src/script.ts:36](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/script/src/script.ts#L36)
 
 ***
 
@@ -96,7 +96,7 @@ Functions that can be invoked within the script.
 
 #### Defined in
 
-[script.ts:61](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/script/src/script.ts#L61)
+[script/src/script.ts:61](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/script/src/script.ts#L61)
 
 ***
 
@@ -112,7 +112,7 @@ The ABI interface for the script.
 
 #### Defined in
 
-[script.ts:41](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/script/src/script.ts#L41)
+[script/src/script.ts:41](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/script/src/script.ts#L41)
 
 ***
 
@@ -128,7 +128,7 @@ The provider used for interacting with the network.
 
 #### Defined in
 
-[script.ts:56](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/script/src/script.ts#L56)
+[script/src/script.ts:56](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/script/src/script.ts#L56)
 
 ***
 
@@ -140,9 +140,51 @@ The script request object.
 
 #### Defined in
 
-[script.ts:51](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/script/src/script.ts#L51)
+[script/src/script.ts:51](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/script/src/script.ts#L51)
 
 ## Methods
+
+### deploy()
+
+> **deploy**\&lt;`T`\>(`account`): `Promise`\&lt;`object`\>
+
+#### Type Parameters
+
+• **T** = [`Script`](Script.md)\&lt;`TInput`, `TOutput`\>
+
+#### Parameters
+
+• **account**: [`Account`](../Account/Account.md)
+
+The account used to pay the deployment costs.
+
+#### Returns
+
+`Promise`\&lt;`object`\>
+
+The _blobId_ and a _waitForResult_ callback that returns the deployed predicate
+once the blob deployment transaction finishes.
+
+The returned loader script will have the same configurable constants
+as the original script which was used to generate the loader script.
+
+##### blobId
+
+> **blobId**: `string`
+
+##### waitForResult()
+
+> **waitForResult**: () => `Promise`\&lt;`T`\>
+
+###### Returns
+
+`Promise`\&lt;`T`\>
+
+#### Defined in
+
+[script/src/script.ts:133](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/script/src/script.ts#L133)
+
+***
 
 ### setConfigurableConstants()
 
@@ -168,4 +210,4 @@ Will throw an error if the script has no configurable constants to be set or if 
 
 #### Defined in
 
-[script.ts:91](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/script/src/script.ts#L91)
+[script/src/script.ts:91](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/script/src/script.ts#L91)

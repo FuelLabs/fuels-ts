@@ -1,4 +1,4 @@
-**@fuel-ts/account v0.96.1** • [**Docs**](index.md)
+**@fuel-ts/account v0.97.0** • [**Docs**](index.md)
 
 ***
 
@@ -12,7 +12,7 @@
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:145](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L145)
+[packages/account/src/providers/transaction-summary/types.ts:177](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L177)
 
 ***
 
@@ -35,7 +35,7 @@ if the account is not authorized for the connection it should trigger with value
 
 #### Defined in
 
-[packages/account/src/connectors/types/events.ts:40](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/events.ts#L40)
+[packages/account/src/connectors/types/events.ts:40](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/types/events.ts#L40)
 
 ***
 
@@ -58,7 +58,7 @@ connection changes.
 
 #### Defined in
 
-[packages/account/src/connectors/types/events.ts:28](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/events.ts#L28)
+[packages/account/src/connectors/types/events.ts:28](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/types/events.ts#L28)
 
 ***
 
@@ -94,7 +94,7 @@ description of the asset
 
 #### Defined in
 
-[packages/account/src/providers/assets/types.ts:25](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/assets/types.ts#L25)
+[packages/account/src/providers/assets/types.ts:25](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/assets/types.ts#L25)
 
 ***
 
@@ -104,7 +104,7 @@ description of the asset
 
 #### Defined in
 
-[packages/account/src/providers/assets/types.ts:38](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/assets/types.ts#L38)
+[packages/account/src/providers/assets/types.ts:38](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/assets/types.ts#L38)
 
 ***
 
@@ -114,7 +114,7 @@ description of the asset
 
 #### Defined in
 
-[packages/account/src/providers/assets/types.ts:39](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/assets/types.ts#L39)
+[packages/account/src/providers/assets/types.ts:39](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/assets/types.ts#L39)
 
 ***
 
@@ -124,7 +124,7 @@ description of the asset
 
 #### Defined in
 
-[packages/account/src/providers/assets/types.ts:36](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/assets/types.ts#L36)
+[packages/account/src/providers/assets/types.ts:36](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/assets/types.ts#L36)
 
 ***
 
@@ -190,7 +190,7 @@ A Fuel block
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:92](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L92)
+[packages/account/src/providers/provider.ts:93](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L93)
 
 ***
 
@@ -254,17 +254,17 @@ A Fuel block
 
 #### Defined in
 
-[packages/account/src/providers/message.ts:39](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/message.ts#L39)
+[packages/account/src/providers/message.ts:39](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/message.ts#L39)
 
 ***
 
 ### BlockId
 
-> **BlockId**: [`SuccessStatus`](index.md#successstatus)\[`"block"`\]\[`"id"`\] \| [`FailureStatus`](index.md#failurestatus)\[`"block"`\]\[`"id"`\]
+> **BlockId**: `string`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:27](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L27)
+[packages/account/src/providers/transaction-summary/types.ts:59](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L59)
 
 ***
 
@@ -274,7 +274,7 @@ A Fuel block
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:174](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L174)
+[packages/account/src/providers/transaction-summary/types.ts:206](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L206)
 
 ***
 
@@ -288,7 +288,7 @@ A Fuel block
 
 #### Defined in
 
-[packages/account/src/connectors/utils/cache.ts:3](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/utils/cache.ts#L3)
+[packages/account/src/connectors/utils/cache.ts:3](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/utils/cache.ts#L3)
 
 ***
 
@@ -330,7 +330,7 @@ A Fuel block
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/calculate-tx-fee-for-summary.ts:24](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/calculate-tx-fee-for-summary.ts#L24)
+[packages/account/src/providers/transaction-summary/calculate-tx-fee-for-summary.ts:24](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/calculate-tx-fee-for-summary.ts#L24)
 
 ***
 
@@ -350,7 +350,7 @@ A Fuel block
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:79](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L79)
+[packages/account/src/providers/provider.ts:80](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L80)
 
 ***
 
@@ -376,7 +376,7 @@ Chain information
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:169](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L169)
+[packages/account/src/providers/provider.ts:172](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L172)
 
 ***
 
@@ -404,7 +404,7 @@ Receiving address or script hash
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/output.ts:24](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-request/output.ts#L24)
+[packages/account/src/providers/transaction-request/output.ts:24](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-request/output.ts#L24)
 
 ***
 
@@ -450,7 +450,7 @@ A Fuel coin
 
 #### Defined in
 
-[packages/account/src/providers/coin.ts:7](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/coin.ts#L7)
+[packages/account/src/providers/coin.ts:7](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/coin.ts#L7)
 
 ***
 
@@ -474,7 +474,7 @@ A Fuel coin
 
 #### Defined in
 
-[packages/account/src/providers/coin-quantity.ts:9](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/coin-quantity.ts#L9)
+[packages/account/src/providers/coin-quantity.ts:9](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/coin-quantity.ts#L9)
 
 ***
 
@@ -484,7 +484,7 @@ A Fuel coin
 
 #### Defined in
 
-[packages/account/src/providers/coin-quantity.ts:6](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/coin-quantity.ts#L6)
+[packages/account/src/providers/coin-quantity.ts:6](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/coin-quantity.ts#L6)
 
 ***
 
@@ -554,7 +554,7 @@ Index of witness that authorizes spending the coin
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/input.ts:11](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-request/input.ts#L11)
+[packages/account/src/providers/transaction-request/input.ts:11](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-request/input.ts#L11)
 
 ***
 
@@ -588,7 +588,7 @@ Receiving address or script hash
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/output.ts:10](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-request/output.ts#L10)
+[packages/account/src/providers/transaction-request/output.ts:10](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-request/output.ts#L10)
 
 ***
 
@@ -620,7 +620,7 @@ Receiving address or script hash
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-metadata.ts:2](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/connector-metadata.ts#L2)
+[packages/account/src/connectors/types/connector-metadata.ts:2](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/types/connector-metadata.ts#L2)
 
 ***
 
@@ -668,7 +668,7 @@ Receiving address or script hash
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:154](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L154)
+[packages/account/src/providers/provider.ts:157](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L157)
 
 ***
 
@@ -696,7 +696,7 @@ State Root
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/output.ts:34](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-request/output.ts#L34)
+[packages/account/src/providers/transaction-request/output.ts:34](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-request/output.ts#L34)
 
 ***
 
@@ -742,7 +742,7 @@ Deployed Contract bytecode and contract id
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:136](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L136)
+[packages/account/src/providers/provider.ts:139](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L139)
 
 ***
 
@@ -770,7 +770,7 @@ Points to the TX whose output is being spent. (TxPointer)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/input.ts:73](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-request/input.ts#L73)
+[packages/account/src/providers/transaction-request/input.ts:73](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-request/input.ts#L73)
 
 ***
 
@@ -792,7 +792,31 @@ Index of input contract
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/output.ts:19](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-request/output.ts#L19)
+[packages/account/src/providers/transaction-request/output.ts:19](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-request/output.ts#L19)
+
+***
+
+### ContractTransferParams
+
+> **ContractTransferParams**: `object`
+
+#### Type declaration
+
+##### amount
+
+> **amount**: `BigNumberish`
+
+##### assetId?
+
+> `optional` **assetId**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+##### contractId
+
+> **contractId**: `string` \| [`AbstractAddress`](../Interfaces/AbstractAddress.md)
+
+#### Defined in
+
+[packages/account/src/account.ts:62](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/account.ts#L62)
 
 ***
 
@@ -836,7 +860,7 @@ Index of input contract
 
 #### Defined in
 
-[packages/account/src/connectors/utils/promises.ts:5](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/utils/promises.ts#L5)
+[packages/account/src/connectors/utils/promises.ts:5](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/utils/promises.ts#L5)
 
 ***
 
@@ -846,7 +870,7 @@ Index of input contract
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:74](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L74)
+[packages/account/src/providers/provider.ts:75](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L75)
 
 ***
 
@@ -856,7 +880,7 @@ Index of input contract
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:77](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L77)
+[packages/account/src/providers/provider.ts:78](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L78)
 
 ***
 
@@ -866,7 +890,7 @@ Index of input contract
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:75](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L75)
+[packages/account/src/providers/provider.ts:76](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L76)
 
 ***
 
@@ -886,7 +910,7 @@ Estimate the transaction dependencies.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:333](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L333)
+[packages/account/src/providers/provider.ts:336](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L336)
 
 ***
 
@@ -906,7 +930,7 @@ Estimate the transaction dependencies.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:84](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L84)
+[packages/account/src/providers/provider.ts:85](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L85)
 
 ***
 
@@ -916,17 +940,51 @@ Estimate the transaction dependencies.
 
 #### Defined in
 
-[packages/account/src/account.ts:62](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/account.ts#L62)
+[packages/account/src/account.ts:68](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/account.ts#L68)
 
 ***
 
 ### FailureStatus
 
-> **FailureStatus**: `GqlFailureStatusFragment`
+> **FailureStatus**: `object`
+
+#### Type declaration
+
+##### block?
+
+> `optional` **block**: `object`
+
+##### block.id
+
+> **block.id**: `string`
+
+##### reason
+
+> **reason**: `string`
+
+##### receipts
+
+> **receipts**: `GqlReceiptFragment`[]
+
+##### time
+
+> **time**: `string`
+
+##### totalFee
+
+> **totalFee**: `string`
+
+##### totalGas
+
+> **totalGas**: `string`
+
+##### type
+
+> **type**: `"FailureStatus"`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:20](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L20)
+[packages/account/src/providers/transaction-summary/types.ts:26](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L26)
 
 ***
 
@@ -936,7 +994,7 @@ Estimate the transaction dependencies.
 
 #### Defined in
 
-[packages/account/src/account.ts:68](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/account.ts#L68)
+[packages/account/src/account.ts:74](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/account.ts#L74)
 
 ***
 
@@ -974,7 +1032,7 @@ Read more at: https://docs.fuel.network/docs/specs/abi/json-abi-format/
 
 #### Defined in
 
-[packages/account/src/connectors/types/data-type.ts:44](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/data-type.ts#L44)
+[packages/account/src/connectors/types/data-type.ts:44](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/types/data-type.ts#L44)
 
 ***
 
@@ -998,7 +1056,7 @@ Read more at: https://docs.fuel.network/docs/specs/abi/json-abi-format/
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:30](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/fuel.ts#L30)
+[packages/account/src/connectors/fuel.ts:30](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/fuel.ts#L30)
 
 ***
 
@@ -1010,7 +1068,7 @@ All the events available to the connector.
 
 #### Defined in
 
-[packages/account/src/connectors/types/events.ts:122](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/events.ts#L122)
+[packages/account/src/connectors/types/events.ts:122](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/types/events.ts#L122)
 
 ***
 
@@ -1020,7 +1078,7 @@ All the events available to the connector.
 
 #### Defined in
 
-[packages/account/src/connectors/types/events.ts:132](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/events.ts#L132)
+[packages/account/src/connectors/types/events.ts:132](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/types/events.ts#L132)
 
 ***
 
@@ -1036,7 +1094,7 @@ All the events available to the connector.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:36](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/fuel.ts#L36)
+[packages/account/src/connectors/fuel.ts:36](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/fuel.ts#L36)
 
 ***
 
@@ -1052,7 +1110,7 @@ Extract the event argument type from the event type.
 
 #### Defined in
 
-[packages/account/src/connectors/types/events.ts:16](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/events.ts#L16)
+[packages/account/src/connectors/types/events.ts:16](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/types/events.ts#L16)
 
 ***
 
@@ -1088,7 +1146,7 @@ Extract the event argument type from the event type.
 
 #### Defined in
 
-packages/account/src/providers/\_\_generated\_\_/operations.ts:1321
+packages/account/src/providers/\_\_generated\_\_/operations.ts:1329
 
 ***
 
@@ -1116,7 +1174,7 @@ packages/account/src/providers/\_\_generated\_\_/operations.ts:1321
 
 #### Defined in
 
-[packages/account/src/providers/assets/utils/network.ts:22](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/assets/utils/network.ts#L22)
+[packages/account/src/providers/assets/utils/network.ts:22](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/assets/utils/network.ts#L22)
 
 ***
 
@@ -1132,7 +1190,7 @@ packages/account/src/providers/\_\_generated\_\_/operations.ts:1321
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:119](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L119)
+[packages/account/src/providers/provider.ts:122](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L122)
 
 ***
 
@@ -1148,11 +1206,11 @@ packages/account/src/providers/\_\_generated\_\_/operations.ts:1321
 
 ##### pageInfo
 
-> **pageInfo**: `GqlPageInfo`
+> **pageInfo**: [`PageInfo`](index.md#pageinfo-4)
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:128](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L128)
+[packages/account/src/providers/provider.ts:131](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L131)
 
 ***
 
@@ -1168,11 +1226,11 @@ packages/account/src/providers/\_\_generated\_\_/operations.ts:1321
 
 ##### pageInfo
 
-> **pageInfo**: `GqlPageInfo`
+> **pageInfo**: [`PageInfo`](index.md#pageinfo-4)
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:109](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L109)
+[packages/account/src/providers/provider.ts:112](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L112)
 
 ***
 
@@ -1188,11 +1246,11 @@ packages/account/src/providers/\_\_generated\_\_/operations.ts:1321
 
 ##### pageInfo
 
-> **pageInfo**: `GqlPageInfo`
+> **pageInfo**: [`PageInfo`](index.md#pageinfo-4)
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:114](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L114)
+[packages/account/src/providers/provider.ts:117](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L117)
 
 ***
 
@@ -1220,7 +1278,7 @@ packages/account/src/providers/\_\_generated\_\_/operations.ts:1321
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:158](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L158)
+[packages/account/src/providers/transaction-summary/types.ts:190](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L190)
 
 ***
 
@@ -1232,7 +1290,7 @@ packages/account/src/providers/\_\_generated\_\_/operations.ts:1321
 
 ##### pageInfo
 
-> **pageInfo**: `GqlPageInfo`
+> **pageInfo**: [`PageInfo`](index.md#pageinfo-4)
 
 ##### transactions
 
@@ -1240,27 +1298,41 @@ packages/account/src/providers/\_\_generated\_\_/operations.ts:1321
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:123](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L123)
+[packages/account/src/providers/provider.ts:126](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L126)
 
 ***
 
 ### GqlTransaction
 
-> **GqlTransaction**: `NonNullable`\&lt;`GqlGetTransactionQuery`\[`"transaction"`\]\>
+> **GqlTransaction**: `object`
+
+#### Type declaration
+
+##### id
+
+> **id**: `string`
+
+##### rawPayload
+
+> **rawPayload**: `string`
+
+##### status?
+
+> `optional` **status**: [`GraphqlTransactionStatus`](index.md#graphqltransactionstatus)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:15](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L15)
+[packages/account/src/providers/transaction-summary/types.ts:50](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L50)
 
 ***
 
 ### GraphqlTransactionStatus
 
-> **GraphqlTransactionStatus**: [`GqlTransaction`](index.md#gqltransaction)\[`"status"`\]
+> **GraphqlTransactionStatus**: [`SubmittedStatus`](index.md#submittedstatus) \| [`SuccessStatus`](index.md#successstatus) \| [`FailureStatus`](index.md#failurestatus) \| [`SqueezedOutStatus`](index.md#squeezedoutstatus) \| `null`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:17](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L17)
+[packages/account/src/providers/transaction-summary/types.ts:43](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L43)
 
 ***
 
@@ -1270,7 +1342,7 @@ packages/account/src/providers/\_\_generated\_\_/operations.ts:1321
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:151](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L151)
+[packages/account/src/providers/transaction-summary/types.ts:183](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L183)
 
 ***
 
@@ -1286,7 +1358,7 @@ packages/account/src/providers/\_\_generated\_\_/operations.ts:1321
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:133](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L133)
+[packages/account/src/providers/transaction-summary/types.ts:165](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L165)
 
 ***
 
@@ -1306,7 +1378,7 @@ packages/account/src/providers/\_\_generated\_\_/operations.ts:1321
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/types.ts:38](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-request/types.ts#L38)
+[packages/account/src/providers/transaction-request/types.ts:38](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-request/types.ts#L38)
 
 ***
 
@@ -1326,7 +1398,7 @@ packages/account/src/providers/\_\_generated\_\_/operations.ts:1321
 
 #### Defined in
 
-[packages/account/src/providers/message.ts:34](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/message.ts#L34)
+[packages/account/src/providers/message.ts:34](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/message.ts#L34)
 
 ***
 
@@ -1376,7 +1448,7 @@ A Fuel message
 
 #### Defined in
 
-[packages/account/src/providers/message.ts:10](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/message.ts#L10)
+[packages/account/src/providers/message.ts:10](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/message.ts#L10)
 
 ***
 
@@ -1420,7 +1492,7 @@ A Fuel message
 
 #### Defined in
 
-[packages/account/src/providers/message.ts:23](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/message.ts#L23)
+[packages/account/src/providers/message.ts:23](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/message.ts#L23)
 
 ***
 
@@ -1470,7 +1542,7 @@ Message Proof
 
 #### Defined in
 
-[packages/account/src/providers/message.ts:58](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/message.ts#L58)
+[packages/account/src/providers/message.ts:58](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/message.ts#L58)
 
 ***
 
@@ -1488,7 +1560,7 @@ Message Status
 
 #### Defined in
 
-[packages/account/src/providers/message.ts:73](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/message.ts#L73)
+[packages/account/src/providers/message.ts:73](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/message.ts#L73)
 
 ***
 
@@ -1558,7 +1630,7 @@ Index of witness that authorizes the message
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/input.ts:42](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-request/input.ts#L42)
+[packages/account/src/providers/transaction-request/input.ts:42](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-request/input.ts#L42)
 
 ***
 
@@ -1568,7 +1640,7 @@ Index of witness that authorizes the message
 
 #### Defined in
 
-[packages/account/src/mnemonic/utils.ts:7](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/mnemonic/utils.ts#L7)
+[packages/account/src/mnemonic/utils.ts:7](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/mnemonic/utils.ts#L7)
 
 ***
 
@@ -1596,7 +1668,7 @@ The name of the network.
 
 #### Defined in
 
-[packages/account/src/connectors/types/data-type.ts:21](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/data-type.ts#L21)
+[packages/account/src/connectors/types/data-type.ts:21](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/types/data-type.ts#L21)
 
 ***
 
@@ -1632,7 +1704,7 @@ type of network
 
 #### Defined in
 
-[packages/account/src/providers/assets/types.ts:1](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/assets/types.ts#L1)
+[packages/account/src/providers/assets/types.ts:1](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/assets/types.ts#L1)
 
 ***
 
@@ -1674,7 +1746,7 @@ type of network
 
 #### Defined in
 
-[packages/account/src/providers/assets/types.ts:12](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/assets/types.ts#L12)
+[packages/account/src/providers/assets/types.ts:12](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/assets/types.ts#L12)
 
 ***
 
@@ -1684,7 +1756,7 @@ type of network
 
 #### Defined in
 
-[packages/account/src/providers/assets/utils/network.ts:5](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/assets/utils/network.ts#L5)
+[packages/account/src/providers/assets/utils/network.ts:5](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/assets/utils/network.ts#L5)
 
 ***
 
@@ -1718,7 +1790,7 @@ Node information
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:178](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L178)
+[packages/account/src/providers/provider.ts:181](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L181)
 
 ***
 
@@ -1746,7 +1818,7 @@ Node information
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:186](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L186)
+[packages/account/src/providers/provider.ts:189](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L189)
 
 ***
 
@@ -1778,7 +1850,7 @@ Node information
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:103](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L103)
+[packages/account/src/providers/transaction-summary/types.ts:135](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L135)
 
 ***
 
@@ -1798,7 +1870,7 @@ Node information
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:92](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L92)
+[packages/account/src/providers/transaction-summary/types.ts:124](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L124)
 
 ***
 
@@ -1822,7 +1894,7 @@ Node information
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:97](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L97)
+[packages/account/src/providers/transaction-summary/types.ts:129](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L129)
 
 ***
 
@@ -1846,7 +1918,7 @@ Node information
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:127](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L127)
+[packages/account/src/providers/transaction-summary/types.ts:159](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L159)
 
 ***
 
@@ -1862,7 +1934,17 @@ Node information
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:137](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L137)
+[packages/account/src/providers/transaction-summary/types.ts:169](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L169)
+
+***
+
+### PageInfo
+
+> **PageInfo**: `GqlPageInfo`
+
+#### Defined in
+
+[packages/account/src/providers/provider.ts:110](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L110)
 
 ***
 
@@ -1910,9 +1992,9 @@ packages/account/src/providers/\_\_generated\_\_/operations.ts:752
 
 #### Type declaration
 
-##### abi?
+##### abi
 
-> `optional` **abi**: `JsonAbi`
+> **abi**: `JsonAbi`
 
 ##### bytecode
 
@@ -1926,17 +2008,13 @@ packages/account/src/providers/\_\_generated\_\_/operations.ts:752
 
 > `optional` **data**: `TData`
 
-##### loaderBytecode?
-
-> `optional` **loaderBytecode**: [`BytesLike`](../Interfaces/index.md#byteslike)
-
 ##### provider
 
 > **provider**: [`Provider`](./Provider.md)
 
 #### Defined in
 
-[packages/account/src/predicate/predicate.ts:29](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/predicate/predicate.ts#L29)
+[packages/account/src/predicate/predicate.ts:30](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/predicate/predicate.ts#L30)
 
 ***
 
@@ -1946,7 +2024,7 @@ packages/account/src/providers/\_\_generated\_\_/operations.ts:752
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:25](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L25)
+[packages/account/src/providers/transaction-summary/types.ts:57](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L57)
 
 ***
 
@@ -1958,7 +2036,7 @@ Provider Call transaction params
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:358](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L358)
+[packages/account/src/providers/provider.ts:361](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L361)
 
 ***
 
@@ -2027,7 +2105,7 @@ Timeout [ms] after which every request will be aborted.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:291](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L291)
+[packages/account/src/providers/provider.ts:294](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L294)
 
 ***
 
@@ -2039,7 +2117,7 @@ Provider Send transaction params
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:363](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L363)
+[packages/account/src/providers/provider.ts:366](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L366)
 
 ***
 
@@ -2075,7 +2153,7 @@ Provider Send transaction params
 
 #### Defined in
 
-[packages/account/src/providers/resource.ts:6](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/resource.ts#L6)
+[packages/account/src/providers/resource.ts:6](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/resource.ts#L6)
 
 ***
 
@@ -2115,7 +2193,7 @@ Provider Send transaction params
 
 #### Defined in
 
-[packages/account/src/providers/resource.ts:15](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/resource.ts#L15)
+[packages/account/src/providers/resource.ts:15](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/resource.ts#L15)
 
 ***
 
@@ -2131,7 +2209,7 @@ Provider Send transaction params
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:147](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L147)
+[packages/account/src/providers/transaction-summary/types.ts:179](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L179)
 
 ***
 
@@ -2141,7 +2219,7 @@ Provider Send transaction params
 
 #### Defined in
 
-[packages/account/src/providers/resource.ts:25](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/resource.ts#L25)
+[packages/account/src/providers/resource.ts:25](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/resource.ts#L25)
 
 ***
 
@@ -2151,7 +2229,7 @@ Provider Send transaction params
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:24](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L24)
+[packages/account/src/providers/transaction-summary/types.ts:56](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L56)
 
 ***
 
@@ -2167,7 +2245,7 @@ Provider Send transaction params
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:141](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L141)
+[packages/account/src/providers/transaction-summary/types.ts:173](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L173)
 
 ***
 
@@ -2177,7 +2255,7 @@ Provider Send transaction params
 
 #### Defined in
 
-[packages/account/src/providers/resource.ts:26](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/resource.ts#L26)
+[packages/account/src/providers/resource.ts:26](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/resource.ts#L26)
 
 ***
 
@@ -2217,17 +2295,27 @@ Select a network requires either the `chainId` or the `url`.
 
 #### Defined in
 
-[packages/account/src/connectors/types/data-type.ts:37](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/data-type.ts#L37)
+[packages/account/src/connectors/types/data-type.ts:37](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/types/data-type.ts#L37)
 
 ***
 
 ### SqueezedOutStatus
 
-> **SqueezedOutStatus**: `GqlSqueezedOutStatusFragment`
+> **SqueezedOutStatus**: `object`
+
+#### Type declaration
+
+##### reason
+
+> **reason**: `string`
+
+##### type
+
+> **type**: `"SqueezedOutStatus"`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:22](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L22)
+[packages/account/src/providers/transaction-summary/types.ts:38](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L38)
 
 ***
 
@@ -2247,27 +2335,71 @@ Select a network requires either the `chainId` or the `url`.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:40](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/fuel.ts#L40)
+[packages/account/src/connectors/fuel.ts:40](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/fuel.ts#L40)
 
 ***
 
 ### SubmittedStatus
 
-> **SubmittedStatus**: `GqlSubmittedStatusFragment`
+> **SubmittedStatus**: `object`
+
+#### Type declaration
+
+##### time
+
+> **time**: `string`
+
+##### type
+
+> **type**: `"SubmittedStatus"`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:21](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L21)
+[packages/account/src/providers/transaction-summary/types.ts:9](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L9)
 
 ***
 
 ### SuccessStatus
 
-> **SuccessStatus**: `GqlSuccessStatusFragment`
+> **SuccessStatus**: `object`
+
+#### Type declaration
+
+##### block?
+
+> `optional` **block**: `object`
+
+##### block.id
+
+> **block.id**: `string`
+
+##### programState?
+
+> `optional` **programState**: `GqlSuccessStatusFragment`\[`"programState"`\]
+
+##### receipts
+
+> **receipts**: `GqlReceiptFragment`[]
+
+##### time
+
+> **time**: `string`
+
+##### totalFee
+
+> **totalFee**: `string`
+
+##### totalGas
+
+> **totalGas**: `string`
+
+##### type
+
+> **type**: `"SuccessStatus"`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:19](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L19)
+[packages/account/src/providers/transaction-summary/types.ts:14](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L14)
 
 ***
 
@@ -2277,7 +2409,7 @@ Select a network requires either the `chainId` or the `url`.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:26](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L26)
+[packages/account/src/providers/transaction-summary/types.ts:58](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L58)
 
 ***
 
@@ -2345,7 +2477,7 @@ Select a network requires either the `chainId` or the `url`.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:194](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L194)
+[packages/account/src/providers/provider.ts:197](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L197)
 
 ***
 
@@ -2381,7 +2513,7 @@ A promise that resolves to the signed transaction request.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:340](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L340)
+[packages/account/src/providers/provider.ts:343](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L343)
 
 ***
 
@@ -2391,7 +2523,7 @@ A promise that resolves to the signed transaction request.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/types.ts:25](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-request/types.ts#L25)
+[packages/account/src/providers/transaction-request/types.ts:25](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-request/types.ts#L25)
 
 ***
 
@@ -2401,7 +2533,7 @@ A promise that resolves to the signed transaction request.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/input.ts:82](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-request/input.ts#L82)
+[packages/account/src/providers/transaction-request/input.ts:82](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-request/input.ts#L82)
 
 ***
 
@@ -2411,7 +2543,7 @@ A promise that resolves to the signed transaction request.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/types.ts:31](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-request/types.ts#L31)
+[packages/account/src/providers/transaction-request/types.ts:31](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-request/types.ts#L31)
 
 ***
 
@@ -2421,7 +2553,7 @@ A promise that resolves to the signed transaction request.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/output.ts:41](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-request/output.ts#L41)
+[packages/account/src/providers/transaction-request/output.ts:41](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-request/output.ts#L41)
 
 ***
 
@@ -2431,7 +2563,7 @@ A promise that resolves to the signed transaction request.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-response/transaction-response.ts:67](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-response/transaction-response.ts#L67)
+[packages/account/src/providers/transaction-response/transaction-response.ts:67](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-response/transaction-response.ts#L67)
 
 ***
 
@@ -2441,7 +2573,7 @@ A promise that resolves to the signed transaction request.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-response/transaction-response.ts:66](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-response/transaction-response.ts#L66)
+[packages/account/src/providers/transaction-response/transaction-response.ts:66](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-response/transaction-response.ts#L66)
 
 ***
 
@@ -2549,7 +2681,7 @@ A promise that resolves to the signed transaction request.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:176](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/types.ts#L176)
+[packages/account/src/providers/transaction-summary/types.ts:208](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/types.ts#L208)
 
 ***
 
@@ -2573,7 +2705,7 @@ A promise that resolves to the signed transaction request.
 
 #### Defined in
 
-[packages/account/src/account.ts:56](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/account.ts#L56)
+[packages/account/src/account.ts:56](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/account.ts#L56)
 
 ***
 
@@ -2623,7 +2755,7 @@ packages/account/src/providers/\_\_generated\_\_/operations.ts:1208
 
 #### Defined in
 
-[packages/account/src/account.ts:51](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/account.ts#L51)
+[packages/account/src/account.ts:51](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/account.ts#L51)
 
 ***
 
@@ -2641,7 +2773,7 @@ UTXO validation params
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:326](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L326)
+[packages/account/src/providers/provider.ts:329](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L329)
 
 ***
 
@@ -2657,7 +2789,7 @@ UTXO validation params
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/output.ts:31](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-request/output.ts#L31)
+[packages/account/src/providers/transaction-request/output.ts:31](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-request/output.ts#L31)
 
 ***
 
@@ -2681,7 +2813,7 @@ UTXO validation params
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:17](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/wallet-manager/types.ts#L17)
+[packages/account/src/wallet-manager/types.ts:17](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/wallet-manager/types.ts#L17)
 
 ***
 
@@ -2691,7 +2823,7 @@ UTXO validation params
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:23](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/wallet-manager/types.ts#L23)
+[packages/account/src/wallet-manager/types.ts:23](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/wallet-manager/types.ts#L23)
 
 ***
 
@@ -2720,7 +2852,7 @@ And Exact Versions 1.0.0
 
 #### Defined in
 
-[packages/account/src/connectors/types/data-type.ts:7](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/data-type.ts#L7)
+[packages/account/src/connectors/types/data-type.ts:7](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/types/data-type.ts#L7)
 
 ***
 
@@ -2744,7 +2876,7 @@ And Exact Versions 1.0.0
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:7](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/wallet-manager/types.ts#L7)
+[packages/account/src/wallet-manager/types.ts:7](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/wallet-manager/types.ts#L7)
 
 ***
 
@@ -2760,7 +2892,7 @@ And Exact Versions 1.0.0
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:13](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/wallet-manager/types.ts#L13)
+[packages/account/src/wallet-manager/types.ts:13](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/wallet-manager/types.ts#L13)
 
 ## Variables
 
@@ -2770,7 +2902,7 @@ And Exact Versions 1.0.0
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:70](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L70)
+[packages/account/src/providers/provider.ts:71](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L71)
 
 ***
 
@@ -2814,7 +2946,7 @@ And Exact Versions 1.0.0
 
 #### Defined in
 
-[packages/account/src/providers/chains.ts:1](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/chains.ts#L1)
+[packages/account/src/providers/chains.ts:1](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/chains.ts#L1)
 
 ***
 
@@ -2824,7 +2956,7 @@ And Exact Versions 1.0.0
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:71](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L71)
+[packages/account/src/providers/provider.ts:72](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L72)
 
 ***
 
@@ -2834,7 +2966,7 @@ And Exact Versions 1.0.0
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:42](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/connector-types.ts#L42)
+[packages/account/src/connectors/types/connector-types.ts:42](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/types/connector-types.ts#L42)
 
 ***
 
@@ -2844,7 +2976,7 @@ And Exact Versions 1.0.0
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:72](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L72)
+[packages/account/src/providers/provider.ts:73](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L73)
 
 ***
 
@@ -2854,7 +2986,7 @@ And Exact Versions 1.0.0
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:20](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/mnemonic/mnemonic.ts#L20)
+[packages/account/src/mnemonic/mnemonic.ts:20](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/mnemonic/mnemonic.ts#L20)
 
 ***
 
@@ -2864,7 +2996,7 @@ And Exact Versions 1.0.0
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:68](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L68)
+[packages/account/src/providers/provider.ts:69](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L69)
 
 ***
 
@@ -2874,7 +3006,7 @@ And Exact Versions 1.0.0
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:69](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/provider.ts#L69)
+[packages/account/src/providers/provider.ts:70](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/provider.ts#L70)
 
 ***
 
@@ -2884,7 +3016,7 @@ And Exact Versions 1.0.0
 
 #### Defined in
 
-[packages/account/src/providers/assets/assets.ts:621](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/assets/assets.ts#L621)
+[packages/account/src/providers/assets/assets.ts:621](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/assets/assets.ts#L621)
 
 ***
 
@@ -2894,7 +3026,7 @@ And Exact Versions 1.0.0
 
 #### Defined in
 
-[packages/account/src/wordlists/words/english.ts:1](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/wordlists/words/english.ts#L1)
+[packages/account/src/wordlists/words/english.ts:1](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/wordlists/words/english.ts#L1)
 
 ***
 
@@ -2904,7 +3036,7 @@ And Exact Versions 1.0.0
 
 #### Defined in
 
-[packages/account/src/providers/assets/utils/fuelAssetsBaseUrl.ts:1](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/assets/utils/fuelAssetsBaseUrl.ts#L1)
+[packages/account/src/providers/assets/utils/fuelAssetsBaseUrl.ts:1](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/assets/utils/fuelAssetsBaseUrl.ts#L1)
 
 ***
 
@@ -2914,7 +3046,7 @@ And Exact Versions 1.0.0
 
 #### Defined in
 
-[packages/account/src/providers/assets/assets.ts:6](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/assets/assets.ts#L6)
+[packages/account/src/providers/assets/assets.ts:6](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/assets/assets.ts#L6)
 
 ## Functions
 
@@ -2932,7 +3064,7 @@ And Exact Versions 1.0.0
 
 #### Defined in
 
-[packages/account/src/providers/coin-quantity.ts:40](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/coin-quantity.ts#L40)
+[packages/account/src/providers/coin-quantity.ts:40](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/coin-quantity.ts#L40)
 
 ***
 
@@ -2956,7 +3088,7 @@ The error message.
 
 #### Defined in
 
-[packages/account/src/providers/utils/extract-tx-error.ts:22](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/utils/extract-tx-error.ts#L22)
+[packages/account/src/providers/utils/extract-tx-error.ts:22](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/utils/extract-tx-error.ts#L22)
 
 ***
 
@@ -2974,7 +3106,7 @@ The error message.
 
 #### Defined in
 
-[packages/account/src/providers/utils/receipts.ts:64](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/utils/receipts.ts#L64)
+[packages/account/src/providers/utils/receipts.ts:64](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/utils/receipts.ts#L64)
 
 ***
 
@@ -3004,7 +3136,7 @@ The error message.
 
 #### Defined in
 
-[packages/account/src/providers/utils/extract-tx-error.ts:47](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/utils/extract-tx-error.ts#L47)
+[packages/account/src/providers/utils/extract-tx-error.ts:47](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/utils/extract-tx-error.ts#L47)
 
 ***
 
@@ -3028,7 +3160,7 @@ The error message.
 
 #### Defined in
 
-[packages/account/src/connectors/utils/cache.ts:16](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/utils/cache.ts#L16)
+[packages/account/src/connectors/utils/cache.ts:16](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/utils/cache.ts#L16)
 
 ***
 
@@ -3046,7 +3178,7 @@ The error message.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/helpers.ts:62](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-request/helpers.ts#L62)
+[packages/account/src/providers/transaction-request/helpers.ts:62](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-request/helpers.ts#L62)
 
 ***
 
@@ -3066,7 +3198,7 @@ The error message.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/helpers.ts:78](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-request/helpers.ts#L78)
+[packages/account/src/providers/transaction-request/helpers.ts:78](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-request/helpers.ts#L78)
 
 ***
 
@@ -3084,7 +3216,7 @@ The error message.
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:241](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/utils/gas.ts#L241)
+[packages/account/src/providers/utils/gas.ts:241](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/utils/gas.ts#L241)
 
 ***
 
@@ -3108,7 +3240,7 @@ The error message.
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:162](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/utils/gas.ts#L162)
+[packages/account/src/providers/utils/gas.ts:162](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/utils/gas.ts#L162)
 
 ***
 
@@ -3134,7 +3266,7 @@ The error message.
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:131](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/utils/gas.ts#L131)
+[packages/account/src/providers/utils/gas.ts:131](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/utils/gas.ts#L131)
 
 ***
 
@@ -3156,7 +3288,7 @@ The error message.
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:152](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/utils/gas.ts#L152)
+[packages/account/src/providers/utils/gas.ts:152](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/utils/gas.ts#L152)
 
 ***
 
@@ -3180,7 +3312,7 @@ The error message.
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:176](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/utils/gas.ts#L176)
+[packages/account/src/providers/utils/gas.ts:176](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/utils/gas.ts#L176)
 
 ***
 
@@ -3206,7 +3338,7 @@ The error message.
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:195](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/utils/gas.ts#L195)
+[packages/account/src/providers/utils/gas.ts:195](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/utils/gas.ts#L195)
 
 ***
 
@@ -3230,7 +3362,7 @@ The error message.
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:217](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/utils/gas.ts#L217)
+[packages/account/src/providers/utils/gas.ts:217](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/utils/gas.ts#L217)
 
 ***
 
@@ -3248,7 +3380,7 @@ The error message.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/calculate-tx-fee-for-summary.ts:35](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/calculate-tx-fee-for-summary.ts#L35)
+[packages/account/src/providers/transaction-summary/calculate-tx-fee-for-summary.ts:35](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/calculate-tx-fee-for-summary.ts#L35)
 
 ***
 
@@ -3266,7 +3398,41 @@ The error message.
 
 #### Defined in
 
-[packages/account/src/connectors/utils/promises.ts:11](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/utils/promises.ts#L11)
+[packages/account/src/connectors/utils/promises.ts:11](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/utils/promises.ts#L11)
+
+***
+
+### deployScriptOrPredicate()
+
+> **deployScriptOrPredicate**\&lt;`T`\>(`__namedParameters`): `Promise`\&lt;`object`\>
+
+#### Type Parameters
+
+• **T**
+
+#### Parameters
+
+• **\_\_namedParameters**: `Deployer`\&lt;`T`\>
+
+#### Returns
+
+`Promise`\&lt;`object`\>
+
+##### blobId
+
+> **blobId**: `string`
+
+##### waitForResult()
+
+> **waitForResult**: () => `Promise`\&lt;`T`\>
+
+###### Returns
+
+`Promise`\&lt;`T`\>
+
+#### Defined in
+
+[packages/account/src/utils/deployScriptOrPredicate.ts:60](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/utils/deployScriptOrPredicate.ts#L60)
 
 ***
 
@@ -3287,7 +3453,7 @@ inform the Fuel Connector Manager that a new connector is available.
 
 #### Defined in
 
-[packages/account/src/connectors/utils/dispatch-fuel-connector-event.ts:8](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/utils/dispatch-fuel-connector-event.ts#L8)
+[packages/account/src/connectors/utils/dispatch-fuel-connector-event.ts:8](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/utils/dispatch-fuel-connector-event.ts#L8)
 
 ***
 
@@ -3305,7 +3471,7 @@ inform the Fuel Connector Manager that a new connector is available.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/receipt.ts:31](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/receipt.ts#L31)
+[packages/account/src/providers/transaction-summary/receipt.ts:31](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/receipt.ts#L31)
 
 ***
 
@@ -3323,7 +3489,7 @@ inform the Fuel Connector Manager that a new connector is available.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/receipt.ts:12](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/receipt.ts#L12)
+[packages/account/src/providers/transaction-summary/receipt.ts:12](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/receipt.ts#L12)
 
 ***
 
@@ -3345,7 +3511,7 @@ The FuelError object.
 
 #### Defined in
 
-[packages/account/src/providers/utils/extract-tx-error.ts:132](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/utils/extract-tx-error.ts#L132)
+[packages/account/src/providers/utils/extract-tx-error.ts:132](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/utils/extract-tx-error.ts#L132)
 
 ***
 
@@ -3367,7 +3533,7 @@ The FuelError object.
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:40](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/utils/gas.ts#L40)
+[packages/account/src/providers/utils/gas.ts:40](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/utils/gas.ts#L40)
 
 ***
 
@@ -3389,7 +3555,7 @@ The FuelError object.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/helpers.ts:45](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-request/helpers.ts#L45)
+[packages/account/src/providers/transaction-request/helpers.ts:45](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-request/helpers.ts#L45)
 
 ***
 
@@ -3411,7 +3577,7 @@ Returns the asset's details on Ethereum
 
 #### Defined in
 
-[packages/account/src/providers/assets/utils/network.ts:80](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/assets/utils/network.ts#L80)
+[packages/account/src/providers/assets/utils/network.ts:80](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/assets/utils/network.ts#L80)
 
 ***
 
@@ -3433,7 +3599,7 @@ Returns the asset's details on Fuel
 
 #### Defined in
 
-[packages/account/src/providers/assets/utils/network.ts:90](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/assets/utils/network.ts#L90)
+[packages/account/src/providers/assets/utils/network.ts:90](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/assets/utils/network.ts#L90)
 
 ***
 
@@ -3458,7 +3624,7 @@ eg. getAssetNetwork({ asset, chainId: 1, networkType: 'ethereum' }) will return 
 
 #### Defined in
 
-[packages/account/src/providers/assets/utils/network.ts:32](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/assets/utils/network.ts#L32)
+[packages/account/src/providers/assets/utils/network.ts:32](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/assets/utils/network.ts#L32)
 
 ***
 
@@ -3483,7 +3649,7 @@ eg. getAssetWithNetwork({ asset, chainId: 1, networkType: 'ethereum' }) will ret
 
 #### Defined in
 
-[packages/account/src/providers/assets/utils/network.ts:48](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/assets/utils/network.ts#L48)
+[packages/account/src/providers/assets/utils/network.ts:48](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/assets/utils/network.ts#L48)
 
 ***
 
@@ -3503,7 +3669,7 @@ Returns the default chainId for the given network
 
 #### Defined in
 
-[packages/account/src/providers/assets/utils/network.ts:11](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/assets/utils/network.ts#L11)
+[packages/account/src/providers/assets/utils/network.ts:11](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/assets/utils/network.ts#L11)
 
 ***
 
@@ -3521,7 +3687,7 @@ Returns the default chainId for the given network
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:110](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/utils/gas.ts#L110)
+[packages/account/src/providers/utils/gas.ts:110](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/utils/gas.ts#L110)
 
 ***
 
@@ -3539,7 +3705,7 @@ Returns the default chainId for the given network
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:88](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/utils/gas.ts#L88)
+[packages/account/src/providers/utils/gas.ts:88](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/utils/gas.ts#L88)
 
 ***
 
@@ -3557,7 +3723,7 @@ Returns the default chainId for the given network
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/helpers.ts:36](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-request/helpers.ts#L36)
+[packages/account/src/providers/transaction-request/helpers.ts:36](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-request/helpers.ts#L36)
 
 ***
 
@@ -3579,7 +3745,7 @@ Returns the default chainId for the given network
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/get-transaction-summary.ts:26](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/get-transaction-summary.ts#L26)
+[packages/account/src/providers/transaction-summary/get-transaction-summary.ts:27](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/get-transaction-summary.ts#L27)
 
 ***
 
@@ -3597,7 +3763,7 @@ Returns the default chainId for the given network
 
 #### Defined in
 
-[packages/account/src/providers/message.ts:77](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/message.ts#L77)
+[packages/account/src/providers/message.ts:77](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/message.ts#L77)
 
 ***
 
@@ -3615,7 +3781,7 @@ Returns the default chainId for the given network
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/helpers.ts:13](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-request/helpers.ts#L13)
+[packages/account/src/providers/transaction-request/helpers.ts:13](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-request/helpers.ts#L13)
 
 ***
 
@@ -3633,7 +3799,7 @@ input is CoinTransactionRequestInput \| MessageTransactionRequestInput
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/helpers.ts:26](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-request/helpers.ts#L26)
+[packages/account/src/providers/transaction-request/helpers.ts:26](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-request/helpers.ts#L26)
 
 ***
 
@@ -3651,7 +3817,7 @@ input is CoinTransactionRequestInput \| MessageTransactionRequestInput
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/helpers.ts:17](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-request/helpers.ts#L17)
+[packages/account/src/providers/transaction-request/helpers.ts:17](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-request/helpers.ts#L17)
 
 ***
 
@@ -3669,7 +3835,7 @@ input is CoinTransactionRequestInput \| MessageTransactionRequestInput
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/helpers.ts:21](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-request/helpers.ts#L21)
+[packages/account/src/providers/transaction-request/helpers.ts:21](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-request/helpers.ts#L21)
 
 ***
 
@@ -3687,7 +3853,7 @@ input is CoinTransactionRequestInput \| MessageTransactionRequestInput
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/helpers.ts:31](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-request/helpers.ts#L31)
+[packages/account/src/providers/transaction-request/helpers.ts:31](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-request/helpers.ts#L31)
 
 ***
 
@@ -3707,7 +3873,7 @@ input is CoinTransactionRequestInput \| MessageTransactionRequestInput
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/helpers.ts:40](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-request/helpers.ts#L40)
+[packages/account/src/providers/transaction-request/helpers.ts:40](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-request/helpers.ts#L40)
 
 ***
 
@@ -3725,7 +3891,7 @@ input is CoinTransactionRequestInput \| MessageTransactionRequestInput
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/receipt.ts:9](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/receipt.ts#L9)
+[packages/account/src/providers/transaction-summary/receipt.ts:9](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/receipt.ts#L9)
 
 ***
 
@@ -3745,7 +3911,7 @@ input is CoinTransactionRequestInput \| MessageTransactionRequestInput
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:29](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/utils/gas.ts#L29)
+[packages/account/src/providers/utils/gas.ts:29](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/utils/gas.ts#L29)
 
 ***
 
@@ -3773,7 +3939,7 @@ The assets with the icon paths resolved
 
 #### Defined in
 
-[packages/account/src/providers/assets/utils/resolveIconPaths.ts:11](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/assets/utils/resolveIconPaths.ts#L11)
+[packages/account/src/providers/assets/utils/resolveIconPaths.ts:11](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/assets/utils/resolveIconPaths.ts#L11)
 
 ***
 
@@ -3793,7 +3959,7 @@ The assets with the icon paths resolved
 
 #### Defined in
 
-[packages/account/src/providers/assets/utils/url.ts:5](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/assets/utils/url.ts#L5)
+[packages/account/src/providers/assets/utils/url.ts:5](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/assets/utils/url.ts#L5)
 
 ***
 
@@ -3819,7 +3985,7 @@ The assets with the icon paths resolved
 
 #### Defined in
 
-[packages/account/src/connectors/utils/promises.ts:23](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/utils/promises.ts#L23)
+[packages/account/src/connectors/utils/promises.ts:23](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/utils/promises.ts#L23)
 
 ## Events
 
@@ -3843,7 +4009,7 @@ Event trigger when the assets list of metadata changed.
 
 #### Defined in
 
-[packages/account/src/connectors/types/events.ts:114](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/events.ts#L114)
+[packages/account/src/connectors/types/events.ts:114](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/types/events.ts#L114)
 
 ***
 
@@ -3867,7 +4033,7 @@ Event trigger when connection status changes. With the new connection status.
 
 #### Defined in
 
-[packages/account/src/connectors/types/events.ts:52](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/events.ts#L52)
+[packages/account/src/connectors/types/events.ts:52](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/types/events.ts#L52)
 
 ***
 
@@ -3891,7 +4057,7 @@ Event trigger when the current connector has changed.
 
 #### Defined in
 
-[packages/account/src/connectors/types/events.ts:102](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/events.ts#L102)
+[packages/account/src/connectors/types/events.ts:102](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/types/events.ts#L102)
 
 ***
 
@@ -3915,7 +4081,7 @@ Event trigger when the list of connectors has changed.
 
 #### Defined in
 
-[packages/account/src/connectors/types/events.ts:90](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/events.ts#L90)
+[packages/account/src/connectors/types/events.ts:90](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/types/events.ts#L90)
 
 ***
 
@@ -3940,7 +4106,7 @@ It should trigger even if the network is not available for the connection.
 
 #### Defined in
 
-[packages/account/src/connectors/types/events.ts:65](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/events.ts#L65)
+[packages/account/src/connectors/types/events.ts:65](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/types/events.ts#L65)
 
 ***
 
@@ -3965,7 +4131,7 @@ It should trigger even if the network is not available for the connection.
 
 #### Defined in
 
-[packages/account/src/connectors/types/events.ts:78](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/events.ts#L78)
+[packages/account/src/connectors/types/events.ts:78](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/connectors/types/events.ts#L78)
 
 ## Enumerations
 

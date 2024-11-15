@@ -1,4 +1,4 @@
-[**@fuel-ts/account v0.96.1**](../index.md) • **Docs**
+[**@fuel-ts/account v0.97.0**](../index.md) • **Docs**
 
 ***
 
@@ -12,7 +12,7 @@
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:32](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L32)
+[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:32](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L32)
 
 ***
 
@@ -22,7 +22,7 @@
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:37](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L37)
+[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:37](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L37)
 
 ***
 
@@ -32,7 +32,7 @@
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:34](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L34)
+[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:34](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L34)
 
 ***
 
@@ -42,7 +42,7 @@
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:25](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L25)
+[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:25](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L25)
 
 ***
 
@@ -52,7 +52,7 @@
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:36](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L36)
+[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:36](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L36)
 
 ***
 
@@ -62,17 +62,17 @@
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:26](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L26)
+[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:26](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L26)
 
 ***
 
 ### gqlTransactionStatus?
 
-> `optional` **gqlTransactionStatus**: `null` \| `object` \| `object` \| `object` \| `object`
+> `optional` **gqlTransactionStatus**: [`GraphqlTransactionStatus`](../index.md#graphqltransactionstatus)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:30](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L30)
+[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:30](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L30)
 
 ***
 
@@ -82,7 +82,7 @@
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:28](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L28)
+[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:28](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L28)
 
 ***
 
@@ -92,7 +92,7 @@
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:35](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L35)
+[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:35](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L35)
 
 ***
 
@@ -102,7 +102,7 @@
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:33](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L33)
+[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:33](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L33)
 
 ***
 
@@ -112,7 +112,7 @@
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:31](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L31)
+[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:31](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L31)
 
 ***
 
@@ -128,7 +128,7 @@
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:27](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L27)
+[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:27](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L27)
 
 ***
 
@@ -138,4 +138,4 @@
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:29](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L29)
+[packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts:29](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/providers/transaction-summary/assemble-transaction-summary.ts#L29)

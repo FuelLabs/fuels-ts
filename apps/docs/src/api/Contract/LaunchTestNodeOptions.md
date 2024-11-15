@@ -1,4 +1,4 @@
-[**@fuel-ts/contract v0.96.1**](../index.md) • **Docs**
+[**@fuel-ts/contract v0.97.0**](../index.md) • **Docs**
 
 ***
 
@@ -22,7 +22,7 @@ Pass in either the path to the contract's root directory to deploy the contract 
 
 #### Defined in
 
-[packages/contract/src/test-utils/launch-test-node.ts:39](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/contract/src/test-utils/launch-test-node.ts#L39)
+[packages/contract/src/test-utils/launch-test-node.ts:39](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/contract/src/test-utils/launch-test-node.ts#L39)
 
 ***
 

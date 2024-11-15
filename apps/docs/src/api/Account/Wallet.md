@@ -1,4 +1,4 @@
-[**@fuel-ts/account v0.96.1**](../index.md) • **Docs**
+[**@fuel-ts/account v0.97.0**](../index.md) • **Docs**
 
 ***
 
@@ -58,9 +58,13 @@ The password to decrypt the JSON.
 
 A Provider instance (optional).
 
+#### Returns
+
+An unlocked wallet instance.
+
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:79](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/wallet/wallet.ts#L79)
+[packages/account/src/wallet/wallet.ts:79](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/wallet/wallet.ts#L79)
 
 ***
 
@@ -96,9 +100,13 @@ The extended key.
 
 A Provider instance (optional).
 
+#### Returns
+
+An unlocked wallet instance.
+
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:69](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/wallet/wallet.ts#L69)
+[packages/account/src/wallet/wallet.ts:69](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/wallet/wallet.ts#L69)
 
 ***
 
@@ -150,9 +158,13 @@ The derivation path (optional).
 
 The passphrase for the mnemonic (optional).
 
+#### Returns
+
+An unlocked wallet instance.
+
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:60](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/wallet/wallet.ts#L60)
+[packages/account/src/wallet/wallet.ts:60](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/wallet/wallet.ts#L60)
 
 ***
 
@@ -196,9 +208,13 @@ A Provider instance (optional).
 
 The derivation path (optional).
 
+#### Returns
+
+An unlocked wallet instance.
+
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:49](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/wallet/wallet.ts#L49)
+[packages/account/src/wallet/wallet.ts:49](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/wallet/wallet.ts#L49)
 
 ***
 
@@ -226,9 +242,13 @@ An instance of WalletUnlocked.
 
 Options to customize the generation process (optional).
 
+#### Returns
+
+An unlocked wallet instance.
+
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:39](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/wallet/wallet.ts#L39)
+[packages/account/src/wallet/wallet.ts:39](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/wallet/wallet.ts#L39)
 
 ## Methods
 
@@ -256,7 +276,7 @@ A locked wallet instance.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:18](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/wallet/wallet.ts#L18)
+[packages/account/src/wallet/wallet.ts:18](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/wallet/wallet.ts#L18)
 
 ***
 
@@ -284,4 +304,4 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:29](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/wallet/wallet.ts#L29)
+[packages/account/src/wallet/wallet.ts:29](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/account/src/wallet/wallet.ts#L29)

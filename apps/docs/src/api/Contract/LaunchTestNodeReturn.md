@@ -1,4 +1,4 @@
-[**@fuel-ts/contract v0.96.1**](../index.md) • **Docs**
+[**@fuel-ts/contract v0.97.0**](../index.md) • **Docs**
 
 ***
 
@@ -38,7 +38,7 @@ packages/account/dist/test-utils/setup-test-provider-and-wallets.d.ts:22
 
 #### Defined in
 
-[packages/contract/src/test-utils/launch-test-node.ts:48](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/contract/src/test-utils/launch-test-node.ts#L48)
+[packages/contract/src/test-utils/launch-test-node.ts:48](https://github.com/FuelLabs/fuels-ts/blob/4c225773d9c890e3b3b178fd875342439d5d1ede/packages/contract/src/test-utils/launch-test-node.ts#L48)
 
 ***
 
@@ -86,7 +86,7 @@ packages/account/dist/test-utils/setup-test-provider-and-wallets.d.ts:20
 
 ##### Defined in
 
-node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.esnext.disposable.d.ts:36
+node\_modules/.pnpm/typescript@5.6.3/node\_modules/typescript/lib/lib.esnext.disposable.d.ts:36
 
 #### \[dispose\](undefined)
 
