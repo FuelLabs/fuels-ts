@@ -124,10 +124,16 @@ describe('StorageTestContract', () => {
 
   it('should allow for overriding storage slots', async () => {
     const { storageSlots } = StorageTestContract;
-    const expectedStorageSlots = storageSlots.map(({ key }) => ({
+
+    expect(storageSlots.length).toBeGreaterThan(2);
+    const modifiedStorageSlots = storageSlots.slice(1).map(({ key }) => ({
       key: `0x${key}`,
       value: ZeroBytes32,
     }));
+    const expectedStorageSlots = [
+      { key: `0x${storageSlots[0].key}`, value: `0x${storageSlots[0].value}` },
+      ...modifiedStorageSlots,
+    ];
 
     using launched = await launchTestNode();
 
@@ -138,7 +144,7 @@ describe('StorageTestContract', () => {
     // via constructor
     const storageContractFactory = new StorageTestContractFactory(wallet);
     const deployConstructor = await storageContractFactory.deploy({
-      storageSlots: expectedStorageSlots,
+      storageSlots: modifiedStorageSlots,
     });
     const { transactionResult: transactionResultConstructor } =
       await deployConstructor.waitForResult();
@@ -146,7 +152,7 @@ describe('StorageTestContract', () => {
 
     // via static deploy
     const deployStatically = await StorageTestContractFactory.deploy(wallet, {
-      storageSlots: expectedStorageSlots,
+      storageSlots: modifiedStorageSlots,
     });
     const { transactionResult: transactionResultStatically } =
       await deployStatically.waitForResult();
@@ -154,7 +160,7 @@ describe('StorageTestContract', () => {
 
     // via deployAsBlobTx
     const deployBlob = await storageContractFactory.deployAsBlobTx({
-      storageSlots: expectedStorageSlots,
+      storageSlots: modifiedStorageSlots,
     });
 
     const { transactionResult: txResultBlob } = await deployBlob.waitForResult();
@@ -162,7 +168,7 @@ describe('StorageTestContract', () => {
 
     // via deployAsCreateTx
     const deployCreate = await storageContractFactory.deployAsBlobTx({
-      storageSlots: expectedStorageSlots,
+      storageSlots: modifiedStorageSlots,
     });
 
     const { transactionResult: txResultCreate } = await deployCreate.waitForResult();
