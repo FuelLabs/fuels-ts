@@ -142,10 +142,10 @@ export async function getTransactionsSummaries(
 ): Promise<GetTransactionsSummariesReturns> {
   const { filters, provider, abiMap } = params;
 
-  const { owner, ...paginationArgs } = filters;
+  const { owner, ...inputArgs } = filters;
 
   const validPaginationParams = provider.validatePaginationArgs({
-    inputArgs: paginationArgs,
+    inputArgs,
     paginationLimit: TRANSACTIONS_PAGE_SIZE_LIMIT,
   });
 
