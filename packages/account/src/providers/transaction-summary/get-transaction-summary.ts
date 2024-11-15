@@ -8,7 +8,7 @@ import type {
   GqlReceiptFragment,
 } from '../__generated__/operations';
 import type Provider from '../provider';
-import type { PageInfo } from '../provider';
+import { TRANSACTIONS_PAGE_SIZE_LIMIT, type PageInfo } from '../provider';
 import type { TransactionRequest } from '../transaction-request';
 import type { TransactionResult } from '../transaction-response';
 
@@ -142,7 +142,17 @@ export async function getTransactionsSummaries(
 ): Promise<GetTransactionsSummariesReturns> {
   const { filters, provider, abiMap } = params;
 
-  const { transactionsByOwner } = await provider.operations.getTransactionsByOwner(filters);
+  const { owner, ...paginationArgs } = filters;
+
+  const validPaginationParams = provider.validatePaginationArgs({
+    inputArgs: paginationArgs,
+    paginationLimit: TRANSACTIONS_PAGE_SIZE_LIMIT,
+  });
+
+  const { transactionsByOwner } = await provider.operations.getTransactionsByOwner({
+    owner,
+    ...validPaginationParams,
+  });
 
   const { edges, pageInfo } = transactionsByOwner;
 
