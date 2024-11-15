@@ -8,3 +8,4 @@ export * from './wallet-manager';
 export * from './predicate';
 export * from './providers';
 export * from './connectors';
+export { deployScriptOrPredicate } from './utils/deployScriptOrPredicate';

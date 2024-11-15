@@ -45,7 +45,11 @@ describe('withConfig', () => {
       if (params?.shouldErrorOnDeploy) {
         throw new Error('Something happened');
       }
-      return Promise.resolve([]);
+      return Promise.resolve({
+        contracts: [],
+        scripts: [],
+        predicates: [],
+      });
     });
 
     const { error } = mockLogger();
