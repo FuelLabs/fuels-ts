@@ -9,7 +9,7 @@
 */
 
 import { Contract, ContractFactory, decompressBytecode } from "../../../../..";
-import type { Provider, Account, DeployContractOptions } from "../../../../..";
+import type { Provider, Account, DeployContractOptions, DeployContractResult } from "../../../../..";
 
 import { Src14OwnedProxy } from "./Src14OwnedProxy";
 
@@ -28,7 +28,7 @@ export class Src14OwnedProxyFactory extends ContractFactory<Src14OwnedProxy> {
     );
   }
 
-  static deploy (
+  static async deploy (
     wallet: Account,
     options: DeployContractOptions = {}
   ): ReturnType<Src14OwnedProxyFactory['deploy']> {

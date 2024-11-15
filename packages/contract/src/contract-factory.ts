@@ -210,18 +210,6 @@ export default class ContractFactory<TContract extends Contract = Contract> {
       : this.deployAsCreateTx(deployOptions);
   }
 
-  private mergeDeployOptions(deployOptions: DeployContractOptions) {
-    const storageSlots = (deployOptions.storageSlots ?? [])
-      .concat(this.deployOptions.storageSlots ?? [])
-      .map((x) => (x.key.startsWith('0x') ? x : { ...x, key: `0x${x.key}` }))
-      .filter((el, index, self) => self.findIndex((s) => s.key === el.key) === index);
-
-    return {
-      ...mergeDeepRight(this.deployOptions, deployOptions),
-      storageSlots,
-    };
-  }
-
   /**
    * Deploy a contract with the specified options.
    *
@@ -231,7 +219,8 @@ export default class ContractFactory<TContract extends Contract = Contract> {
   async deployAsCreateTx(
     deployOptions: DeployContractOptions = {}
   ): Promise<DeployContractResult<TContract>> {
-    const options = this.mergeDeployOptions(deployOptions);
+    const options = mergeDeepRight(this.deployOptions, deployOptions);
+
     const account = this.getAccount();
     const { consensusParameters } = account.provider.getChain();
     const maxContractSize = consensusParameters.contractParameters.contractMaxSize.toNumber();
@@ -272,8 +261,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
       chunkSizeMultiplier: CHUNK_SIZE_MULTIPLIER,
     }
   ): Promise<DeployContractResult<TContract>> {
-    const options = this.mergeDeployOptions(deployOptions);
-
+    const options = mergeDeepRight(this.deployOptions, deployOptions);
     const account = this.getAccount();
     const { configurableConstants, chunkSizeMultiplier } = options;
     if (configurableConstants) {
