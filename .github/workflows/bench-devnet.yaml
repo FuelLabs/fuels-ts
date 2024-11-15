@@ -15,7 +15,7 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/test-setup
 
-      - name: Pretes
+      - name: Pretest
         run: pnpm pretest
 
       - name: Run Node benchmarks
