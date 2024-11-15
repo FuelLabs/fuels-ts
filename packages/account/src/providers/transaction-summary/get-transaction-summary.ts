@@ -150,8 +150,8 @@ export async function getTransactionsSummaries(
   });
 
   const { transactionsByOwner } = await provider.operations.getTransactionsByOwner({
-    owner,
     ...validPaginationParams,
+    owner,
   });
 
   const { edges, pageInfo } = transactionsByOwner;
