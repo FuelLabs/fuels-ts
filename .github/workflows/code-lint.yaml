@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   docs:
-    uses: FuelLabs/github-actions/.github/workflows/vp-docs.yml@ps/chore/enable-docs-with-snippets-inline
+    uses: FuelLabs/github-actions/.github/workflows/vp-docs.yml@master
     with:
       doc-folder-path: "apps/docs/src"
       spellcheck-config-path: "apps/docs/.spellcheck.yml"
