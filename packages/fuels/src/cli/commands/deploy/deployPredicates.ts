@@ -1,35 +1,11 @@
-import type { JsonAbi } from '@fuel-ts/abi-coder';
-import { getPredicateRoot, type WalletUnlocked } from '@fuel-ts/account';
-import { ContractFactory } from '@fuel-ts/contract';
-import { arrayify } from '@fuel-ts/utils';
+import { getPredicateRoot, Predicate } from '@fuel-ts/account';
 import { debug, log } from 'console';
 import { readFileSync } from 'fs';
 
 import { getABIPath, getBinaryPath, getPredicateName } from '../../config/forcUtils';
 import type { DeployedPredicate, FuelsConfig } from '../../types';
 
-import { adjustOffsets } from './adjustOffsets';
 import { createWallet } from './createWallet';
-
-/**
- * Deploys one predicate.
- */
-export async function deployPredicate(wallet: WalletUnlocked, binaryPath: string, abiPath: string) {
-  debug(`Deploying predicate for ABI: ${abiPath}`);
-
-  const bytecode = readFileSync(binaryPath);
-  const abi = JSON.parse(readFileSync(abiPath, 'utf-8'));
-  const factory = new ContractFactory(bytecode, abi, wallet);
-
-  const { waitForResult } = await factory.deployAsBlobTxForScript();
-
-  const { loaderBytecode, configurableOffsetDiff } = await waitForResult();
-
-  return {
-    loaderBytecode,
-    configurableOffsetDiff,
-  };
-}
 
 /**
  * Deploys all predicates.
@@ -48,26 +24,24 @@ export async function deployPredicates(config: FuelsConfig) {
     const binaryPath = getBinaryPath(predicatePath, config);
     const abiPath = getABIPath(predicatePath, config);
     const projectName = getPredicateName(predicatePath);
+    const bytecode = readFileSync(binaryPath);
+    const abi = JSON.parse(readFileSync(abiPath, 'utf-8'));
 
-    const { loaderBytecode, configurableOffsetDiff } = await deployPredicate(
-      wallet,
-      binaryPath,
-      abiPath
-    );
+    const predicate = new Predicate({ abi, bytecode, provider: wallet.provider });
+    const {
+      bytes: loaderBytecode,
+      interface: { jsonAbi },
+    } = await (await predicate.deploy(wallet)).waitForResult();
+
     const predicateRoot = getPredicateRoot(loaderBytecode);
-
-    let abi = JSON.parse(readFileSync(abiPath, 'utf-8')) as JsonAbi;
-    if (configurableOffsetDiff) {
-      abi = adjustOffsets(abi, configurableOffsetDiff);
-    }
 
     debug(`Predicate deployed: ${projectName} - ${predicateRoot}`);
 
     predicates.push({
       path: predicatePath,
       predicateRoot,
-      loaderBytecode: arrayify(loaderBytecode),
-      abi,
+      loaderBytecode,
+      abi: jsonAbi,
     });
   }
 
