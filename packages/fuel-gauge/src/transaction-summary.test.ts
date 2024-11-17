@@ -20,8 +20,17 @@ import {
   ChainName,
   bn,
   OutputType,
+  TRANSACTIONS_PAGE_SIZE_LIMIT,
+  FuelError,
+  ErrorCode,
 } from 'fuels';
-import { ASSET_A, ASSET_B, launchTestNode, TestMessage } from 'fuels/test-utils';
+import {
+  ASSET_A,
+  ASSET_B,
+  expectToThrowFuelError,
+  launchTestNode,
+  TestMessage,
+} from 'fuels/test-utils';
 
 import { MultiTokenContractFactory, TokenContractFactory } from '../test/typegen';
 import type { ContractIdInput, TransferParamsInput } from '../test/typegen/contracts/TokenContract';
@@ -162,6 +171,56 @@ describe('TransactionSummary', () => {
       ...(convertBnsToHex(txResult2) as TransactionResult),
       blockId: undefined,
     });
+  });
+
+  it('should ensure getTransactionsSummaries limits TX pagination number', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      provider,
+      wallets: [sender],
+    } = launched;
+
+    await expectToThrowFuelError(
+      () =>
+        getTransactionsSummaries({
+          provider,
+          filters: {
+            first: TRANSACTIONS_PAGE_SIZE_LIMIT + 1,
+            owner: sender.address.toB256(),
+          },
+        }),
+      new FuelError(
+        ErrorCode.INVALID_INPUT_PARAMETERS,
+        'Pagination limit for this query cannot exceed 60 items'
+      )
+    );
+
+    await expectToThrowFuelError(
+      () =>
+        getTransactionsSummaries({
+          provider,
+          filters: {
+            last: TRANSACTIONS_PAGE_SIZE_LIMIT + 1,
+            owner: sender.address.toB256(),
+          },
+        }),
+      new FuelError(
+        ErrorCode.INVALID_INPUT_PARAMETERS,
+        'Pagination limit for this query cannot exceed 60 items'
+      )
+    );
+
+    // When using limit it should work
+    await expect(
+      getTransactionsSummaries({
+        provider,
+        filters: {
+          last: TRANSACTIONS_PAGE_SIZE_LIMIT,
+          owner: sender.address.toB256(),
+        },
+      })
+    ).resolves.toBeDefined();
   });
 
   it('should ensure getTransactionSummaryFromRequest executes just fine [TX REQUEST]', async () => {
