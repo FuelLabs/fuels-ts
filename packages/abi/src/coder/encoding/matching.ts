@@ -28,7 +28,7 @@ export const createCoderMatcher = (coders: SupportedCoders) =>
     stdString: coders.stdString,
     str: coders.str,
     enum: coders.enum,
-    option: coders.enum, // @TODO Add option coder
+    option: coders.option,
 
     // Unmatchable
     generic: {

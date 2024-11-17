@@ -2,6 +2,7 @@ import type { arrayCoder } from './array';
 import type { enumCoder } from './enum';
 import type { voidCoder, u16, u32, u8, u64, u256, b256, b512, bool } from './fixed';
 import type { byte, rawSlice, stdString, str, vector } from './heap';
+import type { option } from './option';
 import type { string } from './string';
 import type { struct } from './struct';
 import type { tuple } from './tuple';
@@ -19,6 +20,7 @@ export interface SupportedCodersV1 {
   string: typeof string;
   array: typeof arrayCoder;
   enum: typeof enumCoder;
+  option: typeof option;
   struct: typeof struct;
   tuple: typeof tuple;
   byte: typeof byte;
