@@ -96,7 +96,6 @@ export class Predicate<
       provider: this.provider,
       data: params.data ?? this.predicateData,
       configurableConstants: params.configurableConstants,
-      loaderBytecode: this.loaderBytecode,
     });
   }
 

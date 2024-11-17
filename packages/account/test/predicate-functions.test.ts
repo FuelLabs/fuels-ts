@@ -74,7 +74,11 @@ describe('Predicate', () => {
         abi: predicateAbi,
         provider,
         configurableConstants: { value: false },
+        data: ['DADA'],
       });
+
+      expect(predicate.predicateData).toEqual(['DADA']);
+      expect(predicate.bytes[0]).toEqual(0);
 
       const newPredicate = predicate.toNewInstance({
         configurableConstants: { value: true },
