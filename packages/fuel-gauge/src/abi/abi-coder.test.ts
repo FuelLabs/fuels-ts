@@ -1,4 +1,4 @@
-import { bn, FuelError, getRandomB256 } from 'fuels';
+import { bn, Contract, ContractFactory, FuelError, getRandomB256 } from 'fuels';
 import type { AssetId, BigNumberish, EvmAddress, RawSlice, WalletUnlocked } from 'fuels';
 import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
@@ -35,6 +35,7 @@ import type {
 } from '../../test/typegen/contracts/AbiContract';
 import type { Option, Result, Vec } from '../../test/typegen/contracts/common';
 
+import { InterfaceAdapter } from './adapter';
 import {
   U16_MAX,
   U16_MIN,
@@ -67,7 +68,8 @@ describe('AbiCoder', () => {
     const { contracts, wallets } = launched;
 
     wallet = wallets[0];
-    contract = contracts[0] as AbiContract;
+    const interfaceAdapter = new InterfaceAdapter(contracts[0].interface.jsonAbi);
+    contract = new Contract(contracts[0].id, interfaceAdapter, wallet) as AbiContract;
     cleanup = launched.cleanup;
   });
 
