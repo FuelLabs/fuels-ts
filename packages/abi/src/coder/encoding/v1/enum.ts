@@ -18,40 +18,69 @@ export type EnumDecodeValue<TCoders extends Record<string, Coder>> = RequireExac
 
 export const CASE_KEY_WORD_LENGTH = 8;
 
-export const enumCoder = <TCoders extends Record<string, Coder>>(opts: { coders: TCoders }) => ({
-  type: 'enum',
-  encodedLength: (data: Uint8Array) => {
-    const caseBytes = data.slice(0, CASE_KEY_WORD_LENGTH);
-    const caseIndex = u64.decode(caseBytes).toNumber();
-    const caseKey = Object.keys(opts.coders)[caseIndex];
-    const valueCoder = opts.coders[caseKey];
-    return u64.encodedLength(data) + valueCoder.encodedLength(data);
-  },
-  encode: (value: EnumEncodeValue<TCoders>): Uint8Array => {
-    // Obtain the case key and index
-    const [caseKey] = Object.keys(value);
-    const caseIndex = Object.keys(opts.coders).indexOf(caseKey);
+export const enumCoder = <TCoders extends Record<string, Coder>>(opts: {
+  coders: TCoders;
+  type?: string;
+}) => {
+  const isNativeValue = (value: EnumEncodeValue<TCoders>) => typeof value === 'string';
+  const isNativeCoder = (coder: Coder) => opts.type !== 'option' && coder.type === 'void';
 
-    // Encode the case value
-    const valueCoder = opts.coders[caseKey];
-    const encodedValue = valueCoder.encode(value[caseKey]);
+  return {
+    type: opts.type ?? 'enum',
+    encodedLength: (data: Uint8Array) => {
+      const caseBytes = data.slice(0, CASE_KEY_WORD_LENGTH);
+      const caseIndex = u64.decode(caseBytes).toNumber();
+      const caseKey = Object.keys(opts.coders)[caseIndex];
+      const valueCoder = opts.coders[caseKey];
+      return u64.encodedLength(data) + valueCoder.encodedLength(data);
+    },
+    encode: (value: EnumEncodeValue<TCoders>): Uint8Array => {
+      if (isNativeValue(value)) {
+        if (!opts.coders[value]) {
+          throw new Error("Unable to encode native enum as coder can't be found");
+        }
 
-    return concat([u64.encode(caseIndex), encodedValue]);
-  },
-  decode: (data: Uint8Array): EnumDecodeValue<TCoders> => {
-    // Decode the case index
-    const caseBytesLength = u64.encodedLength(data);
-    const caseBytes = data.slice(0, caseBytesLength);
-    const caseIndex = u64.decode(caseBytes).toNumber();
-    const caseKey = Object.keys(opts.coders)[caseIndex];
+        const valueCoder = opts.coders[value];
+        const encodedValue = valueCoder.encode([]);
+        const caseIndex = Object.keys(opts.coders).indexOf(value);
 
-    // Decode the case value
-    const caseValueCoder = opts.coders[caseKey];
-    const caseValueBytes = data.slice(caseBytesLength, data.length);
-    const caseValue = caseValueCoder.decode(caseValueBytes);
-    return { [caseKey]: caseValue } as EnumDecodeValue<TCoders>;
-  },
-});
+        // @TODO investigate issue with the EnumCoder.
+        // const padding = new Uint8Array(this.#encodedValueSize - valueCoder.encodedLength);
+        // return concat([u64.encode(caseIndex), padding, encodedValue]);
+
+        return concat([u64.encode(caseIndex), encodedValue]);
+      }
+
+      // Obtain the case key and index
+      const [caseKey] = Object.keys(value);
+      const caseIndex = Object.keys(opts.coders).indexOf(caseKey);
+
+      // Encode the case value
+      const valueCoder = opts.coders[caseKey];
+      const encodedValue = valueCoder.encode(value[caseKey]);
+
+      return concat([u64.encode(caseIndex), encodedValue]);
+    },
+    decode: (data: Uint8Array): EnumDecodeValue<TCoders> => {
+      // Decode the case index
+      const caseBytesLength = u64.encodedLength(data);
+      const caseBytes = data.slice(0, caseBytesLength);
+      const caseIndex = u64.decode(caseBytes).toNumber();
+      const caseKey = Object.keys(opts.coders)[caseIndex];
+
+      // Decode the case value
+      const caseValueCoder = opts.coders[caseKey];
+      const caseValueBytes = data.slice(caseBytesLength, data.length);
+      const caseValue = caseValueCoder.decode(caseValueBytes);
+
+      if (isNativeCoder(caseValueCoder)) {
+        return caseKey as unknown as EnumDecodeValue<TCoders>;
+      }
+
+      return { [caseKey]: caseValue } as EnumDecodeValue<TCoders>;
+    },
+  };
+};
 
 enumCoder.fromAbi = ({ type: { components } }: GetCoderParams, getCoder: GetCoderFn) => {
   if (!components) {
