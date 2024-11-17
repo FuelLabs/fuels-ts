@@ -108,7 +108,8 @@ describe('AbiCoder', () => {
         },
       };
 
-      const { waitForResult: waitForDeploy } = await AbiContractFactory.deploy(wallet, {
+      const factory = new ContractFactory(AbiContractFactory.bytecode, contract.interface, wallet);
+      const { waitForResult: waitForDeploy } = await factory.deploy({
         configurableConstants: NEW_CONFIGURABLES,
       });
 
