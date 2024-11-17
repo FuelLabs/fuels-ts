@@ -9,8 +9,8 @@ export type SwayType =
   | 'b256'
   | 'generic'
   | 'string'
+  | 'str'
   | 'stdString'
-  | 'strSlice'
   | 'option'
   | 'result'
   | 'enum'
@@ -22,8 +22,8 @@ export type SwayType =
   | 'array'
   | 'assetId'
   | 'evmAddress'
-  | 'rawUntypedPtr' // might not need it
-  | 'rawUntypedSlice'; // might not need it
+  | 'rawUntypedPtr'
+  | 'rawUntypedSlice';
 
 export type Matcher<T = boolean> = (opts: { swayType: string }) => T;
 
@@ -41,7 +41,7 @@ const generic: Matcher = ({ swayType }) => GENERIC_REGEX.test(swayType);
 
 export const STRING_REGEX = /^str\[(?<length>[0-9]+)\]/;
 const string: Matcher = ({ swayType }) => STRING_REGEX.test(swayType);
-const strSlice: Matcher = ({ swayType }) => swayType === 'str';
+const str: Matcher = ({ swayType }) => swayType === 'str';
 
 export const TUPLE_REGEX = /^\((?<items>.+)\)$/m;
 const tuple: Matcher = ({ swayType }) => TUPLE_REGEX.test(swayType);
@@ -49,7 +49,7 @@ const tuple: Matcher = ({ swayType }) => TUPLE_REGEX.test(swayType);
 export const ARRAY_REGEX = /^\[(?<item>[\w\s\\[\]]+);\s*(?<length>[0-9]+)\]/;
 const array: Matcher = ({ swayType }) => ARRAY_REGEX.test(swayType);
 
-const STRUCT_REGEX = /^struct .+$/m;
+export const STRUCT_REGEX = /^struct (.+::)?(?<name>.+)$/m;
 const STRUCT_STD_REGEX =
   /^struct std::.*(AssetId|B512|Vec|RawVec|EvmAddress|Bytes|String|RawBytes)$/m;
 const struct: Matcher = ({ swayType }) =>
@@ -64,8 +64,10 @@ const vector: Matcher = ({ swayType }) => swayType === 'struct std::vec::Vec';
 
 const option: Matcher = ({ swayType }) => swayType === 'enum std::option::Option';
 const result: Matcher = ({ swayType }) => swayType === 'enum std::result::Result';
-const enumMatcher: Matcher = ({ swayType }) =>
-  !option({ swayType }) && !result({ swayType }) && /^enum .*$/m.test(swayType);
+
+export const ENUM_REGEX = /^enum (.+::)?(?<name>.+)$/m;
+const enumMatcher: Matcher = (opts) =>
+  !option(opts) && !result(opts) && ENUM_REGEX.test(opts.swayType);
 
 const rawUntypedPtr: Matcher = ({ swayType }) => swayType === 'raw untyped ptr';
 const rawUntypedSlice: Matcher = ({ swayType }) => swayType === 'raw untyped slice';
@@ -82,7 +84,7 @@ export const swayTypeMatchers: Record<SwayType, Matcher> = {
   b256,
 
   string,
-  strSlice,
+  str,
   tuple,
   array,
 

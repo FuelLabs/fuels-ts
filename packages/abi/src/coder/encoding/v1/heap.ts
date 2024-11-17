@@ -1,5 +1,4 @@
 import { concat, toUtf8Bytes, toUtf8String } from '@fuel-ts/utils';
-import { log } from 'console';
 
 import type { Coder, GetCoderFn, GetCoderParams } from '../../abi-coder-types';
 
@@ -54,21 +53,21 @@ export const rawSlice = createHeapType<number[]>({
 });
 
 /**
- * String slice
+ * Std string
+ *
+ * This is the same as `str`
  */
-export const strSlice = createHeapType<string>({
-  type: 'str_slice',
+export const stdString = createHeapType<string>({
+  type: 'std_string',
   encode: (value: string) => toUtf8Bytes(value),
   decode: (data: Uint8Array) => toUtf8String(data),
 });
 
 /**
- * Std string
- *
- * This is the same as `strSlice`
+ * String slice
  */
-export const stdString = createHeapType<string>({
-  type: 'std_string',
+export const str = createHeapType<string>({
+  type: 'str',
   encode: (value: string) => toUtf8Bytes(value),
   decode: (data: Uint8Array) => toUtf8String(data),
 });

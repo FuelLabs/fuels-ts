@@ -26,6 +26,7 @@ const testMappings: Record<keyof typeof swayTypeMatchers, `${string}-matched`> =
   evmAddress: 'evmAddress-matched',
   rawUntypedPtr: 'rawUntypedPtr-matched',
   rawUntypedSlice: 'rawUntypedSlice-matched',
+  str: 'str-matched',
 };
 
 const matcher = createMatcher(testMappings);
@@ -243,5 +244,24 @@ describe('sway type matchers', () => {
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
     verifyOtherMatchersDontMatch(key, swayType);
+  });
+
+  test('str', () => {
+    const key = 'str';
+    const swayType = 'str';
+
+    expect(matcher({ swayType })).toEqual(`${key}-matched`);
+    verifyOtherMatchersDontMatch(key, swayType);
+  });
+
+  test('matcher without mapping for valid sway type throws', () => {
+    const swayType = 'str';
+
+    // @ts-expect-error intentionally missing key for valid swayType
+    const matcherWithoutMappings = createMatcher({});
+
+    expect(() => matcherWithoutMappings({ swayType })).toThrow(
+      `Matcher not found for sway type ${swayType}.`
+    );
   });
 });

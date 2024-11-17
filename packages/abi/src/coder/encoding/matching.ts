@@ -20,13 +20,13 @@ export const createCoderMatcher = (coders: SupportedCoders) =>
     void: coders.void,
 
     string: coders.string,
-    strSlice: coders.strSlice,
     array: coders.array,
     tuple: coders.tuple,
     vector: coders.vector,
     struct: coders.struct,
     bytes: coders.byte,
     stdString: coders.stdString,
+    str: coders.str,
     enum: coders.enum,
     option: coders.enum, // @TODO Add option coder
 

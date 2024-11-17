@@ -1,7 +1,7 @@
 import type { arrayCoder } from './array';
 import type { enumCoder } from './enum';
 import type { voidCoder, u16, u32, u8, u64, u256, b256, b512, bool } from './fixed';
-import type { byte, rawSlice, stdString, strSlice, vector } from './heap';
+import type { byte, rawSlice, stdString, str, vector } from './heap';
 import type { string } from './string';
 import type { struct } from './struct';
 import type { tuple } from './tuple';
@@ -23,8 +23,8 @@ export interface SupportedCodersV1 {
   tuple: typeof tuple;
   byte: typeof byte;
   rawSlice: typeof rawSlice;
-  strSlice: typeof strSlice;
   stdString: typeof stdString;
+  str: typeof str;
   vector: typeof vector;
 }
 
