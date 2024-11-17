@@ -33,9 +33,15 @@ export const createCoderMatcher = (coders: SupportedCoders) =>
     // Unmatchable
     generic: {
       type: 'generic',
-      encodedLength: () => 0,
-      encode: () => new Uint8Array(),
-      decode: () => undefined,
+      encodedLength: () => {
+        throw new Error('A generic type should not be matched');
+      },
+      encode: () => {
+        throw new Error('A generic type should not be matched');
+      },
+      decode: () => {
+        throw new Error('A generic type should not be matched');
+      },
     },
     assetId: coders.struct,
     evmAddress: coders.struct,
