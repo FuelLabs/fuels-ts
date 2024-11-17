@@ -91,8 +91,6 @@ export default createConfig({
   // #endregion onBuild
 
   // #region onDeploy
-  // #import { DeployedData, FuelsConfig };
-
   onDeploy: (config: FuelsConfig, data: DeployedData) => {
     console.log('fuels:onDeploy', { config, data });
   },
