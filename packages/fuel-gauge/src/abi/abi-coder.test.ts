@@ -1,5 +1,5 @@
-import { bn, Contract, ContractFactory, FuelError, getRandomB256 } from 'fuels';
-import type { AssetId, BigNumberish, EvmAddress, RawSlice, WalletUnlocked } from 'fuels';
+import { bn, Contract, ContractFactory, FuelError, getRandomB256, Interface } from 'fuels';
+import type { AssetId, BigNumberish, BytesLike, EvmAddress, RawSlice, WalletUnlocked } from 'fuels';
 import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
 import { AbiContractFactory } from '../../test/typegen';
@@ -70,6 +70,11 @@ describe('AbiCoder', () => {
     wallet = wallets[0];
     const interfaceAdapter = new InterfaceAdapter(contracts[0].interface.jsonAbi);
     contract = new Contract(contracts[0].id, interfaceAdapter, wallet) as AbiContract;
+
+    vi.spyOn(Interface.prototype, 'decodeLog').mockImplementation(
+      (data: BytesLike, logId: string) => interfaceAdapter.decodeLog(data, logId)
+    );
+
     cleanup = launched.cleanup;
   });
 
@@ -129,8 +134,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await fn.call();
 
-      const { value } = await waitForResult();
-      expect(value).toBe(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
 
     test('should fail to encode/decode [min - 1]', async () => {
@@ -159,8 +165,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_u16(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toBe(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
 
     it('should fail to encode/decode [min - 1]', async () => {
@@ -189,8 +196,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_u32(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toBe(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
 
     it('should fail to encode/decode [min - 1]', async () => {
@@ -219,9 +227,12 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_u64(input).call();
 
-      const { value } = await waitForResult();
-      const actual = value.toString();
-      expect(actual).toBe(expected);
+      const {
+        value,
+        logs: [log],
+      } = await waitForResult();
+      expect(value.toString()).toBe(expected);
+      expect(log.toString()).toBe(expected);
     });
 
     it('should fail to encode/decode [min - 1]', async () => {
@@ -250,9 +261,12 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_u256(input).call();
 
-      const { value } = await waitForResult();
-      const actual = value.toHex();
-      expect(actual).toEqual(expected);
+      const {
+        value,
+        logs: [log],
+      } = await waitForResult();
+      expect(value.toHex()).toStrictEqual(expected);
+      expect(log.toHex()).toStrictEqual(expected);
     });
 
     it('should fail to encode/decode [min - 1]', async () => {
@@ -281,8 +295,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_bool(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toBe(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
 
     it('should fail to encode/decode [number]', async () => {
@@ -311,8 +326,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_b256(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toBe(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
 
     it('should fail to encode/decode [too short]', async () => {
@@ -346,12 +362,13 @@ describe('AbiCoder', () => {
   describe('types_b512', () => {
     it('should encode/decode just fine', async () => {
       const input = `0xbd0c9b8792876713afa8bff383eebf31c43437823ed761cc3600d0016de5110c44ac566bd156b4fc71a4a4cb2655d3dd360c695edb17dc3b64d611e122fea23d`;
-      const expected = `0xbd0c9b8792876713afa8bff383eebf31c43437823ed761cc3600d0016de5110c44ac566bd156b4fc71a4a4cb2655d3dd360c695edb17dc3b64d611e122fea23d`;
+      const expected = `0xad0c9b8792876713afa8bff383eebf31c43437823ed761cc3600d0016de5110c54ac566bd156b4fc71a4a4cb2655d3dd360c695edb17dc3b64d611e122fea23d`;
 
       const { waitForResult } = await contract.functions.types_b512(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toBe(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
 
     it('should fail to encode/decode [too short]', async () => {
@@ -388,8 +405,9 @@ describe('AbiCoder', () => {
       const expected = Uint8Array.from([3, 2, 1]);
       const { waitForResult } = await contract.functions.types_bytes(input).call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
 
     it('should encode/decode just fine [number]', async () => {
@@ -397,8 +415,12 @@ describe('AbiCoder', () => {
       const expected = Uint8Array.from([3, 2, 1]);
       const { waitForResult } = await contract.functions.types_bytes(input).call();
 
-      const { value } = await waitForResult();
+      const {
+        value,
+        logs: [log],
+      } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(log).toStrictEqual(expected);
     });
   });
 
@@ -412,8 +434,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_str(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toBe(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
 
     it('should fail to encode/decode [length - 1]', async () => {
@@ -442,20 +465,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_str_slice(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toBe(expected);
-    });
-  });
-
-  describe('types_raw_slice', () => {
-    it('should encode/decode just fine', async () => {
-      const input: RawSlice = [1, 2, 3];
-      const expected: RawSlice = [4, 3, 2, 1];
-
-      const { waitForResult } = await contract.functions.types_raw_slice(input).call();
-      const { value } = await waitForResult();
-
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -466,8 +478,22 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_std_string(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toBe(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+  });
+
+  describe('types_raw_slice', () => {
+    it('should encode/decode just fine', async () => {
+      const input: RawSlice = [1, 2, 3];
+      const expected: RawSlice = [4, 3, 2, 1];
+
+      const { waitForResult } = await contract.functions.types_raw_slice(input).call();
+
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -481,8 +507,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_array(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
 
     it('should fail to encode/decode [empty]', async () => {
@@ -510,8 +537,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_array_struct(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -541,8 +569,9 @@ describe('AbiCoder', () => {
         .types_array_with_generic_struct(input)
         .call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toEqual(expected);
+      expect(logs).toEqual([expected]);
     });
   });
 
@@ -553,8 +582,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_array_with_vector(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -568,8 +598,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_struct_simple(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -580,8 +611,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_struct_generic(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -593,8 +625,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_struct_with_tuple(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -605,8 +638,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_struct_double_generic(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -618,8 +652,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_struct_external(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -642,8 +677,9 @@ describe('AbiCoder', () => {
         .types_struct_with_implicit_generics(INPUT)
         .call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(EXPECTED);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(EXPECTED);
+      expect(logs).toStrictEqual([EXPECTED]);
     });
   });
 
@@ -676,8 +712,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_struct_with_array(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -688,8 +725,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_struct_with_vector(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -715,8 +753,9 @@ describe('AbiCoder', () => {
         .types_struct_with_array_of_enums(input)
         .call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -732,8 +771,9 @@ describe('AbiCoder', () => {
         .types_struct_with_nested_array(input)
         .call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(EXPECTED);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(EXPECTED);
+      expect(logs).toStrictEqual([EXPECTED]);
     });
   });
 
@@ -747,8 +787,9 @@ describe('AbiCoder', () => {
         .types_struct_with_nested_tuple(input)
         .call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -761,8 +802,9 @@ describe('AbiCoder', () => {
         .types_struct_with_nested_struct(input)
         .call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -787,8 +829,9 @@ describe('AbiCoder', () => {
         .types_struct_with_multiple_struct_params(INPUT_X, INPUT_Y, INPUT_Z)
         .call();
 
-      const { value } = await waitForResult();
-      // expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      // expect(value).toStrictEqual(expected);
+      // expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -809,8 +852,9 @@ describe('AbiCoder', () => {
         .types_struct_with_single_option(input)
         .call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -824,8 +868,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_tuple(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -841,8 +886,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_tuple_complex(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -861,8 +907,9 @@ describe('AbiCoder', () => {
         .types_tuple_with_native_types(input)
         .call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -881,8 +928,9 @@ describe('AbiCoder', () => {
         .types_alias_tuple_with_native_types(input)
         .call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -896,8 +944,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_enum(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toBe(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -909,8 +958,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_enum_with_builtin_type(input).call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -921,8 +971,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_enum_with_vector(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -933,8 +984,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_generic_enum(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -945,8 +997,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_enum_external(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -957,8 +1010,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_enum_with_structs(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -972,8 +1026,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_vector_u8(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -984,8 +1039,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_vector_boolean(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -999,8 +1055,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_vector_inside_vector(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -1011,8 +1068,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_vector_with_struct(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -1023,8 +1081,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_vector_option(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -1038,8 +1097,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_option(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -1053,8 +1113,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_option_struct(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -1072,8 +1133,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_identity_address(input).call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -1088,8 +1150,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_identity_contract_id(input).call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -1102,8 +1165,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_address(input).call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -1116,8 +1180,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_contract_id(input).call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -1131,8 +1196,9 @@ describe('AbiCoder', () => {
       };
 
       const { waitForResult } = await contract.functions.types_asset_id(input).call();
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -1147,8 +1213,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_evm_address(input).call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -1165,7 +1232,7 @@ describe('AbiCoder', () => {
       const { waitForResult } = await contract.functions.types_result(input).call();
 
       const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      expect(value).toStrictEqual(expected);
     });
 
     it('should accept result just fine [Err - divide by zero]', async () => {
@@ -1179,7 +1246,7 @@ describe('AbiCoder', () => {
       const { waitForResult } = await contract.functions.types_result(input).call();
 
       const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      expect(value).toStrictEqual(expected);
     });
 
     it('should accept result just fine [Err - 10]', async () => {
@@ -1193,7 +1260,7 @@ describe('AbiCoder', () => {
       const { waitForResult } = await contract.functions.types_result(input).call();
 
       const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      expect(value).toStrictEqual(expected);
     });
   });
 
@@ -1207,8 +1274,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_void(input).call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
 
     it('should encode/decode just fine [omit optional args]', async () => {
@@ -1216,8 +1284,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_void().call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -1313,8 +1382,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.multi_arg_u64_u64(inputX, inputY).call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -1329,8 +1399,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.multi_arg_b256_bool(inputX, inputY).call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -1347,8 +1418,9 @@ describe('AbiCoder', () => {
         .multi_arg_vector_vector(inputX, inputY)
         .call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -1365,8 +1437,9 @@ describe('AbiCoder', () => {
         .multi_arg_vector_b256(inputX, inputY)
         .call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -1380,8 +1453,9 @@ describe('AbiCoder', () => {
         .multi_arg_struct_vector(inputX, inputY)
         .call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -1395,8 +1469,9 @@ describe('AbiCoder', () => {
         .multi_arg_u64_struct(inputX, inputY)
         .call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(JSON.stringify(value)).toEqual(JSON.stringify(expected));
+      expect(JSON.stringify(logs)).toEqual(JSON.stringify([expected]));
     });
   });
 
@@ -1409,8 +1484,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.multi_arg_str_str(inputX, inputY).call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
   });
 
@@ -1426,8 +1502,9 @@ describe('AbiCoder', () => {
         .multi_arg_u32_vector_vector(inputX, inputY, inputZ)
         .call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(JSON.stringify(value)).toEqual(JSON.stringify(expected));
+      expect(JSON.stringify(logs)).toEqual(JSON.stringify([expected]));
     });
   });
 
@@ -1486,14 +1563,15 @@ describe('AbiCoder', () => {
         b: 57,
       };
 
+      const expected = [expectedX, expectedY, expectedZ, expectedA];
+
       const { waitForResult } = await contract.functions
         .multi_arg_complex(inputX, inputY, inputZ, inputA)
         .call();
 
-      const { value } = await waitForResult();
-      expect(JSON.stringify(value)).toEqual(
-        JSON.stringify([expectedX, expectedY, expectedZ, expectedA])
-      );
+      const { value, logs } = await waitForResult();
+      expect(JSON.stringify(value)).toEqual(JSON.stringify(expected));
+      expect(JSON.stringify(logs)).toEqual(JSON.stringify([expected]));
     });
   });
 });

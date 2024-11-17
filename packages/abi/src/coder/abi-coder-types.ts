@@ -1,7 +1,7 @@
 import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 
-import type { AbiConfigurable, AbiFunction, AbiType } from '../parser';
+import type { AbiConfigurable, AbiFunction, AbiLoggedType, AbiType } from '../parser';
 
 export type Primitive = string | number | boolean;
 
@@ -51,5 +51,10 @@ export interface AbiCoderConfigurable {
   offset: AbiConfigurable['offset'];
 
   // Coders
+  value: Coder<unknown>;
+}
+
+export interface AbiCoderLog {
+  logId: AbiLoggedType['logId'];
   value: Coder<unknown>;
 }

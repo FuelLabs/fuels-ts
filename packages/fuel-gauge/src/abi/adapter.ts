@@ -96,7 +96,10 @@ export class InterfaceAdapter extends Interface {
   }
 
   decodeLog(data: BytesLike, logId: string): [DecodedValue | undefined, number] {
-    throw new Error('Not implemented');
+    const log = this.coder.logs.findById(logId);
+    const bytes = arrayify(data);
+    const decoded = log.value.decode(bytes);
+    return [decoded as DecodedValue | undefined, -1];
   }
 
   encodeConfigurable(name: string, value: InputValue): Uint8Array {
