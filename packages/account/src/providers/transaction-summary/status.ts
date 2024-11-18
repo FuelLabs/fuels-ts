@@ -52,7 +52,7 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
     switch (gqlTransactionStatus.type) {
       case 'SuccessStatus':
         time = gqlTransactionStatus.time;
-        blockId = gqlTransactionStatus.block.id;
+        blockId = gqlTransactionStatus.block?.id;
         isStatusSuccess = true;
         totalFee = bn(gqlTransactionStatus.totalFee);
         totalGas = bn(gqlTransactionStatus.totalGas);
@@ -60,7 +60,7 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
 
       case 'FailureStatus':
         time = gqlTransactionStatus.time;
-        blockId = gqlTransactionStatus.block.id;
+        blockId = gqlTransactionStatus.block?.id;
         isStatusFailure = true;
         totalFee = bn(gqlTransactionStatus.totalFee);
         totalGas = bn(gqlTransactionStatus.totalGas);

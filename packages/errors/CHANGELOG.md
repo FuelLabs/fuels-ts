@@ -1,5 +1,15 @@
 # @fuel-ts/errors
 
+## 0.97.0
+
+### Patch Changes
+
+- 9dba357: chore: upgrading `fuel-core` to `0.40.0`
+- Updated dependencies [9dba357]
+- Updated dependencies [4e057d5]
+- Updated dependencies [7c162de]
+  - @fuel-ts/versions@0.97.0
+
 ## 0.96.1
 
 ### Patch Changes
