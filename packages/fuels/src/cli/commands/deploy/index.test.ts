@@ -2,7 +2,7 @@ import { Wallet } from '@fuel-ts/account';
 
 import { fuelsConfig } from '../../../../test/fixtures/fuels.config';
 import { launchTestNode } from '../../../test-utils';
-import type { DeployedContract } from '../../types';
+import type { DeployedData } from '../../types';
 
 import { deploy } from '.';
 import * as createWalletMod from './createWallet';
@@ -32,11 +32,16 @@ describe('deploy', () => {
   // TODO: Fix this test
   test.skip('should call onDeploy callback', async () => {
     const { onDeploy } = await mockAll();
-    const expectedContracts: DeployedContract[] = [];
-    const config = { ...fuelsConfig, contracts: [], onDeploy };
+    const expectedData: DeployedData = {
+      contracts: [],
+      scripts: [],
+      predicates: [],
+    };
+
+    const config = { ...fuelsConfig, contracts: [], scripts: [], predicates: [], onDeploy };
 
     await deploy(config);
 
-    expect(onDeploy).toHaveBeenCalledWith(config, expectedContracts);
+    expect(onDeploy).toHaveBeenCalledWith(config, expectedData);
   });
 });

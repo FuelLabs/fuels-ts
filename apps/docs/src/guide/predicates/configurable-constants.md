@@ -8,7 +8,7 @@ Let's consider an example where a predicate is used to validate an asset transfe
 
 The following snippet illustrates how this could be implemented:
 
-<<< @/../../docs-snippets/test/fixtures/forc-projects/whitelisted-address-predicate/src/main.sw#predicate-with-configurable-constants-1{rust:line-numbers}
+<<< @/../../docs-snippets2/sway/whitelisted-address-predicate/src/main.sw#full{rust:line-numbers}
 
 In this example, you'll notice the use of a configurable constant named `WHITELISTED`. This constant has a default value that represents the default approved address.
 
@@ -16,7 +16,7 @@ In this example, you'll notice the use of a configurable constant named `WHITELI
 
 If there is a need to whitelist another address, the `WHITELISTED` constant can be easily updated. The following snippet demonstrates how to set a new value for the `WHITELISTED` constant and to make the predicate execute the transfer:
 
-<<< @/../../docs-snippets/src/guide/predicates/predicate-with-configurable.test.ts#predicate-with-configurable-constants-2{ts:line-numbers}
+<<< @/../../docs-snippets2/src/predicates/configurables/configurable-set-data.ts#full{ts:line-numbers}
 
 By ensuring that the updated `WHITELISTED` address matches the intended recipient's address, the predicate will validate the transfer successfully.
 
@@ -24,7 +24,7 @@ By ensuring that the updated `WHITELISTED` address matches the intended recipien
 
 In scenarios where the default whitelisted address is already the intended recipient, there's no need to update the `WHITELISTED` constant. The predicate will validate the transfer based on the default value. Here's how this scenario might look:
 
-<<< @/../../docs-snippets/src/guide/predicates/predicate-with-configurable.test.ts#predicate-with-configurable-constants-3{ts:line-numbers}
+<<< @/../../docs-snippets2/src/predicates/configurables/configurable-default.ts#full{ts:line-numbers}
 
 This ability to configure constants within predicates provides a flexible mechanism for customizing their behavior, thereby enhancing the robustness and versatility of our asset transfer process.
 

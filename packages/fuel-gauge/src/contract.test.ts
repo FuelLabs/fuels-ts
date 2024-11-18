@@ -10,7 +10,6 @@ import {
   transactionRequestify,
   Wallet,
   ContractFactory,
-  Predicate,
   PolicyType,
   buildFunctionResult,
   ReceiptType,
@@ -879,10 +878,7 @@ describe('Contract', () => {
     const amountToContract = 200;
     const amountToPredicate = 500_000;
 
-    const predicate = new Predicate({
-      bytecode: PredicateTrue.bytecode,
-      provider,
-    });
+    const predicate = new PredicateTrue({ provider });
 
     const tx1 = await wallet.transfer(
       predicate.address,
