@@ -10,7 +10,7 @@ export class ScriptInvocationScope<
 > extends FunctionInvocationScope<TArgs, TReturn> {
   scriptRequest!: ScriptRequest<TArgs, TReturn>;
 
-  protected updateScriptRequest() {
+  protected override updateScriptRequest() {
     if (!this.scriptRequest) {
       this.buildScriptRequest();
     }

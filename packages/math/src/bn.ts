@@ -62,7 +62,7 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
 
   // ANCHOR: HELPERS
   // make sure we always include `0x` in hex strings
-  toString(base?: number | 'hex', length?: number) {
+  override toString(base?: number | 'hex', length?: number) {
     const output = super.toString(base, length);
 
     if (base === 16 || base === 'hex') {
@@ -97,11 +97,11 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
     return Uint8Array.from(this.toArray(undefined, bytesPadding));
   }
 
-  toJSON(): string {
+  override toJSON(): string {
     return this.toString(16);
   }
 
-  valueOf(): string {
+  override valueOf(): string {
     return this.toString();
   }
 
@@ -184,77 +184,77 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
   // END ANCHOR: HELPERS
 
   // ANCHOR: OVERRIDES to accept better inputs
-  add(v: BNInput): BN {
+  override add(v: BNInput): BN {
     return this.caller(v, 'add') as BN;
   }
 
-  pow(v: BNInput): BN {
+  override pow(v: BNInput): BN {
     return this.caller(v, 'pow') as BN;
   }
 
-  sub(v: BNInput): BN {
+  override sub(v: BNInput): BN {
     return this.caller(v, 'sub') as BN;
   }
 
-  div(v: BNInput): BN {
+  override div(v: BNInput): BN {
     return this.caller(v, 'div') as BN;
   }
 
-  mul(v: BNInput): BN {
+  override mul(v: BNInput): BN {
     return this.caller(v, 'mul') as BN;
   }
 
-  mod(v: BNInput): BN {
+  override mod(v: BNInput): BN {
     return this.caller(v, 'mod') as BN;
   }
 
-  divRound(v: BNInput): BN {
+  override divRound(v: BNInput): BN {
     return this.caller(v, 'divRound') as BN;
   }
 
-  lt(v: BNInput): boolean {
+  override lt(v: BNInput): boolean {
     return this.caller(v, 'lt') as boolean;
   }
 
-  lte(v: BNInput): boolean {
+  override lte(v: BNInput): boolean {
     return this.caller(v, 'lte') as boolean;
   }
 
-  gt(v: BNInput): boolean {
+  override gt(v: BNInput): boolean {
     return this.caller(v, 'gt') as boolean;
   }
 
-  gte(v: BNInput): boolean {
+  override gte(v: BNInput): boolean {
     return this.caller(v, 'gte') as boolean;
   }
 
-  eq(v: BNInput): boolean {
+  override eq(v: BNInput): boolean {
     return this.caller(v, 'eq') as boolean;
   }
 
-  cmp(v: BNInput): CompareResult {
+  override cmp(v: BNInput): CompareResult {
     return this.caller(v, 'cmp') as CompareResult;
   }
   // END ANCHOR: OVERRIDES to accept better inputs
 
   // ANCHOR: OVERRIDES to output our BN type
-  sqr(): BN {
+  override sqr(): BN {
     return new BN(super.sqr().toArray());
   }
 
-  neg(): BN {
+  override neg(): BN {
     return new BN(super.neg().toArray());
   }
 
-  abs(): BN {
+  override abs(): BN {
     return new BN(super.abs().toArray());
   }
 
-  toTwos(width: number): BN {
+  override toTwos(width: number): BN {
     return new BN(super.toTwos(width).toArray());
   }
 
-  fromTwos(width: number): BN {
+  override fromTwos(width: number): BN {
     return new BN(super.fromTwos(width).toArray());
   }
   // END ANCHOR: OVERRIDES to output our BN type
@@ -274,7 +274,7 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
     return output as CompareResult;
   }
 
-  clone() {
+  override clone() {
     return new BN(this.toArray());
   }
 
@@ -284,7 +284,7 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
     return new BN(output.toArray());
   }
 
-  egcd(p: BnJs) {
+  override egcd(p: BnJs) {
     const { a, b, gcd } = new BnJs(this.toArray()).egcd(p);
 
     return {
@@ -294,7 +294,7 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
     };
   }
 
-  divmod(num: BNInput, mode?: string, positive?: boolean): { mod: BN; div: BN } {
+  override divmod(num: BNInput, mode?: string, positive?: boolean): { mod: BN; div: BN } {
     const { div, mod } = (new BnJs(this.toArray()) as BN).divmod(new BN(num), mode, positive);
 
     return {
