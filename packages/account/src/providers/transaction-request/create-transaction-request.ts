@@ -118,7 +118,7 @@ export class CreateTransactionRequest extends BaseTransactionRequest {
     });
   }
 
-  metadataGas(gasCosts: GasCosts): BN {
+  override metadataGas(gasCosts: GasCosts): BN {
     return calculateMetadataGasForTxCreate({
       contractBytesSize: bn(arrayify(this.witnesses[this.bytecodeWitnessIndex] || '0x').length),
       gasCosts,

@@ -1,4 +1,3 @@
-// #region understanding-fuel-binary-file
 contract;
 
 use std::b512::B512;
@@ -45,4 +44,3 @@ impl EchoValues for Contract {
         value
     }
 }
-// #endregion understanding-fuel-binary-file
