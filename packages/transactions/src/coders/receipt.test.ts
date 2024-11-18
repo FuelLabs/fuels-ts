@@ -19,6 +19,7 @@ describe('ReceiptCoder', () => {
   it('Can encode Call', () => {
     const receipt: Receipt = {
       type: ReceiptType.Call,
+      id: B256,
       from: B256,
       to: B256,
       amount: bn(0),
@@ -134,6 +135,10 @@ describe('ReceiptCoder', () => {
     const receipt: Receipt = {
       type: ReceiptType.Log,
       id: B256,
+      ra: bn(0),
+      rb: bn(0),
+      rc: bn(0),
+      rd: bn(0),
       val0: bn(0),
       val1: bn(0),
       val2: bn(0),
@@ -158,6 +163,8 @@ describe('ReceiptCoder', () => {
     const receipt: Receipt = {
       type: ReceiptType.LogData,
       id: B256,
+      ra: bn(0),
+      rb: bn(0),
       val0: bn(0),
       val1: bn(0),
       ptr: bn(0),
@@ -183,6 +190,7 @@ describe('ReceiptCoder', () => {
   it('Can encode Transfer', () => {
     const receipt: Receipt = {
       type: ReceiptType.Transfer,
+      id: B256,
       from: B256,
       to: B256,
       amount: bn(0),
@@ -206,6 +214,7 @@ describe('ReceiptCoder', () => {
   it('Can encode TransferOut', () => {
     const receipt: Receipt = {
       type: ReceiptType.TransferOut,
+      id: B256,
       from: B256,
       to: B256,
       amount: bn(0),

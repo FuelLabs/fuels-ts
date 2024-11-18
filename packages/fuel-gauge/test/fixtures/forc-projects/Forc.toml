@@ -9,7 +9,6 @@ members = [
   "auth_testing_contract",
   "bytecode-sway-lib",
   "bytes-contract",
-  "script-dummy",
   "call-test-contract",
   "collision_in_fn_names",
   "complex-predicate",
