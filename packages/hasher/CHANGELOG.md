@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.97.0
+
+### Patch Changes
+
+- @fuel-ts/utils@0.97.0
+- @fuel-ts/crypto@0.97.0
+- @fuel-ts/interfaces@0.97.0
+
 ## 0.96.1
 
 ### Patch Changes
