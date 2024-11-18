@@ -1,5 +1,18 @@
 # @fuel-ts/abi-typegen
 
+## 0.97.0
+
+### Patch Changes
+
+- 4e057d5: chore: upgrading `forc` to `0.66.4`
+- Updated dependencies [9dba357]
+- Updated dependencies [4e057d5]
+- Updated dependencies [7c162de]
+  - @fuel-ts/versions@0.97.0
+  - @fuel-ts/errors@0.97.0
+  - @fuel-ts/utils@0.97.0
+  - @fuel-ts/interfaces@0.97.0
+
 ## 0.96.1
 
 ### Patch Changes

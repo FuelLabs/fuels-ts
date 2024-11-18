@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.97.0
+
+### Patch Changes
+
+- 1226ac3: chore: fix receipts properties and deprecate incorrect ones
+- Updated dependencies [9dba357]
+  - @fuel-ts/errors@0.97.0
+  - @fuel-ts/utils@0.97.0
+  - @fuel-ts/abi-coder@0.97.0
+  - @fuel-ts/address@0.97.0
+  - @fuel-ts/math@0.97.0
+  - @fuel-ts/hasher@0.97.0
+  - @fuel-ts/interfaces@0.97.0
+
 ## 0.96.1
 
 ### Patch Changes
