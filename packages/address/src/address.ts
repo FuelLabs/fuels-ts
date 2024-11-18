@@ -141,7 +141,7 @@ export default class Address extends AbstractAddress {
    *
    * @returns The value of `bech32Address` property
    */
-  valueOf(): string {
+  override valueOf(): string {
     return this.toChecksum();
   }
 
