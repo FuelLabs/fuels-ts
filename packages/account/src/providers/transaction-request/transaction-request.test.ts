@@ -122,11 +122,11 @@ describe('TransactionRequest', () => {
   it('adds account based witnesses', async () => {
     class ProviderCustom extends Provider {
       // eslint-disable-next-line @typescript-eslint/require-await
-      static async create(url: string) {
+      static override async create(url: string) {
         return new ProviderCustom(url, {});
       }
 
-      getChainId(): number {
+      override getChainId(): number {
         return 1;
       }
     }

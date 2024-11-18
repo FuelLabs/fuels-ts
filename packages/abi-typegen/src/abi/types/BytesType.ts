@@ -3,17 +3,17 @@ import type { IType } from '../../types/interfaces/IType';
 import { ArrayType } from './ArrayType';
 
 export class BytesType extends ArrayType {
-  public static swayType = 'struct Bytes';
+  public static override swayType = 'struct Bytes';
 
-  public name = 'bytes';
+  public override name = 'bytes';
 
-  static MATCH_REGEX: RegExp = /^struct (std::bytes::)?Bytes/m;
+  static override MATCH_REGEX: RegExp = /^struct (std::bytes::)?Bytes/m;
 
-  static isSuitableFor(params: { type: string }) {
+  static override isSuitableFor(params: { type: string }) {
     return BytesType.MATCH_REGEX.test(params.type);
   }
 
-  public parseComponentsAttributes(_params: { types: IType[] }) {
+  public override parseComponentsAttributes(_params: { types: IType[] }) {
     const capitalizedName = 'Bytes';
 
     this.attributes = {
