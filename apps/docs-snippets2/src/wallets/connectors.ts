@@ -35,11 +35,11 @@ metadata = {
 
 class WalletConnector extends FuelConnector {
   // #region fuel-connector-name
-  name: string = 'My Wallet Connector';
+  public override name: string = 'My Wallet Connector';
   // #endregion fuel-connector-name
 
   // #region fuel-connector-metadata
-  metadata = {
+  public override metadata = {
     install: metadata.install,
     image: metadata.image,
   };
