@@ -1,5 +1,45 @@
 # @internal/check-imports
 
+## 0.0.15
+
+### Patch Changes
+
+- Updated dependencies [f607ba2]
+- Updated dependencies [28e9ed8]
+- Updated dependencies [c009812]
+- Updated dependencies [5dee7ff]
+- Updated dependencies [f1500e4]
+- Updated dependencies [64598d6]
+- Updated dependencies [b0e9c84]
+- Updated dependencies [9dba357]
+- Updated dependencies [82e35a4]
+- Updated dependencies [8c77765]
+- Updated dependencies [efdc721]
+- Updated dependencies [eede61c]
+- Updated dependencies [4e057d5]
+- Updated dependencies [9a17971]
+- Updated dependencies [7c162de]
+- Updated dependencies [2b624a1]
+- Updated dependencies [1226ac3]
+- Updated dependencies [174876c]
+  - @fuel-ts/account@0.97.0
+  - @fuel-ts/contract@0.97.0
+  - @fuel-ts/program@0.97.0
+  - fuels@0.97.0
+  - @fuel-ts/versions@0.97.0
+  - @fuel-ts/errors@0.97.0
+  - @fuel-ts/abi-typegen@0.97.0
+  - @fuel-ts/transactions@0.97.0
+  - @fuel-ts/script@0.97.0
+  - @fuel-ts/utils@0.97.0
+  - @fuel-ts/abi-coder@0.97.0
+  - @fuel-ts/address@0.97.0
+  - @fuel-ts/crypto@0.97.0
+  - @fuel-ts/math@0.97.0
+  - @fuel-ts/hasher@0.97.0
+  - @fuel-ts/merkle@0.97.0
+  - @fuel-ts/interfaces@0.97.0
+
 ## 0.0.14
 
 ### Patch Changes
