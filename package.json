@@ -44,7 +44,7 @@
     "lint:fix": "pnpm lint:check --fix",
     "lint:md-links": "tsx ./scripts/lint-md-links",
     "lint:package-jsons": "tsx ./scripts/lint-package-jsons",
-    "type:check-tests": "turbo run type:check",
+    "type:check": "turbo run type:check",
     "prettier:check": "prettier --check packages --check apps/docs-snippets",
     "prettier:format": "prettier --write packages --check apps/docs-snippets",
     "verify:package-exports": "tsx ./scripts/verify-package-exports",
