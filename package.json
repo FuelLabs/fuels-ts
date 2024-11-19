@@ -84,7 +84,7 @@
     "@internal/fuel-core": "workspace:*",
     "@internal/tsup": "workspace:*",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
-    "@playwright/test": "^1.47.2",
+    "@playwright/test": "1.47.2",
     "@types/node": "^22.5.5",
     "@types/node-fetch": "^2.6.11",
     "@types/web": "^0.0.174",
