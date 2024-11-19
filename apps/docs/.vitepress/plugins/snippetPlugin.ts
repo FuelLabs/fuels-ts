@@ -106,7 +106,11 @@ export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
       const end = state.skipSpacesBack(max, pos);
       const rawPathRegexp =
         /^(.+(?:\.([a-z0-9]+)))(?:(#[\w-]+))?(?: ?(?:{(\d+(?:[,-]\d+)*)? ?(\S+)?}))? ?(?:\[(.+)\])?$/;
-      const rawPath = state.src.slice(start, end).trim().replace(/^@/, srcDir).trim();
+      const relativePath = path.dirname(state.env.path);
+      let rawPath = state.src.slice(start, end).trim()
+        .replace(/^@\./, relativePath)
+        .replace(/^@/, srcDir)
+        .trim();
 
       // Parse the extracted path to get details about the snippet
       const [
