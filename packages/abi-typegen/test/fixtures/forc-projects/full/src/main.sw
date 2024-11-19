@@ -81,15 +81,15 @@ abi MyContract {
     fn types_vector_geo(x: Vec<MyStruct>) -> Vec<MyStruct>;
     fn types_vector_option(x: Vec<StructWithMultiOption>) -> Vec<StructWithMultiOption>;
     fn types_option(x: Option<u8>) -> Option<u8>;
-    fn types_option_struct(x: Option<MyStruct>) -> Option<MyStruct>;
+    fn types_option_geo(x: Option<MyStruct>) -> Option<MyStruct>;
     fn types_evm_address(x: EvmAddress) -> EvmAddress;
     fn types_bytes(x: Bytes) -> Bytes;
     fn types_raw_slice(x: raw_slice) -> raw_slice;
     fn types_str_slice(x: str) -> str;
     fn types_std_string(x: String) -> String;
     fn types_result(x: Result<u64, u32>) -> Result<u64, str[10]>;
-    fn types_address(x: Address) -> Address;
-    fn types_contract_id(x: ContractId) -> ContractId;
+    fn type_address(x: Address) -> Address;
+    fn type_contract_id(x: ContractId) -> ContractId;
     fn type_identity(x: Identity) -> Identity;
     fn type_external_struct(x: ExternalStruct) -> ExternalStruct;
     fn type_external_enum(x: ExternalEnum) -> ExternalEnum;
@@ -182,7 +182,7 @@ impl MyContract for Contract {
     fn types_option(x: Option<u8>) -> Option<u8> {
         x
     }
-    fn types_option_struct(x: Option<MyStruct>) -> Option<MyStruct> {
+    fn types_option_geo(x: Option<MyStruct>) -> Option<MyStruct> {
         x
     }
     fn types_evm_address(x: EvmAddress) -> EvmAddress {
@@ -211,10 +211,10 @@ impl MyContract for Contract {
             Err(MyContractError::DivisionByZero) => Err(__to_str_array("DivisError")),
         }
     }
-    fn types_address(x: Address) -> Address {
+    fn type_address(x: Address) -> Address {
         x
     }
-    fn types_contract_id(x: ContractId) -> ContractId {
+    fn type_contract_id(x: ContractId) -> ContractId {
         x
     }
     fn type_identity(x: Identity) -> Identity {
