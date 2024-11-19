@@ -38,7 +38,7 @@ customLaunchTestNode.cleanup();
 import { CounterFactory } from '../typegend/contracts/CounterFactory';
 
 using launchedContractNode = await launchTestNode({
-  contractsConfigs: [{ factory: CounterFactory }],
+  contractsConfigs: [CounterFactory],
 });
 
 const {
