@@ -84,10 +84,6 @@ my-fuel-project
 
 It is a Vite project with a few extra files and folders. Let's take a closer look at some of the important ones:
 
-### `./fuels.config.ts`
-
-This is the configuration file for the [`fuels` CLI](../fuels-cli/index.md), the CLI and tooling that powers this project under the hood. It makes sure that all of your Sway programs are continuously compiled and deployed to your local Fuel node. You can read more about the `fuels.config.ts` file in the [Fuels CLI documentation](../fuels-cli/config-file.md).
-
 ### `./sway-programs/contract/src/main.sw`
 
 This is where our Sway contract lives. Out of the box, it is a simple counter contract that can only be incremented. We will add a decrement functionality to it in the next step.
@@ -202,7 +198,7 @@ Testing the integration with your smart contract isn't essential, but it's good 
 
 We've provided some examples for each program type in the `./test` directory of your project. But let's also add a test for our new `decrement_counter` function in the `./test/contract.test.ts` file:
 
-<<< @decrement-counter.ts#full{ts:line-numbers}
+<<< @./decrement-counter.ts#full{ts:line-numbers}
 
 The template also comes with a UI testing setup using [Playwright](https://playwright.dev/). We can add a test for our new `decrement_counter` function in the `./test/ui/ui.test.ts` file:
 
