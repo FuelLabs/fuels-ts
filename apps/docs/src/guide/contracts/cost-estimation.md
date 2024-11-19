@@ -1,8 +1,6 @@
 # Estimating Contract Call Cost
 
-<!-- TODO: Update link -->
-
-The [`FunctionInvocationScope.getTransactionCost`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.Account.html) method allows you to estimate the cost of a specific contract call. The return type, `TransactionCost`, is an object containing relevant information for the estimation:
+The [`FunctionInvocationScope.getTransactionCost`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_program.FunctionInvocationScope.html#getTransactionCost) method allows you to estimate the cost of a specific contract call. The return type, `TransactionCost`, is an object containing relevant information for the estimation:
 
 <<< @/../../../packages/account/src/providers/provider.ts#cost-estimation-1{ts:line-numbers}
 
