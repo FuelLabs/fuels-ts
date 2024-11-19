@@ -28,6 +28,7 @@ members = [
   "script-sum",
   "script-main-args",
   "script-transfer-to-contract",
+  "script-main-args",
   "simple-predicate",
   "simple-token",
   "simple-token-abi",
