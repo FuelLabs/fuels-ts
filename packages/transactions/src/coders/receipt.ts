@@ -26,8 +26,12 @@ export enum ReceiptType /* u8 */ {
 
 export type ReceiptCall = {
   type: ReceiptType.Call;
-  /** Contract ID of current context if in an internal context, zero otherwise (b256) */
+  /**
+   * @deprecated This property is deprecated and it will be removed soon. Use property `id` instead.
+   */
   from: string;
+  /** Contract ID of current context if in an internal context, zero otherwise (b256) */
+  id: string;
   /** Contract ID of called contract (b256) */
   to: string;
   /** Amount of coins to forward, i.e. $rB (u64) */
@@ -77,7 +81,7 @@ export class ReceiptCallCoder extends Coder<ReceiptCall, ReceiptCall> {
     let o = offset;
 
     [decoded, o] = new B256Coder().decode(data, o);
-    const from = decoded;
+    const id = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const to = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
@@ -98,7 +102,8 @@ export class ReceiptCallCoder extends Coder<ReceiptCall, ReceiptCall> {
     return [
       {
         type: ReceiptType.Call,
-        from,
+        id,
+        from: id,
         to,
         amount,
         assetId,
@@ -377,14 +382,30 @@ export type ReceiptLog = {
   type: ReceiptType.Log;
   /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
-  /** Value of register $rA (u64) */
+  /**
+   * @deprecated This property is deprecated and it will be removed soon. Use property `ra` instead.
+   */
   val0: BN;
-  /** Value of register $rB (u64) */
+  /** Value of register $rA (u64) */
+  ra: BN;
+  /**
+   * @deprecated This property is deprecated and it will be removed soon. Use property `rb` instead.
+   */
   val1: BN;
-  /** Value of register $rC (u64) */
+  /** Value of register $rB (u64) */
+  rb: BN;
+  /**
+   * @deprecated This property is deprecated and it will be removed soon. Use property `rc` instead.
+   */
   val2: BN;
-  /** Value of register $rD (u64) */
+  /** Value of register $rC (u64) */
+  rc: BN;
+  /**
+   * @deprecated This property is deprecated and it will be removed soon. Use property `rd` instead.
+   */
   val3: BN;
+  /** Value of register $rD (u64) */
+  rd: BN;
   /** Value of register $pc (u64) */
   pc: BN;
   /** Value of register $is (u64) */
@@ -422,13 +443,13 @@ export class ReceiptLogCoder extends Coder<ReceiptLog, ReceiptLog> {
     [decoded, o] = new B256Coder().decode(data, o);
     const id = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
-    const val0 = decoded;
+    const ra = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
-    const val1 = decoded;
+    const rb = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
-    const val2 = decoded;
+    const rc = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
-    const val3 = decoded;
+    const rd = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const pc = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
@@ -438,10 +459,14 @@ export class ReceiptLogCoder extends Coder<ReceiptLog, ReceiptLog> {
       {
         type: ReceiptType.Log,
         id,
-        val0,
-        val1,
-        val2,
-        val3,
+        ra,
+        rb,
+        rc,
+        rd,
+        val0: ra,
+        val1: rb,
+        val2: rc,
+        val3: rd,
         pc,
         is,
       },
@@ -455,8 +480,16 @@ export type ReceiptLogData = {
   /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
   /** Value of register $rA (u64) */
+  ra: BN;
+  /**
+   * @deprecated This property is deprecated and it will be removed soon. Use property `ra` instead.
+   */
   val0: BN;
   /** Value of register $rB (u64) */
+  rb: BN;
+  /**
+   * @deprecated This property is deprecated and it will be removed soon. Use property `rb` instead.
+   */
   val1: BN;
   /** Value of register $rC (u64) */
   ptr: BN;
@@ -505,9 +538,9 @@ export class ReceiptLogDataCoder extends Coder<ReceiptLogData, ReceiptLogData> {
     [decoded, o] = new B256Coder().decode(data, o);
     const id = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
-    const val0 = decoded;
+    const ra = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
-    const val1 = decoded;
+    const rb = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const ptr = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
@@ -525,8 +558,10 @@ export class ReceiptLogDataCoder extends Coder<ReceiptLogData, ReceiptLogData> {
       {
         type: ReceiptType.LogData,
         id,
-        val0,
-        val1,
+        ra,
+        rb,
+        val0: ra,
+        val1: rb,
         ptr,
         len,
         digest,
@@ -541,8 +576,12 @@ export class ReceiptLogDataCoder extends Coder<ReceiptLogData, ReceiptLogData> {
 
 export type ReceiptTransfer = {
   type: ReceiptType.Transfer;
-  /** Contract ID of current context if in an internal context, zero otherwise (b256) */
+  /**
+   * @deprecated This property is deprecated and it will be removed soon. Use property `id` instead.
+   */
   from: string;
+  /** Contract ID of current context if in an internal context, zero otherwise (b256) */
+  id: string;
   /** Contract ID of contract to transfer coins to (b256) */
   to: string;
   /** Amount of coins transferred (u64) */
@@ -583,7 +622,7 @@ export class ReceiptTransferCoder extends Coder<ReceiptTransfer, ReceiptTransfer
     let o = offset;
 
     [decoded, o] = new B256Coder().decode(data, o);
-    const from = decoded;
+    const id = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const to = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
@@ -598,7 +637,8 @@ export class ReceiptTransferCoder extends Coder<ReceiptTransfer, ReceiptTransfer
     return [
       {
         type: ReceiptType.Transfer,
-        from,
+        id,
+        from: id,
         to,
         amount,
         assetId,
@@ -612,8 +652,12 @@ export class ReceiptTransferCoder extends Coder<ReceiptTransfer, ReceiptTransfer
 
 export type ReceiptTransferOut = {
   type: ReceiptType.TransferOut;
-  /** Contract ID of current context if in an internal context, zero otherwise (b256) */
+  /**
+   * @deprecated This property is deprecated and it will be removed soon. Use property `id` instead.
+   */
   from: string;
+  /** Contract ID of current context if in an internal context, zero otherwise (b256) */
+  id: string;
   /** Address to transfer coins to (b256) */
   to: string;
   /** Amount of coins transferred (u64) */
@@ -654,7 +698,7 @@ export class ReceiptTransferOutCoder extends Coder<ReceiptTransferOut, ReceiptTr
     let o = offset;
 
     [decoded, o] = new B256Coder().decode(data, o);
-    const from = decoded;
+    const id = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const to = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
@@ -669,7 +713,8 @@ export class ReceiptTransferOutCoder extends Coder<ReceiptTransferOut, ReceiptTr
     return [
       {
         type: ReceiptType.TransferOut,
-        from,
+        id,
+        from: id,
         to,
         amount,
         assetId,

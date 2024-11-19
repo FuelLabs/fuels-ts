@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Interface } from '@fuel-ts/abi-coder';
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
-import type { Account, Provider } from '@fuel-ts/account';
+import { deployScriptOrPredicate, type Account, type Provider } from '@fuel-ts/account';
 import { FuelError } from '@fuel-ts/errors';
 import { AbstractScript } from '@fuel-ts/interfaces';
 import type { BytesLike } from '@fuel-ts/interfaces';
@@ -119,5 +119,24 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
     }
 
     return this;
+  }
+
+  /**
+   *
+   * @param account - The account used to pay the deployment costs.
+   * @returns The _blobId_ and a _waitForResult_ callback that returns the deployed predicate
+   * once the blob deployment transaction finishes.
+   *
+   * The returned loader script will have the same configurable constants
+   * as the original script which was used to generate the loader script.
+   */
+  deploy<T = this>(account: Account) {
+    return deployScriptOrPredicate<T>({
+      deployer: account,
+      abi: this.interface.jsonAbi,
+      bytecode: this.bytes,
+      loaderInstanceCallback: (loaderBytecode, newAbi) =>
+        new Script(loaderBytecode, newAbi, this.account) as T,
+    });
   }
 }

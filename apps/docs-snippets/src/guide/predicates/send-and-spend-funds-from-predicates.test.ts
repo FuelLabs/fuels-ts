@@ -195,6 +195,7 @@ describe('Send and Spend Funds from Predicates', () => {
     const amountToReceiver = 200;
 
     // #region send-and-spend-funds-from-predicates-8
+    // Create the transaction for transferring funds from the predicate.
     const transactionRequest = await predicate.createTransfer(
       receiverWallet.address,
       amountToReceiver,
@@ -204,74 +205,16 @@ describe('Send and Spend Funds from Predicates', () => {
       }
     );
 
-    /*
-      You can retrieve the transaction ID before actually submitting it to the node
-      like this:
-     */
-
+    // We can obtain the transaction ID before submitting the transaction.
     const chainId = provider.getChainId();
-    const txId = transactionRequest.getTransactionId(chainId);
+    const transactionId = transactionRequest.getTransactionId(chainId);
 
-    const res = await predicate.sendTransaction(transactionRequest);
-
-    await res.waitForResult();
+    // We can submit the transaction and wait for the result.
+    const response = await predicate.sendTransaction(transactionRequest);
+    await response.waitForResult();
     // #endregion send-and-spend-funds-from-predicates-8
-    const txIdFromExecutedTx = res.id;
+    const txIdFromExecutedTx = response.id;
 
-    expect(txId).toEqual(txIdFromExecutedTx);
-  });
-
-  it('should be able to pre-stage a transaction, get TX ID, and then send the transaction', async () => {
-    using launched = await launchTestNode();
-    const {
-      provider,
-      wallets: [walletWithFunds],
-    } = launched;
-
-    const predicate = new Predicate({
-      bytecode: SimplePredicate.bytecode,
-      abi: SimplePredicate.abi,
-      provider,
-      data: [inputAddress],
-    });
-
-    const amountToPredicate = 300_000;
-
-    const tx = await walletWithFunds.transfer(
-      predicate.address,
-      amountToPredicate,
-      provider.getBaseAssetId(),
-      {
-        gasLimit: 1_000,
-      }
-    );
-
-    await tx.waitForResult();
-
-    const receiverWallet = WalletUnlocked.generate({
-      provider,
-    });
-
-    const transferAmount = 1000;
-
-    // #region predicates-prestage-transaction
-    // Prepare the transaction
-    const preparedTx = await predicate.createTransfer(
-      receiverWallet.address,
-      transferAmount,
-      provider.getBaseAssetId()
-    );
-
-    // Get the transaction ID before sending the transaction
-    const txId = preparedTx.getTransactionId(provider.getChainId());
-
-    // Send the transaction
-    const res = await predicate.sendTransaction(preparedTx);
-    await res.waitForResult();
-    // #endregion predicates-prestage-transaction
-
-    const txIdFromExecutedTx = res.id;
-
-    expect(txId).toEqual(txIdFromExecutedTx);
+    expect(transactionId).toEqual(txIdFromExecutedTx);
   });
 });

@@ -1,8 +1,7 @@
-import { ContractFactory } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { AdvancedLoggingFactory } from '../test/typegen/contracts/AdvancedLoggingFactory';
-import { ScriptDummy } from '../test/typegen/scripts';
+import { ScriptMainArgBool } from '../test/typegen/scripts';
 
 /**
  * @group browser
@@ -17,8 +16,8 @@ describe('User account tests', () => {
       wallets: [wallet],
     } = launch;
 
-    const factory = new ContractFactory(ScriptDummy.bytecode, ScriptDummy.abi, wallet);
-    const { waitForResult, blobId } = await factory.deployAsBlobTxForScript();
+    const script = new ScriptMainArgBool(wallet);
+    const { waitForResult, blobId } = await script.deploy(wallet);
 
     await waitForResult();
 

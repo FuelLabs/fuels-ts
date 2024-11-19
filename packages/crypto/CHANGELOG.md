@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.97.0
+
+### Patch Changes
+
+- Updated dependencies [9dba357]
+  - @fuel-ts/errors@0.97.0
+  - @fuel-ts/utils@0.97.0
+  - @fuel-ts/math@0.97.0
+  - @fuel-ts/interfaces@0.97.0
+
 ## 0.96.1
 
 ### Patch Changes

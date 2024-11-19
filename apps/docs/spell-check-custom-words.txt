@@ -55,6 +55,7 @@ Collateralized
 compositional
 config
 config
+configurables
 Config
 configs
 ContractFactory
@@ -112,6 +113,7 @@ Executablity
 exponentiate
 Exponentiate
 extractable
+estimateTxDependencies
 FIPS
 forc
 formatter

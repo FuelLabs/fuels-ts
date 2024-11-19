@@ -1,5 +1,40 @@
 # Change Log
 
+## 0.97.0
+
+### Minor Changes
+
+- f607ba2: fix!: remove unnecessary nonce from message gql queries
+- 82e35a4: chore!: mandate `abi` in `Predicate` constructor
+- 8c77765: chore!: optimize `getTransactions` query
+- efdc721: chore!: limit TX pagination number for `getTransactionsSummaries`
+- 9a17971: chore!: remove `blockId` in transaction list responses
+- 174876c: chore!: optimize coin gql queries
+
+### Patch Changes
+
+- 28e9ed8: build(deps): bump the deps-minor group with 20 updates
+- c009812: docs: migrated `provider` docs snippets
+- b0e9c84: chore!: refactor predicate and script deployment
+- 9dba357: chore: upgrading `fuel-core` to `0.40.0`
+- eede61c: feat: implement batch transfer to contracts
+- 1226ac3: chore: fix receipts properties and deprecate incorrect ones
+- Updated dependencies [9dba357]
+- Updated dependencies [4e057d5]
+- Updated dependencies [7c162de]
+- Updated dependencies [1226ac3]
+  - @fuel-ts/versions@0.97.0
+  - @fuel-ts/errors@0.97.0
+  - @fuel-ts/transactions@0.97.0
+  - @fuel-ts/utils@0.97.0
+  - @fuel-ts/abi-coder@0.97.0
+  - @fuel-ts/address@0.97.0
+  - @fuel-ts/crypto@0.97.0
+  - @fuel-ts/math@0.97.0
+  - @fuel-ts/hasher@0.97.0
+  - @fuel-ts/merkle@0.97.0
+  - @fuel-ts/interfaces@0.97.0
+
 ## 0.96.1
 
 ### Patch Changes

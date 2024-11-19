@@ -136,15 +136,37 @@ describe('launchTestNode', () => {
     expect(response.value).toBe(true);
   });
 
+  test('a contract can be deployed by passing the static factory method directly', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deploy: async (wallet, options) => {
+            const factory = new ContractFactory(binHexlified, abiContents, wallet);
+            return factory.deploy(options);
+          },
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+      wallets: [wallet],
+    } = launched;
+
+    const { waitForResult } = await contract.functions.test_function().call();
+    const response = await waitForResult();
+    expect(response.value).toBe(true);
+
+    expect(contract.account).toEqual(wallet);
+  });
+
   test('multiple contracts can be deployed', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          factory: {
-            deploy: async (wallet, options) => {
-              const factory = new ContractFactory(binHexlified, abiContents, wallet);
-              return factory.deploy(options);
-            },
+          deploy: async (wallet, options) => {
+            const factory = new ContractFactory(binHexlified, abiContents, wallet);
+            return factory.deploy(options);
           },
         },
         {
