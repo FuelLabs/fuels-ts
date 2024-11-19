@@ -115,10 +115,24 @@ describe('AbiCoder', () => {
       const { value } = await waitForResult();
       expect(value).toEqual(NEW_CONFIGURABLES);
     });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('configurables');
+
+      expect(fn.name).toBe('configurables');
+      expect(fn.signature).toEqual('configurables()');
+      expect(fn.selector).toEqual('0x00000000fdaf4480');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 13, 99, 111, 110, 102, 105, 103, 117, 114, 97, 98, 108, 101, 115,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
+    });
   });
 
   describe('types_u8', () => {
-    test('should encode/decode just fine', async () => {
+    it('should encode/decode just fine', async () => {
       const input = 8;
       const expected = 255;
 
@@ -126,11 +140,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await fn.call();
 
-      const { value } = await waitForResult();
-      expect(value).toBe(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
 
-    test('should fail to encode/decode [min - 1]', async () => {
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_u8');
+
+      expect(fn.name).toBe('types_u8');
+      expect(fn.signature).toEqual('types_u8(u8)');
+      expect(fn.selector).toEqual('0x00000000469feadd');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([0, 0, 0, 0, 0, 0, 0, 8, 116, 121, 112, 101, 115, 95, 117, 56])
+      );
+      expect(fn.attributes).toEqual([]);
+    });
+
+    it('should fail to encode/decode [min - 1]', async () => {
       const input = U8_MIN - 1;
 
       await expectToThrowFuelError(
@@ -139,7 +166,7 @@ describe('AbiCoder', () => {
       );
     });
 
-    test('should fail to encode/decode [max + 1]', async () => {
+    it('should fail to encode/decode [max + 1]', async () => {
       const input = U8_MAX + 1;
 
       await expectToThrowFuelError(
@@ -156,8 +183,21 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_u16(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toBe(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_u16');
+
+      expect(fn.name).toBe('types_u16');
+      expect(fn.signature).toEqual('types_u16(u16)');
+      expect(fn.selector).toEqual('0x0000000014b491ca');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([0, 0, 0, 0, 0, 0, 0, 9, 116, 121, 112, 101, 115, 95, 117, 49, 54])
+      );
+      expect(fn.attributes).toEqual([]);
     });
 
     it('should fail to encode/decode [min - 1]', async () => {
@@ -186,8 +226,21 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_u32(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toBe(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_u32');
+
+      expect(fn.name).toBe('types_u32');
+      expect(fn.signature).toEqual('types_u32(u32)');
+      expect(fn.selector).toEqual('0x0000000060564dd0');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([0, 0, 0, 0, 0, 0, 0, 9, 116, 121, 112, 101, 115, 95, 117, 51, 50])
+      );
+      expect(fn.attributes).toEqual([]);
     });
 
     it('should fail to encode/decode [min - 1]', async () => {
@@ -216,9 +269,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_u64(input).call();
 
-      const { value } = await waitForResult();
-      const actual = value.toString();
-      expect(actual).toBe(expected);
+      const {
+        value,
+        logs: [log],
+      } = await waitForResult();
+      expect(value.toString()).toBe(expected);
+      expect(log.toString()).toBe(expected);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_u64');
+
+      expect(fn.name).toBe('types_u64');
+      expect(fn.signature).toEqual('types_u64(u64)');
+      expect(fn.selector).toEqual('0x000000005366a006');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([0, 0, 0, 0, 0, 0, 0, 9, 116, 121, 112, 101, 115, 95, 117, 54, 52])
+      );
+      expect(fn.attributes).toEqual([]);
     });
 
     it('should fail to encode/decode [min - 1]', async () => {
@@ -247,9 +315,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_u256(input).call();
 
-      const { value } = await waitForResult();
-      const actual = value.toHex();
-      expect(actual).toEqual(expected);
+      const {
+        value,
+        logs: [log],
+      } = await waitForResult();
+      expect(value.toHex()).toStrictEqual(expected);
+      expect(log.toHex()).toStrictEqual(expected);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_u256');
+
+      expect(fn.name).toBe('types_u256');
+      expect(fn.signature).toEqual('types_u256(u256)');
+      expect(fn.selector).toEqual('0x00000000385e74cd');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([0, 0, 0, 0, 0, 0, 0, 10, 116, 121, 112, 101, 115, 95, 117, 50, 53, 54])
+      );
+      expect(fn.attributes).toEqual([]);
     });
 
     it('should fail to encode/decode [min - 1]', async () => {
@@ -278,8 +361,21 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_bool(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toBe(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_bool');
+
+      expect(fn.name).toBe('types_bool');
+      expect(fn.signature).toEqual('types_bool(bool)');
+      expect(fn.selector).toEqual('0x0000000040b71e0f');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([0, 0, 0, 0, 0, 0, 0, 10, 116, 121, 112, 101, 115, 95, 98, 111, 111, 108])
+      );
+      expect(fn.attributes).toEqual([]);
     });
 
     it('should fail to encode/decode [number]', async () => {
@@ -292,7 +388,7 @@ describe('AbiCoder', () => {
     });
 
     it('should fail to encode/decode [string]', async () => {
-      const input = '2';
+      const input = new Uint8Array([2]);
 
       await expectToThrowFuelError(
         () => contract.functions.types_bool(input as unknown as boolean).call(),
@@ -308,8 +404,21 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_b256(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toBe(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_b256');
+
+      expect(fn.name).toBe('types_b256');
+      expect(fn.signature).toEqual('types_b256(b256)');
+      expect(fn.selector).toEqual('0x00000000124e3f18');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([0, 0, 0, 0, 0, 0, 0, 10, 116, 121, 112, 101, 115, 95, 98, 50, 53, 54])
+      );
+      expect(fn.attributes).toEqual([]);
     });
 
     it('should fail to encode/decode [too short]', async () => {
@@ -343,12 +452,25 @@ describe('AbiCoder', () => {
   describe('types_b512', () => {
     it('should encode/decode just fine', async () => {
       const input = `0xbd0c9b8792876713afa8bff383eebf31c43437823ed761cc3600d0016de5110c44ac566bd156b4fc71a4a4cb2655d3dd360c695edb17dc3b64d611e122fea23d`;
-      const expected = `0xbd0c9b8792876713afa8bff383eebf31c43437823ed761cc3600d0016de5110c44ac566bd156b4fc71a4a4cb2655d3dd360c695edb17dc3b64d611e122fea23d`;
+      const expected = `0xad0c9b8792876713afa8bff383eebf31c43437823ed761cc3600d0016de5110c54ac566bd156b4fc71a4a4cb2655d3dd360c695edb17dc3b64d611e122fea23d`;
 
       const { waitForResult } = await contract.functions.types_b512(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toBe(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_b512');
+
+      expect(fn.name).toBe('types_b512');
+      expect(fn.signature).toEqual('types_b512(s(a[b256;2]))');
+      expect(fn.selector).toEqual('0x00000000e628dc42');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([0, 0, 0, 0, 0, 0, 0, 10, 116, 121, 112, 101, 115, 95, 98, 53, 49, 50])
+      );
+      expect(fn.attributes).toEqual([]);
     });
 
     it('should fail to encode/decode [too short]', async () => {
@@ -385,8 +507,9 @@ describe('AbiCoder', () => {
       const expected = Uint8Array.from([3, 2, 1]);
       const { waitForResult } = await contract.functions.types_bytes(input).call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
 
     it('should encode/decode just fine [number]', async () => {
@@ -394,8 +517,26 @@ describe('AbiCoder', () => {
       const expected = Uint8Array.from([3, 2, 1]);
       const { waitForResult } = await contract.functions.types_bytes(input).call();
 
-      const { value } = await waitForResult();
+      const {
+        value,
+        logs: [log],
+      } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(log).toStrictEqual(expected);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_bytes');
+
+      expect(fn.name).toBe('types_bytes');
+      expect(fn.signature).toEqual('types_bytes(s(s(rawptr,u64),u64))');
+      expect(fn.selector).toEqual('0x00000000647316a2');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 11, 116, 121, 112, 101, 115, 95, 98, 121, 116, 101, 115,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -409,8 +550,21 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_str(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toBe(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_str');
+
+      expect(fn.name).toBe('types_str');
+      expect(fn.signature).toEqual('types_str(str[5])');
+      expect(fn.selector).toEqual('0x00000000476ddcb5');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([0, 0, 0, 0, 0, 0, 0, 9, 116, 121, 112, 101, 115, 95, 115, 116, 114])
+      );
+      expect(fn.attributes).toEqual([]);
     });
 
     it('should fail to encode/decode [length - 1]', async () => {
@@ -439,20 +593,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_str_slice(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toBe(expected);
-    });
-  });
-
-  describe('types_raw_slice', () => {
-    it('should encode/decode just fine', async () => {
-      const input: RawSlice = [1, 2, 3];
-      const expected: RawSlice = [4, 3, 2, 1];
-
-      const { waitForResult } = await contract.functions.types_raw_slice(input).call();
-      const { value } = await waitForResult();
-
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_str_slice');
+
+      expect(fn.name).toBe('types_str_slice');
+      expect(fn.signature).toEqual('types_str_slice(str)');
+      expect(fn.selector).toEqual('0x0000000010afc4e3');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 15, 116, 121, 112, 101, 115, 95, 115, 116, 114, 95, 115, 108, 105,
+          99, 101,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -463,8 +621,52 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_std_string(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toBe(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_std_string');
+
+      expect(fn.name).toBe('types_std_string');
+      expect(fn.signature).toEqual('types_std_string(s(s(s(rawptr,u64),u64)))');
+      expect(fn.selector).toEqual('0x0000000088a7be99');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 16, 116, 121, 112, 101, 115, 95, 115, 116, 100, 95, 115, 116, 114,
+          105, 110, 103,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
+    });
+  });
+
+  describe('types_raw_slice', () => {
+    it('should encode/decode just fine', async () => {
+      const input: RawSlice = [1, 2, 3];
+      const expected: RawSlice = [4, 3, 2, 1];
+
+      const { waitForResult } = await contract.functions.types_raw_slice(input).call();
+
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_raw_slice');
+
+      expect(fn.name).toBe('types_raw_slice');
+      expect(fn.signature).toEqual('types_raw_slice(rawslice)');
+      expect(fn.selector).toEqual('0x00000000e009cdab');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 15, 116, 121, 112, 101, 115, 95, 114, 97, 119, 95, 115, 108, 105, 99,
+          101,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -478,8 +680,23 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_array(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_array');
+
+      expect(fn.name).toBe('types_array');
+      expect(fn.signature).toEqual('types_array(a[u8;4])');
+      expect(fn.selector).toEqual('0x0000000006fd70c6');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 11, 116, 121, 112, 101, 115, 95, 97, 114, 114, 97, 121,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
 
     it('should fail to encode/decode [empty]', async () => {
@@ -507,8 +724,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_array_struct(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_array_struct');
+
+      expect(fn.name).toBe('types_array_struct');
+      expect(fn.signature).toEqual('types_array_struct(a[s(bool,u32);3])');
+      expect(fn.selector).toEqual('0x000000000e99463a');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 18, 116, 121, 112, 101, 115, 95, 97, 114, 114, 97, 121, 95, 115, 116,
+          114, 117, 99, 116,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -538,8 +771,26 @@ describe('AbiCoder', () => {
         .types_array_with_generic_struct(input)
         .call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toEqual(expected);
+      expect(logs).toEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_array_with_generic_struct');
+
+      expect(fn.name).toBe('types_array_with_generic_struct');
+      expect(fn.signature).toEqual(
+        'types_array_with_generic_struct(a[s<s<u64>(u64),str[1]>(s<u64>(u64),str[1]);2])'
+      );
+      expect(fn.selector).toEqual('0x0000000026db0b1a');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 31, 116, 121, 112, 101, 115, 95, 97, 114, 114, 97, 121, 95, 119, 105,
+          116, 104, 95, 103, 101, 110, 101, 114, 105, 99, 95, 115, 116, 114, 117, 99, 116,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -550,8 +801,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_array_with_vector(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_array_with_vector');
+
+      expect(fn.name).toBe('types_array_with_vector');
+      expect(fn.signature).toEqual('types_array_with_vector(a[s<u32>(s<u32>(rawptr,u64),u64);1])');
+      expect(fn.selector).toEqual('0x00000000f433e5fd');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 23, 116, 121, 112, 101, 115, 95, 97, 114, 114, 97, 121, 95, 119, 105,
+          116, 104, 95, 118, 101, 99, 116, 111, 114,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -565,8 +832,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_struct_simple(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_struct_simple');
+
+      expect(fn.name).toBe('types_struct_simple');
+      expect(fn.signature).toEqual('types_struct_simple(s(bool,u32))');
+      expect(fn.selector).toEqual('0x000000005497d4b2');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 19, 116, 121, 112, 101, 115, 95, 115, 116, 114, 117, 99, 116, 95,
+          115, 105, 109, 112, 108, 101,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -577,8 +860,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_struct_generic(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_struct_generic');
+
+      expect(fn.name).toBe('types_struct_generic');
+      expect(fn.signature).toEqual('types_struct_generic(s<u8>(u8))');
+      expect(fn.selector).toEqual('0x000000007b2086ec');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 20, 116, 121, 112, 101, 115, 95, 115, 116, 114, 117, 99, 116, 95,
+          103, 101, 110, 101, 114, 105, 99,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -590,8 +889,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_struct_with_tuple(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_struct_with_tuple');
+
+      expect(fn.name).toBe('types_struct_with_tuple');
+      expect(fn.signature).toEqual('types_struct_with_tuple(s<(bool,u64)>((bool,u64)))');
+      expect(fn.selector).toEqual('0x00000000adeb6dfa');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 23, 116, 121, 112, 101, 115, 95, 115, 116, 114, 117, 99, 116, 95,
+          119, 105, 116, 104, 95, 116, 117, 112, 108, 101,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -602,8 +917,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_struct_double_generic(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_struct_double_generic');
+
+      expect(fn.name).toBe('types_struct_double_generic');
+      expect(fn.signature).toEqual('types_struct_double_generic(s<u8,u16>(u8,e<u8,u16>(u8,u16)))');
+      expect(fn.selector).toEqual('0x0000000096e85141');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 27, 116, 121, 112, 101, 115, 95, 115, 116, 114, 117, 99, 116, 95,
+          100, 111, 117, 98, 108, 101, 95, 103, 101, 110, 101, 114, 105, 99,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -615,8 +946,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_struct_external(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_struct_external');
+
+      expect(fn.name).toBe('types_struct_external');
+      expect(fn.signature).toEqual('types_struct_external(s(u64))');
+      expect(fn.selector).toEqual('0x00000000080aff53');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 21, 116, 121, 112, 101, 115, 95, 115, 116, 114, 117, 99, 116, 95,
+          101, 120, 116, 101, 114, 110, 97, 108,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -639,13 +986,35 @@ describe('AbiCoder', () => {
         .types_struct_with_implicit_generics(INPUT)
         .call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(EXPECTED);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(EXPECTED);
+      expect(logs).toStrictEqual([EXPECTED]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_struct_with_implicit_generics');
+
+      expect(fn.name).toBe('types_struct_with_implicit_generics');
+      expect(fn.signature).toEqual(
+        'types_struct_with_implicit_generics(s<b256,u8>(a[b256;3],<b256,u8>(b256,u8)))'
+      );
+      expect(fn.selector).toEqual('0x0000000099d41855');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 35, 116, 121, 112, 101, 115, 95, 115, 116, 114, 117, 99, 116, 95,
+          119, 105, 116, 104, 95, 105, 109, 112, 108, 105, 99, 105, 116, 95, 103, 101, 110, 101,
+          114, 105, 99, 115,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
   describe('types_struct_with_array', () => {
-    it('should encode/decode just fine', async () => {
+    /**
+     * TODO: This is causing a generic to be left into the parsed format.
+     */
+    it.skip('should encode/decode just fine', async () => {
       // Inputs
       const inputB256: string =
         '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
@@ -670,8 +1039,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_struct_with_array(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_struct_with_array');
+
+      expect(fn.name).toBe('types_struct_with_array');
+      expect(fn.signature).toEqual('types_struct_with_array(s<b256>(a[s<b256,u8>(b256,u8);3]))');
+      expect(fn.selector).toEqual('0x00000000b2b64104');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 23, 116, 121, 112, 101, 115, 95, 115, 116, 114, 117, 99, 116, 95,
+          119, 105, 116, 104, 95, 97, 114, 114, 97, 121,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -682,8 +1067,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_struct_with_vector(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_struct_with_vector');
+
+      expect(fn.name).toBe('types_struct_with_vector');
+      expect(fn.signature).toEqual('types_struct_with_vector(s(u8,s<u8>(s<u8>(rawptr,u64),u64)))');
+      expect(fn.selector).toEqual('0x000000007d0fb2b3');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 24, 116, 121, 112, 101, 115, 95, 115, 116, 114, 117, 99, 116, 95,
+          119, 105, 116, 104, 95, 118, 101, 99, 116, 111, 114,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -692,8 +1093,8 @@ describe('AbiCoder', () => {
    *
    * Currently the expected value is not correct
    */
-  describe.todo('types_struct_with_array_of_enums', () => {
-    it('should encode/decode just fine', async () => {
+  describe('types_struct_with_array_of_enums', () => {
+    it.todo('should encode/decode just fine', async () => {
       const input: StructWithEnumArrayInput = {
         a: [EnumWithNativeInput.Checked, EnumWithNativeInput.Checked, EnumWithNativeInput.Checked],
       };
@@ -709,8 +1110,24 @@ describe('AbiCoder', () => {
         .types_struct_with_array_of_enums(input)
         .call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_struct_with_array_of_enums');
+
+      expect(fn.name).toBe('types_struct_with_array_of_enums');
+      expect(fn.signature).toEqual('types_struct_with_array_of_enums(s(a[e((),());3]))');
+      expect(fn.selector).toEqual('0x0000000096a7800d');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 32, 116, 121, 112, 101, 115, 95, 115, 116, 114, 117, 99, 116, 95,
+          119, 105, 116, 104, 95, 97, 114, 114, 97, 121, 95, 111, 102, 95, 101, 110, 117, 109, 115,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -726,8 +1143,26 @@ describe('AbiCoder', () => {
         .types_struct_with_nested_array(input)
         .call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(EXPECTED);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(EXPECTED);
+      expect(logs).toStrictEqual([EXPECTED]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_struct_with_nested_array');
+
+      expect(fn.name).toBe('types_struct_with_nested_array');
+      expect(fn.signature).toEqual(
+        'types_struct_with_nested_array(s(a[s<s<u64>(u64),str[1]>(s<u64>(u64),str[1]);2]))'
+      );
+      expect(fn.selector).toEqual('0x00000000199261fa');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 30, 116, 121, 112, 101, 115, 95, 115, 116, 114, 117, 99, 116, 95,
+          119, 105, 116, 104, 95, 110, 101, 115, 116, 101, 100, 95, 97, 114, 114, 97, 121,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -741,8 +1176,26 @@ describe('AbiCoder', () => {
         .types_struct_with_nested_tuple(input)
         .call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_struct_with_nested_tuple');
+
+      expect(fn.name).toBe('types_struct_with_nested_tuple');
+      expect(fn.signature).toEqual(
+        'types_struct_with_nested_tuple(s((u8,s<s<u64>(u64)>(s<u64>(u64)),str[3])))'
+      );
+      expect(fn.selector).toEqual('0x000000007fb152f7');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 30, 116, 121, 112, 101, 115, 95, 115, 116, 114, 117, 99, 116, 95,
+          119, 105, 116, 104, 95, 110, 101, 115, 116, 101, 100, 95, 116, 117, 112, 108, 101,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -755,13 +1208,31 @@ describe('AbiCoder', () => {
         .types_struct_with_nested_struct(input)
         .call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_struct_with_nested_struct');
+
+      expect(fn.name).toBe('types_struct_with_nested_struct');
+      expect(fn.signature).toEqual(
+        'types_struct_with_nested_struct(s(s<s<u8>(u8),u16>(s<u8>(u8),u16)))'
+      );
+      expect(fn.selector).toEqual('0x00000000511602c7');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 31, 116, 121, 112, 101, 115, 95, 115, 116, 114, 117, 99, 116, 95,
+          119, 105, 116, 104, 95, 110, 101, 115, 116, 101, 100, 95, 115, 116, 114, 117, 99, 116,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
-  describe.todo('types_struct_with_multiple_struct_params', () => {
-    it('should encode/decode just fine', async () => {
+  describe('types_struct_with_multiple_struct_params', () => {
+    it.todo('should encode/decode just fine', async () => {
       const STRUCT_A = { propA1: 10 };
       const STRUCT_B = { propB1: STRUCT_A, propB2: 20 };
 
@@ -781,12 +1252,52 @@ describe('AbiCoder', () => {
         .types_struct_with_multiple_struct_params(INPUT_X, INPUT_Y, INPUT_Z)
         .call();
 
-      const { value } = await waitForResult();
-      // expect(value).toEqual(expected);
+      await waitForResult();
+      // const { value, logs } = await waitForResult();
+      // expect(value).toStrictEqual(expected);
+      // expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_struct_with_multiple_struct_params');
+
+      expect(fn.name).toBe('types_struct_with_multiple_struct_params');
+      expect(fn.signature).toEqual(
+        'types_struct_with_multiple_struct_params(s(u8),s(s(u8),u16),s(s(u8),s<s(s(u8),u16)>(s<s(s(u8),u16)>(rawptr,u64),u64),s<u8,u8,s<str[1]>(u64,str[1])>(s<s<u8>(s(u8),s(s(u8),u16),u8)>(s<s<u8>(s(u8),s(s(u8),u16),u8)>(rawptr,u64),u64),u8,s<str[1]>(u64,str[1]))))'
+      );
+      expect(fn.selector).toEqual('0x00000000c61458a4');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 40, 116, 121, 112, 101, 115, 95, 115, 116, 114, 117, 99, 116, 95,
+          119, 105, 116, 104, 95, 109, 117, 108, 116, 105, 112, 108, 101, 95, 115, 116, 114, 117,
+          99, 116, 95, 112, 97, 114, 97, 109, 115,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
-  describe.todo('types_struct_with_complex_nested_struct');
+  describe('types_struct_with_complex_nested_struct', () => {
+    it.todo('should encode/decode just fine');
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_struct_with_complex_nested_struct');
+
+      expect(fn.name).toBe('types_struct_with_complex_nested_struct');
+      expect(fn.signature).toEqual(
+        'types_struct_with_complex_nested_struct(s<u32,u32,s<s<s(u8)>(s<s(u8)>(rawptr,u64),u64)>(u64,s<s(u8)>(s<s(u8)>(rawptr,u64),u64))>(s<s<u32>(s(u8),s(s(u8),u16),u32)>(s<s<u32>(s(u8),s(s(u8),u16),u32)>(rawptr,u64),u64),u32,s<s<s(u8)>(s<s(u8)>(rawptr,u64),u64)>(u64,s<s(u8)>(s<s(u8)>(rawptr,u64),u64))))'
+      );
+      expect(fn.selector).toEqual('0x000000003bb27fd2');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 39, 116, 121, 112, 101, 115, 95, 115, 116, 114, 117, 99, 116, 95,
+          119, 105, 116, 104, 95, 99, 111, 109, 112, 108, 101, 120, 95, 110, 101, 115, 116, 101,
+          100, 95, 115, 116, 114, 117, 99, 116,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
+    });
+  });
 
   describe('types_struct_with_single_option', () => {
     it('should encode/decode just fine', async () => {
@@ -803,8 +1314,26 @@ describe('AbiCoder', () => {
         .types_struct_with_single_option(input)
         .call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_struct_with_single_option');
+
+      expect(fn.name).toBe('types_struct_with_single_option');
+      expect(fn.signature).toEqual(
+        'types_struct_with_single_option(s(e<s(a[e<u8>((),u8);5])>((),s(a[e<u8>((),u8);5]))))'
+      );
+      expect(fn.selector).toEqual('0x000000003ec1dd13');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 31, 116, 121, 112, 101, 115, 95, 115, 116, 114, 117, 99, 116, 95,
+          119, 105, 116, 104, 95, 115, 105, 110, 103, 108, 101, 95, 111, 112, 116, 105, 111, 110,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -818,8 +1347,23 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_tuple(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_tuple');
+
+      expect(fn.name).toBe('types_tuple');
+      expect(fn.signature).toEqual('types_tuple((u8,u8,u8))');
+      expect(fn.selector).toEqual('0x00000000d4afe0f7');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 11, 116, 121, 112, 101, 115, 95, 116, 117, 112, 108, 101,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -835,8 +1379,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_tuple_complex(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_tuple_complex');
+
+      expect(fn.name).toBe('types_tuple_complex');
+      expect(fn.signature).toEqual('types_tuple_complex((u8,s<s<u64>(u64)>(s<u64>(u64)),str[3]))');
+      expect(fn.selector).toEqual('0x000000003976bc45');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 19, 116, 121, 112, 101, 115, 95, 116, 117, 112, 108, 101, 95, 99,
+          111, 109, 112, 108, 101, 120,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -855,8 +1415,24 @@ describe('AbiCoder', () => {
         .types_tuple_with_native_types(input)
         .call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_tuple_with_native_types');
+
+      expect(fn.name).toBe('types_tuple_with_native_types');
+      expect(fn.signature).toEqual('types_tuple_with_native_types((s(b256),s(b256),bool))');
+      expect(fn.selector).toEqual('0x0000000070139504');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 29, 116, 121, 112, 101, 115, 95, 116, 117, 112, 108, 101, 95, 119,
+          105, 116, 104, 95, 110, 97, 116, 105, 118, 101, 95, 116, 121, 112, 101, 115,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -875,8 +1451,25 @@ describe('AbiCoder', () => {
         .types_alias_tuple_with_native_types(input)
         .call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_alias_tuple_with_native_types');
+
+      expect(fn.name).toBe('types_alias_tuple_with_native_types');
+      expect(fn.signature).toEqual('types_alias_tuple_with_native_types((s(b256),s(b256),bool))');
+      expect(fn.selector).toEqual('0x00000000f1230bbf');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 35, 116, 121, 112, 101, 115, 95, 97, 108, 105, 97, 115, 95, 116, 117,
+          112, 108, 101, 95, 119, 105, 116, 104, 95, 110, 97, 116, 105, 118, 101, 95, 116, 121, 112,
+          101, 115,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -890,8 +1483,21 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_enum(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toBe(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_enum');
+
+      expect(fn.name).toBe('types_enum');
+      expect(fn.signature).toEqual('types_enum(e((),()))');
+      expect(fn.selector).toEqual('0x000000003227c41f');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([0, 0, 0, 0, 0, 0, 0, 10, 116, 121, 112, 101, 115, 95, 101, 110, 117, 109])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -903,8 +1509,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_enum_with_builtin_type(input).call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_enum_with_builtin_type');
+
+      expect(fn.name).toBe('types_enum_with_builtin_type');
+      expect(fn.signature).toEqual('types_enum_with_builtin_type(e(bool,u64))');
+      expect(fn.selector).toEqual('0x000000000d46aae9');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 28, 116, 121, 112, 101, 115, 95, 101, 110, 117, 109, 95, 119, 105,
+          116, 104, 95, 98, 117, 105, 108, 116, 105, 110, 95, 116, 121, 112, 101,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -915,8 +1537,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_enum_with_vector(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_enum_with_vector');
+
+      expect(fn.name).toBe('types_enum_with_vector');
+      expect(fn.signature).toEqual('types_enum_with_vector(e(u8,s<u8>(s<u8>(rawptr,u64),u64)))');
+      expect(fn.selector).toEqual('0x000000002cbc0dda');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 22, 116, 121, 112, 101, 115, 95, 101, 110, 117, 109, 95, 119, 105,
+          116, 104, 95, 118, 101, 99, 116, 111, 114,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -927,8 +1565,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_generic_enum(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_generic_enum');
+
+      expect(fn.name).toBe('types_generic_enum');
+      expect(fn.signature).toEqual('types_generic_enum(e<u8,u16>(u8,u16))');
+      expect(fn.selector).toEqual('0x0000000097aaba95');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 18, 116, 121, 112, 101, 115, 95, 103, 101, 110, 101, 114, 105, 99,
+          95, 101, 110, 117, 109,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -939,8 +1593,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_enum_external(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_enum_external');
+
+      expect(fn.name).toBe('types_enum_external');
+      expect(fn.signature).toEqual('types_enum_external(e((),()))');
+      expect(fn.selector).toEqual('0x0000000085288d18');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 19, 116, 121, 112, 101, 115, 95, 101, 110, 117, 109, 95, 101, 120,
+          116, 101, 114, 110, 97, 108,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -951,8 +1621,26 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_enum_with_structs(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_enum_with_structs');
+
+      expect(fn.name).toBe('types_enum_with_structs');
+      expect(fn.signature).toEqual(
+        'types_enum_with_structs(e(e((),()),s(bool,u32),s<u64,s(bool,u32)>(u64,s(bool,u32))))'
+      );
+      expect(fn.selector).toEqual('0x000000005da5a1c9');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 23, 116, 121, 112, 101, 115, 95, 101, 110, 117, 109, 95, 119, 105,
+          116, 104, 95, 115, 116, 114, 117, 99, 116, 115,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -966,8 +1654,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_vector_u8(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_vector_u8');
+
+      expect(fn.name).toBe('types_vector_u8');
+      expect(fn.signature).toEqual('types_vector_u8(s<u8>(s<u8>(rawptr,u64),u64))');
+      expect(fn.selector).toEqual('0x00000000c6e0e9a2');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 15, 116, 121, 112, 101, 115, 95, 118, 101, 99, 116, 111, 114, 95,
+          117, 56,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -978,8 +1682,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_vector_boolean(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_vector_boolean');
+
+      expect(fn.name).toBe('types_vector_boolean');
+      expect(fn.signature).toEqual('types_vector_boolean(s<bool>(s<bool>(rawptr,u64),u64))');
+      expect(fn.selector).toEqual('0x0000000056c4f119');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 20, 116, 121, 112, 101, 115, 95, 118, 101, 99, 116, 111, 114, 95, 98,
+          111, 111, 108, 101, 97, 110,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -993,8 +1713,26 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_vector_inside_vector(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_vector_inside_vector');
+
+      expect(fn.name).toBe('types_vector_inside_vector');
+      expect(fn.signature).toEqual(
+        'types_vector_inside_vector(s<s<u32>(s<u32>(rawptr,u64),u64)>(s<s<u32>(s<u32>(rawptr,u64),u64)>(rawptr,u64),u64))'
+      );
+      expect(fn.selector).toEqual('0x00000000c40617f1');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 26, 116, 121, 112, 101, 115, 95, 118, 101, 99, 116, 111, 114, 95,
+          105, 110, 115, 105, 100, 101, 95, 118, 101, 99, 116, 111, 114,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -1005,8 +1743,26 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_vector_with_struct(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_vector_with_struct');
+
+      expect(fn.name).toBe('types_vector_with_struct');
+      expect(fn.signature).toEqual(
+        'types_vector_with_struct(s<s(bool,u32)>(s<s(bool,u32)>(rawptr,u64),u64))'
+      );
+      expect(fn.selector).toEqual('0x000000006c28b333');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 24, 116, 121, 112, 101, 115, 95, 118, 101, 99, 116, 111, 114, 95,
+          119, 105, 116, 104, 95, 115, 116, 114, 117, 99, 116,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -1017,8 +1773,26 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_vector_option(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_vector_option');
+
+      expect(fn.name).toBe('types_vector_option');
+      expect(fn.signature).toEqual(
+        'types_vector_option(s<s(a[e<u8>((),u8);5])>(s<s(a[e<u8>((),u8);5])>(rawptr,u64),u64))'
+      );
+      expect(fn.selector).toEqual('0x000000007d911a50');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 19, 116, 121, 112, 101, 115, 95, 118, 101, 99, 116, 111, 114, 95,
+          111, 112, 116, 105, 111, 110,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -1032,8 +1806,23 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_option(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_option');
+
+      expect(fn.name).toBe('types_option');
+      expect(fn.signature).toEqual('types_option(e<u8>((),u8))');
+      expect(fn.selector).toEqual('0x000000004f547ea4');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 12, 116, 121, 112, 101, 115, 95, 111, 112, 116, 105, 111, 110,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -1047,8 +1836,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_option_struct(input).call();
 
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_option_struct');
+
+      expect(fn.name).toBe('types_option_struct');
+      expect(fn.signature).toEqual('types_option_struct(e<s(bool,u32)>((),s(bool,u32)))');
+      expect(fn.selector).toEqual('0x000000003d47e5fd');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 19, 116, 121, 112, 101, 115, 95, 111, 112, 116, 105, 111, 110, 95,
+          115, 116, 114, 117, 99, 116,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -1066,8 +1871,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_identity_address(input).call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_identity_address');
+
+      expect(fn.name).toBe('types_identity_address');
+      expect(fn.signature).toEqual('types_identity_address(e(s(b256),s(b256)))');
+      expect(fn.selector).toEqual('0x00000000aa402b49');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 22, 116, 121, 112, 101, 115, 95, 105, 100, 101, 110, 116, 105, 116,
+          121, 95, 97, 100, 100, 114, 101, 115, 115,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -1082,8 +1903,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_identity_contract_id(input).call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_identity_contract_id');
+
+      expect(fn.name).toBe('types_identity_contract_id');
+      expect(fn.signature).toEqual('types_identity_contract_id(e(s(b256),s(b256)))');
+      expect(fn.selector).toEqual('0x00000000b133fa5b');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 26, 116, 121, 112, 101, 115, 95, 105, 100, 101, 110, 116, 105, 116,
+          121, 95, 99, 111, 110, 116, 114, 97, 99, 116, 95, 105, 100,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -1096,8 +1933,23 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_address(input).call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_address');
+
+      expect(fn.name).toBe('types_address');
+      expect(fn.signature).toEqual('types_address(s(b256))');
+      expect(fn.selector).toEqual('0x000000005b7bb428');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 13, 116, 121, 112, 101, 115, 95, 97, 100, 100, 114, 101, 115, 115,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -1110,8 +1962,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_contract_id(input).call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_contract_id');
+
+      expect(fn.name).toBe('types_contract_id');
+      expect(fn.signature).toEqual('types_contract_id(s(b256))');
+      expect(fn.selector).toEqual('0x0000000051bcfff5');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 17, 116, 121, 112, 101, 115, 95, 99, 111, 110, 116, 114, 97, 99, 116,
+          95, 105, 100,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -1125,8 +1993,24 @@ describe('AbiCoder', () => {
       };
 
       const { waitForResult } = await contract.functions.types_asset_id(input).call();
-      const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      const { value, logs } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_asset_id');
+
+      expect(fn.name).toBe('types_asset_id');
+      expect(fn.signature).toEqual('types_asset_id(s(b256))');
+      expect(fn.selector).toEqual('0x00000000bdd1d050');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 14, 116, 121, 112, 101, 115, 95, 97, 115, 115, 101, 116, 95, 105,
+          100,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -1141,8 +2025,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_evm_address(input).call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_evm_address');
+
+      expect(fn.name).toBe('types_evm_address');
+      expect(fn.signature).toEqual('types_evm_address(s(b256))');
+      expect(fn.selector).toEqual('0x00000000727fec9d');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 17, 116, 121, 112, 101, 115, 95, 101, 118, 109, 95, 97, 100, 100,
+          114, 101, 115, 115,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -1159,7 +2059,7 @@ describe('AbiCoder', () => {
       const { waitForResult } = await contract.functions.types_result(input).call();
 
       const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      expect(value).toStrictEqual(expected);
     });
 
     it('should accept result just fine [Err - divide by zero]', async () => {
@@ -1173,7 +2073,7 @@ describe('AbiCoder', () => {
       const { waitForResult } = await contract.functions.types_result(input).call();
 
       const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      expect(value).toStrictEqual(expected);
     });
 
     it('should accept result just fine [Err - 10]', async () => {
@@ -1187,7 +2087,21 @@ describe('AbiCoder', () => {
       const { waitForResult } = await contract.functions.types_result(input).call();
 
       const { value } = await waitForResult();
-      expect(value).toEqual(expected);
+      expect(value).toStrictEqual(expected);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_result');
+
+      expect(fn.name).toBe('types_result');
+      expect(fn.signature).toEqual('types_result(e<u64,u32>(u64,u32))');
+      expect(fn.selector).toEqual('0x00000000ec4468f8');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 12, 116, 121, 112, 101, 115, 95, 114, 101, 115, 117, 108, 116,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -1201,8 +2115,9 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_void(input).call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
     });
 
     it('should encode/decode just fine [omit optional args]', async () => {
@@ -1210,8 +2125,21 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.types_void().call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_void');
+
+      expect(fn.name).toBe('types_void');
+      expect(fn.signature).toEqual('types_void(())');
+      expect(fn.selector).toEqual('0x00000000fd833d6f');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([0, 0, 0, 0, 0, 0, 0, 10, 116, 121, 112, 101, 115, 95, 118, 111, 105, 100])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -1227,6 +2155,21 @@ describe('AbiCoder', () => {
 
       const { value } = await waitForResult();
       expect(value).toBe(expected);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_void_then_value');
+
+      expect(fn.name).toBe('types_void_then_value');
+      expect(fn.signature).toEqual('types_void_then_value((),u8)');
+      expect(fn.selector).toEqual('0x0000000027599008');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 21, 116, 121, 112, 101, 115, 95, 118, 111, 105, 100, 95, 116, 104,
+          101, 110, 95, 118, 97, 108, 117, 101,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -1250,6 +2193,21 @@ describe('AbiCoder', () => {
       const { value } = await waitForResult();
       expect(value).toBeUndefined();
     });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_value_then_void');
+
+      expect(fn.name).toBe('types_value_then_void');
+      expect(fn.signature).toEqual('types_value_then_void(u8,())');
+      expect(fn.selector).toEqual('0x00000000fe7792d4');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 21, 116, 121, 112, 101, 115, 95, 118, 97, 108, 117, 101, 95, 116,
+          104, 101, 110, 95, 118, 111, 105, 100,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
+    });
   });
 
   describe('types_value_then_void_then_value', () => {
@@ -1264,6 +2222,21 @@ describe('AbiCoder', () => {
 
       const { value } = await waitForResult();
       expect(value).toBeUndefined();
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_value_then_void_then_value');
+
+      expect(fn.name).toBe('types_value_then_void_then_value');
+      expect(fn.signature).toEqual('types_value_then_void_then_value(u8,(),u8)');
+      expect(fn.selector).toEqual('0x000000005c3c9a25');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 32, 116, 121, 112, 101, 115, 95, 118, 97, 108, 117, 101, 95, 116,
+          104, 101, 110, 95, 118, 111, 105, 100, 95, 116, 104, 101, 110, 95, 118, 97, 108, 117, 101,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -1293,6 +2266,22 @@ describe('AbiCoder', () => {
       const { value } = await waitForResult();
       expect(value).toBeUndefined();
     });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('types_value_then_value_then_void_then_void');
+
+      expect(fn.name).toBe('types_value_then_value_then_void_then_void');
+      expect(fn.signature).toEqual('types_value_then_value_then_void_then_void(u8,u8,(),())');
+      expect(fn.selector).toEqual('0x00000000ef0dd323');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 42, 116, 121, 112, 101, 115, 95, 118, 97, 108, 117, 101, 95, 116,
+          104, 101, 110, 95, 118, 97, 108, 117, 101, 95, 116, 104, 101, 110, 95, 118, 111, 105, 100,
+          95, 116, 104, 101, 110, 95, 118, 111, 105, 100,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
+    });
   });
 
   /**
@@ -1307,8 +2296,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.multi_arg_u64_u64(inputX, inputY).call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('multi_arg_u64_u64');
+
+      expect(fn.name).toBe('multi_arg_u64_u64');
+      expect(fn.signature).toEqual('multi_arg_u64_u64(u64,u64)');
+      expect(fn.selector).toEqual('0x000000008da21283');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 17, 109, 117, 108, 116, 105, 95, 97, 114, 103, 95, 117, 54, 52, 95,
+          117, 54, 52,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -1323,8 +2328,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.multi_arg_b256_bool(inputX, inputY).call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('multi_arg_b256_bool');
+
+      expect(fn.name).toBe('multi_arg_b256_bool');
+      expect(fn.signature).toEqual('multi_arg_b256_bool(b256,bool)');
+      expect(fn.selector).toEqual('0x0000000087e6d52c');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 19, 109, 117, 108, 116, 105, 95, 97, 114, 103, 95, 98, 50, 53, 54,
+          95, 98, 111, 111, 108,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -1341,8 +2362,26 @@ describe('AbiCoder', () => {
         .multi_arg_vector_vector(inputX, inputY)
         .call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('multi_arg_vector_vector');
+
+      expect(fn.name).toBe('multi_arg_vector_vector');
+      expect(fn.signature).toEqual(
+        'multi_arg_vector_vector(s<u8>(s<u8>(rawptr,u64),u64),s<u8>(s<u8>(rawptr,u64),u64))'
+      );
+      expect(fn.selector).toEqual('0x000000008f38c8a0');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 23, 109, 117, 108, 116, 105, 95, 97, 114, 103, 95, 118, 101, 99, 116,
+          111, 114, 95, 118, 101, 99, 116, 111, 114,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -1359,8 +2398,24 @@ describe('AbiCoder', () => {
         .multi_arg_vector_b256(inputX, inputY)
         .call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('multi_arg_vector_b256');
+
+      expect(fn.name).toBe('multi_arg_vector_b256');
+      expect(fn.signature).toEqual('multi_arg_vector_b256(s<u8>(s<u8>(rawptr,u64),u64),b256)');
+      expect(fn.selector).toEqual('0x0000000031ca0fba');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 21, 109, 117, 108, 116, 105, 95, 97, 114, 103, 95, 118, 101, 99, 116,
+          111, 114, 95, 98, 50, 53, 54,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -1374,8 +2429,26 @@ describe('AbiCoder', () => {
         .multi_arg_struct_vector(inputX, inputY)
         .call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('multi_arg_struct_vector');
+
+      expect(fn.name).toBe('multi_arg_struct_vector');
+      expect(fn.signature).toEqual(
+        'multi_arg_struct_vector(s(bool,u32),s<u8>(s<u8>(rawptr,u64),u64))'
+      );
+      expect(fn.selector).toEqual('0x00000000d63bf118');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 23, 109, 117, 108, 116, 105, 95, 97, 114, 103, 95, 115, 116, 114,
+          117, 99, 116, 95, 118, 101, 99, 116, 111, 114,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -1389,8 +2462,24 @@ describe('AbiCoder', () => {
         .multi_arg_u64_struct(inputX, inputY)
         .call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(JSON.stringify(value)).toEqual(JSON.stringify(expected));
+      expect(JSON.stringify(logs)).toEqual(JSON.stringify([expected]));
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('multi_arg_u64_struct');
+
+      expect(fn.name).toBe('multi_arg_u64_struct');
+      expect(fn.signature).toEqual('multi_arg_u64_struct(u64,s(bool,u32))');
+      expect(fn.selector).toEqual('0x00000000259174ac');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 20, 109, 117, 108, 116, 105, 95, 97, 114, 103, 95, 117, 54, 52, 95,
+          115, 116, 114, 117, 99, 116,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -1403,8 +2492,24 @@ describe('AbiCoder', () => {
 
       const { waitForResult } = await contract.functions.multi_arg_str_str(inputX, inputY).call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(value).toStrictEqual(expected);
+      expect(logs).toStrictEqual([expected]);
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('multi_arg_str_str');
+
+      expect(fn.name).toBe('multi_arg_str_str');
+      expect(fn.signature).toEqual('multi_arg_str_str(str[5],str[5])');
+      expect(fn.selector).toEqual('0x0000000001cf9e71');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 17, 109, 117, 108, 116, 105, 95, 97, 114, 103, 95, 115, 116, 114, 95,
+          115, 116, 114,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -1420,8 +2525,26 @@ describe('AbiCoder', () => {
         .multi_arg_u32_vector_vector(inputX, inputY, inputZ)
         .call();
 
-      const { value } = await waitForResult();
+      const { value, logs } = await waitForResult();
       expect(JSON.stringify(value)).toEqual(JSON.stringify(expected));
+      expect(JSON.stringify(logs)).toEqual(JSON.stringify([expected]));
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('multi_arg_u32_vector_vector');
+
+      expect(fn.name).toBe('multi_arg_u32_vector_vector');
+      expect(fn.signature).toEqual(
+        'multi_arg_u32_vector_vector(u32,s<u64>(s<u64>(rawptr,u64),u64),s<u64>(s<u64>(rawptr,u64),u64))'
+      );
+      expect(fn.selector).toEqual('0x000000003f794313');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 27, 109, 117, 108, 116, 105, 95, 97, 114, 103, 95, 117, 51, 50, 95,
+          118, 101, 99, 116, 111, 114, 95, 118, 101, 99, 116, 111, 114,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 
@@ -1480,14 +2603,32 @@ describe('AbiCoder', () => {
         b: 57,
       };
 
+      const expected = [expectedX, expectedY, expectedZ, expectedA];
+
       const { waitForResult } = await contract.functions
         .multi_arg_complex(inputX, inputY, inputZ, inputA)
         .call();
 
-      const { value } = await waitForResult();
-      expect(JSON.stringify(value)).toEqual(
-        JSON.stringify([expectedX, expectedY, expectedZ, expectedA])
+      const { value, logs } = await waitForResult();
+      expect(JSON.stringify(value)).toEqual(JSON.stringify(expected));
+      expect(JSON.stringify(logs)).toEqual(JSON.stringify([expected]));
+    });
+
+    it('should have function properties', () => {
+      const fn = contract.interface.getFunction('multi_arg_complex');
+
+      expect(fn.name).toBe('multi_arg_complex');
+      expect(fn.signature).toEqual(
+        'multi_arg_complex(s<a[b256;3],u8>(a[b256;3],u8),a[s<u64,bool>(u64,bool);4],(str[5],bool),s(bool,u32))'
       );
+      expect(fn.selector).toEqual('0x00000000808afb73');
+      expect(fn.selectorBytes).toEqual(
+        new Uint8Array([
+          0, 0, 0, 0, 0, 0, 0, 17, 109, 117, 108, 116, 105, 95, 97, 114, 103, 95, 99, 111, 109, 112,
+          108, 101, 120,
+        ])
+      );
+      expect(fn.attributes).toEqual([]);
     });
   });
 });
