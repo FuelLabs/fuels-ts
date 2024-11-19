@@ -12,10 +12,8 @@ export async function deploy(config: FuelsConfig) {
   /**
    * Deploy contract and save their IDs to JSON file.
    */
-  const contractIds = await deployContracts(config);
-  await saveContractIds(contractIds, config.output);
-
-  config.onDeploy?.(config, contractIds);
+  const contracts = await deployContracts(config);
+  await saveContractIds(contracts, config.output);
 
   /**
    * Deploy scripts and save deployed files to disk.
@@ -29,11 +27,21 @@ export async function deploy(config: FuelsConfig) {
   const predicates = await deployPredicates(config);
   savePredicateFiles(predicates, config);
 
+  config.onDeploy?.(config, {
+    contracts,
+    scripts,
+    predicates,
+  });
+
   /**
    * After deploying scripts/predicates, we need to
    * re-generate factory classe with the loader coee
    */
   await generateTypes(config);
 
-  return contractIds;
+  return {
+    contracts,
+    scripts,
+    predicates,
+  };
 }

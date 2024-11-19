@@ -563,14 +563,17 @@ describe('Fuel Connector', () => {
     }).init();
 
     class CustomProvider extends Provider {
-      static async create(_url: string, opts?: ProviderOptions) {
+      static override async create(_url: string, opts?: ProviderOptions) {
         const provider = new CustomProvider(nodeProvider.url, opts);
         await provider.fetchChainAndNodeInfo();
         return provider;
       }
 
       // eslint-disable-next-line @typescript-eslint/require-await
-      async getBalance(_owner: AbstractAddress, _assetId: BytesLike = ZeroBytes32): Promise<BN> {
+      override async getBalance(
+        _owner: AbstractAddress,
+        _assetId: BytesLike = ZeroBytes32
+      ): Promise<BN> {
         return bn(1234);
       }
     }
