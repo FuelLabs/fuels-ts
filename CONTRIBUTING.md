@@ -111,14 +111,14 @@ See also:
 
 # Working with Unreleased Forc and Fuel-Core Functionality
 
-When you need to work with unreleased versions of `forc` or `fuel-core`, you can specify a git branch instead of a version number.
+When you need to work with unreleased versions of `forc` or `fuel-core`, you can specify a git branch instead of a version number in the respective `VERSION` file.
 
 ## Using Unreleased Forc
 
 To use an unreleased version of `forc`:
 
 1.  **Edit the `VERSION` File**
-    Open the `internal/forc/VERSION` file and replace the version number (e.g., 0.59.0) with the desired git branch:
+    Open the `internal/forc/VERSION` file and replace the version number (e.g., `0.59.0`) with the desired git branch:
 
         ```text
         git:some/branch-name
@@ -182,7 +182,7 @@ To resolve the issue and ensure the SDK uses the correct binaries:
    rm -rf internal/fuel-core/fuel-core-repo
    ```
 
-1. **Reinstall and build.**
+1. **Reinstall and build**
    ```sh
    pnpm install
    pnpm build
