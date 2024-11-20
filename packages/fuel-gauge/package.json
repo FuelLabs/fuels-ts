@@ -8,7 +8,7 @@
     "pretest": "run-s build:forc build:process-predicates",
     "build:forc": "pnpm fuels build",
     "build:process-predicates": "tsx ./scripts/process-predicates.ts",
-    "lint": "tsc --noEmit"
+    "type:check": "tsc --noEmit"
   },
   "license": "Apache-2.0",
   "dependencies": {
