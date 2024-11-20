@@ -17,7 +17,7 @@
   "scripts": {
     "build": "run-s build:source",
     "build:source": "tsup",
-    "lint": "tsc --noEmit",
+    "type:check": "tsc --noEmit",
     "prepublishOnly": "tsx ./scripts/prepublish.ts"
   },
   "dependencies": {
