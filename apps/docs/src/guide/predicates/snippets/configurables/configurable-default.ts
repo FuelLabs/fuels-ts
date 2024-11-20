@@ -1,8 +1,8 @@
 // #region full
 import { Wallet, Provider } from 'fuels';
 
-import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../env';
-import { WhitelistedAddressPredicate } from '../../typegend/predicates/WhitelistedAddressPredicate';
+import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
+import { WhitelistedAddressPredicate } from '../../../../typegend/predicates/WhitelistedAddressPredicate';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 

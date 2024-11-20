@@ -2,7 +2,7 @@
 import type { WalletUnlocked } from 'fuels';
 import { Provider, Wallet } from 'fuels';
 
-import { LOCAL_NETWORK_URL } from '../env';
+import { LOCAL_NETWORK_URL } from '../../../env';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 

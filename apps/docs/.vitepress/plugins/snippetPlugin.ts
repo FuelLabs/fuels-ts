@@ -107,7 +107,9 @@ export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
       const rawPathRegexp =
         /^(.+(?:\.([a-z0-9]+)))(?:(#[\w-]+))?(?: ?(?:{(\d+(?:[,-]\d+)*)? ?(\S+)?}))? ?(?:\[(.+)\])?$/;
       const relativePath = path.dirname(state.env.path);
-      let rawPath = state.src.slice(start, end).trim()
+      let rawPath = state.src
+        .slice(start, end)
+        .trim()
         .replace(/^@\./, relativePath)
         .replace(/^@/, srcDir)
         .trim();

@@ -5,7 +5,7 @@ import {
   ZeroBytes32,
 } from 'fuels';
 
-import { ScriptSum } from '../../typegend';
+import { ScriptSum } from '../../../../typegend';
 
 // Instantiate the transaction request using a ScriptTransactionRequest
 const scriptTransactionRequest = new ScriptTransactionRequest({

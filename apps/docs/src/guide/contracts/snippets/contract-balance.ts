@@ -2,8 +2,8 @@
 import type { AssetId } from 'fuels';
 import { Provider, Wallet } from 'fuels';
 
-import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
-import { TransferToAddressFactory } from '../typegend';
+import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../env';
+import { TransferToAddressFactory } from '../../../typegend';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);

@@ -1,7 +1,7 @@
 // #region getMessages
 import { Provider, Wallet } from 'fuels';
 
-import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../env';
+import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
 
 // Instantiate a provider and wallet
 const provider = await Provider.create(LOCAL_NETWORK_URL);

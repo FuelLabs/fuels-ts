@@ -1,9 +1,9 @@
 // #region predicate-custom-transaction
 import { Provider, ScriptTransactionRequest, Wallet } from 'fuels';
 
-import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
-import { ConfigurablePin } from '../typegend';
-import type { ConfigurablePinInputs } from '../typegend/predicates/ConfigurablePin';
+import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../env';
+import { ConfigurablePin } from '../../../typegend';
+import type { ConfigurablePinInputs } from '../../../typegend/predicates/ConfigurablePin';
 
 // Setup
 const provider = await Provider.create(LOCAL_NETWORK_URL);

@@ -2,7 +2,7 @@
 // #region full
 import { WalletManager, Wallet, Provider } from 'fuels';
 
-import { LOCAL_NETWORK_URL } from '../env';
+import { LOCAL_NETWORK_URL } from '../../../env';
 
 // #region getting-started-with-wallet-manager-1
 

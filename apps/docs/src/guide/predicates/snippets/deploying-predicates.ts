@@ -1,8 +1,11 @@
 // #region full
 import { Provider, Wallet } from 'fuels';
 
-import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
-import { ConfigurablePin, ConfigurablePinLoader } from '../typegend/predicates';
+import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../env';
+import {
+  ConfigurablePin,
+  ConfigurablePinLoader,
+} from '../../../typegend/predicates';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 

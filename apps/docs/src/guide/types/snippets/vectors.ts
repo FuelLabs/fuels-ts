@@ -1,12 +1,12 @@
 // #region full
 import { arrayify, bn, getRandomB256, Provider, Wallet } from 'fuels';
 
-import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
+import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../env';
 import {
   BytecodeInputFactory,
   EchoEmployeeDataVectorFactory,
-} from '../typegend';
-import type { EmployeeDataInput } from '../typegend/contracts/EchoEmployeeDataVector';
+} from '../../../typegend';
+import type { EmployeeDataInput } from '../../../typegend/contracts/EchoEmployeeDataVector';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);

@@ -1,7 +1,7 @@
 // #region provider-instantiation
 import { Provider, WalletUnlocked } from 'fuels';
 
-import { LOCAL_NETWORK_URL } from '../env';
+import { LOCAL_NETWORK_URL } from '../../../env';
 
 // Create the provider
 const provider = await Provider.create(LOCAL_NETWORK_URL);

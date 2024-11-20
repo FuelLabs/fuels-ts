@@ -2,8 +2,8 @@
 import type { Bech32Address } from 'fuels';
 import { Address, Provider, Contract } from 'fuels';
 
-import { LOCAL_NETWORK_URL } from '../../env';
-import { Counter } from '../../typegend/contracts';
+import { LOCAL_NETWORK_URL } from '../../../../env';
+import { Counter } from '../../../../typegend/contracts';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 

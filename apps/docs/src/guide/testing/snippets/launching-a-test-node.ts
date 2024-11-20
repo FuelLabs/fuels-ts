@@ -35,7 +35,7 @@ const customLaunchTestNode = await launchTestNode(/* options */);
 
 customLaunchTestNode.cleanup();
 // #region basic-example
-import { CounterFactory } from '../typegend/contracts/CounterFactory';
+import { CounterFactory } from '../../../typegend/contracts/CounterFactory';
 
 using launchedContractNode = await launchTestNode({
   contractsConfigs: [CounterFactory],
@@ -95,7 +95,7 @@ nodeWithCustomArgs.cleanup();
 
 const mySnapshotDirPath = join(
   __dirname,
-  '../../../../',
+  '../../../../../../',
   '.fuel-core',
   'configs'
 );

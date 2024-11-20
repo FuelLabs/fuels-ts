@@ -1,7 +1,7 @@
 // #region signing-1
 import { hashMessage, Provider, Signer, WalletUnlocked } from 'fuels';
 
-import { LOCAL_NETWORK_URL } from '../../env';
+import { LOCAL_NETWORK_URL } from '../../../../env';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 

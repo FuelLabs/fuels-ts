@@ -2,8 +2,8 @@
 // #region full
 import { BN, DECIMAL_GWEI, DECIMAL_KWEI, bn, Provider, Wallet } from 'fuels';
 
-import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
-import { EchoValuesFactory } from '../typegend/contracts/EchoValuesFactory';
+import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../env';
+import { EchoValuesFactory } from '../../../typegend/contracts/EchoValuesFactory';
 
 // #region instantiation-1
 const myBigNumberOne = '100000000';

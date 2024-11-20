@@ -2,8 +2,8 @@
 // #region full
 import { Script, BN, Wallet, Provider } from 'fuels';
 
-import { WALLET_PVT_KEY, LOCAL_NETWORK_URL } from '../env';
-import { ScriptSum } from '../typegend/scripts/ScriptSum';
+import { WALLET_PVT_KEY, LOCAL_NETWORK_URL } from '../../../env';
+import { ScriptSum } from '../../../typegend/scripts/ScriptSum';
 
 // #region script-with-configurable-contants-2
 const provider = await Provider.create(LOCAL_NETWORK_URL);

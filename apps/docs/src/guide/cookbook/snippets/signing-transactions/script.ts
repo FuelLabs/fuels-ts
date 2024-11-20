@@ -7,8 +7,8 @@ import {
   WALLET_PVT_KEY,
   WALLET_PVT_KEY_2,
   WALLET_PVT_KEY_3,
-} from '../../env';
-import { ScriptSigning } from '../../typegend';
+} from '../../../../env';
+import { ScriptSigning } from '../../../../typegend';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 const sender = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);

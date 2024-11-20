@@ -4,7 +4,7 @@ import { launchTestNode } from 'fuels/test-utils';
 import {
   ScriptSum as TypegenScript,
   ScriptSumLoader as TypegenScriptLoader,
-} from '../typegend/scripts';
+} from '../../../typegend/scripts';
 
 using launched = await launchTestNode();
 

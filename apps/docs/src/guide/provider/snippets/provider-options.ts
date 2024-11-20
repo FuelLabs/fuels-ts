@@ -1,6 +1,6 @@
 import { Provider } from 'fuels';
 
-import { LOCAL_NETWORK_URL } from '../env';
+import { LOCAL_NETWORK_URL } from '../../../env';
 
 async function fetchSomeExternalCredentials() {
   return Promise.resolve('credential');

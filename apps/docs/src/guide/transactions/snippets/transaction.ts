@@ -1,6 +1,10 @@
 import { Provider, Wallet } from 'fuels';
 
-import { LOCAL_NETWORK_URL, WALLET_PVT_KEY, WALLET_PVT_KEY_2 } from '../env';
+import {
+  LOCAL_NETWORK_URL,
+  WALLET_PVT_KEY,
+  WALLET_PVT_KEY_2,
+} from '../../../env';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 const sender = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);

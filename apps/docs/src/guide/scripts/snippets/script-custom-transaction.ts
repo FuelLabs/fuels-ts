@@ -3,8 +3,8 @@
 import { BN, ScriptTransactionRequest, coinQuantityfy } from 'fuels';
 import { ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
 
-import { EchoValuesFactory } from '../typegend/contracts/EchoValuesFactory';
-import { ScriptTransferToContract } from '../typegend/scripts/ScriptTransferToContract';
+import { EchoValuesFactory } from '../../../typegend/contracts/EchoValuesFactory';
+import { ScriptTransferToContract } from '../../../typegend/scripts/ScriptTransferToContract';
 
 using launched = await launchTestNode({
   contractsConfigs: [{ factory: EchoValuesFactory }],

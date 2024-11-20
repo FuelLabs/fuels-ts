@@ -1,8 +1,8 @@
 // #region multicall-3
 import { Provider, Wallet } from 'fuels';
 
-import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../env';
-import { EchoValuesFactory, ReturnContextFactory } from '../../typegend';
+import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
+import { EchoValuesFactory, ReturnContextFactory } from '../../../../typegend';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 const deployer = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);

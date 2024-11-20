@@ -1,11 +1,11 @@
 // #region contract-deployment-storage-slots
 import { Provider, Wallet } from 'fuels';
 
-import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../env';
+import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
 import {
   StorageTestContract,
   StorageTestContractFactory,
-} from '../../typegend';
+} from '../../../../typegend';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 const deployer = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);

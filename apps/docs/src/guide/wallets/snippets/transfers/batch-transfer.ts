@@ -2,7 +2,7 @@
 import type { TransferParams } from 'fuels';
 import { Provider, Wallet } from 'fuels';
 
-import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../env';
+import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 const sender = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);

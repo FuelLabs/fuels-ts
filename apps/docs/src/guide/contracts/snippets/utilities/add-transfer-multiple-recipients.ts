@@ -3,8 +3,8 @@ import type { TransferParams } from 'fuels';
 import { Provider, Wallet } from 'fuels';
 import { ASSET_A, ASSET_B } from 'fuels/test-utils';
 
-import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../env';
-import { EchoValuesFactory } from '../../typegend';
+import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
+import { EchoValuesFactory } from '../../../../typegend';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 const deployer = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);

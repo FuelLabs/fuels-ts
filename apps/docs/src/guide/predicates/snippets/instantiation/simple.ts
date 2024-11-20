@@ -1,8 +1,8 @@
 // #region predicate-simple-2
 import { Provider } from 'fuels';
 
-import { LOCAL_NETWORK_URL } from '../../env';
-import { ReturnTruePredicate } from '../../typegend';
+import { LOCAL_NETWORK_URL } from '../../../../env';
+import { ReturnTruePredicate } from '../../../../typegend';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 

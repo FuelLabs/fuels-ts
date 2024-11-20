@@ -4,7 +4,7 @@
 import type { WalletLocked, WalletUnlocked } from 'fuels';
 import { Provider, Wallet } from 'fuels';
 
-import { LOCAL_NETWORK_URL } from '../env';
+import { LOCAL_NETWORK_URL } from '../../../env';
 
 // We can use the `generate` to create a new unlocked wallet.
 const provider = await Provider.create(LOCAL_NETWORK_URL);

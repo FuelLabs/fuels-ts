@@ -1,8 +1,8 @@
 // #region minted-token-asset-id-2
 import { bn, getMintedAssetId, Provider, Wallet } from 'fuels';
 
-import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../env';
-import { TokenFactory } from '../../typegend';
+import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
+import { TokenFactory } from '../../../../typegend';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 const deployer = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);

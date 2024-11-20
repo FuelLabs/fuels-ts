@@ -1,8 +1,8 @@
 import type { BigNumberish } from 'fuels';
 import { Provider, Wallet } from 'fuels';
 
-import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
-import { EchoValuesFactory } from '../typegend';
+import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../env';
+import { EchoValuesFactory } from '../../../typegend';
 
 // #region arrays-1
 // in Sway: [u8; 5]

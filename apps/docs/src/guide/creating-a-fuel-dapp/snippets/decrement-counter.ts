@@ -2,8 +2,8 @@
 // #region full
 import { Wallet, Provider } from 'fuels';
 
-import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
-import { CounterFactory } from '../typegend/contracts';
+import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../env';
+import { CounterFactory } from '../../../typegend/contracts';
 
 // Let's create our provider from the network URL.
 const provider = await Provider.create(LOCAL_NETWORK_URL);
