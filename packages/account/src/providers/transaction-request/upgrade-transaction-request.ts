@@ -177,7 +177,7 @@ export class UpgradeTransactionRequest extends BaseTransactionRequest {
    *
    * @returns metadata gas cost for the upgrade transaction.
    */
-  metadataGas(gasCosts: GasCosts): BN {
+  override metadataGas(gasCosts: GasCosts): BN {
     const txBytesSize = this.byteSize();
 
     if (this.upgradePurpose.type === UpgradePurposeTypeEnum.ConsensusParameters) {

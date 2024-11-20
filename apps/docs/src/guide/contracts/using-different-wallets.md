@@ -6,7 +6,7 @@ This guide demonstrates how to make contract calls using different wallets and p
 
 To change the wallet associated with a contract instance, assign a new wallet to the instance's `account` property. This allows you to make contract calls with different wallets in a concise manner:
 
-<<< @/../../docs-snippets/src/guide/contracts/calls-with-different-wallets.test.ts#calls-with-different-wallets-1{ts:line-numbers}
+<<< @/../../docs-snippets2/src/contracts/utilities/using-different-wallet.ts#using-different-wallet{ts:line-numbers}
 
 ## Changing Providers
 

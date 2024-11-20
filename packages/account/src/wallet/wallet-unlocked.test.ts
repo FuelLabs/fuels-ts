@@ -54,9 +54,6 @@ describe('WalletUnlocked', () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
-    // #region wallet-transaction-signing
-    // #import { Provider, Wallet, Signer };
-
     const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
     const signedTransaction = await wallet.signTransaction(SCRIPT_TX_REQUEST);
     const chainId = wallet.provider.getChainId();
@@ -64,7 +61,7 @@ describe('WalletUnlocked', () => {
       SCRIPT_TX_REQUEST.getTransactionId(chainId),
       signedTransaction
     );
-    // #endregion wallet-transaction-signing
+
     expect(signedTransaction).toEqual(SIGNED_TX);
     expect(verifiedAddress).toEqual(wallet.address);
   });

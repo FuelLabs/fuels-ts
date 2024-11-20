@@ -330,7 +330,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @param eventName - The event name to listen
    * @param listener - The listener function
    */
-  on<E extends FuelConnectorEvents['type'], D extends FuelEventArg<E>>(
+  override on<E extends FuelConnectorEvents['type'], D extends FuelEventArg<E>>(
     eventName: E,
     listener: (data: D) => void
   ): this {

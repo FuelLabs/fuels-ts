@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // #region full
-import { randomBytes } from 'crypto';
 import {
   ArrayCoder,
   B256Coder,
@@ -16,6 +15,7 @@ import {
   TupleCoder,
   VecCoder,
   hexlify,
+  randomBytes,
 } from 'fuels';
 
 // #region working-with-bytes-1

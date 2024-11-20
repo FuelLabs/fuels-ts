@@ -365,6 +365,10 @@ describe('Provider', () => {
         val1: bn(186),
         val2: bn(0),
         val3: bn(0),
+        ra: bn(202),
+        rb: bn(186),
+        rc: bn(0),
+        rd: bn(0),
         pc: bn(0x2888),
         is: bn(0x2880),
       },
@@ -1876,6 +1880,48 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       data: expect.any(Uint8Array),
       daHeight: expect.any(BN),
     });
+  });
+
+  it('ensures getTransactions does not fetch unused data', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    await provider.produceBlocks(1);
+
+    const { transactions } = await provider.operations.getTransactions({
+      first: 1,
+    });
+
+    expect(transactions.edges.length).toBe(1);
+
+    const expectedData = {
+      rawPayload: expect.any(String),
+    };
+
+    expect(transactions.edges[0].node).toStrictEqual(expectedData);
+  });
+
+  it('ensures getBlockWithTransactions does not fetch unused transaction data', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    await provider.produceBlocks(1);
+
+    const blockNumber = await provider.getBlockNumber();
+
+    const { block } = await provider.operations.getBlockWithTransactions({
+      blockHeight: blockNumber.toString(),
+    });
+
+    expect(block).toBeDefined();
+    expect(block?.transactions.length).toBe(1);
+
+    const expectedData = {
+      id: expect.any(String),
+      rawPayload: expect.any(String),
+    };
+
+    expect(block?.transactions?.[0]).toStrictEqual(expectedData);
   });
 
   describe('paginated methods', () => {

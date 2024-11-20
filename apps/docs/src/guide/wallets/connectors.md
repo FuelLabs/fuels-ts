@@ -8,7 +8,7 @@ Fuel Wallet Connectors offer a standardized interface to integrate multiple wall
 
 To build your own wallet integration, you can create a custom connector that extends the abstract [`FuelConnector`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.FuelConnector.html) class. This interface provides a set of methods and events that allow you to interact with the wallet and handle various operations such as connecting, disconnecting, signing messages, and sending transactions.
 
-<<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-connector-extends{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-connector-extends{ts:line-numbers}
 
 ### Properties
 
@@ -18,7 +18,7 @@ The `FuelConnector` abstract class provides several properties that should be im
 
 The `name` property is simply a `string` on the connector that serves as an identifier and will be displayed to the end-user when selecting a connector.
 
-<<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-connector-name{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-connector-name{ts:line-numbers}
 
 ### `external`
 
@@ -43,17 +43,17 @@ The `install` object requires three properties:
 
 - `description` (_required_) - a `string` that will contain a description of the installation process.
 
-<<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-connector-metadata-install{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-connector-metadata-install{ts:line-numbers}
 
 ##### `image`
 
 The `metadata.image` property (_optional_) provides an image that will be displayed to the end-user when selecting a connector. The image will be a URL to the image to be displayed (this can be an inline data URI, encoded in base64).
 
-<<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-connector-metadata-image{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-connector-metadata-image{ts:line-numbers}
 
 You can even define a `light` and `dark` theme for the image by providing an object with the `light` and `dark` keys (these will take a similar URI as above).
 
-<<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-connector-metadata-image-theme{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-connector-metadata-image-theme{ts:line-numbers}
 
 ### Events
 
@@ -63,55 +63,55 @@ The `FuelConnector` class provides a number of events that enable developers to 
 
 The `accounts` event is emitted every time a connector's accounts change. The event data is an array of `string` addresses available on the network.
 
-<<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-connector-events-accounts{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-connector-events-accounts{ts:line-numbers}
 
 #### `connectors`
 
 The `connectors` event is emitted when the connectors are initialized. The event data is an array of [`FuelConnector`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.FuelConnector.html) objects available on the network.
 
-<<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-connector-events-connectors{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-connector-events-connectors{ts:line-numbers}
 
 #### `currentConnector`
 
 The `currentConnector` event is emitted every time the current connector changes. The event data is a [`FuelConnector`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.FuelConnector.html) object that is currently connected.
 
-<<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-connector-events-currentConnector{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-connector-events-currentConnector{ts:line-numbers}
 
 #### `currentAccount`
 
 The `currentAccount` event is emitted every time the current account changes. The event data is a string containing the current account address.
 
-<<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-connector-events-currentAccount{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-connector-events-currentAccount{ts:line-numbers}
 
 #### `connection`
 
 The `connection` event is emitted every time the connection status changes. The event data is a `boolean` value that is `true` if the connection is established and `false` otherwise.
 
-<<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-connector-events-connection{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-connector-events-connection{ts:line-numbers}
 
 #### `networks`
 
 The `networks` event is emitted every time the network changes. The event data will be a [`Network`](https://fuels-ts-docs-api.vercel.app/types/_fuel_ts_account.Network.html) object containing the current network information.
 
-<<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-connector-events-networks{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-connector-events-networks{ts:line-numbers}
 
 #### `currentNetwork`
 
 The `currentNetwork` event is emitted every time the current network changes. The event data will be a [`Network`](https://fuels-ts-docs-api.vercel.app/types/_fuel_ts_account.Network.html) object containing the current network information.
 
-<<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-connector-events-currentNetwork{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-connector-events-currentNetwork{ts:line-numbers}
 
 #### `assets`
 
 The `assets` event is emitted every time the assets change. The event data will be an array of [`Asset`](https://fuels-ts-docs-api.vercel.app/types/_fuel_ts_account.Asset.html) objects available on the network.
 
-<<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-connector-events-assets{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-connector-events-assets{ts:line-numbers}
 
 #### `abis`
 
 The `abis` event is emitted every time an ABI is added to a connector. The event data will be an array of [`FuelABI`](https://fuels-ts-docs-api.vercel.app/types/_fuel_ts_account.FuelABI.html) object.
 
-<<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-connector-events-assets{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-connector-events-assets{ts:line-numbers}
 
 ### Methods
 
@@ -324,7 +324,7 @@ The TS SDK exports the `Fuel` class, which serves as the connectors manager. Thi
 
 It can be instantiated as follows:
 
-<<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-instantiation-1{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/fuel-instantiation-one.ts#fuel-instantiation-1{ts:line-numbers}
 
 > [!NOTE] Note
 > We recommend initializing the Fuel class with the `init` method to avoid any potential race conditions that may arise from the async nature of instantiating a connector.
@@ -341,25 +341,25 @@ Several options can be passed to the `Fuel` connector manager:
 
 The `connectors` option provides a list of connectors with which the `Fuel` connector manager can interact. The manager interacts with the connectors, which in turn handle communication with the respective wallet. You can find a list of all the connectors in our [`FuelLabs/fuel-connectors`](https://github.com/FuelLabs/fuel-connectors).
 
-Below, we initialize the manager using the `defaultConnectors` method which provides an array of all the default connectors available in the `fuel-connectors` package. Supplying the `devMode` flag as `true` will enable the development wallet for the connectors (to install visit our [wallet documentation](https://docs.fuel.network/docs/wallet/install/)).
+Below, we initialize the manager using the `defaultConnectors` method which provides an array of all the default connectors available in the `fuel-connectors` package. It's being mocked here for the purposes of this example, but you can provide your own custom connectors. Supplying the `devMode` flag as `true` will enable the development wallet for the connectors (to install visit our [wallet documentation](https://docs.fuel.network/docs/wallet/install/)).
 
-<<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-options-connectors{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/fuel-instantiation-options.ts#fuel-options-connectors{ts:line-numbers}
 
 #### `storage`
 
 The `storage` is used internally to store the current connector state. It can be overridden by passing an instance that extends the `StorageAbstract` class.
 
-<<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-options-storage-memory{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/fuel-options-storage-memory.ts#fuel-options-storage-memory{ts:line-numbers}
 
 The default behavior will use `LocalStorage` if the `window` is available:
 
-<<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-options-storage-local{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/fuel-options-storage-local.ts#fuel-options-storage-local{ts:line-numbers}
 
 #### `targetObject`
 
 The `targetObject` provides a target with which the `Fuel` manager can interact. Used for registering events and can be overridden as follows:
 
-<<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-options-target-object{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/fuel-options-target-object.ts#fuel-options-target-object{ts:line-numbers}
 
 ### Methods
 
