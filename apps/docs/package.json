@@ -16,7 +16,8 @@
     "preview:docs": "vitepress preview",
     "dev:docs": "vitepress dev",
     "wrap:snippets": "tsx ./scripts/wrap-snippets.ts",
-    "build:forc": "pnpm fuels build"
+    "build:forc": "pnpm fuels build",
+    "type:check": "pnpm tsc --noEmit --project tsconfig.emit.json"
   },
   "keywords": [],
   "author": "",
