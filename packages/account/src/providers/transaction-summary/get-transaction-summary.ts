@@ -137,7 +137,10 @@ export interface GetTransactionsSummariesReturns {
   pageInfo: PageInfo;
 }
 
-/** @hidden */
+/**
+ * Gets transaction summaries for a given owner/address.
+ * @param params: The filters to apply to the query.
+ */
 export async function getTransactionsSummaries(
   params: GetTransactionsSummariesParams
 ): Promise<GetTransactionsSummariesReturns> {
