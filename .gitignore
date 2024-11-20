@@ -141,8 +141,7 @@ _site/
 Forc.lock
 
 # Ignore forc builds
-**/out/debug
-**/out/release
+**/out
 **/test-predicate-*/index.ts
 
 ## Ignore perf test files
@@ -169,3 +168,5 @@ Forc.lock
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+FUELS_VERSION

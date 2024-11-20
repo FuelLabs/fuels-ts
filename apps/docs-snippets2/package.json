@@ -7,11 +7,12 @@
     "build": "run-s wrap:snippets build:forc",
     "build:forc": "pnpm fuels build",
     "wrap:snippets": "tsx scripts/wrap-snippets.ts",
-    "pretest": "pnpm build",
+    "pretest": "./scripts/pretest.sh",
     "test": "cd ../.. && pnpm run test:filter apps/docs-snippets2"
   },
   "dependencies": {
-    "fuels": "workspace:*"
+    "fuels": "workspace:*",
+    "ethers": "^6.13.2"
   },
   "devDependencies": {
     "glob": "^10.4.5"

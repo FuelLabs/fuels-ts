@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 
 /*
-  Fuels version: 0.94.7
+  Fuels version: 0.97.0
 */
 
 import { Contract, ContractFactory, decompressBytecode } from "../../../../..";
@@ -23,7 +23,7 @@ export class Src14OwnedProxyFactory extends ContractFactory {
     super(bytecode, Src14OwnedProxy.abi, accountOrProvider);
   }
 
-  deploy<TContract extends Contract = Contract>(
+  override deploy<TContract extends Contract = Contract>(
     deployOptions?: DeployContractOptions
   ): Promise<DeployContractResult<TContract>> {
     return super.deploy({

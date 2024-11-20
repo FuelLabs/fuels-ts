@@ -19,7 +19,6 @@ describe('Script Coverage', () => {
       wallets: [wallet],
     } = launched;
 
-    // #region script-call-factory
     const foo = 33;
     const scriptInstance = new Script<BigNumberish[], BigNumberish>(
       ScriptMainArgs.bytecode,
@@ -30,7 +29,6 @@ describe('Script Coverage', () => {
     const { waitForResult } = await scriptInstance.functions.main(foo).call();
 
     const { value, logs } = await waitForResult();
-    // #endregion script-call-factory
 
     expect(value?.toString()).toEqual(bn(foo).toString());
     expect(logs).toEqual(['u8 foo', 33]);

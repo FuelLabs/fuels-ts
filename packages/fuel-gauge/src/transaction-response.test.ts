@@ -100,7 +100,14 @@ describe('TransactionResponse', () => {
   it('should ensure getTransactionSummary fetches a transaction and assembles transaction summary', async () => {
     using launched = await launchTestNode({
       nodeOptions: {
-        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+        args: [
+          '--poa-instant',
+          'false',
+          '--poa-interval-period',
+          '1s',
+          '--tx-ttl-check-interval',
+          '1s',
+        ],
       },
     });
 
@@ -160,7 +167,14 @@ describe('TransactionResponse', () => {
          * We need at least one long test to ensure that the keep-alive messages are handled correctly.
          * */
         nodeOptions: {
-          args: ['--poa-instant', 'false', '--poa-interval-period', '17sec'],
+          args: [
+            '--poa-instant',
+            'false',
+            '--poa-interval-period',
+            '17sec',
+            '--tx-ttl-check-interval',
+            '1s',
+          ],
         },
       });
 
@@ -202,7 +216,16 @@ describe('TransactionResponse', () => {
           amountPerCoin: 500_000,
         },
         nodeOptions: {
-          args: ['--poa-instant', 'false', '--poa-interval-period', '2s', '--tx-pool-ttl', '1s'],
+          args: [
+            '--poa-instant',
+            'false',
+            '--poa-interval-period',
+            '2s',
+            '--tx-pool-ttl',
+            '1s',
+            '--tx-ttl-check-interval',
+            '1s',
+          ],
           loggingEnabled: false,
         },
       });
@@ -245,7 +268,16 @@ describe('TransactionResponse', () => {
     async () => {
       using launched = await launchTestNode({
         nodeOptions: {
-          args: ['--poa-instant', 'false', '--poa-interval-period', '4s', '--tx-pool-ttl', '1s'],
+          args: [
+            '--poa-instant',
+            'false',
+            '--poa-interval-period',
+            '4s',
+            '--tx-pool-ttl',
+            '1s',
+            '--tx-ttl-check-interval',
+            '1s',
+          ],
           loggingEnabled: false,
         },
       });

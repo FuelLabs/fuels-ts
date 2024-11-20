@@ -1,5 +1,136 @@
 # Change Log
 
+## 0.97.0
+
+### Minor Changes
+
+- f607ba2: fix!: remove unnecessary nonce from message gql queries
+- 82e35a4: chore!: mandate `abi` in `Predicate` constructor
+- 8c77765: chore!: optimize `getTransactions` query
+- efdc721: chore!: limit TX pagination number for `getTransactionsSummaries`
+- 9a17971: chore!: remove `blockId` in transaction list responses
+- 174876c: chore!: optimize coin gql queries
+
+### Patch Changes
+
+- 28e9ed8: build(deps): bump the deps-minor group with 20 updates
+- c009812: docs: migrated `provider` docs snippets
+- b0e9c84: chore!: refactor predicate and script deployment
+- 9dba357: chore: upgrading `fuel-core` to `0.40.0`
+- eede61c: feat: implement batch transfer to contracts
+- 1226ac3: chore: fix receipts properties and deprecate incorrect ones
+- Updated dependencies [9dba357]
+- Updated dependencies [4e057d5]
+- Updated dependencies [7c162de]
+- Updated dependencies [1226ac3]
+  - @fuel-ts/versions@0.97.0
+  - @fuel-ts/errors@0.97.0
+  - @fuel-ts/transactions@0.97.0
+  - @fuel-ts/utils@0.97.0
+  - @fuel-ts/abi-coder@0.97.0
+  - @fuel-ts/address@0.97.0
+  - @fuel-ts/crypto@0.97.0
+  - @fuel-ts/math@0.97.0
+  - @fuel-ts/hasher@0.97.0
+  - @fuel-ts/merkle@0.97.0
+  - @fuel-ts/interfaces@0.97.0
+
+## 0.96.1
+
+### Patch Changes
+
+- 85072f7: fix: setup listeners current connector
+- 6b7b6de: feat: ensure that we fetch node info per estimation
+- b78d032: chore: validate tx max number of inputs
+- 987aed3: feat: using gas modifier at `Provider.getTransactionCost`
+- Updated dependencies [eb3b6c9]
+- Updated dependencies [4ae041e]
+- Updated dependencies [bdfd009]
+- Updated dependencies [987aed3]
+  - @fuel-ts/versions@0.96.1
+  - @fuel-ts/address@0.96.1
+  - @fuel-ts/math@0.96.1
+  - @fuel-ts/errors@0.96.1
+  - @fuel-ts/utils@0.96.1
+  - @fuel-ts/transactions@0.96.1
+  - @fuel-ts/abi-coder@0.96.1
+  - @fuel-ts/crypto@0.96.1
+  - @fuel-ts/merkle@0.96.1
+  - @fuel-ts/hasher@0.96.1
+  - @fuel-ts/interfaces@0.96.1
+
+## 0.96.0
+
+### Patch Changes
+
+- Updated dependencies [5bf6621]
+  - @fuel-ts/address@0.96.0
+  - @fuel-ts/transactions@0.96.0
+  - @fuel-ts/abi-coder@0.96.0
+  - @fuel-ts/crypto@0.96.0
+  - @fuel-ts/errors@0.96.0
+  - @fuel-ts/hasher@0.96.0
+  - @fuel-ts/interfaces@0.96.0
+  - @fuel-ts/math@0.96.0
+  - @fuel-ts/merkle@0.96.0
+  - @fuel-ts/utils@0.96.0
+  - @fuel-ts/versions@0.96.0
+
+## 0.95.0
+
+### Minor Changes
+
+- 55bfa6d: chore!: slim down `chainInfoFragment` and `GasCostsFragment`
+- 87da048: chore!: optimize balance queries
+
+### Patch Changes
+
+- d4e839f: chore: `fuel-core@0.37.1`, `forc@0.65.1`, and `create-fuels` toolchains
+- 74991ad: chore: merge `chain` and `nodeInfo` queries into one
+- fcbcc22: feat: bump transaction pagination limit to 60
+- 45f4a86: fix: provider cache
+- d968532: feat: add feature to check if hex is an account
+- c84abb3: feat: add source request header
+- 735bb1c: chore: update `fuel-core` to `0.38.0`
+- 9c70eba: feat: add pagination limit to `getTransactions`
+- d1b4505: chore: optimize blockWithTransactions query
+- Updated dependencies [d4e839f]
+- Updated dependencies [95a9650]
+- Updated dependencies [b733e81]
+- Updated dependencies [bf14023]
+- Updated dependencies [f7afa04]
+- Updated dependencies [735bb1c]
+  - @fuel-ts/versions@0.95.0
+  - @fuel-ts/math@0.95.0
+  - @fuel-ts/address@0.95.0
+  - @fuel-ts/interfaces@0.95.0
+  - @fuel-ts/errors@0.95.0
+  - @fuel-ts/utils@0.95.0
+  - @fuel-ts/abi-coder@0.95.0
+  - @fuel-ts/crypto@0.95.0
+  - @fuel-ts/merkle@0.95.0
+  - @fuel-ts/transactions@0.95.0
+  - @fuel-ts/hasher@0.95.0
+
+## 0.94.9
+
+### Patch Changes
+
+- 5194a85: chore: deprecate unused operation names
+- c2f0599: feat: deploying scripts and predicates
+- Updated dependencies [c2f0599]
+  - @fuel-ts/versions@0.94.9
+  - @fuel-ts/errors@0.94.9
+  - @fuel-ts/utils@0.94.9
+  - @fuel-ts/abi-coder@0.94.9
+  - @fuel-ts/address@0.94.9
+  - @fuel-ts/crypto@0.94.9
+  - @fuel-ts/math@0.94.9
+  - @fuel-ts/transactions@0.94.9
+  - @fuel-ts/hasher@0.94.9
+  - @fuel-ts/merkle@0.94.9
+  - @fuel-ts/interfaces@0.94.9
+
 ## 0.94.8
 
 ### Patch Changes

@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.89.4
+
+### Patch Changes
+
+- 4e057d5: chore: upgrading `forc` to `0.66.4`
+- 7c162de: chore: upgrading `forc` to `0.66.2`
+
+## 0.89.3
+
+### Patch Changes
+
+- d4e839f: chore: `fuel-core@0.37.1`, `forc@0.65.1`, and `create-fuels` toolchains
+- 95a9650: chore: update to `forc@0.65.2`
+
 ## 0.89.2
 
 ### Patch Changes

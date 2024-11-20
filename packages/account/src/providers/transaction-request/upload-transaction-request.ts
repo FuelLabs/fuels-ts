@@ -5,8 +5,7 @@ import { type TransactionUpload, TransactionType } from '@fuel-ts/transactions';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
-import type { GqlGasCosts } from '../__generated__/operations';
-import type { ChainInfo } from '../provider';
+import type { ChainInfo, GasCosts } from '../provider';
 import { calculateMetadataGasForTxUpload, calculateMinGasForTxUpload } from '../utils';
 
 import { hashTransaction } from './hash-transaction';
@@ -123,7 +122,7 @@ export class UploadTransactionRequest extends BaseTransactionRequest {
    *
    * @returns metadata gas cost for the upload transaction.
    */
-  metadataGas(gasCosts: GqlGasCosts): BN {
+  override metadataGas(gasCosts: GasCosts): BN {
     return calculateMetadataGasForTxUpload({
       gasCosts,
       txBytesSize: this.byteSize(),
@@ -139,7 +138,7 @@ export class UploadTransactionRequest extends BaseTransactionRequest {
    *
    * @returns the minimum gas for the upload transaction
    */
-  calculateMinGas(chainInfo: ChainInfo): BN {
+  override calculateMinGas(chainInfo: ChainInfo): BN {
     const minGas = super.calculateMinGas(chainInfo);
     const { gasCosts } = chainInfo.consensusParameters;
     const bytecode = this.witnesses[this.witnessIndex] ?? ZeroBytes32;

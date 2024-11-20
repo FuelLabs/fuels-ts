@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.97.0
+
+## 0.96.1
+
+## 0.96.0
+
+## 0.95.0
+
+### Patch Changes
+
+- f7afa04: feat: add checksum utils for address
+
+## 0.94.9
+
 ## 0.94.8
 
 ## 0.94.7

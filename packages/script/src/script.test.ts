@@ -50,10 +50,6 @@ const callScript = async <TData, TResult>(
   return { transactionResult, result, response };
 };
 
-// #region script-init
-// #import { ScriptRequest, arrayify };
-// #context const scriptBin = readFileSync(join(__dirname, './path/to/script-binary.bin'));
-
 type MyStruct = {
   arg_one: boolean;
   arg_two: BigNumberish;
@@ -86,7 +82,6 @@ describe('Script', () => {
       }
     );
   });
-  // #endregion script-init
 
   it('can call a script', async () => {
     using launched = await setupTestProviderAndWallets();
