@@ -24,7 +24,7 @@ export class Src14OwnedProxyFactory extends ContractFactory<Src14OwnedProxy> {
       bytecode,
       Src14OwnedProxy.abi,
       accountOrProvider,
-      { storageSlots: Src14OwnedProxy.storageSlots }
+      Src14OwnedProxy.storageSlots
     );
   }
 

@@ -122,21 +122,19 @@ export default class ContractFactory<TContract extends Contract = Contract> {
    * @returns The CreateTransactionRequest object for deploying the contract.
    */
   createTransactionRequest(deployOptions?: DeployContractOptions & { bytecode?: BytesLike }) {
-    const mergedStorageSlots = (deployOptions?.storageSlots ?? [])
+    const storageSlots = (deployOptions?.storageSlots ?? [])
       .concat(this.storageSlots)
-      .map((x) => (x.key.startsWith('0x') ? x : { ...x, key: `0x${x.key}` }))
-      .filter((el, index, self) => self.findIndex((s) => s.key === el.key) === index);
-    const storageSlots = mergedStorageSlots
-      ?.map(({ key, value }) => ({
+      .map(({ key, value }) => ({
         key: hexlifyWithPrefix(key),
         value: hexlifyWithPrefix(value),
       }))
+      .filter((el, index, self) => self.findIndex((s) => s.key === el.key) === index)
       .sort(({ key: keyA }, { key: keyB }) => keyA.localeCompare(keyB));
 
     const options = {
       salt: randomBytes(32),
       ...(deployOptions ?? {}),
-      storageSlots: storageSlots || [],
+      storageSlots,
     };
 
     if (!this.provider) {
