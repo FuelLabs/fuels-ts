@@ -43,19 +43,6 @@ pnpm install
 pnpm build
 ```
 
-# Files and Directories Created After Installation
-
-After running `pnpm install` and `pnpm build`, the following files and directories are created:
-
-- Forc Repository:
-
-  - Located at `internal/forc/sway-repo`.
-  - Contains the source code for the version of `forc` you are using.
-
-- Fuel-Core Repository:
-  - Located at `internal/fuel-core/fuel-core-repo`.
-  - Contains the source code for the version of `fuel-core` you are using.
-
 # Developing
 
 For building everything in watch-mode, run:
@@ -169,11 +156,22 @@ Similarly, to use an unreleased version of `fuel-core`:
 > [!Note]
 > The `internal/forc/sway-repo` and `internal/fuel-core/fuel-core-repo` directory will contain a local clone of the Sway and Fuel Core repository respectively, at the specific version or git branch you have specified in the `internal/forc/VERSION` and `internal/fuel-core/VERSION` file.
 
-# Switching Back to Standard Binaries
+## Unreleased Files and Directories Created After Installation
+
+After running `pnpm install` and `pnpm build`, the following files and directories are created:
+
+- Forc Repository:
+
+  - Located at `internal/forc/sway-repo`.
+  - Contains the source code for the version of `forc` you are using.
+
+- Fuel-Core Repository:
+  - Located at `internal/fuel-core/fuel-core-repo`.
+  - Contains the source code for the version of `fuel-core` you are using.
+
+## Switching Back to Standard Binaries
 
 If you switch back to using standard binaries you might encounter issues where the SDK still uses the previously downloaded unreleased binaries.
-
-## Resolving the Issue
 
 To resolve the issue and ensure the SDK uses the correct binaries:
 
