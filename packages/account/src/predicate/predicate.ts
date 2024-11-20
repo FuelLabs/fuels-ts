@@ -23,6 +23,7 @@ import type {
   TransactionRequestLike,
   TransactionResponse,
 } from '../providers';
+import { deployScriptOrPredicate } from '../utils/deployScriptOrPredicate';
 
 import { getPredicateRoot } from './utils';
 
@@ -32,7 +33,7 @@ export type PredicateParams<
 > = {
   bytecode: BytesLike;
   provider: Provider;
-  abi?: JsonAbi;
+  abi: JsonAbi;
   data?: TData;
   configurableConstants?: TConfigurables;
 };
@@ -46,7 +47,7 @@ export class Predicate<
 > extends Account {
   bytes: Uint8Array;
   predicateData: TData = [] as unknown as TData;
-  interface?: Interface;
+  interface: Interface;
 
   /**
    * Creates an instance of the Predicate class.
@@ -116,7 +117,9 @@ export class Predicate<
    * @param transactionRequestLike - The transaction request-like object.
    * @returns A promise that resolves to the transaction response.
    */
-  sendTransaction(transactionRequestLike: TransactionRequestLike): Promise<TransactionResponse> {
+  override sendTransaction(
+    transactionRequestLike: TransactionRequestLike
+  ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
 
     return super.sendTransaction(transactionRequest, { estimateTxDependencies: false });
@@ -128,7 +131,9 @@ export class Predicate<
    * @param transactionRequestLike - The transaction request-like object.
    * @returns A promise that resolves to the call result.
    */
-  simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
+  override simulateTransaction(
+    transactionRequestLike: TransactionRequestLike
+  ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     return super.simulateTransaction(transactionRequest, { estimateTxDependencies: false });
   }
@@ -152,20 +157,17 @@ export class Predicate<
    */
   private static processPredicateData(
     bytes: BytesLike,
-    jsonAbi?: JsonAbi,
+    jsonAbi: JsonAbi,
     configurableConstants?: { [name: string]: unknown }
   ) {
     let predicateBytes = arrayify(bytes);
-    let abiInterface: Interface | undefined;
+    const abiInterface: Interface = new Interface(jsonAbi);
 
-    if (jsonAbi) {
-      abiInterface = new Interface(jsonAbi);
-      if (abiInterface.functions.main === undefined) {
-        throw new FuelError(
-          ErrorCode.ABI_MAIN_METHOD_MISSING,
-          'Cannot use ABI without "main" function.'
-        );
-      }
+    if (abiInterface.functions.main === undefined) {
+      throw new FuelError(
+        ErrorCode.ABI_MAIN_METHOD_MISSING,
+        'Cannot use ABI without "main" function.'
+      );
     }
 
     if (configurableConstants && Object.keys(configurableConstants).length) {
@@ -189,7 +191,7 @@ export class Predicate<
    * @param excludedIds - IDs of resources to be excluded from the query.
    * @returns A promise that resolves to an array of Resources.
    */
-  async getResourcesToSpend(
+  override async getResourcesToSpend(
     quantities: CoinQuantityLike[] /** IDs of coins to exclude */,
     excludedIds?: ExcludeResourcesOption
   ): Promise<Resource[]> {
@@ -211,7 +213,7 @@ export class Predicate<
    * @param coins - An array of `FakeResources` objects representing the coins.
    * @returns An array of `Resource` objects with generated properties.
    */
-  generateFakeResources(coins: FakeResources[]): Array<Resource> {
+  override generateFakeResources(coins: FakeResources[]): Array<Resource> {
     return super.generateFakeResources(coins).map((coin) => ({
       ...coin,
       predicate: hexlify(this.bytes),
@@ -230,18 +232,11 @@ export class Predicate<
   private static setConfigurableConstants(
     bytes: Uint8Array,
     configurableConstants: { [name: string]: unknown },
-    abiInterface?: Interface
+    abiInterface: Interface
   ) {
     const mutatedBytes = bytes;
 
     try {
-      if (!abiInterface) {
-        throw new FuelError(
-          ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
-          'Cannot validate configurable constants because the Predicate was instantiated without a JSON ABI'
-        );
-      }
-
       if (Object.keys(abiInterface.configurables).length === 0) {
         throw new FuelError(
           ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
@@ -310,5 +305,29 @@ export class Predicate<
     }
 
     return index;
+  }
+
+  /**
+   *
+   * @param account - The account used to pay the deployment costs.
+   * @returns The _blobId_ and a _waitForResult_ callback that returns the deployed predicate
+   * once the blob deployment transaction finishes.
+   *
+   * The returned loader predicate will have the same configurable constants
+   * as the original predicate which was used to generate the loader predicate.
+   */
+  async deploy<T = this>(account: Account) {
+    return deployScriptOrPredicate<T>({
+      deployer: account,
+      abi: this.interface.jsonAbi,
+      bytecode: this.bytes,
+      loaderInstanceCallback: (loaderBytecode, newAbi) =>
+        new Predicate({
+          bytecode: loaderBytecode,
+          abi: newAbi,
+          provider: this.provider,
+          data: this.predicateData,
+        }) as T,
+    });
   }
 }

@@ -1,4 +1,3 @@
-/* eslint-disable no-continue */
 import type { BytesLike } from '@fuel-ts/interfaces';
 
 import { arrayify } from './arrayify';

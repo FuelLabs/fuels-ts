@@ -29,6 +29,7 @@ import type { ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
 import Provider, {
   BLOCKS_PAGE_SIZE_LIMIT,
   DEFAULT_RESOURCE_CACHE_TTL,
+  GAS_USED_MODIFIER,
   RESOURCES_PAGE_SIZE_LIMIT,
 } from './provider';
 import type { ExcludeResourcesOption } from './resource';
@@ -79,6 +80,10 @@ const createBasicAuth = (launchNodeUrl: string) => {
  * @group node
  */
 describe('Provider', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should ensure supports basic auth', async () => {
     using launched = await setupTestProviderAndWallets();
     const {
@@ -95,6 +100,22 @@ describe('Provider', () => {
     const [requestUrl, request] = fetchSpy.mock.calls[0];
     expect(requestUrl).toEqual(url);
     expect(request?.headers).toMatchObject(expectedHeaders);
+  });
+
+  it('adds source header with version on request', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider: { url },
+    } = launched;
+    const provider = await Provider.create(url);
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    await provider.operations.getChain();
+
+    const [requestUrl, request] = fetchSpy.mock.calls[0];
+    expect(requestUrl).toEqual(url);
+    expect(request?.headers).toMatchObject({ Source: `ts-sdk-${versions.FUELS}` });
   });
 
   it('should ensure we can reuse provider URL to connect to a authenticated endpoint', async () => {
@@ -127,11 +148,11 @@ describe('Provider', () => {
 
   it('should ensure that custom requestMiddleware is not overwritten by basic auth', async () => {
     using launched = await setupTestProviderAndWallets();
-    const {
-      provider: { url },
-    } = launched;
+    const { provider } = launched;
 
-    const { urlWithAuth } = createBasicAuth(url);
+    Provider.clearChainAndNodeCaches();
+
+    const { urlWithAuth } = createBasicAuth(provider.url);
 
     const requestMiddleware = vi.fn().mockImplementation((options) => options);
 
@@ -298,7 +319,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.36.0');
+    expect(version).toEqual(versions.FUEL_CORE);
   });
 
   it('can call()', async () => {
@@ -344,6 +365,10 @@ describe('Provider', () => {
         val1: bn(186),
         val2: bn(0),
         val3: bn(0),
+        ra: bn(202),
+        rb: bn(186),
+        rc: bn(0),
+        rd: bn(0),
         pc: bn(0x2888),
         is: bn(0x2880),
       },
@@ -803,7 +828,7 @@ describe('Provider', () => {
     });
   });
 
-  it('should throws if max of inputs was exceeded', async () => {
+  it('should validate max number of inputs at sendTransaction method', async () => {
     const maxInputs = 2;
     using launched = await setupTestProviderAndWallets({
       nodeOptions: {
@@ -831,29 +856,57 @@ describe('Provider', () => {
       provider,
     } = launched;
 
-    const request = new ScriptTransactionRequest();
+    const request = new ScriptTransactionRequest({
+      gasLimit: 1000,
+      maxFee: 1000,
+    });
 
-    const quantities = [coinQuantityfy([1000, ASSET_A]), coinQuantityfy([500, ASSET_B])];
+    const quantities = [
+      coinQuantityfy([1000, ASSET_A]),
+      coinQuantityfy([500, ASSET_B]),
+      coinQuantityfy([5000, provider.getBaseAssetId()]),
+    ];
+
     const resources = await sender.getResourcesToSpend(quantities);
-
     request.addCoinOutput(receiver.address, 500, provider.getBaseAssetId());
-
-    const txCost = await sender.getTransactionCost(request);
-
-    request.gasLimit = txCost.gasUsed;
-    request.maxFee = txCost.maxFee;
-
     request.addResources(resources);
 
-    await sender.fund(request, txCost);
+    // We need to add more resources manually here as a single `getResourcesToSpend` call
+    // will always truncate to `maxInputs`. So we need to add more resources manually
+    // to test our validation logic.
+    const moreResources = await sender.getResourcesToSpend(quantities);
+    request.addResources(moreResources);
 
     await expectToThrowFuelError(
       () => sender.sendTransaction(request),
       new FuelError(
         ErrorCode.MAX_INPUTS_EXCEEDED,
-        'The transaction exceeds the maximum allowed number of inputs.'
+        `The transaction exceeds the maximum allowed number of inputs. Tx inputs: 4, max inputs: ${maxInputs}`
       )
     );
+  });
+
+  it('should validate max number of inputs when estimating TX', async () => {
+    using launched = await setupTestProviderAndWallets({
+      walletsConfig: {
+        amountPerCoin: 100,
+        coinsPerAsset: 400,
+      },
+    });
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+
+    const request = new ScriptTransactionRequest();
+    request.addCoinOutput(wallet.address, 40_000, provider.getBaseAssetId());
+
+    const { coins } = await wallet.getCoins(provider.getBaseAssetId());
+    request.addResources(coins);
+
+    await expectToThrowFuelError(() => wallet.getTransactionCost(request), {
+      code: ErrorCode.MAX_INPUTS_EXCEEDED,
+    });
   });
 
   it('should throws if max of ouputs was exceeded', async () => {
@@ -897,7 +950,7 @@ describe('Provider', () => {
       () => sender.sendTransaction(request),
       new FuelError(
         ErrorCode.MAX_OUTPUTS_EXCEEDED,
-        'The transaction exceeds the maximum allowed number of outputs.'
+        `The transaction exceeds the maximum allowed number of outputs. Tx outputs: ${request.outputs.length}, max outputs: ${maxOutputs}`
       )
     );
   });
@@ -960,7 +1013,7 @@ describe('Provider', () => {
     const { provider } = launched;
     await provider.produceBlocks(1);
     const block = await provider.getBlockWithTransactions('latest');
-    const { transactions } = await provider.getTransactions({ first: 100 });
+    const { transactions } = await provider.getTransactions({ first: 30 });
     expect(block).toStrictEqual({
       id: expect.any(String),
       height: expect.any(BN),
@@ -1030,57 +1083,48 @@ describe('Provider', () => {
     expect(provider.getNode()).toBeDefined();
   });
 
-  it('should cache chain and node info', async () => {
-    Provider.clearChainAndNodeCaches();
-
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
-
-    expect(provider.getChain()).toBeDefined();
-    expect(provider.getNode()).toBeDefined();
-  });
-
   it('should ensure getChain and getNode uses the cache and does not fetch new data', async () => {
-    Provider.clearChainAndNodeCaches();
-
-    const spyFetchChainAndNodeInfo = vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
-    const spyFetchChain = vi.spyOn(Provider.prototype, 'fetchChain');
-    const spyFetchNode = vi.spyOn(Provider.prototype, 'fetchNode');
-
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
-    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
-    expect(spyFetchChain).toHaveBeenCalledTimes(1);
-    expect(spyFetchNode).toHaveBeenCalledTimes(1);
+    const { error } = await safeExec(() => {
+      provider.getChain();
+      provider.getNode();
+    });
 
-    provider.getChain();
-    provider.getNode();
-
-    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
-    expect(spyFetchChain).toHaveBeenCalledTimes(1);
-    expect(spyFetchNode).toHaveBeenCalledTimes(1);
+    expect(error).toBeUndefined();
   });
 
-  it('should ensure fetchChainAndNodeInfo always fetch new data', async () => {
-    Provider.clearChainAndNodeCaches();
-
-    const spyFetchChainAndNodeInfo = vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
-    const spyFetchChain = vi.spyOn(Provider.prototype, 'fetchChain');
-    const spyFetchNode = vi.spyOn(Provider.prototype, 'fetchNode');
-
+  it('should ensure creating new instances should not re-fetch chain and node info', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
-    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
-    expect(spyFetchChain).toHaveBeenCalledTimes(1);
-    expect(spyFetchNode).toHaveBeenCalledTimes(1);
+    const spyFetchChainAndNodeInfo = vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
+    const spyGetChainAndNodeInfo = vi.spyOn(provider.operations, 'getChainAndNodeInfo');
+
+    const INSTANCES_NUM = 5;
+
+    const promises = Array.from({ length: INSTANCES_NUM }, async () =>
+      Provider.create(provider.url)
+    );
+    await Promise.all(promises);
+
+    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(INSTANCES_NUM);
+
+    expect(spyGetChainAndNodeInfo).not.toHaveBeenCalled();
+  });
+
+  it('should ensure fetchChainAndNodeInfo uses cached data', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    Provider.clearChainAndNodeCaches();
+
+    const spyOperation = vi.spyOn(provider.operations, 'getChainAndNodeInfo');
 
     await provider.fetchChainAndNodeInfo();
 
-    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(2);
-    expect(spyFetchChain).toHaveBeenCalledTimes(2);
-    expect(spyFetchNode).toHaveBeenCalledTimes(2);
+    expect(spyOperation).toHaveBeenCalledTimes(1);
   });
 
   it('should ensure getGasConfig return essential gas related data', async () => {
@@ -1186,50 +1230,6 @@ which is not supported by the version of the TS SDK that you are using.
 Things may not work as expected.
 Supported fuel-core version: ${mock.supportedVersion}.`
     );
-  });
-
-  it('should ensure fuel node version warning is shown before chain incompatibility error', async () => {
-    const { FUEL_CORE } = versions;
-    const [major, minor, patch] = FUEL_CORE.split('.');
-    const majorMismatch = major === '0' ? 1 : parseInt(patch, 10) - 1;
-
-    const mock = {
-      isMajorSupported: false,
-      isMinorSupported: true,
-      isPatchSupported: true,
-      supportedVersion: `${majorMismatch}.${minor}.${patch}`,
-    };
-
-    if (mock.supportedVersion === FUEL_CORE) {
-      throw new Error();
-    }
-
-    const spy = vi.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
-    spy.mockImplementationOnce(() => mock);
-
-    const consoleWarnSpy = vi.spyOn(console, 'warn');
-
-    const graphQLDummyError = `Unknown field "height" on type "Block".
-      Unknown field "version" on type "ScriptParameters".
-      Unknown field "version" on type "ConsensusParameters".`;
-
-    const fuelError = new FuelError(ErrorCode.INVALID_REQUEST, graphQLDummyError);
-
-    const fetchChainSpy = vi
-      .spyOn(Provider.prototype, 'fetchChain')
-      .mockImplementationOnce(async () => Promise.reject(fuelError));
-
-    await expectToThrowFuelError(() => setupTestProviderAndWallets(), fuelError);
-
-    expect(consoleWarnSpy).toHaveBeenCalledOnce();
-    expect(consoleWarnSpy).toHaveBeenCalledWith(
-      `The Fuel Node that you are trying to connect to is using fuel-core version ${FUEL_CORE},
-which is not supported by the version of the TS SDK that you are using.
-Things may not work as expected.
-Supported fuel-core version: ${mock.supportedVersion}.`
-    );
-
-    expect(fetchChainSpy).toHaveBeenCalledOnce();
   });
 
   it('An invalid subscription request throws a FuelError and does not hold the test runner (closes all handles)', async () => {
@@ -1383,6 +1383,27 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     expect(gasPrice.eq(0)).toBeTruthy();
     expect(maxFee.eq(0)).not.toBeTruthy();
     expect(minFee.eq(0)).not.toBeTruthy();
+  });
+
+  it('should ensure gas used has a modifier', async () => {
+    using launched = await setupTestProviderAndWallets();
+
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const request = new ScriptTransactionRequest();
+    request.addCoinOutput(wallet.address, 1000, provider.getBaseAssetId());
+
+    const spyGetGasUsedFromReceipts = vi.spyOn(gasMod, 'getGasUsedFromReceipts');
+    const cost = await wallet.getTransactionCost(request);
+
+    const pristineGasUsed = spyGetGasUsedFromReceipts.mock.results[0].value;
+
+    expect(cost.gasUsed.toNumber()).toBe(
+      bn(pristineGasUsed.toNumber() * GAS_USED_MODIFIER).toNumber()
+    );
   });
 
   it('should accept string addresses in methods that require an address', async () => {
@@ -1724,6 +1745,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   test('requestMiddleware modifies the request before being sent to the node [sync]', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
+    Provider.clearChainAndNodeCaches();
 
     const fetchSpy = vi.spyOn(global, 'fetch');
     await Provider.create(provider.url, {
@@ -1744,6 +1766,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   test('requestMiddleware modifies the request before being sent to the node [async]', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
+    Provider.clearChainAndNodeCaches();
 
     const fetchSpy = vi.spyOn(global, 'fetch');
     await Provider.create(provider.url, {
@@ -1795,6 +1818,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   test('custom fetch works with requestMiddleware', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
+    Provider.clearChainAndNodeCaches();
 
     let requestHeaders: HeadersInit | undefined;
     await Provider.create(provider.url, {
@@ -1856,6 +1880,48 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       data: expect.any(Uint8Array),
       daHeight: expect.any(BN),
     });
+  });
+
+  it('ensures getTransactions does not fetch unused data', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    await provider.produceBlocks(1);
+
+    const { transactions } = await provider.operations.getTransactions({
+      first: 1,
+    });
+
+    expect(transactions.edges.length).toBe(1);
+
+    const expectedData = {
+      rawPayload: expect.any(String),
+    };
+
+    expect(transactions.edges[0].node).toStrictEqual(expectedData);
+  });
+
+  it('ensures getBlockWithTransactions does not fetch unused transaction data', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    await provider.produceBlocks(1);
+
+    const blockNumber = await provider.getBlockNumber();
+
+    const { block } = await provider.operations.getBlockWithTransactions({
+      blockHeight: blockNumber.toString(),
+    });
+
+    expect(block).toBeDefined();
+    expect(block?.transactions.length).toBe(1);
+
+    const expectedData = {
+      id: expect.any(String),
+      rawPayload: expect.any(String),
+    };
+
+    expect(block?.transactions?.[0]).toStrictEqual(expectedData);
   });
 
   describe('paginated methods', () => {
@@ -2015,6 +2081,52 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       expect(pageInfo.endCursor).toBeDefined();
     });
 
+    it('can get transactions', async () => {
+      using launched = await setupTestProviderAndWallets();
+      const { provider } = launched;
+
+      await provider.produceBlocks(70);
+
+      await expectToThrowFuelError(
+        () => provider.getTransactions({ first: 80 }),
+        new FuelError(
+          ErrorCode.INVALID_INPUT_PARAMETERS,
+          'Pagination limit for this query cannot exceed 60 items'
+        )
+      );
+
+      let { transactions, pageInfo } = await provider.getTransactions({
+        first: 60,
+      });
+
+      expect(transactions.length).toBe(60);
+      expect(pageInfo.hasNextPage).toBeTruthy();
+      expect(pageInfo.hasPreviousPage).toBeFalsy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+
+      ({ transactions, pageInfo } = await provider.getTransactions({
+        after: pageInfo.endCursor,
+      }));
+
+      expect(transactions.length).toBe(10);
+      expect(pageInfo.hasNextPage).toBeFalsy();
+      expect(pageInfo.hasPreviousPage).toBeTruthy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+
+      ({ transactions, pageInfo } = await provider.getTransactions({
+        before: pageInfo.startCursor,
+        last: 10,
+      }));
+
+      expect(transactions.length).toBe(10);
+      expect(pageInfo.hasNextPage).toBeTruthy();
+      expect(pageInfo.hasPreviousPage).toBeTruthy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+    });
+
     describe('pagination arguments', async () => {
       using launched = await setupTestProviderAndWallets({
         walletsConfig: {
@@ -2129,5 +2241,32 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       expect(balance.amount.toNumber()).toBe(fundAmount);
       expect([baseAssetId, ASSET_A, ASSET_B].includes(balance.assetId)).toBeTruthy();
     });
+  });
+
+  test('should not refetch consensus params in less than 1min', async () => {
+    using launched = await setupTestProviderAndWallets();
+
+    const provider = await Provider.create(launched.provider.url);
+    const fetchChainAndNodeInfo = vi.spyOn(provider, 'fetchChainAndNodeInfo');
+
+    // calling twice
+    await provider.autoRefetchConfigs();
+    await provider.autoRefetchConfigs();
+
+    expect(fetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
+  });
+
+  test('should refetch consensus params if >1 min has passed', async () => {
+    using launched = await setupTestProviderAndWallets();
+
+    const provider = await Provider.create(launched.provider.url);
+    const fetchChainAndNodeInfo = vi.spyOn(provider, 'fetchChainAndNodeInfo');
+
+    // calling twice
+    await provider.autoRefetchConfigs();
+    provider.consensusParametersTimestamp = 0;
+    await provider.autoRefetchConfigs();
+
+    expect(fetchChainAndNodeInfo).toHaveBeenCalledTimes(2);
   });
 });

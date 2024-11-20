@@ -276,6 +276,10 @@ export default defineConfig({
                 link: '/guide/scripts/instantiating-a-script',
               },
               {
+                text: 'Deploying Scripts',
+                link: '/guide/scripts/deploying-scripts',
+              },
+              {
                 text: 'Configurable Constants',
                 link: '/guide/scripts/configurable-constants',
               },
@@ -297,6 +301,10 @@ export default defineConfig({
               {
                 text: 'Instantiating A Predicate',
                 link: '/guide/predicates/instantiating-a-predicate',
+              },
+              {
+                text: 'Deploying Predicates',
+                link: '/guide/predicates/deploying-predicates',
               },
               {
                 text: 'Configurable Constants',
@@ -413,6 +421,10 @@ export default defineConfig({
               {
                 text: 'Resubmitting Failed Transactions',
                 link: '/guide/cookbook/resubmitting-failed-transactions',
+              },
+              {
+                text: 'Combining UTXOs',
+                link: '/guide/cookbook/combining-utxos',
               },
             ],
           },

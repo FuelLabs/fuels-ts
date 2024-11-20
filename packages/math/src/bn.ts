@@ -2,7 +2,6 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import BnJs from 'bn.js';
 
 import { DEFAULT_DECIMAL_UNITS, DEFAULT_MIN_PRECISION, DEFAULT_PRECISION } from './configs';
-import { toFixed } from './decimal';
 import type { FormatConfig } from './types';
 
 type CompareResult = -1 | 0 | 1;
@@ -63,7 +62,7 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
 
   // ANCHOR: HELPERS
   // make sure we always include `0x` in hex strings
-  toString(base?: number | 'hex', length?: number) {
+  override toString(base?: number | 'hex', length?: number) {
     const output = super.toString(base, length);
 
     if (base === 16 || base === 'hex') {
@@ -98,123 +97,164 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
     return Uint8Array.from(this.toArray(undefined, bytesPadding));
   }
 
-  toJSON(): string {
+  override toJSON(): string {
     return this.toString(16);
   }
 
-  valueOf(): string {
+  override valueOf(): string {
     return this.toString();
   }
 
   format(options?: FormatConfig): string {
     const {
       units = DEFAULT_DECIMAL_UNITS,
-      precision = DEFAULT_PRECISION,
-      minPrecision = DEFAULT_MIN_PRECISION,
+      precision: initialPrecision = DEFAULT_PRECISION,
+      minPrecision: initialMinPrecision = DEFAULT_MIN_PRECISION,
     } = options || {};
 
-    const formattedUnits = this.formatUnits(units);
-    const formattedFixed = toFixed(formattedUnits, { precision, minPrecision });
-
-    // increase precision if formatted is zero, but has more numbers out of precision
-    if (!parseFloat(formattedFixed)) {
-      const [, originalDecimals = '0'] = formattedUnits.split('.');
-      const firstNonZero = originalDecimals.match(/[1-9]/);
-
-      if (firstNonZero && firstNonZero.index && firstNonZero.index + 1 > precision) {
-        const [valueUnits = '0'] = formattedFixed.split('.');
-        return `${valueUnits}.${originalDecimals.slice(0, firstNonZero.index + 1)}`;
-      }
+    // If units is 0, return the whole number formatted with commas
+    if (units === 0) {
+      return this.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
 
-    return formattedFixed;
+    // Adjust precision and minPrecision
+    // TODO: This really should throw an error because you can't have a precision less than the minPrecision but this would be a breaking change
+    const minPrecision =
+      initialMinPrecision > initialPrecision ? initialPrecision : initialMinPrecision;
+    const precision =
+      initialPrecision > initialMinPrecision ? initialPrecision : initialMinPrecision;
+
+    const formattedUnits = this.formatUnits(units);
+    const [integerPart, fractionalPart = ''] = formattedUnits.split('.');
+
+    const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+    // If precision is 0, return only the integer part
+    if (precision === 0) {
+      return formattedInteger;
+    }
+
+    // Remove trailing zeros and apply precision
+    let formattedFractional = fractionalPart.replace(/0+$/, '');
+
+    // Always return the first non-zero number if it exceeds the precision and the integer part is zero
+    if (formattedFractional.length > precision) {
+      if (integerPart === '0') {
+        const firstNonZeroIndex = formattedFractional.search(/[1-9]/);
+        if (firstNonZeroIndex >= 0 && firstNonZeroIndex < precision) {
+          formattedFractional = formattedFractional.slice(0, precision);
+        } else {
+          formattedFractional = formattedFractional.slice(0, firstNonZeroIndex + 1);
+        }
+      } else {
+        formattedFractional = formattedFractional.slice(0, precision);
+      }
+    } else {
+      formattedFractional = formattedFractional.slice(0, precision);
+    }
+
+    // Ensure we meet the minimum precision
+    if (formattedFractional.length < minPrecision) {
+      formattedFractional = formattedFractional.padEnd(minPrecision, '0');
+    }
+
+    // If after removing trailing zeros, the fractional part is empty and minPrecision is 0, return only the integer part
+    if (formattedFractional === '' && minPrecision === 0) {
+      return formattedInteger;
+    }
+
+    // Only add the decimal point and fractional part if there's a fractional part
+    return formattedFractional ? `${formattedInteger}.${formattedFractional}` : formattedInteger;
   }
 
   formatUnits(units: number = DEFAULT_DECIMAL_UNITS): string {
-    const valueUnits = this.toString().slice(0, units * -1);
-    const valueDecimals = this.toString().slice(units * -1);
-    const length = valueDecimals.length;
-    const defaultDecimals = Array.from({ length: units - length })
-      .fill('0')
-      .join('');
-    const integerPortion = valueUnits ? `${valueUnits}.` : '0.';
+    const valueString = this.toString();
+    const valueLength = valueString.length;
 
-    return `${integerPortion}${defaultDecimals}${valueDecimals}`;
+    if (valueLength <= units) {
+      const paddedZeros = '0'.repeat(units - valueLength);
+      return `0.${paddedZeros}${valueString}`;
+    }
+
+    const integerPart = valueString.slice(0, valueLength - units);
+    const fractionalPart = valueString.slice(valueLength - units);
+
+    return `${integerPart}.${fractionalPart}`;
   }
   // END ANCHOR: HELPERS
 
   // ANCHOR: OVERRIDES to accept better inputs
-  add(v: BNInput): BN {
+  override add(v: BNInput): BN {
     return this.caller(v, 'add') as BN;
   }
 
-  pow(v: BNInput): BN {
+  override pow(v: BNInput): BN {
     return this.caller(v, 'pow') as BN;
   }
 
-  sub(v: BNInput): BN {
+  override sub(v: BNInput): BN {
     return this.caller(v, 'sub') as BN;
   }
 
-  div(v: BNInput): BN {
+  override div(v: BNInput): BN {
     return this.caller(v, 'div') as BN;
   }
 
-  mul(v: BNInput): BN {
+  override mul(v: BNInput): BN {
     return this.caller(v, 'mul') as BN;
   }
 
-  mod(v: BNInput): BN {
+  override mod(v: BNInput): BN {
     return this.caller(v, 'mod') as BN;
   }
 
-  divRound(v: BNInput): BN {
+  override divRound(v: BNInput): BN {
     return this.caller(v, 'divRound') as BN;
   }
 
-  lt(v: BNInput): boolean {
+  override lt(v: BNInput): boolean {
     return this.caller(v, 'lt') as boolean;
   }
 
-  lte(v: BNInput): boolean {
+  override lte(v: BNInput): boolean {
     return this.caller(v, 'lte') as boolean;
   }
 
-  gt(v: BNInput): boolean {
+  override gt(v: BNInput): boolean {
     return this.caller(v, 'gt') as boolean;
   }
 
-  gte(v: BNInput): boolean {
+  override gte(v: BNInput): boolean {
     return this.caller(v, 'gte') as boolean;
   }
 
-  eq(v: BNInput): boolean {
+  override eq(v: BNInput): boolean {
     return this.caller(v, 'eq') as boolean;
   }
 
-  cmp(v: BNInput): CompareResult {
+  override cmp(v: BNInput): CompareResult {
     return this.caller(v, 'cmp') as CompareResult;
   }
   // END ANCHOR: OVERRIDES to accept better inputs
 
   // ANCHOR: OVERRIDES to output our BN type
-  sqr(): BN {
+  override sqr(): BN {
     return new BN(super.sqr().toArray());
   }
 
-  neg(): BN {
+  override neg(): BN {
     return new BN(super.neg().toArray());
   }
 
-  abs(): BN {
+  override abs(): BN {
     return new BN(super.abs().toArray());
   }
 
-  toTwos(width: number): BN {
+  override toTwos(width: number): BN {
     return new BN(super.toTwos(width).toArray());
   }
 
-  fromTwos(width: number): BN {
+  override fromTwos(width: number): BN {
     return new BN(super.fromTwos(width).toArray());
   }
   // END ANCHOR: OVERRIDES to output our BN type
@@ -234,7 +274,7 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
     return output as CompareResult;
   }
 
-  clone() {
+  override clone() {
     return new BN(this.toArray());
   }
 
@@ -244,7 +284,7 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
     return new BN(output.toArray());
   }
 
-  egcd(p: BnJs) {
+  override egcd(p: BnJs) {
     const { a, b, gcd } = new BnJs(this.toArray()).egcd(p);
 
     return {
@@ -254,7 +294,7 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
     };
   }
 
-  divmod(num: BNInput, mode?: string, positive?: boolean): { mod: BN; div: BN } {
+  override divmod(num: BNInput, mode?: string, positive?: boolean): { mod: BN; div: BN } {
     const { div, mod } = (new BnJs(this.toArray()) as BN).divmod(new BN(num), mode, positive);
 
     return {
@@ -265,6 +305,10 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
 
   maxU64(): BN {
     return this.gte(this.MAX_U64) ? new BN(this.MAX_U64) : this;
+  }
+
+  max(num: BNInput): BN {
+    return this.gte(num) ? new BN(num) : this;
   }
 
   normalizeZeroToOne(): BN {
@@ -281,6 +325,11 @@ bn.parseUnits = (value: string, units: number = DEFAULT_DECIMAL_UNITS): BN => {
   const valueToParse = value === '.' ? '0.' : value;
   const [valueUnits = '0', valueDecimals = '0'] = valueToParse.split('.');
   const length = valueDecimals.length;
+
+  if (units === 0) {
+    const valueWithoutDecimals = valueToParse.replace(',', '').split('.')[0];
+    return bn(valueWithoutDecimals);
+  }
 
   if (length > units) {
     throw new FuelError(

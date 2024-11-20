@@ -1,5 +1,132 @@
 # Change Log
 
+## 0.97.0
+
+### Minor Changes
+
+- b0e9c84: chore!: refactor predicate and script deployment
+
+### Patch Changes
+
+- 28e9ed8: build(deps): bump the deps-minor group with 20 updates
+- Updated dependencies [f607ba2]
+- Updated dependencies [28e9ed8]
+- Updated dependencies [c009812]
+- Updated dependencies [b0e9c84]
+- Updated dependencies [9dba357]
+- Updated dependencies [82e35a4]
+- Updated dependencies [8c77765]
+- Updated dependencies [efdc721]
+- Updated dependencies [eede61c]
+- Updated dependencies [4e057d5]
+- Updated dependencies [9a17971]
+- Updated dependencies [7c162de]
+- Updated dependencies [1226ac3]
+- Updated dependencies [174876c]
+  - @fuel-ts/account@0.97.0
+  - @fuel-ts/program@0.97.0
+  - @fuel-ts/versions@0.97.0
+  - @fuel-ts/errors@0.97.0
+  - @fuel-ts/transactions@0.97.0
+  - @fuel-ts/utils@0.97.0
+  - @fuel-ts/abi-coder@0.97.0
+  - @fuel-ts/crypto@0.97.0
+  - @fuel-ts/math@0.97.0
+  - @fuel-ts/hasher@0.97.0
+  - @fuel-ts/merkle@0.97.0
+  - @fuel-ts/interfaces@0.97.0
+
+## 0.96.1
+
+### Patch Changes
+
+- Updated dependencies [85072f7]
+- Updated dependencies [eb3b6c9]
+- Updated dependencies [6b7b6de]
+- Updated dependencies [bdfd009]
+- Updated dependencies [b78d032]
+- Updated dependencies [987aed3]
+  - @fuel-ts/account@0.96.1
+  - @fuel-ts/versions@0.96.1
+  - @fuel-ts/math@0.96.1
+  - @fuel-ts/program@0.96.1
+  - @fuel-ts/errors@0.96.1
+  - @fuel-ts/utils@0.96.1
+  - @fuel-ts/transactions@0.96.1
+  - @fuel-ts/abi-coder@0.96.1
+  - @fuel-ts/crypto@0.96.1
+  - @fuel-ts/merkle@0.96.1
+  - @fuel-ts/hasher@0.96.1
+  - @fuel-ts/interfaces@0.96.1
+
+## 0.96.0
+
+### Patch Changes
+
+- @fuel-ts/account@0.96.0
+- @fuel-ts/program@0.96.0
+- @fuel-ts/transactions@0.96.0
+- @fuel-ts/abi-coder@0.96.0
+- @fuel-ts/crypto@0.96.0
+- @fuel-ts/errors@0.96.0
+- @fuel-ts/hasher@0.96.0
+- @fuel-ts/interfaces@0.96.0
+- @fuel-ts/math@0.96.0
+- @fuel-ts/merkle@0.96.0
+- @fuel-ts/utils@0.96.0
+- @fuel-ts/versions@0.96.0
+
+## 0.95.0
+
+### Patch Changes
+
+- Updated dependencies [d4e839f]
+- Updated dependencies [95a9650]
+- Updated dependencies [b733e81]
+- Updated dependencies [74991ad]
+- Updated dependencies [fcbcc22]
+- Updated dependencies [f7afa04]
+- Updated dependencies [45f4a86]
+- Updated dependencies [55bfa6d]
+- Updated dependencies [d968532]
+- Updated dependencies [c84abb3]
+- Updated dependencies [735bb1c]
+- Updated dependencies [87da048]
+- Updated dependencies [9c70eba]
+- Updated dependencies [d1b4505]
+  - @fuel-ts/versions@0.95.0
+  - @fuel-ts/account@0.95.0
+  - @fuel-ts/math@0.95.0
+  - @fuel-ts/interfaces@0.95.0
+  - @fuel-ts/errors@0.95.0
+  - @fuel-ts/utils@0.95.0
+  - @fuel-ts/program@0.95.0
+  - @fuel-ts/abi-coder@0.95.0
+  - @fuel-ts/crypto@0.95.0
+  - @fuel-ts/merkle@0.95.0
+  - @fuel-ts/transactions@0.95.0
+  - @fuel-ts/hasher@0.95.0
+
+## 0.94.9
+
+### Patch Changes
+
+- c2f0599: feat: deploying scripts and predicates
+- Updated dependencies [5194a85]
+- Updated dependencies [c2f0599]
+  - @fuel-ts/account@0.94.9
+  - @fuel-ts/program@0.94.9
+  - @fuel-ts/versions@0.94.9
+  - @fuel-ts/errors@0.94.9
+  - @fuel-ts/utils@0.94.9
+  - @fuel-ts/abi-coder@0.94.9
+  - @fuel-ts/crypto@0.94.9
+  - @fuel-ts/math@0.94.9
+  - @fuel-ts/transactions@0.94.9
+  - @fuel-ts/hasher@0.94.9
+  - @fuel-ts/merkle@0.94.9
+  - @fuel-ts/interfaces@0.94.9
+
 ## 0.94.8
 
 ### Patch Changes

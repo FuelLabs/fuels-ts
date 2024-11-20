@@ -12,9 +12,6 @@ fragment SubmittedStatusFragment on SubmittedStatus {
 
 fragment SuccessStatusFragment on SuccessStatus {
   type: __typename
-  block {
-    id
-  }
   time
   programState {
     returnType
@@ -27,17 +24,28 @@ fragment SuccessStatusFragment on SuccessStatus {
   totalFee
 }
 
-fragment FailureStatusFragment on FailureStatus {
-  type: __typename
+fragment SuccessStatusWithBlockIdFragment on SuccessStatus {
+  ...SuccessStatusFragment
   block {
     id
   }
+}
+
+fragment FailureStatusFragment on FailureStatus {
+  type: __typename
   totalGas
   totalFee
   time
   reason
   receipts {
     ...receiptFragment
+  }
+}
+
+fragment FailureStatusWithBlockIdFragment on FailureStatus {
+  ...FailureStatusFragment
+  block {
+    id
   }
 }
 
@@ -106,13 +114,13 @@ fragment transactionStatusSubscriptionFragment on TransactionStatus {
     ...SubmittedStatusFragment
   }
   ... on SuccessStatus {
-    ...SuccessStatusFragment
+    ...SuccessStatusWithBlockIdFragment
     transaction {
       ...malleableTransactionFieldsFragment
     }
   }
   ... on FailureStatus {
-    ...FailureStatusFragment
+    ...FailureStatusWithBlockIdFragment
     transaction {
       ...malleableTransactionFieldsFragment
     }
@@ -128,6 +136,11 @@ fragment transactionFragment on Transaction {
   status {
     ...transactionStatusFragment
   }
+}
+
+fragment transactionRawPayloadFragment on Transaction {
+  id
+  rawPayload
 }
 
 fragment inputEstimatePredicatesFragment on Input {
@@ -238,7 +251,6 @@ fragment blockFragment on Block {
 fragment coinFragment on Coin {
   type: __typename
   utxoId
-  owner
   amount
   assetId
   blockCreated
@@ -260,8 +272,12 @@ fragment messageFragment on Message {
   sender
   recipient
   data
-  nonce
   daHeight
+}
+
+fragment getMessageFragment on Message {
+  ...messageFragment
+  nonce
 }
 
 fragment messageProofFragment on MessageProof {
@@ -307,15 +323,8 @@ fragment messageProofFragment on MessageProof {
   }
   sender
   recipient
-  nonce
   amount
   data
-}
-
-fragment balanceFragment on Balance {
-  owner
-  amount
-  assetId
 }
 
 fragment TxParametersFragment on TxParameters {
@@ -368,167 +377,6 @@ fragment DependentCostFragment on DependentCost {
 }
 
 fragment GasCostsFragment on GasCosts {
-  version
-  add
-  addi
-  aloc
-  and
-  andi
-  bal
-  bhei
-  bhsh
-  burn
-  cb
-  cfei
-  cfsi
-  div
-  divi
-  ecr1
-  eck1
-  ed19
-  eq
-  exp
-  expi
-  flag
-  gm
-  gt
-  gtf
-  ji
-  jmp
-  jne
-  jnei
-  jnzi
-  jmpf
-  jmpb
-  jnzf
-  jnzb
-  jnef
-  jneb
-  lb
-  log
-  lt
-  lw
-  mint
-  mlog
-  modOp
-  modi
-  moveOp
-  movi
-  mroo
-  mul
-  muli
-  mldv
-  noop
-  not
-  or
-  ori
-  poph
-  popl
-  pshh
-  pshl
-  ret
-  rvrt
-  sb
-  sll
-  slli
-  srl
-  srli
-  srw
-  sub
-  subi
-  sw
-  sww
-  time
-  tr
-  tro
-  wdcm
-  wqcm
-  wdop
-  wqop
-  wdml
-  wqml
-  wddv
-  wqdv
-  wdmd
-  wqmd
-  wdam
-  wqam
-  wdmm
-  wqmm
-  xor
-  xori
-  alocDependentCost {
-    ...DependentCostFragment
-  }
-  bldd {
-    ...DependentCostFragment
-  }
-  bsiz {
-    ...DependentCostFragment
-  }
-  cfe {
-    ...DependentCostFragment
-  }
-  cfeiDependentCost {
-    ...DependentCostFragment
-  }
-  call {
-    ...DependentCostFragment
-  }
-  ccp {
-    ...DependentCostFragment
-  }
-  croo {
-    ...DependentCostFragment
-  }
-  csiz {
-    ...DependentCostFragment
-  }
-  ed19DependentCost {
-    ...DependentCostFragment
-  }
-  k256 {
-    ...DependentCostFragment
-  }
-  ldc {
-    ...DependentCostFragment
-  }
-  logd {
-    ...DependentCostFragment
-  }
-  mcl {
-    ...DependentCostFragment
-  }
-  mcli {
-    ...DependentCostFragment
-  }
-  mcp {
-    ...DependentCostFragment
-  }
-  mcpi {
-    ...DependentCostFragment
-  }
-  meq {
-    ...DependentCostFragment
-  }
-  retd {
-    ...DependentCostFragment
-  }
-  s256 {
-    ...DependentCostFragment
-  }
-  scwq {
-    ...DependentCostFragment
-  }
-  smo {
-    ...DependentCostFragment
-  }
-  srwq {
-    ...DependentCostFragment
-  }
-  swwq {
-    ...DependentCostFragment
-  }
   contractRoot {
     ...DependentCostFragment
   }
@@ -538,6 +386,10 @@ fragment GasCostsFragment on GasCosts {
   vmInitialization {
     ...DependentCostFragment
   }
+  s256 {
+    ...DependentCostFragment
+  }
+  ecr1
   newStoragePerByte
 }
 
@@ -567,9 +419,6 @@ fragment consensusParametersFragment on ConsensusParameters {
 
 fragment chainInfoFragment on ChainInfo {
   name
-  latestBlock {
-    ...blockFragment
-  }
   daHeight
   consensusParameters {
     ...consensusParametersFragment
@@ -623,6 +472,15 @@ query getChain {
   }
 }
 
+query getChainAndNodeInfo {
+  chain {
+    ...chainInfoFragment
+  }
+  nodeInfo {
+    ...nodeInfoFragment
+  }
+}
+
 query getTransaction($transactionId: TransactionId!) {
   transaction(id: $transactionId) {
     ...transactionFragment
@@ -631,7 +489,22 @@ query getTransaction($transactionId: TransactionId!) {
 
 query getTransactionWithReceipts($transactionId: TransactionId!) {
   transaction(id: $transactionId) {
-    ...transactionFragment
+    id
+    rawPayload
+    status {
+      ... on SubmittedStatus {
+        ...SubmittedStatusFragment
+      }
+      ... on SuccessStatus {
+        ...SuccessStatusWithBlockIdFragment
+      }
+      ... on FailureStatus {
+        ...FailureStatusWithBlockIdFragment
+      }
+      ... on SqueezedOutStatus {
+        ...SqueezedOutStatusFragment
+      }
+    }
   }
 }
 
@@ -644,7 +517,7 @@ query getTransactions(
   transactions(after: $after, before: $before, first: $first, last: $last) {
     edges {
       node {
-        ...transactionFragment
+        rawPayload
       }
     }
     pageInfo {
@@ -684,6 +557,22 @@ query estimatePredicates($encodedTransaction: HexString!) {
   }
 }
 
+query getLatestBlock {
+  chain {
+    latestBlock {
+      ...blockFragment
+    }
+  }
+}
+
+query getLatestBlockHeight {
+  chain {
+    latestBlock {
+      height
+    }
+  }
+}
+
 query getBlock($blockId: BlockId, $height: U32) {
   block(id: $blockId, height: $height) {
     ...blockFragment
@@ -694,7 +583,7 @@ query getBlockWithTransactions($blockId: BlockId, $blockHeight: U32) {
   block(id: $blockId, height: $blockHeight) {
     ...blockFragment
     transactions {
-      ...transactionFragment
+      ...transactionRawPayloadFragment
     }
   }
 }
@@ -715,6 +604,7 @@ query getBlocks($after: String, $before: String, $first: Int, $last: Int) {
 query getCoin($coinId: UtxoId!) {
   coin(utxoId: $coinId) {
     ...coinFragment
+    owner
   }
 }
 
@@ -773,7 +663,7 @@ query getContractBalance($contract: ContractId!, $asset: AssetId!) {
 
 query getBalance($owner: Address!, $assetId: AssetId!) {
   balance(owner: $owner, assetId: $assetId) {
-    ...balanceFragment
+    amount
   }
 }
 
@@ -808,7 +698,8 @@ query getBalances(
     }
     edges {
       node {
-        ...balanceFragment
+        assetId
+        amount
       }
     }
   }
@@ -833,7 +724,7 @@ query getMessages(
     }
     edges {
       node {
-        ...messageFragment
+        ...getMessageFragment
       }
     }
   }
@@ -902,6 +793,32 @@ mutation produceBlocks(
 query getMessageByNonce($nonce: Nonce!) {
   message(nonce: $nonce) {
     ...messageFragment
+  }
+}
+
+query isUserAccount(
+  $blobId: BlobId!
+  $contractId: ContractId!
+  $transactionId: TransactionId!
+) {
+  blob(id: $blobId) {
+    id
+  }
+  contract(id: $contractId) {
+    id
+  }
+  transaction(id: $transactionId) {
+    id
+  }
+}
+
+query getConsensusParametersVersion {
+  chain {
+    latestBlock {
+      header {
+        consensusParametersVersion
+      }
+    }
   }
 }
 

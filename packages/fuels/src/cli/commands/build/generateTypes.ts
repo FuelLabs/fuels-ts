@@ -2,6 +2,7 @@ import { ProgramTypeEnum } from '@fuel-ts/abi-typegen';
 import { runTypegen } from '@fuel-ts/abi-typegen/runTypegen';
 import { getBinaryVersions } from '@fuel-ts/versions/cli';
 import { writeFileSync, mkdirSync } from 'fs';
+import { globSync } from 'glob';
 import { join } from 'path';
 
 import { getABIPaths } from '../../config/forcUtils';
@@ -16,9 +17,21 @@ async function generateTypesForProgramType(
 ) {
   debug('Generating types..');
 
-  const filepaths = await getABIPaths(paths, config);
+  let filepaths = await getABIPaths(paths, config);
   const pluralizedDirName = `${String(programType).toLocaleLowerCase()}s`;
   const versions = getBinaryVersions(config);
+
+  const isScript = programType === ProgramTypeEnum.SCRIPT;
+  const isPredicate = programType === ProgramTypeEnum.PREDICATE;
+
+  if (isScript || isPredicate) {
+    const loaderFiles = paths.flatMap((dirpath) => {
+      const glob = `*-abi.json`;
+      const cwd = `${dirpath}/out`;
+      return globSync(glob, { cwd }).map((filename) => `${dirpath}/out/${filename}`);
+    });
+    filepaths = filepaths.concat(loaderFiles);
+  }
 
   runTypegen({
     programType,

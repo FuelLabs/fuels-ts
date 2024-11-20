@@ -157,7 +157,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
    * @param minGas - The minimum gas.
    * @returns the maximum gas.
    */
-  calculateMaxGas(chainInfo: ChainInfo, minGas: BN): BN {
+  override calculateMaxGas(chainInfo: ChainInfo, minGas: BN): BN {
     const { consensusParameters } = chainInfo;
     const {
       feeParameters: { gasPerByte },
@@ -231,7 +231,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     return this;
   }
 
-  metadataGas(gasCosts: GasCosts): BN {
+  override metadataGas(gasCosts: GasCosts): BN {
     return calculateMetadataGasForTxScript({
       gasCosts,
       txBytesSize: this.byteSize(),

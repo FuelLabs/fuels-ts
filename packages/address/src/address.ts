@@ -1,6 +1,12 @@
 import { FuelError } from '@fuel-ts/errors';
 import { AbstractAddress } from '@fuel-ts/interfaces';
-import type { Bech32Address, B256Address, EvmAddress, AssetId } from '@fuel-ts/interfaces';
+import type {
+  Bech32Address,
+  B256Address,
+  EvmAddress,
+  AssetId,
+  ChecksumAddress,
+} from '@fuel-ts/interfaces';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 import { sha256 } from '@noble/hashes/sha256';
 
@@ -43,6 +49,16 @@ export default class Address extends AbstractAddress {
   }
 
   /**
+   * Takes an B256 Address and returns back an checksum address.
+   * The implementation follows the ERC-55 https://github.com/ethereum/ercs/blob/master/ERCS/erc-55.md.
+   *
+   * @returns A new `ChecksumAddress` instance
+   */
+  toChecksum(): ChecksumAddress {
+    return Address.toChecksum(this.toB256());
+  }
+
+  /**
    * Returns the `bech32Address` property
    *
    * @returns The `bech32Address` property
@@ -79,12 +95,12 @@ export default class Address extends AbstractAddress {
   }
 
   /**
-   * Converts and returns the `bech32Address` property as a string
+   * returns the address `checksum` as a string
    *
    * @returns The `bech32Address` property as a string
    */
   toString(): string {
-    return this.bech32Address;
+    return this.toChecksum();
   }
 
   /**
@@ -121,12 +137,12 @@ export default class Address extends AbstractAddress {
   }
 
   /**
-   * Returns the value of the `bech32Address` property
+   * returns the address `checksum` as a string
    *
    * @returns The value of `bech32Address` property
    */
-  valueOf(): string {
-    return this.bech32Address;
+  override valueOf(): string {
+    return this.toChecksum();
   }
 
   /**
@@ -251,5 +267,47 @@ export default class Address extends AbstractAddress {
     const paddedAddress = padFirst12BytesOfEvmAddress(evmAddress);
 
     return new Address(toBech32(paddedAddress));
+  }
+
+  /**
+   * Takes an ChecksumAddress and validates if it is a valid checksum address.
+   *
+   * @returns A `boolean` instance indicating if the address is valid.
+   */
+  static isChecksumValid(address: ChecksumAddress): boolean {
+    let addressParsed = address;
+
+    if (!address.startsWith('0x')) {
+      addressParsed = `0x${address}`;
+    }
+    if (addressParsed.trim().length !== 66) {
+      return false;
+    }
+
+    return Address.toChecksum(hexlify(addressParsed)) === addressParsed;
+  }
+
+  /** @hidden */
+  private static toChecksum(address: string) {
+    if (!isB256(address)) {
+      throw new FuelError(
+        FuelError.CODES.INVALID_B256_ADDRESS,
+        `Invalid B256 Address: ${address}.`
+      );
+    }
+
+    const addressHex = hexlify(address).toLowerCase().slice(2);
+    const checksum = sha256(addressHex);
+
+    let ret = '0x';
+    for (let i = 0; i < 32; ++i) {
+      const byte = checksum[i];
+      const ha = addressHex.charAt(i * 2);
+      const hb = addressHex.charAt(i * 2 + 1);
+      ret += (byte & 0xf0) >= 0x80 ? ha.toUpperCase() : ha;
+      ret += (byte & 0x0f) >= 0x08 ? hb.toUpperCase() : hb;
+    }
+
+    return ret;
   }
 }

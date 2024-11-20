@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { DEVNET_NETWORK_URL, TESTNET_NETWORK_URL } from '@internal/utils';
-import { WalletUnlocked, Provider, TransactionType, CHAIN_IDS, rawAssets, assets } from 'fuels';
+import { WalletUnlocked, Provider, TransactionType, CHAIN_IDS, rawAssets, assets, bn } from 'fuels';
 
 import { ScriptMainArgBool } from '../test/typegen';
 
@@ -119,6 +119,53 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
     },
     15_000
   );
+
+  describe('optimized graphql queries', () => {
+    it('should get the balance of the wallet', { timeout: 15_000 }, async () => {
+      if (shouldSkip) {
+        return;
+      }
+
+      const balance = await provider.getBalance(wallet.address, provider.getBaseAssetId());
+      expect(bn(balance).gt(0));
+    });
+
+    it('should get the chain and node info', { timeout: 15_000 }, async () => {
+      if (shouldSkip) {
+        return;
+      }
+
+      const chainInfo = await provider.fetchChainAndNodeInfo();
+      expect(chainInfo).toBeDefined();
+    });
+
+    it('should get latest block height', { timeout: 15_000 }, async () => {
+      if (shouldSkip) {
+        return;
+      }
+
+      const blockNumber = await provider.getBlockNumber();
+      expect(bn(blockNumber).gt(0));
+    });
+
+    it('should get the latest block', { timeout: 15_000 }, async () => {
+      if (shouldSkip) {
+        return;
+      }
+
+      const block = await provider.getBlock('latest');
+      expect(block).toBeDefined();
+    });
+
+    it('should get block with transactions', { timeout: 15_000 }, async () => {
+      if (shouldSkip) {
+        return;
+      }
+
+      const block = await provider.getBlockWithTransactions('latest');
+      expect(block).toBeDefined();
+    });
+  });
 
   it(`should have correct assets`, () => {
     if (shouldSkip) {

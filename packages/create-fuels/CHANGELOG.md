@@ -1,5 +1,38 @@
 # create-fuels
 
+## 0.97.0
+
+### Patch Changes
+
+- b306b7b: fix: moved `create-fuels` deps for `fuels-ts`
+- 28e9ed8: build(deps): bump the deps-minor group with 20 updates
+- bf47c3d: build(deps): bump typescript-eslint from 8.5.0 to 8.8.0
+- bdf0ebe: build(deps): bump postcss from 8.4.48 to 8.4.49
+- d8232a6: build(deps): bump postcss from 8.4.47 to 8.4.48
+- 3a56354: chore: exclude `node_modules` in template tests
+- Updated dependencies [9dba357]
+- Updated dependencies [4e057d5]
+- Updated dependencies [7c162de]
+  - @fuel-ts/versions@0.97.0
+  - @fuel-ts/errors@0.97.0
+
+## 0.96.1
+
+## 0.96.0
+
+## 0.95.0
+
+### Patch Changes
+
+- d4e839f: chore: `fuel-core@0.37.1`, `forc@0.65.1`, and `create-fuels` toolchains
+
+## 0.94.9
+
+### Patch Changes
+
+- c2f0599: feat: deploying scripts and predicates
+- 8ea97cc: build(deps): bump the deps-minor group with 9 updates
+
 ## 0.94.8
 
 ### Patch Changes
