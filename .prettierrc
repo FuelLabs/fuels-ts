@@ -26,8 +26,8 @@
       }
     },
     {
-      "files": ["apps/docs/src/snippets/**/*.ts"],
-      "excludeFiles": ["apps/docs/src/snippets/**/*.test.ts"],
+      "files": ["apps/docs/src/**/*.ts"],
+      "excludeFiles": ["apps/docs/src/**/*.test.ts"],
       "options": {
         "printWidth": 80
       }
