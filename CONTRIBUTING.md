@@ -6,7 +6,7 @@ This document outlines the process for installing dependencies, setting up for d
 
 # Finding Something to Work On
 
-There are many ways in which you may contribute to the project, some of which involve coding knowledge and some which do not. A few examples include:
+There are many ways in which you may contribute to the project, some of which involve coding knowledge and some of which do not. A few examples include:
 
 - Reporting bugs
 - Adding new features or bugfixes for which there is already an open issue
@@ -24,7 +24,7 @@ If you would like to create an issue, please use the relevant [issue template](h
 
 1. A new issue is created and is given the `triage` label
 1. It is assigned to a core maintainer for investigation
-1. Once the assigned core maintainer has completed their investigation, they remove the `triage` label and assign the relevant label to the issue i.e. `bug` , `feat`, `chore`, `docs`
+1. Once the assigned core maintainer has completed their investigation, they remove the `triage` label and assign the relevant label to the issue e.g. `bug` , `feat`, `chore`, `docs`
 1. The issue is assigned a milestone (e.g. `mainnet`, `post-launch`) and a prioritization label where `p0` is the highest priority and `p2` is the lowest priority
 1. The issue is assigned for development and should be moved to `In Progress`
 1. A pull request is made ready and the issue is now `In Review`
@@ -32,7 +32,7 @@ If you would like to create an issue, please use the relevant [issue template](h
 1. It can then be merged to `master` and included in a release
 1. The issue is closed automatically and it's status is moved to `Done`
 
-> **Note:** If additional information is ever required by the assigned investigator then the `awaiting` label will be added to the issue, these means they require more information from the author. Any `awaiting` issue left unanswered for 2 weeks will go `stale` and will be closed.
+> **Note:** If additional information is ever required by the assigned investigator then the `awaiting` label will be added to the issue, this means they require more information from the author. Any `awaiting` issue left unanswered for 2 weeks will go `stale` and will be closed.
 
 # Setting up
 
@@ -63,7 +63,7 @@ Check `nodemon.config.json` for all settings.
 > pnpm dev
 > ```
 
-# Using local sym-linked packages
+# Using local symlinked packages
 
 First, we need to link our `fuels` package globally in our local `global pnpm store`:
 
@@ -103,7 +103,7 @@ cd my-local-project
 pnpm link --global @fuel-ts/wallet
 ```
 
-> **Warning** When using local symlinked `fuels-ts` in `your-local-project`, remember to `pnpm build` the SDK whenever you change a source file to reflect the changes on `your-local-project`. To automate this, you can use `pnpm dev`, which will keep watching and compiling everything automatically while developing.
+> **Warning** When using local symlinked `fuels-ts` in `my-local-project`, remember to `pnpm build` the SDK whenever you change a source file to reflect the changes on `my-local-project`. To automate this, you can use `pnpm dev`, which will keep watching and compiling everything automatically while developing.
 
 See also:
 
@@ -169,7 +169,7 @@ The Bech32 address of this wallet is `fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqf
 
 If you want to run an e2e test locally, you can provide your own wallet address and private key. For obvious security reasons, the private key should not be shared.
 
-These can be overridden by generating an environment file:
+This can be overridden by generating an environment file:
 
 ```sh
 cp .env.example .env.test
@@ -198,13 +198,13 @@ the following categories:
 - `fix`: changes that fix a bug (ideally you will additionally reference an
   issue if present)
 - `refactor`: any code related change that is not a fix nor a feature
-- `docs`: changing existing or creating new documentation (i.e. README, docs for
+- `docs`: changing existing or creating new documentation (e.g. README, docs for
   usage of a lib or cli usage)
 - `build`: all changes regarding the build of the software, changes to
   dependencies or the addition of new dependencies
 - `test`: all changes regarding tests (adding new tests or changing existing
   ones)
-- `ci`: all changes regarding the configuration of continuous integration (i.e.
+- `ci`: all changes regarding the configuration of continuous integration (e.g.
   github actions, ci system)
 - `chore`: all changes to the repository that do not fit into any of the above
   categories
@@ -273,7 +273,7 @@ The following example is for releasing a patch for `v0.69.0` -> `v0.69.1`.
 
 # Patching latest release
 
-Imagine the scenario:
+Consider the following scenario:
 
 1. We release `v0.80.0`
 1. One day later, we have a new changesets PR that will bump things to `v0.81.0`
