@@ -8,7 +8,7 @@
   Fuels version: 0.97.0
 */
 
-import { Contract, ContractFactory, decompressBytecode } from "../../../../..";
+import { ContractFactory, decompressBytecode } from "../../../../..";
 import type { Provider, Account, DeployContractOptions } from "../../../../..";
 
 import { Src14OwnedProxy } from "./Src14OwnedProxy";
