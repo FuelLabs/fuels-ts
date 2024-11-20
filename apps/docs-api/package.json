@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "name": "docs-api",
+  "version": "0.0.1",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "build": "typedoc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "fuels": "workspace:*",
+    "typedoc": "^0.26.3"
+  }
+}
