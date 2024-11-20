@@ -44,8 +44,8 @@ import type {
 
 /**
  * Extracts a specific type of receipts from a list of receipts.
- * @param receipts: The list of receipts to filter.
- * @param type: The type of receipt to filter for.
+ * @param receipts - The list of receipts to filter.
+ * @param type - The type of receipt to filter for.
  * @returns The filtered list of receipts.
  */
 export function getReceiptsByType<T = TransactionResultReceipt>(
@@ -57,7 +57,7 @@ export function getReceiptsByType<T = TransactionResultReceipt>(
 
 /**
  * Returns the transaction type's name based on the transaction type enum value.
- * @param transactionType: The transaction type enum value.
+ * @param transactionType - The transaction type enum value.
  * @returns The transaction type's name.
  */
 export function getTransactionTypeName(transactionType: TransactionType): TransactionTypeName {

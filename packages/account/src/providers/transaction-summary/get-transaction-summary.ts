@@ -139,7 +139,7 @@ export interface GetTransactionsSummariesReturns {
 
 /**
  * Gets transaction summaries for a given owner/address.
- * @param params: The filters to apply to the query.
+ * @param params - The filters to apply to the query.
  */
 export async function getTransactionsSummaries(
   params: GetTransactionsSummariesParams
