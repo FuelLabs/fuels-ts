@@ -120,11 +120,14 @@ export const wrapSnippet = (filepath: string) => {
   Wrap all snippets inside `src` dir
 */
 const dir = 'src/**';
-const src = `${dir}/snippets/*.ts`;
+const src = `${dir}/*.ts`;
 const ignore = [
-  `src/snippets/typegend/**`,
-  `src/snippets/env.ts`,
-  `src/snippets/transactions/new-api.ts`,
+  `src/typegend/**`,
+  `src/env.ts`,
+  `src/vite.config.ts`,
+  `src/versions.data.ts`,
+  `src/jsonc.d.ts`,
+  `src/guide/transactions/new-api.ts`,
   `${dir}/*.test.ts`,
 ];
 

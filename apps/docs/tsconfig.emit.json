@@ -6,6 +6,6 @@
     "rootDir": "./",
     "baseUrl": "./"
   },
-  "include": ["src/**/snippets"],
-  "exclude": ["src/**/snippets/typegend"]
+  "include": ["src/**/guide"],
+  "exclude": ["src/**/typegend"]
 }

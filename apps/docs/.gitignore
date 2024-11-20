@@ -5,6 +5,6 @@
 
 src/api
 
-src/snippets/typegend
-src/snippets/**/*.test.ts
+src/typegend
+src/guide/**/*.test.ts
 .fuels/
