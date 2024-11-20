@@ -28,13 +28,13 @@ For now, let's keep it simple and not worry about the storage. Later we will dis
 
 To instantiate a `WalletManager` you can simply:
 
-<<< @/../../docs/src/snippets/wallet-manager/getting-started-with-wallet-manager.ts#getting-started-with-wallet-manager-1{ts:line-numbers}
+<<< @./snippets/getting-started-with-wallet-manager.ts#getting-started-with-wallet-manager-1{ts:line-numbers}
 
 ### Setting `WalletManager` Password
 
 By default, a `WalletManager` instance is locked when created. Before using it, you need to unlock it by setting a password. You can do this by calling the `unlock` method.
 
-<<< @/../../docs/src/snippets/wallet-manager/getting-started-with-wallet-manager.ts#getting-started-with-wallet-manager-2{ts:line-numbers}
+<<< @./snippets/getting-started-with-wallet-manager.ts#getting-started-with-wallet-manager-2{ts:line-numbers}
 
 Once your `WalletManager` is unlocked, it can manage your wallets.
 
@@ -44,7 +44,7 @@ A vault in `WalletManager` serves as a secure container for wallets. The `Wallet
 
 To add a vault, we utilize the `addVault` method. Here's how we can create a private key vault and add a private key from a wallet we own:
 
-<<< @/../../docs/src/snippets/wallet-manager/getting-started-with-wallet-manager.ts#getting-started-with-wallet-manager-3{ts:line-numbers}
+<<< @./snippets/getting-started-with-wallet-manager.ts#getting-started-with-wallet-manager-3{ts:line-numbers}
 
 The `addVault` method requires an object with three properties: `type`, `secret`, and `title`. The `WalletManager` currently supports two types of vaults: `privateKeyVault` and `mnemonicVault`. For the `secret`, we use our wallet's private key, and for the `title`, we can provide a custom name.
 
@@ -52,7 +52,7 @@ By running this code, `WalletManager` creates a new vault instance of the type `
 
 A key feature of the `WalletManager` is its ability to manage multiple vaults, even of the same type. This implies that if you run the `addVault` method again, with the same parameters, `WalletManager` will create another vault of the type `privateKey`, holding the same wallet. Here's an example:
 
-<<< @/../../docs/src/snippets/wallet-manager/getting-started-with-wallet-manager.ts#getting-started-with-wallet-manager-4{ts:line-numbers}
+<<< @./snippets/getting-started-with-wallet-manager.ts#getting-started-with-wallet-manager-4{ts:line-numbers}
 
 After executing this, you will find that your `WalletManager` is managing two `privateKey` vaults, both storing the same wallet.
 
@@ -62,17 +62,17 @@ Remember, both `title` and `secret` are optional when adding vaults, but providi
 
 With your `WalletManager` set up, you can now access your vaults and wallets. Here's how to retrieve the details of your vaults:
 
-<<< @/../../docs/src/snippets/wallet-manager/getting-started-with-wallet-manager.ts#getting-started-with-wallet-manager-5{ts:line-numbers}
+<<< @./snippets/getting-started-with-wallet-manager.ts#getting-started-with-wallet-manager-5{ts:line-numbers}
 
 This will output something like this:
 
-<<< @/../../docs/src/snippets/wallet-manager/getting-started-with-wallet-manager.ts#getting-started-with-wallet-manager-6{bash:line-numbers}
+<<< @./snippets/getting-started-with-wallet-manager.ts#getting-started-with-wallet-manager-6{bash:line-numbers}
 
 As you can see, the `WalletManager` assigns unique `vaultIds` for each vault. The first vault you added has a `vaultId` of `0`, and the second one has a `vaultId` of `1`.
 
 Let's retrieve your wallet instance with the `getWallet` method:
 
-<<< @/../../docs/src/snippets/wallet-manager/getting-started-with-wallet-manager.ts#getting-started-with-wallet-manager-7{ts:line-numbers}
+<<< @./snippets/getting-started-with-wallet-manager.ts#getting-started-with-wallet-manager-7{ts:line-numbers}
 
 This guide walked through the steps to instantiate a `WalletManager`, set up its first vault, and retrieve vault information. The following sections will explore more functionalities of `WalletManager`, and go deeper into the usage of its vaults and the details of its storage system.
 
@@ -84,13 +84,13 @@ This guide will walk you through the process of managing the lock state of your 
 
 As mentioned earlier, a `WalletManager` instance begins in a locked state. Before usage, you need to unlock it by providing a password via the unlock method.
 
-<<< @/../../docs/src/snippets/wallet-manager/locking-and-unlocking-wallet-manager.ts#locking-and-unlocking-wallet-manager-1{ts:line-numbers}
+<<< @./snippets/locking-and-unlocking-wallet-manager.ts#locking-and-unlocking-wallet-manager-1{ts:line-numbers}
 
 ### Locking the `WalletManager`
 
 When you lock the `WalletManager` using the `lock` method, all its vaults and associated accounts (wallets) are cleared. This clearance is possible due to the encryption and saving of all data by the storage system. `WalletManager` frequently uses the storage system to preserve its state. Consequently, sensitive operations including exporting vaults, private keys, accessing wallets, and saving/loading the `WalletManager` state are not possible when it is locked.
 
-<<< @/../../docs/src/snippets/wallet-manager/locking-and-unlocking-wallet-manager.ts#locking-and-unlocking-wallet-manager-2{ts:line-numbers}
+<<< @./snippets/locking-and-unlocking-wallet-manager.ts#locking-and-unlocking-wallet-manager-2{ts:line-numbers}
 
 Remember, it's crucial to lock your `WalletManager` when it's not in use to ensure the safety of your funds.
 
@@ -98,7 +98,7 @@ Remember, it's crucial to lock your `WalletManager` when it's not in use to ensu
 
 The `unlock` method requires the previously set password to unlock the `WalletManager` and all its vaults. The password decrypts the stored vaults, allowing `WalletManager` to load its saved data.
 
-<<< @/../../docs/src/snippets/wallet-manager/locking-and-unlocking-wallet-manager.ts#locking-and-unlocking-wallet-manager-3{ts:line-numbers}
+<<< @./snippets/locking-and-unlocking-wallet-manager.ts#locking-and-unlocking-wallet-manager-3{ts:line-numbers}
 
 Providing an incorrect password will result in an error. However, when unlocked successfully, `WalletManager` is ready for use again.
 
@@ -106,18 +106,18 @@ Providing an incorrect password will result in an error. However, when unlocked 
 
 You can confirm the current lock state of the `WalletManager` by using the `isLocked` method:
 
-<<< @/../../docs/src/snippets/wallet-manager/locking-and-unlocking-wallet-manager.ts#locking-and-unlocking-wallet-manager-4{ts:line-numbers}
+<<< @./snippets/locking-and-unlocking-wallet-manager.ts#locking-and-unlocking-wallet-manager-4{ts:line-numbers}
 
 ### Updating the Password
 
 To change the current password, invoke the `updatePassphrase` method, and provide both the old and new passwords:
 
-<<< @/../../docs/src/snippets/wallet-manager/locking-and-unlocking-wallet-manager.ts#locking-and-unlocking-wallet-manager-5{ts:line-numbers}
+<<< @./snippets/locking-and-unlocking-wallet-manager.ts#locking-and-unlocking-wallet-manager-5{ts:line-numbers}
 
 ### Reminder: Always Lock Your `WalletManager`
 
 Always ensure you lock the `WalletManager` after completing operations. This step is critical for securing your wallets.
 
-<<< @/../../docs/src/snippets/wallet-manager/locking-and-unlocking-wallet-manager.ts#locking-and-unlocking-wallet-manager-6{ts:line-numbers}
+<<< @./snippets/locking-and-unlocking-wallet-manager.ts#locking-and-unlocking-wallet-manager-6{ts:line-numbers}
 
 By using `WalletManager` to manage lock and unlock states, you introduce an additional layer of security. Never forget to lock your `WalletManager` when it's not in use.

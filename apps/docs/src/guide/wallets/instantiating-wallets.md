@@ -6,7 +6,7 @@ Wallets can be instantiated in multiple ways within the SDK.
 
 To generate a new, unlocked wallet, use the [`generate`](../../api/Account/Wallet.md#generate) method. This method creates a new [`WalletUnlocked`](../../api/Account/WalletUnlocked.md) instance, which is immediately ready for use.
 
-<<< @/../../docs/src/snippets/wallets/instantiating/generate.ts#instantiating-wallets-1{ts:line-numbers}
+<<< @./snippets/instantiating/generate.ts#instantiating-wallets-1{ts:line-numbers}
 
 ## Instantiating Unlocked Wallets
 
@@ -14,33 +14,33 @@ Creating [`WalletUnlocked`](../../api/Account/WalletUnlocked.md) instances of yo
 
 From a private key:
 
-<<< @/../../docs/src/snippets/wallets/instantiating/from-private-key.ts#instantiating-wallets-2{ts:line-numbers}
+<<< @./snippets/instantiating/from-private-key.ts#instantiating-wallets-2{ts:line-numbers}
 
 From a mnemonic phrase:
 
-<<< @/../../docs/src/snippets/wallets/instantiating/from-mnemonic-phrase.ts#instantiating-wallets-3{ts:line-numbers}
+<<< @./snippets/instantiating/from-mnemonic-phrase.ts#instantiating-wallets-3{ts:line-numbers}
 
 From a seed:
 
-<<< @/../../docs/src/snippets/wallets/instantiating/from-seed.ts#instantiating-wallets-4{ts:line-numbers}
+<<< @./snippets/instantiating/from-seed.ts#instantiating-wallets-4{ts:line-numbers}
 
 From a Hierarchical Deterministic (HD) derived key:
 
-<<< @/../../docs/src/snippets/wallets/instantiating/from-hd-derived-key.ts#instantiating-wallets-5{ts:line-numbers}
+<<< @./snippets/instantiating/from-hd-derived-key.ts#instantiating-wallets-5{ts:line-numbers}
 
 From a JSON wallet:
 
-<<< @/../../docs/src/snippets/wallets/instantiating/from-json-wallet.ts#instantiating-wallets-6{ts:line-numbers}
+<<< @./snippets/instantiating/from-json-wallet.ts#instantiating-wallets-6{ts:line-numbers}
 
 It's possible to instantiate a `WalletUnlocked` from a `WalletLocked`:
 
-<<< @/../../docs/src/snippets/wallets/instantiating/unlock-from-private-key.ts#instantiating-wallets-7{ts:line-numbers}
+<<< @./snippets/instantiating/unlock-from-private-key.ts#instantiating-wallets-7{ts:line-numbers}
 
 ## Instantiating Locked Wallets
 
 You can also instantiate [`WalletLocked`](../../api/Account/WalletLocked.md) instances using just the wallet address:
 
-<<< @/../../docs/src/snippets/wallets/instantiating/from-bech32-address.ts#instantiating-wallets-8{ts:line-numbers}
+<<< @./snippets/instantiating/from-bech32-address.ts#instantiating-wallets-8{ts:line-numbers}
 
 ## Connecting to a Provider
 
@@ -48,8 +48,8 @@ While wallets can be used independently of a [`Provider`](../../api/Account/Prov
 
 Connecting an existing wallet to a Provider:
 
-<<< @/../../docs/src/snippets/wallets/instantiating/connect-existing-wallet.ts#instantiating-wallets-9{ts:line-numbers}
+<<< @./snippets/instantiating/connect-existing-wallet.ts#instantiating-wallets-9{ts:line-numbers}
 
 Instantiating a wallet with a Provider:
 
-<<< @/../../docs/src/snippets/wallets/instantiating/connect-new-wallet.ts#instantiating-wallets-10{ts:line-numbers}
+<<< @./snippets/instantiating/connect-new-wallet.ts#instantiating-wallets-10{ts:line-numbers}

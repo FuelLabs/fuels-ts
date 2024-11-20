@@ -10,4 +10,4 @@ The `StdString` type can be integrated with your contract calls. Consider the fo
 
 A string can be created using a native JavaScript string, and sent to a Sway contract:
 
-<<< @/../../docs/src/snippets/types/std-string.ts#std-string-2{ts:line-numbers}
+<<< @./snippets/std-string.ts#std-string-2{ts:line-numbers}

@@ -8,6 +8,6 @@ Consider the following example contract:
 
 To access the logged values in TypeScript, use the `logs` property in the response of a contract call. The logs data will be stored in an `Array<any>`:
 
-<<< @/../../docs/src/snippets/contracts/logs.ts#full{ts:line-numbers}
+<<< @./snippets/logs.ts#full{ts:line-numbers}
 
 This approach allows you to work seamlessly with logged values in your contract, making it easier to understand and debug the contract's behavior.

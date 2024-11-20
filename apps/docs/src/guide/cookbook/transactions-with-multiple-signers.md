@@ -10,7 +10,7 @@ In the snippet above, we use the built-in Sway function `tx_witness_data()` to r
 
 We would interact with this script in the SDK by creating a transaction request from an invocation scope. The same can be done for a contract. Consider the following script:
 
-<<< @/../../docs/src/snippets/cookbook/signing-transactions/script.ts#multiple-signers-2{ts:line-numbers}
+<<< @./snippets/signing-transactions/script.ts#multiple-signers-2{ts:line-numbers}
 
 The same approach can be used for a predicate by instantiating it and adding it to a transaction request. Consider the following predicate:
 
@@ -18,4 +18,4 @@ The same approach can be used for a predicate by instantiating it and adding it 
 
 We can interact with this predicate in the SDK with the following implementation:
 
-<<< @/../../docs/src/snippets/cookbook/signing-transactions/predicate.ts#multiple-signers-4{ts:line-numbers}
+<<< @./snippets/signing-transactions/predicate.ts#multiple-signers-4{ts:line-numbers}

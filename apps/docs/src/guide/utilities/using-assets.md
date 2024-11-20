@@ -11,4 +11,4 @@ Included assets such as:
 
 The helper functions `getAssetFuel` and `getAssetEth` can be used to get an asset's details relative to each network. These return a combination of the asset, and network information (the return types are [`AssetFuel`](../../api/Account/index.md#assetfuel) and [`AssetEth`](../../api/Account/index.md#asseteth) respectively).
 
-<<< @/../../docs/src/snippets/utilities/using-assets.ts#using-assets-1{ts:line-numbers}
+<<< @./snippets/using-assets.ts#using-assets-1{ts:line-numbers}

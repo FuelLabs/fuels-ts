@@ -17,4 +17,4 @@ This will perform the following actions:
 
 We can then utilize the above generated types like so:
 
-<<< @/../../docs/src/snippets/predicates/deploying-predicates.ts#full{ts:line-numbers}
+<<< @./snippets/deploying-predicates.ts#full{ts:line-numbers}

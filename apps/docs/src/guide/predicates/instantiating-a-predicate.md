@@ -10,7 +10,7 @@ Just like contracts in Sway, once you've created a predicate, you can compile it
 
 After compiling, you will obtain the binary of the predicate and its JSON ABI (Application Binary Interface). Using these, you can instantiate a predicate in TypeScript as shown in the code snippet below:
 
-<<< @/../../docs/src/snippets/predicates/instantiation/simple.ts#predicate-simple-2{ts:line-numbers}
+<<< @./snippets/instantiation/simple.ts#predicate-simple-2{ts:line-numbers}
 
 The created [`Predicate`](../../api/Account/Predicate.md) instance, among other things, has three important properties: the predicate `bytes` (byte code), the `chainId`, and the predicate `address`.
 
@@ -24,7 +24,7 @@ You can pass more than one argument to a predicate. For example, this is a predi
 
 You can pass the two arguments to this predicate like this:
 
-<<< @/../../docs/src/snippets/predicates/instantiation/multi-args.ts#predicate-multi-args-2{rust:line-numbers}
+<<< @./snippets/instantiation/multi-args.ts#predicate-multi-args-2{rust:line-numbers}
 
 ## Predicate with a Struct argument
 
@@ -34,4 +34,4 @@ You can also pass a struct as an argument to a predicate. This is one such predi
 
 You can pass a struct as an argument to this predicate like this:
 
-<<< @/../../docs/src/snippets/predicates/instantiation/struct-arg.ts#predicate-main-args-struct-2{ts:line-numbers}
+<<< @./snippets/instantiation/struct-arg.ts#predicate-main-args-struct-2{ts:line-numbers}

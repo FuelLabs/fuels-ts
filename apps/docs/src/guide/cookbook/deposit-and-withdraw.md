@@ -8,8 +8,8 @@ As the name implies, this contract represents a simplified version of a liquidit
 
 Now, let's deposit some tokens into the liquidity pool contract. Since this requires forwarding assets to the contract, we need to pass the appropriate values to `callParams` when creating a contract call.
 
-<<< @/../../docs/src/snippets/cookbook/deposit-and-withdraw/deposit.ts#deposit-and-withdraw-cookbook-2{ts:line-numbers}
+<<< @./snippets/deposit-and-withdraw/deposit.ts#deposit-and-withdraw-cookbook-2{ts:line-numbers}
 
 As a final demonstration, let's use all our liquidity asset balance to withdraw from the pool and confirm we retrieved the initial amount. For this, we get our liquidity asset balance and supply it to the `withdraw()` function via `callParams`.
 
-<<< @/../../docs/src/snippets/cookbook/deposit-and-withdraw/withdraw.ts#deposit-and-withdraw-cookbook-3{ts:line-numbers}
+<<< @./snippets/deposit-and-withdraw/withdraw.ts#deposit-and-withdraw-cookbook-3{ts:line-numbers}

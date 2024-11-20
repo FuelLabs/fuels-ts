@@ -10,4 +10,4 @@ However, this guide will demonstrate how to use a predicate in a custom transact
 
 We can interact with the above and include it in a custom transaction like so:
 
-<<< @/../../docs/src/snippets/predicates/custom-transactions.ts#predicate-custom-transaction{ts:line-numbers}
+<<< @./snippets/custom-transactions.ts#predicate-custom-transaction{ts:line-numbers}

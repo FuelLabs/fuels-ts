@@ -18,8 +18,8 @@ In this contract, the function `echo_configurables` returns the values of the co
 
 During contract deployment, you can define new values for any/all of the configurable constants. The example below shows setting of one configurable constant, while the others will have default values.
 
-<<< @/../../docs/src/snippets/contracts/configurable-constants.ts#setting-configurable-constant{ts:line-numbers}
+<<< @./snippets/configurable-constants.ts#setting-configurable-constant{ts:line-numbers}
 
 Please note that when assigning new values for a `Struct`, all properties of the `Struct` must be defined. Failing to do so will result in an error:
 
-<<< @/../../docs/src/snippets/contracts/configurable-constants.ts#invalid-configurable{ts:line-numbers}
+<<< @./snippets/configurable-constants.ts#invalid-configurable{ts:line-numbers}

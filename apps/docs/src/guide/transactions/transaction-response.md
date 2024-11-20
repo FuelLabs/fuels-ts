@@ -11,12 +11,12 @@ Once a transaction has been submitted, you may want to extract information regar
 
 We can easily extract this information from a contract call:
 
-<<< @/../../docs/src/snippets/transactions/transaction-response/contract-call.ts#transaction-response-1{ts:line-numbers}
+<<< @./snippets/transaction-response/contract-call.ts#transaction-response-1{ts:line-numbers}
 
 We can also use the result of a transaction request to extract a transaction summary:
 
-<<< @/../../docs/src/snippets/transactions/transaction-response/from-submitted-request.ts#transaction-response-2{ts:line-numbers}
+<<< @./snippets/transaction-response/from-submitted-request.ts#transaction-response-2{ts:line-numbers}
 
 Or we can build a transaction summary from a stored transaction ID:
 
-<<< @/../../docs/src/snippets/transactions/transaction-response/from-submitted-request.ts#transaction-response-3{ts:line-numbers}
+<<< @./snippets/transaction-response/from-submitted-request.ts#transaction-response-3{ts:line-numbers}

@@ -2,7 +2,7 @@
 
 When deploying a contract, you can specify the custom storage slots that you want to use.
 
-<<< @/../../docs/src/snippets/contracts/storage-slots/override-storage-slots.ts#contract-deployment-storage-slots{ts:line-numbers}
+<<< @./snippets/storage-slots/override-storage-slots.ts#contract-deployment-storage-slots{ts:line-numbers}
 
 ## Using plain JavaScript
 
@@ -10,7 +10,7 @@ In the above example, we directly imported the storage slots from a JSON file ge
 
 Instead of importing from a file, you can also specify the custom storage slots directly in your code:
 
-<<< @/../../docs/src/snippets/contracts/storage-slots/override-storage-slots-inline.ts#contract-deployment-storage-slots-inline{ts:line-numbers}
+<<< @./snippets/storage-slots/override-storage-slots-inline.ts#contract-deployment-storage-slots-inline{ts:line-numbers}
 
 ## Auto-load of Storage Slots
 

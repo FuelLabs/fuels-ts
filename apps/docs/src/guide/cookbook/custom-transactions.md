@@ -8,10 +8,10 @@ Consider the following script that transfers multiple assets to a contract:
 
 This script can be executed by creating a [`ScriptTransactionRequest`](../../api/Account/ScriptTransactionRequest.md), appending the resource and contract inputs/outputs and then sending the transaction, as follows:
 
-<<< @/../../docs/src/snippets/scripts/script-custom-transaction.ts#custom-transactions-2{ts:line-numbers}
+<<< @/../../docs/src/guide/scripts/snippets/script-custom-transaction.ts#custom-transactions-2{ts:line-numbers}
 
 ## Full Example
 
 For a full example, see below:
 
-<<< @/../../docs/src/snippets/scripts/script-custom-transaction.ts#full{ts:line-numbers}
+<<< @/../../docs/src/guide/scripts/snippets/script-custom-transaction.ts#full{ts:line-numbers}

@@ -10,7 +10,7 @@ The SDK handles the conversion from TypeScript to Sway in the background, allowi
 
 An `Array` in Sway is simply a typed `Array`, as demonstrated in the following example:
 
-<<< @/../../docs/src/snippets/types/arrays.ts#arrays-1{ts:line-numbers}
+<<< @./snippets/arrays.ts#arrays-1{ts:line-numbers}
 
 In Sway, `Arrays` are fixed in size, so the storage size is determined at the time of program compilation, not during runtime.
 
@@ -20,7 +20,7 @@ Let's say you have a contract that takes an `Array` of type `u64` with a size le
 
 To execute the contract call using the SDK, you would do something like this:
 
-<<< @/../../docs/src/snippets/types/arrays.ts#arrays-3{ts:line-numbers}
+<<< @./snippets/arrays.ts#arrays-3{ts:line-numbers}
 
 You can easily access and validate the `Array` returned by the contract method, as demonstrated in the previous example.
 
@@ -28,11 +28,11 @@ As previously mentioned, Sway `Arrays` have a predefined type and size, so you n
 
 Passing an Array with an incorrect size, whether it has more or fewer elements than the specified length, will result in an error:
 
-<<< @/../../docs/src/snippets/types/arrays.ts#arrays-4{ts:line-numbers}
+<<< @./snippets/arrays.ts#arrays-4{ts:line-numbers}
 
 Similarly, passing an `Array` with an incorrect type will also result in an error:
 
-<<< @/../../docs/src/snippets/types/arrays.ts#arrays-5{ts:line-numbers}
+<<< @./snippets/arrays.ts#arrays-5{ts:line-numbers}
 
 ## Vectors
 

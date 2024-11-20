@@ -16,7 +16,7 @@ In this example, you'll notice the use of a configurable constant named `WHITELI
 
 If there is a need to whitelist another address, the `WHITELISTED` constant can be easily updated. The following snippet demonstrates how to set a new value for the `WHITELISTED` constant and to make the predicate execute the transfer:
 
-<<< @/../../docs/src/snippets/predicates/configurables/configurable-set-data.ts#full{ts:line-numbers}
+<<< @./snippets/configurables/configurable-set-data.ts#full{ts:line-numbers}
 
 By ensuring that the updated `WHITELISTED` address matches the intended recipient's address, the predicate will validate the transfer successfully.
 
@@ -24,7 +24,7 @@ By ensuring that the updated `WHITELISTED` address matches the intended recipien
 
 In scenarios where the default whitelisted address is already the intended recipient, there's no need to update the `WHITELISTED` constant. The predicate will validate the transfer based on the default value. Here's how this scenario might look:
 
-<<< @/../../docs/src/snippets/predicates/configurables/configurable-default.ts#full{ts:line-numbers}
+<<< @./snippets/configurables/configurable-default.ts#full{ts:line-numbers}
 
 This ability to configure constants within predicates provides a flexible mechanism for customizing their behavior, thereby enhancing the robustness and versatility of our asset transfer process.
 

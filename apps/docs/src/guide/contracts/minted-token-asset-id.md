@@ -15,7 +15,7 @@ Consider the following simplified token contract:
 
 Imagine that this contract is already deployed and we are about to mint some coins:
 
-<<< @/../../docs/src/snippets/contracts/utilities/minted-token-asset-id.ts#minted-token-asset-id-2{ts:line-numbers}
+<<< @./snippets/utilities/minted-token-asset-id.ts#minted-token-asset-id-2{ts:line-numbers}
 
 ## Obtaining the Asset ID
 
@@ -25,4 +25,4 @@ Since the asset ID depends on the contract ID, which is always dynamic (unlike t
 
 The SDK provides a helper named `createAssetId` which takes the contract ID and sub ID as parameters. This helper internally calls `getMintedAssetId` and returns the Sway native parameter [AssetId](https://docs.fuel.network/docs/fuels-ts/interfaces/#assetid), ready to be used in a Sway program invocation:
 
-<<< @/../../docs/src/snippets/contracts/utilities/create-asset-id.ts#create-asset-id-1{ts:line-numbers}
+<<< @./snippets/utilities/create-asset-id.ts#create-asset-id-1{ts:line-numbers}

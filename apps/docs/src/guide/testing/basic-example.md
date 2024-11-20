@@ -10,7 +10,7 @@ Let's use `launchTestNode` with the counter contract from the [Fuel dApp tutoria
 
 _Note: you will have to change the import paths of the contract factory and bytecode to match your folder structure._
 
-<<< @/../../docs/src/snippets/testing/launching-a-test-node.ts#basic-example{ts:line-numbers}
+<<< @./snippets/launching-a-test-node.ts#basic-example{ts:line-numbers}
 
 ## Summary
 

@@ -21,21 +21,21 @@ forc build
 
 It will produce the following ABI:
 
-<<< @/../../docs/src/snippets/encoding/encode-and-decode.jsonc#encode-and-decode-2{json:line-numbers}
+<<< @./snippets/encode-and-decode.jsonc#encode-and-decode-2{json:line-numbers}
 
 Now, let's prepare some data to pass to the `main` function to retrieve the combined integer. The function expects and returns a `u32` integer. So here, we will encode the `u32` to pass it to the function and receive the same `u32` back, as bytes, that we'll use for decoding. We can do both of these with the `Interface`.
 
 First, let's prepare the transaction:
 
-<<< @/../../docs/src/snippets/encoding/encode-and-decode.ts#encode-and-decode-3{ts:line-numbers}
+<<< @./snippets/encode-and-decode.ts#encode-and-decode-3{ts:line-numbers}
 
 Now, we can encode the script data to use in the transaction:
 
-<<< @/../../docs/src/snippets/encoding/encode-and-decode.ts#encode-and-decode-4{ts:line-numbers}
+<<< @./snippets/encode-and-decode.ts#encode-and-decode-4{ts:line-numbers}
 
 Finally, we can decode the result:
 
-<<< @/../../docs/src/snippets/encoding/encode-and-decode.ts#encode-and-decode-5{ts:line-numbers}
+<<< @./snippets/encode-and-decode.ts#encode-and-decode-5{ts:line-numbers}
 
 A similar approach can be taken with [Predicates](../predicates/index.md); however, you must set the encoded values to the `predicateData` property.
 
@@ -45,4 +45,4 @@ A similar approach can be taken with [Predicates](../predicates/index.md); howev
 
 Here is the full example of the encoding and decoding methods:
 
-<<< @/../../docs/src/snippets/encoding/encode-and-decode.ts#full{ts:line-numbers}
+<<< @./snippets/encode-and-decode.ts#full{ts:line-numbers}

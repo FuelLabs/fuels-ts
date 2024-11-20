@@ -12,7 +12,7 @@ In this script, `AMOUNT` is a configurable constant with a default value of `10`
 
 To change the value of the `AMOUNT` constant, we can use the `setConfigurableConstants` method as shown in the following example:
 
-<<< @/../../docs/src/snippets/scripts/script-with-configurable.ts#script-with-configurable-contants-2{ts:line-numbers}
+<<< @./snippets/script-with-configurable.ts#script-with-configurable-contants-2{ts:line-numbers}
 
 In this example, we're setting a new value `81` for the `AMOUNT` constant. We then call the main function with an inputted value of `10`.
 
@@ -24,4 +24,4 @@ This way, configurable constants in scripts allow for more flexibility and dynam
 
 For a full example, see below:
 
-<<< @/../../docs/src/snippets/scripts/script-with-configurable.ts#full{ts:line-numbers}
+<<< @./snippets/script-with-configurable.ts#full{ts:line-numbers}

@@ -16,7 +16,7 @@ Upon execution, this function returns a promise that resolves to a transaction r
 
 Here is an example of how to use the `transfer` function:
 
-<<< @/../../docs/src/snippets/cookbook/wallet-transferring/between-accounts.ts#transferring-assets-1{ts:line-numbers}
+<<< @./snippets/wallet-transferring/between-accounts.ts#transferring-assets-1{ts:line-numbers}
 
 In the previous example, we used the `transfer` method which creates a `ScriptTransactionRequest`, populates its data with the provided transfer information and submits the transaction.
 
@@ -24,17 +24,17 @@ However, there may be times when you need the Transaction ID before actually sub
 
 This method also creates a `ScriptTransactionRequest` and populates it with the provided data but returns the request object prior to submission.
 
-<<< @/../../docs/src/snippets/cookbook/wallet-transferring/create-transfer.ts#transferring-assets-2{ts:line-numbers}
+<<< @./snippets/wallet-transferring/create-transfer.ts#transferring-assets-2{ts:line-numbers}
 
 > **Note**: Any changes made to a transaction request will alter the transaction ID. Therefore, you should only get the transaction ID after all modifications have been made.
 
-<<< @/../../docs/src/snippets/cookbook/wallet-transferring/create-transfer-2.ts#transferring-assets-3{ts:line-numbers}
+<<< @./snippets/wallet-transferring/create-transfer-2.ts#transferring-assets-3{ts:line-numbers}
 
 ## Transferring Assets To Multiple Wallets
 
 To transfer assets to multiple wallets, use the `Account.batchTransfer` method:
 
-<<< @/../../docs/src/snippets/wallets/transfers/batch-transfer.ts#wallet-transferring-6{ts:line-numbers}
+<<< @./snippets/transfers/batch-transfer.ts#wallet-transferring-6{ts:line-numbers}
 
 ## Transferring Assets To Contracts
 
@@ -46,7 +46,7 @@ If you have the [Contract](../contracts/) instance of the deployed contract, you
 
 Here's an example demonstrating how to use `transferToContract`:
 
-<<< @/../../docs/src/snippets/cookbook/wallet-transferring/transferring-to-contracts.ts#transferring-assets-4{ts:line-numbers}
+<<< @./snippets/wallet-transferring/transferring-to-contracts.ts#transferring-assets-4{ts:line-numbers}
 
 _Note: Use `transferToContract` exclusively for transfers to a contract. For transfers to an account address, use `transfer` instead._
 
@@ -54,7 +54,7 @@ _Note: Use `transferToContract` exclusively for transfers to a contract. For tra
 
 Similar to the `Account.batchTransfer` method, you can transfer multiple assets to multiple contracts using the `Account.batchTransferToContracts` method. Here's how it works:
 
-<<< @/../../docs/src/snippets/cookbook/wallet-transferring/transferring-to-multiple-contracts.ts#transferring-assets-5{ts:line-numbers}
+<<< @./snippets/wallet-transferring/transferring-to-multiple-contracts.ts#transferring-assets-5{ts:line-numbers}
 
 Always remember to call the `waitForResult()` function on the transaction response. That ensures the transaction has been mined successfully before proceeding.
 

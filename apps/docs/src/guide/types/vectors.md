@@ -6,7 +6,7 @@ In Sway, a Vector is a dynamic-sized collection of elements of the same type. Ve
 
 A basic Vector in Sway is similar to a TypeScript Array:
 
-<<< @/../../docs/src/snippets/types/vectors.ts#vector-1{ts:line-numbers}
+<<< @./snippets/vectors.ts#vector-1{ts:line-numbers}
 
 Consider the following example of a `EmployeeData` struct in Sway:
 
@@ -18,7 +18,7 @@ Now, let's look at the following contract method. It receives a Vector of the `T
 
 The code snippet below demonstrates how to call this Sway contract method, which accepts a `Vec<Transaction>`:
 
-<<< @/../../docs/src/snippets/types/vectors.ts#vector-4{ts:line-numbers}
+<<< @./snippets/vectors.ts#vector-4{ts:line-numbers}
 
 ## Converting Bytecode to Vectors
 
@@ -28,4 +28,4 @@ Some functions require you to pass in bytecode to the function. The type of the 
 
 To pass bytecode to this function, you can make use of the `arrayify` function to convert the bytecode file contents into a `UInt8Array`, the TS compatible type for Sway's `Vec<u8>` type and pass it the function like so:
 
-<<< @/../../docs/src/snippets/types/vectors.ts#vector-bytecode-input-ts{ts:line-numbers}
+<<< @./snippets/vectors.ts#vector-bytecode-input-ts{ts:line-numbers}

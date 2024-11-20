@@ -4,4 +4,4 @@ In the previous example we demonstrated how you can instantiate a [`ScriptTransa
 
 This cookbook demonstrates how we can utilize a contract call to build out a custom transaction, allowing us to update on-chain state and transfer assets to a recipient address.
 
-<<< @/../../docs/src/snippets/cookbook/custom-contract-calls.ts#custom-transactions-contract-calls{ts:line-numbers}
+<<< @./snippets/custom-contract-calls.ts#custom-transactions-contract-calls{ts:line-numbers}

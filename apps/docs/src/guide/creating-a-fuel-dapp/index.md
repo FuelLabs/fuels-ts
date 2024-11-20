@@ -202,7 +202,7 @@ Testing the integration with your smart contract isn't essential, but it's good 
 
 We've provided some examples for each program type in the `./test` directory of your project. But let's also add a test for our new `decrement_counter` function in the `./test/contract.test.ts` file:
 
-<<< @/../../docs/src/snippets/create-fuels/decrement-counter.ts#full{ts:line-numbers}
+<<< @./snippets/decrement-counter.ts#full{ts:line-numbers}
 
 The template also comes with a UI testing setup using [Playwright](https://playwright.dev/). We can add a test for our new `decrement_counter` function in the `./test/ui/ui.test.ts` file:
 

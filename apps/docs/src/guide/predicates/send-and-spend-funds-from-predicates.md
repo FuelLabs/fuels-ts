@@ -20,17 +20,17 @@ Once you've compiled the predicate (`forc build`), you'll obtain two important a
 
 This is where we also pass in the predicate's data. Note that the `main` function in our predicate example requires a parameter called `input_address` of type `b256`. We will pass this parameter to the `Predicate` constructor along with the bytecode and the JSON ABI.
 
-<<< @/../../docs/src/snippets/predicates/cookbook/transferring-assets.ts#send-and-spend-funds-from-predicates-2{ts:line-numbers}
+<<< @./snippets/cookbook/transferring-assets.ts#send-and-spend-funds-from-predicates-2{ts:line-numbers}
 
 > Note: If you want to pass in the predicate data _after_ instantiating the `Predicate` or if you want to use a different data than the one passed in the constructor, you will have to create a new `Predicate` instance.
 
 With the predicate instantiated, we can transfer funds to its address. This requires us to have a wallet with sufficient funds. If you're unsure about using wallets with the SDK, we recommend checking out our [wallet](../wallets/) guide.
 
-<<< @/../../docs/src/snippets/predicates/cookbook/transferring-assets.ts#send-and-spend-funds-from-predicates-3{ts:line-numbers}
+<<< @./snippets/cookbook/transferring-assets.ts#send-and-spend-funds-from-predicates-3{ts:line-numbers}
 
 Now that our predicate holds funds, we can use it to validate a transaction and hence execute our transfer. We can achieve that by doing the following:
 
-<<< @/../../docs/src/snippets/predicates/cookbook/transferring-assets.ts#send-and-spend-funds-from-predicates-5{ts:line-numbers}
+<<< @./snippets/cookbook/transferring-assets.ts#send-and-spend-funds-from-predicates-5{ts:line-numbers}
 
 Note the method transfer has two parameters: the recipient's address and the intended transfer amount.
 
@@ -42,13 +42,13 @@ In a similar approach, you can use the `createTransfer` method, which returns a 
 
 The following example, we are pre-staging a transaction and therefore we are able to know the transaction ID without actually submitting the transaction.
 
-<<< @/../../docs/src/snippets/predicates/cookbook/pre-stage.ts#send-and-spend-funds-from-predicates-8{ts:line-numbers}
+<<< @./snippets/cookbook/pre-stage.ts#send-and-spend-funds-from-predicates-8{ts:line-numbers}
 
 ## Spending Entire Predicate Held Amount
 
 Trying to forward the entire amount held by the predicate results in an error because no funds are left to cover the transaction fees. Attempting this will result in an error message like:
 
-<<< @/../../docs/src/snippets/predicates/cookbook/failure-not-enough-funds.ts#send-and-spend-funds-from-predicates-6{ts:line-numbers}
+<<< @./snippets/cookbook/failure-not-enough-funds.ts#send-and-spend-funds-from-predicates-6{ts:line-numbers}
 
 ## Predicate Validation Failure
 
@@ -56,4 +56,4 @@ What happens when a predicate fails to validate? Recall our predicate only valid
 
 When a predicate fails to validate, the SDK throws an error that starts like this:
 
-<<< @/../../docs/src/snippets/predicates/cookbook/failure-returns-false.ts#send-and-spend-funds-from-predicates-7{ts:line-numbers}
+<<< @./snippets/cookbook/failure-returns-false.ts#send-and-spend-funds-from-predicates-7{ts:line-numbers}
