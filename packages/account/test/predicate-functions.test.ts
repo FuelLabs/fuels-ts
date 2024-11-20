@@ -64,32 +64,5 @@ describe('Predicate', () => {
         });
       }).toThrow('Cannot use ABI without "main" function');
     });
-
-    it('creates a new instance with updated parameters', async () => {
-      using launched = await setupTestProviderAndWallets();
-      const { provider } = launched;
-
-      const predicate = new Predicate({
-        bytecode: predicateBytecode,
-        abi: predicateAbi,
-        provider,
-        configurableConstants: { value: false },
-        data: ['DADA'],
-      });
-
-      expect(predicate.predicateData).toEqual(['DADA']);
-      expect(predicate.bytes[0]).toEqual(0);
-
-      const newPredicate = predicate.toNewInstance({
-        configurableConstants: { value: true },
-        data: ['NADA'],
-      });
-
-      expect(newPredicate.predicateData).toEqual(['NADA']);
-      expect(newPredicate.bytes.slice(1)).toEqual(predicate.bytes.slice(1));
-      expect(newPredicate.bytes[0]).not.toEqual(predicate.bytes[0]);
-      expect(newPredicate.interface?.jsonAbi).toEqual(predicate.interface?.jsonAbi);
-      expect(newPredicate.provider).toEqual(predicate.provider);
-    });
   });
 });

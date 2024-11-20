@@ -48,6 +48,7 @@ export class Predicate<
   bytes: Uint8Array;
   predicateData: TData = [] as unknown as TData;
   interface: Interface;
+  configurableConstants: TConfigurables = {} as TConfigurables;
 
   /**
    * Creates an instance of the Predicate class.
@@ -65,38 +66,29 @@ export class Predicate<
     data,
     configurableConstants,
   }: PredicateParams<TData, TConfigurables>) {
-    const { predicateBytes, predicateInterface } = Predicate.processPredicateData(
-      bytecode,
-      abi,
-      configurableConstants
-    );
+    const { predicateBytes, predicateInterface } = Predicate.processPredicateData(bytecode, abi);
     const address = Address.fromB256(getPredicateRoot(predicateBytes));
     super(address, provider);
 
     this.bytes = predicateBytes;
     this.interface = predicateInterface;
-    if (data !== undefined && data.length > 0) {
+
+    if (configurableConstants && Object.keys(configurableConstants).length) {
+      this.configurableConstants = configurableConstants;
+    }
+    if (data && data.length) {
       this.predicateData = data;
     }
   }
 
   /**
-   * Creates a new Predicate instance with updated parameters while maintaining the original bytecode and ABI
+   * Updates parameters of predicate
    *
    * @param params - Object containing optional new configurableConstants and data
-   * @returns A new Predicate instance with the updated parameters
    */
-  toNewInstance(params: {
-    configurableConstants?: TConfigurables;
-    data?: TData;
-  }): Predicate<TData, TConfigurables> {
-    return new Predicate<TData, TConfigurables>({
-      bytecode: this.bytes,
-      abi: this.interface?.jsonAbi,
-      provider: this.provider,
-      data: params.data ?? this.predicateData,
-      configurableConstants: params.configurableConstants,
-    });
+  setParams(params: { configurableConstants?: TConfigurables; data?: TData }) {
+    this.predicateData = params.data ?? this.predicateData;
+    this.configurableConstants = params.configurableConstants ?? this.configurableConstants;
   }
 
   /**
@@ -119,7 +111,13 @@ export class Predicate<
     request.inputs.filter(isRequestInputCoinOrMessage).forEach((input) => {
       if (isRequestInputResourceFromOwner(input, this.address)) {
         // eslint-disable-next-line no-param-reassign
-        input.predicate = hexlify(this.bytes);
+        input.predicate = hexlify(
+          this.setConfigurableConstants(
+            this.bytes,
+            this.configurableConstants ?? {},
+            this.interface
+          )
+        );
         // eslint-disable-next-line no-param-reassign
         input.predicateData = hexlify(this.getPredicateData());
         // eslint-disable-next-line no-param-reassign
@@ -171,14 +169,9 @@ export class Predicate<
    *
    * @param bytes - The bytes of the predicate.
    * @param jsonAbi - The JSON ABI of the predicate.
-   * @param configurableConstants - Optional configurable constants for the predicate.
    * @returns An object containing the new predicate bytes and interface.
    */
-  private static processPredicateData(
-    bytes: BytesLike,
-    jsonAbi: JsonAbi,
-    configurableConstants?: { [name: string]: unknown }
-  ) {
+  private static processPredicateData(bytes: BytesLike, jsonAbi: JsonAbi) {
     let predicateBytes = arrayify(bytes);
     const abiInterface: Interface = new Interface(jsonAbi);
 
@@ -186,14 +179,6 @@ export class Predicate<
       throw new FuelError(
         ErrorCode.ABI_MAIN_METHOD_MISSING,
         'Cannot use ABI without "main" function.'
-      );
-    }
-
-    if (configurableConstants && Object.keys(configurableConstants).length) {
-      predicateBytes = Predicate.setConfigurableConstants(
-        predicateBytes,
-        configurableConstants,
-        abiInterface
       );
     }
 
@@ -221,7 +206,9 @@ export class Predicate<
     );
     return resources.map((resource) => ({
       ...resource,
-      predicate: hexlify(this.bytes),
+      predicate: hexlify(
+        this.setConfigurableConstants(this.bytes, this.configurableConstants ?? {}, this.interface)
+      ),
       predicateData: hexlify(this.getPredicateData()),
     }));
   }
@@ -235,9 +222,39 @@ export class Predicate<
   override generateFakeResources(coins: FakeResources[]): Array<Resource> {
     return super.generateFakeResources(coins).map((coin) => ({
       ...coin,
-      predicate: hexlify(this.bytes),
+      predicate: hexlify(
+        this.setConfigurableConstants(this.bytes, this.configurableConstants ?? {}, this.interface)
+      ),
       predicateData: hexlify(this.getPredicateData()),
     }));
+  }
+
+  /**
+   *
+   * @param account - The account used to pay the deployment costs.
+   * @returns The _blobId_ and a _waitForResult_ callback that returns the deployed predicate
+   * once the blob deployment transaction finishes.
+   *
+   * The returned loader predicate will have the same configurable constants
+   * as the original predicate which was used to generate the loader predicate.
+   */
+  async deploy<T = this>(account: Account) {
+    return deployScriptOrPredicate<T>({
+      deployer: account,
+      abi: this.interface.jsonAbi,
+      bytecode: this.setConfigurableConstants(
+        this.bytes,
+        this.configurableConstants ?? {},
+        this.interface
+      ),
+      loaderInstanceCallback: (loaderBytecode, newAbi) =>
+        new Predicate({
+          bytecode: loaderBytecode,
+          abi: newAbi,
+          provider: this.provider,
+          data: this.predicateData,
+        }) as T,
+    });
   }
 
   /**
@@ -248,7 +265,7 @@ export class Predicate<
    * @param abiInterface - The ABI interface of the predicate.
    * @returns The mutated bytes with the configurable constants set.
    */
-  private static setConfigurableConstants(
+  private setConfigurableConstants(
     bytes: Uint8Array,
     configurableConstants: { [name: string]: unknown },
     abiInterface: Interface
@@ -324,29 +341,5 @@ export class Predicate<
     }
 
     return index;
-  }
-
-  /**
-   *
-   * @param account - The account used to pay the deployment costs.
-   * @returns The _blobId_ and a _waitForResult_ callback that returns the deployed predicate
-   * once the blob deployment transaction finishes.
-   *
-   * The returned loader predicate will have the same configurable constants
-   * as the original predicate which was used to generate the loader predicate.
-   */
-  async deploy<T = this>(account: Account) {
-    return deployScriptOrPredicate<T>({
-      deployer: account,
-      abi: this.interface.jsonAbi,
-      bytecode: this.bytes,
-      loaderInstanceCallback: (loaderBytecode, newAbi) =>
-        new Predicate({
-          bytecode: loaderBytecode,
-          abi: newAbi,
-          provider: this.provider,
-          data: this.predicateData,
-        }) as T,
-    });
   }
 }
