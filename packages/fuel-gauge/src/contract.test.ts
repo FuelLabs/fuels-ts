@@ -28,7 +28,6 @@ import {
   launchTestNode,
   TestAssetId,
 } from 'fuels/test-utils';
-import type { DeployContractConfig } from 'fuels/test-utils';
 
 import {
   CallTestContract,
@@ -42,23 +41,14 @@ import { PredicateTrue } from '../test/typegen/predicates/PredicateTrue';
 
 import { launchTestContract } from './utils';
 
-const contractsConfigs: DeployContractConfig[] = [
-  {
-    factory: CallTestContractFactory,
-  },
-  {
-    factory: CallTestContractFactory,
-  },
-];
+const contractsConfigs = [CallTestContractFactory, CallTestContractFactory];
 
 const txPointer = '0x00000000000000000000000000000000';
 
 const AltToken = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
 function setupTestContract() {
-  return launchTestContract({
-    factory: CallTestContractFactory,
-  });
+  return launchTestContract(CallTestContractFactory);
 }
 
 /**
