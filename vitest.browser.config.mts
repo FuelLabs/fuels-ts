@@ -21,7 +21,6 @@ const config: UserConfig = {
         "util",
         "stream",
         "path",
-        "fs",
         "os",
       ],
       overrides: {
