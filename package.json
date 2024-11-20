@@ -123,7 +123,7 @@
     "ts-generator": "^0.1.1",
     "tsup": "^6.7.0",
     "tsx": "^4.19.1",
-    "turbo": "^2.1.2",
+    "turbo": "^2.3.0",
     "typescript": "~5.6.3",
     "vite": "^5.4.9",
     "vite-plugin-json5": "^1.1.2",
