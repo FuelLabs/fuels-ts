@@ -5,7 +5,7 @@
     "dist"
   ],
   "scripts": {
-    "lint": "tsc --noEmit",
+    "type:check": "tsc --noEmit",
     "pretest": "run-s build:forc ",
     "build:forc": "pnpm fuels build"
   },
