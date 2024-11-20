@@ -261,6 +261,12 @@ DEVNET_WALLET_PVT_KEY=0x...
 TESTNET_WALLET_PVT_KEY=0x...
 ```
 
+This will enable you to run the e2e test locally against the live network:
+
+```sh
+pnpm test:filter e2e-script
+```
+
 <!-- TODO: add/fix block explorer URL after testnet support- Checking Wallet Balance: https://fuellabs.github.io/block-explorer-v2/beta-5/?#/address/fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg -->
 
 # Commit Convention
