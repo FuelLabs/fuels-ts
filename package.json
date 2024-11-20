@@ -45,6 +45,7 @@
     "lint:md-links": "tsx ./scripts/lint-md-links",
     "lint:package-jsons": "tsx ./scripts/lint-package-jsons",
     "type:check": "turbo run type:check",
+    "type:check-tests": "tsc -p tsconfig.test.json",
     "prettier:check": "prettier --check packages --check apps/docs-snippets",
     "prettier:format": "prettier --write packages --check apps/docs-snippets",
     "verify:package-exports": "tsx ./scripts/verify-package-exports",
