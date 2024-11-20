@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "pretest": "./scripts/pretest.sh",
-    "lint": "tsc --noEmit"
+    "type:check": "tsc --noEmit"
   },
   "devDependencies": {
     "@fuel-ts/account": "workspace:*",
