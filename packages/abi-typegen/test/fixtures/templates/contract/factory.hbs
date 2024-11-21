@@ -33,7 +33,7 @@ export class MyContractFactory extends ContractFactory<MyContract> {
   static deploy (
     wallet: Account,
     options: DeployContractOptions = {}
-  ): ReturnType<MyContractFactory['deploy']> {
+  ) {
     const factory = new MyContractFactory(wallet);
     return factory.deploy(options);
   }

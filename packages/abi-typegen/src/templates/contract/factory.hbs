@@ -23,7 +23,7 @@ export class {{capitalizedName}}Factory extends ContractFactory<{{capitalizedNam
   static deploy (
     wallet: Account,
     options: DeployContractOptions = {}
-  ): ReturnType<{{capitalizedName}}Factory['deploy']> {
+  ) {
     const factory = new {{capitalizedName}}Factory(wallet);
     return factory.deploy(options);
   }
