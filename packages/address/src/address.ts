@@ -40,11 +40,14 @@ export default class Address extends AbstractAddress {
   /**
    * @param address - A Bech32 address
    */
-  constructor(address: Bech32Address) {
+  constructor(address: Bech32Address | B256Address) {
     super();
-    this.bech32Address = normalizeBech32(address);
 
-    if (!isBech32(this.bech32Address)) {
+    if (isBech32(address)) {
+      this.bech32Address = normalizeBech32(address as Bech32Address);
+    } else if (isB256(address)) {
+      this.bech32Address = toBech32(address);
+    } else {
       throw new FuelError(
         FuelError.CODES.INVALID_BECH32_ADDRESS,
         `Invalid Bech32 Address: ${address}.`
@@ -137,8 +140,6 @@ export default class Address extends AbstractAddress {
 
   /**
    * Returns the value of the `bech32Address` property
-   * @deprecated
-   * Type `Bech32Address` is now deprecated, as is this method. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
    * @returns The value of `bech32Address` property
    */
   override valueOf(): string {
