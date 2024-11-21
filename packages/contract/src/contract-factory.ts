@@ -198,16 +198,16 @@ export default class ContractFactory<TContract extends Contract = Contract> {
    * @param deployOptions - Options for deploying the contract.
    * @returns A promise that resolves to the deployed contract instance.
    */
-  async deploy(
+  async deploy<T extends Contract = TContract>(
     deployOptions: DeployContractOptions = {}
-  ): Promise<DeployContractResult<TContract>> {
+  ): Promise<DeployContractResult<T>> {
     const account = this.getAccount();
     const { consensusParameters } = account.provider.getChain();
     const maxContractSize = consensusParameters.contractParameters.contractMaxSize.toNumber();
 
     return this.bytecode.length > maxContractSize
       ? this.deployAsBlobTx(deployOptions)
-      : this.deployAsCreateTx(deployOptions);
+      : this.deployAsCreateTx<T>(deployOptions);
   }
 
   /**
@@ -216,9 +216,9 @@ export default class ContractFactory<TContract extends Contract = Contract> {
    * @param deployOptions - Options for deploying the contract.
    * @returns A promise that resolves to the deployed contract instance.
    */
-  async deployAsCreateTx(
+  async deployAsCreateTx<T extends Contract = TContract>(
     deployOptions: DeployContractOptions = {}
-  ): Promise<DeployContractResult<TContract>> {
+  ): Promise<DeployContractResult<T>> {
     const account = this.getAccount();
     const { consensusParameters } = account.provider.getChain();
     const maxContractSize = consensusParameters.contractParameters.contractMaxSize.toNumber();
@@ -236,7 +236,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
 
     const waitForResult = async () => {
       const transactionResult = await transactionResponse.waitForResult<TransactionType.Create>();
-      const contract = new Contract(contractId, this.interface, account) as TContract;
+      const contract = new Contract(contractId, this.interface, account) as T;
 
       return { contract, transactionResult };
     };
@@ -254,11 +254,11 @@ export default class ContractFactory<TContract extends Contract = Contract> {
    * @param deployOptions - Options for deploying the contract.
    * @returns A promise that resolves to the deployed contract instance.
    */
-  async deployAsBlobTx(
+  async deployAsBlobTx<T extends Contract = TContract>(
     deployOptions: DeployContractOptions = {
       chunkSizeMultiplier: CHUNK_SIZE_MULTIPLIER,
     }
-  ): Promise<DeployContractResult<TContract>> {
+  ): Promise<DeployContractResult<T>> {
     const account = this.getAccount();
     const { configurableConstants, chunkSizeMultiplier } = deployOptions;
     if (configurableConstants) {
@@ -368,7 +368,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
       txIdResolver(createRequest.getTransactionId(account.provider.getChainId()));
       const transactionResponse = await account.sendTransaction(createRequest);
       const transactionResult = await transactionResponse.waitForResult<TransactionType.Create>();
-      const contract = new Contract(contractId, this.interface, account) as TContract;
+      const contract = new Contract(contractId, this.interface, account) as T;
 
       return { contract, transactionResult };
     };
