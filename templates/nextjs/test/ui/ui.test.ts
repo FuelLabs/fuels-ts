@@ -8,38 +8,37 @@ const setup = async ({ page }: { page: Page }) => {
 
   await page.waitForTimeout(2000);
 
-  const connectWalletButton = page.getByText('Connect Wallet');
+  const connectWalletButton = await page.getByText('Connect Wallet');
   await connectWalletButton.click();
 
-  const burnerWalletButton = page.getByText('Burner Wallet');
+  const burnerWalletButton = await page.getByText('Burner Wallet');
   await burnerWalletButton.click();
 };
 
-test.extend({
-  page: async ({ page }, use) => {
+test.describe('Counter Contract Tests', () => {
+  test.beforeEach(async ({ page }) => {
     await page.evaluate(() => window.localStorage.clear());
-    await use(page);
-  },
-});
+  });
 
-test('counter contract - increment function call works properly', async ({ page }) => {
-  await setup({ page });
+  test('counter contract - increment function call works properly', async ({ page }) => {
+    await setup({ page });
 
-  const topUpWalletButton = page.getByText('Transfer 5 ETH', { exact: true });
-  await topUpWalletButton.click();
+    const topUpWalletButton = await page.getByText('Transfer 5 ETH', { exact: true });
+    await topUpWalletButton.click();
 
-  await page.waitForTimeout(2000);
+    await page.waitForTimeout(2000);
 
-  const contractTab = page.getByText('Contract');
-  await contractTab.click();
+    const contractTab = await page.getByText('Contract');
+    await contractTab.click();
 
-  const initialCounterValue = +page.getByTestId('counter').textContent;
+    const initialCounterValue = +(await page.getByTestId('counter').textContent());
 
-  const incrementButton = page.getByText('Increment', { exact: true });
-  await incrementButton.click();
+    const incrementButton = await page.getByText('Increment', { exact: true });
+    await incrementButton.click();
 
-  await page.waitForTimeout(2000);
+    await page.waitForTimeout(2000);
 
-  const counterValueAfterIncrement = +page.getByTestId('counter').textContent;
-  expect(counterValueAfterIncrement).toEqual(initialCounterValue + 1);
+    const counterValueAfterIncrement = +(await page.getByTestId('counter').textContent());
+    expect(counterValueAfterIncrement).toEqual(initialCounterValue + 1);
+  });
 });
