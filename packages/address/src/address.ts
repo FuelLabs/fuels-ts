@@ -38,7 +38,7 @@ export default class Address extends AbstractAddress {
   // #endregion address-2
 
   /**
-   * @param address - A Bech32 address
+   * @param address - A Bech32 address or B256 address
    */
   constructor(address: Bech32Address | B256Address) {
     super();
@@ -139,8 +139,8 @@ export default class Address extends AbstractAddress {
   }
 
   /**
-   * Returns the value of the `bech32Address` property
-   * @returns The value of `bech32Address` property
+   * Wraps the B256 address `checksum` and returns it as a string
+   * @returns The B256 address `checksum` as a string
    */
   override valueOf(): string {
     return this.toChecksum();
