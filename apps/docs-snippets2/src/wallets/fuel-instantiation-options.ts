@@ -2,7 +2,7 @@
 import { Fuel, FuelConnector } from 'fuels';
 
 class WalletConnector extends FuelConnector {
-  name: string = 'My Wallet Connector';
+  public override name: string = 'My Wallet Connector';
 }
 
 const defaultConnectors = (_opts: {
