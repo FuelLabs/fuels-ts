@@ -1,3 +1,4 @@
+import type { Matcher } from '../matchers/sway-type-matchers';
 import type { Abi, AbiSpecification } from '../parser';
 import { AbiParser } from '../parser';
 
@@ -24,7 +25,7 @@ export class AbiCoder {
     this.logs = new LogRepository(this.abi.loggedTypes, this.encoding);
   }
 
-  static fromAbi(abi: AbiSpecification): AbiCoder {
+  static fromAbi(abi: AbiSpecification, options: { message: Matcher<Coder> }): AbiCoder {
     return new AbiCoder(abi);
   }
 }

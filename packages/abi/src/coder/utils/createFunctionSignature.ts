@@ -1,15 +1,22 @@
-import { ARRAY_REGEX, STRING_REGEX, swayTypeMatchers } from '../../matchers/sway-type-matchers';
+/* eslint-disable @typescript-eslint/no-use-before-define */
+import {
+  ARRAY_REGEX,
+  ENUM_REGEX,
+  STRING_REGEX,
+  STRUCT_REGEX,
+  swayTypeMatchers,
+} from '../../matchers/sway-type-matchers';
 import type { AbiFunction, AbiType } from '../../parser';
 
 const createSignaturePrefix = ({ type }: { type: AbiType }): string => {
   switch (true) {
-    case swayTypeMatchers.struct(type):
+    case STRUCT_REGEX.test(type.swayType):
       return 's';
 
-    case swayTypeMatchers.array(type):
+    case ARRAY_REGEX.test(type.swayType):
       return 'a';
 
-    case swayTypeMatchers.enum(type):
+    case ENUM_REGEX.test(type.swayType):
       return 'e';
 
     default:
@@ -18,7 +25,7 @@ const createSignaturePrefix = ({ type }: { type: AbiType }): string => {
 };
 
 const createSignatureContents = ({ type }: { type: AbiType }): string => {
-  const { swayType, components } = type;
+  const { swayType, components, metadata } = type;
 
   if (swayTypeMatchers.rawUntypedPtr(type)) {
     return 'rawptr';
@@ -44,20 +51,15 @@ const createSignatureContents = ({ type }: { type: AbiType }): string => {
     return `[${arrayElementSignature};${arrayMatch.length}]`;
   }
 
-  // // TODO: implement the following, talk with @nedsalk
-  // const typeArgumentsSignature =
-  //   this.originalTypeArguments !== null
-  //     ? `<${this.originalTypeArguments
-  //         .map((a) => new ResolvedAbiType(this.abi, a).getSignature())
-  //         .join(',')}>`
-  //     : '';
+  const typeArgumentsSignature = metadata?.typeArguments
+    ? `<${metadata.typeArguments
+        ?.map((typeArgument) => createSignatureForType({ type: typeArgument }))
+        .join(',')}>`
+    : '';
 
-  // const componentsSignature = `(${this.components.map((c) => c.getSignature()).join(',')})`;
+  const componentsSignature = components.map(createSignatureForType).join(',');
 
-  // return `${typeArgumentsSignature}${componentsSignature}`;
-
-  // TODO: this is incorrect and should be the same implementation as above.
-  return '';
+  return `${typeArgumentsSignature}(${componentsSignature})`;
 };
 
 const createSignatureForType = (input: { type: AbiType }): string => {
