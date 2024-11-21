@@ -43,15 +43,17 @@ export default class Address extends AbstractAddress {
   constructor(address: Bech32Address | B256Address) {
     super();
 
-    if (isBech32(address)) {
-      this.bech32Address = normalizeBech32(address as Bech32Address);
-    } else if (isB256(address)) {
+    if (isB256(address)) {
       this.bech32Address = toBech32(address);
     } else {
-      throw new FuelError(
-        FuelError.CODES.INVALID_BECH32_ADDRESS,
-        `Invalid Bech32 Address: ${address}.`
-      );
+      this.bech32Address = normalizeBech32(address as Bech32Address);
+
+      if (!isBech32(this.bech32Address)) {
+        throw new FuelError(
+          FuelError.CODES.INVALID_BECH32_ADDRESS,
+          `Invalid Bech32 Address: ${this.bech32Address}.`
+        );
+      }
     }
   }
 
