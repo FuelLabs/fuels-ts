@@ -10,34 +10,30 @@
   Fuel-Core version: 33.33.33
 */
 
-import { Contract, ContractFactory, decompressBytecode } from "fuels";
-import type { Provider, Account, DeployContractOptions, DeployContractResult } from "fuels";
+import { ContractFactory, decompressBytecode } from "fuels";
+import type { Provider, Account, DeployContractOptions } from "fuels";
 
 import { MyContract } from "./MyContract";
 
 const bytecode = decompressBytecode("0x-bytecode-here");
 
-export class MyContractFactory extends ContractFactory {
+export class MyContractFactory extends ContractFactory<MyContract> {
 
   static readonly bytecode = bytecode;
 
   constructor(accountOrProvider: Account | Provider) {
-    super(bytecode, MyContract.abi, accountOrProvider);
+    super(
+      bytecode,
+      MyContract.abi,
+      accountOrProvider,
+      MyContract.storageSlots
+    );
   }
 
-  override deploy<TContract extends Contract = Contract>(
-    deployOptions?: DeployContractOptions
-  ): Promise<DeployContractResult<TContract>> {
-    return super.deploy({
-      storageSlots: MyContract.storageSlots,
-      ...deployOptions,
-    });
-  }
-
-  static async deploy (
+  static deploy (
     wallet: Account,
     options: DeployContractOptions = {}
-  ): Promise<DeployContractResult<MyContract>> {
+  ) {
     const factory = new MyContractFactory(wallet);
     return factory.deploy(options);
   }
