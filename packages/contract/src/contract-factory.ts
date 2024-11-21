@@ -70,7 +70,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
     bytecode: BytesLike,
     abi: JsonAbi | Interface,
     accountOrProvider: Account | Provider | null = null,
-    deployOptions: StorageSlot[] = []
+    storageSlots: StorageSlot[] = []
   ) {
     // Force the bytecode to be a byte array
     this.bytecode = arrayify(bytecode);
@@ -102,7 +102,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
       this.account = null;
     }
 
-    this.storageSlots = deployOptions;
+    this.storageSlots = storageSlots;
   }
 
   /**
