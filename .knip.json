@@ -8,7 +8,8 @@
     "templates/**",
     "/apps/docs-snippets/**",
     "/apps/docs-snippets2/**/*.test.ts",
-    "apps/create-fuels-counter-guide/**"
+    "apps/create-fuels-counter-guide/**",
+    "apps/docs-api/**"
   ],
   "ignoreDependencies": [
     "autocannon",
