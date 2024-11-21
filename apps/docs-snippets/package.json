@@ -4,7 +4,8 @@
   "description": "",
   "private": true,
   "scripts": {
-    "pretest": "./scripts/pretest.sh"
+    "pretest": "./scripts/pretest.sh",
+    "type:check": "tsc --noEmit"
   },
   "devDependencies": {
     "@fuel-ts/account": "workspace:*",
