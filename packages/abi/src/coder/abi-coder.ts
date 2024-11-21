@@ -25,7 +25,7 @@ export class AbiCoder {
     this.logs = new LogRepository(this.abi.loggedTypes, this.encoding);
   }
 
-  static fromAbi(abi: AbiSpecification, options: { message: Matcher<Coder> }): AbiCoder {
+  static fromAbi(abi: AbiSpecification): AbiCoder {
     return new AbiCoder(abi);
   }
 }
