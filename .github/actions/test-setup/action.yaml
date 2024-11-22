@@ -33,6 +33,12 @@ runs:
         version: ${{ inputs.pnpm-version }}
         run_install: true
 
+    - name: Setup forc and fuel-core paths
+      shell: bash
+      run: |
+        echo "$PWD/internal/forc/forc-binaries" >> $GITHUB_PATH
+        echo "$PWD/internal/fuel-core/fuel-core-binaries" >> $GITHUB_PATH
+
     - name: Setup Bun
       if: ${{ inputs.should-install-bun == 'true' }}
       uses: oven-sh/setup-bun@v1

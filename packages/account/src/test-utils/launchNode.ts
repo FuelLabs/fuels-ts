@@ -225,7 +225,6 @@ export const launchNode = async ({
       }
       childState.isDead = true;
 
-      removeSideffects();
       if (child.pid !== undefined) {
         try {
           process.kill(-child.pid);

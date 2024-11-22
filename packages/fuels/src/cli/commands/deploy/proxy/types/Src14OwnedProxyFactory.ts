@@ -31,7 +31,7 @@ export class Src14OwnedProxyFactory extends ContractFactory<Src14OwnedProxy> {
   static deploy (
     wallet: Account,
     options: DeployContractOptions = {}
-  ): ReturnType<Src14OwnedProxyFactory['deploy']> {
+  ) {
     const factory = new Src14OwnedProxyFactory(wallet);
     return factory.deploy(options);
   }
