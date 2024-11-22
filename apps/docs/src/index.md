@@ -20,3 +20,7 @@ Using the SDK you can:
 ## Version
 
 This documentation was generated using Fuels `v{{fuels}}`, Fuel Core `v{{fuelCore}}`, Sway `v{{forc}}`, and Forc `v{{forc}}`.
+
+## API Documentation
+
+The Complete API documentation for the SDK is available [here](https://fuels-ts-docs-api.vercel.app/).

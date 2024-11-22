@@ -30,21 +30,30 @@ import {
  */
 export default class Address extends AbstractAddress {
   // #region address-2
+  /**
+   * @deprecated
+   * Type `Bech32Address` is now deprecated, as is this property. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
+   */
   readonly bech32Address: Bech32Address;
   // #endregion address-2
 
   /**
-   * @param address - A Bech32 address
+   * @param address - A Bech32 address or B256 address
    */
-  constructor(address: Bech32Address) {
+  constructor(address: Bech32Address | B256Address) {
     super();
-    this.bech32Address = normalizeBech32(address);
 
-    if (!isBech32(this.bech32Address)) {
-      throw new FuelError(
-        FuelError.CODES.INVALID_BECH32_ADDRESS,
-        `Invalid Bech32 Address: ${address}.`
-      );
+    if (isB256(address)) {
+      this.bech32Address = toBech32(address);
+    } else {
+      this.bech32Address = normalizeBech32(address as Bech32Address);
+
+      if (!isBech32(this.bech32Address)) {
+        throw new FuelError(
+          FuelError.CODES.INVALID_BECH32_ADDRESS,
+          `Invalid Bech32 Address: ${this.bech32Address}.`
+        );
+      }
     }
   }
 
@@ -60,7 +69,8 @@ export default class Address extends AbstractAddress {
 
   /**
    * Returns the `bech32Address` property
-   *
+   * @deprecated
+   * Type `Bech32Address` is now deprecated, as is this method. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
    * @returns The `bech32Address` property
    */
   toAddress(): Bech32Address {
@@ -69,7 +79,6 @@ export default class Address extends AbstractAddress {
 
   /**
    * Converts and returns the `bech32Address` property to a 256 bit hash string
-   *
    * @returns The `bech32Address` property as a 256 bit hash string
    */
   toB256(): B256Address {
@@ -78,7 +87,6 @@ export default class Address extends AbstractAddress {
 
   /**
    * Converts and returns the `bech32Address` property to a byte array
-   *
    * @returns The `bech32Address` property as a byte array
    */
   toBytes(): Uint8Array {
@@ -86,8 +94,7 @@ export default class Address extends AbstractAddress {
   }
 
   /**
-   * Converts
-   *
+   * Converts the `bech32Address` property to a 256 bit hash string
    * @returns The `bech32Address` property as a 256 bit hash string
    */
   toHexString(): B256Address {
@@ -105,8 +112,7 @@ export default class Address extends AbstractAddress {
 
   /**
    * Converts and returns the `bech32Address` property as a string
-   *
-   * @returns The `bech32Address` property as a string
+   * @returns The `bech32Address` property as a JSON string
    */
   toJSON(): string {
     return this.bech32Address;
@@ -114,7 +120,6 @@ export default class Address extends AbstractAddress {
 
   /**
    * Clears the first 12 bytes of the `bech32Address` property and returns it as a `EvmAddress`
-   *
    * @returns The `bech32Address` property as an {@link EvmAddress | `EvmAddress`}
    */
   toEvmAddress(): EvmAddress {
@@ -126,9 +131,8 @@ export default class Address extends AbstractAddress {
   }
 
   /**
-   * Wraps the `bech32Address` property and returns as an `AssetId`.
-   *
-   * @returns The `bech32Address` property as an {@link AssetId | `AssetId`}
+   * Wraps the B256 property and returns as an `AssetId`.
+   * @returns The B256 property as an {@link AssetId | `AssetId`}
    */
   toAssetId(): AssetId {
     return {
@@ -137,9 +141,8 @@ export default class Address extends AbstractAddress {
   }
 
   /**
-   * returns the address `checksum` as a string
-   *
-   * @returns The value of `bech32Address` property
+   * Wraps the B256 address `checksum` and returns it as a string
+   * @returns The B256 address `checksum` as a string
    */
   override valueOf(): string {
     return this.toChecksum();
@@ -147,7 +150,6 @@ export default class Address extends AbstractAddress {
 
   /**
    * Compares this the `bech32Address` property to another for direct equality
-   *
    * @param other - Another address to compare against
    * @returns The equality of the comparison
    */

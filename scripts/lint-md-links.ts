@@ -16,6 +16,7 @@ import { globSync } from 'glob';
       'apps/create-fuels-counter-guide/**',
       'internal/forc/sway-repo/**',
       'internal/fuel-core/fuel-core-repo/**',
+      'apps/docs-api/**',
     ],
   });
 

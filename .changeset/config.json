@@ -19,6 +19,7 @@
     "template-nextjs",
     "create-fuels-counter-guide",
     "demo-wallet-sdk-react",
-    "template-vite"
+    "template-vite",
+    "docs-api"
   ]
 }
