@@ -4,8 +4,7 @@ import { tmpdir } from 'os';
 import path from 'path';
 
 import { deferPromise, randomUUID } from '../../src';
-import { findChildProcessPid } from '../utils/findChildProcessPid';
-import { isProcessRunning } from '../utils/isProcessRunning';
+import { findChildProcessPid, waitProcessEnd } from '../utils/processUtils';
 
 function runInit() {
   const fuelsPath = path.join(process.cwd(), 'packages/fuels');
@@ -72,7 +71,8 @@ describe('dev', () => {
 
       await devExited.promise;
 
-      expect(isProcessRunning(fuelCorePid)).toBe(false);
+      // if it finishes before timeout, it means the process was killed successfully
+      await waitProcessEnd(fuelCorePid);
     },
     { timeout: 15000 }
   );
