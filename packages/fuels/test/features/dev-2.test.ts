@@ -67,6 +67,8 @@ describe('dev', () => {
 
       const fuelCorePid = findChildProcessPid(devPid, 'fuel-core') as number;
 
+      // we kill the pnpm fuels dev process group
+      // and we want to verify that the fuel-core process is also killed
       process.kill(-devPid, 'SIGINT');
 
       await devExited.promise;
