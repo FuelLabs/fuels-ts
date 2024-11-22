@@ -1,4 +1,4 @@
-import { execSync, spawn } from 'child_process';
+import { execSync, execFileSync, spawn } from 'child_process';
 import { mkdirSync, rmSync } from 'fs';
 import { tmpdir } from 'os';
 import path from 'path';
@@ -14,8 +14,8 @@ function runInit() {
 
   mkdirSync(init, { recursive: true });
 
-  execSync('pnpm init', { cwd: init });
-  execSync(`pnpm link ${fuelsPath}`, { cwd: init });
+  execFileSync('pnpm', ['init'], { cwd: init });
+  execFileSync('pnpm', ['link', fuelsPath], { cwd: init });
 
   const contractDir = path.join(init, 'contract');
   const outputDir = path.join(init, 'output');
