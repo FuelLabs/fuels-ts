@@ -24,6 +24,9 @@ To create an [`Address`](../../api/Address/Address.md) from a `Bech32` address, 
 
 <<< @/../../docs-snippets2/src/types/address/creating-an-address.ts#full{ts:line-numbers}
 
+> [!NOTE] Note
+> `Bech32` addresses like `fuel1..` are now deprecated. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
+
 ### From a Public Key
 
 To create an [`Address`](../../api/Address/Address.md) from a public key, use the following code snippet:
