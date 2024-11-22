@@ -800,6 +800,7 @@ query isUserAccount(
   $blobId: BlobId!
   $contractId: ContractId!
   $transactionId: TransactionId!
+  $assetId: AssetId!
 ) {
   blob(id: $blobId) {
     id
@@ -809,6 +810,9 @@ query isUserAccount(
   }
   transaction(id: $transactionId) {
     id
+  }
+  assetDetails(id: $assetId) {
+    subId
   }
 }
 

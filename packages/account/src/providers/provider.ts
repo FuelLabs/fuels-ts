@@ -2009,23 +2009,27 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns A promise that resolves to the result of the check.
    */
   async isUserAccount(id: string): Promise<boolean> {
-    const { contract, blob, transaction } = await this.operations.isUserAccount({
+    const { contract, blob, transaction, assetDetails } = await this.operations.isUserAccount({
       blobId: id,
       contractId: id,
       transactionId: id,
+      assetId: id,
     });
 
-    if (contract || blob || transaction) {
+    if (contract || blob || transaction || assetDetails) {
       return false;
     }
     return true;
   }
 
-  async getAddressType(id: string): Promise<'Account' | 'Contract' | 'Transaction' | 'Blob'> {
-    const { contract, blob, transaction } = await this.operations.isUserAccount({
+  async getAddressType(
+    id: string
+  ): Promise<'Account' | 'Contract' | 'Transaction' | 'Blob' | 'Asset'> {
+    const { contract, blob, transaction, assetDetails } = await this.operations.isUserAccount({
       blobId: id,
       contractId: id,
       transactionId: id,
+      assetId: id,
     });
 
     if (contract) {
@@ -2036,6 +2040,10 @@ Supported fuel-core version: ${supportedVersion}.`
     }
     if (transaction) {
       return 'Transaction';
+    }
+
+    if (assetDetails) {
+      return 'Asset';
     }
 
     return 'Account';

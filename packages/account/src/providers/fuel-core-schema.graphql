@@ -18,6 +18,12 @@ scalar Address
 
 scalar AssetId
 
+type AssetInfoDetails {
+  contractId: HexString!
+  subId: HexString!
+  totalSupply: U64!
+}
+
 type Balance {
   owner: Address!
   amount: U64!
@@ -921,6 +927,12 @@ type ProgramState {
 }
 
 type Query {
+  assetDetails(
+    """
+    ID of the Asset
+    """
+    id: AssetId!
+  ): AssetInfoDetails
   """
   Read register value by index.
   """
