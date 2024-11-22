@@ -17,7 +17,6 @@ apps/create-fuels-counter-guide
 apps/docs/.fuels
 apps/docs/.typedoc
 apps/docs/src/api
-apps/docs/src/**/*.ts
 apps/docs/src/typegend
 
 packages/fuels/src/cli/commands/deploy/proxy
