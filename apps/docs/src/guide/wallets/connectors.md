@@ -6,7 +6,7 @@ Fuel Wallet Connectors offer a standardized interface to integrate multiple wall
 
 `Fuel Connectors` are a set of standardized interfaces that provide a way to interact with various wallets and services. They offer a consistent way to interact with different wallets and services, allowing developers to focus on building their applications rather than worrying about wallet integration.
 
-To build your own wallet integration, you can create a custom connector that extends the abstract [`FuelConnector`](../../api/Account/FuelConnector.md) class. This interface provides a set of methods and events that allow you to interact with the wallet and handle various operations such as connecting, disconnecting, signing messages, and sending transactions.
+To build your own wallet integration, you can create a custom connector that extends the abstract [`FuelConnector`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.FuelConnector.html) class. This interface provides a set of methods and events that allow you to interact with the wallet and handle various operations such as connecting, disconnecting, signing messages, and sending transactions.
 
 <<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-connector-extends{ts:line-numbers}
 
@@ -21,6 +21,7 @@ The `name` property is simply a `string` on the connector that serves as an iden
 <<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-connector-name{ts:line-numbers}
 
 ### `external`
+
 The `external` property is simply a `boolean` that indicates when a connector is external or not.
 Connectors are considered external, or non-native, when they do not support the Fuel Network (e.g. `Solana`, `WalletConnect`).
 
@@ -66,13 +67,13 @@ The `accounts` event is emitted every time a connector's accounts change. The ev
 
 #### `connectors`
 
-The `connectors` event is emitted when the connectors are initialized. The event data is an array of [`FuelConnector`](../../api/Account/FuelConnector.md) objects available on the network.
+The `connectors` event is emitted when the connectors are initialized. The event data is an array of [`FuelConnector`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.FuelConnector.html) objects available on the network.
 
 <<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-connector-events-connectors{ts:line-numbers}
 
 #### `currentConnector`
 
-The `currentConnector` event is emitted every time the current connector changes. The event data is a [`FuelConnector`](../../api/Account/FuelConnector.md) object that is currently connected.
+The `currentConnector` event is emitted every time the current connector changes. The event data is a [`FuelConnector`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.FuelConnector.html) object that is currently connected.
 
 <<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-connector-events-currentConnector{ts:line-numbers}
 
@@ -90,25 +91,25 @@ The `connection` event is emitted every time the connection status changes. The 
 
 #### `networks`
 
-The `networks` event is emitted every time the network changes. The event data will be a [`Network`](../../api/Account/index.md#network) object containing the current network information.
+The `networks` event is emitted every time the network changes. The event data will be a [`Network`](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_account.html#network) object containing the current network information.
 
 <<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-connector-events-networks{ts:line-numbers}
 
 #### `currentNetwork`
 
-The `currentNetwork` event is emitted every time the current network changes. The event data will be a [`Network`](../../api/Account/index.md#network) object containing the current network information.
+The `currentNetwork` event is emitted every time the current network changes. The event data will be a [`Network`](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_account.html#network) object containing the current network information.
 
 <<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-connector-events-currentNetwork{ts:line-numbers}
 
 #### `assets`
 
-The `assets` event is emitted every time the assets change. The event data will be an array of [`Asset`](../../api/Account/index.md#asset) objects available on the network.
+The `assets` event is emitted every time the assets change. The event data will be an array of [`Asset`](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_account.html#asset) objects available on the network.
 
 <<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-connector-events-assets{ts:line-numbers}
 
 #### `abis`
 
-The `abis` event is emitted every time an ABI is added to a connector. The event data will be an array of [`FuelABI`](../../api/Account/index.md#fuelabi) object.
+The `abis` event is emitted every time an ABI is added to a connector. The event data will be an array of [`FuelABI`](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_account.html#fuelabi) object.
 
 <<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-connector-events-assets{ts:line-numbers}
 
@@ -196,7 +197,7 @@ The `signTransaction` method initiates the send transaction flow for the current
 It requires two arguments:
 
 - `address` (`string`)
-- `transaction` ([`TransactionRequestLike`](../../api/Account/index.md#transactionrequestlike))
+- `transaction` ([`TransactionRequestLike`](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_account.html#transactionrequestlike))
 
 It will return the transaction signature (as a `string`) if it is successfully signed.
 
@@ -206,7 +207,7 @@ It will return the transaction signature (as a `string`) if it is successfully s
 
 The `assets` method returns a list of all the assets available for the current connection.
 
-It will return a promise that will resolve to an array of assets (see [`Asset`](../../api/Account/index.md#asset)) that are available on the network.
+It will return a promise that will resolve to an array of assets (see [`Asset`](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_account.html#asset)) that are available on the network.
 
 <<< @/../../../packages/account/src/connectors/fuel-connector.ts#fuel-connector-method-assets{ts:line-numbers}
 
@@ -216,7 +217,7 @@ The `addAsset` method adds asset metadata to the connector.
 
 It requires a single argument:
 
-- `asset` ([`Asset`](../../api/Account/index.md#asset))
+- `asset` ([`Asset`](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_account.html#asset))
 
 It returns a promise that resolves to `true` if the asset is successfully added; otherwise, it resolves to `false`.
 
@@ -228,7 +229,7 @@ The `addAssets` method adds multiple asset metadata to the connector.
 
 It requires a single argument:
 
-- `assets` (an Array of [`Asset`](../../api/Account/index.md#asset)).
+- `assets` (an Array of [`Asset`](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_account.html#asset)).
 
 Returns a promise that resolves to `true` if the assets are successfully added; otherwise, resolves to `false`.
 
@@ -252,7 +253,7 @@ It should throw an error if the network is not available or the network already 
 
 The `networks` method returns a list of all the networks available for the current connection.
 
-Returns a promise that resolves to an array of available networks (see [`Network`](../../api/Account/index.md#network)).
+Returns a promise that resolves to an array of available networks (see [`Network`](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_account.html#network)).
 
 <<< @/../../../packages/account/src/connectors/fuel-connector.ts#fuel-connector-method-networks{ts:line-numbers}
 
@@ -260,7 +261,7 @@ Returns a promise that resolves to an array of available networks (see [`Network
 
 The `currentNetwork` method will return the current network that is connected.
 
-It will return a promise that will resolve to the current network (see [`Network`](../../api/Account/index.md#network)).
+It will return a promise that will resolve to the current network (see [`Network`](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_account.html#network)).
 
 <<< @/../../../packages/account/src/connectors/fuel-connector.ts#fuel-connector-method-currentNetwork{ts:line-numbers}
 
@@ -270,7 +271,7 @@ The `selectNetwork` method requests the user to select a network for the current
 
 It requires a single argument:
 
-- `network` ([`Network`](../../api/Account/index.md#network))
+- `network` ([`Network`](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_account.html#network))
 
 You call this method with either the `providerUrl` or `chainId` to select the network.
 
@@ -287,7 +288,7 @@ The `addABI` method adds ABI information about a contract to the connector. This
 It requires two arguments:
 
 - `contractId` (`string`)
-- `abi` ([`FuelABI`](../../api/Account/index.md#fuelabi)).
+- `abi` ([`FuelABI`](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_account.html#fuelabi)).
 
 It will return a promise that will resolve to `true` if the ABI is successfully added; otherwise `false`.
 
@@ -301,7 +302,7 @@ It requires a single argument:
 
 - `contractId` (`string`)
 
-Returns a promise that resolves to the ABI information (as a [`FuelABI`](../../api/Account/index.md#fuelabi)) or `null` if the data is unavailable.
+Returns a promise that resolves to the ABI information (as a [`FuelABI`](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_account.html#fuelabi)) or `null` if the data is unavailable.
 
 <<< @/../../../packages/account/src/connectors/fuel-connector.ts#fuel-connector-method-getABI{ts:line-numbers}
 
