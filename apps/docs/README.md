@@ -17,11 +17,25 @@ The build process will build out our snippets and the documentation.
 pnpm build
 ```
 
-The snippets are built into testable scripts from the `src/snippets` folder and generates the Typegen types into the `src/snippets/typegend` folder. All test scripts end with a `.test.ts` suffix.
+The build process generates testable scripts from the snippets and outputs them alongside the snippets. The corresponding typegen types are also generated and outputted in the `src/snippets/typegend` folder. All test scripts end with a `.test.ts` suffix.
 
 ## Testing
 
-This will build the snippets and run the generated tests. To test a specific environment (`node` or `browser`), the snippet should be named as `{name}.{environment}.test.ts`. e.g. `deploy-contract.node.test.ts`
+This will build the snippets and run the generated tests. To test a specific environment (`node` or `browser`), the snippet should contain one of the following tags:
+
+```ts
+/**
+ * @group browser
+ */
+```
+
+or
+
+```ts
+/**
+ * @group node
+ */
+```
 
 If no environment is specified, it will run in the browser and node environments by default.
 
