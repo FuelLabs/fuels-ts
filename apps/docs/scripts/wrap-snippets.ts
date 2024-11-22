@@ -127,7 +127,6 @@ const ignore = [
   `src/vite.config.ts`,
   `src/versions.data.ts`,
   `src/jsonc.d.ts`,
-  `src/guide/transactions/new-api.ts`,
   `${dir}/*.test.ts`,
 ];
 
