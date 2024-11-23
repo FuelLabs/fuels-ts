@@ -1,6 +1,6 @@
 # Custom Transactions
 
-There may be scenarios where you need to build out transactions that involve multiple program types and assets; this can be done by instantiating a [`ScriptTransactionRequest`](../../api/Account/ScriptTransactionRequest.md). This class allows you to a append multiple program types and assets to a single transaction.
+There may be scenarios where you need to build out transactions that involve multiple program types and assets; this can be done by instantiating a [`ScriptTransactionRequest`](../../api/Account/ScriptTransactionRequest.md). This class allows you to an append multiple program types and assets to a single transaction.
 
 Consider the following script that transfers multiple assets to a contract:
 
