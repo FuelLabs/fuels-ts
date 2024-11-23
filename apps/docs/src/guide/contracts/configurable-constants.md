@@ -16,7 +16,7 @@ In this contract, the function `echo_configurables` returns the values of the co
 
 ## Setting New Values For Configurable Constants
 
-During contract deployment, you can define new values for any/all of the configurable constants. The example below shows setting of one configurable constant, while the others will have default values.
+During contract deployment, you can define new values for any/all the configurable constants. The example below shows setting of one configurable constant, while the others will have default values.
 
 <<< @./snippets/configurable-constants.ts#setting-configurable-constant{ts:line-numbers}
 
