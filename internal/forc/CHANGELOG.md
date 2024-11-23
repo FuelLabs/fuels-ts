@@ -308,7 +308,7 @@
 
 ### Patch Changes
 
-- [#565](https://github.com/FuelLabs/fuels-ts/pull/565) [`bdfa9d6`](https://github.com/FuelLabs/fuels-ts/commit/bdfa9d6e453a9c47177b19f2811265d740fc4ac4) Thanks [@segfault-magnet](https://github.com/segfault-magnet)! - Adapted to forc v0.28.0+ with respect to vectors now using an untyped raw ptr instead of a u64 for the vec ptr.
+- [#565](https://github.com/FuelLabs/fuels-ts/pull/565) [`bdfa9d6`](https://github.com/FuelLabs/fuels-ts/commit/bdfa9d6e453a9c47177b19f2811265d740fc4ac4) Thanks [@segfault-magnet](https://github.com/segfault-magnet)! - Adapted to forc v0.28.0+ with respect to vectors now using an untyped raw ptr instead of an u64 for the vec ptr.
 
 ## 0.26.1
 
