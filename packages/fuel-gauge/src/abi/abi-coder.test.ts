@@ -140,6 +140,51 @@ describe('AbiCoder', () => {
     });
   });
 
+  describe('attributes', () => {
+    it('should have storage read attribute', () => {
+      const fn = contract.interface.getFunction('attributes_storage_read');
+      expect(fn.attributes).toEqual([{ name: 'storage', arguments: ['read'] }]);
+    });
+
+    it('should have storage write attribute', () => {
+      const fn = contract.interface.getFunction('attributes_storage_write');
+      expect(fn.attributes).toEqual([{ name: 'storage', arguments: ['write'] }]);
+    });
+
+    it('should have storage read and write attribute', () => {
+      const fn = contract.interface.getFunction('attributes_storage_read_write');
+      expect(fn.attributes).toEqual([{ name: 'storage', arguments: ['read', 'write'] }]);
+    });
+
+    it('should have payable attribute', () => {
+      const fn = contract.interface.getFunction('attributes_payable');
+      expect(fn.attributes).toEqual([{ name: 'payable' }]);
+    });
+
+    it('should have test attribute', () => {
+      const fn = contract.interface.getFunction('attributes_test');
+      expect(fn.attributes).toEqual([{ name: 'test' }]);
+    });
+
+    it('should have inline never attribute', () => {
+      const fn = contract.interface.getFunction('attributes_inline_never');
+      expect(fn.attributes).toEqual([{ name: 'inline', arguments: 'never' }]);
+    });
+
+    it('should have inline always attribute', () => {
+      const fn = contract.interface.getFunction('attributes_inline_always');
+      expect(fn.attributes).toEqual([{ name: 'inline', arguments: 'always' }]);
+    });
+
+    it('should have doc attribute', () => {
+      const fn = contract.interface.getFunction('attributes_doc_comment');
+      expect(fn.attributes).toEqual([
+        { name: 'doc-comment', arguments: [' This is a doc'] },
+        { name: 'doc-comment', arguments: [' This is another doc comment'] },
+      ]);
+    });
+  });
+
   describe('types_u8', () => {
     it('should encode/decode just fine', async () => {
       const input = 8;
