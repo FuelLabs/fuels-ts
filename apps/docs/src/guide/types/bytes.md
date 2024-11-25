@@ -6,8 +6,8 @@ A dynamic array of byte values can be represented using the `Bytes` type, which 
 
 The `Bytes` type can be integrated with your contract calls. Consider the following contract that can compare and return a `Bytes`:
 
-<<< @/../../docs-snippets2/sway/echo-bytes/src/main.sw#bytes-1{ts:line-numbers}
+<<< @/../../docs/sway/echo-bytes/src/main.sw#bytes-1{ts:line-numbers}
 
 A `Bytes` array can be created using a native JavaScript array of numbers or Big Numbers, and sent to a Sway contract:
 
-<<< @/../../docs-snippets2/src/types/bytes.ts#snippet-1{ts:line-numbers}
+<<< @./snippets/bytes.ts#snippet-1{ts:line-numbers}

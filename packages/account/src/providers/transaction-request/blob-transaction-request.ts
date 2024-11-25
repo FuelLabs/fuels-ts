@@ -72,7 +72,7 @@ export class BlobTransactionRequest extends BaseTransactionRequest {
    * @param gasCosts - gas costs passed from the chain.
    * @returns metadata gas cost for the blob transaction.
    */
-  metadataGas(gasCosts: GasCosts): BN {
+  override metadataGas(gasCosts: GasCosts): BN {
     return calculateMetadataGasForTxBlob({
       gasCosts,
       txBytesSize: this.byteSize(),

@@ -19,4 +19,4 @@ In the example below, we connect a [Provider](../provider/index.md) to the lates
 
 > **Note:** New wallets on the Testnet will not have any assets! You can use the [Faucet](https://faucet-testnet.fuel.network/) to fund your wallet.
 
-<<< @/../../docs-snippets2/src/introduction/connecting-to-testnet.ts#main{ts:line-numbers}
+<<< @./snippets/connecting-to-testnet.ts#main{ts:line-numbers}

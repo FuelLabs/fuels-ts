@@ -8,6 +8,9 @@ The `contractId` property from the [`Contract`](../../api/Program/Contract.md) c
 
 The [`Address`](../../api/Address/Address.md) class wraps all methods from the [`AbstractAddress`](../../api/Interfaces/AbstractAddress.md) class and adds a single property: `bech32Address`. This property is a string encoded in [`Bech32`](../types/bech32.md) format, recognizable by the human-readable prefix `fuel` followed by the separator `1`.
 
+> [!NOTE] Note
+> `Bech32` addresses like `fuel1..` are now deprecated; please switch to B256 format, for more details see [here](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256).
+
 When you log the `contractId` property of an instantiated Contract using `console.log`, the output appears as follows:
 
 ```console
@@ -20,7 +23,7 @@ When you log the `contractId` property of an instantiated Contract using `consol
 
 If you have already an instantiated and deployed contract in hands you can create another contract instance simply by using the `contractId` property and the contract JSON ABI:
 
-<<< @/../../docs-snippets2/src/contracts/managing-deployed-contracts.ts#with-contractId{ts:line-numbers}
+<<< @./snippets/managing-deployed-contracts.ts#with-contractId{ts:line-numbers}
 
 The previous example assumes that you have a [`Contract`](../../api/Program/Contract.md) instance at hand. However, some Fuel tools and Sway use the [`b256`](../types/bits256.md) type format, a hex-encoded string-like type, for contract IDs.
 
@@ -28,4 +31,4 @@ You might have this format instead, for example, if you have deployed your contr
 
 The process of instantiating a [`Contract`](../../api/Program/Contract.md) remains the same when using a contract ID of type `b256`:
 
-<<< @/../../docs-snippets2/src/contracts/managing-deployed-contracts.ts#with-b256{ts:line-numbers}
+<<< @./snippets/managing-deployed-contracts.ts#with-b256{ts:line-numbers}
