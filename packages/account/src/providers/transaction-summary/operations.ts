@@ -377,6 +377,7 @@ export function getContractCallOperations({
 /**
  * Extracts a transfer operation from a transaction receipt, determining the addresses and types
  * of the sender and receiver, along with the transferred asset details.
+ *
  * @param receipt - The transaction receipt containing transfer information
  * @param contractInputs - Array of contract inputs to determine address types
  * @param changeOutputs - Array of change outputs to resolve zero addresses
