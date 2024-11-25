@@ -12,7 +12,7 @@ It is important to note that this method returns the total available contract ba
 
 Consider a simple contract that transfers a specified amount of a given asset to an address:
 
-<<< @/../../docs-snippets2/sway/transfer-to-address/src/main.sw#full{rust:line-numbers}
+<<< @/../../docs/sway/transfer-to-address/src/main.sw#full{rust:line-numbers}
 
 The `transfer` function has three parameters:
 
@@ -26,7 +26,7 @@ The `transfer` function calls the built-in Sway function `transfer_to_address`, 
 
 Let's execute this contract and use the `getBalance` method to validate the remaining asset amount the contract has left to spend.
 
-<<< @/../../docs-snippets2/src/contracts/contract-balance.ts#example{ts:line-numbers}
+<<< @./snippets/contract-balance.ts#example{ts:line-numbers}
 
 In this example, we first forward an asset amount greater than the amount required for the transfer, and then we execute the contract call.
 
