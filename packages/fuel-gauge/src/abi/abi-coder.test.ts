@@ -53,6 +53,7 @@ import { toEqualBn } from './vitest.matcher';
 expect.extend({ toEqualBn });
 
 /**
+ * @group browser
  * @group node
  */
 describe('AbiCoder', () => {

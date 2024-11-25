@@ -680,15 +680,15 @@ impl AbiContract for Contract {
     fn types_struct_with_single_option(x: StructWithSingleOption) -> StructWithSingleOption {
         const OPTION_ARRAY: [Option<u8>; 5] = [Option::Some(1), Option::None, Option::Some(2), Option::None, Option::Some(3)];
         const OPTION_STRUCT: Option<StructWithMultiOption> = Option::Some(StructWithMultiOption {
-          a: OPTION_ARRAY
+            a: OPTION_ARRAY,
         });
         const INPUT: StructWithSingleOption = StructWithSingleOption {
-          a: OPTION_STRUCT
+            a: OPTION_STRUCT,
         };
         assert(x == INPUT);
 
         const EXPECTED: StructWithSingleOption = StructWithSingleOption {
-          a: Option::None
+            a: Option::None,
         };
         log(EXPECTED);
         return EXPECTED;

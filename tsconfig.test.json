@@ -5,5 +5,5 @@
     "types": ["./vitest.d.ts"]
   },
   "include": ["**/*.test.ts", "vitest.**/*.ts"],
-  "exclude": ["node_modules", "apps/docs-snippets2/src/**/*.test.ts"]
+  "exclude": ["node_modules", "apps/docs/src/**/*.test.ts"]
 }

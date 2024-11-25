@@ -134,4 +134,3 @@ pub enum MyContractError {
 }
 
 pub type TupleWithNativeAssets = (AssetId, AssetId, bool);
-

@@ -4,18 +4,18 @@ When a transaction contains a spendable input such as a coin, it must also conta
 
 Consider a script that requires two signatures to be spent:
 
-<<< @/../../docs-snippets2/sway/script-signing/src/main.sw#multiple-signers-1{rust:line-numbers}
+<<< @/../../docs/sway/script-signing/src/main.sw#multiple-signers-1{rust:line-numbers}
 
 In the snippet above, we use the built-in Sway function `tx_witness_data()` to retrieve the witness signatures and `tx_id()` for the transaction hash. Then, we retrieve the signing address to validate the script.
 
 We would interact with this script in the SDK by creating a transaction request from an invocation scope. The same can be done for a contract. Consider the following script:
 
-<<< @/../../docs-snippets2/src/cookbook/signing-transactions/script.ts#multiple-signers-2{ts:line-numbers}
+<<< @./snippets/signing-transactions/script.ts#multiple-signers-2{ts:line-numbers}
 
 The same approach can be used for a predicate by instantiating it and adding it to a transaction request. Consider the following predicate:
 
-<<< @/../../docs-snippets2/sway/predicate-signing/src/main.sw#multiple-signers-3{rust:line-numbers}
+<<< @/../../docs/sway/predicate-signing/src/main.sw#multiple-signers-3{rust:line-numbers}
 
 We can interact with this predicate in the SDK with the following implementation:
 
-<<< @/../../docs-snippets2/src/cookbook/signing-transactions/predicate.ts#multiple-signers-4{ts:line-numbers}
+<<< @./snippets/signing-transactions/predicate.ts#multiple-signers-4{ts:line-numbers}
