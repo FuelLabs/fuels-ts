@@ -43,10 +43,10 @@ const configurableAdapter = (configurable: AbiCoderConfigurable): Configurable =
 
 export class InterfaceAdapter extends Interface {
   private coder: AbiCoder;
-  functions: Record<string, FunctionFragment>;
-  configurables: Record<string, Configurable>;
-  jsonAbi: JsonAbi;
-  encoding: EncodingVersion;
+  override functions: Record<string, FunctionFragment>;
+  override configurables: Record<string, Configurable>;
+  override jsonAbi: JsonAbi;
+  override encoding: EncodingVersion;
 
   constructor(jsonAbi: JsonAbi) {
     super(jsonAbi);
@@ -68,7 +68,7 @@ export class InterfaceAdapter extends Interface {
     this.encoding = '1';
   }
 
-  getFunction(nameOrSignatureOrSelector: string): FunctionFragment {
+  override getFunction(nameOrSignatureOrSelector: string): FunctionFragment {
     let fn = this.coder.functions.findByName(nameOrSignatureOrSelector);
     if (fn) {
       return functionAdapter(fn);
@@ -87,7 +87,7 @@ export class InterfaceAdapter extends Interface {
     throw new Error('Function not found');
   }
 
-  decodeFunctionResult(
+  override decodeFunctionResult(
     fragment: FunctionFragment | string,
     data: BytesLike
   ): [DecodedValue | undefined, number] {
@@ -95,23 +95,23 @@ export class InterfaceAdapter extends Interface {
     return fn.decodeOutput(data);
   }
 
-  decodeLog(data: BytesLike, logId: string): [DecodedValue | undefined, number] {
+  override decodeLog(data: BytesLike, logId: string): [DecodedValue | undefined, number] {
     const log = this.coder.logs.findById(logId);
     const bytes = arrayify(data);
     const decoded = log.value.decode(bytes);
     return [decoded as DecodedValue | undefined, -1];
   }
 
-  encodeConfigurable(name: string, value: InputValue): Uint8Array {
+  override encodeConfigurable(name: string, value: InputValue): Uint8Array {
     const coder = this.coder.configurables.findByName(name);
     return coder.value.encode(value);
   }
 
-  encodeType(concreteTypeId: string, value: InputValue): Uint8Array {
+  override encodeType(concreteTypeId: string, value: InputValue): Uint8Array {
     throw new Error('Not implemented');
   }
 
-  decodeType(concreteTypeId: string, data: BytesLike): [DecodedValue | undefined, number] {
+  override decodeType(concreteTypeId: string, data: BytesLike): [DecodedValue | undefined, number] {
     throw new Error('Not implemented');
   }
 }
