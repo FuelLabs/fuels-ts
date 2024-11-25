@@ -221,7 +221,7 @@ export function getReceiptsTransferOut(receipts: TransactionResultReceipt[]) {
  * @param inputs - Transaction inputs containing account information
  * @param receipts - Transaction receipts containing withdrawal details
  * @param baseAssetId - The ID of the asset being withdrawn
- * @returns Array of withdrawal operations with sender, recipient, and asset details
+ * @returns Array of withdrawal operations with sender, recipient, and asset id.
  */
 export function getWithdrawFromFuelOperations({
   inputs,
