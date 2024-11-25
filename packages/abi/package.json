@@ -25,6 +25,8 @@
     "build": "tsup",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@fuel-ts/utils": "workspace:*"
+  },
   "devDependencies": {}
 }

@@ -650,7 +650,11 @@ importers:
         specifier: workspace:*
         version: link:../tsup
 
-  packages/abi: {}
+  packages/abi:
+    dependencies:
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../utils
 
   packages/abi-coder:
     dependencies:
