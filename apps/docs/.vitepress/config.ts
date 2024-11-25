@@ -550,7 +550,7 @@ export default defineConfig({
             link: '/guide/errors/',
             collapsed: false,
             items: [],
-          }
+          },
         ],
       },
     ],
