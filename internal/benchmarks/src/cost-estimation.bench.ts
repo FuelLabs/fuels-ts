@@ -29,7 +29,7 @@ describe('Cost Estimation Benchmarks', () => {
       const wallet = new WalletUnlocked(process.env.DEVNET_WALLET_PVT_KEY as string, provider);
 
       const contractFactory = new CallTestContractFactory(wallet);
-      const { waitForResult } = await contractFactory.deploy<CallTestContract>();
+      const { waitForResult } = await contractFactory.deploy();
       const { contract: deployedContract } = await waitForResult();
       contract = deployedContract;
     } else {

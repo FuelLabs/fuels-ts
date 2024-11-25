@@ -6,13 +6,13 @@ In certain scenarios, you might need to implement a solution to resubmit failed 
 
 When submitting a transaction, you will first get a response.
 
-<<< @/../../docs-snippets2/src/cookbook/resubmitting-failed-transactions/submitting.ts#resubmitting-failed-transactions-1{ts:line-numbers}
+<<< @./snippets/resubmitting-failed-transactions/submitting.ts#resubmitting-failed-transactions-1{ts:line-numbers}
 
 If the `sendTransaction` method resolves without an error, we know that the transaction was successfully submitted and accepted by the network. However, this does not guarantee that the transaction has been processed; it only indicates that the transaction has been accepted and placed in a queue for processing.
 
 To determine whether the transaction has been processed, you must call `waitForResult`, which will either resolve (with the processed transaction) or reject with an error.
 
-<<< @/../../docs-snippets2/src/cookbook/resubmitting-failed-transactions/submitting.ts#resubmitting-failed-transactions-2{ts:line-numbers}
+<<< @./snippets/resubmitting-failed-transactions/submitting.ts#resubmitting-failed-transactions-2{ts:line-numbers}
 
 In other words:
 
@@ -25,7 +25,7 @@ If a transaction is reverted during processing, the Fuel VM will still consume t
 
 Attempting to resubmit the same transaction request that failed during processing will likely result in an error, as the initially spent resources no longer exist.
 
-<<< @/../../docs-snippets2/src/cookbook/resubmitting-failed-transactions/wrong-resubmission.ts#resubmitting-failed-transactions-3{ts:line-numbers}
+<<< @./snippets/resubmitting-failed-transactions/wrong-resubmission.ts#resubmitting-failed-transactions-3{ts:line-numbers}
 
 The attempt from the above snippet will result in the error:
 
@@ -35,4 +35,4 @@ FuelError: Transaction is not inserted. UTXO does not exist: {{utxoId}}
 
 To safely retry a transaction that failed during processing, you should reassemble the request from scratch and resubmit it.
 
-<<< @/../../docs-snippets2/src/cookbook/resubmitting-failed-transactions/right-resubmission.ts#resubmitting-failed-transactions-4{ts:line-numbers}
+<<< @./snippets/resubmitting-failed-transactions/right-resubmission.ts#resubmitting-failed-transactions-4{ts:line-numbers}
