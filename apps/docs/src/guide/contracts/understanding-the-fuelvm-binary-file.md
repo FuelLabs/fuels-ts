@@ -4,7 +4,7 @@ When you compile your Sway code using the `forc build` command, it generates a b
 
 For example, consider the following smart contract:
 
-<<< @/../../docs-snippets2/sway/echo-values/src/main.sw#understanding-fuel-binary-file{ts:line-numbers}
+<<< @/../../docs/sway/echo-values/src/main.sw#understanding-fuel-binary-file{ts:line-numbers}
 
 After running `forc build`, a binary file will be generated with the following content:
 

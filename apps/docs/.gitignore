@@ -4,3 +4,7 @@
 .typedoc/api-links.json
 
 src/api
+
+src/typegend
+src/guide/**/*.test.ts
+.fuels/
