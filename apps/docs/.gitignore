@@ -1,2 +1,6 @@
 .vitepress/cache
 .vitepress/.temp
+
+src/typegend
+src/guide/**/*.test.ts
+.fuels/

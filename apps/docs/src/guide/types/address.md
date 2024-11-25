@@ -22,7 +22,7 @@ Thanks to the utility functions provided by the [`AbstractAddress`](https:https:
 
 To create an [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) from a `Bech32` address, use the following code snippet:
 
-<<< @/../../docs-snippets2/src/types/address/creating-an-address.ts#full{ts:line-numbers}
+<<< @./snippets/address/creating-an-address.ts#full{ts:line-numbers}
 
 > [!NOTE] Note
 > `Bech32` addresses like `fuel1..` are now deprecated. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
@@ -31,13 +31,13 @@ To create an [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_a
 
 To create an [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) from a public key, use the following code snippet:
 
-<<< @/../../docs-snippets2/src/types/address/from-a-public-key.ts#full{ts:line-numbers}
+<<< @./snippets/address/from-a-public-key.ts#full{ts:line-numbers}
 
 ### From a 256-bit Address
 
 To create an [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) from a 256-bit address, use the following code snippet:
 
-<<< @/../../docs-snippets2/src/types/address/from-a-b256.ts#full{ts:line-numbers}
+<<< @./snippets/address/from-a-b256.ts#full{ts:line-numbers}
 
 ## Utility Functions
 
@@ -45,12 +45,12 @@ The [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Ad
 
 1. `fromString`: Create a new [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) from an ambiguous source that may be a `Bech32` or `B256` address:
 
-<<< @/../../docs-snippets2/src/types/address/utilities-function-1.ts#full{ts:line-numbers}
+<<< @./snippets/address/utilities-function-1.ts#full{ts:line-numbers}
 
 2. `fromDynamicInput`: Create a new [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) when the address source is unknown:
 
-<<< @/../../docs-snippets2/src/types/address/utilities-function-2.ts#full{ts:line-numbers}
+<<< @./snippets/address/utilities-function-2.ts#full{ts:line-numbers}
 
 3. `equals:` As you may already notice, the `equals` function can compare addresses instances:
 
-<<< @/../../docs-snippets2/src/types/address/utilities-function-3.ts#full{ts:line-numbers}
+<<< @./snippets/address/utilities-function-3.ts#full{ts:line-numbers}

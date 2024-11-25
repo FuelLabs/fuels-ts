@@ -4,7 +4,7 @@
 
 Signing messages with a wallet is a fundamental security practice in a blockchain environment. It verifies ownership and ensures the integrity of data. Here's how to use the `wallet.signMessage` method to sign messages:
 
-<<< @/../../docs-snippets2/src/wallets/signing/sign-message.ts#signing-1{ts:line-numbers}
+<<< @./snippets/signing/sign-message.ts#signing-1{ts:line-numbers}
 
 The `wallet.signMessage` method internally hashes the message using the SHA-256 algorithm, then signs the hashed message, returning the signature as a hex string.
 
@@ -24,10 +24,10 @@ Signing a transaction involves using your wallet to sign the transaction ID (als
 
 The following code snippet exemplifies how a Transaction can be signed:
 
-<<< @/../../docs-snippets2/src/wallets/signing/sign-transaction.ts#signing-2{ts:line-numbers}
+<<< @./snippets/signing/sign-transaction.ts#signing-2{ts:line-numbers}
 
 Similar to the sign message example, the previous code used `Signer.recoverAddress` to get the wallet's address from the transaction ID and the signed data.
 
 When using your wallet to submit a transaction with `wallet.sendTransaction()`, the SDK already handles these steps related to signing the transaction and adding the signature to the `witnesses` array. Because of that, you can skip this in most cases:
 
-<<< @/../../docs-snippets2/src/wallets/signing/fund-transaction.ts#signing-3{ts:line-numbers}
+<<< @./snippets/signing/fund-transaction.ts#signing-3{ts:line-numbers}

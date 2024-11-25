@@ -20,7 +20,7 @@ If you need a different snapshot, you can specify a `DEFAULT_CHAIN_SNAPSHOT_DIR`
 
 How and where you specify the environment variable depends on your testing tool.
 
-<<< @/../../docs-snippets2/src/testing/launching-a-test-node.ts#custom-chain-config{ts:line-numbers}
+<<< @./snippets/launching-a-test-node.ts#custom-chain-config{ts:line-numbers}
 
 ## Fuel-Core Node Options
 
@@ -32,4 +32,4 @@ fuel-core run --help
 
 If you want _all_ your tests to run with the same arguments, consider specifying the `DEFAULT_FUEL_CORE_ARGS` environment variable.
 
-<<< @/../../docs-snippets2/src/testing/launching-a-test-node.ts#custom-fuel-core-args{ts:line-numbers}
+<<< @./snippets/launching-a-test-node.ts#custom-fuel-core-args{ts:line-numbers}

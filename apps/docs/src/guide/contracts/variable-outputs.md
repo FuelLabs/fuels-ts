@@ -8,7 +8,7 @@ For instance, if a contract function calls a Sway transfer function 3 times, it 
 
 ## Example: Sway functions that requires `Output Variable`
 
-<<< @/../../docs-snippets2/sway/token/src/main.sw#variable-outputs-1{ts:line-numbers}
+<<< @/../../docs/sway/token/src/main.sw#variable-outputs-1{ts:line-numbers}
 
 ## Adding Variable Outputs to the contract call
 
@@ -16,7 +16,7 @@ When your contract invokes any of these functions, or if it calls a function tha
 
 This can be done as shown in the following example:
 
-<<< @/../../docs-snippets2/src/contracts/utilities/variable-outputs.ts#variable-outputs-2{ts:line-numbers}
+<<< @./snippets/utilities/variable-outputs.ts#variable-outputs-2{ts:line-numbers}
 
 In the TypeScript SDK, the Output Variables are automatically added to the transaction's list of outputs.
 

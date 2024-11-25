@@ -5,9 +5,18 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "dev": "nodemon --config nodemon.config.json -x 'vitepress dev'",
-    "build": "vitepress build",
-    "preview": "vitepress preview"
+    "dev": "nodemon --config nodemon.config.json -x 'run-s build:snippets dev:docs'",
+    "build": "run-s build:snippets build:docs",
+    "preview": "run-s build:snippets preview:docs",
+    "pretest": "./scripts/pretest.sh",
+    "test": "cd ../.. && pnpm run test:filter apps/docs",
+    "build:snippets": "run-s wrap:snippets build:forc",
+    "build:docs": "vitepress build",
+    "preview:docs": "vitepress preview",
+    "dev:docs": "vitepress dev",
+    "wrap:snippets": "tsx ./scripts/wrap-snippets.ts",
+    "build:forc": "pnpm fuels build",
+    "type:check": "pnpm tsc --noEmit --project tsconfig.emit.json"
   },
   "keywords": [],
   "author": "",
@@ -15,12 +24,14 @@
   "dependencies": {
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "fuels": "workspace:*"
+    "fuels": "workspace:*",
+    "ethers": "^6.13.2"
   },
   "devDependencies": {
     "@types/markdown-it": "^14.1.2",
     "@vue/devtools-api": "^6.6.3",
     "flexsearch": "^0.7.43",
+    "glob": "^10.4.5",
     "markdown-it": "^14.1.0",
     "nodemon": "^3.1.7",
     "replace": "^1.2.2",

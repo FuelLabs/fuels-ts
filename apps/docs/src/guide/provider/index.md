@@ -4,6 +4,6 @@ The [`Provider`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.P
 
 All higher-level abstractions (e.g. [`Wallet`](../wallets/index.md), [`Contract`](../contracts/index.md)) that interact with the blockchain go through the `Provider`, so it's used for various actions like getting a wallet's balance, deploying contracts, querying their state, etc.
 
-<<< @/../../docs-snippets2/src/provider/provider-instantiation.ts#provider-instantiation{ts:line-numbers}
+<<< @./snippets/provider-instantiation.ts#provider-instantiation{ts:line-numbers}
 
 You can find more examples of `Provider` usage [here](./querying-the-chain.md).

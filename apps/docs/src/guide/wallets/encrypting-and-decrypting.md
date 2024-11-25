@@ -8,7 +8,7 @@ We will be calling `encrypt` from the [`WalletUnlocked`](https://fuels-ts-docs-a
 
 Here is an example of how you can accomplish this:
 
-<<< @/../../docs-snippets2/src/wallets/encrypting-and-decrypting-wallets.ts#encrypting-and-decrypting-json-wallets-1{ts:line-numbers}
+<<< @./snippets/encrypting-and-decrypting-wallets.ts#encrypting-and-decrypting-json-wallets-1{ts:line-numbers}
 
 Please note that `encrypt` must be called within an instance of [`WalletUnlocked`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.WalletUnlocked.html). This instance can only be achieved through passing a private key or mnemonic phrase to a locked wallet.
 
@@ -18,7 +18,7 @@ To decrypt the JSON wallet and retrieve your private key, you can call `fromEncr
 
 Here is an example:
 
-<<< @/../../docs-snippets2/src/wallets/encrypting-and-decrypting-json-wallets-two.ts#encrypting-and-decrypting-json-wallets-2{ts:line-numbers}
+<<< @./snippets/encrypting-and-decrypting-json-wallets-two.ts#encrypting-and-decrypting-json-wallets-2{ts:line-numbers}
 
 In this example, `decryptedWallet` is an instance of [`WalletUnlocked`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.WalletUnlocked.html) class, now available for use.
 

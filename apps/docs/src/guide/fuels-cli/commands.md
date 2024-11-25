@@ -36,7 +36,7 @@ npx fuels@{{fuels}} init --workspace ./sway-programs --output ./src/sway-program
 
 This will give you a minimal configuration:
 
-<<< @../../../demo-fuels/fuels.config.minimal.ts#config{ts:line-numbers}
+<<< @/../../demo-fuels/fuels.config.minimal.ts#config{ts:line-numbers}
 
 In a nutshell:
 
@@ -107,7 +107,7 @@ The `fuels deploy` command does two things:
 
 Use it when instantiating your contracts:
 
-<<< @../../../demo-fuels/src/index.test.ts#using-generated-files{ts:line-numbers}
+<<< @/../../demo-fuels/src/index.test.ts#using-generated-files{ts:line-numbers}
 
 For a complete example, see:
 
