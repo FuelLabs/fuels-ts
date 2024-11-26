@@ -42,13 +42,13 @@ for (const recipe of supportedRecipes) {
       .forEach(({ name, isType }) => {
         const packageName = importReplacementMap[name];
         if (!packageName) {
-          console.warn(`No package mapping found for: ${name}`);
-          return;
+          throw new Error(`No package mapping found for: ${name}`);
         }
 
         if (!importsByPackage.has(packageName)) {
           importsByPackage.set(packageName, new Set());
         }
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         importsByPackage.get(packageName)!.add(isType ? `type ${name}` : name);
       });
   });
