@@ -1,4 +1,0 @@
----
----
-
-docs: proxy contract cookbook
