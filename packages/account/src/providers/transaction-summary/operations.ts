@@ -42,7 +42,13 @@ import type {
   AbiMap,
 } from './types';
 
-/** @hidden */
+/**
+ * Extracts a specific type of receipt from a list of receipts.
+ *
+ * @param receipts - The list of receipts to filter.
+ * @param type - The type of receipt to filter for.
+ * @returns The filtered list of receipts.
+ */
 export function getReceiptsByType<T = TransactionResultReceipt>(
   receipts: TransactionResultReceipt[],
   type: ReceiptType
@@ -50,7 +56,12 @@ export function getReceiptsByType<T = TransactionResultReceipt>(
   return (receipts ?? []).filter((r) => r.type === type) as T[];
 }
 
-/** @hidden */
+/**
+ * Returns the transaction type's name based on the transaction type enum value.
+ *
+ * @param transactionType - The transaction type enum value.
+ * @returns The transaction type's name.
+ */
 export function getTransactionTypeName(transactionType: TransactionType): TransactionTypeName {
   switch (transactionType) {
     case TransactionType.Mint:
@@ -204,7 +215,14 @@ export function getReceiptsTransferOut(receipts: TransactionResultReceipt[]) {
   return getReceiptsByType<TransactionResultTransferOutReceipt>(receipts, ReceiptType.TransferOut);
 }
 
-/** @hidden */
+/**
+ * Creates withdrawal operations from Fuel to Ethereum based on message out receipts
+ *
+ * @param inputs - Transaction inputs containing account information
+ * @param receipts - Transaction receipts containing withdrawal details
+ * @param baseAssetId - The ID of the asset being withdrawn
+ * @returns Array of withdrawal operations with sender, recipient, and asset id.
+ */
 export function getWithdrawFromFuelOperations({
   inputs,
   receipts,
@@ -356,7 +374,15 @@ export function getContractCallOperations({
   });
 }
 
-/** @hidden */
+/**
+ * Extracts a transfer operation from a transaction receipt, determining the addresses and types
+ * of the sender and receiver, along with the transferred asset details.
+ *
+ * @param receipt - The transaction receipt containing transfer information
+ * @param contractInputs - Array of contract inputs to determine address types
+ * @param changeOutputs - Array of change outputs to resolve zero addresses
+ * @returns A transfer operation object with sender, receiver and asset details
+ */
 function extractTransferOperationFromReceipt(
   receipt: TransactionResultTransferReceipt | TransactionResultTransferOutReceipt,
   contractInputs: InputContract[],
