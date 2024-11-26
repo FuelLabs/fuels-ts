@@ -2,17 +2,17 @@
 
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/consistent-type-imports */
 
 /*
   Fuels version: 0.97.0
 */
 
+import { Contract, type InvokeFunction } from '@fuel-ts/program';
 import { Interface, type FunctionFragment } from '@fuel-ts/abi-coder';
 import { type Provider, type Account } from '@fuel-ts/account';
-import { type AbstractAddress, type StrSlice } from '@fuel-ts/interfaces';
-import { Contract, type InvokeFunction } from '@fuel-ts/program';
 import { type StorageSlot } from '@fuel-ts/transactions';
-
+import { type AbstractAddress, type StrSlice } from '@fuel-ts/interfaces';
 import type { Option, Enum } from './common';
 
 export enum AccessErrorInput {
