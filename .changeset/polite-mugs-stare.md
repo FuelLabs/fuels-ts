@@ -1,5 +1,5 @@
 ---
-"@fuel-ts/recipes": patch
+"@fuel-ts/recipes": minor
 ---
 
 docs: proxy contract cookbook
