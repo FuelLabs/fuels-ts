@@ -1,5 +1,5 @@
 {
-  "chain_name": "Local network",
+  "chain_name": "local_testnet",
   "consensus_parameters": {
     "V2": {
       "tx_params": {
@@ -7,17 +7,17 @@
           "max_inputs": 255,
           "max_outputs": 255,
           "max_witnesses": 255,
-          "max_gas_per_tx": 100000000,
-          "max_size": 262144,
+          "max_gas_per_tx": 30000000,
+          "max_size": 112640,
           "max_bytecode_subsections": 256
         }
       },
       "predicate_params": {
         "V1": {
-          "max_predicate_length": 102400,
-          "max_predicate_data_length": 102400,
+          "max_predicate_length": 24576,
+          "max_predicate_data_length": 24576,
           "max_message_data_length": 102400,
-          "max_gas_per_predicate": 100000000
+          "max_gas_per_predicate": 1000000
         }
       },
       "script_params": {
@@ -28,17 +28,17 @@
       },
       "contract_params": {
         "V1": {
-          "contract_max_size": 262144,
+          "contract_max_size": 112640,
           "max_storage_slots": 1760
         }
       },
       "fee_params": {
         "V1": {
-          "gas_price_factor": 92,
-          "gas_per_byte": 233
+          "gas_price_factor": 1150000,
+          "gas_per_byte": 63
         }
       },
-      "chain_id": 0,
+      "chain_id": 9889,
       "gas_costs": {
         "V4": {
           "add": 2,
@@ -58,7 +58,7 @@
           "eq": 2,
           "exp": 2,
           "expi": 2,
-          "flag": 1,
+          "flag": 2,
           "gm": 2,
           "gt": 2,
           "gtf": 3,
@@ -93,8 +93,8 @@
           "ori": 2,
           "poph": 2,
           "popl": 2,
-          "pshh": 3073,
-          "pshl": 3016,
+          "pshh": 5,
+          "pshl": 5,
           "ret_contract": 43,
           "rvrt_contract": 39,
           "sb": 2,
@@ -282,7 +282,7 @@
               "gas_per_unit": 96
             }
           },
-          "new_storage_per_byte": 233,
+          "new_storage_per_byte": 63,
           "vm_initialization": {
             "LightOperation": {
               "base": 3127,
@@ -291,16 +291,15 @@
           }
         }
       },
-      "base_asset_id": "0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07",
-      "block_gas_limit": 100000000,
-      "block_transaction_size_limit": 129024,
-      "privileged_address": "9f0e19d6c2a6283a3222426ab2630d35516b1799b503f37b02105bebe1b8a3e9"
+      "base_asset_id": "f8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07",
+      "block_gas_limit": 30000000,
+      "block_transaction_size_limit": 260096,
+      "privileged_address": "eb42c979046d091f4f524e1efd8d4ffad92629b9a506b268a511861b0dbf2366"
     }
   },
-  "genesis_state_transition_version": 11,
   "consensus": {
     "PoA": {
-      "signing_key": "e0a9fcde1b73f545252e01b30b50819eb9547d07531fa3df0385c5695736634d"
+      "signing_key": "0x94ffcc53b892684acefaebc8a3d4a595e528a8cf664eeb3ef36f1020b0809d0d"
     }
   }
 }

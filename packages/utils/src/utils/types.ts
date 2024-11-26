@@ -206,7 +206,6 @@ interface ChainConfig {
   consensus_parameters: {
     V2: ConsensusParameters;
   };
-  genesis_state_transition_version: number;
   consensus: Consensus;
 }
 
