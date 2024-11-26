@@ -26,6 +26,7 @@ fn divide(numerator: u64, denominator: u64) -> Result<u64, MyContractError> {
 abi AbiContract {
     fn configurables() -> Configurables;
 
+    fn attributes_none() -> ();
     #[storage(read)]
     fn attributes_storage_read() -> ();
     #[storage(write)]
@@ -159,6 +160,10 @@ impl AbiContract for Contract {
             OPTION_U8_VALUE: OPTION_U8_VALUE,
             GENERIC_STRUCT_VALUE: GENERIC_STRUCT_VALUE,
         }
+    }
+
+    fn attributes_none() -> () {
+        ()
     }
 
     #[storage(read)]

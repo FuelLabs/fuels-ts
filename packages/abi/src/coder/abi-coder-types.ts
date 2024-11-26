@@ -39,6 +39,7 @@ export interface AbiCoderFunction {
   selector: string;
   selectorBytes: Uint8Array;
   attributes: AbiFunction['attributes'];
+  isReadOnly: () => boolean;
 
   // Coders
   arguments: Coder<unknown[]>;

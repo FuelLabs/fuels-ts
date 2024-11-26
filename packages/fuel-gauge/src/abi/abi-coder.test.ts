@@ -185,6 +185,23 @@ describe('AbiCoder', () => {
     });
   });
 
+  describe('isReadOnly', () => {
+    it('should return true for a storage read function', () => {
+      const fn = contract.interface.getFunction('attributes_storage_read');
+      expect(fn.isReadOnly()).toBe(true);
+    });
+
+    it('should return true for a function that does not use storage', () => {
+      const fn = contract.interface.getFunction('attributes_none');
+      expect(fn.isReadOnly()).toBe(true);
+    });
+
+    it('should return false for a storage write function', () => {
+      const fn = contract.interface.getFunction('attributes_storage_write');
+      expect(fn.isReadOnly()).toBe(false);
+    });
+  });
+
   describe('types_u8', () => {
     it('should encode/decode just fine', async () => {
       const input = 8;

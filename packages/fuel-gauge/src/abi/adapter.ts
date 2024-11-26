@@ -22,9 +22,7 @@ const functionAdapter = (fn: AbiCoderFunction): FunctionFragment =>
       const bytes = arrayify(data);
       return [fn.output.decode(bytes) as DecodedValue | undefined, 0];
     },
-    isReadOnly: () => {
-      throw new Error('Not implemented');
-    },
+    isReadOnly: fn.isReadOnly,
 
     // Unused
     // encoding: '1',

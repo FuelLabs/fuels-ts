@@ -23,6 +23,10 @@ export class FunctionRepository {
       selector: createFunctionSelector(signature),
       selectorBytes: encoding.coders.stdString.encode(fn.name),
       attributes: fn.attributes ?? [],
+      isReadOnly: () => {
+        const storageAttribute = fn.attributes?.find((attr) => attr.name === 'storage');
+        return !storageAttribute?.arguments?.includes('write');
+      },
 
       // Coders
       arguments: encoding.coders.tuple({
