@@ -2,4 +2,4 @@
 "@fuel-ts/recipes": minor
 ---
 
-docs: proxy contract cookbook
+docs!: proxy contract cookbook
