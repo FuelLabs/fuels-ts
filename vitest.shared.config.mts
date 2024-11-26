@@ -17,6 +17,7 @@ export default defineConfig({
   esbuild: { target: "es2022" },
   test: {
     globalSetup: ["vitest.global-setup.ts"],
+    setupFiles: ["./packages/fuel-gauge/src/test/setup.ts"],
     coverage: {
       enabled: true,
       provider: "istanbul",

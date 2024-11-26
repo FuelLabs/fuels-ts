@@ -1,20 +1,49 @@
 import { bn } from 'fuels';
 import type { BNInput } from 'fuels';
 
-export const toEqualBn = (_received: BNInput, _argument: BNInput) => {
-  const received = bn(_received);
-  const argument = bn(_argument);
+type MatcherResult = {
+  message: () => string;
+  pass: boolean;
+};
 
-  const pass = received.eq(argument);
+type BNAsymmetricMatcher = {
+  asymmetricMatch(actual: BNInput): boolean;
+  toString(): string;
+};
 
-  if (pass) {
-    return {
-      message: () => `Expected ${received.toString()} not to equal ${argument.toString()}`,
-      pass: true,
-    };
+declare module 'vitest' {
+  interface Expect {
+    toEqualBn(expected: BNInput): void;
   }
-  return {
-    message: () => `expected ${received.toString()} to equal ${argument.toString()}`,
-    pass: false,
-  };
+  interface ExpectStatic {
+    toEqualBn(expected: BNInput): BNAsymmetricMatcher;
+  }
+  interface AsymmetricMatchersContaining {
+    toEqualBn(expected: BNInput): BNAsymmetricMatcher;
+  }
+}
+
+const createMatcher = (expected: BNInput): BNAsymmetricMatcher => ({
+  asymmetricMatch: (actual: BNInput) => bn(actual).eq(bn(expected)),
+  toString: () => `BNMatcher(${expected})`,
+});
+
+export const setupTestMatchers = () => {
+  expect.extend({
+    toEqualBn(received: BNInput, expected: BNInput): MatcherResult {
+      const actualBn = bn(received);
+      const expectedBn = bn(expected);
+      const pass = actualBn.eq(expectedBn);
+
+      return {
+        pass,
+        message: () =>
+          pass
+            ? `Expected ${actualBn.toString()} not to equal ${expectedBn.toString()}`
+            : `Expected ${actualBn.toString()} to equal ${expectedBn.toString()}`,
+      };
+    },
+  });
+
+  expect.toEqualBn = createMatcher;
 };
