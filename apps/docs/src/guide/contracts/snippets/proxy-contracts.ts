@@ -1,5 +1,10 @@
 // #region proxy-2
-import { Provider, Wallet } from 'fuels';
+import {
+  Provider,
+  Wallet,
+  Src14OwnedProxy,
+  Src14OwnedProxyFactory,
+} from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../env';
 import {
@@ -7,8 +12,6 @@ import {
   CounterFactory,
   CounterV2,
   CounterV2Factory,
-  Proxy,
-  ProxyFactory,
 } from '../../../typegend';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
@@ -24,7 +27,7 @@ const { contract: counterContract } = await deploy.waitForResult();
  * It is important to pass all storage slots to the proxy in order to
  * initialize the storage slots.
  */
-const storageSlots = Counter.storageSlots.concat(Proxy.storageSlots);
+const storageSlots = Counter.storageSlots.concat(Src14OwnedProxy.storageSlots);
 
 /**
  * These configurables are specific to our recommended SRC14 compliant
@@ -38,7 +41,7 @@ const configurableConstants = {
   },
 };
 
-const proxyContractFactory = new ProxyFactory(wallet);
+const proxyContractFactory = new Src14OwnedProxyFactory(wallet);
 const proxyDeploy = await proxyContractFactory.deploy({
   storageSlots,
   configurableConstants,

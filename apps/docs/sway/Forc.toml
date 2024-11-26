@@ -5,7 +5,6 @@ members = [
   "configurable-pin",
   "counter",
   "counter-v2",
-  "proxy",
   "echo-asset-id",
   "echo-bytes",
   "echo-configurables",
