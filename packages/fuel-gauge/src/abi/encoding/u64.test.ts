@@ -100,6 +100,7 @@ describe('types_u64', () => {
 
       const actual = fn.output.decode(value);
 
+      // @ts-expect-error toEqualBn is not a function
       expect(actual).toStrictEqual(expect.toEqualBn(expected));
     });
 
@@ -109,6 +110,7 @@ describe('types_u64', () => {
 
       const actual = fn.output.decode(value);
 
+      // @ts-expect-error toEqualBn is not a function
       expect(actual).toStrictEqual(expect.toEqualBn(expected));
     });
 
@@ -118,6 +120,7 @@ describe('types_u64', () => {
 
       const actual = fn.output.decode(value);
 
+      // @ts-expect-error toEqualBn is not a function
       expect(actual).toStrictEqual(expect.toEqualBn(expected));
     });
 
@@ -127,6 +130,7 @@ describe('types_u64', () => {
 
       const actual = fn.output.decode(value);
 
+      // @ts-expect-error toEqualBn is not a function
       expect(actual).toStrictEqual(expect.toEqualBn(expected));
     });
 
@@ -136,6 +140,7 @@ describe('types_u64', () => {
 
       const actual = fn.output.decode(value);
 
+      // @ts-expect-error toEqualBn is not a function
       expect(actual).toStrictEqual(expect.toEqualBn(expected));
     });
 

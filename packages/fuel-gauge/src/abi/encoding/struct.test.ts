@@ -169,6 +169,7 @@ describe('types_struct_with_tuple', () => {
   describe('decode', () => {
     it('should decode value [{ a: [true, U64_MAX] }]', () => {
       const value = concat([BOOL_TRUE_ENCODED, U64_MAX_ENCODED]);
+      // @ts-expect-error toEqualBn is not a function
       const expected = { a: [true, expect.toEqualBn(U64_MAX)] };
 
       const actual = fn.output.decode(value);

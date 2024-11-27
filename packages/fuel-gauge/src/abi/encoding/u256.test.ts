@@ -65,6 +65,7 @@ describe('types_u256', () => {
 
       const actual = fn.output.decode(value);
 
+      // @ts-expect-error toEqualBn is not a function
       expect(actual).toStrictEqual(expect.toEqualBn(expected));
     });
 

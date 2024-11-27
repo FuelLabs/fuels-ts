@@ -110,6 +110,7 @@ describe('types_enum_with_builtin_type', () => {
         new Uint8Array([255, 255, 255, 255, 255, 255, 255, 255]),
       ]);
       const expected = {
+        // @ts-expect-error toEqualBn is not a function
         b: expect.toEqualBn(U64_MAX),
       };
 
@@ -211,6 +212,7 @@ describe('types_enum_with_structs', () => {
       ]);
       const expected = {
         c: {
+          // @ts-expect-error toEqualBn is not a function
           a: expect.toEqualBn(U64_MAX),
           b: {
             a: true,
