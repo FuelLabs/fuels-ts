@@ -1,5 +1,5 @@
 import type { BytesLike } from '@fuel-ts/interfaces';
-import type { BN } from '@fuel-ts/math';
+import type { BN, BNInput } from '@fuel-ts/math';
 
 import type { AbiConfigurable, AbiFunction, AbiLoggedType, AbiType } from '../parser';
 
@@ -23,6 +23,7 @@ export type InputValue<T = void> =
  * The type of value you can get from `Coder.decode`
  */
 export type DecodedValue =
+  | undefined
   | Primitive
   | DecodedValue[]
   | { [key: string]: DecodedValue }
@@ -42,7 +43,6 @@ export type GetCoderParams = { name?: string; type: AbiType };
 export type GetCoderFn = (params: GetCoderParams) => Coder;
 
 export interface AbiCoderFunction {
-  // Member fields
   name: AbiFunction['name'];
   signature: string;
   selector: string;
@@ -51,25 +51,19 @@ export interface AbiCoderFunction {
 
   // Methods
   isReadOnly: () => boolean;
-  // encodeArguments: (values: InputValue[]) => Uint8Array;
-  // decodeArguments: (data: Uint8Array) => DecodedValue | undefined;
-  // decodeOutput: (data: Uint8Array) => DecodedValue | undefined;
-
-  // Coders
-  arguments: Coder<unknown[]>;
-  output: Coder<unknown>;
+  encodeArguments: (values: InputValue[]) => Uint8Array;
+  decodeArguments: (data: BytesLike) => DecodedValue[];
+  encodeOutput: (value: InputValue) => Uint8Array;
+  decodeOutput: (data: BytesLike) => DecodedValue;
 }
 
 export interface AbiCoderConfigurable {
-  // Member fields
   name: AbiConfigurable['name'];
   offset: AbiConfigurable['offset'];
-
-  // Coders
-  value: Coder<unknown>;
+  encode: (values: InputValue) => Uint8Array;
 }
 
 export interface AbiCoderLog {
   logId: AbiLoggedType['logId'];
-  value: Coder<unknown>;
+  decode: (data: BytesLike) => DecodedValue;
 }

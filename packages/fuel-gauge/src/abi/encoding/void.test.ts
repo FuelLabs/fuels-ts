@@ -11,10 +11,10 @@ describe('types_void', () => {
 
   describe('encode', () => {
     it('should encode value [undefined]', () => {
-      const value: void = undefined;
+      const value: undefined = undefined;
       const expected = new Uint8Array([]);
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -24,7 +24,7 @@ describe('types_void', () => {
     it('should decode value', () => {
       const value = new Uint8Array([]);
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       expect(actual).toStrictEqual(undefined);
     });

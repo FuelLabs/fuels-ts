@@ -26,7 +26,7 @@ describe.todo('types_enum', () => {
       const value = 'Pending';
       const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1]);
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -37,7 +37,7 @@ describe.todo('types_enum', () => {
       const value = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1]);
       const expected = 'Pending';
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -60,7 +60,7 @@ describe('types_enum_with_builtin_type', () => {
         new Uint8Array([1]),
       ]);
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -77,7 +77,7 @@ describe('types_enum_with_builtin_type', () => {
         new Uint8Array([255, 255, 255, 255, 255, 255, 255, 255]),
       ]);
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -96,7 +96,7 @@ describe('types_enum_with_builtin_type', () => {
         a: true,
       };
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -110,10 +110,11 @@ describe('types_enum_with_builtin_type', () => {
         new Uint8Array([255, 255, 255, 255, 255, 255, 255, 255]),
       ]);
       const expected = {
+        // @ts-expect-error toEqualBn is not a function
         b: expect.toEqualBn(U64_MAX),
       };
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -139,7 +140,7 @@ describe('types_enum_with_vector', () => {
         new Uint8Array([1, 2]),
       ]);
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -161,7 +162,7 @@ describe('types_enum_with_vector', () => {
         b: [1, 2],
       };
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -192,7 +193,7 @@ describe('types_enum_with_structs', () => {
         U32_MAX_ENCODED,
       ]);
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -211,6 +212,7 @@ describe('types_enum_with_structs', () => {
       ]);
       const expected = {
         c: {
+          // @ts-expect-error toEqualBn is not a function
           a: expect.toEqualBn(U64_MAX),
           b: {
             a: true,
@@ -219,7 +221,7 @@ describe('types_enum_with_structs', () => {
         },
       };
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });

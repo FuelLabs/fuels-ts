@@ -14,7 +14,7 @@ describe('types_bytes', () => {
       const value = new Uint8Array([1, 2, 3]);
       const expected: Uint8Array = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 3]);
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -25,7 +25,7 @@ describe('types_bytes', () => {
       const value = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 3]);
       const expected: Uint8Array = new Uint8Array([1, 2, 3]);
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -40,7 +40,7 @@ describe('types_raw_slice', () => {
       const value: number[] = [1, 2, 3];
       const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 3]);
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -51,7 +51,7 @@ describe('types_raw_slice', () => {
       const value = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 3]);
       const expected: number[] = [1, 2, 3];
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -68,7 +68,7 @@ describe('types_str_slice', () => {
         0, 0, 0, 0, 0, 0, 0, 5, 104, 101, 108, 108, 111,
       ]);
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -79,7 +79,7 @@ describe('types_str_slice', () => {
       const value: Uint8Array = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 5, 104, 101, 108, 108, 111]);
       const expected: string = 'hello';
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });

@@ -39,7 +39,7 @@ describe('types_struct_simple', () => {
       const value = { a: true, b: U32_MAX };
       const expected = concat([BOOL_TRUE_ENCODED, U32_MAX_ENCODED]);
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -48,7 +48,7 @@ describe('types_struct_simple', () => {
       const value = { b: U32_MIN, a: false };
       const expected = concat([BOOL_FALSE_ENCODED, U32_MIN_ENCODED]);
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -57,7 +57,7 @@ describe('types_struct_simple', () => {
       const value = { a: false };
 
       await expectToThrowFuelError(
-        () => fn.output.encode(value),
+        () => fn.encodeOutput(value),
         new FuelError(
           FuelError.CODES.ENCODE_ERROR,
           'Invalid struct SimpleStruct. Field "b" not present.'
@@ -69,7 +69,7 @@ describe('types_struct_simple', () => {
       const value = { a: false, b: U32_MIN, naz: 'gûl' };
 
       await expectToThrowFuelError(
-        () => fn.output.encode(value),
+        () => fn.encodeOutput(value),
         new FuelError(FuelError.CODES.ENCODE_ERROR, 'Types/values length mismatch.')
       );
     });
@@ -80,7 +80,7 @@ describe('types_struct_simple', () => {
       const value = concat([BOOL_TRUE_ENCODED, U32_MAX_ENCODED]);
       const expected = { a: true, b: U32_MAX };
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -89,7 +89,7 @@ describe('types_struct_simple', () => {
       const value = concat([BOOL_FALSE_ENCODED, U32_MIN_ENCODED]);
       const expected = { b: U32_MIN, a: false };
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -98,7 +98,7 @@ describe('types_struct_simple', () => {
       const value = concat([BOOL_FALSE_ENCODED]);
 
       await expectToThrowFuelError(
-        () => fn.output.decode(value),
+        () => fn.decodeOutput(value),
         new FuelError(
           FuelError.CODES.DECODE_ERROR,
           'Invalid struct SimpleStruct. Field "b" not present.'
@@ -110,7 +110,7 @@ describe('types_struct_simple', () => {
       const value = concat([BOOL_FALSE_ENCODED, U32_MIN_ENCODED, toBytes('gûl')]);
 
       await expectToThrowFuelError(
-        () => fn.output.decode(value),
+        () => fn.decodeOutput(value),
         new FuelError(FuelError.CODES.DECODE_ERROR, 'Types/values length mismatch.')
       );
     });
@@ -125,7 +125,7 @@ describe('types_struct_generic', () => {
       const value = { a: U8_MAX };
       const expected = U8_MAX_ENCODED;
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -136,7 +136,7 @@ describe('types_struct_generic', () => {
       const value = U8_MAX_ENCODED;
       const expected = { a: U8_MAX };
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -151,7 +151,7 @@ describe('types_struct_with_tuple', () => {
       const value = { a: [true, U64_MAX] };
       const expected = concat([BOOL_TRUE_ENCODED, U64_MAX_ENCODED]);
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -160,7 +160,7 @@ describe('types_struct_with_tuple', () => {
       const value = { a: [true] };
 
       await expectToThrowFuelError(
-        () => fn.output.encode(value),
+        () => fn.encodeOutput(value),
         new FuelError(FuelError.CODES.ENCODE_ERROR, 'Types/values length mismatch.')
       );
     });
@@ -169,9 +169,10 @@ describe('types_struct_with_tuple', () => {
   describe('decode', () => {
     it('should decode value [{ a: [true, U64_MAX] }]', () => {
       const value = concat([BOOL_TRUE_ENCODED, U64_MAX_ENCODED]);
+      // @ts-expect-error toEqualBn is not a function
       const expected = { a: [true, expect.toEqualBn(U64_MAX)] };
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -180,7 +181,7 @@ describe('types_struct_with_tuple', () => {
       const value = concat([BOOL_TRUE_ENCODED]);
 
       await expectToThrowFuelError(
-        () => fn.output.decode(value),
+        () => fn.decodeOutput(value),
         new FuelError(FuelError.CODES.DECODE_ERROR, 'Types/values length mismatch.')
       );
     });
@@ -189,7 +190,7 @@ describe('types_struct_with_tuple', () => {
       const value = concat([BOOL_FALSE_ENCODED, U32_MIN_ENCODED, toBytes('gûl')]);
 
       await expectToThrowFuelError(
-        () => fn.output.decode(value),
+        () => fn.decodeOutput(value),
         new FuelError(FuelError.CODES.DECODE_ERROR, 'Types/values length mismatch.')
       );
     });
@@ -213,7 +214,7 @@ describe.only('types_struct_with_implicit_generics', () => {
         U8_MAX_ENCODED,
       ]);
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -233,7 +234,7 @@ describe.only('types_struct_with_implicit_generics', () => {
         b: [B256_DECODED, U8_MAX],
       };
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -254,7 +255,7 @@ describe('types_struct_with_vector', () => {
         Uint8Array.from([3, 9, 6, 4]),
       ]);
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -271,7 +272,7 @@ describe('types_struct_with_vector', () => {
       ]);
       const expected = { a: U8_MAX, b: [3, 9, 6, 4] };
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });

@@ -16,7 +16,7 @@ describe('types_tuple', () => {
       const value = [U8_MAX, U8_MAX, U8_MAX];
       const expected = concat([U8_MAX_ENCODED, U8_MAX_ENCODED, U8_MAX_ENCODED]);
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -27,7 +27,7 @@ describe('types_tuple', () => {
       const value = concat([U8_MAX_ENCODED, U8_MAX_ENCODED, U8_MAX_ENCODED]);
       const expected = [U8_MAX, U8_MAX, U8_MAX];
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -42,7 +42,7 @@ describe('types_tuple_complex', () => {
       const value = [U8_MAX, { a: { a: U64_MAX } }, 'aaa'];
       const expected = concat([U8_MAX_ENCODED, U64_MAX_ENCODED, Uint8Array.from([97, 97, 97])]);
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -53,7 +53,7 @@ describe('types_tuple_complex', () => {
       const value = concat([U8_MAX_ENCODED, U64_MAX_ENCODED, Uint8Array.from([97, 97, 97])]);
       const expected = [U8_MAX, { a: { a: U64_MAX } }, 'aaa'];
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });

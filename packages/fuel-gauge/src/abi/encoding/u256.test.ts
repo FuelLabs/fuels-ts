@@ -25,7 +25,7 @@ describe('types_u256', () => {
       const value = U256_MIN;
       const expected = U256_MIN_ENCODED;
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -34,7 +34,7 @@ describe('types_u256', () => {
       const value = U256_MAX;
       const expected = U256_MAX_ENCODED;
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -43,7 +43,7 @@ describe('types_u256', () => {
       const value = U256_MIN_MINUS_ONE;
 
       await expectToThrowFuelError(
-        () => fn.output.encode(value),
+        () => fn.encodeOutput(value),
         new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid U256 value.')
       );
     });
@@ -52,7 +52,7 @@ describe('types_u256', () => {
       const value = U256_MAX_PLUS_ONE;
 
       await expectToThrowFuelError(
-        () => fn.output.encode(value),
+        () => fn.encodeOutput(value),
         new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid U256 value.')
       );
     });
@@ -63,8 +63,9 @@ describe('types_u256', () => {
       const value = U256_MIN_ENCODED;
       const expected = U256_MIN;
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
+      // @ts-expect-error toEqualBn is not a function
       expect(actual).toStrictEqual(expect.toEqualBn(expected));
     });
 
@@ -72,7 +73,7 @@ describe('types_u256', () => {
       const value = U256_MAX_ENCODED;
       const expected = U256_MAX;
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -81,7 +82,7 @@ describe('types_u256', () => {
       const value = U256_MIN_MINUS_ONE_ENCODED;
 
       await expectToThrowFuelError(
-        () => fn.output.decode(value),
+        () => fn.decodeOutput(value),
         new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u256 value.')
       );
     });
@@ -90,7 +91,7 @@ describe('types_u256', () => {
       const value = U256_MAX_PLUS_ONE_ENCODED;
 
       await expectToThrowFuelError(
-        () => fn.output.decode(value),
+        () => fn.decodeOutput(value),
         new FuelError(FuelError.CODES.DECODE_ERROR, 'Invalid u256 value.')
       );
     });

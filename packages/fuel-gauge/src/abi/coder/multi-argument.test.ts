@@ -34,6 +34,7 @@ describe('multi_arg_u64_u64', () => {
         new Uint8Array([0, 0, 0, 0, 0, 0, 0, U8_MAX]),
         new Uint8Array([0, 0, 0, 0, 0, 0, 0, U8_MAX]),
       ]);
+      // @ts-expect-error toEqualBn is not a function
       const expected: [number, number] = [expect.toEqualBn(U8_MAX), expect.toEqualBn(U8_MAX)];
 
       const actual = fn.arguments.decode(value);
@@ -209,8 +210,11 @@ describe('multi_arg_u32_vector_vector', () => {
         new Uint8Array([0, 0, 0, 0, 0, 0, 0, 126]), // Vector 2 - element 3
       ]);
       const expected = [
+        // @ts-expect-error toEqualBn is not a function
         expect.toEqualBn(U32_MAX),
+        // @ts-expect-error toEqualBn is not a function
         [expect.toEqualBn(123), expect.toEqualBn(0)],
+        // @ts-expect-error toEqualBn is not a function
         [expect.toEqualBn(124), expect.toEqualBn(0), expect.toEqualBn(125), expect.toEqualBn(126)],
       ];
 
