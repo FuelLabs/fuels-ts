@@ -223,17 +223,16 @@ export class ResolvableType {
     return this.typeParamsArgsMap === undefined
       ? typeParamsArgsMap
       : this.typeParamsArgsMap.map(([typeParameter, value]) => {
-          if (value instanceof ResolvedType) {
-            return [+typeParameter, value];
+          if (value instanceof ResolvableType) {
+            const resolved = typeParamsArgsMap?.find(([tp]) => tp === value.metadataTypeId)?.[1];
+
+            if (resolved) {
+              return [+value.metadataTypeId, resolved];
+            }
+
+            return [+typeParameter, value.resolveInternal(value.metadataTypeId, typeParamsArgsMap)];
           }
-
-          const resolved = typeParamsArgsMap?.find(([tp]) => tp === value.metadataTypeId)?.[1];
-
-          if (resolved) {
-            return [+typeParameter, resolved];
-          }
-
-          return [+typeParameter, value.resolveInternal(value.metadataTypeId, typeParamsArgsMap)];
+          return [+typeParameter, value];
         });
   }
 
