@@ -1,6 +1,7 @@
 import type { Abi } from '../../abi';
 
 import { makeResolvedType } from './make-resolved-type';
+import { mapAttribute } from './map-attribute';
 import { ResolvableType } from './resolvable-type';
 import type {
   AbiConfigurableV1,
@@ -38,7 +39,7 @@ export class AbiParserV1 {
       encodingVersion: abi.encodingVersion,
       programType: abi.programType,
       functions: abi.functions.map((fn: AbiFunctionV1) => ({
-        attributes: fn.attributes ?? undefined,
+        attributes: fn.attributes?.map(mapAttribute) ?? undefined,
         name: fn.name,
         output: getType(fn.output),
         inputs: fn.inputs.map((input: AbiFunctionInputV1) => ({

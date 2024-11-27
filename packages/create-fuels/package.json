@@ -1,6 +1,6 @@
 {
   "name": "create-fuels",
-  "version": "0.96.1",
+  "version": "0.97.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -15,7 +15,7 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "build": "run-s build:source type:check",
+    "build": "run-s build:source",
     "build:source": "tsup",
     "type:check": "tsc --noEmit",
     "prepublishOnly": "tsx ./scripts/prepublish.ts"

@@ -37,7 +37,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.13",
     "globals": "^15.9.0",
-    "postcss": "^8.4.47",
+    "postcss": "^8.4.49",
     "tailwindcss": "^3.4.14",
     "typescript": "~5.6.3",
     "typescript-eslint": "^8.8.0",

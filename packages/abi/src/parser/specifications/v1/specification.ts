@@ -70,11 +70,11 @@ export type AbiFunctionAttributeV1 =
   | PayableAttrV1
   | TestAttrV1
   | InlineAttrV1
-  | DocCommentAttrV1
-  | DocAttrV1;
+  | DocCommentAttrV1;
 
 export interface PayableAttrV1 {
   readonly name: 'payable';
+  readonly arguments?: readonly [];
 }
 
 export interface StorageAttrV1 {
@@ -84,6 +84,7 @@ export interface StorageAttrV1 {
 
 export interface TestAttrV1 {
   readonly name: 'test';
+  readonly arguments?: readonly [];
 }
 
 export interface InlineAttrV1 {
@@ -94,8 +95,4 @@ export interface InlineAttrV1 {
 export interface DocCommentAttrV1 {
   readonly name: 'doc-comment';
   readonly arguments: string[];
-}
-
-export interface DocAttrV1 {
-  readonly name: 'doc';
 }

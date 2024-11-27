@@ -6,15 +6,16 @@
     "/apps/docs/*",
     "/packages/abi-typegen/test/**",
     "templates/**",
-    "/apps/docs-snippets/**",
-    "/apps/docs-snippets2/**/*.test.ts",
-    "apps/create-fuels-counter-guide/**"
+    "/apps/docs/**/*.test.ts",
+    "apps/create-fuels-counter-guide/**",
+    "apps/docs-api/**"
   ],
   "ignoreDependencies": [
     "autocannon",
     "bun",
     "@/sway-api/*",
     "@fuel-ts/*",
+    "@fuels/connectors",
     "@internal/fuel-core",
     "@internal/forc",
     "@types/jest",

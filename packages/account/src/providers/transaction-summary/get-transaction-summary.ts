@@ -5,12 +5,13 @@ import { arrayify } from '@fuel-ts/utils';
 
 import type {
   GqlGetTransactionsByOwnerQueryVariables,
-  GqlPageInfo,
   GqlReceiptFragment,
 } from '../__generated__/operations';
 import type Provider from '../provider';
+import { TRANSACTIONS_PAGE_SIZE_LIMIT, type PageInfo } from '../provider';
 import type { TransactionRequest } from '../transaction-request';
 import type { TransactionResult } from '../transaction-response';
+import { validatePaginationArgs } from '../utils/validate-pagination-args';
 
 import { assembleTransactionSummary } from './assemble-transaction-summary';
 import { processGqlReceipt } from './receipt';
@@ -133,16 +134,31 @@ export interface GetTransactionsSummariesParams {
 
 export interface GetTransactionsSummariesReturns {
   transactions: TransactionResult[];
-  pageInfo: GqlPageInfo;
+  pageInfo: PageInfo;
 }
 
-/** @hidden */
+/**
+ * Gets transaction summaries for a given owner/address.
+ *
+ * @param params - The filters to apply to the query.
+ * @returns The transaction summaries.
+ */
 export async function getTransactionsSummaries(
   params: GetTransactionsSummariesParams
 ): Promise<GetTransactionsSummariesReturns> {
   const { filters, provider, abiMap } = params;
 
-  const { transactionsByOwner } = await provider.operations.getTransactionsByOwner(filters);
+  const { owner, ...inputArgs } = filters;
+
+  const validPaginationParams = validatePaginationArgs({
+    inputArgs,
+    paginationLimit: TRANSACTIONS_PAGE_SIZE_LIMIT,
+  });
+
+  const { transactionsByOwner } = await provider.operations.getTransactionsByOwner({
+    ...validPaginationParams,
+    owner,
+  });
 
   const { edges, pageInfo } = transactionsByOwner;
 
