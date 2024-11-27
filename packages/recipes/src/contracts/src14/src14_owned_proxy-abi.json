@@ -115,9 +115,7 @@
           "typeId": 7
         }
       ],
-      "typeParameters": [
-        7
-      ]
+      "typeParameters": [7]
     },
     {
       "type": "enum sway_libs::ownership::errors::InitializationError",
@@ -192,27 +190,19 @@
       "attributes": [
         {
           "name": "doc-comment",
-          "arguments": [
-            " Returns the target contract of the proxy contract."
-          ]
+          "arguments": [" Returns the target contract of the proxy contract."]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " # Returns"
-          ]
+          "arguments": [" # Returns"]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
@@ -222,33 +212,23 @@
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " # Number of Storage Accesses"
-          ]
+          "arguments": [" # Number of Storage Accesses"]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " * Reads: `1`"
-          ]
+          "arguments": [" * Reads: `1`"]
         },
         {
           "name": "storage",
-          "arguments": [
-            "read"
-          ]
+          "arguments": ["read"]
         }
       ]
     },
@@ -264,51 +244,35 @@
       "attributes": [
         {
           "name": "doc-comment",
-          "arguments": [
-            " Change the target contract of the proxy contract."
-          ]
+          "arguments": [" Change the target contract of the proxy contract."]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " # Additional Information"
-          ]
+          "arguments": [" # Additional Information"]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " This method can only be called by the `proxy_owner`."
-          ]
+          "arguments": [" This method can only be called by the `proxy_owner`."]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " # Arguments"
-          ]
+          "arguments": [" # Arguments"]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
@@ -318,64 +282,43 @@
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " # Reverts"
-          ]
+          "arguments": [" # Reverts"]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " * When not called by `proxy_owner`."
-          ]
+          "arguments": [" * When not called by `proxy_owner`."]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " # Number of Storage Accesses"
-          ]
+          "arguments": [" # Number of Storage Accesses"]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " * Reads: `1`"
-          ]
+          "arguments": [" * Reads: `1`"]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " * Write: `1`"
-          ]
+          "arguments": [" * Write: `1`"]
         },
         {
           "name": "storage",
-          "arguments": [
-            "read",
-            "write"
-          ]
+          "arguments": ["read", "write"]
         }
       ]
     },
@@ -386,27 +329,19 @@
       "attributes": [
         {
           "name": "doc-comment",
-          "arguments": [
-            " Returns the owner of the proxy contract."
-          ]
+          "arguments": [" Returns the owner of the proxy contract."]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " # Returns"
-          ]
+          "arguments": [" # Returns"]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
@@ -416,33 +351,23 @@
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " # Number of Storage Accesses"
-          ]
+          "arguments": [" # Number of Storage Accesses"]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " * Reads: `1`"
-          ]
+          "arguments": [" * Reads: `1`"]
         },
         {
           "name": "storage",
-          "arguments": [
-            "read"
-          ]
+          "arguments": ["read"]
         }
       ]
     },
@@ -453,27 +378,19 @@
       "attributes": [
         {
           "name": "doc-comment",
-          "arguments": [
-            " Initializes the proxy contract."
-          ]
+          "arguments": [" Initializes the proxy contract."]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " # Additional Information"
-          ]
+          "arguments": [" # Additional Information"]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
@@ -489,27 +406,19 @@
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " This method can only be called once."
-          ]
+          "arguments": [" This method can only be called once."]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " # Reverts"
-          ]
+          "arguments": [" # Reverts"]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
@@ -519,33 +428,23 @@
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " # Number of Storage Accesses"
-          ]
+          "arguments": [" # Number of Storage Accesses"]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " * Writes: `2`"
-          ]
+          "arguments": [" * Writes: `2`"]
         },
         {
           "name": "storage",
-          "arguments": [
-            "write"
-          ]
+          "arguments": ["write"]
         }
       ]
     },
@@ -561,27 +460,19 @@
       "attributes": [
         {
           "name": "doc-comment",
-          "arguments": [
-            " Changes proxy ownership to the passed State."
-          ]
+          "arguments": [" Changes proxy ownership to the passed State."]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " # Additional Information"
-          ]
+          "arguments": [" # Additional Information"]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
@@ -591,21 +482,15 @@
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " # Arguments"
-          ]
+          "arguments": [" # Arguments"]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
@@ -615,27 +500,19 @@
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " # Reverts"
-          ]
+          "arguments": [" # Reverts"]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " * When the sender is not the current proxy owner."
-          ]
+          "arguments": [" * When the sender is not the current proxy owner."]
         },
         {
           "name": "doc-comment",
@@ -645,39 +522,27 @@
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " # Number of Storage Accesses"
-          ]
+          "arguments": [" # Number of Storage Accesses"]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            ""
-          ]
+          "arguments": [""]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " * Reads: `1`"
-          ]
+          "arguments": [" * Reads: `1`"]
         },
         {
           "name": "doc-comment",
-          "arguments": [
-            " * Writes: `1`"
-          ]
+          "arguments": [" * Writes: `1`"]
         },
         {
           "name": "storage",
-          "arguments": [
-            "write"
-          ]
+          "arguments": ["write"]
         }
       ]
     }
