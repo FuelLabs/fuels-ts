@@ -5,13 +5,12 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "dev": "nodemon --config nodemon.config.json -x 'run-s build:snippets build:docs-api dev:docs'",
-    "build": "run-s build:snippets build:docs-api build:docs",
-    "preview": "run-s build:snippets build:docs-api preview:docs",
+    "dev": "nodemon --config nodemon.config.json -x 'run-s build:snippets dev:docs'",
+    "build": "run-s build:snippets build:docs",
+    "preview": "run-s build:snippets preview:docs",
     "pretest": "./scripts/pretest.sh",
     "test": "cd ../.. && pnpm run test:filter apps/docs",
     "build:snippets": "run-s wrap:snippets build:forc",
-    "build:docs-api": "typedoc && tsx ./scripts/typedoc-postbuild.ts",
     "build:docs": "vitepress build",
     "preview:docs": "vitepress preview",
     "dev:docs": "vitepress dev",
@@ -26,8 +25,7 @@
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
     "fuels": "workspace:*",
-    "ethers": "^6.13.2",
-    "typedoc-plugin-markdown": "^4.2.9"
+    "ethers": "^6.13.2"
   },
   "devDependencies": {
     "@types/markdown-it": "^14.1.2",
@@ -37,8 +35,6 @@
     "markdown-it": "^14.1.0",
     "nodemon": "^3.1.7",
     "replace": "^1.2.2",
-    "typedoc": "^0.26.3",
-    "typedoc-plugin-merge-modules": "^6.0.2",
     "vitepress-plugin-search": "1.0.4-alpha.22",
     "vitepress": "1.3.4",
     "vue": "^3.5.12"
