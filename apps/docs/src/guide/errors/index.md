@@ -318,6 +318,12 @@ In cases where the error hasn't been mapped yet, this code will be used.
 
 If you believe you found a bug, please report the [issue](https://github.com/FuelLabs/fuels-ts/issues/new/choose) to the team.
 
+### `MATCHER_NOT_FOUND`
+
+When a matcher is not found for a given Sway type.
+
+Check that the Sway type is correct and exists in the ABI.
+
 ### `MAX_INPUTS_EXCEEDED`
 
 When the number of transaction inputs exceeds the maximum limit allowed by the blockchain.

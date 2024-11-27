@@ -120,7 +120,7 @@ export function createMatcher<T>(mappings: Record<SwayType, T>) {
     }
 
     throw new FuelError(
-      FuelError.CODES.NOT_IMPLEMENTED,
+      FuelError.CODES.MATCHER_NOT_FOUND,
       `Matcher not found for Sway type "${swayType}".`
     );
   };
