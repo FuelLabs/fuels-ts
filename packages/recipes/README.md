@@ -50,8 +50,8 @@ In order to contribute to `@fuel-ts/recipes`, please see the main [fuels-ts](htt
 
 ## Changelog
 
-The `@fuel-ts/program` changelog can be found at [CHANGELOG](./CHANGELOG.md).
+The `@fuel-ts/recipes` changelog can be found at [CHANGELOG](./CHANGELOG.md).
 
 ## License
 
-The primary license for `@fuel-ts/program` is `Apache 2.0`, see [LICENSE](./LICENSE).
+The primary license for `@fuel-ts/recipes` is `Apache 2.0`, see [LICENSE](./LICENSE).
