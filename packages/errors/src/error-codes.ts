@@ -23,6 +23,7 @@ export enum ErrorCode {
   CONFIG_FILE_NOT_FOUND = 'config-file-not-found',
   CONFIG_FILE_ALREADY_EXISTS = 'config-file-already-exists',
   WORKSPACE_NOT_DETECTED = 'workspace-not-detected',
+  MATCHER_NOT_FOUND = 'matcher-not-found',
 
   // address
   /**
