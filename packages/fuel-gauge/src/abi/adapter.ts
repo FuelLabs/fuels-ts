@@ -3,7 +3,7 @@ import type { AbiCoderConfigurable, AbiCoderFunction, AbiSpecificationV1 } from 
 import type { Configurable } from '@fuel-ts/abi-coder/dist/types/JsonAbiNew';
 import type { EncodingVersion } from '@fuel-ts/abi-coder/dist/utils/constants';
 import type { BytesLike, DecodedValue, JsonAbi, FunctionFragment, InputValue } from 'fuels';
-import { arrayify, Interface } from 'fuels';
+import { Interface } from 'fuels';
 
 const functionAdapter = (fn: AbiCoderFunction): FunctionFragment =>
   ({
@@ -13,15 +13,13 @@ const functionAdapter = (fn: AbiCoderFunction): FunctionFragment =>
     selectorBytes: fn.selectorBytes,
     attributes: fn.attributes,
 
-    encodeArguments: (values: InputValue[]): Uint8Array => fn.arguments.encode(values),
-    decodeArguments: (data: BytesLike): (DecodedValue | undefined)[] => {
-      const bytes = arrayify(data);
-      return fn.arguments.decode(bytes) as (DecodedValue | undefined)[];
-    },
-    decodeOutput: (data: BytesLike): [DecodedValue | undefined, number] => {
-      const bytes = arrayify(data);
-      return [fn.output.decode(bytes) as DecodedValue | undefined, 0];
-    },
+    encodeArguments: (values: InputValue[]): Uint8Array => fn.encodeArguments(values),
+    decodeArguments: (data: BytesLike): (DecodedValue | undefined)[] =>
+      fn.decodeArguments(data) as (DecodedValue | undefined)[],
+    decodeOutput: (data: BytesLike): [DecodedValue | undefined, number] => [
+      fn.decodeOutput(data) as DecodedValue | undefined,
+      0,
+    ],
     isReadOnly: fn.isReadOnly,
 
     // Unused
@@ -51,13 +49,10 @@ export class InterfaceAdapter extends Interface {
     this.coder = AbiCoder.fromAbi(jsonAbi as AbiSpecificationV1);
 
     this.functions = Object.fromEntries(
-      Object.entries(this.coder.functions.functions).map(([name, fn]) => [
-        name,
-        functionAdapter(fn),
-      ])
+      Object.entries(this.coder.functions).map(([name, fn]) => [name, functionAdapter(fn)])
     );
     this.configurables = Object.fromEntries(
-      Object.entries(this.coder.configurables.configurables).map(([name, configurable]) => [
+      Object.entries(this.coder.configurables).map(([name, configurable]) => [
         name,
         configurableAdapter(configurable),
       ])
@@ -67,22 +62,8 @@ export class InterfaceAdapter extends Interface {
   }
 
   override getFunction(nameOrSignatureOrSelector: string): FunctionFragment {
-    let fn = this.coder.functions.findByName(nameOrSignatureOrSelector);
-    if (fn) {
-      return functionAdapter(fn);
-    }
-
-    fn = this.coder.functions.findBySelector(nameOrSignatureOrSelector);
-    if (fn) {
-      return functionAdapter(fn);
-    }
-
-    fn = this.coder.functions.findBySignature(nameOrSignatureOrSelector);
-    if (fn) {
-      return functionAdapter(fn);
-    }
-
-    throw new Error('Function not found');
+    const fn = this.coder.getFunction(nameOrSignatureOrSelector);
+    return functionAdapter(fn);
   }
 
   override decodeFunctionResult(
@@ -94,15 +75,14 @@ export class InterfaceAdapter extends Interface {
   }
 
   override decodeLog(data: BytesLike, logId: string): [DecodedValue | undefined, number] {
-    const log = this.coder.logs.findById(logId);
-    const bytes = arrayify(data);
-    const decoded = log.value.decode(bytes);
+    const log = this.coder.getLog(logId);
+    const decoded = log.decode(data);
     return [decoded as DecodedValue | undefined, -1];
   }
 
   override encodeConfigurable(name: string, value: InputValue): Uint8Array {
-    const coder = this.coder.configurables.findByName(name);
-    return coder.value.encode(value);
+    const coder = this.coder.getConfigurable(name);
+    return coder.encode(value);
   }
 
   override encodeType(concreteTypeId: string, value: InputValue): Uint8Array {

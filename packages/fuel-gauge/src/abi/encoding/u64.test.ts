@@ -33,7 +33,7 @@ describe('types_u64', () => {
       const value = U64_MIN;
       const expected = U64_MIN_ENCODED;
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -42,7 +42,7 @@ describe('types_u64', () => {
       const value = U64_MAX;
       const expected = U64_MAX_ENCODED;
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -51,7 +51,7 @@ describe('types_u64', () => {
       const value = U8_MAX;
       const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, U8_MAX]);
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -60,7 +60,7 @@ describe('types_u64', () => {
       const value = U16_MAX;
       const expected = new Uint8Array([0, 0, 0, 0, 0, 0, U8_MAX, U8_MAX]);
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -69,7 +69,7 @@ describe('types_u64', () => {
       const value = U32_MAX;
       const expected = new Uint8Array([0, 0, 0, 0, U8_MAX, U8_MAX, U8_MAX, U8_MAX]);
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -78,7 +78,7 @@ describe('types_u64', () => {
       const value = U64_MIN_MINUS_ONE;
 
       await expectToThrowFuelError(
-        () => fn.output.encode(value),
+        () => fn.encodeOutput(value),
         new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid U64 value.')
       );
     });
@@ -87,7 +87,7 @@ describe('types_u64', () => {
       const value = U64_MAX_PLUS_ONE;
 
       await expectToThrowFuelError(
-        () => fn.output.encode(value),
+        () => fn.encodeOutput(value),
         new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid U64 value.')
       );
     });
@@ -98,7 +98,7 @@ describe('types_u64', () => {
       const value = U64_MIN_ENCODED;
       const expected = U64_MIN;
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       // @ts-expect-error toEqualBn is not a function
       expect(actual).toStrictEqual(expect.toEqualBn(expected));
@@ -108,7 +108,7 @@ describe('types_u64', () => {
       const value = U64_MAX_ENCODED;
       const expected = U64_MAX;
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       // @ts-expect-error toEqualBn is not a function
       expect(actual).toStrictEqual(expect.toEqualBn(expected));
@@ -118,7 +118,7 @@ describe('types_u64', () => {
       const value = new Uint8Array([0, 0, 0, 0, 0, 0, 0, U8_MAX]);
       const expected = U8_MAX;
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       // @ts-expect-error toEqualBn is not a function
       expect(actual).toStrictEqual(expect.toEqualBn(expected));
@@ -128,7 +128,7 @@ describe('types_u64', () => {
       const value = new Uint8Array([0, 0, 0, 0, 0, 0, U8_MAX, U8_MAX]);
       const expected = U16_MAX;
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       // @ts-expect-error toEqualBn is not a function
       expect(actual).toStrictEqual(expect.toEqualBn(expected));
@@ -138,7 +138,7 @@ describe('types_u64', () => {
       const value = new Uint8Array([0, 0, 0, 0, U8_MAX, U8_MAX, U8_MAX, U8_MAX]);
       const expected = U32_MAX;
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       // @ts-expect-error toEqualBn is not a function
       expect(actual).toStrictEqual(expect.toEqualBn(expected));
@@ -148,7 +148,7 @@ describe('types_u64', () => {
       const value = U64_MIN_MINUS_ONE_ENCODED;
 
       await expectToThrowFuelError(
-        () => fn.output.decode(value),
+        () => fn.decodeOutput(value),
         new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u64 value.')
       );
     });
@@ -157,7 +157,7 @@ describe('types_u64', () => {
       const value = U64_MAX_PLUS_ONE_ENCODED;
 
       await expectToThrowFuelError(
-        () => fn.output.decode(value),
+        () => fn.decodeOutput(value),
         new FuelError(FuelError.CODES.DECODE_ERROR, 'Invalid u64 value.')
       );
     });

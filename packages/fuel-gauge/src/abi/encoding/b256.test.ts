@@ -17,7 +17,7 @@ describe('types_b256', () => {
       const value = B256_DECODED;
       const expected = B256_ENCODED;
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -26,7 +26,7 @@ describe('types_b256', () => {
       const value = B256_DECODED.slice(-1);
 
       await expectToThrowFuelError(
-        () => fn.output.encode(value),
+        () => fn.encodeOutput(value),
         new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b256 value.')
       );
     });
@@ -35,7 +35,7 @@ describe('types_b256', () => {
       const value = `${B256_DECODED}PLUS`;
 
       await expectToThrowFuelError(
-        () => fn.output.encode(value),
+        () => fn.encodeOutput(value),
         new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b256 value.')
       );
     });
@@ -44,7 +44,7 @@ describe('types_b256', () => {
       const value = `not a hex value`;
 
       await expectToThrowFuelError(
-        () => fn.output.encode(value),
+        () => fn.encodeOutput(value),
         new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b256 value.')
       );
     });
@@ -55,7 +55,7 @@ describe('types_b256', () => {
       const value = B256_ENCODED;
       const expected = B256_DECODED;
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -64,7 +64,7 @@ describe('types_b256', () => {
       const value = B256_ENCODED.slice(-1);
 
       await expectToThrowFuelError(
-        () => fn.output.decode(value),
+        () => fn.decodeOutput(value),
         new FuelError(FuelError.CODES.DECODE_ERROR, 'Invalid b256 value.')
       );
     });
@@ -73,7 +73,7 @@ describe('types_b256', () => {
       const value = new Uint8Array([...B256_ENCODED, 0]);
 
       await expectToThrowFuelError(
-        () => fn.output.decode(value),
+        () => fn.decodeOutput(value),
         new FuelError(FuelError.CODES.DECODE_ERROR, 'Invalid b256 value.')
       );
     });
@@ -82,7 +82,7 @@ describe('types_b256', () => {
       const value = toBytes('not a hex value');
 
       await expectToThrowFuelError(
-        () => fn.output.decode(value),
+        () => fn.decodeOutput(value),
         new FuelError(FuelError.CODES.DECODE_ERROR, 'Invalid b256 value.')
       );
     });

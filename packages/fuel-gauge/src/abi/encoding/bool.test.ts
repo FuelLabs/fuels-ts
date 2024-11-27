@@ -16,7 +16,7 @@ describe('types_bool', () => {
       const value = true;
       const expected = new Uint8Array([1]);
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -25,7 +25,7 @@ describe('types_bool', () => {
       const value = false;
       const expected = new Uint8Array([0]);
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -34,7 +34,7 @@ describe('types_bool', () => {
       const value = 2;
 
       await expectToThrowFuelError(
-        () => fn.output.encode(value),
+        () => fn.encodeOutput(value),
         new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid bool value.')
       );
     });
@@ -43,7 +43,7 @@ describe('types_bool', () => {
       const value = 'true';
 
       await expectToThrowFuelError(
-        () => fn.output.encode(value),
+        () => fn.encodeOutput(value),
         new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid bool value.')
       );
     });
@@ -54,7 +54,7 @@ describe('types_bool', () => {
       const value = new Uint8Array([1]);
       const expected = true;
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -63,7 +63,7 @@ describe('types_bool', () => {
       const value = new Uint8Array([0]);
       const expected = false;
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -72,7 +72,7 @@ describe('types_bool', () => {
       const value = new Uint8Array([2]);
 
       await expectToThrowFuelError(
-        () => fn.output.encode(value),
+        () => fn.encodeOutput(value),
         new FuelError(FuelError.CODES.DECODE_ERROR, 'Invalid bool value.')
       );
     });
@@ -81,7 +81,7 @@ describe('types_bool', () => {
       const value = toBytes('true');
 
       await expectToThrowFuelError(
-        () => fn.output.encode(value),
+        () => fn.encodeOutput(value),
         new FuelError(FuelError.CODES.DECODE_ERROR, 'Invalid bool value.')
       );
     });

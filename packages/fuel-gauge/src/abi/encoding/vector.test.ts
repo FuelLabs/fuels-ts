@@ -16,7 +16,7 @@ describe('types_vector_boolean', () => {
       const value: boolean[] = [true, false, true, true];
       const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4, 1, 0, 1, 1]);
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -27,7 +27,7 @@ describe('types_vector_boolean', () => {
       const value = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4, 1, 0, 1, 1]);
       const expected: boolean[] = [true, false, true, true];
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -42,7 +42,7 @@ describe('types_vector_u8', () => {
       const value: number[] = [U8_MAX, 0, U8_MAX, U8_MAX];
       const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4, U8_MAX, 0, U8_MAX, U8_MAX]);
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -53,7 +53,7 @@ describe('types_vector_u8', () => {
       const value = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4, U8_MAX, 0, U8_MAX, U8_MAX]);
       const expected: number[] = [U8_MAX, 0, U8_MAX, U8_MAX];
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -88,7 +88,7 @@ describe('types_vector_inside_vector', () => {
         new Uint8Array([0, 0, 0, 8]),
       ]);
 
-      const actual = fn.output.encode(value);
+      const actual = fn.encodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
@@ -119,7 +119,7 @@ describe('types_vector_inside_vector', () => {
         [6, 7, 8],
       ];
 
-      const actual = fn.output.decode(value);
+      const actual = fn.decodeOutput(value);
 
       expect(actual).toStrictEqual(expected);
     });
