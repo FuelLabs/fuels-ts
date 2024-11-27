@@ -1,3 +1,5 @@
+import { FuelError } from '@fuel-ts/errors';
+
 import type { Abi } from '../../abi';
 
 import { makeResolvedType } from './make-resolved-type';
@@ -27,7 +29,10 @@ export class AbiParserV1 {
     const getType = (typeId: string | number) => {
       const type = types.find((t) => t.concreteTypeId === typeId);
       if (type === undefined) {
-        throw new Error(`Type with typeId ${typeId} not found`);
+        throw new FuelError(
+          FuelError.CODES.TYPE_ID_NOT_FOUND,
+          `Type with typeId ${typeId} not found`
+        );
       }
       return type;
     };

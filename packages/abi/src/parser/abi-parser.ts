@@ -1,3 +1,5 @@
+import { FuelError } from '@fuel-ts/errors';
+
 import type { Abi } from './abi';
 import type { AbiSpecificationV1 } from './specifications';
 import { AbiParserV1 } from './specifications';
@@ -23,14 +25,18 @@ export class AbiParser {
    */
   static parse(abi: AbiSpecification): Abi {
     if (typeof abi.specVersion !== 'string') {
-      // TODO: change to FuelError
-      throw new Error('Invalid ABI: specVersion is not a string');
+      throw new FuelError(
+        FuelError.CODES.ABI_SPECIFICATION_INVALID,
+        'Invalid ABI: "specVersion" is not a string'
+      );
     }
 
     const parse = AbiParser.specifications[abi.specVersion];
     if (!parse) {
-      // TODO: change to FuelError
-      throw new Error(`Unsupported ABI specVersion: ${abi.specVersion}`);
+      throw new FuelError(
+        FuelError.CODES.ABI_SPECIFICATION_INVALID,
+        `Invalid ABI: Unsupported ABI "specVersion": ${abi.specVersion}`
+      );
     }
 
     return parse(abi);
