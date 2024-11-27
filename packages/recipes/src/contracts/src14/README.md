@@ -1,4 +1,4 @@
-## SRC-14: Owned Proxy Contract
+# SRC-14: Owned Proxy Contract
 
 The `contract` folder contains a pre-built version of the owned proxy `contract`, its `abi` and `storage-slots` JSON files.
 
