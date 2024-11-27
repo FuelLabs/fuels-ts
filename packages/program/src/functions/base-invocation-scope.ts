@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
+import type { AbiSpecification, InputValue } from '@fuel-ts/abi';
 import type {
   Provider,
   CoinQuantity,
@@ -40,7 +40,7 @@ import { assert, getAbisFromAllCalls } from '../utils';
  */
 function createContractCall(funcScope: InvocationScopeLike): ContractCall {
   const { program, args, forward, func, callParameters, externalAbis } = funcScope.getCallConfig();
-  const data = func.encodeArguments(args as Array<InputValue>);
+  const data = func.arguments.encode(args as Array<InputValue>);
 
   return {
     contractId: (program as AbstractContract).id,
@@ -64,7 +64,7 @@ export class BaseInvocationScope<TReturn = any> {
   protected requiredCoins: CoinQuantity[] = [];
   protected isMultiCall: boolean = false;
   protected hasCallParamsGasLimit: boolean = false; // flag to check if any of the callParams has gasLimit set
-  protected externalAbis: Record<string, JsonAbi> = {};
+  protected externalAbis: Record<string, AbiSpecification> = {};
   private addSignersCallback?: (
     txRequest: ScriptTransactionRequest
   ) => Promise<ScriptTransactionRequest>;

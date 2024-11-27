@@ -78,7 +78,7 @@ export abstract class AbstractAccount {
 export abstract class AbstractProgram {
   abstract account: AbstractAccount | null;
   abstract interface: {
-    readonly jsonAbi: any;
+    readonly abi: any;
   };
 
   abstract provider: {

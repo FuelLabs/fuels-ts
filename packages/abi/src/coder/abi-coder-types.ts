@@ -19,6 +19,15 @@ export type InputValue<T = void> =
   | { [key: string]: InputValue<T> }
   | Record<string, Primitive | BytesLike>;
 
+/**
+ * The type of value you can get from `Coder.decode`
+ */
+export type DecodedValue =
+  | Primitive
+  | DecodedValue[]
+  | { [key: string]: DecodedValue }
+  | Record<string, Primitive>;
+
 export type TypesOfCoder<TCoder> =
   TCoder extends Coder<infer TInput, infer TDecoded> ? { Input: TInput; Decoded: TDecoded } : never;
 
@@ -39,7 +48,12 @@ export interface AbiCoderFunction {
   selector: string;
   selectorBytes: Uint8Array;
   attributes: AbiFunction['attributes'];
+
+  // Methods
   isReadOnly: () => boolean;
+  // encodeArguments: (values: InputValue[]) => Uint8Array;
+  // decodeArguments: (data: Uint8Array) => DecodedValue | undefined;
+  // decodeOutput: (data: Uint8Array) => DecodedValue | undefined;
 
   // Coders
   arguments: Coder<unknown[]>;

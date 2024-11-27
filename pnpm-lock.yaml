@@ -743,9 +743,9 @@ importers:
 
   packages/account:
     dependencies:
-      '@fuel-ts/abi-coder':
+      '@fuel-ts/abi':
         specifier: workspace:*
-        version: link:../abi-coder
+        version: link:../abi
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
@@ -846,9 +846,9 @@ importers:
 
   packages/contract:
     dependencies:
-      '@fuel-ts/abi-coder':
+      '@fuel-ts/abi':
         specifier: workspace:*
-        version: link:../abi-coder
+        version: link:../abi
       '@fuel-ts/account':
         specifier: workspace:*
         version: link:../account
@@ -981,6 +981,9 @@ importers:
 
   packages/fuels:
     dependencies:
+      '@fuel-ts/abi':
+        specifier: workspace:*
+        version: link:../abi
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
@@ -1138,9 +1141,9 @@ importers:
 
   packages/program:
     dependencies:
-      '@fuel-ts/abi-coder':
+      '@fuel-ts/abi':
         specifier: workspace:*
-        version: link:../abi-coder
+        version: link:../abi
       '@fuel-ts/account':
         specifier: workspace:*
         version: link:../account
@@ -1175,9 +1178,9 @@ importers:
 
   packages/script:
     dependencies:
-      '@fuel-ts/abi-coder':
+      '@fuel-ts/abi':
         specifier: workspace:*
-        version: link:../abi-coder
+        version: link:../abi
       '@fuel-ts/account':
         specifier: workspace:*
         version: link:../account

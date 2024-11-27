@@ -1,5 +1,5 @@
-import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
-import { Interface } from '@fuel-ts/abi-coder';
+import type { AbiSpecification, AbiCoderFunction } from '@fuel-ts/abi';
+import { AbiCoder } from '@fuel-ts/abi';
 import type { Account, Provider } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import type { AbstractAddress, AbstractContract, BytesLike } from '@fuel-ts/interfaces';
@@ -25,7 +25,7 @@ export default class Contract implements AbstractContract {
   /**
    * The contract's ABI interface.
    */
-  interface!: Interface;
+  interface!: AbiCoder;
 
   /**
    * The account associated with the contract, if available.
@@ -46,10 +46,10 @@ export default class Contract implements AbstractContract {
    */
   constructor(
     id: string | AbstractAddress,
-    abi: JsonAbi | Interface,
+    abi: AbiSpecification | AbiCoder,
     accountOrProvider: Account | Provider
   ) {
-    this.interface = abi instanceof Interface ? abi : new Interface(abi);
+    this.interface = abi instanceof AbiCoder ? abi : AbiCoder.fromAbi(abi);
     this.id = Address.fromAddressOrString(id);
 
     /**

@@ -1,4 +1,4 @@
-import { Interface, type JsonAbi } from '@fuel-ts/abi-coder';
+import { AbiCoder, type Abi } from '@fuel-ts/abi';
 import type { BN } from '@fuel-ts/math';
 import type { ReceiptCall } from '@fuel-ts/transactions';
 

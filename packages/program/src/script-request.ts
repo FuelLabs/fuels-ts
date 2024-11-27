@@ -5,7 +5,7 @@ import {
   SCRIPT_FIXED_SIZE,
   WORD_SIZE,
   calculateVmTxMemory,
-} from '@fuel-ts/abi-coder';
+} from '@fuel-ts/abi';
 import type {
   TransactionResultReturnDataReceipt,
   TransactionResultRevertReceipt,

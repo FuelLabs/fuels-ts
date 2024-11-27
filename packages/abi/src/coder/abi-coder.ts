@@ -1,4 +1,3 @@
-import type { Matcher } from '../matchers/sway-type-matchers';
 import type { Abi, AbiSpecification } from '../parser';
 import { AbiParser } from '../parser';
 
