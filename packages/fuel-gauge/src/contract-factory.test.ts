@@ -283,7 +283,7 @@ describe('Contract Factory', () => {
     const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
     expect(factory.bytecode.length % 8 === 0).toBe(true);
 
-    const deploy = await factory.deployAsBlobTx<LargeContract>();
+    const deploy = await factory.deployAsBlobTx();
 
     const { contract } = await deploy.waitForResult();
 
@@ -311,7 +311,7 @@ describe('Contract Factory', () => {
       } = launched;
 
       const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
-      const deploy = await factory.deployAsBlobTx<LargeContract>();
+      const deploy = await factory.deployAsBlobTx();
       const initTxId = deploy.waitForTransactionId();
       expect(initTxId).toStrictEqual(new Promise(() => {}));
       const { contract } = await deploy.waitForResult();
@@ -339,7 +339,7 @@ describe('Contract Factory', () => {
     const bytecode = concat([arrayify(LargeContractFactory.bytecode), new Uint8Array(3)]);
     const factory = new ContractFactory(bytecode, LargeContract.abi, wallet);
     expect(factory.bytecode.length % 8 === 0).toBe(false);
-    const deploy = await factory.deployAsBlobTx<LargeContract>({ chunkSizeMultiplier: 0.5 });
+    const deploy = await factory.deployAsBlobTx({ chunkSizeMultiplier: 0.5 });
 
     const { contract } = await deploy.waitForResult();
     expect(contract.id).toBeDefined();
@@ -361,7 +361,7 @@ describe('Contract Factory', () => {
     const chunkSizeMultiplier = 2;
 
     await expectToThrowFuelError(
-      () => factory.deployAsBlobTx<LargeContract>({ chunkSizeMultiplier }),
+      () => factory.deployAsBlobTx({ chunkSizeMultiplier }),
       new FuelError(
         ErrorCode.INVALID_CHUNK_SIZE_MULTIPLIER,
         'Chunk size multiplier must be between 0 and 1'
@@ -534,12 +534,12 @@ describe('Contract Factory', () => {
     const sendTransactionSpy = vi.spyOn(wallet, 'sendTransaction');
     const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
 
-    const firstDeploy = await factory.deployAsBlobTx<LargeContract>({
+    const firstDeploy = await factory.deployAsBlobTx({
       salt: concat(['0x01', new Uint8Array(31)]),
     });
     const { contract: firstContract } = await firstDeploy.waitForResult();
     const firstDeployCalls = sendTransactionSpy.mock.calls.length;
-    const secondDeploy = await factory.deployAsBlobTx<LargeContract>({
+    const secondDeploy = await factory.deployAsBlobTx({
       salt: concat(['0x02', new Uint8Array(31)]),
     });
     const { contract: secondContract } = await secondDeploy.waitForResult();

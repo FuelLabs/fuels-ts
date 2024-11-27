@@ -14,6 +14,11 @@ apps/demo-typegen/src/script-types
 apps/demo-typegen/src/predicate-types
 apps/docs/.vitepress/cache/
 apps/create-fuels-counter-guide
+apps/docs/.fuels
+apps/docs/.typedoc
+apps/docs/src/api
+apps/docs/src/typegend
+apps/docs/src/**/*.test.ts
 
 packages/fuels/src/cli/commands/deploy/proxy
 packages/fuels/test/fixtures/project

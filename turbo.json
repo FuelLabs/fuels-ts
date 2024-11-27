@@ -1,6 +1,9 @@
 {
   "$schema": "https://turborepo.org/schema.json",
   "tasks": {
+    "type:check": {
+      "outputLogs": "errors-only"
+    },
     "preinstall": {
       "outputLogs": "new-only"
     },

@@ -16,7 +16,7 @@ The current predicate functionality we have is a simple one that checks if the u
 
 The first step is to modify the predicate contract to accept a configurable pin. We will use the [`configurable`](https://docs.fuel.network/guides/intro-to-predicates/configurables/#configurables) keyword to create an updatable constant to store the pin. We will also modify the main function to check this constant instead of a hardcoded pin.
 
-<<< @/../../docs-snippets/test/fixtures/forc-projects/configurable-pin/src/main.sw#predicate-with-configurable-pin-1{rust:line-numbers}
+<<< @/../../docs/sway/configurable-pin/src/main.sw#full{rust:line-numbers}
 
 2. Modifying the Frontend
 

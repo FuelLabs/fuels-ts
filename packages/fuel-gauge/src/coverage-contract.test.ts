@@ -24,9 +24,7 @@ enum MixedNativeEnum {
 }
 
 function setupContract() {
-  return launchTestContract({
-    factory: CoverageContractFactory,
-  });
+  return launchTestContract(CoverageContractFactory);
 }
 
 /**

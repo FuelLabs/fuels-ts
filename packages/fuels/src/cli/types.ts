@@ -18,7 +18,7 @@ export type CommandEvent =
     }
   | {
       type: Commands.deploy;
-      data: DeployedContract[];
+      data: DeployedData;
     }
   | {
       type: Commands.dev;
@@ -54,6 +54,12 @@ export type DeployedScript = {
 
 export type DeployedPredicate = DeployedScript & {
   predicateRoot: string;
+};
+
+export type DeployedData = {
+  contracts?: DeployedContract[];
+  scripts?: DeployedScript[];
+  predicates?: DeployedPredicate[];
 };
 
 export type ContractDeployOptions = {

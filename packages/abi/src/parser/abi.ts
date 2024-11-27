@@ -60,13 +60,12 @@ export interface AbiConfigurable {
   type: AbiType;
 }
 
-type AbiFunctionAttribute =
+export type AbiFunctionAttribute =
   | StorageAttr
   | PayableAttr
   | TestAttr
   | InlineAttr
-  | DocCommentAttr
-  | DocAttr;
+  | DocCommentAttr;
 
 export interface PayableAttr {
   readonly name: 'payable';
@@ -87,9 +86,5 @@ export interface InlineAttr {
 
 export interface DocCommentAttr {
   readonly name: 'doc-comment';
-  readonly arguments: string[];
-}
-
-export interface DocAttr {
-  readonly name: 'doc';
+  readonly arguments: readonly string[];
 }

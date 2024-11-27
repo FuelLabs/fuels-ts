@@ -9,14 +9,14 @@ Once a transaction has been submitted, you may want to extract information regar
 - Date and time of the transaction
 - The block the transaction was included in
 
-Firstly, we can extract this information from the result of a submitted transaction:
+We can easily extract this information from a contract call:
 
-<<< @/../../docs-snippets/src/guide/transactions/transaction-response.test.ts#transaction-response-1{ts:line-numbers}
+<<< @./snippets/transaction-response/contract-call.ts#transaction-response-1{ts:line-numbers}
 
 We can also use the result of a transaction request to extract a transaction summary:
 
-<<< @/../../docs-snippets/src/guide/transactions/transaction-response.test.ts#transaction-response-2{ts:line-numbers}
+<<< @./snippets/transaction-response/from-submitted-request.ts#transaction-response-2{ts:line-numbers}
 
 Or we can build a transaction summary from a stored transaction ID:
 
-<<< @/../../docs-snippets/src/guide/transactions/transaction-response.test.ts#transaction-response-3{ts:line-numbers}
+<<< @./snippets/transaction-response/from-submitted-request.ts#transaction-response-3{ts:line-numbers}

@@ -4,5 +4,5 @@
     "noEmit": true
   },
   "include": ["**/*.test.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "apps/docs/src/**/*.test.ts"]
 }
