@@ -16,6 +16,6 @@ To convert between a `b256` hexlified string and a `Uint8Array`, you can use the
 
 ## Support from `Address` Class
 
-A `b256` value is also supported as part of the [`Address`](../../api/Address/Address.md) class, providing seamless integration with other components of your application. To create an [`Address`](../../api/Address/Address.md) instance from a b256 value, use the `Address.fromB256()` method:
+A `b256` value is also supported as part of the [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class, providing seamless integration with other components of your application. To create an [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) instance from a b256 value, use the `Address.fromB256()` method:
 
 <<< @./snippets/bits256/support-from-address-class.ts#full{ts:line-numbers}

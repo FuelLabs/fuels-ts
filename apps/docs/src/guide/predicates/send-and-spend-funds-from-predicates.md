@@ -38,7 +38,7 @@ Once the predicate resolves with a return value `true` based on its predefined c
 
 ---
 
-In a similar approach, you can use the `createTransfer` method, which returns a [`ScriptTransactionRequest`](../../api/Account/ScriptTransactionRequest.md). Then, we can submit this transaction request by calling the `sendTransaction` method.
+In a similar approach, you can use the `createTransfer` method, which returns a [`ScriptTransactionRequest`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.ScriptTransactionRequest.html). Then, we can submit this transaction request by calling the `sendTransaction` method.
 
 The following example, we are pre-staging a transaction and therefore we are able to know the transaction ID without actually submitting the transaction.
 
