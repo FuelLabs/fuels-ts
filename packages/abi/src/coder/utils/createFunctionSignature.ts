@@ -57,7 +57,9 @@ const createSignatureContents = ({ type }: { type: AbiType }): string => {
         .join(',')}>`
     : '';
 
-  const componentsSignature = components.map(createSignatureForType).join(',');
+  const componentsSignature = swayTypeMatchers.vector(type)
+    ? `s${typeArgumentsSignature}(rawptr,u64),u64)`
+    : components.map(createSignatureForType).join(',');
 
   return `${typeArgumentsSignature}(${componentsSignature})`;
 };
