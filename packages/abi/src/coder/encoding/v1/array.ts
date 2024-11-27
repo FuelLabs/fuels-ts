@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { concat } from '@fuel-ts/utils';
 
 import { ARRAY_REGEX } from '../../../matchers/sway-type-matchers';
@@ -11,10 +10,7 @@ import type { Coder, GetCoderFn, GetCoderParams, TypesOfCoder } from '../../abi-
 type ArrayEncodeValue<TCoder extends Coder = Coder> = Array<TypesOfCoder<TCoder>['Input']>;
 type ArrayDecodeValue<TCoder extends Coder = Coder> = Array<TypesOfCoder<TCoder>['Decoded']>;
 
-// TODO: fix the any type
-// Used any here to allow for passing through the coder
-// Was getting type hint error
-export const arrayCoder = <TCoder extends Coder<any, any>>(opts: {
+export const arrayCoder = <TCoder extends Coder>(opts: {
   coder: TCoder;
   size: number;
 }): Coder<ArrayEncodeValue<TCoder>, ArrayDecodeValue<TCoder>> => {
