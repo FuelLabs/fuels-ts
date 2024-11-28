@@ -38,7 +38,7 @@
           "gas_per_byte": 63
         }
       },
-      "chain_id": 9889,
+      "chain_id": 0,
       "gas_costs": {
         "V4": {
           "add": 2,
