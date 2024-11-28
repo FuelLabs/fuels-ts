@@ -32,7 +32,7 @@ const storageSlots = counterContractFactory.storageSlots.concat(
 );
 /**
  * These configurables are specific to our recommended SRC14 compliant
- * contract. They must be passed on deploy and then `initialize_proxy`
+ * contract. They must be passed on deployment and then `initialize_proxy`
  * must be called to setup the proxy contract.
  */
 const configurableConstants = {
