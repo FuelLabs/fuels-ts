@@ -984,6 +984,9 @@ importers:
       '@fuel-ts/program':
         specifier: workspace:*
         version: link:../program
+      '@fuel-ts/recipes':
+        specifier: workspace:*
+        version: link:../recipes
       '@fuel-ts/script':
         specifier: workspace:*
         version: link:../script
@@ -1139,6 +1142,33 @@ importers:
       '@types/ramda':
         specifier: ^0.30.2
         version: 0.30.2
+
+  packages/recipes:
+    dependencies:
+      '@fuel-ts/abi-coder':
+        specifier: workspace:*
+        version: link:../abi-coder
+      '@fuel-ts/abi-typegen':
+        specifier: workspace:*
+        version: link:../abi-typegen
+      '@fuel-ts/account':
+        specifier: workspace:*
+        version: link:../account
+      '@fuel-ts/contract':
+        specifier: workspace:*
+        version: link:../contract
+      '@fuel-ts/interfaces':
+        specifier: workspace:*
+        version: link:../interfaces
+      '@fuel-ts/program':
+        specifier: workspace:*
+        version: link:../program
+      '@fuel-ts/transactions':
+        specifier: workspace:*
+        version: link:../transactions
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../utils
 
   packages/script:
     dependencies:
@@ -12014,10 +12044,6 @@ packages:
     resolution: {integrity: sha512-dPEtOeMvF9VMcYV/1Wb8CPoVAXtp6MKMlcbAt4ddqmGqUJ6fQZFXkNZNkNlfevtNkGtaSoXf/vNNNSvgrdXwtA==}
     engines: {node: '>= 6.13.0'}
 
-  node-gyp-build@4.8.1:
-    resolution: {integrity: sha512-OSs33Z9yWr148JZcbZd5WiAXhh/n9z8TxQcdMhIOlpN9AhWpLfvVFO73+m77bBABQMaY9XSvIa+qk0jlI7Gcaw==}
-    hasBin: true
-
   node-gyp-build@4.8.2:
     resolution: {integrity: sha512-IRUxE4BVsHWXkV/SFOut4qTlagw2aM8T5/vnTsmrHJvVoKueJHRc/JaFND7QDDc61kLYUJ6qlZM3sqTSyx2dTw==}
     hasBin: true
@@ -13135,9 +13161,6 @@ packages:
   postcss@8.4.49:
     resolution: {integrity: sha512-OCVPnIObs4N29kxTjzLfUryOkvZEq+pf8jTF0lg8E7uETuWHA+v7j3c/xJmiqpX450191LlmZfUKkXxkTry7nA==}
     engines: {node: ^10 || ^12 || >=14}
-
-  preact@10.23.2:
-    resolution: {integrity: sha512-kKYfePf9rzKnxOAKDpsWhg/ysrHPqT+yQ7UW4JjdnqjFIeNUnNcEJvhuA8fDenxAGWzUqtd51DfVg7xp/8T9NA==}
 
   preact@10.24.1:
     resolution: {integrity: sha512-PnBAwFI3Yjxxcxw75n6VId/5TFxNW/81zexzWD9jn1+eSrOP84NdsS38H5IkF/UH3frqRPT+MvuCoVHjTDTnDw==}
@@ -19151,7 +19174,7 @@ snapshots:
       axios: 1.7.7
       find-up: 6.3.0
       form-data: 4.0.0
-      node-gyp-build: 4.8.1
+      node-gyp-build: 4.8.2
     transitivePeerDependencies:
       - debug
 
@@ -19279,7 +19302,7 @@ snapshots:
   '@docsearch/js@3.6.1(@algolia/client-search@4.22.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.11.0)':
     dependencies:
       '@docsearch/react': 3.6.1(@algolia/client-search@4.22.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.11.0)
-      preact: 10.23.2
+      preact: 10.24.3
     transitivePeerDependencies:
       - '@algolia/client-search'
       - '@types/react'
@@ -32056,8 +32079,6 @@ snapshots:
 
   node-forge@1.3.1: {}
 
-  node-gyp-build@4.8.1: {}
-
   node-gyp-build@4.8.2: {}
 
   node-int64@0.4.0: {}
@@ -33260,8 +33281,6 @@ snapshots:
       nanoid: 3.3.7
       picocolors: 1.1.1
       source-map-js: 1.2.1
-
-  preact@10.23.2: {}
 
   preact@10.24.1: {}
 
