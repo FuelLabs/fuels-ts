@@ -62,14 +62,26 @@ export class BaseWalletUnlocked extends Account {
   }
 
   /**
-   * Signs a message with the wallet's private key.
+   * Signs a message with the wallet's private key without hashing.
    *
-   * @param message - The message to sign.
+   * @param message - The message to sign (can be a BytesLike).
    * @returns A promise that resolves to the signature as a ECDSA 64 bytes string.
    */
-  override async signMessage(message: string): Promise<string> {
-    const signedMessage = await this.signer().sign(hashMessage(message));
+  override async signMessage(message: BytesLike): Promise<string> {
+    const signedMessage = await this.signer().sign(message);
     return hexlify(signedMessage);
+  }
+
+  /**
+   * Signs a hashed message with the wallet's private key.
+   * Use this method if you want the message to be hashed before signing.
+   *
+   * @param message - The message to hash and sign (can be a BytesLike).
+   * @returns A promise that resolves to the signature as a ECDSA 64 bytes string.
+   */
+  async signHashedMessage(message: BytesLike): Promise<string> {
+    const hashedMessage = hashMessage(message);
+    return this.signMessage(hashedMessage);
   }
 
   /**
