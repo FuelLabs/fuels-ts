@@ -1,3 +1,5 @@
+import { FuelError } from '@fuel-ts/errors';
+
 export type SwayType =
   | 'void'
   | 'bool'
@@ -117,6 +119,9 @@ export function createMatcher<T>(mappings: Record<SwayType, T>) {
       }
     }
 
-    throw new Error(`Matcher not found for sway type ${swayType}.`);
+    throw new FuelError(
+      FuelError.CODES.MATCHER_NOT_FOUND,
+      `Matcher not found for Sway type "${swayType}".`
+    );
   };
 }
