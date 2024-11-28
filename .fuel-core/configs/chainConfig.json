@@ -38,7 +38,7 @@
           "gas_per_byte": 63
         }
       },
-      "chain_id": 9889,
+      "chain_id": 0,
       "gas_costs": {
         "V4": {
           "add": 2,
@@ -294,7 +294,7 @@
       "base_asset_id": "f8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07",
       "block_gas_limit": 30000000,
       "block_transaction_size_limit": 260096,
-      "privileged_address": "eb42c979046d091f4f524e1efd8d4ffad92629b9a506b268a511861b0dbf2366"
+      "privileged_address": "0000000000000000000000000000000000000000000000000000000000000000"
     }
   },
   "consensus": {

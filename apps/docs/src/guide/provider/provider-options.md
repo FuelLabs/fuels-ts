@@ -1,6 +1,6 @@
 # Provider Options
 
-You can provide various [options](../../api/Account/index.md#provideroptions) on `Provider` instantiation to modify its behavior.
+You can provide various [options](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_account.html#provideroptions) on `Provider` instantiation to modify its behavior.
 
 ### `retryOptions`
 
