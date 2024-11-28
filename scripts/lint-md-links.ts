@@ -2,7 +2,7 @@
 import { execSync } from 'child_process';
 import { globSync } from 'glob';
 
-const { error, log } = console;
+const { log } = console;
 
 (() => {
   const includePattern = '**/*.md';
@@ -20,19 +20,21 @@ const { error, log } = console;
   const mdFiles = globSync(includePattern, { ignore: ignorePatterns });
   const skippedFiles = allFiles.filter((file) => !mdFiles.includes(file));
 
-  log('### Markdown files to be checked:');
+  log('##################### Markdown files to be checked #####################');
   log(mdFiles.join('\n'));
 
-  log('### Markdown files being skipped:');
+  log('##################### Markdown files being skipped #####################');
   log(skippedFiles.join('\n'));
 
   try {
     execSync(`pnpm markdown-link-check -q -c ./link-check.config.json ${mdFiles.join(' ')}`, {
       stdio: 'inherit',
     });
-    log('### All markdown files passed link checks.');
+    log('##################### All markdown files passed link checks #####################');
   } catch {
-    error('### Some files have broken links. Please fix them.');
+    log(
+      '##################### Some files have broken links. Please fix them #####################'
+    );
     process.exit(1);
   }
 })();
