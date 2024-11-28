@@ -6,19 +6,15 @@ import { globSync } from 'glob';
   const mdFiles = globSync('**/*.md', {
     ignore: [
       '**/node_modules/**',
-      'apps/docs/src/api/**', // generated api
-      '**/CHANGELOG.md',
-      'apps/demo-nextjs/**',
+      'apps/demo/**',
       'apps/demo-react-cra/**',
-      'apps/demo-react-vite/**',
-      'templates/**',
-      'apps/demo-wallet-sdk-react/**',
-      'apps/create-fuels-counter-guide/**',
-      'internal/forc/sway-repo/**',
-      'internal/fuel-core/fuel-core-repo/**',
-      'apps/docs-api/**',
+      'apps/demo-nextjs/**',
+      '.changeset/**',
+      '**/CHANGELOG.md',
     ],
   });
 
-  execSync(`pnpm textlint ${mdFiles.join(' ')} --debug`, { stdio: 'inherit' });
+  execSync(`pnpm markdown-link-check -c ./link-check.config.json ${mdFiles.join(' ')}`, {
+    stdio: 'inherit',
+  });
 })();
