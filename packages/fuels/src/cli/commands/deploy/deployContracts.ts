@@ -2,6 +2,7 @@ import type { WalletUnlocked } from '@fuel-ts/account';
 import { ContractFactory } from '@fuel-ts/contract';
 import type { DeployContractOptions } from '@fuel-ts/contract';
 import { Contract } from '@fuel-ts/program';
+import { Src14OwnedProxy, Src14OwnedProxyFactory } from '@fuel-ts/recipes';
 import { existsSync, readFileSync } from 'fs';
 
 import {
@@ -20,7 +21,6 @@ import { debug, log } from '../../utils/logger';
 
 import { createWallet } from './createWallet';
 import { getDeployConfig } from './getDeployConfig';
-import { Src14OwnedProxy, Src14OwnedProxyFactory } from './proxy/types';
 
 /**
  * Deploys one contract.
