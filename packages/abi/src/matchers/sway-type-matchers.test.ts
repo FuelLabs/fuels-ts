@@ -1,3 +1,6 @@
+import { FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+
 import type { SwayType, swayTypeMatchers } from './sway-type-matchers';
 import { createMatcher } from './sway-type-matchers';
 
@@ -31,14 +34,20 @@ const testMappings: Record<keyof typeof swayTypeMatchers, `${string}-matched`> =
 
 const matcher = createMatcher(testMappings);
 
-function verifyOtherMatchersDontMatch(key: keyof typeof testMappings, swayType: string) {
+async function verifyOtherMatchersDontMatch(key: keyof typeof testMappings, swayType: string) {
   const testMappingsWithoutKey = Object.fromEntries(
     Object.entries(testMappings).filter(([k]) => k !== key)
   );
 
   const verifier = createMatcher(testMappingsWithoutKey as Record<SwayType, string>);
 
-  expect(() => verifier({ swayType })).toThrow(`Matcher not found for sway type ${swayType}.`);
+  await expectToThrowFuelError(
+    () => verifier({ swayType }),
+    new FuelError(
+      FuelError.CODES.MATCHER_NOT_FOUND,
+      `Matcher not found for Sway type "${swayType}".`
+    )
+  );
 }
 
 /**
@@ -46,222 +55,226 @@ function verifyOtherMatchersDontMatch(key: keyof typeof testMappings, swayType: 
  * @group browser
  */
 describe('sway type matchers', () => {
-  test('void', () => {
+  test('void', async () => {
     const key = 'void';
     const swayType = '()';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('bool', () => {
+  test('bool', async () => {
     const key = 'bool';
     const swayType = 'bool';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('u8', () => {
+  test('u8', async () => {
     const key = 'u8';
     const swayType = 'u8';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('u16', () => {
+  test('u16', async () => {
     const key = 'u16';
     const swayType = 'u16';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('u32', () => {
+  test('u32', async () => {
     const key = 'u32';
     const swayType = 'u32';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('u64', () => {
+  test('u64', async () => {
     const key = 'u64';
     const swayType = 'u64';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('u256', () => {
+  test('u256', async () => {
     const key = 'u256';
     const swayType = 'u256';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('b256', () => {
+  test('b256', async () => {
     const key = 'b256';
     const swayType = 'b256';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('string', () => {
+  test('string', async () => {
     const key = 'string';
     const swayType = 'str[5]';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('array', () => {
+  test('array', async () => {
     const key = 'array';
     const swayType = '[_; 3]';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('tuple', () => {
+  test('tuple', async () => {
     const key = 'tuple';
     const swayType = '(_, _, _)';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('struct', () => {
+  test('struct', async () => {
     const key = 'struct';
     const swayType = 'struct MyStruct';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('assetId', () => {
+  test('assetId', async () => {
     const key = 'assetId';
     const swayType = 'struct std::asset_id::AssetId';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('b512', () => {
+  test('b512', async () => {
     const key = 'b512';
     const swayType = 'struct std::b512::B512';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('assetId', () => {
+  test('assetId', async () => {
     const key = 'assetId';
     const swayType = 'struct std::asset_id::AssetId';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('bytes', () => {
+  test('bytes', async () => {
     const key = 'bytes';
     const swayType = 'struct std::bytes::Bytes';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('stdString', () => {
+  test('stdString', async () => {
     const key = 'stdString';
     const swayType = 'struct std::string::String';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('evmAddress', () => {
+  test('evmAddress', async () => {
     const key = 'evmAddress';
     const swayType = 'struct std::vm::evm::evm_address::EvmAddress';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('vector', () => {
+  test('vector', async () => {
     const key = 'vector';
     const swayType = 'struct std::vec::Vec';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('enum', () => {
+  test('enum', async () => {
     const key = 'enum';
     const swayType = 'enum MyEnum';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('option', () => {
+  test('option', async () => {
     const key = 'option';
     const swayType = 'enum std::option::Option';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('result', () => {
+  test('result', async () => {
     const key = 'result';
     const swayType = 'enum std::result::Result';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('rawUntypedPtr', () => {
+  test('rawUntypedPtr', async () => {
     const key = 'rawUntypedPtr';
     const swayType = 'raw untyped ptr';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('rawUntypedSlice', () => {
+  test('rawUntypedSlice', async () => {
     const key = 'rawUntypedSlice';
     const swayType = 'raw untyped slice';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('generic', () => {
+  test('generic', async () => {
     const key = 'generic';
     const swayType = 'generic T';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('str', () => {
+  test('str', async () => {
     const key = 'str';
     const swayType = 'str';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    verifyOtherMatchersDontMatch(key, swayType);
+    await verifyOtherMatchersDontMatch(key, swayType);
   });
 
-  test('matcher without mapping for valid sway type throws', () => {
+  test('matcher without mapping for valid sway type throws', async () => {
     const swayType = 'str';
 
     // @ts-expect-error intentionally missing key for valid swayType
     const matcherWithoutMappings = createMatcher({});
 
-    expect(() => matcherWithoutMappings({ swayType })).toThrow(
-      `Matcher not found for sway type ${swayType}.`
+    await expectToThrowFuelError(
+      () => matcherWithoutMappings({ swayType }),
+      new FuelError(
+        FuelError.CODES.MATCHER_NOT_FOUND,
+        `Matcher not found for Sway type "${swayType}".`
+      )
     );
   });
 });
