@@ -27,8 +27,7 @@ const { contract: counterContract } = await deploy.waitForResult();
  * It is important to pass all storage slots to the proxy in order to
  * initialize the storage slots.
  */
-const storageSlots = Counter.storageSlots.concat(Src14OwnedProxy.storageSlots);
-
+const storageSlots = counterContractFactory.storageSlots.concat(Src14OwnedProxy.storageSlots);
 /**
  * These configurables are specific to our recommended SRC14 compliant
  * contract. They must be passed on deploy and then `initialize_proxy`
