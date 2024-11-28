@@ -20,18 +20,23 @@ const { error, log } = console;
   const mdFiles = globSync(includePattern, { ignore: ignorePatterns });
   const skippedFiles = allFiles.filter((file) => !mdFiles.includes(file));
 
-  log('Markdown files to be checked:\n');
+  log('Markdown files to be checked:');
+  log('\n');
   log(mdFiles.join('\n'));
-
-  log('\nMarkdown files being skipped:\n');
+  log('\n');
+  log('\nMarkdown files being skipped:');
+  log('\n');
   log(skippedFiles.join('\n'));
+  log('\n');
 
   try {
     execSync(`pnpm markdown-link-check -q -c ./link-check.config.json ${mdFiles.join(' ')}`, {
       stdio: 'inherit',
     });
+    log('\n');
     log('\nAll markdown files passed link checks.');
   } catch {
+    log('\n');
     error('\nSome files have broken links. Please fix them.');
     process.exit(1);
   }
