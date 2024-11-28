@@ -27,7 +27,7 @@ const { error, log } = console;
   log(skippedFiles.join('\n'));
 
   try {
-    execSync(`pnpm markdown-link-check -c ./link-check.config.json ${mdFiles.join(' ')}`, {
+    execSync(`pnpm markdown-link-check -q -c ./link-check.config.json ${mdFiles.join(' ')}`, {
       stdio: 'inherit',
     });
     log('\nAll markdown files passed link checks.');
