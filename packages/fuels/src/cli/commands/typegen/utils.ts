@@ -2,6 +2,8 @@ import { type ProgramDetails, type AbiSpecification, AbiParser } from '@fuel-ts/
 import { compressBytecode, hexlify } from '@fuel-ts/utils';
 import { readFileSync } from 'fs';
 import { globSync } from 'glob';
+
+import { log } from '../../utils/logger';
 /**
  * Converts `some.string-value` into `SomeStringValue`.
  *
@@ -38,6 +40,10 @@ export function getProgramDetails(buildDirs: string[]) {
   const details: ProgramDetails[] = [];
   buildDirs.forEach((dir) => {
     const [binPath] = globSync(`${dir}/*.bin`);
+    if (binPath === undefined) {
+      log(`No build outputs found in ${dir}, skipping...`);
+      return;
+    }
     const [storageSlotsPath] = globSync(`${dir}/*-storage_slots.json`);
     const projectName = binPath.match(/([^/])+(?=\.bin)/)?.[0] as string;
     const abiContents = readFileSync(`${dir}/${projectName}-abi.json`).toString();
