@@ -1,5 +1,5 @@
-import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
-import { Interface } from '@fuel-ts/abi-coder';
+import type { InputValue, AbiSpecification } from '@fuel-ts/abi';
+import { AbiCoder } from '@fuel-ts/abi';
 import { addressify } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { AbstractScriptRequest, ContractIdLike, BytesLike } from '@fuel-ts/interfaces';
@@ -225,8 +225,8 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
    * @param args - The input arguments.
    * @returns The current instance of the `ScriptTransactionRequest`.
    */
-  setData(abi: JsonAbi, args: InputValue[]): ScriptTransactionRequest {
-    const abiInterface = new Interface(abi);
+  setData(abi: AbiSpecification, args: InputValue[]): ScriptTransactionRequest {
+    const abiInterface = AbiCoder.fromAbi(abi);
     this.scriptData = abiInterface.functions.main.encodeArguments(args);
     return this;
   }

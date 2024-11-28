@@ -28,10 +28,11 @@ export function getAbisFromAllCalls(
     const { program, externalAbis } = funcScope.getCallConfig();
 
     if (i === 0) {
-      acc.main = program.interface.abi;
+      acc.main = program.interface.specification;
       acc.otherContractsAbis = {};
     } else {
-      acc.otherContractsAbis[(<AbstractContract>program).id.toB256()] = program.interface.jsonAbi;
+      acc.otherContractsAbis[(<AbstractContract>program).id.toB256()] =
+        program.interface.specification;
     }
 
     acc.otherContractsAbis = { ...acc.otherContractsAbis, ...externalAbis };

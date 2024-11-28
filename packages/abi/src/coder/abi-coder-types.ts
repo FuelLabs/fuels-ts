@@ -44,6 +44,7 @@ export type GetCoderFn = (params: GetCoderParams) => Coder;
 
 export interface AbiCoderFunction {
   name: AbiFunction['name'];
+  inputs: AbiFunction['inputs'];
   signature: string;
   selector: string;
   selectorBytes: Uint8Array;

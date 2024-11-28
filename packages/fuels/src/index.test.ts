@@ -8,7 +8,7 @@ describe('index.js', () => {
     expect(fuels.hexlify).toBeTruthy();
     expect(fuels.arrayify).toBeTruthy();
 
-    expect(fuels.Interface).toBeTruthy();
+    expect(fuels.AbiCoder).toBeTruthy();
     expect(fuels.Address).toBeTruthy();
     expect(fuels.FuelError).toBeTruthy();
     expect(fuels.Contract).toBeTruthy();

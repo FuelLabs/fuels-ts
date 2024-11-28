@@ -1,4 +1,4 @@
-import type { Abi } from '@fuel-ts/abi';
+import type { AbiSpecification } from '@fuel-ts/abi';
 import type { TransactionType } from '@fuel-ts/transactions';
 
 import type {
@@ -36,6 +36,6 @@ export type TransactionRequestLike =
   | ({ type: TransactionType.Upload } & UploadTransactionRequestLike);
 
 export type JsonAbisFromAllCalls = {
-  main: Abi;
-  otherContractsAbis: Record<string, Abi>;
+  main: AbiSpecification;
+  otherContractsAbis: Record<string, AbiSpecification>;
 };

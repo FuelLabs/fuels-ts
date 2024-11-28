@@ -1,12 +1,13 @@
 {{header}}
 
-import { Contract, Interface } from "fuels";
+import { Contract, AbiCoder } from "fuels";
 {{#if imports}}
 import type {
   Provider,
   Account,
   StorageSlot,
   AbstractAddress,
+  AbiSpecification,
 {{#each imports}}
   {{this}},
 {{/each}}
@@ -53,18 +54,14 @@ export type {{capitalizedName}}Configurables = Partial<{
 }>;
 {{/if}}
 
-const abi = {{abiJsonString}};
+const abi: AbiSpecification = {{abiJsonString}};
 
 const storageSlots: StorageSlot[] = {{storageSlotsJsonString}};
 
-export class {{capitalizedName}}Interface extends Interface {
-  constructor() {
-    super(abi);
-  }
-
+export class {{capitalizedName}}AbiCoder extends AbiCoder {
   declare functions: {
     {{#each functionsFragments}}
-    {{this}}: FunctionFragment;
+    {{this}}: AbiCoderFunction;
     {{/each}}
   };
 }
@@ -73,7 +70,7 @@ export class {{capitalizedName}} extends Contract {
   static readonly abi = abi;
   static readonly storageSlots = storageSlots;
 
-  declare interface: {{capitalizedName}}Interface;
+  declare interface: {{capitalizedName}}AbiCoder;
   declare functions: {
     {{#each functionsTypedefs}}
     {{this}};

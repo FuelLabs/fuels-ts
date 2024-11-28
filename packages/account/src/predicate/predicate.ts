@@ -1,5 +1,5 @@
-import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
-import { Interface } from '@fuel-ts/abi-coder';
+import type { AbiSpecification, InputValue } from '@fuel-ts/abi';
+import { AbiCoder } from '@fuel-ts/abi';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
@@ -33,7 +33,7 @@ export type PredicateParams<
 > = {
   bytecode: BytesLike;
   provider: Provider;
-  abi: JsonAbi;
+  abi: AbiSpecification;
   data?: TData;
   configurableConstants?: TConfigurables;
 };
@@ -47,7 +47,7 @@ export class Predicate<
 > extends Account {
   bytes: Uint8Array;
   predicateData: TData = [] as unknown as TData;
-  interface: Interface;
+  interface: AbiCoder;
 
   /**
    * Creates an instance of the Predicate class.
@@ -157,11 +157,11 @@ export class Predicate<
    */
   private static processPredicateData(
     bytes: BytesLike,
-    jsonAbi: JsonAbi,
+    jsonAbi: AbiSpecification,
     configurableConstants?: { [name: string]: unknown }
   ) {
     let predicateBytes = arrayify(bytes);
-    const abiInterface: Interface = new Interface(jsonAbi);
+    const abiInterface: AbiCoder = AbiCoder.fromAbi(jsonAbi);
 
     if (abiInterface.functions.main === undefined) {
       throw new FuelError(
@@ -232,7 +232,7 @@ export class Predicate<
   private static setConfigurableConstants(
     bytes: Uint8Array,
     configurableConstants: { [name: string]: unknown },
-    abiInterface: Interface
+    abiInterface: AbiCoder
   ) {
     const mutatedBytes = bytes;
 
@@ -254,7 +254,7 @@ export class Predicate<
 
         const { offset } = abiInterface.configurables[key];
 
-        const encoded = abiInterface.encodeConfigurable(key, value as InputValue);
+        const encoded = abiInterface.getConfigurable(key).encode(value as InputValue);
 
         mutatedBytes.set(encoded, offset);
       });
@@ -319,7 +319,7 @@ export class Predicate<
   async deploy<T = this>(account: Account) {
     return deployScriptOrPredicate<T>({
       deployer: account,
-      abi: this.interface.jsonAbi,
+      abi: this.interface.specification,
       bytecode: this.bytes,
       loaderInstanceCallback: (loaderBytecode, newAbi) =>
         new Predicate({

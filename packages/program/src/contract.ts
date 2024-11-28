@@ -88,7 +88,7 @@ export default class Contract implements AbstractContract {
    * @param func - The function fragment to build a scope for.
    * @returns A function that creates a FunctionInvocationScope.
    */
-  buildFunction(func: FunctionFragment) {
+  buildFunction(func: AbiCoderFunction) {
     return (() => {
       const funcInvocationScopeCreator = (...args: Array<unknown>) =>
         new FunctionInvocationScope(this, func, args);

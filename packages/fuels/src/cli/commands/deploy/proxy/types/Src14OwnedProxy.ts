@@ -8,13 +8,14 @@
   Fuels version: 0.97.0
 */
 
-import { Contract, Interface } from "../../../../..";
+import { Contract, AbiCoder } from "../../../../..";
 import type {
   Provider,
   Account,
   StorageSlot,
   AbstractAddress,
-  FunctionFragment,
+  AbiSpecification,
+  AbiCoderFunction,
   InvokeFunction,
   StrSlice,
 } from "../../../../..";
@@ -46,7 +47,7 @@ export type Src14OwnedProxyConfigurables = Partial<{
   INITIAL_OWNER: StateInput;
 }>;
 
-const abi = {
+const abi: AbiSpecification = {
   "programType": "contract",
   "specVersion": "1",
   "encodingVersion": "1",
@@ -790,17 +791,13 @@ const storageSlots: StorageSlot[] = [
   }
 ];
 
-export class Src14OwnedProxyInterface extends Interface {
-  constructor() {
-    super(abi);
-  }
-
+export class Src14OwnedProxyAbiCoder extends AbiCoder {
   declare functions: {
-    proxy_target: FunctionFragment;
-    set_proxy_target: FunctionFragment;
-    proxy_owner: FunctionFragment;
-    initialize_proxy: FunctionFragment;
-    set_proxy_owner: FunctionFragment;
+    proxy_target: AbiCoderFunction;
+    set_proxy_target: AbiCoderFunction;
+    proxy_owner: AbiCoderFunction;
+    initialize_proxy: AbiCoderFunction;
+    set_proxy_owner: AbiCoderFunction;
   };
 }
 
@@ -808,7 +805,7 @@ export class Src14OwnedProxy extends Contract {
   static readonly abi = abi;
   static readonly storageSlots = storageSlots;
 
-  declare interface: Src14OwnedProxyInterface;
+  declare interface: Src14OwnedProxyAbiCoder;
   declare functions: {
     proxy_target: InvokeFunction<[], Option<ContractIdOutput>>;
     set_proxy_target: InvokeFunction<[new_target: ContractIdInput], void>;

@@ -12,7 +12,8 @@ import { makeLog } from './utils/createLog';
 
 export class AbiCoder {
   // Internal properties
-  private abi: Abi;
+  public readonly abi: Abi;
+  public readonly specification: AbiSpecification;
   private encoding: AbiEncoding;
 
   // Exposed properties
@@ -20,8 +21,9 @@ export class AbiCoder {
   public readonly configurables: Record<string, AbiCoderConfigurable>;
   public readonly logs: Record<string, AbiCoderLog>;
 
-  private constructor(abi: AbiSpecification) {
-    this.abi = AbiParser.parse(abi);
+  public constructor(specification: AbiSpecification) {
+    this.abi = AbiParser.parse(specification);
+    this.specification = specification;
     this.encoding = AbiEncoding.from(this.abi.encodingVersion);
 
     const { functions, configurables, loggedTypes } = this.abi;

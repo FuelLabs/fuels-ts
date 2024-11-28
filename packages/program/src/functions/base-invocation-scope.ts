@@ -40,7 +40,7 @@ import { assert, getAbisFromAllCalls } from '../utils';
  */
 function createContractCall(funcScope: InvocationScopeLike): ContractCall {
   const { program, args, forward, func, callParameters, externalAbis } = funcScope.getCallConfig();
-  const data = func.arguments.encode(args as Array<InputValue>);
+  const data = func.encodeArguments(args as Array<InputValue>);
 
   return {
     contractId: (program as AbstractContract).id,
@@ -305,7 +305,7 @@ export class BaseInvocationScope<TReturn = any> {
   addContracts(contracts: Array<AbstractContract>) {
     contracts.forEach((contract) => {
       this.transactionRequest.addContractInputAndOutput(contract.id);
-      this.externalAbis[contract.id.toB256()] = contract.interface.jsonAbi;
+      this.externalAbis[contract.id.toB256()] = contract.interface.specification;
     });
     return this;
   }

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Interface } from '@fuel-ts/abi-coder';
-import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
+import { AbiCoder } from '@fuel-ts/abi';
+import type { InputValue, AbiSpecification } from '@fuel-ts/abi';
 import { deployScriptOrPredicate, type Account, type Provider } from '@fuel-ts/account';
 import { FuelError } from '@fuel-ts/errors';
 import { AbstractScript } from '@fuel-ts/interfaces';
@@ -38,7 +38,7 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
   /**
    * The ABI interface for the script.
    */
-  interface: Interface;
+  interface: AbiCoder;
 
   /**
    * The account associated with the script.
@@ -67,10 +67,10 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
    * @param abi - The ABI interface for the script.
    * @param account - The account associated with the script.
    */
-  constructor(bytecode: BytesLike, abi: JsonAbi, account: Account) {
+  constructor(bytecode: BytesLike, abi: AbiSpecification, account: Account) {
     super();
     this.bytes = arrayify(bytecode);
-    this.interface = new Interface(abi);
+    this.interface = AbiCoder.fromAbi(abi);
 
     this.provider = account.provider;
     this.account = account;
@@ -107,7 +107,7 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
 
         const { offset } = this.interface.configurables[key];
 
-        const encoded = this.interface.encodeConfigurable(key, value as InputValue);
+        const encoded = this.interface.getConfigurable(key).encode(value as InputValue);
 
         this.bytes.set(encoded, offset);
       });
@@ -133,7 +133,7 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
   deploy<T = this>(account: Account) {
     return deployScriptOrPredicate<T>({
       deployer: account,
-      abi: this.interface.jsonAbi,
+      abi: this.interface.specification,
       bytecode: this.bytes,
       loaderInstanceCallback: (loaderBytecode, newAbi) =>
         new Script(loaderBytecode, newAbi, this.account) as T,

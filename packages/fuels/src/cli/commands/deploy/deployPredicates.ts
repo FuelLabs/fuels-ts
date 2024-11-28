@@ -30,7 +30,7 @@ export async function deployPredicates(config: FuelsConfig) {
     const predicate = new Predicate({ abi, bytecode, provider: wallet.provider });
     const {
       bytes: loaderBytecode,
-      interface: { jsonAbi },
+      interface: { specification },
     } = await (await predicate.deploy(wallet)).waitForResult();
 
     const predicateRoot = getPredicateRoot(loaderBytecode);
@@ -41,7 +41,7 @@ export async function deployPredicates(config: FuelsConfig) {
       path: predicatePath,
       predicateRoot,
       loaderBytecode,
-      abi: jsonAbi,
+      abi: specification,
     });
   }
 

@@ -1,6 +1,6 @@
-import type { JsonAbi } from '@fuel-ts/abi-coder';
+import type { AbiSpecification } from '@fuel-ts/abi';
 
-export const jsonAbiMock: JsonAbi = {
+export const jsonAbiMock: AbiSpecification = {
   programType: 'script',
   specVersion: '1',
   encodingVersion: '1',

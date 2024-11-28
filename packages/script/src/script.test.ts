@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { JsonAbi } from '@fuel-ts/abi-coder';
-import { Interface } from '@fuel-ts/abi-coder';
+import type { AbiSpecification } from '@fuel-ts/abi';
+import { AbiCoder } from '@fuel-ts/abi';
 import type { Account, TransactionResponse, TransactionResult } from '@fuel-ts/account';
 import { ScriptTransactionRequest } from '@fuel-ts/account';
 import { setupTestProviderAndWallets } from '@fuel-ts/account/test-utils';
@@ -61,7 +61,7 @@ type MyStruct = {
 describe('Script', () => {
   let scriptRequest: ScriptRequest<MyStruct, MyStruct>;
   beforeAll(() => {
-    const abiInterface = new Interface(scriptJsonAbi);
+    const abiInterface = AbiCoder.fromAbi(scriptJsonAbi);
     scriptRequest = new ScriptRequest(
       scriptBin,
       (myStruct: MyStruct) => {
@@ -145,7 +145,7 @@ describe('Script', () => {
       wallets: [wallet],
     } = launched;
 
-    const jsonAbiWithConfigurablesMock: JsonAbi = {
+    const jsonAbiWithConfigurablesMock: AbiSpecification = {
       ...jsonAbiMock,
       configurables: [
         {

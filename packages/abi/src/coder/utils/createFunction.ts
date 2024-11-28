@@ -21,6 +21,7 @@ export const makeFunction = (fn: AbiFunction, encoding: AbiEncoding): AbiCoderFu
   return {
     // Function fields
     name: fn.name,
+    inputs: fn.inputs,
     signature,
     selector: createFunctionSelector(signature),
     selectorBytes: encoding.coders.stdString.encode(fn.name),
