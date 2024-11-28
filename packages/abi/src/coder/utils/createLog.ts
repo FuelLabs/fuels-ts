@@ -9,6 +9,7 @@ export const makeLog = (loggedType: AbiLoggedType, encoding: AbiEncoding): AbiCo
   const loggedTypeCoder = encoding.getCoder(loggedType);
   return {
     logId: loggedType.logId,
+    encode: loggedTypeCoder.encode,
     decode: (data: BytesLike): DecodedValue => {
       const bytes = arrayify(data);
       return loggedTypeCoder.decode(bytes) as DecodedValue;

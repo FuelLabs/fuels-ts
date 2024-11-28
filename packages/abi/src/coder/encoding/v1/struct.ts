@@ -1,6 +1,6 @@
 import { concatBytes } from '@fuel-ts/utils';
 
-import type { Coder, GetCoderFn, GetCoderParams } from '../../abi-coder-types';
+import type { AbstractCoder, Coder, GetCoderFn, GetCoderParams } from '../../abi-coder-types';
 
 /**
  * `struct` coder
@@ -10,7 +10,7 @@ type StructValue<TCoders extends Record<string, Coder>> = Record<
   ReturnType<TCoders[keyof TCoders]['decode']>
 >;
 
-export const struct = <TCoders extends Record<string, Coder>>(opts: {
+export const struct = <TCoders extends Record<string, AbstractCoder>>(opts: {
   coders: TCoders;
 }): Coder<StructValue<TCoders>> => ({
   type: 'struct',

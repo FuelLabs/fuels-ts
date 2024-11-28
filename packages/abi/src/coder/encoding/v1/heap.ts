@@ -1,6 +1,6 @@
 import { concat, toUtf8Bytes, toUtf8String } from '@fuel-ts/utils';
 
-import type { Coder, GetCoderFn, GetCoderParams } from '../../abi-coder-types';
+import type { AbstractCoder, Coder, GetCoderFn, GetCoderParams } from '../../abi-coder-types';
 
 import { u64 } from './fixed';
 
@@ -77,7 +77,9 @@ export const str = createHeapType<string>({
  */
 type VecValue<TCoder extends Coder = Coder> = ReturnType<TCoder['decode']>[];
 
-export const vector = <TCoder extends Coder>(opts: { coder: TCoder }): Coder<VecValue<TCoder>> =>
+export const vector = <TCoder extends AbstractCoder>(opts: {
+  coder: TCoder;
+}): Coder<VecValue<TCoder>> =>
   createHeapType({
     type: 'vector',
     encodedLength: (data: Uint8Array) => {

@@ -2,7 +2,13 @@ import { concat } from '@fuel-ts/utils';
 
 import { ARRAY_REGEX } from '../../../matchers/sway-type-matchers';
 import type { AbiTypeComponent } from '../../../parser';
-import type { Coder, GetCoderFn, GetCoderParams, TypesOfCoder } from '../../abi-coder-types';
+import type {
+  AbstractCoder,
+  Coder,
+  GetCoderFn,
+  GetCoderParams,
+  TypesOfCoder,
+} from '../../abi-coder-types';
 
 /**
  * `array` coder
@@ -10,7 +16,7 @@ import type { Coder, GetCoderFn, GetCoderParams, TypesOfCoder } from '../../abi-
 type ArrayEncodeValue<TCoder extends Coder = Coder> = Array<TypesOfCoder<TCoder>['Input']>;
 type ArrayDecodeValue<TCoder extends Coder = Coder> = Array<TypesOfCoder<TCoder>['Decoded']>;
 
-export const arrayCoder = <TCoder extends Coder>(opts: {
+export const arrayCoder = <TCoder extends AbstractCoder>(opts: {
   coder: TCoder;
   size: number;
 }): Coder<ArrayEncodeValue<TCoder>, ArrayDecodeValue<TCoder>> => {

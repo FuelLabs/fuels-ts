@@ -1,14 +1,19 @@
 import { FuelError } from '@fuel-ts/errors';
 
-import type { Matcher } from '../matchers/sway-type-matchers';
 import type { Abi, AbiSpecification } from '../parser';
 import { AbiParser } from '../parser';
 
-import type { AbiCoderConfigurable, AbiCoderFunction, AbiCoderLog } from './abi-coder-types';
+import type {
+  AbiCoderConfigurable,
+  AbiCoderFunction,
+  AbiCoderLog,
+  AbiCoderType,
+} from './abi-coder-types';
 import { AbiEncoding } from './encoding/encoding';
 import { makeConfigurable } from './utils/createConfigurable';
 import { makeFunction } from './utils/createFunction';
 import { makeLog } from './utils/createLog';
+import { makeType } from './utils/createType';
 
 export class AbiCoder {
   // Internal properties
@@ -82,5 +87,17 @@ export class AbiCoder {
     }
 
     return log;
+  }
+
+  public getType(concreteTypeId: string): AbiCoderType {
+    const type = this.abi.types.find((t) => t.concreteTypeId === concreteTypeId);
+    if (type === undefined) {
+      throw new FuelError(
+        FuelError.CODES.TYPE_NOT_FOUND,
+        `Type with concreteTypeId '${concreteTypeId}' doesn't exist in the ABI.`
+      );
+    }
+
+    return makeType(type, this.encoding);
   }
 }

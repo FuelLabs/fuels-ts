@@ -2,7 +2,13 @@ import { concat } from '@fuel-ts/utils';
 import type { RequireExactlyOne } from 'type-fest';
 
 import type { AbiTypeComponent } from '../../../parser';
-import type { Coder, GetCoderFn, GetCoderParams, TypesOfCoder } from '../../abi-coder-types';
+import type {
+  AbstractCoder,
+  Coder,
+  GetCoderFn,
+  GetCoderParams,
+  TypesOfCoder,
+} from '../../abi-coder-types';
 
 import { u64 } from './fixed';
 
@@ -18,7 +24,7 @@ export type EnumDecodeValue<TCoders extends Record<string, Coder>> = RequireExac
 
 export const CASE_KEY_WORD_LENGTH = 8;
 
-export const enumCoder = <TCoders extends Record<string, Coder>>(opts: {
+export const enumCoder = <TCoders extends Record<string, AbstractCoder>>(opts: {
   coders: TCoders;
   type?: string;
 }) => {

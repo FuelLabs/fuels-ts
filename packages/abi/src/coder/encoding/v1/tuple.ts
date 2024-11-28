@@ -1,19 +1,25 @@
 import { concatBytes } from '@fuel-ts/utils';
 
 import type { AbiTypeComponent } from '../../../parser';
-import type { Coder, GetCoderFn, GetCoderParams, TypesOfCoder } from '../../abi-coder-types';
+import type {
+  AbstractCoder,
+  Coder,
+  GetCoderFn,
+  GetCoderParams,
+  TypesOfCoder,
+} from '../../abi-coder-types';
 
 /**
  * Tuple coder
  */
-type TupleEncodeValue<TCoders extends Coder[]> = {
+export type TupleEncodeValue<TCoders extends Coder[]> = {
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Input'];
 };
-type TupleDecodeValue<TCoders extends Coder[]> = {
+export type TupleDecodeValue<TCoders extends Coder[]> = {
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Decoded'];
 };
 
-export const tuple = <TCoders extends Coder[] = Coder[]>({
+export const tuple = <TCoders extends AbstractCoder[]>({
   coders,
 }: {
   coders: TCoders;
