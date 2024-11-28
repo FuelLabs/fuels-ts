@@ -8,7 +8,7 @@ We recommend that you use [fuels deploy](https://docs.fuel.network/docs/fuels-ts
 
 As mentioned above, we recommend using [fuels deploy](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands/#fuels-deploy) to deploy and upgrade your contract as everything is handled under the hood. But the below guide will detail this process should you want to implement it yourself.
 
-We recommend using the [SRC14 compliant owned proxy contract](https://github.com/FuelLabs/sway-standard-implementations/tree/174f5ed9c79c23a6aaf5db906fe27ecdb29c22eb/src14/owned_proxy/contract/out/release) as the underlying proxy and that is the one we will use in this guide, as is the one used by [fuels deploy](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands/#fuels-deploy). A TypeScript implementation of this proxy is exported from the `fuels` package as `Src14OwnedProxy` and `Src14OwnedProxyFactory`.
+We recommend using the [SRC14 compliant owned proxy contract](https://github.com/FuelLabs/sway-standard-implementations/tree/174f5ed9c79c23a6aaf5db906fe27ecdb29c22eb/src14/owned_proxy/contract/out/release) as the underlying proxy as that is the one we will use in this guide and the one used by [fuels deploy](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands/#fuels-deploy). A TypeScript implementation of this proxy is exported from the `fuels` package as `Src14OwnedProxy` and `Src14OwnedProxyFactory`.
 
 The overall process is as follows:
 
