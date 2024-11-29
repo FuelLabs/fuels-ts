@@ -48,6 +48,7 @@ export class Predicate<
   bytes: Uint8Array;
   predicateData: TData = [] as unknown as TData;
   interface: Interface;
+  initialBytecode: Uint8Array;
 
   /**
    * Creates an instance of the Predicate class.
@@ -73,6 +74,7 @@ export class Predicate<
     const address = Address.fromB256(getPredicateRoot(predicateBytes));
     super(address, provider);
 
+    this.initialBytecode = arrayify(bytecode);
     this.bytes = predicateBytes;
     this.interface = predicateInterface;
     if (data !== undefined && data.length > 0) {
@@ -145,6 +147,46 @@ export class Predicate<
 
     const mainFn = this.interface?.functions.main;
     return mainFn?.encodeArguments(this.predicateData) || new Uint8Array();
+  }
+
+  /**
+   * Creates a new Predicate instance from an existing Predicate instance.
+   * @param instance - The existing Predicate instance.
+   * @returns A new Predicate instance with the same bytecode, ABI and provider but with the ability to set the data and configurable constants.
+   */
+  static fromInstance<
+    TData extends InputValue[] = InputValue[],
+    TConfigurables extends { [name: string]: unknown } | undefined = { [name: string]: unknown },
+  >(instance: Predicate<TData, TConfigurables>) {
+    return new (class {
+      data: TData;
+      configurableConstants: TConfigurables;
+
+      constructor() {
+        this.data = instance.predicateData;
+        this.configurableConstants = {} as TConfigurables;
+      }
+
+      withData(data: TData): this {
+        this.data = data;
+        return this;
+      }
+
+      withConfigurableConstants(configurableConstants: TConfigurables): this {
+        this.configurableConstants = configurableConstants;
+        return this;
+      }
+
+      build(): Predicate<TData, TConfigurables> {
+        return new Predicate({
+          bytecode: instance.initialBytecode,
+          abi: instance.interface.jsonAbi,
+          provider: instance.provider,
+          data: this.data,
+          configurableConstants: this.configurableConstants,
+        });
+      }
+    })();
   }
 
   /**
