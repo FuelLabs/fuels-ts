@@ -16,3 +16,4 @@ export * from '@fuel-ts/utils';
 export * from '@fuel-ts/account';
 export * from '@fuel-ts/transactions/configs';
 export * from '@fuel-ts/account/configs';
+export * from '@fuel-ts/recipes';

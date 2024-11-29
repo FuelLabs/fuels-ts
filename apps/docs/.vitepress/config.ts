@@ -1,7 +1,6 @@
 import { defineConfig } from 'vitepress';
 import { codeInContextPlugin } from './plugins/codeInContextPlugin';
 import { snippetPlugin } from './plugins/snippetPlugin';
-import apiLinks from '../.typedoc/api-links.json';
 
 export default defineConfig({
   title: 'Fuels-ts',
@@ -552,7 +551,6 @@ export default defineConfig({
             collapsed: false,
             items: [],
           },
-          apiLinks,
         ],
       },
     ],
