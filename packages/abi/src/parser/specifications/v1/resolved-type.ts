@@ -6,13 +6,25 @@ export interface ResolvedComponent {
 }
 
 export class ResolvedType {
-  constructor(
-    public type: string,
-    public typeId: string | number,
-    public components: ResolvedComponent[] | undefined,
-    public typeParamsArgsMap: Array<[number, ResolvedType]> | undefined,
-    private metadataTypeId: number | undefined
-  ) {}
+  public type: string;
+  public typeId: string | number;
+  public components: ResolvedComponent[] | undefined;
+  public typeParamsArgsMap: Array<[number, ResolvedType]> | undefined;
+  private metadataTypeId: number | undefined;
+
+  constructor(params: {
+    type: string;
+    typeId: string | number;
+    components?: ResolvedComponent[];
+    typeParamsArgsMap?: Array<[number, ResolvedType]>;
+    metadataTypeId?: number;
+  }) {
+    this.type = params.type;
+    this.typeId = params.typeId;
+    this.components = params.components;
+    this.typeParamsArgsMap = params.typeParamsArgsMap;
+    this.metadataTypeId = params.metadataTypeId;
+  }
 
   public toAbiType(): AbiType {
     return {
