@@ -1,33 +1,29 @@
 {{header}}
 
-import { Contract, ContractFactory, decompressBytecode } from "fuels";
-import type { Provider, Account, DeployContractOptions, DeployContractResult } from "fuels";
+import { ContractFactory, decompressBytecode } from "fuels";
+import type { Provider, Account, DeployContractOptions } from "fuels";
 
 import { {{capitalizedName}} } from "./{{capitalizedName}}";
 
 const bytecode = decompressBytecode("{{compressedBytecode}}");
 
-export class {{capitalizedName}}Factory extends ContractFactory {
+export class {{capitalizedName}}Factory extends ContractFactory<{{capitalizedName}}> {
 
   static readonly bytecode = bytecode;
 
   constructor(accountOrProvider: Account | Provider) {
-    super(bytecode, {{capitalizedName}}.abi, accountOrProvider);
+    super(
+      bytecode,
+      {{capitalizedName}}.abi,
+      accountOrProvider,
+      {{capitalizedName}}.storageSlots
+    );
   }
 
-  override deploy<TContract extends Contract = Contract>(
-    deployOptions?: DeployContractOptions
-  ): Promise<DeployContractResult<TContract>> {
-    return super.deploy({
-      storageSlots: {{capitalizedName}}.storageSlots,
-      ...deployOptions,
-    });
-  }
-
-  static async deploy (
+  static deploy (
     wallet: Account,
     options: DeployContractOptions = {}
-  ): Promise<DeployContractResult<{{capitalizedName}}>> {
+  ) {
     const factory = new {{capitalizedName}}Factory(wallet);
     return factory.deploy(options);
   }
