@@ -27,7 +27,7 @@ for forc_toml in $forc_tomls; do
 
         if [[ "$authors" != "$expected_authors" ]]; then
             ERRORED=1
-            echo -e "authors field should be: ${RED}$expected_authors] ${NC} but is ${RED}$authors ${NC}"
+            echo -e "authors field should be: ${RED}$expected_authors ${NC} but is ${RED}$authors ${NC}"
         fi
 
     fi
