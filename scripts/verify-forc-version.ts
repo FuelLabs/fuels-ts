@@ -8,4 +8,4 @@ import path from 'path';
     throw new Error('Cannot publish from a git branch. Please use a release directly.');
   }
   // eslint-disable-next-line no-console
-})().catch((x) => console.log(x));
+})().catch((x) => console.error(x));
