@@ -2,6 +2,7 @@ import { Interface, WORD_SIZE } from '@fuel-ts/abi-coder';
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import type {
   Account,
+  ChainInfo,
   CreateTransactionRequestLike,
   Provider,
   TransactionRequest,
@@ -18,6 +19,7 @@ import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { hash } from '@fuel-ts/hasher';
 import type { BytesLike } from '@fuel-ts/interfaces';
+import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
@@ -37,6 +39,10 @@ export type DeployContractOptions = {
   storageSlots?: StorageSlot[];
   stateRoot?: BytesLike;
   configurableConstants?: { [name: string]: unknown };
+  /**
+   * Multiplier for the maximum chunk size.
+   * @deprecated this option is no longer supported and will be removed in a future version
+   */
   chunkSizeMultiplier?: number;
 } & CreateTransactionRequestLike;
 
@@ -259,15 +265,56 @@ export default class ContractFactory<TContract extends Contract = Contract> {
       chunkSizeMultiplier: CHUNK_SIZE_MULTIPLIER,
     }
   ): Promise<DeployContractResult<T>> {
+    // TODO: remove this after a future release
+    if (
+      deployOptions.chunkSizeMultiplier &&
+      (deployOptions.chunkSizeMultiplier < 0 || deployOptions.chunkSizeMultiplier > 1)
+    ) {
+      throw new FuelError(
+        ErrorCode.INVALID_CHUNK_SIZE_MULTIPLIER,
+        'Chunk size multiplier must be between 0 and 1'
+      );
+    }
+
     const account = this.getAccount();
-    const { configurableConstants, chunkSizeMultiplier } = deployOptions;
+    const balance = await account.getBalance();
+
+    if (balance.isZero()) {
+      throw new FuelError(ErrorCode.FUNDS_TOO_LOW, 'Insufficient balance to deploy contract.');
+    }
+
+    const { configurableConstants } = deployOptions;
     if (configurableConstants) {
       this.setConfigurableConstants(configurableConstants);
     }
 
-    // Generate the chunks based on the maximum chunk size and create blob txs
-    const chunkSize = this.getMaxChunkSize(deployOptions, chunkSizeMultiplier);
-    const chunks = getContractChunks(arrayify(this.bytecode), chunkSize).map((c) => {
+    // search for optimal chunk size
+    let minSize = WORD_SIZE; // Minimum chunk size
+    let maxSize = this.getMaxChunkSize(deployOptions); // Maximum possible chunk size
+    let optimalSize = maxSize;
+    let optimalCost = this.estimateCost(
+      arrayify(this.bytecode),
+      maxSize,
+      account.provider.getChain(),
+      await account.provider.estimateGasPrice(10)
+    );
+    while (minSize <= maxSize) {
+      const midSize = Math.floor((minSize + maxSize) / 2);
+      const { totalCost, chunkCount } = this.estimateCost(
+        arrayify(this.bytecode),
+        midSize,
+        account.provider.getChain(),
+        await account.provider.estimateGasPrice(10)
+      );
+      if (totalCost.lte(balance)) {
+        optimalSize = midSize;
+        optimalCost = { totalCost, chunkCount };
+        minSize = midSize + 1;
+      } else {
+        maxSize = midSize - 1;
+      }
+    }
+    const chunks = getContractChunks(arrayify(this.bytecode), optimalSize).map((c) => {
       const transactionRequest = this.blobTransactionRequest({
         ...deployOptions,
         bytecode: c.bytecode,
@@ -276,6 +323,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
         ...c,
         transactionRequest,
         blobId: transactionRequest.blobId,
+        cost: optimalCost,
       };
     });
 
@@ -291,37 +339,6 @@ export default class ContractFactory<TContract extends Contract = Contract> {
     const uniqueBlobIds = [...new Set(blobIds)];
     const uploadedBlobIds = await account.provider.getBlobs(uniqueBlobIds);
     const blobIdsToUpload = uniqueBlobIds.filter((id) => !uploadedBlobIds.includes(id));
-
-    // Check the account can afford to deploy all chunks and loader
-    let totalCost = bn(0);
-    const chainInfo = account.provider.getChain();
-    const gasPrice = await account.provider.estimateGasPrice(10);
-    const priceFactor = chainInfo.consensusParameters.feeParameters.gasPriceFactor;
-
-    for (const { transactionRequest, blobId } of chunks) {
-      if (blobIdsToUpload.includes(blobId)) {
-        const minGas = transactionRequest.calculateMinGas(chainInfo);
-        const minFee = calculateGasFee({
-          gasPrice,
-          gas: minGas,
-          priceFactor,
-          tip: transactionRequest.tip,
-        }).add(1);
-
-        totalCost = totalCost.add(minFee);
-      }
-      const createMinGas = createRequest.calculateMinGas(chainInfo);
-      const createMinFee = calculateGasFee({
-        gasPrice,
-        gas: createMinGas,
-        priceFactor,
-        tip: createRequest.tip,
-      }).add(1);
-      totalCost = totalCost.add(createMinFee);
-    }
-    if (totalCost.gt(await account.getBalance())) {
-      throw new FuelError(ErrorCode.FUNDS_TOO_LOW, 'Insufficient balance to deploy contract.');
-    }
 
     // Transaction id is unset until we have funded the create tx, which is dependent on the blob txs
     let txIdResolver: (value: string | PromiseLike<string>) => void;
@@ -463,17 +480,8 @@ export default class ContractFactory<TContract extends Contract = Contract> {
   /**
    * Get the maximum chunk size for deploying a contract by chunks.
    */
-  private getMaxChunkSize(
-    deployOptions: DeployContractOptions,
-    chunkSizeMultiplier: number = CHUNK_SIZE_MULTIPLIER
-  ) {
-    if (chunkSizeMultiplier < 0 || chunkSizeMultiplier > 1) {
-      throw new FuelError(
-        ErrorCode.INVALID_CHUNK_SIZE_MULTIPLIER,
-        'Chunk size multiplier must be between 0 and 1'
-      );
-    }
 
+  private getMaxChunkSize(deployOptions: DeployContractOptions) {
     const account = this.getAccount();
     const { consensusParameters } = account.provider.getChain();
     const contractSizeLimit = consensusParameters.contractParameters.contractMaxSize.toNumber();
@@ -492,9 +500,36 @@ export default class ContractFactory<TContract extends Contract = Contract> {
       account.generateFakeResources([{ assetId: account.provider.getBaseAssetId(), amount: bn(1) }])
     );
     // Given above, calculate the maximum chunk size
-    const maxChunkSize = (sizeLimit - blobTx.byteLength() - WORD_SIZE) * chunkSizeMultiplier;
+    const maxChunkSize = sizeLimit - blobTx.byteLength() - WORD_SIZE;
 
     // Ensure chunksize is byte aligned
     return Math.round(maxChunkSize / WORD_SIZE) * WORD_SIZE;
+  }
+
+  // Function to estimate cost for a given chunk size
+  private estimateCost(
+    bytecode: Uint8Array,
+    chunkSize: number,
+    chainInfo: ChainInfo,
+    gasPrice: BN
+  ) {
+    const chunks = getContractChunks(bytecode, chunkSize);
+    let totalCost = bn(0);
+    const estimatedBlobIds: string[] = [];
+    for (const chunk of chunks) {
+      const transactionRequest = this.blobTransactionRequest({ bytecode: chunk.bytecode });
+      if (!estimatedBlobIds.includes(transactionRequest.blobId)) {
+        const minGas = transactionRequest.calculateMinGas(chainInfo);
+        const minFee = calculateGasFee({
+          gasPrice,
+          gas: minGas,
+          priceFactor: chainInfo.consensusParameters.feeParameters.gasPriceFactor,
+          tip: transactionRequest.tip,
+        }).add(1);
+        totalCost = totalCost.add(minFee);
+        estimatedBlobIds.push(transactionRequest.blobId);
+      }
+    }
+    return { totalCost, chunkCount: chunks.length };
   }
 }
