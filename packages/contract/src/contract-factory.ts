@@ -352,7 +352,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
       // Deploy the chunks as blob txs
       for (const { blobId, transactionRequest } of chunks) {
         if (!uploadedBlobs.includes(blobId) && blobIdsToUpload.includes(blobId)) {
-          const fundedBlobRequest = await this.fundTransactionRequest(
+          let fundedBlobRequest = await this.fundTransactionRequest(
             transactionRequest,
             deployOptions
           );
@@ -368,6 +368,18 @@ export default class ContractFactory<TContract extends Contract = Contract> {
             if ((<Error>err).message.indexOf(`BlobId is already taken ${blobId}`) > -1) {
               uploadedBlobs.push(blobId);
               continue;
+            } else if ((<Error>err).message.indexOf('InsufficientMaxFee') > -1) {
+              const newMaxFee = fundedBlobRequest.maxFee.mul(1.5);
+              if (newMaxFee.gt(balance)) {
+                throw new FuelError(
+                  ErrorCode.FUNDS_TOO_LOW,
+                  'Insufficient balance to deploy contract.'
+                );
+              }
+              fundedBlobRequest = await this.fundTransactionRequest(
+                new BlobTransactionRequest({ ...transactionRequest, maxFee: newMaxFee }),
+                deployOptions
+              );
             }
 
             throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
