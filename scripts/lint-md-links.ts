@@ -6,14 +6,7 @@ const { log } = console;
 
 (() => {
   const mdFiles = globSync('**/*.md', {
-    ignore: [
-      '**/node_modules/**',
-      'apps/demo/**',
-      'apps/demo-react-cra/**',
-      'apps/demo-nextjs/**',
-      '.changeset/**',
-      '**/CHANGELOG.md',
-    ],
+    ignore: ['**/node_modules/**', 'apps/demo-*/**', '.changeset/**', '**/CHANGELOG.md'],
   });
 
   try {
