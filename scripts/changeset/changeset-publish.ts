@@ -13,9 +13,9 @@ const changesetPublishOutput = execSync(
 console.log(changesetPublishOutput); // print out as if execSync was run with stdio: "inherit"
 
 // inspired by https://github.com/FuelLabs/changesets-action/blob/5866ff9f4cd625a76d86c0735aded055aeacf814/src/run.ts#L146
-const publishedSucceed = changesetPublishOutput.includes(`published successfully`);
+const publishSucceeded = changesetPublishOutput.includes(`published successfully`);
 
-if (publishedSucceed) {
+if (publishSucceeded) {
   /**
    * Tagging MUST be done after the branch is published so that the GitHub release is tied to the proper commit.
    * If this isn't done then the changesets workflow will always create a tag and release based off of the latest commit on the default branch (master).
