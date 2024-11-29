@@ -7,9 +7,6 @@
   "ignorePatterns": [
     {
       "pattern": "^http://localhost:3000"
-    },
-    {
-      "pattern": "^./modules/_fuel_ts"
     }
   ]
 }
