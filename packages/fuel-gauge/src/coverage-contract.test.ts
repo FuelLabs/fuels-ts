@@ -609,7 +609,7 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
     expect(pageInfob.hasPreviousPage).toBeFalsy();
   });
 
-  it.only('should test spending input messages', async () => {
+  it('should test spending input messages', async () => {
     using contractInstance = await setupContract({
       nodeOptions: {
         snapshotConfig: {
