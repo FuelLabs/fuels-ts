@@ -223,12 +223,12 @@ describe('Funding Transactions', () => {
       wallets: [funded],
     } = launched;
 
-    const splitIn = 204;
+    const splitIn = 254;
     const sender = Wallet.generate({ provider });
     const receiver = Wallet.generate({ provider });
 
     /**
-     * Splitting funds in 24 UTXOs to result in the transaction become more expensive
+     * Splitting funds in 254 UTXOs to result in the transaction become more expensive
      * after the funds are added to it.
      */
     await fundingTxWithMultipleUTXOs({
@@ -241,7 +241,7 @@ describe('Funding Transactions', () => {
 
     const request = new ScriptTransactionRequest();
 
-    const amountToTransfer = 1000;
+    const amountToTransfer = 1013;
     request.addCoinOutput(receiver.address, amountToTransfer, provider.getBaseAssetId());
 
     const txCost = await sender.getTransactionCost(request);
@@ -253,6 +253,7 @@ describe('Funding Transactions', () => {
     const getResourcesToSpend = vi.spyOn(sender, 'getResourcesToSpend');
 
     /**
+     * TODO: Update this comment with the new values
      * When estimating with only one UTXO the TX will require in total =~ 1887 of basetAssetId:
      * 1000 for the transfer and 887 for fees. However after funding it with 24 UTXOs the fee is
      * increased to =~ 3081. This happens because the bigger the TX becomes, more gas it will use.
