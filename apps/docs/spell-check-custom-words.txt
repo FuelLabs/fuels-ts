@@ -291,6 +291,7 @@ tsconfig
 TTL
 tuple's
 turbofish
+TxParameters
 TypeChain
 typeclass
 typedoc

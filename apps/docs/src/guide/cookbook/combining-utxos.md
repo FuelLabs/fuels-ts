@@ -12,4 +12,4 @@ One way to avoid these errors is to combine your UTXOs. This can be done by perf
 
 ## Max Outputs
 
-It's also important to note that depending on the chain configuration, you may be limited on the number of outputs you can have in a transaction. This amount can be queried via the [TxParameters](https://docs.fuel.network/docs/graphql/reference/objects/#txparameters) GQL query.
+It's also important to note that depending on the chain configuration, you may be limited on the number of outputs you can have in a transaction. This amount can be queried via the [TxParameters](https://docs.fuel.network/docs/graphql/reference/objects/#txparameters) GraphQL query.
