@@ -16,7 +16,8 @@
     "../../packages/errors",
     "../../packages/hasher",
     "../../packages/math",
-    "../../packages/transactions"
+    "../../packages/transactions",
+    "../../packages/recipes"
   ],
   "out": "src/api",
   "readme": "./index.md",
