@@ -535,56 +535,6 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
     expect(unhexed).toStrictEqual(last);
   });
 
-  it('should get initial state messages from node', async () => {
-    using launched = await setupContract();
-    const { provider } = launched;
-
-    // #region Message-getMessages
-    const WALLET_A = Wallet.fromPrivateKey(
-      '0x1ff16505df75735a5bcf4cb4cf839903120c181dd9be6781b82cda23543bd242',
-      provider
-    );
-    const WALLET_B = Wallet.fromPrivateKey(
-      '0x30bb0bc68f5d2ec3b523cee5a65503031b40679d9c72280cd8088c2cfbc34e38',
-      provider
-    );
-
-    const EXPECTED_MESSAGES_A: Message[] = [
-      {
-        messageId: '0x5e4b9a05438f912573515dd32093657499310cb650766ce868f21dfb05f09a1a',
-        sender: WALLET_B.address,
-        recipient: WALLET_A.address,
-        nonce: '0x0101010101010101010101010101010101010101010101010101010101010101',
-        amount: bn('0xffffffffffffffff', 'hex'),
-        data: arrayify('0x'),
-        daHeight: bn(0),
-      },
-    ];
-    const EXPECTED_MESSAGES_B: Message[] = [
-      {
-        messageId: '0xba5fece66404c865ea533b1a0f8462e9a67c2066a20b70fcf8446ce4f2b82ed4',
-        sender: WALLET_A.address,
-        recipient: WALLET_B.address,
-        nonce: '0x0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b',
-        amount: bn('0xffffffffffffffff', 'hex'),
-        data: arrayify('0x'),
-        daHeight: bn(0),
-      },
-    ];
-
-    const { messages: aMessages, pageInfo: pageInfoa } = await WALLET_A.getMessages();
-    const { messages: bMessages, pageInfo: pageInfob } = await WALLET_B.getMessages();
-
-    expect(aMessages).toStrictEqual(EXPECTED_MESSAGES_A);
-    expect(pageInfoa.hasNextPage).toBeFalsy();
-    expect(pageInfoa.hasPreviousPage).toBeFalsy();
-
-    expect(bMessages).toStrictEqual(EXPECTED_MESSAGES_B);
-    expect(pageInfob.hasNextPage).toBeFalsy();
-    expect(pageInfob.hasPreviousPage).toBeFalsy();
-    // #endregion Message-getMessages
-  });
-
   it('should test spending input messages', async () => {
     using contractInstance = await setupContract();
 

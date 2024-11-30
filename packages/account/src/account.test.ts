@@ -23,7 +23,62 @@ describe('Account', () => {
   });
 
   async function setupTestProvider(providerOptions = {}) {
-    const { provider, cleanup } = await setupTestProviderAndWallets({ providerOptions });
+    const { provider, cleanup } = await setupTestProviderAndWallets({
+      providerOptions,
+      nodeOptions: {
+        snapshotConfig: {
+          stateConfig: {
+            coins: [
+              {
+                tx_id: '0x0000000000000000000000000000000000000000000000000000000000000002',
+                output_index: 0,
+                tx_pointer_block_height: 0,
+                tx_pointer_tx_idx: 0,
+                owner: '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+                amount: bn('0xFFFFFFFFFFFFFFFF', 'hex'),
+                asset_id: '0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07',
+              },
+              {
+                tx_id: '0x0000000000000000000000000000000000000000000000000000000000000003',
+                output_index: 0,
+                tx_pointer_block_height: 0,
+                tx_pointer_tx_idx: 0,
+                owner: '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+                amount: bn('0xFFFFFFFFFFFFFFFF', 'hex'),
+                asset_id: '0x0101010101010101010101010101010101010101010101010101010101010101',
+              },
+              {
+                tx_id: '0x0000000000000000000000000000000000000000000000000000000000000004',
+                output_index: 0,
+                tx_pointer_block_height: 0,
+                tx_pointer_tx_idx: 0,
+                owner: '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+                amount: bn('0xFFFFFFFFFFFFFFFF', 'hex'),
+                asset_id: '0x0202020202020202020202020202020202020202020202020202020202020202',
+              },
+            ],
+            messages: [
+              {
+                sender: '0xc43454aa38dd91f88109a4b7aef5efb96ce34e3f24992fe0f81d233ca686f80f',
+                recipient: '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba',
+                nonce: '0101010101010101010101010101010101010101010101010101010101010101',
+                amount: bn('0xFFFFFFFFFFFFFFFF', 'hex'),
+                data: '',
+                da_height: 0,
+              },
+              {
+                sender: '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba',
+                recipient: '0xc43454aa38dd91f88109a4b7aef5efb96ce34e3f24992fe0f81d233ca686f80f',
+                nonce: '0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b',
+                amount: bn('0xB04F3C08F59B309E', 'hex'),
+                data: '',
+                da_height: 0,
+              },
+            ],
+          },
+        },
+      },
+    });
 
     return Object.assign(provider, { [Symbol.dispose]: cleanup });
   }
@@ -76,7 +131,6 @@ describe('Account', () => {
   it('should execute getResourcesToSpend just fine', async () => {
     using provider = await setupTestProvider();
 
-    // #region Message-getResourcesToSpend
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
@@ -88,7 +142,6 @@ describe('Account', () => {
       },
     ]);
     expect(resourcesToSpend[0].amount.gt(2)).toBeTruthy();
-    // #endregion Message-getResourcesToSpend
   });
 
   it('getResourcesToSpend should work with <1 amount', async () => {
