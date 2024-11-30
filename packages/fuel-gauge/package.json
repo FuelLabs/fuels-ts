@@ -16,10 +16,11 @@
   },
   "devDependencies": {
     "@fuel-ts/account": "workspace:*",
-    "@internal/forc": "workspace:*",
-    "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/merkle": "workspace:*",
-    "@internal/utils": "workspace:*"
+    "@fuel-ts/utils": "workspace:*",
+    "@internal/forc": "workspace:*",
+    "@internal/utils": "workspace:*",
+    "type-fest": "^4.26.1"
   }
 }
