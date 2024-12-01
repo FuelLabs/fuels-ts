@@ -252,4 +252,18 @@ describe('launchNode', () => {
       `fuel-core node under pid ${pid} does not exist. The node might have been killed before cleanup was called. Exiting cleanly.`
     );
   });
+
+  test('should clean up when unable to kill process with "RangeError: pid must be a positive integer" error', async () => {
+    const killSpy = vi.spyOn(process, 'kill').mockImplementationOnce(() => {
+      throw new RangeError('pid must be a positive integer');
+    });
+
+    const { pid, cleanup } = await launchNode({ loggingEnabled: false });
+
+    cleanup();
+
+    expect(killSpy).toBeCalledTimes(2);
+    expect(killSpy).toBeCalledWith(-pid);
+    expect(killSpy).toBeCalledWith(+pid);
+  });
 });
