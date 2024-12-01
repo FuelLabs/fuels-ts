@@ -2,6 +2,7 @@ import { ErrorCode } from '@fuel-ts/errors';
 import { safeExec, expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { defaultSnapshotConfigs, sleep } from '@fuel-ts/utils';
 import { waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
+import ps from '@webpod/ps';
 import * as childProcessMod from 'child_process';
 import * as fsMod from 'fs';
 
@@ -33,6 +34,18 @@ describe('launchNode', () => {
     vi.spyOn(console, 'log').mockImplementation(() => {});
   });
 
+  afterAll(async () => {
+    // This creates a "ps -lx" process under the current process.
+    const children = await ps.tree({ pid: process.pid, recursive: true });
+
+    // We expect that only the above process is running for the current process.
+    // Therefore, we can safely assume all the launched nodes have been killed.
+    expect(children).toEqual([
+      expect.objectContaining({
+        ppid: process.pid.toString(),
+      }),
+    ]);
+  });
 
   test('using ephemeral port 0 is possible', async () => {
     const { cleanup, port, url } = await launchNode({ port: '0' });
