@@ -41,9 +41,12 @@ describe('launchNode', () => {
     // We expect that only the above process is running for the current process.
     // Therefore, we can safely assume all the launched nodes have been killed.
     expect(children).toEqual([
-      expect.objectContaining({
+      {
+        command: 'ps',
+        arguments: ['-lx'],
+        pid: expect.any(String),
         ppid: process.pid.toString(),
-      }),
+      },
     ]);
   });
 
