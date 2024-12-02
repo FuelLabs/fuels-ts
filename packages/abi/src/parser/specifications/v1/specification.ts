@@ -59,6 +59,7 @@ export interface AbiMessageTypeV1 {
   readonly messageId: string;
   readonly concreteTypeId: string;
 }
+
 export interface AbiConfigurableV1 {
   readonly name: string;
   readonly concreteTypeId: string;
