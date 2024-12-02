@@ -30,7 +30,7 @@ vi.mock('fs', async () => {
  */
 describe('launchNode', () => {
   test('using ephemeral port 0 is possible', async () => {
-    const { cleanup, port, url } = await launchNode({ port: '0' });
+    const { cleanup, port, url } = await launchNode({ port: '0', loggingEnabled: false });
     expect(await fetch(url)).toBeTruthy();
     expect(port).not.toEqual('0');
 
@@ -38,7 +38,7 @@ describe('launchNode', () => {
   });
 
   it('cleanup kills the started node', async () => {
-    const { cleanup, url } = await launchNode();
+    const { cleanup, url } = await launchNode({ loggingEnabled: false });
     expect(await fetch(url)).toBeTruthy();
 
     cleanup();
@@ -57,7 +57,7 @@ describe('launchNode', () => {
     const spawnSpy = vi.spyOn(childProcessMod, 'spawn');
     const killSpy = vi.spyOn(process, 'kill');
 
-    const { cleanup, pid } = await launchNode();
+    const { cleanup, pid } = await launchNode({ loggingEnabled: false });
 
     const spawnOptions = spawnSpy.mock.calls[0][2];
     expect(spawnOptions.detached).toBeTruthy();
@@ -74,7 +74,7 @@ describe('launchNode', () => {
 
     process.env.FUEL_CORE_PATH = '';
 
-    const { result } = await safeExec(async () => launchNode());
+    const { result } = await safeExec(async () => launchNode({ loggingEnabled: false }));
 
     const command = spawnSpy.mock.calls[0][0];
     expect(command).toEqual('fuel-core');
@@ -95,7 +95,7 @@ describe('launchNode', () => {
 
     const fuelCorePath = './my-fuel-core-binary-path';
     const { error } = await safeExec(async () => {
-      await launchNode({ fuelCorePath, loggingEnabled: true });
+      await launchNode({ fuelCorePath, loggingEnabled: false });
     });
 
     expect(error).toBeTruthy();
@@ -107,7 +107,7 @@ describe('launchNode', () => {
   test('reads FUEL_CORE_PATH environment variable for fuel-core binary', async () => {
     const spawnSpy = vi.spyOn(childProcessMod, 'spawn');
     process.env.FUEL_CORE_PATH = 'fuels-core';
-    const { cleanup, url } = await launchNode();
+    const { cleanup, url } = await launchNode({ loggingEnabled: false });
     await Provider.create(url);
 
     const command = spawnSpy.mock.calls[0][0];
@@ -162,7 +162,7 @@ describe('launchNode', () => {
 
   test('cleanup removes temporary directory', async () => {
     const mkdirSyncSpy = vi.spyOn(fsMod, 'mkdirSync');
-    const { cleanup } = await launchNode();
+    const { cleanup } = await launchNode({ loggingEnabled: false });
 
     expect(mkdirSyncSpy).toHaveBeenCalledTimes(1);
     const tempDirPath = mkdirSyncSpy.mock.calls[0][0];

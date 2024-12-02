@@ -448,7 +448,7 @@ describe('Provider', () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
-    const { cleanup, url } = await launchNode({ port: '0' });
+    const { cleanup, url } = await launchNode({ port: '0', loggingEnabled: false });
 
     const spyFetchChainAndNodeInfo = vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
 
