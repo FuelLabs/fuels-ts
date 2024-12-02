@@ -11,6 +11,16 @@ interface AssembleTransferToContractParams {
   amount: BN;
 }
 
+// console.warn = (message) => {
+//   if (
+//     message ===
+//     'using deprecated parameters for the initialization function; pass a single object instead'
+//   ) {
+//     return;
+//   }
+//   console.warn(message);
+// };
+
 export const formatTransferToContractScriptData = (
   transferParams: Array<AssembleTransferToContractParams>
 ) => {
