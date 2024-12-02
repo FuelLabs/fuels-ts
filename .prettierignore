@@ -19,8 +19,6 @@ apps/docs/.typedoc
 apps/docs/src/api
 apps/docs/src/typegend
 apps/docs/src/**/*.test.ts
-
-packages/recipes/src
 packages/fuels/test/fixtures/project
 packages/account/src/providers/assets
 
