@@ -90,7 +90,7 @@ export interface TestAttrV1 {
 
 export interface InlineAttrV1 {
   readonly name: 'inline';
-  readonly arguments: 'never' | 'always';
+  readonly arguments: readonly ['never'] | readonly ['always'];
 }
 
 export interface DocCommentAttrV1 {
