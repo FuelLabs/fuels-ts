@@ -4,9 +4,9 @@ To interact with a deployed contract using the SDK without redeploying it, you o
 
 ## Contract ID
 
-The `contractId` property from the [`Contract`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_program.Contract.html) class is of type [`AbstractAddress`](https:https://fuels-ts-docs-api.vercel.app/interfaces/_fuel_ts_interfaces.AbstractAddress.html), an abstract class that is exclusively extended by the [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class.
+The `contractId` property from the [`Contract`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_program.Contract.html) class is of type [`AbstractAddress`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_interfaces.AbstractAddress.html), an abstract class that is exclusively extended by the [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class.
 
-The [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class wraps all methods from the [`AbstractAddress`](https:https://fuels-ts-docs-api.vercel.app/interfaces/_fuel_ts_interfaces.AbstractAddress.html) class and adds a single property: `bech32Address`. This property is a string encoded in [`Bech32`](../types/bech32.md) format, recognizable by the human-readable prefix `fuel` followed by the separator `1`.
+The [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class wraps all methods from the [`AbstractAddress`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_interfaces.AbstractAddress.html) class and adds a single property: `bech32Address`. This property is a string encoded in [`Bech32`](../types/bech32.md) format, recognizable by the human-readable prefix `fuel` followed by the separator `1`.
 
 > [!NOTE] Note
 > `Bech32` addresses like `fuel1..` are now deprecated; please switch to B256 format, for more details see [here](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256).
