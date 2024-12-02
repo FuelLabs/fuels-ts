@@ -9,6 +9,10 @@ export function makeType(type: AbiType, encoding: AbiEncoding): AbiCoderType {
   const coder = encoding.getCoder({ type });
   return {
     encode: coder.encode,
-    decode: (data: BytesLike): DecodedValue => coder.decode(arrayify(data)) as DecodedValue,
+    decode: (data: BytesLike): DecodedValue => {
+      const bytes = arrayify(data);
+      const encodedLength = coder.encodedLength(bytes);
+      return coder.decode(bytes.slice(0, encodedLength)) as DecodedValue;
+    },
   };
 }

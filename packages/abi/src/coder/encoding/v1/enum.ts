@@ -34,11 +34,15 @@ export const enumCoder = <TCoders extends Record<string, AbstractCoder>>(opts: {
   return {
     type: opts.type ?? 'enum',
     encodedLength: (data: Uint8Array) => {
-      const caseBytes = data.slice(0, CASE_KEY_WORD_LENGTH);
-      const caseIndex = u64.decode(caseBytes).toNumber();
-      const caseKey = Object.keys(opts.coders)[caseIndex];
-      const valueCoder = opts.coders[caseKey];
-      return u64.encodedLength(data) + valueCoder.encodedLength(data);
+      // Get the index for the case
+      const caseIndexBytes = data.slice(0, CASE_KEY_WORD_LENGTH);
+      const caseIndex = u64.decode(caseIndexBytes).toNumber();
+
+      // Get the coder for the case
+      const caseCoder = Object.values(opts.coders)[caseIndex];
+      const caseValueBytes = data.slice(CASE_KEY_WORD_LENGTH);
+      const caseValueLength = caseCoder.encodedLength(caseValueBytes);
+      return CASE_KEY_WORD_LENGTH + caseValueLength;
     },
     encode: (value: EnumEncodeValue<TCoders>): Uint8Array => {
       if (isNativeValue(value)) {

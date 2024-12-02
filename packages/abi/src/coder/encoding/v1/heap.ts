@@ -83,28 +83,36 @@ export const vector = <TCoder extends AbstractCoder>(opts: {
   createHeapType({
     type: 'vector',
     encodedLength: (data: Uint8Array) => {
-      const encodedLength = data.slice(0, DYNAMIC_WORD_LENGTH);
-      return (
-        u64.decode(encodedLength).toNumber() * opts.coder.encodedLength(data) + DYNAMIC_WORD_LENGTH
-      );
+      // Get the number of elements in the vector
+      const numberOfElementsBytes = data.slice(0, DYNAMIC_WORD_LENGTH);
+      const numberOfElements = u64.decode(numberOfElementsBytes).toNumber();
+
+      let elementLength = 0;
+      let currData = data.slice(DYNAMIC_WORD_LENGTH);
+      for (let i = 0; i < numberOfElements; i++) {
+        const encodedLength = opts.coder.encodedLength(currData);
+        currData = currData.slice(encodedLength);
+        elementLength += encodedLength;
+      }
+
+      return DYNAMIC_WORD_LENGTH + elementLength;
     },
     encode: (value: VecValue<TCoder>) => {
       const encodedBytes = value.map((v) => opts.coder.encode(v));
       return concat(encodedBytes);
     },
-    decode: (data: Uint8Array, length: number) => {
-      const elementByteLength = data.length / length;
+    decode: (data: Uint8Array, numberOfElements: number) => {
+      const elements = Array(numberOfElements);
 
-      let offset = 0;
-      const decodedValue = Array(length)
-        .fill(0)
-        .map(() => {
-          const elementData = data.slice(offset, (offset += elementByteLength));
+      let currData = data;
+      for (let i = 0; i < numberOfElements; i++) {
+        const encodedLength = opts.coder.encodedLength(currData);
+        const elementData = currData.slice(0, encodedLength);
+        elements[i] = opts.coder.decode(elementData);
+        currData = currData.slice(encodedLength);
+      }
 
-          return opts.coder.decode(elementData);
-        });
-
-      return decodedValue as VecValue<TCoder>;
+      return elements as VecValue<TCoder>;
     },
   });
 

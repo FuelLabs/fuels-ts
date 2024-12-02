@@ -5,9 +5,9 @@ import {
   Address,
   hexlify,
   getGasUsedFromReceipts,
-  BigNumberCoder,
   ContractFactory,
   GAS_USED_MODIFIER,
+  AbiEncoding,
 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
@@ -83,7 +83,7 @@ describe('Minimum gas tests', () => {
 
     const request = new ScriptTransactionRequest({
       script: ComplexScript.bytecode,
-      scriptData: hexlify(new BigNumberCoder('u64').encode(bn(2000))),
+      scriptData: hexlify(AbiEncoding.v1.coders.u64.encode(bn(2000))),
     });
     request.addCoinOutput(Address.fromRandom(), bn(100), provider.getBaseAssetId());
 
@@ -187,7 +187,7 @@ describe('Minimum gas tests', () => {
      */
     const request = new ScriptTransactionRequest({
       script: ComplexScript.bytecode,
-      scriptData: hexlify(new BigNumberCoder('u64').encode(bn(2000))),
+      scriptData: hexlify(AbiEncoding.v1.coders.u64.encode(bn(2000))),
     });
 
     // add predicate transfer

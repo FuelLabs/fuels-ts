@@ -25,8 +25,17 @@ export const tuple = <TCoders extends AbstractCoder[]>({
   coders: TCoders;
 }): Coder<TupleEncodeValue<TCoders>, TupleDecodeValue<TCoders>> => ({
   type: 'tuple',
-  encodedLength: (data: Uint8Array) =>
-    coders.reduce((acc, coder) => acc + coder.encodedLength(data), 0),
+  encodedLength: (data: Uint8Array) => {
+    let offset = 0;
+    let currData = data;
+
+    return coders.reduce((acc, coder) => {
+      currData = data.slice(offset, data.length);
+      const encodedLength = coder.encodedLength(currData);
+      offset += encodedLength;
+      return acc + encodedLength;
+    }, 0);
+  },
   encode: (value: TupleEncodeValue<TCoders>): Uint8Array =>
     concatBytes(coders.map((coder, i) => coder.encode(value[i]))),
   decode: (data: Uint8Array): TupleDecodeValue<TCoders> => {

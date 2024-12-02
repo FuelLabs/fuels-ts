@@ -1,12 +1,20 @@
 import type { AbiTypeComponent } from '../../../parser';
-import type { Coder, GetCoderFn, GetCoderParams, Option } from '../../abi-coder-types';
+import type {
+  AbstractCoder,
+  Coder,
+  GetCoderFn,
+  GetCoderParams,
+  Option,
+} from '../../abi-coder-types';
 
 import { enumCoder } from './enum';
 import type { EnumDecodeValue, EnumEncodeValue } from './enum';
 
 type SwayOption<T> = { None: [] } | { Some: T };
 
-export const option = <TCoders extends Record<string, Coder>>(opts: { coders: TCoders }) => {
+export const option = <TCoders extends Record<string, AbstractCoder>>(opts: {
+  coders: TCoders;
+}) => {
   const valueCoder = enumCoder({ ...opts, type: 'option' });
   return {
     type: 'option',
@@ -15,10 +23,10 @@ export const option = <TCoders extends Record<string, Coder>>(opts: { coders: TC
       const input: SwayOption<unknown> = value !== undefined ? { Some: value } : { None: [] };
       return valueCoder.encode(input as unknown as EnumEncodeValue<TCoders>);
     },
-    decode: (data: Uint8Array): EnumDecodeValue<TCoders> => {
+    decode: (data: Uint8Array): EnumDecodeValue<TCoders>[string] => {
       const decoded = valueCoder.decode(data);
       const optionValue = decoded && 'Some' in decoded ? decoded.Some : undefined;
-      return optionValue as EnumDecodeValue<TCoders>;
+      return optionValue as EnumDecodeValue<TCoders>[string];
     },
   };
 };

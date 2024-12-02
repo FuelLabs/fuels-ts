@@ -14,8 +14,17 @@ export const struct = <TCoders extends Record<string, AbstractCoder>>(opts: {
   coders: TCoders;
 }): Coder<StructValue<TCoders>> => ({
   type: 'struct',
-  encodedLength: (data: Uint8Array) =>
-    Object.values(opts.coders).reduce((acc, coder) => acc + coder.encodedLength(data), 0),
+  encodedLength: (data: Uint8Array) => {
+    let offset = 0;
+    let currData = data;
+
+    return Object.values(opts.coders).reduce((acc, coder) => {
+      currData = data.slice(offset, data.length);
+      const encodedLength = coder.encodedLength(currData);
+      offset += encodedLength;
+      return acc + encodedLength;
+    }, 0);
+  },
   encode: (value: StructValue<TCoders>): Uint8Array => {
     const encodedValues = Object.entries(value).map(([key, val]) => {
       const coder = opts.coders[key];

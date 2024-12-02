@@ -77,8 +77,7 @@ describe('Script', () => {
           throw new Error('fail');
         }
 
-        const decoded = abiInterface.functions.main.decodeOutput(scriptResult.returnReceipt.data);
-        return (decoded as any)[0];
+        return abiInterface.functions.main.decodeOutput(scriptResult.returnReceipt.data) as any;
       }
     );
   });

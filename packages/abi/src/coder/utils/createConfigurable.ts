@@ -16,7 +16,8 @@ export const makeConfigurable = (
     encode: configurableCoder.encode,
     decode: (data: BytesLike): DecodedValue => {
       const bytes = arrayify(data);
-      return configurableCoder.decode(bytes) as DecodedValue;
+      const encodedLength = configurableCoder.encodedLength(bytes);
+      return configurableCoder.decode(bytes.slice(0, encodedLength)) as DecodedValue;
     },
   };
 };

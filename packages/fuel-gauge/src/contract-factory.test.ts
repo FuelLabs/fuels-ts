@@ -1,7 +1,7 @@
 import type { Account, TransactionResult } from '@fuel-ts/account';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import { BN, bn, toHex, Interface, ContractFactory, arrayify, concat } from 'fuels';
+import { BN, bn, toHex, AbiCoder, ContractFactory, arrayify, concat } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
@@ -25,7 +25,7 @@ describe('Contract Factory', () => {
     using contract = await launchTestContract({
       factory: StorageTestContractFactory,
     });
-    expect(contract.interface).toBeInstanceOf(Interface);
+    expect(contract.interface).toBeInstanceOf(AbiCoder);
 
     const { waitForResult } = await contract.functions.initialize_counter(41).call();
     const { value: valueInitial } = await waitForResult();
@@ -46,7 +46,7 @@ describe('Contract Factory', () => {
       factory: StorageTestContractFactory,
     });
 
-    expect(contract.interface).toBeInstanceOf(Interface);
+    expect(contract.interface).toBeInstanceOf(AbiCoder);
 
     const call1 = await contract.functions.initialize_counter(100).call();
     await call1.waitForResult();

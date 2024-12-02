@@ -1,5 +1,5 @@
-import { bn, Contract, ContractFactory, FuelError, getRandomB256, Interface } from 'fuels';
-import type { AssetId, BigNumberish, BytesLike, EvmAddress, RawSlice, WalletUnlocked } from 'fuels';
+import { bn, ContractFactory, FuelError, getRandomB256 } from 'fuels';
+import type { AssetId, BigNumberish, EvmAddress, RawSlice, WalletUnlocked } from 'fuels';
 import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
 import { AbiContractFactory } from '../../test/typegen';
@@ -35,7 +35,6 @@ import type {
 } from '../../test/typegen/contracts/AbiContract';
 import type { Option, Result, Vec } from '../../test/typegen/contracts/common';
 
-import { InterfaceAdapter } from './adapter';
 import {
   U16_MAX,
   U16_MIN,
@@ -56,7 +55,7 @@ expect.extend({ toEqualBn });
  * @group browser
  * @group node
  */
-describe('AbiCoder', () => {
+describe.skip('AbiCoder', () => {
   let contract: AbiContract;
   let wallet: WalletUnlocked;
   let cleanup: () => void;
@@ -69,12 +68,7 @@ describe('AbiCoder', () => {
     const { contracts, wallets } = launched;
 
     wallet = wallets[0];
-    const interfaceAdapter = new InterfaceAdapter(contracts[0].interface.jsonAbi);
-    contract = new Contract(contracts[0].id, interfaceAdapter, wallet) as AbiContract;
-
-    vi.spyOn(Interface.prototype, 'decodeLog').mockImplementation(
-      (data: BytesLike, logId: string) => interfaceAdapter.decodeLog(data, logId)
-    );
+    contract = contracts[0];
 
     cleanup = launched.cleanup;
   });

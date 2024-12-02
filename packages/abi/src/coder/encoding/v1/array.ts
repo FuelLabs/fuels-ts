@@ -23,20 +23,28 @@ export const arrayCoder = <TCoder extends AbstractCoder>(opts: {
   const { coder, size } = opts;
   return {
     type: `array`,
-    encodedLength: (data: Uint8Array) => coder.encodedLength(data) * size,
+    encodedLength: (data: Uint8Array) => {
+      let elementLength = 0;
+      let currData = data;
+      for (let i = 0; i < size; i++) {
+        currData = data.slice(elementLength);
+        elementLength += coder.encodedLength(currData);
+      }
+      return elementLength;
+    },
     encode: (value: ArrayEncodeValue<TCoder>): Uint8Array =>
       concat(value.map((v) => coder.encode(v))),
     decode: (data: Uint8Array): ArrayDecodeValue<TCoder> => {
       let offset = 0;
-      const elementEncodedLength = coder.encodedLength(data);
+      let currData = data;
       const decodedValue = Array(size)
         .fill(0)
         .map(() => {
-          const newOffset = offset + elementEncodedLength;
-          const dataValue = data.slice(offset, newOffset);
-          const decoded = coder.decode(dataValue);
-          offset = newOffset;
-          return decoded;
+          currData = data.slice(offset, data.length);
+          const fieldLength = coder.encodedLength(currData);
+          const fieldData = currData.slice(0, fieldLength);
+          offset += fieldLength;
+          return coder.decode(fieldData);
         });
 
       return decodedValue;
