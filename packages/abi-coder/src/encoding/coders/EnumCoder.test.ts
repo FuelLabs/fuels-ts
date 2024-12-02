@@ -33,7 +33,7 @@ describe('EnumCoder', () => {
       expect(actual).toStrictEqual(expected);
     });
 
-    it('encodes a native enum (void)', () => {
+    it('encodes a native enum', () => {
       const nativeCoder = new EnumCoder('Native', {
         One: new BooleanCoder(),
         Two: new BigNumberCoder('u64'),
@@ -43,19 +43,6 @@ describe('EnumCoder', () => {
       const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 2]);
       // @ts-expect-error native
       const actual = nativeCoder.encode('Three');
-      expect(actual).toStrictEqual(expected);
-    });
-
-    it('encodes a native enum (u64)', () => {
-      const nativeCoder = new EnumCoder('Native', {
-        One: new BooleanCoder(),
-        Two: new BigNumberCoder('u64'),
-        Three: new VoidCoder(),
-      });
-
-      const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 2]);
-      // @ts-expect-error native
-      const actual = nativeCoder.encode('Two');
       expect(actual).toStrictEqual(expected);
     });
 

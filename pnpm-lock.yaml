@@ -728,9 +728,9 @@ importers:
 
   packages/account:
     dependencies:
-      '@fuel-ts/abi-coder':
+      '@fuel-ts/abi':
         specifier: workspace:*
-        version: link:../abi-coder
+        version: link:../abi
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
@@ -831,9 +831,9 @@ importers:
 
   packages/contract:
     dependencies:
-      '@fuel-ts/abi-coder':
+      '@fuel-ts/abi':
         specifier: workspace:*
-        version: link:../abi-coder
+        version: link:../abi
       '@fuel-ts/account':
         specifier: workspace:*
         version: link:../account
@@ -966,6 +966,9 @@ importers:
 
   packages/fuels:
     dependencies:
+      '@fuel-ts/abi':
+        specifier: workspace:*
+        version: link:../abi
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
@@ -1126,9 +1129,9 @@ importers:
 
   packages/program:
     dependencies:
-      '@fuel-ts/abi-coder':
+      '@fuel-ts/abi':
         specifier: workspace:*
-        version: link:../abi-coder
+        version: link:../abi
       '@fuel-ts/account':
         specifier: workspace:*
         version: link:../account
@@ -1163,9 +1166,9 @@ importers:
 
   packages/recipes:
     dependencies:
-      '@fuel-ts/abi-coder':
+      '@fuel-ts/abi':
         specifier: workspace:*
-        version: link:../abi-coder
+        version: link:../abi
       '@fuel-ts/abi-typegen':
         specifier: workspace:*
         version: link:../abi-typegen
@@ -1190,9 +1193,9 @@ importers:
 
   packages/script:
     dependencies:
-      '@fuel-ts/abi-coder':
+      '@fuel-ts/abi':
         specifier: workspace:*
-        version: link:../abi-coder
+        version: link:../abi
       '@fuel-ts/account':
         specifier: workspace:*
         version: link:../account
@@ -6889,9 +6892,6 @@ packages:
 
   async@3.2.5:
     resolution: {integrity: sha512-baNZyqaaLhyLVKm/DlvdW051MSgO6b8eVfIezl9E5PqWxFgzLm/wQntEW4zOytVburDEr0JlALEpdOFwvErLsg==}
-
-  async@3.2.6:
-    resolution: {integrity: sha512-htCUDlxyyCLMgaM3xXg0C0LW2xqfuQ6p05pCEIsXuyQ+a1koYKTuBMzRNwmybfLgvJDMd0r1LTn4+E0Ti6C2AA==}
 
   asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
@@ -24741,8 +24741,6 @@ snapshots:
 
   async@3.2.5: {}
 
-  async@3.2.6: {}
-
   asynckit@0.4.0: {}
 
   at-least-node@1.0.0: {}
@@ -29501,7 +29499,7 @@ snapshots:
 
   jake@10.8.7:
     dependencies:
-      async: 3.2.6
+      async: 3.2.5
       chalk: 4.1.2
       filelist: 1.0.4
       minimatch: 3.1.2
@@ -30652,7 +30650,7 @@ snapshots:
 
   markdown-link-check@3.12.2:
     dependencies:
-      async: 3.2.6
+      async: 3.2.5
       chalk: 5.3.0
       commander: 12.1.0
       link-check: 5.4.0

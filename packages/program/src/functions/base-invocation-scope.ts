@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
+import type { AbiSpecification, InputValue } from '@fuel-ts/abi';
 import type {
   Provider,
   CoinQuantity,
@@ -64,7 +64,7 @@ export class BaseInvocationScope<TReturn = any> {
   protected requiredCoins: CoinQuantity[] = [];
   protected isMultiCall: boolean = false;
   protected hasCallParamsGasLimit: boolean = false; // flag to check if any of the callParams has gasLimit set
-  protected externalAbis: Record<string, JsonAbi> = {};
+  protected externalAbis: Record<string, AbiSpecification> = {};
   private addSignersCallback?: (
     txRequest: ScriptTransactionRequest
   ) => Promise<ScriptTransactionRequest>;
@@ -305,7 +305,7 @@ export class BaseInvocationScope<TReturn = any> {
   addContracts(contracts: Array<AbstractContract>) {
     contracts.forEach((contract) => {
       this.transactionRequest.addContractInputAndOutput(contract.id);
-      this.externalAbis[contract.id.toB256()] = contract.interface.jsonAbi;
+      this.externalAbis[contract.id.toB256()] = contract.interface.specification;
     });
     return this;
   }

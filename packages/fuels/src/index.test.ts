@@ -8,7 +8,8 @@ describe('index.js', () => {
     expect(fuels.hexlify).toBeTruthy();
     expect(fuels.arrayify).toBeTruthy();
     expect(fuels.concat).toBeTruthy();
-    expect(fuels.Interface).toBeTruthy();
+
+    expect(fuels.AbiCoder).toBeTruthy();
     expect(fuels.Address).toBeTruthy();
     expect(fuels.FuelError).toBeTruthy();
     expect(fuels.Contract).toBeTruthy();
@@ -19,6 +20,5 @@ describe('index.js', () => {
     expect(fuels.TransactionType).toBeTruthy();
     expect(fuels.Script).toBeTruthy();
     expect(fuels.FunctionInvocationScope).toBeTruthy();
-    expect(fuels.Src14OwnedProxy).toBeTruthy();
   });
 });

@@ -1,4 +1,4 @@
-import { BigNumberCoder } from '@fuel-ts/abi-coder';
+import { AbiEncoding } from '@fuel-ts/abi';
 import { getRandomB256 } from '@fuel-ts/address';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import { bn, type BigNumberish } from '@fuel-ts/math';
@@ -50,7 +50,7 @@ describe('util', () => {
     const byte: number[] = [0, 0, 0, 0, 0, 0, 0, 1];
 
     const encode = vi
-      .spyOn(BigNumberCoder.prototype, 'encode')
+      .spyOn(AbiEncoding.v1.coders.u64, 'encode')
       .mockReturnValue(Uint8Array.from(byte));
 
     const arrayify = vi.spyOn(arrayifyMod, 'arrayify').mockReturnValue(Uint8Array.from(byte));

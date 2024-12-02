@@ -10,14 +10,15 @@
   Fuel-Core version: 33.33.33
 */
 
-import { Contract, Interface } from "fuels";
+import { Contract, AbiCoder } from "fuels";
 import type {
   Provider,
   Account,
   StorageSlot,
   AbstractAddress,
+  AbiSpecification,
+  AbiCoderFunction,
   BigNumberish,
-  FunctionFragment,
   InvokeFunction,
 } from 'fuels';
 
@@ -32,7 +33,7 @@ export type MyContractConfigurables = Partial<{
   A_GENERIC_STRUCT: GenericStructInput<GenericStructInput<BigNumberish, BigNumberish>, BigNumberish>;
 }>;
 
-const abi = {
+const abi: AbiSpecification = {
   "programType": "contract",
   "specVersion": "1",
   "encodingVersion": "1",
@@ -160,30 +161,26 @@ const abi = {
     {
       "name": "SHOULD_RETURN",
       "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903",
-      "offset": 2768
+      "offset": 2776
     },
     {
       "name": "AN_OPTION",
       "concreteTypeId": "2da102c46c7263beeed95818cd7bee801716ba8303dddafdcd0f6c9efda4a0f1",
-      "offset": 2744
+      "offset": 2752
     },
     {
       "name": "A_GENERIC_STRUCT",
       "concreteTypeId": "71df88006611ffff852cf617defb70f77adaf507305088cedd41d276c783aab0",
-      "offset": 2760
+      "offset": 2768
     }
   ]
 };
 
 const storageSlots: StorageSlot[] = [];
 
-export class MyContractInterface extends Interface {
-  constructor() {
-    super(abi);
-  }
-
+export class MyContractAbiCoder extends AbiCoder {
   declare functions: {
-    main: FunctionFragment;
+    main: AbiCoderFunction;
   };
 }
 
@@ -191,7 +188,7 @@ export class MyContract extends Contract {
   static readonly abi = abi;
   static readonly storageSlots = storageSlots;
 
-  declare interface: MyContractInterface;
+  declare interface: MyContractAbiCoder;
   declare functions: {
     main: InvokeFunction<[x: string, y: string], boolean>;
   };

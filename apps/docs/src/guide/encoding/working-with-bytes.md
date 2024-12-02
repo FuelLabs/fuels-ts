@@ -6,7 +6,7 @@ This guide aims to give a high-level overview of how to work with bytes in the S
 
 We know the sizes of all core types at compile time. They are the building blocks of the more complex types and are the most common types you will encounter.
 
-### Unsigned Integer (`u8` / `u16` / `u32` / `u64` / `u128` / `u256`)
+### Unsigned Integer (`u8` / `u16` / `u32` / `u64` / `u256`)
 
 Each type will only contain the number of bits specified in the name. For example, a `u8` will contain 8 bits, and a `u256` will contain 256 bits and take up the exact property space with no additional padding.
 

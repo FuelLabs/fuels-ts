@@ -34,7 +34,7 @@ export const extractInvocationResult = <T>(
 
   const decodedResults = encodedResults.map((encodedResult, i) => {
     const { func } = functionScopes[i].getCallConfig();
-    return func.decodeOutput(encodedResult)?.[0];
+    return func.decodeOutput(encodedResult);
   });
 
   return (isMultiCall ? decodedResults : decodedResults?.[0]) as T;

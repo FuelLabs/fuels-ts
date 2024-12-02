@@ -1,5 +1,5 @@
-import type { JsonAbi } from '@fuel-ts/abi-coder';
-import { Interface, BigNumberCoder } from '@fuel-ts/abi-coder';
+import type { AbiSpecification } from '@fuel-ts/abi';
+import { AbiCoder, AbiEncoding } from '@fuel-ts/abi';
 import { ReceiptType } from '@fuel-ts/transactions';
 
 import type { TransactionResultReceipt } from './transaction-response';
@@ -7,8 +7,8 @@ import type { TransactionResultReceipt } from './transaction-response';
 /** @hidden */
 export function getDecodedLogs<T = unknown>(
   receipts: Array<TransactionResultReceipt>,
-  mainAbi: JsonAbi,
-  externalAbis: Record<string, JsonAbi> = {}
+  mainAbi: AbiSpecification,
+  externalAbis: Record<string, AbiSpecification> = {}
 ): T[] {
   /**
    * This helper decodes logs from transaction receipts.
@@ -28,14 +28,15 @@ export function getDecodedLogs<T = unknown>(
    */
   return receipts.reduce((logs: T[], receipt) => {
     if (receipt.type === ReceiptType.LogData || receipt.type === ReceiptType.Log) {
-      const interfaceToUse = new Interface(externalAbis[receipt.id] || mainAbi);
+      const interfaceToUse = AbiCoder.fromAbi(externalAbis[receipt.id] || mainAbi);
 
       const data =
         receipt.type === ReceiptType.Log
-          ? new BigNumberCoder('u64').encode(receipt.val0)
+          ? AbiEncoding.v1.coders.u64.encode(receipt.val0)
           : receipt.data;
 
-      const [decodedLog] = interfaceToUse.decodeLog(data, receipt.val1.toString());
+      const log = interfaceToUse.getLog(receipt.val1.toString());
+      const decodedLog = log.decode(data) as T;
       logs.push(decodedLog);
     }
 

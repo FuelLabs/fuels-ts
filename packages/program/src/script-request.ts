@@ -5,7 +5,7 @@ import {
   SCRIPT_FIXED_SIZE,
   WORD_SIZE,
   calculateVmTxMemory,
-} from '@fuel-ts/abi-coder';
+} from '@fuel-ts/abi';
 import type {
   TransactionResultReturnDataReceipt,
   TransactionResultRevertReceipt,
@@ -161,8 +161,7 @@ export function callResultToInvocationResult<TReturn>(
         value = scriptResult.returnReceipt.val;
       }
       if (scriptResult.returnReceipt.type === ReceiptType.ReturnData) {
-        const decoded = call.func.decodeOutput(scriptResult.returnReceipt.data);
-        value = decoded[0];
+        value = call.func.decodeOutput(scriptResult.returnReceipt.data);
       }
 
       return value as TReturn;

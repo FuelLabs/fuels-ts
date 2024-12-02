@@ -1,4 +1,4 @@
-import type { JsonAbi } from '@fuel-ts/abi-coder';
+import type { AbiSpecification } from '@fuel-ts/abi';
 import type { Account } from '@fuel-ts/account';
 import { Contract } from '@fuel-ts/program';
 import { exec } from 'child_process';
@@ -82,7 +82,7 @@ describe('deploy', { timeout: 180000 }, () => {
   /**
    * Executes the target contract and returns the values of the functions for proxy deploys.
    */
-  async function executeTargetContract(contractId: string, abi: JsonAbi, wallet: Account) {
+  async function executeTargetContract(contractId: string, abi: AbiSpecification, wallet: Account) {
     const targetContract = new Contract(contractId, abi, wallet);
 
     const { value: getCountValue } = await targetContract.functions.get_value().get();

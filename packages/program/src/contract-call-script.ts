@@ -1,11 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  WORD_SIZE,
-  B256Coder,
-  ASSET_ID_LEN,
-  BigNumberCoder,
-  CONTRACT_ID_LEN,
-} from '@fuel-ts/abi-coder';
+import { WORD_SIZE, ASSET_ID_LEN, CONTRACT_ID_LEN, AbiEncoding } from '@fuel-ts/abi';
 import type {
   CallResult,
   TransactionResultCallReceipt,
@@ -25,6 +19,7 @@ import { InstructionSet } from './instruction-set';
 import type { EncodedScriptCall, ScriptResult } from './script-request';
 import { decodeCallResult, ScriptRequest, calculateScriptDataBaseOffset } from './script-request';
 import type { ContractCall, InvocationScopeLike } from './types';
+import {} from '@fuel-ts/abi/dist/coder/encoding/encoding';
 
 type CallOpcodeParamsOffset = {
   callDataOffset: number;
@@ -118,6 +113,7 @@ const scriptResultDecoder = (contractId: AbstractAddress) => (result: ScriptResu
   );
   const mainCallInstructionStart = bn(mainCallResult?.is);
 
+  const coders = AbiEncoding.v1.coders;
   const receipts = result.receipts as ReturnReceipt[];
   return receipts
     .filter(({ type }) => isReturnType(type))
@@ -126,7 +122,7 @@ const scriptResultDecoder = (contractId: AbstractAddress) => (result: ScriptResu
         return [];
       }
       if (receipt.type === ReceiptType.Return) {
-        return [new BigNumberCoder('u64').encode((receipt as TransactionResultReturnReceipt).val)];
+        return [coders.u64.encode((receipt as TransactionResultReturnReceipt).val)];
       }
       if (receipt.type === ReceiptType.ReturnData) {
         const encodedScriptReturn = arrayify(receipt.data);
@@ -187,6 +183,7 @@ export const getContractCallScript = (
       // the data about the contract output
       let segmentOffset = dataOffset;
 
+      const coders = AbiEncoding.v1.coders;
       const scriptData: Uint8Array[] = [];
       for (let i = 0; i < TOTAL_CALLS; i += 1) {
         const call = contractCalls[i];
@@ -200,15 +197,15 @@ export const getContractCallScript = (
         let gasForwardedOffset = 0;
 
         // 1. Amount
-        scriptData.push(new BigNumberCoder('u64').encode(call.amount || 0));
+        scriptData.push(coders.u64.encode(call.amount || 0));
         // 2. Asset ID
-        scriptData.push(new B256Coder().encode(call.assetId?.toString() || ZeroBytes32));
+        scriptData.push(coders.b256.encode(call.assetId?.toString() || ZeroBytes32));
         // 3. Contract ID
         scriptData.push(call.contractId.toBytes());
         // 4. Function selector offset
-        scriptData.push(new BigNumberCoder('u64').encode(encodedSelectorOffset));
+        scriptData.push(coders.u64.encode(encodedSelectorOffset));
         // 5. Encoded argument offset
-        scriptData.push(new BigNumberCoder('u64').encode(encodedArgsOffset));
+        scriptData.push(coders.u64.encode(encodedArgsOffset));
         // 6. Encoded function selector
         scriptData.push(call.fnSelectorBytes);
         // 7. Encoded arguments
@@ -216,7 +213,7 @@ export const getContractCallScript = (
 
         // 8. Gas to be forwarded
         if (call.gas) {
-          scriptData.push(new BigNumberCoder('u64').encode(call.gas));
+          scriptData.push(coders.u64.encode(call.gas));
           gasForwardedOffset = encodedArgsOffset + encodedArgs.byteLength;
         }
 

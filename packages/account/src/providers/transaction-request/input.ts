@@ -1,4 +1,4 @@
-import { BYTES_32, UTXO_ID_LEN } from '@fuel-ts/abi-coder';
+import { BYTES_32, UTXO_ID_LEN } from '@fuel-ts/abi';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';

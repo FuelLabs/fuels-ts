@@ -39,7 +39,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@fuel-ts/abi-coder": "workspace:*",
+    "@fuel-ts/abi": "workspace:*",
     "@fuel-ts/account": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/errors": "workspace:*",

@@ -1,11 +1,11 @@
-import type { JsonAbi } from '@fuel-ts/abi-coder';
+import type { AbiSpecification } from '@fuel-ts/abi';
 import { Account } from '@fuel-ts/account';
 import { setupTestProviderAndWallets } from '@fuel-ts/account/test-utils';
 
 import Contract from './contract';
 
 const CONTRACT_ID = '0x0101010101010101010101010101010101010101010101010101010101010101';
-const ABI: JsonAbi = {
+const ABI: AbiSpecification = {
   concreteTypes: [
     {
       concreteTypeId: 'asdf',

@@ -1,12 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // #region full
-import type { JsonAbi, TransactionResultReturnDataReceipt } from 'fuels';
+import type {
+  AbiSpecification,
+  TransactionResultReturnDataReceipt,
+} from 'fuels';
 import {
   buildFunctionResult,
   ReceiptType,
   arrayify,
   Script,
-  Interface,
+  AbiCoder,
   Provider,
   Wallet,
 } from 'fuels';
@@ -20,7 +23,7 @@ const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 // First we need to build out the transaction via the script that we want to encode.
 // For that we'll need the ABI and the bytecode of the script
-const abi: JsonAbi = ScriptSum.abi;
+const abi: AbiSpecification = ScriptSum.abi;
 const bytecode = ScriptSum.bytecode;
 
 // Create the invocation scope for the script call, passing the initial
@@ -43,13 +46,13 @@ const argument = abi.functions
   .find((f) => f.name === 'main')
   ?.inputs.find((i) => i.name === 'inputted_amount')?.concreteTypeId as string;
 
-// The `Interface` class (imported from `fuels`) is the entry point for encoding and decoding all things abi-related.
-// We will use its `encodeType` method and create the encoding required for
-// a u32 which takes 4 bytes up of property space.
+// The `AbiCoder` class (imported from `fuels`) is the entry point for encoding and decoding all things abi-related.
+// We will use its `getType` method to get the coder for the argument and then call its `encode` method to
+// create the encoding required for a u32 which takes 4 bytes up of property space.
 
-const abiInterface = new Interface(abi);
+const abiInterface = AbiCoder.fromAbi(abi);
 const argumentToAdd = 10;
-const encodedArguments = abiInterface.encodeType(argument, [argumentToAdd]);
+const encodedArguments = abiInterface.getType(argument).encode([argumentToAdd]);
 // Therefore the value of 10 will be encoded to:
 // Uint8Array([0, 0, 0, 10]
 
@@ -94,10 +97,13 @@ const returnData = arrayify(returnDataReceipt.data);
 // returnData = new Uint8Array([0, 0, 0, 20]
 
 // And now we can decode the returned bytes in a similar fashion to how they were
-// encoded, via the `Interface`
-const [decodedReturnData] = abiInterface.decodeType(argument, returnData);
+// encoded, via the `AbiCoder`
+const decodedReturnData = abiInterface.getType(argument).decode(returnData);
 // 20
 
 const totalValue = argumentToAdd + initialValue;
 // #endregion encode-and-decode-5
 // #endregion full
+
+console.log('decodedReturnData should be 20', decodedReturnData === 20);
+console.log('totalValue should be 20', totalValue === 20);

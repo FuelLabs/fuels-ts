@@ -10,17 +10,18 @@
   Fuel-Core version: 33.33.33
 */
 
-import { Contract, Interface } from "fuels";
+import { Contract, AbiCoder } from "fuels";
 import type {
   Provider,
   Account,
   StorageSlot,
   AbstractAddress,
+  AbiSpecification,
+  AbiCoderFunction,
   BigNumberish,
   BN,
   Bytes,
   EvmAddress,
-  FunctionFragment,
   InvokeFunction,
   RawSlice,
   StdString,
@@ -55,7 +56,7 @@ export type MyStructOutput = { x: number, y: number, state: MyEnumOutput };
 export type StructWithMultiOptionInput = { multiple: [Option<BigNumberish>, Option<BigNumberish>, Option<BigNumberish>, Option<BigNumberish>, Option<BigNumberish>] };
 export type StructWithMultiOptionOutput = { multiple: [Option<number>, Option<number>, Option<number>, Option<number>, Option<number>] };
 
-const abi = {
+const abi: AbiSpecification = {
   "programType": "contract",
   "specVersion": "1",
   "encodingVersion": "1",
@@ -1150,52 +1151,48 @@ const abi = {
 
 const storageSlots: StorageSlot[] = [];
 
-export class MyContractInterface extends Interface {
-  constructor() {
-    super(abi);
-  }
-
+export class MyContractAbiCoder extends AbiCoder {
   declare functions: {
-    alias_types_tuple_with_native_types: FunctionFragment;
-    type_external_enum: FunctionFragment;
-    type_external_struct: FunctionFragment;
-    type_identity: FunctionFragment;
-    types_address: FunctionFragment;
-    types_array: FunctionFragment;
-    types_asset_id: FunctionFragment;
-    types_b256: FunctionFragment;
-    types_b512: FunctionFragment;
-    types_bool: FunctionFragment;
-    types_bytes: FunctionFragment;
-    types_contract_id: FunctionFragment;
-    types_empty: FunctionFragment;
-    types_empty_then_value: FunctionFragment;
-    types_enum: FunctionFragment;
-    types_enum_with_vector: FunctionFragment;
-    types_evm_address: FunctionFragment;
-    types_generic_enum: FunctionFragment;
-    types_generic_struct: FunctionFragment;
-    types_option: FunctionFragment;
-    types_option_struct: FunctionFragment;
-    types_raw_slice: FunctionFragment;
-    types_result: FunctionFragment;
-    types_std_string: FunctionFragment;
-    types_str: FunctionFragment;
-    types_str_slice: FunctionFragment;
-    types_struct: FunctionFragment;
-    types_tuple: FunctionFragment;
-    types_tuple_with_native_types: FunctionFragment;
-    types_u16: FunctionFragment;
-    types_u256: FunctionFragment;
-    types_u32: FunctionFragment;
-    types_u64: FunctionFragment;
-    types_u8: FunctionFragment;
-    types_value_then_empty: FunctionFragment;
-    types_value_then_empty_then_value: FunctionFragment;
-    types_value_then_value_then_empty_then_empty: FunctionFragment;
-    types_vector_geo: FunctionFragment;
-    types_vector_option: FunctionFragment;
-    types_vector_u8: FunctionFragment;
+    alias_types_tuple_with_native_types: AbiCoderFunction;
+    type_external_enum: AbiCoderFunction;
+    type_external_struct: AbiCoderFunction;
+    type_identity: AbiCoderFunction;
+    types_address: AbiCoderFunction;
+    types_array: AbiCoderFunction;
+    types_asset_id: AbiCoderFunction;
+    types_b256: AbiCoderFunction;
+    types_b512: AbiCoderFunction;
+    types_bool: AbiCoderFunction;
+    types_bytes: AbiCoderFunction;
+    types_contract_id: AbiCoderFunction;
+    types_empty: AbiCoderFunction;
+    types_empty_then_value: AbiCoderFunction;
+    types_enum: AbiCoderFunction;
+    types_enum_with_vector: AbiCoderFunction;
+    types_evm_address: AbiCoderFunction;
+    types_generic_enum: AbiCoderFunction;
+    types_generic_struct: AbiCoderFunction;
+    types_option: AbiCoderFunction;
+    types_option_struct: AbiCoderFunction;
+    types_raw_slice: AbiCoderFunction;
+    types_result: AbiCoderFunction;
+    types_std_string: AbiCoderFunction;
+    types_str: AbiCoderFunction;
+    types_str_slice: AbiCoderFunction;
+    types_struct: AbiCoderFunction;
+    types_tuple: AbiCoderFunction;
+    types_tuple_with_native_types: AbiCoderFunction;
+    types_u16: AbiCoderFunction;
+    types_u256: AbiCoderFunction;
+    types_u32: AbiCoderFunction;
+    types_u64: AbiCoderFunction;
+    types_u8: AbiCoderFunction;
+    types_value_then_empty: AbiCoderFunction;
+    types_value_then_empty_then_value: AbiCoderFunction;
+    types_value_then_value_then_empty_then_empty: AbiCoderFunction;
+    types_vector_geo: AbiCoderFunction;
+    types_vector_option: AbiCoderFunction;
+    types_vector_u8: AbiCoderFunction;
   };
 }
 
@@ -1203,7 +1200,7 @@ export class MyContract extends Contract {
   static readonly abi = abi;
   static readonly storageSlots = storageSlots;
 
-  declare interface: MyContractInterface;
+  declare interface: MyContractAbiCoder;
   declare functions: {
     alias_types_tuple_with_native_types: InvokeFunction<[x: [AssetIdInput, AssetIdInput, boolean]], [AssetIdOutput, AssetIdOutput, boolean]>;
     type_external_enum: InvokeFunction<[x: ExternalEnumInput], ExternalEnumOutput>;

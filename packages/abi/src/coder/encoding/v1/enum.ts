@@ -2,7 +2,13 @@ import { concat } from '@fuel-ts/utils';
 import type { RequireExactlyOne } from 'type-fest';
 
 import type { AbiTypeComponent } from '../../../parser';
-import type { Coder, GetCoderFn, GetCoderParams, TypesOfCoder } from '../../abi-coder-types';
+import type {
+  AbstractCoder,
+  Coder,
+  GetCoderFn,
+  GetCoderParams,
+  TypesOfCoder,
+} from '../../abi-coder-types';
 
 import { u64 } from './fixed';
 
@@ -18,7 +24,7 @@ export type EnumDecodeValue<TCoders extends Record<string, Coder>> = RequireExac
 
 export const CASE_KEY_WORD_LENGTH = 8;
 
-export const enumCoder = <TCoders extends Record<string, Coder>>(opts: {
+export const enumCoder = <TCoders extends Record<string, AbstractCoder>>(opts: {
   coders: TCoders;
   type?: string;
 }) => {
@@ -28,11 +34,15 @@ export const enumCoder = <TCoders extends Record<string, Coder>>(opts: {
   return {
     type: opts.type ?? 'enum',
     encodedLength: (data: Uint8Array) => {
-      const caseBytes = data.slice(0, CASE_KEY_WORD_LENGTH);
-      const caseIndex = u64.decode(caseBytes).toNumber();
-      const caseKey = Object.keys(opts.coders)[caseIndex];
-      const valueCoder = opts.coders[caseKey];
-      return u64.encodedLength(data) + valueCoder.encodedLength(data);
+      // Get the index for the case
+      const caseIndexBytes = data.slice(0, CASE_KEY_WORD_LENGTH);
+      const caseIndex = u64.decode(caseIndexBytes).toNumber();
+
+      // Get the coder for the case
+      const caseCoder = Object.values(opts.coders)[caseIndex];
+      const caseValueBytes = data.slice(CASE_KEY_WORD_LENGTH);
+      const caseValueLength = caseCoder.encodedLength(caseValueBytes);
+      return CASE_KEY_WORD_LENGTH + caseValueLength;
     },
     encode: (value: EnumEncodeValue<TCoders>): Uint8Array => {
       if (isNativeValue(value)) {

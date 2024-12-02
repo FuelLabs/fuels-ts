@@ -1,18 +1,24 @@
 import { FuelError } from '@fuel-ts/errors';
 
-import type { Matcher } from '../matchers/sway-type-matchers';
 import type { Abi, AbiSpecification } from '../parser';
 import { AbiParser } from '../parser';
 
-import type { AbiCoderConfigurable, AbiCoderFunction, AbiCoderLog } from './abi-coder-types';
+import type {
+  AbiCoderConfigurable,
+  AbiCoderFunction,
+  AbiCoderLog,
+  AbiCoderType,
+} from './abi-coder-types';
 import { AbiEncoding } from './encoding/encoding';
 import { makeConfigurable } from './utils/createConfigurable';
 import { makeFunction } from './utils/createFunction';
 import { makeLog } from './utils/createLog';
+import { makeType } from './utils/createType';
 
 export class AbiCoder {
   // Internal properties
-  private abi: Abi;
+  public readonly abi: Abi;
+  public readonly specification: AbiSpecification;
   private encoding: AbiEncoding;
 
   // Exposed properties
@@ -20,8 +26,9 @@ export class AbiCoder {
   public readonly configurables: Record<string, AbiCoderConfigurable>;
   public readonly logs: Record<string, AbiCoderLog>;
 
-  private constructor(abi: AbiSpecification) {
-    this.abi = AbiParser.parse(abi);
+  public constructor(specification: AbiSpecification) {
+    this.abi = AbiParser.parse(specification);
+    this.specification = specification;
     this.encoding = AbiEncoding.from(this.abi.encodingVersion);
 
     const { functions, configurables, loggedTypes } = this.abi;
@@ -80,5 +87,17 @@ export class AbiCoder {
     }
 
     return log;
+  }
+
+  public getType(concreteTypeId: string): AbiCoderType {
+    const type = this.abi.types.find((t) => t.concreteTypeId === concreteTypeId);
+    if (type === undefined) {
+      throw new FuelError(
+        FuelError.CODES.TYPE_NOT_FOUND,
+        `Type with concreteTypeId '${concreteTypeId}' doesn't exist in the ABI.`
+      );
+    }
+
+    return makeType(type, this.encoding);
   }
 }

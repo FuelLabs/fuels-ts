@@ -14,7 +14,6 @@ export class AbiEncoding {
 
   private constructor(version: string) {
     const coders = this.supportedEncodings[version as keyof typeof this.supportedEncodings];
-    // @TODO decorate coders with validation
     this.coders = coders;
     this.matcher = createCoderMatcher(this.coders);
   }
@@ -22,6 +21,8 @@ export class AbiEncoding {
   static from(version: string): AbiEncoding {
     return new AbiEncoding(version);
   }
+
+  static v1 = this.from('1');
 
   public getCoder: GetCoderFn = (opts: GetCoderParams): Coder => {
     const coder = this.matcher(opts.type);

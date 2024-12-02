@@ -1,4 +1,4 @@
-import type { JsonAbi } from '@fuel-ts/abi-coder';
+import type { AbiSpecification } from '@fuel-ts/abi';
 import type { B256Address } from '@fuel-ts/interfaces';
 import type { BN, BNInput } from '@fuel-ts/math';
 import type { Input, Output, Transaction, TransactionType } from '@fuel-ts/transactions';
@@ -174,7 +174,7 @@ export type ReceiptParam = {
   receipts: TransactionResultReceipt[];
 };
 
-export type AbiMap = Record<string, JsonAbi>;
+export type AbiMap = Record<string, AbiSpecification>;
 
 export type RawPayloadParam = {
   rawPayload?: string;

@@ -1,9 +1,10 @@
-import { Interface, type JsonAbi } from '@fuel-ts/abi-coder';
+import { AbiCoder } from '@fuel-ts/abi';
+import type { AbiSpecification } from '@fuel-ts/abi';
 import type { BN } from '@fuel-ts/math';
 import type { ReceiptCall } from '@fuel-ts/transactions';
 
 type GetFunctionCallProps = {
-  abi: JsonAbi;
+  abi: AbiSpecification;
   receipt: ReceiptCall;
   rawPayload?: string;
   maxInputs: BN;
@@ -18,10 +19,10 @@ export interface FunctionCall {
 }
 
 export const getFunctionCall = ({ abi, receipt }: GetFunctionCallProps): FunctionCall => {
-  const abiInterface = new Interface(abi);
+  const abiInterface = AbiCoder.fromAbi(abi);
   const callFunctionSelector = receipt.param1.toHex(8);
   const functionFragment = abiInterface.getFunction(callFunctionSelector);
-  const inputs = functionFragment.jsonFn.inputs;
+  const inputs = functionFragment.inputs;
 
   const encodedArgs = receipt.param2.toHex();
   let argumentsProvided;

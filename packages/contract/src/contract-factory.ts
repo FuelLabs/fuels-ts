@@ -1,5 +1,5 @@
-import { Interface, WORD_SIZE } from '@fuel-ts/abi-coder';
-import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
+import { AbiCoder, WORD_SIZE } from '@fuel-ts/abi';
+import type { AbiSpecification, InputValue } from '@fuel-ts/abi';
 import type {
   Account,
   CreateTransactionRequestLike,
@@ -54,7 +54,7 @@ export type DeployContractResult<TContract extends Contract = Contract> = {
  */
 export default class ContractFactory<TContract extends Contract = Contract> {
   bytecode: BytesLike;
-  interface: Interface;
+  interface: AbiCoder;
   provider!: Provider | null;
   account!: Account | null;
   storageSlots: StorageSlot[];
@@ -68,17 +68,17 @@ export default class ContractFactory<TContract extends Contract = Contract> {
    */
   constructor(
     bytecode: BytesLike,
-    abi: JsonAbi | Interface,
+    abi: AbiSpecification | AbiCoder,
     accountOrProvider: Account | Provider | null = null,
     storageSlots: StorageSlot[] = []
   ) {
     // Force the bytecode to be a byte array
     this.bytecode = arrayify(bytecode);
 
-    if (abi instanceof Interface) {
+    if (abi instanceof AbiCoder) {
       this.interface = abi;
     } else {
-      this.interface = new Interface(abi);
+      this.interface = AbiCoder.fromAbi(abi);
     }
 
     /**
@@ -404,7 +404,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
 
         const { offset } = this.interface.configurables[key];
 
-        const encoded = this.interface.encodeConfigurable(key, value as InputValue);
+        const encoded = this.interface.getConfigurable(key).encode(value as InputValue);
 
         const bytes = arrayify(this.bytecode);
 
