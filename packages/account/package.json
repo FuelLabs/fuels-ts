@@ -77,7 +77,6 @@
     "@graphql-codegen/typescript-operations": "^4.2.3",
     "@internal/utils": "workspace:*",
     "@types/ramda": "^0.30.2",
-    "@webpod/ps": "0.0.0-beta.11",
     "get-graphql-schema": "^2.1.2",
     "type-fest": "^4.26.1"
   }

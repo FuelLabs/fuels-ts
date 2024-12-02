@@ -783,9 +783,6 @@ importers:
       '@types/ramda':
         specifier: ^0.30.2
         version: 0.30.2
-      '@webpod/ps':
-        specifier: 0.0.0-beta.11
-        version: 0.0.0-beta.11
       get-graphql-schema:
         specifier: ^2.1.2
         version: 2.1.2
@@ -6570,12 +6567,6 @@ packages:
 
   '@webgpu/types@0.1.16':
     resolution: {integrity: sha512-9E61voMP4+Rze02jlTXud++Htpjyyk8vw5Hyw9FGRrmhHQg2GqbuOfwf5Klrb8vTxc2XWI3EfO7RUHMpxTj26A==}
-
-  '@webpod/ingrid@0.0.0-beta.3':
-    resolution: {integrity: sha512-PkorwT+q/MiIF+It47ORX0wCYHumOeMKwp5KX5WbUvbCeOtSB6b5UUC5FvzlijdwK/YPR+sOitQzyVSsRrMmJA==}
-
-  '@webpod/ps@0.0.0-beta.11':
-    resolution: {integrity: sha512-oW4oObIu4UfWzPp2tFaafJbJVBsJtxcIRE0Jx4CpwsmhyAU91/6n9Yz5HlhagBiktvIWPcwe5t0PNPinVdG1oA==}
 
   '@whatwg-node/fetch@0.9.21':
     resolution: {integrity: sha512-Wt0jPb+04JjobK0pAAN7mEHxVHcGA9HoP3OyCsZtyAecNQeADXCZ1MihFwVwjsgaRYuGVmNlsCmLxlG6mor8Gw==}
@@ -16173,9 +16164,6 @@ packages:
   zod@3.23.8:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
 
-  zurk@0.6.3:
-    resolution: {integrity: sha512-1EyIiD9td75xMmmZv9kD1YXOtG2vPxXZFqXWdgFd2Fu55OLWLgfmvFqaQKOKotpbXeQ6JpsAsaPmU4By9GEnoA==}
-
   zustand@4.4.1:
     resolution: {integrity: sha512-QCPfstAS4EBiTQzlaGP1gmorkh/UL1Leaj2tdj+zZCZ/9bm0WS7sI2wnfD5lpOszFqWJ1DcPnGoY8RDL61uokw==}
     engines: {node: '>=12.7.0'}
@@ -24835,13 +24823,6 @@ snapshots:
       '@xtuc/long': 4.2.2
 
   '@webgpu/types@0.1.16': {}
-
-  '@webpod/ingrid@0.0.0-beta.3': {}
-
-  '@webpod/ps@0.0.0-beta.11':
-    dependencies:
-      '@webpod/ingrid': 0.0.0-beta.3
-      zurk: 0.6.3
 
   '@whatwg-node/fetch@0.9.21':
     dependencies:
@@ -37125,8 +37106,6 @@ snapshots:
   zod@3.22.4: {}
 
   zod@3.23.8: {}
-
-  zurk@0.6.3: {}
 
   zustand@4.4.1(@types/react@18.3.11)(immer@9.0.21)(react@18.3.1):
     dependencies:
