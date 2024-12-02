@@ -4,19 +4,19 @@ In Sway, the [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_a
 
 ## `AbstractAddress` Class
 
-The SDK defines the [AbstractAddress](https:https://fuels-ts-docs-api.vercel.app/interfaces/_fuel_ts_interfaces.AbstractAddress.html) class, which provides a set of utility functions for easy manipulation and conversion between address formats.
+The SDK defines the [AbstractAddress](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_interfaces.AbstractAddress.html) class, which provides a set of utility functions for easy manipulation and conversion between address formats.
 
 <<< @/../../../packages/interfaces/src/index.ts#address-1{ts:line-numbers}
 
 ## Address Class
 
-Besides conforming to the interface of the [`AbstractAddress`](https:https://fuels-ts-docs-api.vercel.app/interfaces/_fuel_ts_interfaces.AbstractAddress.html), the [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class also defines one property; `bech32Address`, which is of the [`Bech32`](./bech32.md) type.
+Besides conforming to the interface of the [`AbstractAddress`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_interfaces.AbstractAddress.html), the [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class also defines one property; `bech32Address`, which is of the [`Bech32`](./bech32.md) type.
 
 <<< @/../../../packages/address/src/address.ts#address-2{ts:line-numbers}
 
 ## Creating an Address
 
-Thanks to the utility functions provided by the [`AbstractAddress`](https:https://fuels-ts-docs-api.vercel.app/interfaces/_fuel_ts_interfaces.AbstractAddress.html) class, there are several ways to create an [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) instance:
+Thanks to the utility functions provided by the [`AbstractAddress`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_interfaces.AbstractAddress.html) class, there are several ways to create an [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) instance:
 
 ### From a `Bech32` Address
 
