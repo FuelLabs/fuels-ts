@@ -4,6 +4,7 @@ members = [
   "call-test-script",
   "configurable-pin",
   "counter",
+  "counter-v2",
   "echo-asset-id",
   "echo-bytes",
   "echo-configurables",

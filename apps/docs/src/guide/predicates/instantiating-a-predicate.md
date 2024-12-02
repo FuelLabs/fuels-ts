@@ -12,7 +12,7 @@ After compiling, you will obtain the binary of the predicate and its JSON ABI (A
 
 <<< @./snippets/instantiation/simple.ts#predicate-simple-2{ts:line-numbers}
 
-The created [`Predicate`](../../api/Account/Predicate.md) instance, among other things, has three important properties: the predicate `bytes` (byte code), the `chainId`, and the predicate `address`.
+The created [`Predicate`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.Predicate.html) instance, among other things, has three important properties: the predicate `bytes` (byte code), the `chainId`, and the predicate `address`.
 
 This address, generated from the byte code, corresponds to the Pay-to-Script-Hash (P2SH) address used in Bitcoin.
 

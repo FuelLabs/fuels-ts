@@ -1,8 +1,10 @@
+import { FuelError } from '@fuel-ts/errors';
+
 import type { Abi } from '../../abi';
 
-import { makeResolvedType } from './make-resolved-type';
 import { mapAttribute } from './map-attribute';
 import { ResolvableType } from './resolvable-type';
+import { ResolvedType } from './resolved-type';
 import type {
   AbiConfigurableV1,
   AbiFunctionInputV1,
@@ -20,14 +22,23 @@ export class AbiParserV1 {
         (x) => x.type !== 'struct std::vec::RawVec' && x.type !== 'struct std::bytes::RawBytes'
       );
 
-    const types = abi.concreteTypes.map((t) =>
-      makeResolvedType(abi, resolvableTypes, t.concreteTypeId).toAbiType()
-    );
+    const types = abi.concreteTypes.map((ct) => {
+      const resolvableType = resolvableTypes.find((rt) => rt.metadataTypeId === ct.metadataTypeId);
 
-    const getType = (typeId: string | number) => {
-      const type = types.find((t) => t.concreteTypeId === typeId);
+      const resolvedType = resolvableType
+        ? resolvableType.resolve(ct)
+        : new ResolvedType({ type: ct.type, typeId: ct.concreteTypeId });
+
+      return resolvedType.toAbiType();
+    });
+
+    const getType = (concreteTypeId: string) => {
+      const type = types.find((t) => t.concreteTypeId === concreteTypeId);
       if (type === undefined) {
-        throw new Error(`Type with typeId ${typeId} not found`);
+        throw new FuelError(
+          FuelError.CODES.TYPE_ID_NOT_FOUND,
+          `A type with concrete type id of "${concreteTypeId}" was not found.`
+        );
       }
       return type;
     };
