@@ -15,7 +15,6 @@
     "apps/demo-typegen/src/contract-types/**",
     "apps/demo-typegen/src/predicate-types/**",
     "apps/demo-typegen/src/script-types/**",
-    "packages/fuels/src/cli/commands/deploy/proxy/types/**",
     "packages/recipes/src/types/**"
   ]
 }
