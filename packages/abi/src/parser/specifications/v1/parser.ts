@@ -32,12 +32,12 @@ export class AbiParserV1 {
       return resolvedType.toAbiType();
     });
 
-    const getType = (typeId: string | number) => {
-      const type = types.find((t) => t.concreteTypeId === typeId);
+    const getType = (concreteTypeId: string) => {
+      const type = types.find((t) => t.concreteTypeId === concreteTypeId);
       if (type === undefined) {
         throw new FuelError(
           FuelError.CODES.TYPE_ID_NOT_FOUND,
-          `Type with typeId ${typeId} not found`
+          `A type with concrete type id of "${concreteTypeId}" was not found.`
         );
       }
       return type;
