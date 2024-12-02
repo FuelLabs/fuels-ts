@@ -59,6 +59,7 @@ export interface AbiMessageTypeV1 {
   readonly messageId: string;
   readonly concreteTypeId: string;
 }
+
 export interface AbiConfigurableV1 {
   readonly name: string;
   readonly concreteTypeId: string;
@@ -74,7 +75,7 @@ export type AbiFunctionAttributeV1 =
 
 export interface PayableAttrV1 {
   readonly name: 'payable';
-  readonly arguments?: readonly [];
+  readonly arguments: readonly [];
 }
 
 export interface StorageAttrV1 {
@@ -84,12 +85,12 @@ export interface StorageAttrV1 {
 
 export interface TestAttrV1 {
   readonly name: 'test';
-  readonly arguments?: readonly [];
+  readonly arguments: readonly [];
 }
 
 export interface InlineAttrV1 {
   readonly name: 'inline';
-  readonly arguments: 'never' | 'always';
+  readonly arguments: readonly ['never'] | readonly ['always'];
 }
 
 export interface DocCommentAttrV1 {

@@ -27,7 +27,7 @@ export class AbiParser {
     if (typeof abi.specVersion !== 'string') {
       throw new FuelError(
         FuelError.CODES.ABI_SPECIFICATION_INVALID,
-        'Invalid ABI: "specVersion" is not a string'
+        'Invalid ABI: the specification version is not a string.'
       );
     }
 
@@ -35,7 +35,7 @@ export class AbiParser {
     if (!parse) {
       throw new FuelError(
         FuelError.CODES.ABI_SPECIFICATION_INVALID,
-        `Invalid ABI: Unsupported ABI "specVersion": ${abi.specVersion}`
+        `Invalid ABI: Unsupported ABI specification version ("${abi.specVersion}").`
       );
     }
 
