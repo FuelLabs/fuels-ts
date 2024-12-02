@@ -652,7 +652,6 @@ const storageSlots: StorageSlot[] = [
     value: '0000000000000000000000000000000000000000000000000000000000000000',
   },
 ];
-
 export class Src14OwnedProxyInterface extends Interface {
   constructor() {
     super(abi);
