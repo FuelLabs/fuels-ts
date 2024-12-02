@@ -1,0 +1,12 @@
+{
+  "aliveStatusCodes": [200, 206],
+  "timeout": "10s",
+  "retryOn429": true,
+  "retryCount": 2,
+  "fallbackRetryDelay": "5s",
+  "ignorePatterns": [
+    {
+      "pattern": "^http://localhost:3000"
+    }
+  ]
+}
