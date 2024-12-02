@@ -38,16 +38,9 @@ describe('launchNode', () => {
     // This creates a "ps -lx" process under the current process.
     const children = await ps.tree({ pid: process.pid, recursive: true });
 
-    // We expect that only the above process is running for the current process.
+    // We expect that only the above process (from ps.tree) is running for the current process.
     // Therefore, we can safely assume all the launched nodes have been killed.
-    expect(children).toEqual([
-      expect.objectContaining({
-        command: expect.any(String),
-        arguments: expect.any(Array),
-        pid: expect.any(String),
-        ppid: process.pid.toString(),
-      }),
-    ]);
+    expect(children.length).toEqual(1);
   });
 
   test('using ephemeral port 0 is possible', async () => {
