@@ -250,7 +250,7 @@ describe('Provider', () => {
     });
 
     // Spy on console.warn
-    const consoleWarnSpy = vi.spyOn(console, 'warn');
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     // Verify that only one transaction was returned (the known type)
     const transaction = await mockProvider.getTransaction('0x1234567890abcdef');
@@ -298,7 +298,7 @@ describe('Provider', () => {
     });
 
     // Spy on console.warn
-    const consoleWarnSpy = vi.spyOn(console, 'warn');
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     // Verify that only one transaction was returned (the known type)
     const { transactions } = await mockProvider.getTransactions();

@@ -152,7 +152,7 @@ describe('launchNode', () => {
   });
 
   test('logs fuel-core outputs via console.log', async () => {
-    const logSpy = vi.spyOn(console, 'log');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
     const { cleanup } = await launchNode({ loggingEnabled: true });
     const logs = logSpy.mock.calls.map((call) => call[0]);
