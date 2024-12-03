@@ -272,6 +272,10 @@ export const launchNode = async ({
             console.log(
               `fuel-core node under pid ${child.pid} does not exist. The node might have been killed before cleanup was called. Exiting cleanly.`
             );
+          } else if (error.message.includes('pid must be a positive integer')) {
+            // This is a workaround for a bug with Bun.
+            // See: https://github.com/oven-sh/bun/issues/8787
+            process.kill(+child.pid);
           } else {
             throw e;
           }
