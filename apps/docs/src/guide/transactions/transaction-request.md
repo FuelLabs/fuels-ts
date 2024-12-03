@@ -42,7 +42,7 @@ Before submitting a transaction, it is essential to ensure it is properly funded
 
 <<< @./snippets/transaction-request/estimate-and-fund.ts#transaction-request-4{ts:line-numbers}
 
-This is the recommended approach for manually estimating and funding a transaction before submission. It ensures that the `gasLimit` and `maxFee` are accurately calculated, and that the required amounts for `OutputCoins` are fulfilled. The `fund` method automatically fetches any missing resource amounts from the calling account and adds them to the transaction request.
+This is the recommended approach for manually estimating and funding a transaction before submission. It ensures that the `gasLimit` and `maxFee` are accurately calculated and that the required amounts for `OutputCoin`s are fulfilled. The `fund` method automatically fetches any missing resource amounts from the calling account and adds them to the transaction request.
 
 ### Manually Fetching Resources
 
