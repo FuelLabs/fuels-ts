@@ -25,9 +25,14 @@ export class ResolvableType {
   toAbiType(): AbiTypeMetadata {
     return {
       metadataTypeId: this.metadataTypeId,
-      components: this.components?.map((c) => ({ name: c.name, type: c.type.toAbiType() })),
+      components: this.components?.map((component) => ({
+        name: component.name,
+        type: component.type.toAbiType(),
+      })),
       swayType: this.type,
-      typeParameters: this.typeParamsArgsMap?.map(([, t]) => (t as ResolvableType).toAbiType()),
+      typeParameters: this.typeParamsArgsMap?.map(([, resolvableType]) =>
+        (resolvableType as ResolvableType).toAbiType()
+      ),
     };
   }
 
@@ -50,11 +55,11 @@ export class ResolvableType {
      * (you just treat is as a regular struct).
      */
     if (swayTypeMatchers.vector(this.metadataType.type)) {
-      components = components?.map((c) => {
-        if (c.name === 'buf') {
-          return c.typeArguments?.[0];
+      components = components?.map((component) => {
+        if (component.name === 'buf') {
+          return component.typeArguments?.[0];
         }
-        return c;
+        return component;
       }) as AbiComponentV1[];
     }
 
@@ -117,22 +122,22 @@ export class ResolvableType {
 
   private handleComponent(
     parent: ResolvableType,
-    c: AbiComponentV1 | AbiTypeArgumentV1
+    component: AbiComponentV1 | AbiTypeArgumentV1
   ): ResolvableComponent {
-    const name = (c as AbiComponentV1).name;
+    const name = (component as AbiComponentV1).name;
 
-    if (typeof c.typeId === 'string') {
-      const concreteType = this.findConcreteType(c.typeId);
+    if (typeof component.typeId === 'string') {
+      const concreteType = this.findConcreteType(component.typeId);
       return {
         name,
         type: this.resolveConcreteType(concreteType),
       };
     }
 
-    const metadataType = this.findMetadataType(c.typeId);
+    const metadataType = this.findMetadataType(component.typeId);
     return {
       name,
-      type: this.handleMetadataType(parent, metadataType, c.typeArguments),
+      type: this.handleMetadataType(parent, metadataType, component.typeArguments),
     };
   }
 
@@ -156,8 +161,8 @@ export class ResolvableType {
 
     const metadataType = this.findMetadataType(type.metadataTypeId);
 
-    const concreteTypeArgs = type.typeArguments.map((ta) => {
-      const concreteTypeArg = this.findConcreteType(ta);
+    const concreteTypeArgs = type.typeArguments.map((typeArgument) => {
+      const concreteTypeArg = this.findConcreteType(typeArgument);
       return this.resolveConcreteType(concreteTypeArg);
     });
 
@@ -175,43 +180,48 @@ export class ResolvableType {
    */
   private handleMetadataType(
     parent: ResolvableType,
-    mt: AbiMetadataTypeV1,
+    metadataType: AbiMetadataTypeV1,
     typeArguments: AbiComponentV1['typeArguments']
   ): ResolvableType | ResolvedType {
-    if (swayTypeMatchers.generic(mt.type)) {
+    if (swayTypeMatchers.generic(metadataType.type)) {
       const resolvedTypeParameter = parent.typeParamsArgsMap?.find(
-        ([tp]) => tp === mt.metadataTypeId
+        ([typeParameterId]) => typeParameterId === metadataType.metadataTypeId
       )?.[1];
 
-      return resolvedTypeParameter ?? new ResolvableType(this.abi, mt.metadataTypeId, undefined);
+      return (
+        resolvedTypeParameter ??
+        new ResolvableType(this.abi, metadataType.metadataTypeId, undefined)
+      );
     }
 
-    if (!mt.components) {
+    if (!metadataType.components) {
       /**
        * types like u8, u16 can make their way into metadata types
        * if they aren't used _directly_ in a function-input/function-output/log/configurable/messageType
        * These types are characterized by not having components and we can resolve them as-is
        */
-      return new ResolvableType(this.abi, mt.metadataTypeId, undefined).resolveInternal(
-        mt.metadataTypeId,
+      return new ResolvableType(this.abi, metadataType.metadataTypeId, undefined).resolveInternal(
+        metadataType.metadataTypeId,
         undefined
       );
     }
 
-    const typeArgs = typeArguments?.map((ta) => this.handleComponent(parent, ta).type);
+    const typeArgs = typeArguments?.map(
+      (typeArgument) => this.handleComponent(parent, typeArgument).type
+    );
 
     const resolvable = new ResolvableType(
       this.abi,
-      mt.metadataTypeId,
-      this.mapTypeParametersAndArgs(mt, typeArgs)
+      metadataType.metadataTypeId,
+      this.mapTypeParametersAndArgs(metadataType, typeArgs)
     );
 
-    if (typeArgs?.every((ta) => ta instanceof ResolvedType)) {
-      return resolvable.resolveInternal(mt.metadataTypeId, undefined);
+    if (typeArgs?.every((typeArgument) => typeArgument instanceof ResolvedType)) {
+      return resolvable.resolveInternal(metadataType.metadataTypeId, undefined);
     }
 
-    if (resolvable.components?.every((comp) => comp.type instanceof ResolvedType)) {
-      return resolvable.resolveInternal(mt.metadataTypeId, undefined);
+    if (resolvable.components?.every((component) => component.type instanceof ResolvedType)) {
+      return resolvable.resolveInternal(metadataType.metadataTypeId, undefined);
     }
 
     return resolvable;
@@ -223,21 +233,24 @@ export class ResolvableType {
   ): ResolvedType {
     const typeArgs = this.resolveTypeArgs(typeParamsArgsMap);
 
-    const components: ResolvedType['components'] = this.components?.map((c) => {
-      if (c.type instanceof ResolvedType) {
-        return c as { name: string; type: ResolvedType };
+    const components: ResolvedType['components'] = this.components?.map((component) => {
+      if (component.type instanceof ResolvedType) {
+        return component as { name: string; type: ResolvedType };
       }
 
       const resolvedGenericType = typeArgs?.find(
-        ([tp]) => (c.type as ResolvableType).metadataTypeId === tp
+        ([typeParameterId]) => (component.type as ResolvableType).metadataTypeId === typeParameterId
       )?.[1];
       if (resolvedGenericType) {
         return {
-          name: c.name,
+          name: component.name,
           type: resolvedGenericType,
         };
       }
-      return { name: c.name, type: c.type.resolveInternal(c.type.metadataTypeId, typeArgs) };
+      return {
+        name: component.name,
+        type: component.type.resolveInternal(component.type.metadataTypeId, typeArgs),
+      };
     });
     return new ResolvedType({
       type: this.metadataType.type,
@@ -255,7 +268,9 @@ export class ResolvableType {
       ? typeParamsArgsMap
       : this.typeParamsArgsMap.map(([typeParameter, value]) => {
           if (value instanceof ResolvableType) {
-            const resolved = typeParamsArgsMap?.find(([tp]) => tp === value.metadataTypeId);
+            const resolved = typeParamsArgsMap?.find(
+              ([typeParameterId]) => typeParameterId === value.metadataTypeId
+            );
 
             return (
               resolved ?? [

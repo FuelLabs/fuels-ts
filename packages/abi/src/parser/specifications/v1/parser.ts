@@ -19,21 +19,25 @@ export class AbiParserV1 {
     const resolvableTypes = abi.metadataTypes
       .map((metadataType) => new ResolvableType(abi, metadataType.metadataTypeId, undefined))
       .filter(
-        (x) => x.type !== 'struct std::vec::RawVec' && x.type !== 'struct std::bytes::RawBytes'
+        (resolveableType) =>
+          resolveableType.type !== 'struct std::vec::RawVec' &&
+          resolveableType.type !== 'struct std::bytes::RawBytes'
       );
 
-    const types = abi.concreteTypes.map((ct) => {
-      const resolvableType = resolvableTypes.find((rt) => rt.metadataTypeId === ct.metadataTypeId);
+    const types = abi.concreteTypes.map((concreteType) => {
+      const resolvableType = resolvableTypes.find(
+        (resolvable) => resolvable.metadataTypeId === concreteType.metadataTypeId
+      );
 
       const resolvedType = resolvableType
-        ? resolvableType.resolve(ct)
-        : new ResolvedType({ type: ct.type, typeId: ct.concreteTypeId });
+        ? resolvableType.resolve(concreteType)
+        : new ResolvedType({ type: concreteType.type, typeId: concreteType.concreteTypeId });
 
       return resolvedType.toAbiType();
     });
 
     const getType = (concreteTypeId: string) => {
-      const type = types.find((t) => t.concreteTypeId === concreteTypeId);
+      const type = types.find((abiType) => abiType.concreteTypeId === concreteTypeId);
       if (type === undefined) {
         throw new FuelError(
           FuelError.CODES.TYPE_ID_NOT_FOUND,
