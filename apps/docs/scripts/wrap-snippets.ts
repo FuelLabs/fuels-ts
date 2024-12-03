@@ -85,8 +85,6 @@ export const wrapSnippet = (filepath: string) => {
       .replace(/import.*$/gm, '') // ignore file imports
       .trim() // zip
       .replace(/\n/g, '\n  '); // indent chunk
-
-    console.log(nodeLauncher);
   }
 
   /*
