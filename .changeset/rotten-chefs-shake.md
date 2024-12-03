@@ -1,4 +1,5 @@
 ---
+"@fuel-ts/utils": patch
 ---
 
-docs: add max outputs documentation to combining UTXO docs
+feat: add function for splitting UTXOs and docs on `maxOutputs`
