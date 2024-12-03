@@ -1,16 +1,10 @@
-import type { Account } from 'fuels';
-import {
-  Provider,
-  ScriptTransactionRequest,
-  WalletUnlocked,
-  ZeroBytes32,
-} from 'fuels';
+import { Provider, ScriptTransactionRequest, Wallet } from 'fuels';
 
-import { LOCAL_NETWORK_URL } from '../../../../env';
+import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
 import { ScriptSum } from '../../../../typegend';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
-const witness = ZeroBytes32;
+const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 const transactionRequest = new ScriptTransactionRequest({
   script: ScriptSum.bytecode,
@@ -18,11 +12,9 @@ const transactionRequest = new ScriptTransactionRequest({
 
 // #region transaction-request-10
 // Add a witness directly
-transactionRequest.addWitness(witness);
+const witness = await wallet.signTransaction(transactionRequest);
 
-// Add a witness using an account
-const account: Account = WalletUnlocked.generate({ provider });
-await transactionRequest.addAccountWitnesses(account);
+transactionRequest.addWitness(witness);
 // #endregion transaction-request-10
 
 // #region transaction-request-11
