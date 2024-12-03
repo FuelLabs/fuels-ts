@@ -3,16 +3,16 @@ import { TestAssetId } from 'fuels/test-utils';
 
 import {
   LOCAL_NETWORK_URL,
+  WALLET_PVT_KEY,
   WALLET_PVT_KEY_2,
-  WALLET_PVT_KEY_3,
 } from '../../../../env';
 import { ScriptSum } from '../../../../typegend';
 
 // #region transaction-request-3
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 
-const recipient1 = Wallet.fromPrivateKey(WALLET_PVT_KEY_2, provider);
-const recipient2 = Wallet.fromPrivateKey(WALLET_PVT_KEY_3, provider);
+const recipient1 = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
+const recipient2 = Wallet.fromPrivateKey(WALLET_PVT_KEY_2, provider);
 
 const baseAssetId = provider.getBaseAssetId();
 const assetA = TestAssetId.A.value;
