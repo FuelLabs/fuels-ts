@@ -322,6 +322,7 @@ Utils
 Utils
 UTXO
 UTXOs
+utxos
 validator
 validators
 vercel
