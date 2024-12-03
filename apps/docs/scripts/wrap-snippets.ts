@@ -67,7 +67,7 @@ export const wrapSnippet = (filepath: string) => {
      Adds `launchTestNode` import, always right below the last `fuels` import
      and before the next relative one.
    */
-    const launchImport = `import { launchTestNode } from 'fuels/test-utils';`;
+    const launchImport = `import { launchTestNode, TestMessage } from 'fuels/test-utils';`;
 
     const searchStr = `from 'fuels';`;
     const lastIndexStart = imports.lastIndexOf(searchStr);
@@ -85,6 +85,8 @@ export const wrapSnippet = (filepath: string) => {
       .replace(/import.*$/gm, '') // ignore file imports
       .trim() // zip
       .replace(/\n/g, '\n  '); // indent chunk
+
+    console.log(nodeLauncher);
   }
 
   /*
