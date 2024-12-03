@@ -32,7 +32,7 @@ Once you have instantiated a transaction request, you can modify it by setting t
 
 ### Adding `OutputCoin`
 
-Including `OutputCoins` in the transaction request specifies the UTXOs that will be created once the transaction is processed. These UTXOs represent the amounts being transferred to specified account addresses during the transaction:
+Including `OutputCoin`s in the transaction request specifies the UTXOs that will be created once the transaction is processed. These UTXOs represent the amounts being transferred to specified account addresses during the transaction:
 
 <<< @./snippets/transaction-request/add-output-coin.ts#transaction-request-3{ts:line-numbers}
 
