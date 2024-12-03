@@ -1,3 +1,5 @@
+import { FuelError } from '@fuel-ts/errors';
+
 import { swayTypeMatchers } from '../../../matchers/sway-type-matchers';
 import type { AbiTypeMetadata } from '../../abi';
 
@@ -34,20 +36,16 @@ export class ResolvableType {
     public metadataTypeId: number,
     public typeParamsArgsMap: Array<[number, ResolvedType | ResolvableType]> | undefined
   ) {
-    const metadataType = abi.metadataTypes.find(
-      (tm) => tm.metadataTypeId === metadataTypeId
-    ) as AbiMetadataTypeV1;
-
-    this.metadataType = metadataType;
-    this.type = metadataType.type;
+    this.metadataType = this.findMetadataType(metadataTypeId);
+    this.type = this.metadataType.type;
 
     this.typeParamsArgsMap ??= ResolvableType.mapTypeParametersAndArgs(
       abi,
-      metadataType,
+      this.metadataType,
       undefined
     );
 
-    let components = metadataType.components;
+    let components = this.metadataType.components;
 
     /**
      * Vectors consist of multiple components,
@@ -57,7 +55,7 @@ export class ResolvableType {
      * as it's then easier to reason about the vector
      * (you just treat is as a regular struct).
      */
-    if (swayTypeMatchers.vector(metadataType.type)) {
+    if (swayTypeMatchers.vector(this.metadataType.type)) {
       components = components?.map((c) => {
         if (c.name === 'buf') {
           return c.typeArguments?.[0];
@@ -67,6 +65,46 @@ export class ResolvableType {
     }
 
     this.components = components?.map((c) => ResolvableType.handleComponent(this, abi, c));
+  }
+
+  /**
+   * Find a metadata type by its ID.
+   * @param metadataTypeId - The ID of the metadata type to find.
+   * @returns The metadata type.
+   *
+   * @throws  If the metadata type can not be found in the ABI.
+   */
+  private findMetadataType(metadataTypeId: number): AbiMetadataTypeV1 {
+    const metadataType = this.abi.metadataTypes.find(
+      (type) => type.metadataTypeId === metadataTypeId
+    );
+    if (!metadataType) {
+      throw new FuelError(
+        FuelError.CODES.TYPE_NOT_FOUND,
+        `Metadata type with id ${metadataTypeId} not found`
+      );
+    }
+    return metadataType;
+  }
+
+  /**
+   * Find a concrete type by its ID.
+   * @param concreteTypeId - The ID of the concrete type to find.
+   * @returns The concrete type.
+   *
+   * @throws  If the concrete type can not be found in the ABI.
+   */
+  private findConcreteType(concreteTypeId: string): AbiConcreteTypeV1 {
+    const concreteType = this.abi.concreteTypes.find(
+      (type) => type.concreteTypeId === concreteTypeId
+    );
+    if (!concreteType) {
+      throw new FuelError(
+        FuelError.CODES.TYPE_NOT_FOUND,
+        `Concrete type with id ${concreteTypeId} not found`
+      );
+    }
+    return concreteType;
   }
 
   private static mapTypeParametersAndArgs(
@@ -251,10 +289,8 @@ export class ResolvableType {
   }
 
   public resolve(concreteType: AbiConcreteTypeV1) {
-    const concreteTypeArgs = concreteType.typeArguments?.map((ta) => {
-      const concreteTypeArg = this.abi.concreteTypes.find(
-        (ct) => ct.concreteTypeId === ta
-      ) as AbiConcreteTypeV1;
+    const concreteTypeArgs = concreteType.typeArguments?.map((typeArgument) => {
+      const concreteTypeArg = this.findConcreteType(typeArgument);
       return ResolvableType.resolveConcreteType(this.abi, concreteTypeArg);
     });
 
