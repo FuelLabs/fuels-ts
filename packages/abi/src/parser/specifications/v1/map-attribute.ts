@@ -5,29 +5,18 @@ import type { AbiFunctionAttribute } from '../../abi';
 import type { AbiFunctionAttributeV1 } from './specification';
 
 export const mapAttribute = (attribute: AbiFunctionAttributeV1): AbiFunctionAttribute => {
-  switch (attribute.name) {
+  const { name, arguments: args } = attribute;
+
+  switch (name) {
     case 'inline':
-      return {
-        name: attribute.name,
-        arguments: attribute.arguments[0] === 'never' ? 'never' : 'always',
-      };
-
+      return { name, arguments: args[0] };
     case 'storage':
-      return {
-        name: attribute.name,
-        arguments: attribute.arguments,
-      };
-
+      return { name: 'storage', arguments: args };
     case 'doc-comment':
-      return {
-        name: attribute.name,
-        arguments: attribute.arguments,
-      };
-
+      return { name, arguments: args };
     case 'payable':
     case 'test':
-      return { name: attribute.name };
-
+      return { name };
     default:
       return assertUnreachable(attribute);
   }
