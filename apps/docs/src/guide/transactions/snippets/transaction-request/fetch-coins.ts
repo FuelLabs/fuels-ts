@@ -16,7 +16,7 @@ const transactionRequest = new ScriptTransactionRequest({
 const { coins } = await wallet.getCoins(baseAssetId);
 const { messages } = await wallet.getMessages();
 
-// Adding an specific coin or message
+// Adding a specific coin or message
 transactionRequest.addCoinInput(coins[0]);
 transactionRequest.addMessageInput(messages[0]);
 // #endregion transaction-request-6
