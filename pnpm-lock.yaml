@@ -1236,10 +1236,6 @@ importers:
       fflate:
         specifier: ^0.8.2
         version: 0.8.2
-    devDependencies:
-      '@fuel-ts/address':
-        specifier: workspace:*
-        version: link:../address
 
   packages/versions:
     dependencies:
