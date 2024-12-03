@@ -50,8 +50,6 @@ In certain scenarios, you may need to manually fetch resources. This can be achi
 
 <<< @./snippets/transaction-request/fetch-resources.ts#transaction-request-5{ts:line-numbers}
 
-> **Note**: While manually fetching and adding resources to a transaction request is possible, it is generally not recommended as it potentially leads to funding errors.
-
 #### Manually Fetching Coins or Messages
 
 If needed, you can manually include specific coins or messages in the transaction. However, this approach is generally discouraged and should only be used in scenarios where explicitly adding particular coins or messages to the transaction request is required:
