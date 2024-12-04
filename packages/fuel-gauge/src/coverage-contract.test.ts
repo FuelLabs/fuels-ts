@@ -1,12 +1,12 @@
 import type { BigNumberish, BN, Message } from 'fuels';
 import { bn, toHex, Wallet, ScriptTransactionRequest, randomBytes, hexlify, arrayify } from 'fuels';
+import type { LaunchTestNodeOptions } from 'fuels/test-utils';
 
 import { CoverageContractFactory } from '../test/typegen/contracts';
 import type { MixedNativeEnumInput } from '../test/typegen/contracts/CoverageContract';
 import { SmallEnumInput } from '../test/typegen/contracts/Vectors';
 import type { Vec } from '../test/typegen/contracts/common';
 
-import type { ExtraLaunchNodeOptions } from './utils';
 import { launchTestContract } from './utils';
 
 const RUST_U8_MAX = 255;
@@ -34,8 +34,10 @@ enum MixedNativeEnum {
   NotNative = 12,
 }
 
-function setupContract(extraOptions: ExtraLaunchNodeOptions = {}) {
-  return launchTestContract(CoverageContractFactory, extraOptions);
+function setupContract({
+  nodeOptions,
+}: Pick<LaunchTestNodeOptions<[typeof CoverageContractFactory]>, 'nodeOptions'> = {}) {
+  return launchTestContract(CoverageContractFactory, { nodeOptions });
 }
 
 /**

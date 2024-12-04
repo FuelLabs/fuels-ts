@@ -1,22 +1,12 @@
 import { calcRoot, constructTree, getProof } from '@fuel-ts/merkle';
-import type { SnapshotConfigs } from '@fuel-ts/utils';
 import { chunkAndPadBytes, hexlify } from '@fuel-ts/utils';
 import { readFileSync } from 'fs';
-import type { DeployContractConfig, LaunchNodeOptions } from 'fuels/test-utils';
+import type { DeployContractConfig, LaunchTestNodeOptions } from 'fuels/test-utils';
 import { launchTestNode } from 'fuels/test-utils';
-import type { PartialDeep } from 'type-fest';
-
-export type ExtraLaunchNodeOptions = {
-  nodeOptions?: Partial<
-    Omit<LaunchNodeOptions, 'snapshotConfig'> & {
-      snapshotConfig: PartialDeep<SnapshotConfigs>;
-    }
-  >;
-};
 
 export async function launchTestContract<T extends DeployContractConfig>(
   config: T,
-  { nodeOptions }: ExtraLaunchNodeOptions = {}
+  { nodeOptions }: Pick<LaunchTestNodeOptions<[T]>, 'nodeOptions'>
 ) {
   const {
     contracts: [contract],
