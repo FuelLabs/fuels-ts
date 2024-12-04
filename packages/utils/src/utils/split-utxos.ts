@@ -3,13 +3,13 @@ import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 
 /**
- * Split UTXOs into multiple UTXOs
- * @param balance - The balance of the UTXO
+ * This function allows a consumer to split a UTXO into multiple smaller UTXOs
+ * @param balance - The total balance that the user wants to split, this is equivalent of the amount you would like to send to the recipient
  * @param amount - The amount of each UTXO
- * @param assetId - The asset ID of the UTXO
+ * @param assetId - The asset ID of the UTXOs
  * @param destination - The destination address for the UTXOs
- * @param number_of_coins - The number of UTXOs to split into
- * @returns An array of the desired UTXOs with the amount, assetId, and destination
+ * @param number_of_coins - The number of UTXOs to split into, it defaults to 2
+ * @returns An array of the desired UTXOs with the amount, assetId, and destination address
  */
 export function splitUTXOs(
   balance: BN,
