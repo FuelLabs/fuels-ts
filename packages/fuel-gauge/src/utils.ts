@@ -33,7 +33,7 @@ export async function launchTestContract<T extends DeployContractConfig>(
 
 export function subsectionFromBytecode() {
   const wasmFileBuffer = readFileSync(
-    join(__dirname, '../test/fixtures/chain-config/state_transition_bytecode.wasm')
+    './packages/fuel-gauge/test/fixtures/chain-config/state_transition_bytecode.wasm'
   );
 
   const subsectionSize = 90 * 1024;
