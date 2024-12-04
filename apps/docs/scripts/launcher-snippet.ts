@@ -1,6 +1,6 @@
-import { launchTestNode } from 'fuels/test-utils';
+import { launchTestNode, TestMessage } from 'fuels/test-utils';
 
-using node = await launchTestNode({ walletsConfig: { count: 5 } });
+using node = await launchTestNode({ walletsConfig: { count: 5, messages: [new TestMessage()] } });
 
 const LOCAL_NETWORK_URL = node.provider.url;
 
