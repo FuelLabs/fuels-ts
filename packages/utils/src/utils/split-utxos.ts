@@ -6,7 +6,7 @@ export function splitUTXOs(
   balance: BN,
   amount: BN,
   assetId: string,
-  destinationAddress: AbstractAddress,
+  destination: AbstractAddress,
   number_of_coins: number = 2
 ): { amount: BN; assetId: string; destination: string }[] {
   if (balance.lte(0)) {
@@ -18,6 +18,6 @@ export function splitUTXOs(
   return new Array(splitInto).fill({
     amount,
     assetId,
-    destinationAddress,
+    destination,
   });
 }
