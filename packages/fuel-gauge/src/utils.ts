@@ -4,7 +4,6 @@ import { chunkAndPadBytes, hexlify } from '@fuel-ts/utils';
 import { readFileSync } from 'fs';
 import type { DeployContractConfig, LaunchNodeOptions } from 'fuels/test-utils';
 import { launchTestNode } from 'fuels/test-utils';
-import { join } from 'path';
 import type { PartialDeep } from 'type-fest';
 
 export type ExtraLaunchNodeOptions = {
