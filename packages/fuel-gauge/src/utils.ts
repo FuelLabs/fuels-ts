@@ -6,7 +6,7 @@ import { launchTestNode } from 'fuels/test-utils';
 
 export async function launchTestContract<T extends DeployContractConfig>(
   config: T,
-  { nodeOptions }: Pick<LaunchTestNodeOptions<[T]>, 'nodeOptions'>
+  { nodeOptions }: Pick<LaunchTestNodeOptions<[T]>, 'nodeOptions'> = {}
 ) {
   const {
     contracts: [contract],
