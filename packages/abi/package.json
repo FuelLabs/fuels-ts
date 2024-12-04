@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@fuel-ts/errors": "workspace:*",
+    "@fuel-ts/math": "workspace:*",
     "@fuel-ts/utils": "workspace:*"
   },
   "devDependencies": {}
