@@ -3,6 +3,10 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
 import { AbiEncoding } from '../../../src';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('b512', () => {
   describe('encode', () => {
     it('should encode a b512 [zero]', () => {

@@ -1,5 +1,9 @@
 import { AbiEncoding } from '../../../src';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('void', () => {
   describe('encode', () => {
     it('should encode a void', () => {

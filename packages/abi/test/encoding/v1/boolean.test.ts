@@ -3,6 +3,10 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
 import { AbiEncoding } from '../../../src';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('boolean', () => {
   describe('encode', () => {
     it('should encode a boolean [true]', () => {
@@ -81,22 +85,22 @@ describe('boolean', () => {
         () => coder.decode(data),
         new FuelError(FuelError.CODES.DECODE_ERROR, 'Invalid boolean data - not enough data.', {
           data,
-          type: 'bool',
+          type: 'boolean',
           expectedLength: 1,
         })
       );
     });
 
-    it('should throw when decoding an invalid boolean value [2]', async () => {
+    it('should throw when decoding an invalid boolean value [256]', async () => {
       const coder = AbiEncoding.v1.bool;
-      const data = new Uint8Array([2]);
+      const data = new Uint8Array([256]);
 
       await expectToThrowFuelError(
         () => coder.decode(data),
         new FuelError(FuelError.CODES.DECODE_ERROR, 'Invalid boolean value.', {
           data,
-          type: 'bool',
-          value: 2,
+          type: 'boolean',
+          value: 256,
         })
       );
     });

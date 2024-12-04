@@ -3,6 +3,10 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
 import { AbiEncoding } from '../../../src';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('u32', () => {
   describe('encode', () => {
     it('should encode a u32 [min = 0]', () => {

@@ -6,6 +6,10 @@ import { toEqualBn } from '../../utils/vitest.matcher';
 
 expect.extend({ toEqualBn });
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('u64', () => {
   describe('encode', () => {
     it('should encode a u64 [min = 0]', () => {
