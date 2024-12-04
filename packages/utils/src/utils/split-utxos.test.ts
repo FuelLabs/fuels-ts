@@ -39,14 +39,15 @@ describe('splitUTXOs', () => {
     ]);
   });
 
-  it('should generate the maximum number of UTXOs possible', () => {
+  it('should throw an error if the number of coins to split into is greater than the balance', async () => {
     const destination = '0x...' as unknown as AbstractAddress;
 
-    expect(splitUTXOs(new BN(40), new BN(10), '0x0', destination, 5)).toEqual([
-      { amount: new BN(10), assetId: '0x0', destination },
-      { amount: new BN(10), assetId: '0x0', destination },
-      { amount: new BN(10), assetId: '0x0', destination },
-      { amount: new BN(10), assetId: '0x0', destination },
-    ]);
+    await expectToThrowFuelError(
+      () => splitUTXOs(new BN(40), new BN(10), '0x0', destination, 5),
+      new FuelError(
+        ErrorCode.INVALID_DATA,
+        'The number of coins to split into is greater than the balance'
+      )
+    );
   });
 });
