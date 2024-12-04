@@ -32,6 +32,14 @@ const splitTx = splitUTXOs(
   5
 );
 
+// We will also add some funds to the wallet to cover the fee
+const fundTx = await fundingWallet.transfer(
+  wallet.address,
+  500,
+  provider.getBaseAssetId()
+);
+await fundTx.waitForResult();
+
 console.log('Split UTXOs', splitTx);
 // [
 //   { amount: 200, assetId: '0x0', destination	: '0x...' },
