@@ -16,7 +16,7 @@ const fundingTx = await fundingWallet.transfer(
 );
 await fundingTx.waitForResult();
 
-// We can fetch the coins to see how many UTXOs we have, and confirm it is 1.
+// We can fetch the coins to see how many UTXOs we have and confirm it is 1
 const { coins: initialCoins } = await wallet.getCoins(
   provider.getBaseAssetId()
 );
