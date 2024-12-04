@@ -23,7 +23,7 @@ const { coins: initialCoins } = await wallet.getCoins(
 console.log('Initial Coins Length', initialCoins.length);
 // 1
 
-// Now we can split the UTXO into 5 UTXOs of 200 each.
+// Now we can split the UTXO into 5 UTXOs of 200 each
 const splitTx = splitUTXOs(
   new BN(1000),
   new BN(200),
