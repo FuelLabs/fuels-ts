@@ -5,6 +5,10 @@ import { BN } from '@fuel-ts/math';
 
 import { splitUTXOs } from './split-utxos';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('splitUTXOs', () => {
   it('should generate two UTXOs by default', () => {
     // using unknown as AbstractAddress to avoid importing @fuel-ts/address as that's a circular dependency
