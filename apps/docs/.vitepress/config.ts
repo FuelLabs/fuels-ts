@@ -425,6 +425,10 @@ export default defineConfig({
                 text: 'Combining UTXOs',
                 link: '/guide/cookbook/combining-utxos',
               },
+              {
+                text: 'Splitting UTXOs',
+                link: '/guide/cookbook/splitting-utxos',
+              },
             ],
           },
           {
