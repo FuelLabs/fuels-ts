@@ -8,7 +8,7 @@ const fundingWallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 const wallet = Wallet.generate({ provider });
 
-// let's fund the wallet with 1000 of the base asset
+// Let's fund the wallet with 1000 of the base asset
 const fundingTx = await fundingWallet.transfer(
   wallet.address,
   1000,
