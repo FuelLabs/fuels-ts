@@ -595,22 +595,22 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
 
     const EXPECTED_MESSAGES_A: Message[] = [
       {
-        messageId: '0x5e4b9a05438f912573515dd32093657499310cb650766ce868f21dfb05f09a1a',
+        messageId: '0xb3b3f933cc51055ed30df72e2a324e1f0224b683b5f1052d4d8acfa207dd72c9',
         sender: WALLET_B.address,
         recipient: WALLET_A.address,
         nonce: '0x0101010101010101010101010101010101010101010101010101010101010101',
-        amount: bn('0xffffffffffffffff', 'hex'),
+        amount: bn('123'),
         data: arrayify('0x'),
         daHeight: bn(0),
       },
     ];
     const EXPECTED_MESSAGES_B: Message[] = [
       {
-        messageId: '0xba5fece66404c865ea533b1a0f8462e9a67c2066a20b70fcf8446ce4f2b82ed4',
+        messageId: '0x9f57053cc18ac7aa83cf4617f603a64feeace171f9e004511083573f6678cfdd',
         sender: WALLET_A.address,
         recipient: WALLET_B.address,
         nonce: '0x0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b',
-        amount: bn('0xffffffffffffffff', 'hex'),
+        amount: bn('123'),
         data: arrayify('0x'),
         daHeight: bn(0),
       },
