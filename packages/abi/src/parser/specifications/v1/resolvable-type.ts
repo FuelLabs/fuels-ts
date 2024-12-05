@@ -19,7 +19,7 @@ interface ResolvableComponent {
 
 export class ResolvableType {
   private metadataType: AbiMetadataTypeV1;
-  type: string;
+  swayType: string;
   components: ResolvableComponent[] | undefined;
 
   constructor(
@@ -28,7 +28,7 @@ export class ResolvableType {
     public typeParamsArgsMap: Array<[number, ResolvedType | ResolvableType]> | undefined
   ) {
     this.metadataType = this.findMetadataType(metadataTypeId);
-    this.type = this.metadataType.type;
+    this.swayType = this.metadataType.type;
     this.typeParamsArgsMap ??= this.mapTypeParametersAndArgs(this.metadataType, undefined);
     let components = this.metadataType.components;
 
@@ -59,7 +59,7 @@ export class ResolvableType {
         name: component.name,
         type: component.type.toAbiType(),
       })),
-      swayType: this.type,
+      swayType: this.swayType,
       typeParameters: this.typeParamsArgsMap?.map(([, resolvableType]) =>
         (resolvableType as ResolvableType).toAbiType()
       ),
@@ -147,7 +147,7 @@ export class ResolvableType {
   private resolveConcreteType(type: AbiConcreteTypeV1): ResolvedType {
     if (type.metadataTypeId === undefined) {
       return new ResolvedType({
-        type: type.type,
+        swayType: type.type,
         typeId: type.concreteTypeId,
       });
     }
@@ -253,7 +253,7 @@ export class ResolvableType {
       };
     });
     return new ResolvedType({
-      type: this.metadataType.type,
+      swayType: this.metadataType.type,
       typeId,
       components,
       typeParamsArgsMap: typeArgs,

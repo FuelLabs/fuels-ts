@@ -20,8 +20,8 @@ export class AbiParserV1 {
       .map((metadataType) => new ResolvableType(abi, metadataType.metadataTypeId, undefined))
       .filter(
         (resolveableType) =>
-          resolveableType.type !== 'struct std::vec::RawVec' &&
-          resolveableType.type !== 'struct std::bytes::RawBytes'
+          resolveableType.swayType !== 'struct std::vec::RawVec' &&
+          resolveableType.swayType !== 'struct std::bytes::RawBytes'
       );
 
     const types = abi.concreteTypes.map((concreteType) => {
@@ -31,7 +31,7 @@ export class AbiParserV1 {
 
       const resolvedType = resolvableType
         ? resolvableType.resolve(concreteType)
-        : new ResolvedType({ type: concreteType.type, typeId: concreteType.concreteTypeId });
+        : new ResolvedType({ swayType: concreteType.type, typeId: concreteType.concreteTypeId });
 
       return resolvedType.toAbiType();
     });

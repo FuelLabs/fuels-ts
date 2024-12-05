@@ -6,20 +6,20 @@ export interface ResolvedComponent {
 }
 
 export class ResolvedType {
-  public type: string;
+  public swayType: string;
   public typeId: string | number;
   public components: ResolvedComponent[] | undefined;
   public typeParamsArgsMap: Array<[number, ResolvedType]> | undefined;
   private metadataTypeId: number | undefined;
 
   constructor(params: {
-    type: string;
+    swayType: string;
     typeId: string | number;
     components?: ResolvedComponent[];
     typeParamsArgsMap?: Array<[number, ResolvedType]>;
     metadataTypeId?: number;
   }) {
-    this.type = params.type;
+    this.swayType = params.swayType;
     this.typeId = params.typeId;
     this.components = params.components;
     this.typeParamsArgsMap = params.typeParamsArgsMap;
@@ -28,7 +28,7 @@ export class ResolvedType {
 
   public toAbiType(): AbiType {
     return {
-      swayType: this.type,
+      swayType: this.swayType,
       concreteTypeId: this.typeId as string,
       components: this.components?.map((c) => ({ name: c.name, type: c.type.toAbiType() })),
       metadata: this.metadataTypeId
