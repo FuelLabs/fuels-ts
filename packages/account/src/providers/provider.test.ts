@@ -584,14 +584,14 @@ describe('Provider', () => {
     });
     const { provider } = launched;
 
-    expect(provider.cache?.ttl).toEqual(ttl);
+    expect(provider.cache?.getActiveTTL()).toEqual(ttl);
   });
 
   it('should use resource cache by default', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
-    expect(provider.cache?.ttl).toEqual(DEFAULT_RESOURCE_CACHE_TTL);
+    expect(provider.cache?.getActiveTTL()).toEqual(DEFAULT_RESOURCE_CACHE_TTL);
   });
 
   it('should validate resource cache value [invalid numerical]', async () => {

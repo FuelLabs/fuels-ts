@@ -36,6 +36,7 @@ import { coinQuantityfy } from './coin-quantity';
 import { FuelGraphqlSubscriber } from './fuel-graphql-subscriber';
 import type { Message, MessageCoin, MessageProof, MessageStatus } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
+import type { CacheStrategy } from './resource-cache';
 import { ResourceCache } from './resource-cache';
 import type {
   TransactionRequestLike,
@@ -309,6 +310,10 @@ export type ProviderOptions = {
    */
   resourceCacheTTL?: number;
   /**
+   * The caching strategy to use, consumers can choose a global shared cache or an instance specific cache.
+   */
+  resourceCacheStrategy?: CacheStrategy;
+  /**
    * Retry options to use when fetching data from the node.
    */
   retryOptions?: RetryOptions;
@@ -467,6 +472,13 @@ export default class Provider {
    */
   protected constructor(url: string, options: ProviderOptions = {}) {
     const { url: rawUrl, urlWithoutAuth, headers: authHeaders } = Provider.extractBasicAuth(url);
+
+    if (options.resourceCacheTTL) {
+      this.cache = new ResourceCache(
+        options.resourceCacheTTL,
+        options.resourceCacheStrategy || 'global'
+      );
+    }
 
     this.url = rawUrl;
     this.urlWithoutAuth = urlWithoutAuth;

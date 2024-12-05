@@ -1,33 +1,57 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { hexlify } from '@fuel-ts/utils';
 
+import { GlobalCache } from './global-cache';
 import type { ExcludeResourcesOption } from './resource';
 
-interface CachedResource {
+export interface CachedResource {
   utxos: Set<string>;
   messages: Set<string>;
   timestamp: number;
 }
 
-const cache = new Map<string, CachedResource>();
+export type CacheStrategy = 'global' | 'instance';
 
+/**
+ * Resource cache
+ */
 export class ResourceCache {
-  readonly ttl: number;
+  private readonly ttl: number;
+  private readonly strategy: CacheStrategy;
+  private instanceCache?: Map<string, CachedResource>;
+  private globalCache: GlobalCache;
 
-  constructor(ttl: number) {
-    this.ttl = ttl; // TTL in milliseconds
-
-    if (typeof ttl !== 'number' || this.ttl <= 0) {
+  constructor(ttl: number, strategy: CacheStrategy = 'global') {
+    if (typeof ttl !== 'number' || ttl <= 0) {
       throw new FuelError(
         ErrorCode.INVALID_TTL,
-        `Invalid TTL: ${this.ttl}. Use a value greater than zero.`
+        `Invalid TTL: ${ttl}. Use a value greater than zero.`
       );
+    }
+
+    this.ttl = ttl;
+    this.strategy = strategy;
+    this.globalCache = GlobalCache.getInstance();
+
+    if (strategy === 'global') {
+      this.globalCache.setTTL(ttl);
+    } else {
+      this.instanceCache = new Map();
     }
   }
 
-  // Add resources to the cache
+  getActiveCache(): Map<string, CachedResource> {
+    return this.strategy === 'global' ? this.globalCache.getCache() : this.instanceCache!;
+  }
+
+  getActiveTTL(): number {
+    return this.strategy === 'global' ? this.globalCache.getTTL() : this.ttl;
+  }
+
   set(transactionId: string, resources: Required<ExcludeResourcesOption>): void {
     const currentTime = Date.now();
+    const cache = this.getActiveCache();
+
     const existingResources = cache.get(transactionId) || {
       utxos: new Set<string>(),
       messages: new Set<string>(),
@@ -40,31 +64,35 @@ export class ResourceCache {
     cache.set(transactionId, existingResources);
   }
 
-  // Remove resources from the cache for a given transaction ID
   unset(transactionId: string): void {
-    cache.delete(transactionId);
+    this.getActiveCache().delete(transactionId);
   }
 
-  // Get all cached resources and remove expired ones
   getActiveData() {
-    const allResources: { utxos: string[]; messages: string[] } = { utxos: [], messages: [] };
+    const allResources = { utxos: [] as string[], messages: [] as string[] };
     const currentTime = Date.now();
+    const cache = this.getActiveCache();
+    const ttl = this.getActiveTTL();
+
     cache.forEach((resource, transactionId) => {
-      if (currentTime - resource.timestamp < this.ttl) {
-        allResources.utxos.push(...resource.utxos);
-        allResources.messages.push(...resource.messages);
+      if (currentTime - resource.timestamp < ttl) {
+        allResources.utxos.push(...Array.from(resource.utxos));
+        allResources.messages.push(...Array.from(resource.messages));
       } else {
         cache.delete(transactionId);
       }
     });
+
     return allResources;
   }
 
-  // Check if a UTXO ID or message nonce is already cached and not expired
   isCached(key: string): boolean {
     const currentTime = Date.now();
+    const cache = this.getActiveCache();
+    const ttl = this.getActiveTTL();
+
     for (const [transactionId, resourceData] of cache.entries()) {
-      if (currentTime - resourceData.timestamp > this.ttl) {
+      if (currentTime - resourceData.timestamp > ttl) {
         cache.delete(transactionId);
       } else if (resourceData.utxos.has(key) || resourceData.messages.has(key)) {
         return true;
@@ -73,7 +101,19 @@ export class ResourceCache {
     return false;
   }
 
-  clear() {
-    cache.clear();
+  clear(): void {
+    this.getActiveCache().clear();
+  }
+
+  getStrategy() {
+    return this.strategy;
+  }
+
+  getGlobalCache() {
+    return this.globalCache;
+  }
+
+  getInstanceCache() {
+    return this.instanceCache;
   }
 }
