@@ -2,7 +2,6 @@
 "create-fuels": patch
 "@fuel-ts/transactions": patch
 "@fuel-ts/abi-typegen": patch
-"@internal/fuel-core": patch
 "@fuel-ts/abi-coder": patch
 "@fuel-ts/contract": patch
 "@fuel-ts/versions": patch
@@ -15,7 +14,6 @@
 "@fuel-ts/merkle": patch
 "fuels": patch
 "@fuel-ts/utils": patch
-"@internal/forc": patch
 "@fuel-ts/math": patch
 ---
 
