@@ -1,6 +1,15 @@
 import type { BigNumberish, BN, Message } from 'fuels';
-import { bn, toHex, Wallet, ScriptTransactionRequest, randomBytes, hexlify, arrayify } from 'fuels';
-import type { LaunchTestNodeOptions } from 'fuels/test-utils';
+import {
+  bn,
+  toHex,
+  Wallet,
+  ScriptTransactionRequest,
+  randomBytes,
+  hexlify,
+  arrayify,
+  Address,
+} from 'fuels';
+import { TestMessage, type LaunchTestNodeOptions } from 'fuels/test-utils';
 
 import { CoverageContractFactory } from '../test/typegen/contracts';
 import type { MixedNativeEnumInput } from '../test/typegen/contracts/CoverageContract';
@@ -544,22 +553,30 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
         snapshotConfig: {
           stateConfig: {
             messages: [
-              {
-                sender: '0xc43454aa38dd91f88109a4b7aef5efb96ce34e3f24992fe0f81d233ca686f80f',
-                recipient: '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba',
+              new TestMessage({
+                sender: Address.fromB256(
+                  '0xc43454aa38dd91f88109a4b7aef5efb96ce34e3f24992fe0f81d233ca686f80f'
+                ),
+                recipient: Address.fromB256(
+                  '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba'
+                ),
                 nonce: '0101010101010101010101010101010101010101010101010101010101010101',
-                amount: bn('0xffffffffffffffff', 'hex'),
+                amount: bn('123').toNumber(),
                 data: '',
                 da_height: 0,
-              },
-              {
-                sender: '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba',
-                recipient: '0xc43454aa38dd91f88109a4b7aef5efb96ce34e3f24992fe0f81d233ca686f80f',
+              }).toChainMessage(),
+              new TestMessage({
+                sender: Address.fromB256(
+                  '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba'
+                ),
+                recipient: Address.fromB256(
+                  '0xc43454aa38dd91f88109a4b7aef5efb96ce34e3f24992fe0f81d233ca686f80f'
+                ),
                 nonce: '0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b',
-                amount: bn('0xffffffffffffffff', 'hex'),
+                amount: bn('123').toNumber(),
                 data: '',
                 da_height: 0,
-              },
+              }).toChainMessage(),
             ],
           },
         },
@@ -617,14 +634,18 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
         snapshotConfig: {
           stateConfig: {
             messages: [
-              {
-                sender: '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba',
-                recipient: '0xc43454aa38dd91f88109a4b7aef5efb96ce34e3f24992fe0f81d233ca686f80f',
+              new TestMessage({
+                sender: Address.fromB256(
+                  '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba'
+                ),
+                recipient: Address.fromB256(
+                  '0xc43454aa38dd91f88109a4b7aef5efb96ce34e3f24992fe0f81d233ca686f80f'
+                ),
                 nonce: '0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b',
-                amount: bn('0xffffffffffffffff', 'hex'),
+                amount: bn('1000').toNumber(),
                 data: '',
                 da_height: 0,
-              },
+              }).toChainMessage(),
             ],
           },
         },
