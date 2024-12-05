@@ -33,16 +33,16 @@ importers:
         specifier: 3.1.1
         version: 3.1.1(vite@5.4.9(@types/node@22.5.5)(terser@5.36.0))(vitest@2.0.5(@types/node@22.5.5)(@vitest/browser@2.0.5)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.36.0))
       '@fuel-ts/utils':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:packages/utils
       '@internal/forc':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:internal/forc
       '@internal/fuel-core':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:internal/fuel-core
       '@internal/tsup':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:internal/tsup
       '@istanbuljs/nyc-config-typescript':
         specifier: 1.0.2
@@ -210,7 +210,7 @@ importers:
         specifier: 16.4.5
         version: 16.4.5
       fuels:
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../../packages/fuels
       react:
         specifier: 18.3.1
@@ -277,13 +277,13 @@ importers:
   apps/demo-bun-fuels:
     dependencies:
       '@fuel-ts/account':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/account
       '@fuel-ts/errors':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/errors
       fuels:
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../../packages/fuels
     devDependencies:
       bun:
@@ -293,13 +293,13 @@ importers:
   apps/demo-fuels:
     dependencies:
       '@fuel-ts/account':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/account
       '@fuel-ts/errors':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/errors
       fuels:
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../../packages/fuels
 
   apps/demo-nextjs:
@@ -317,7 +317,7 @@ importers:
         specifier: '18.3'
         version: 18.3.0
       fuels:
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../../packages/fuels
       next:
         specifier: 14.2.15
@@ -335,7 +335,7 @@ importers:
   apps/demo-nodejs-esm:
     dependencies:
       fuels:
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../../packages/fuels
 
   apps/demo-react-cra:
@@ -359,7 +359,7 @@ importers:
         specifier: 7.0.1
         version: 7.0.1(@babel/plugin-syntax-flow@7.25.7(@babel/core@7.22.5))(@babel/plugin-transform-react-jsx@7.25.7(@babel/core@7.22.5))(eslint@9.9.1(jiti@2.3.3))(jest@27.5.1(bufferutil@4.0.8)(ts-node@10.9.1(@swc/core@1.7.14)(@types/node@22.5.5)(typescript@5.6.3))(utf-8-validate@5.0.10))(typescript@5.6.3)
       fuels:
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../../packages/fuels
       react:
         specifier: 18.3.1
@@ -387,7 +387,7 @@ importers:
         specifier: 0.58.2
         version: 0.58.2
       fuels:
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../../packages/fuels
       react:
         specifier: 18.3.1
@@ -430,17 +430,17 @@ importers:
   apps/demo-typegen:
     dependencies:
       fuels:
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../../packages/fuels
     devDependencies:
       '@fuel-ts/account':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../../packages/account
       '@fuel-ts/errors':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../../packages/errors
       '@internal/forc':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../../internal/forc
 
   apps/demo-wallet-sdk-react:
@@ -455,7 +455,7 @@ importers:
         specifier: 5.55.4
         version: 5.55.4(react@18.3.1)
       fuels:
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../../packages/fuels
       next:
         specifier: 14.2.15
@@ -498,16 +498,16 @@ importers:
   apps/docs:
     dependencies:
       '@fuel-ts/errors':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../../packages/errors
       '@fuel-ts/versions':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../../packages/versions
       ethers:
         specifier: 6.13.2
         version: 6.13.2(bufferutil@4.0.8)(utf-8-validate@6.0.4)
       fuels:
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../../packages/fuels
     devDependencies:
       '@types/markdown-it':
@@ -544,7 +544,7 @@ importers:
   apps/docs-api:
     devDependencies:
       fuels:
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../../packages/fuels
       typedoc:
         specifier: 0.26.3
@@ -638,22 +638,22 @@ importers:
   packages/abi-coder:
     dependencies:
       '@fuel-ts/crypto':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../crypto
       '@fuel-ts/errors':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../errors
       '@fuel-ts/hasher':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../hasher
       '@fuel-ts/interfaces':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../interfaces
       '@fuel-ts/math':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../math
       '@fuel-ts/utils':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../utils
       type-fest:
         specifier: 4.26.1
@@ -662,16 +662,16 @@ importers:
   packages/abi-typegen:
     dependencies:
       '@fuel-ts/errors':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../errors
       '@fuel-ts/interfaces':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../interfaces
       '@fuel-ts/utils':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../utils
       '@fuel-ts/versions':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../versions
       commander:
         specifier: 12.1.0
@@ -693,7 +693,7 @@ importers:
         version: 5.0.10
     devDependencies:
       '@internal/forc':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../../internal/forc
       '@types/ramda':
         specifier: 0.30.2
@@ -705,37 +705,37 @@ importers:
   packages/account:
     dependencies:
       '@fuel-ts/abi-coder':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../abi-coder
       '@fuel-ts/address':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../address
       '@fuel-ts/crypto':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../crypto
       '@fuel-ts/errors':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../errors
       '@fuel-ts/hasher':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../hasher
       '@fuel-ts/interfaces':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../interfaces
       '@fuel-ts/math':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../math
       '@fuel-ts/merkle':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../merkle
       '@fuel-ts/transactions':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../transactions
       '@fuel-ts/utils':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../utils
       '@fuel-ts/versions':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../versions
       '@fuels/vm-asm':
         specifier: 0.58.2
@@ -772,7 +772,7 @@ importers:
         specifier: 4.2.3
         version: 4.2.3(graphql@16.9.0)
       '@internal/utils':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../../internal/utils
       '@types/ramda':
         specifier: 0.30.2
@@ -787,16 +787,16 @@ importers:
   packages/address:
     dependencies:
       '@fuel-ts/crypto':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../crypto
       '@fuel-ts/errors':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../errors
       '@fuel-ts/interfaces':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../interfaces
       '@fuel-ts/utils':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../utils
       '@noble/hashes':
         specifier: 1.5.0
@@ -808,40 +808,40 @@ importers:
   packages/contract:
     dependencies:
       '@fuel-ts/abi-coder':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../abi-coder
       '@fuel-ts/account':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../account
       '@fuel-ts/crypto':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../crypto
       '@fuel-ts/errors':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../errors
       '@fuel-ts/hasher':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../hasher
       '@fuel-ts/interfaces':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../interfaces
       '@fuel-ts/math':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../math
       '@fuel-ts/merkle':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../merkle
       '@fuel-ts/program':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../program
       '@fuel-ts/transactions':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../transactions
       '@fuel-ts/utils':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../utils
       '@fuel-ts/versions':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../versions
       '@fuels/vm-asm':
         specifier: 0.58.2
@@ -851,7 +851,7 @@ importers:
         version: 0.30.1
     devDependencies:
       '@internal/forc':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../../internal/forc
       '@types/ramda':
         specifier: 0.30.2
@@ -900,7 +900,7 @@ importers:
         specifier: workspace:*
         version: link:../math
       '@fuel-ts/utils':
-        specifier: 'workspace:'
+        specifier: workspace:*
         version: link:../utils
       '@noble/hashes':
         specifier: 1.5.0
@@ -909,7 +909,7 @@ importers:
   packages/errors:
     dependencies:
       '@fuel-ts/versions':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../versions
 
   packages/fuel-gauge:
@@ -940,55 +940,55 @@ importers:
   packages/fuels:
     dependencies:
       '@fuel-ts/abi-coder':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../abi-coder
       '@fuel-ts/abi-typegen':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../abi-typegen
       '@fuel-ts/account':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../account
       '@fuel-ts/address':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../address
       '@fuel-ts/contract':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../contract
       '@fuel-ts/crypto':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../crypto
       '@fuel-ts/errors':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../errors
       '@fuel-ts/hasher':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../hasher
       '@fuel-ts/interfaces':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../interfaces
       '@fuel-ts/math':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../math
       '@fuel-ts/merkle':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../merkle
       '@fuel-ts/program':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../program
       '@fuel-ts/recipes':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../recipes
       '@fuel-ts/script':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../script
       '@fuel-ts/transactions':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../transactions
       '@fuel-ts/utils':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../utils
       '@fuel-ts/versions':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../versions
       bundle-require:
         specifier: 5.0.0
@@ -1046,7 +1046,7 @@ importers:
         specifier: workspace:*
         version: link:../crypto
       '@fuel-ts/interfaces':
-        specifier: 'workspace:'
+        specifier: workspace:*
         version: link:../interfaces
       '@fuel-ts/utils':
         specifier: workspace:*
@@ -1060,13 +1060,13 @@ importers:
   packages/logger:
     dependencies:
       '@fuel-ts/address':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../address
       '@fuel-ts/interfaces':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../interfaces
       '@fuel-ts/math':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../math
       debug:
         specifier: 4.3.7
@@ -1079,7 +1079,7 @@ importers:
   packages/math:
     dependencies:
       '@fuel-ts/errors':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../errors
       '@types/bn.js':
         specifier: 5.1.6
@@ -1091,7 +1091,7 @@ importers:
   packages/merkle:
     dependencies:
       '@fuel-ts/hasher':
-        specifier: 'workspace:'
+        specifier: workspace:*
         version: link:../hasher
       '@fuel-ts/math':
         specifier: workspace:*
@@ -1100,28 +1100,28 @@ importers:
   packages/program:
     dependencies:
       '@fuel-ts/abi-coder':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../abi-coder
       '@fuel-ts/account':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../account
       '@fuel-ts/address':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../address
       '@fuel-ts/errors':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../errors
       '@fuel-ts/interfaces':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../interfaces
       '@fuel-ts/math':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../math
       '@fuel-ts/transactions':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../transactions
       '@fuel-ts/utils':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../utils
       '@fuels/vm-asm':
         specifier: 0.58.2
@@ -1137,101 +1137,101 @@ importers:
   packages/recipes:
     dependencies:
       '@fuel-ts/abi-coder':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../abi-coder
       '@fuel-ts/abi-typegen':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../abi-typegen
       '@fuel-ts/account':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../account
       '@fuel-ts/contract':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../contract
       '@fuel-ts/interfaces':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../interfaces
       '@fuel-ts/program':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../program
       '@fuel-ts/transactions':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../transactions
       '@fuel-ts/utils':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../utils
 
   packages/script:
     dependencies:
       '@fuel-ts/abi-coder':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../abi-coder
       '@fuel-ts/account':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../account
       '@fuel-ts/address':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../address
       '@fuel-ts/errors':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../errors
       '@fuel-ts/interfaces':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../interfaces
       '@fuel-ts/math':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../math
       '@fuel-ts/program':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../program
       '@fuel-ts/transactions':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../transactions
       '@fuel-ts/utils':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../utils
     devDependencies:
       '@internal/forc':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../../internal/forc
 
   packages/transactions:
     dependencies:
       '@fuel-ts/abi-coder':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../abi-coder
       '@fuel-ts/address':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../address
       '@fuel-ts/errors':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../errors
       '@fuel-ts/hasher':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../hasher
       '@fuel-ts/interfaces':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../interfaces
       '@fuel-ts/math':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../math
       '@fuel-ts/utils':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../utils
 
   packages/utils:
     dependencies:
       '@fuel-ts/errors':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../errors
       '@fuel-ts/interfaces':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../interfaces
       '@fuel-ts/math':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../math
       '@fuel-ts/versions':
-        specifier: workspace:^*
+        specifier: workspace:*
         version: link:../versions
       fflate:
         specifier: 0.8.2
