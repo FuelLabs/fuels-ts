@@ -1,8 +1,9 @@
 import { calcRoot, constructTree, getProof } from '@fuel-ts/merkle';
-import { chunkAndPadBytes, hexlify } from '@fuel-ts/utils';
-import { readFileSync } from 'fs';
+import { arrayify, chunkAndPadBytes, hexlify } from '@fuel-ts/utils';
 import type { DeployContractConfig, LaunchTestNodeOptions } from 'fuels/test-utils';
 import { launchTestNode } from 'fuels/test-utils';
+
+import { STATE_TRANSITION_BYTECODE } from '../test/fixtures/chain-config/state_transition_bytecode';
 
 export async function launchTestContract<T extends DeployContractConfig>(
   config: T,
@@ -21,12 +22,11 @@ export async function launchTestContract<T extends DeployContractConfig>(
 }
 
 export function subsectionFromBytecode() {
-  const wasmFileBuffer = readFileSync(
-    './packages/fuel-gauge/test/fixtures/chain-config/state_transition_bytecode.wasm'
-  );
-
   const subsectionSize = 90 * 1024;
-  const subsectionsChunk = chunkAndPadBytes(wasmFileBuffer, subsectionSize).map(hexlify);
+  const subsectionsChunk = chunkAndPadBytes(
+    arrayify(STATE_TRANSITION_BYTECODE),
+    subsectionSize
+  ).map(hexlify);
 
   const merkleTree = constructTree(subsectionsChunk);
   const merkleRoot = calcRoot(subsectionsChunk);
