@@ -1,5 +1,4 @@
 export interface Abi {
-  specVersion: string;
   encodingVersion: string;
   programType: string;
   metadataTypes: AbiTypeMetadata[];

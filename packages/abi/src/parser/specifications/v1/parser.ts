@@ -50,7 +50,6 @@ export class AbiParserV1 {
     return {
       metadataTypes: resolvableTypes.map((rt) => rt.toAbiType()),
       types,
-      specVersion: abi.specVersion,
       encodingVersion: abi.encodingVersion,
       programType: abi.programType,
       functions: abi.functions.map((fn: AbiFunctionV1) => ({
