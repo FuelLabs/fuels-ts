@@ -936,9 +936,6 @@ importers:
       '@internal/utils':
         specifier: workspace:*
         version: link:../../internal/utils
-      type-fest:
-        specifier: ^4.26.1
-        version: 4.26.1
 
   packages/fuels:
     dependencies:
