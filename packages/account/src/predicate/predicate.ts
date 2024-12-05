@@ -49,7 +49,7 @@ export class Predicate<
   predicateData: TData = [] as unknown as TData;
   interface: Interface;
   initialBytecode: Uint8Array;
-
+  configurableConstants: TConfigurables | undefined;
   /**
    * Creates an instance of the Predicate class.
    *
@@ -77,6 +77,7 @@ export class Predicate<
     this.initialBytecode = arrayify(bytecode);
     this.bytes = predicateBytes;
     this.interface = predicateInterface;
+    this.configurableConstants = configurableConstants;
     if (data !== undefined && data.length > 0) {
       this.predicateData = data;
     }
@@ -151,42 +152,19 @@ export class Predicate<
 
   /**
    * Creates a new Predicate instance from an existing Predicate instance.
-   * @param instance - The existing Predicate instance.
+   * @overrides - The data and configurable constants to override.
    * @returns A new Predicate instance with the same bytecode, ABI and provider but with the ability to set the data and configurable constants.
    */
-  static fromInstance<
-    TData extends InputValue[] = InputValue[],
-    TConfigurables extends { [name: string]: unknown } | undefined = { [name: string]: unknown },
-  >(instance: Predicate<TData, TConfigurables>) {
-    return new (class {
-      data: TData;
-      configurableConstants: TConfigurables;
-
-      constructor() {
-        this.data = instance.predicateData;
-        this.configurableConstants = {} as TConfigurables;
-      }
-
-      withData(data: TData): this {
-        this.data = data;
-        return this;
-      }
-
-      withConfigurableConstants(configurableConstants: TConfigurables): this {
-        this.configurableConstants = configurableConstants;
-        return this;
-      }
-
-      build(): Predicate<TData, TConfigurables> {
-        return new Predicate({
-          bytecode: instance.initialBytecode,
-          abi: instance.interface.jsonAbi,
-          provider: instance.provider,
-          data: this.data,
-          configurableConstants: this.configurableConstants,
-        });
-      }
-    })();
+  toNewInstance(
+    overrides: Pick<PredicateParams<TData, TConfigurables>, 'data' | 'configurableConstants'> = {}
+  ) {
+    return new Predicate<TData, TConfigurables>({
+      bytecode: this.initialBytecode,
+      abi: this.interface.jsonAbi,
+      provider: this.provider,
+      data: overrides.data ?? this.predicateData,
+      configurableConstants: overrides.configurableConstants ?? this.configurableConstants,
+    });
   }
 
   /**

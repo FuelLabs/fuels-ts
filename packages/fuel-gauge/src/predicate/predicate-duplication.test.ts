@@ -1,4 +1,4 @@
-import { Predicate, Provider, TransactionResponse, WalletUnlocked } from '@fuel-ts/account';
+import { WalletUnlocked } from '@fuel-ts/account';
 import { launchTestNode } from 'fuels/test-utils';
 import { PredicateWithConfigurable } from '../../test/typegen';
 import { processPredicateData } from './utils/predicate/processPredicateData';
@@ -7,12 +7,10 @@ import {
   PredicateWithConfigurableInputs,
 } from '../../test/typegen/predicates/PredicateWithConfigurable';
 import { fundPredicate, assertBalance } from './utils/predicate';
-import { getRandomB256 } from 'fuels';
 
 /**
  * @group node
  * @group browser
- * @group unit
  */
 describe('Predicate.fromInstance', () => {
   const amountToPredicate = 300_000;
@@ -33,7 +31,7 @@ describe('Predicate.fromInstance', () => {
         configurableConstants: defaultValues,
       });
 
-      const newPredicate: PredicateWithConfigurable = Predicate.fromInstance(basePredicate).build();
+      const newPredicate: PredicateWithConfigurable = basePredicate.toNewInstance();
 
       expect(newPredicate.predicateData).toEqual(basePredicate.predicateData);
       expect(newPredicate.interface).toEqual(basePredicate.interface);
@@ -58,9 +56,7 @@ describe('Predicate.fromInstance', () => {
         13,
         '0x48966232edb5997574be45f94c665aedb41a1663f5b0528e765f355086eebf96',
       ];
-      const newPredicate: PredicateWithConfigurable = Predicate.fromInstance(basePredicate)
-        .withData(data)
-        .build();
+      const newPredicate: PredicateWithConfigurable = basePredicate.toNewInstance({ data });
 
       expect(newPredicate.predicateData).toEqual(data);
       expect(newPredicate.interface).toEqual(basePredicate.interface);
@@ -85,9 +81,9 @@ describe('Predicate.fromInstance', () => {
         FEE: 13,
         ADDRESS: '0x48966232edb5997574be45f94c665aedb41a1663f5b0528e765f355086eebf96',
       };
-      const newPredicate: PredicateWithConfigurable = Predicate.fromInstance(basePredicate)
-        .withConfigurableConstants(configurableConstants)
-        .build();
+      const newPredicate: PredicateWithConfigurable = basePredicate.toNewInstance({
+        configurableConstants,
+      });
 
       expect(newPredicate.predicateData).toEqual(basePredicate.predicateData);
       expect(newPredicate.interface).toEqual(basePredicate.interface);
@@ -119,10 +115,10 @@ describe('Predicate.fromInstance', () => {
         FEE: 13,
         ADDRESS: '0x48966232edb5997574be45f94c665aedb41a1663f5b0528e765f355086eebf96',
       };
-      const newPredicate: PredicateWithConfigurable = Predicate.fromInstance(basePredicate)
-        .withData(data)
-        .withConfigurableConstants(configurableConstants)
-        .build();
+      const newPredicate: PredicateWithConfigurable = basePredicate.toNewInstance({
+        data,
+        configurableConstants,
+      });
 
       expect(newPredicate.predicateData).toEqual(data);
       expect(newPredicate.interface).toEqual(basePredicate.interface);
@@ -146,8 +142,8 @@ describe('Predicate.fromInstance', () => {
         configurableConstants: defaultValues,
       });
 
-      const newPredicate1 = Predicate.fromInstance(basePredicate).build();
-      const newPredicate2 = Predicate.fromInstance(basePredicate).build();
+      const newPredicate1 = basePredicate.toNewInstance();
+      const newPredicate2 = basePredicate.toNewInstance();
 
       expect(newPredicate1.bytes).toEqual(newPredicate2.bytes);
     });
@@ -166,10 +162,8 @@ describe('Predicate.fromInstance', () => {
         FEE: 13,
         ADDRESS: '0x38966262edb5997574be45f94c665aedb41a1663f5b0528e765f355086eebf96',
       };
-      const newPredicate1 = Predicate.fromInstance(basePredicate).build();
-      const newPredicate2 = Predicate.fromInstance(basePredicate)
-        .withConfigurableConstants(configurableConstants)
-        .build();
+      const newPredicate1 = basePredicate.toNewInstance();
+      const newPredicate2 = basePredicate.toNewInstance({ configurableConstants });
 
       expect(newPredicate1.bytes).not.toEqual(newPredicate2.bytes);
     });
@@ -185,9 +179,9 @@ describe('Predicate.fromInstance', () => {
       });
 
       const bytes = basePredicate.bytes;
-      Predicate.fromInstance(basePredicate).build();
+      const newPredicate = basePredicate.toNewInstance();
 
-      expect(basePredicate.bytes).toEqual(bytes);
+      expect(newPredicate.bytes).toEqual(bytes);
     });
   });
 
@@ -206,7 +200,7 @@ describe('Predicate.fromInstance', () => {
         configurableConstants: defaultValues,
       });
 
-      const predicate = Predicate.fromInstance(basePredicate).build();
+      const predicate = basePredicate.toNewInstance();
 
       const amountToTransfer = 200;
 
@@ -246,9 +240,9 @@ describe('Predicate.fromInstance', () => {
         configurableConstants: defaultValues,
       });
 
-      const predicate = Predicate.fromInstance(basePredicate)
-        .withData([defaultValues.FEE, defaultValues.ADDRESS])
-        .build();
+      const predicate = basePredicate.toNewInstance({
+        data: [defaultValues.FEE, defaultValues.ADDRESS],
+      });
 
       const amountToTransfer = 200;
 
@@ -291,9 +285,7 @@ describe('Predicate.fromInstance', () => {
         },
       });
 
-      const predicate = Predicate.fromInstance(basePredicate)
-        .withConfigurableConstants(defaultValues)
-        .build();
+      const predicate = basePredicate.toNewInstance({ configurableConstants: defaultValues });
 
       const amountToTransfer = 200;
 
@@ -336,10 +328,10 @@ describe('Predicate.fromInstance', () => {
         },
       });
 
-      const predicate = Predicate.fromInstance(basePredicate)
-        .withData([defaultValues.FEE, defaultValues.ADDRESS])
-        .withConfigurableConstants(defaultValues)
-        .build();
+      const predicate = basePredicate.toNewInstance({
+        data: [defaultValues.FEE, defaultValues.ADDRESS],
+        configurableConstants: defaultValues,
+      });
 
       const amountToTransfer = 200;
 
@@ -363,69 +355,6 @@ describe('Predicate.fromInstance', () => {
       await tx.waitForResult();
 
       await assertBalance(destination, amountToTransfer, provider.getBaseAssetId());
-    });
-
-    it('can reuse same factory to create multiple working predicates', async () => {
-      using launched = await launchTestNode();
-
-      const {
-        provider,
-        wallets: [wallet],
-      } = launched;
-
-      const basePredicate = new PredicateWithConfigurable({
-        provider: wallet.provider,
-        data: [13, '0x48966232edb5997574be45f94c665aedb41a1663f5b0528e765f355086eebf96'],
-        configurableConstants: {
-          FEE: 15,
-          ADDRESS: '0x38966262edb5997574be45f94c665aedb41a1663f5b0528e765f355086eebf96',
-        },
-      });
-
-      const factory = Predicate.fromInstance(basePredicate);
-
-      const predicate1 = factory
-        .withConfigurableConstants(defaultValues)
-        .withData([defaultValues.FEE, defaultValues.ADDRESS])
-        .build();
-
-      const configurableConstants2 = {
-        FEE: 20,
-        ADDRESS: getRandomB256(),
-      };
-
-      const predicate2 = factory
-        .withConfigurableConstants(configurableConstants2)
-        .withData([configurableConstants2.FEE, configurableConstants2.ADDRESS])
-        .build();
-
-      const configurableConstants3 = {
-        FEE: 30,
-        ADDRESS: getRandomB256(),
-      };
-
-      const predicate3 = factory
-        .withConfigurableConstants(configurableConstants3)
-        .withData([configurableConstants3.FEE, configurableConstants3.ADDRESS])
-        .build();
-
-      const amountToTransfer = 200;
-      const destination = WalletUnlocked.generate({ provider: wallet.provider });
-
-      for (const predicate of [predicate1, predicate2, predicate3]) {
-        await fundPredicate(wallet, predicate, amountToPredicate);
-
-        const tx = await predicate.transfer(
-          destination.address,
-          amountToTransfer,
-          provider.getBaseAssetId(),
-          { gasLimit: 1000 }
-        );
-
-        await tx.waitForResult();
-      }
-
-      await assertBalance(destination, amountToTransfer * 3, provider.getBaseAssetId());
     });
   });
 });
