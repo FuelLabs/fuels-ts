@@ -20,7 +20,6 @@
     "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@internal/forc": "workspace:*",
-    "@internal/utils": "workspace:*",
-    "type-fest": "^4.26.1"
+    "@internal/utils": "workspace:*"
   }
 }
