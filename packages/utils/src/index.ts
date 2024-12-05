@@ -14,7 +14,6 @@ export * from './utils/dataSlice';
 export * from './utils/toUtf8Bytes';
 export * from './utils/toUtf8String';
 export * from './utils/bytecode';
-export * from './utils/split-utxos';
 
 /**
  * Used to verify that a switch statement exhausts all variants.
