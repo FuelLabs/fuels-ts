@@ -22,20 +22,6 @@ export class ResolvableType {
   type: string;
   components: ResolvableComponent[] | undefined;
 
-  toAbiType(): AbiTypeMetadata {
-    return {
-      metadataTypeId: this.metadataTypeId,
-      components: this.components?.map((component) => ({
-        name: component.name,
-        type: component.type.toAbiType(),
-      })),
-      swayType: this.type,
-      typeParameters: this.typeParamsArgsMap?.map(([, resolvableType]) =>
-        (resolvableType as ResolvableType).toAbiType()
-      ),
-    };
-  }
-
   constructor(
     private abi: AbiSpecificationV1,
     public metadataTypeId: number,
@@ -64,6 +50,20 @@ export class ResolvableType {
     }
 
     this.components = components?.map((c) => this.handleComponent(this, c));
+  }
+
+  toAbiType(): AbiTypeMetadata {
+    return {
+      metadataTypeId: this.metadataTypeId,
+      components: this.components?.map((component) => ({
+        name: component.name,
+        type: component.type.toAbiType(),
+      })),
+      swayType: this.type,
+      typeParameters: this.typeParamsArgsMap?.map(([, resolvableType]) =>
+        (resolvableType as ResolvableType).toAbiType()
+      ),
+    };
   }
 
   /**
