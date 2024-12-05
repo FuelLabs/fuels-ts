@@ -12,6 +12,6 @@ One way to avoid these errors is to combine your UTXOs. This can be done by perf
 
 ## Max Inputs and Outputs
 
-It's also important to note that depending on the chain configuration, you may be limited on the number of inputs and/or outputs that you can have in a transaction. These amounts can be queried via the [TxParameters](https://docs.fuel.network/docs/graphql/reference/objects/#txparameters) GraphQL query
+It's also important to note that depending on the chain configuration, you may be limited on the number of inputs and/or outputs that you can have in a transaction. These amounts can be queried via the [TxParameters](https://docs.fuel.network/docs/graphql/reference/objects/#txparameters) GraphQL query.
 
 <<< @./snippets/max-outputs.ts#max-outputs{ts:line-numbers}
