@@ -26,8 +26,8 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@fuel-ts/crypto": "workspace:*",
-    "@fuel-ts/interfaces": "workspace:^",
+    "@fuel-ts/interfaces": "workspace:",
     "@fuel-ts/utils": "workspace:*",
-    "@noble/hashes": "^1.5.0"
+    "@noble/hashes": "1.5.0"
   }
 }

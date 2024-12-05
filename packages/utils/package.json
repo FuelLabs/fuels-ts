@@ -51,6 +51,6 @@
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "fflate": "^0.8.2"
+    "fflate": "0.8.2"
   }
 }
