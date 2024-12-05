@@ -1,20 +1,13 @@
+import { FuelError } from '@fuel-ts/errors';
 import { concat } from '@fuel-ts/utils';
 import type { RequireExactlyOne } from 'type-fest';
 
 import type { AbiTypeComponent } from '../../../parser';
-import type {
-  AbstractCoder,
-  Coder,
-  GetCoderFn,
-  GetCoderParams,
-  TypesOfCoder,
-} from '../../abi-coder-types';
+import { ENUM_TYPE, OPTION_TYPE, VOID_TYPE } from '../encoding-constants';
+import type { GetCoderFn, GetCoderParams, Coder, TypesOfCoder, CoderType } from '../encoding-types';
 
 import { u64 } from './fixed';
 
-/**
- * `enum` coder
- */
 export type EnumEncodeValue<TCoders extends Record<string, Coder>> = RequireExactlyOne<{
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Input'];
 }>;
@@ -24,70 +17,127 @@ export type EnumDecodeValue<TCoders extends Record<string, Coder>> = RequireExac
 
 export const CASE_KEY_WORD_LENGTH = 8;
 
-export const enumCoder = <TCoders extends Record<string, AbstractCoder>>(opts: {
-  coders: TCoders;
-  type?: string;
-}) => {
+const createCaseKeyCoder = (type: CoderType, validKeys: string[]): Coder<string, string> => ({
+  type,
+  encode: u64.encode,
+  decode: (data: Uint8Array, initialOffset: number = 0) => {
+    try {
+      const [caseKeyBn, caseValueOffset] = u64.decode(data, initialOffset);
+      const caseIndex = caseKeyBn.toNumber();
+      const caseKey = validKeys[caseIndex];
+      if (!caseKey) {
+        throw new FuelError(
+          FuelError.CODES.DECODE_ERROR,
+          `Invalid ${type} data - invalid case key.`
+        );
+      }
+      return [caseKey, caseValueOffset];
+    } catch (error) {
+      throw new FuelError(
+        FuelError.CODES.DECODE_ERROR,
+        `Invalid ${type} data - invalid case key.`,
+        {
+          data,
+          validKeys,
+        }
+      );
+    }
+  },
+});
+
+export const enumCoder = <TCoders extends Record<string, Coder>>(
+  coders: TCoders,
+  type: CoderType = ENUM_TYPE
+) => {
   const isNativeValue = (value: EnumEncodeValue<TCoders>) => typeof value === 'string';
-  const isNativeCoder = (coder: Coder) => opts.type !== 'option' && coder.type === 'void';
+  const isNativeCoder = (coder: Coder) => type !== OPTION_TYPE && coder.type === VOID_TYPE;
+  const validKeys = Object.keys(coders);
+  const caseKeyCoder = createCaseKeyCoder(type, validKeys);
 
   return {
-    type: opts.type ?? 'enum',
-    encodedLength: (data: Uint8Array) => {
-      // Get the index for the case
-      const caseIndexBytes = data.slice(0, CASE_KEY_WORD_LENGTH);
-      const caseIndex = u64.decode(caseIndexBytes).toNumber();
-
-      // Get the coder for the case
-      const caseCoder = Object.values(opts.coders)[caseIndex];
-      const caseValueBytes = data.slice(CASE_KEY_WORD_LENGTH);
-      const caseValueLength = caseCoder.encodedLength(caseValueBytes);
-      return CASE_KEY_WORD_LENGTH + caseValueLength;
-    },
+    type,
     encode: (value: EnumEncodeValue<TCoders>): Uint8Array => {
       if (isNativeValue(value)) {
-        if (!opts.coders[value]) {
+        const valueCoder = coders[value];
+        if (!coders[value]) {
           throw new Error("Unable to encode native enum as coder can't be found");
         }
 
-        const valueCoder = opts.coders[value];
         const encodedValue = valueCoder.encode([]);
-        const caseIndex = Object.keys(opts.coders).indexOf(value);
-
-        // @TODO investigate issue with the EnumCoder.
-        // const padding = new Uint8Array(this.#encodedValueSize - valueCoder.encodedLength);
-        // return concat([u64.encode(caseIndex), padding, encodedValue]);
-
+        const caseIndex = validKeys.indexOf(value);
         return concat([u64.encode(caseIndex), encodedValue]);
       }
 
       // Obtain the case key and index
-      const [caseKey] = Object.keys(value);
-      const caseIndex = Object.keys(opts.coders).indexOf(caseKey);
-
-      // Encode the case value
-      const valueCoder = opts.coders[caseKey];
-      const encodedValue = valueCoder.encode(value[caseKey]);
-
-      return concat([u64.encode(caseIndex), encodedValue]);
-    },
-    decode: (data: Uint8Array): EnumDecodeValue<TCoders> => {
-      // Decode the case index
-      const caseBytesLength = u64.encodedLength(data);
-      const caseBytes = data.slice(0, caseBytesLength);
-      const caseIndex = u64.decode(caseBytes).toNumber();
-      const caseKey = Object.keys(opts.coders)[caseIndex];
-
-      // Decode the case value
-      const caseValueCoder = opts.coders[caseKey];
-      const caseValueBytes = data.slice(caseBytesLength, data.length);
-      const caseValue = caseValueCoder.decode(caseValueBytes);
-
-      if (isNativeCoder(caseValueCoder)) {
-        return caseKey as unknown as EnumDecodeValue<TCoders>;
+      const [caseKey, ...empty] = Object.keys(value);
+      if (!caseKey) {
+        throw new FuelError(
+          FuelError.CODES.ENCODE_ERROR,
+          `Invalid ${type} value - a valid case key must be provided.`,
+          { value, validKeys }
+        );
+      }
+      if (empty.length !== 0) {
+        throw new FuelError(
+          FuelError.CODES.ENCODE_ERROR,
+          `Invalid ${type} value - only one field must be provided.`,
+          {
+            value,
+            validKeys,
+          }
+        );
+      }
+      const caseIndex = validKeys.indexOf(caseKey);
+      if (caseIndex === -1) {
+        throw new FuelError(
+          FuelError.CODES.ENCODE_ERROR,
+          `Invalid ${type} value - invalid case key "${caseKey}".`,
+          { value, validKeys }
+        );
       }
 
-      return { [caseKey]: caseValue } as EnumDecodeValue<TCoders>;
+      // Encode the case value
+      const valueCoder = coders[caseKey];
+
+      try {
+        const encodedValue = valueCoder.encode(value[caseKey]);
+        return concat([u64.encode(caseIndex), encodedValue]);
+      } catch (error) {
+        const e = <FuelError>error;
+        throw new FuelError(
+          FuelError.CODES.ENCODE_ERROR,
+          `Invalid ${type} value - failed to encode case.`,
+          {
+            value,
+            paths: [{ path: caseKey, value: value[caseKey], error: e.message }],
+          }
+        );
+      }
+    },
+    decode: (data: Uint8Array, initialOffset = 0): [EnumDecodeValue<TCoders>, number] => {
+      const [caseKey, caseValueOffset] = caseKeyCoder.decode(data, initialOffset);
+
+      try {
+        // Decode the case value
+        const caseValueCoder = coders[caseKey];
+        const [caseValue, dataOffset] = caseValueCoder.decode(data, caseValueOffset);
+
+        if (isNativeCoder(caseValueCoder)) {
+          return [caseKey as unknown as EnumDecodeValue<TCoders>, dataOffset];
+        }
+
+        return [{ [caseKey]: caseValue } as EnumDecodeValue<TCoders>, dataOffset];
+      } catch (error) {
+        const e = <FuelError>error;
+        throw new FuelError(
+          FuelError.CODES.DECODE_ERROR,
+          `Invalid ${type} data - invalid case element.`,
+          {
+            data,
+            paths: [{ path: caseKey, error: e.message }],
+          }
+        );
+      }
     },
   };
 };
@@ -104,5 +154,5 @@ enumCoder.fromAbi = ({ type: { components } }: GetCoderParams, getCoder: GetCode
     return o;
   }, {});
 
-  return enumCoder({ coders });
+  return enumCoder(coders);
 };

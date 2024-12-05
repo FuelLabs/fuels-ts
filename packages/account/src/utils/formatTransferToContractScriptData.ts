@@ -14,7 +14,7 @@ interface AssembleTransferToContractParams {
 export const formatTransferToContractScriptData = (
   transferParams: Array<AssembleTransferToContractParams>
 ) => {
-  const numberCoder = AbiEncoding.v1.coders.u64;
+  const numberCoder = AbiEncoding.v1.u64;
   return transferParams.reduce((acc, transferParam) => {
     const { assetId, amount, contractId } = transferParam;
     const encoded = numberCoder.encode(new BN(amount).toNumber());

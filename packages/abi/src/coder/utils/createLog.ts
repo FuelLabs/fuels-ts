@@ -2,8 +2,9 @@ import type { BytesLike } from '@fuel-ts/interfaces';
 import { arrayify } from '@fuel-ts/utils';
 
 import type { AbiLoggedType } from '../../parser';
-import type { AbiCoderLog, DecodedValue } from '../abi-coder-types';
-import type { AbiEncoding } from '../encoding/encoding';
+import type { AbiCoderLog } from '../abi-coder-types';
+import type { AbiEncoding } from '../encoding';
+import type { DecodedValue } from '../encoding/encoding-types';
 
 export const makeLog = (loggedType: AbiLoggedType, encoding: AbiEncoding): AbiCoderLog => {
   const loggedTypeCoder = encoding.getCoder(loggedType);
@@ -12,7 +13,8 @@ export const makeLog = (loggedType: AbiLoggedType, encoding: AbiEncoding): AbiCo
     encode: loggedTypeCoder.encode,
     decode: (data: BytesLike): DecodedValue => {
       const bytes = arrayify(data);
-      return loggedTypeCoder.decode(bytes) as DecodedValue;
+      const [decoded] = loggedTypeCoder.decode(bytes);
+      return decoded as DecodedValue;
     },
   };
 };

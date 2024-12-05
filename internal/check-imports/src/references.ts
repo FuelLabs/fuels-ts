@@ -47,8 +47,8 @@ const { log } = console;
  */
 log(AbiCoder);
 log(AbiEncoding);
-log(AbiEncoding.v1.coders.string);
-log(AbiEncoding.v1.coders.string({ encodedLength: 8 }));
+log(AbiEncoding.v1.string);
+log(AbiEncoding.v1.string(8));
 
 /**
  * abi-coder

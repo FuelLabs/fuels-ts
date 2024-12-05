@@ -1,4 +1,4 @@
-import type { InputValue } from '../abi-coder-types';
+import type { InputValue } from '../encoding/encoding-types';
 
 export const padValuesWithUndefined = (values: InputValue[], inputs: ArrayLike<unknown>) => {
   if (values.length >= inputs.length) {

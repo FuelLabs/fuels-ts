@@ -9,7 +9,7 @@ import type {
   AbiCoderLog,
   AbiCoderType,
 } from './abi-coder-types';
-import { AbiEncoding } from './encoding/encoding';
+import { AbiEncoding } from './encoding';
 import { makeConfigurable } from './utils/createConfigurable';
 import { makeFunction } from './utils/createFunction';
 import { makeLog } from './utils/createLog';

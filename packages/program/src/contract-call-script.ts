@@ -19,7 +19,6 @@ import { InstructionSet } from './instruction-set';
 import type { EncodedScriptCall, ScriptResult } from './script-request';
 import { decodeCallResult, ScriptRequest, calculateScriptDataBaseOffset } from './script-request';
 import type { ContractCall, InvocationScopeLike } from './types';
-import {} from '@fuel-ts/abi/dist/coder/encoding/encoding';
 
 type CallOpcodeParamsOffset = {
   callDataOffset: number;
@@ -113,7 +112,6 @@ const scriptResultDecoder = (contractId: AbstractAddress) => (result: ScriptResu
   );
   const mainCallInstructionStart = bn(mainCallResult?.is);
 
-  const coders = AbiEncoding.v1.coders;
   const receipts = result.receipts as ReturnReceipt[];
   return receipts
     .filter(({ type }) => isReturnType(type))
@@ -122,7 +120,7 @@ const scriptResultDecoder = (contractId: AbstractAddress) => (result: ScriptResu
         return [];
       }
       if (receipt.type === ReceiptType.Return) {
-        return [coders.u64.encode((receipt as TransactionResultReturnReceipt).val)];
+        return [AbiEncoding.v1.u64.encode((receipt as TransactionResultReturnReceipt).val)];
       }
       if (receipt.type === ReceiptType.ReturnData) {
         const encodedScriptReturn = arrayify(receipt.data);
@@ -183,7 +181,7 @@ export const getContractCallScript = (
       // the data about the contract output
       let segmentOffset = dataOffset;
 
-      const coders = AbiEncoding.v1.coders;
+      const coders = AbiEncoding.v1;
       const scriptData: Uint8Array[] = [];
       for (let i = 0; i < TOTAL_CALLS; i += 1) {
         const call = contractCalls[i];

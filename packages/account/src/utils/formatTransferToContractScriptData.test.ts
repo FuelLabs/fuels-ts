@@ -49,9 +49,7 @@ describe('util', () => {
   it('should ensure "formatScriptDataForTransferringToContract" returns script data just fine', () => {
     const byte: number[] = [0, 0, 0, 0, 0, 0, 0, 1];
 
-    const encode = vi
-      .spyOn(AbiEncoding.v1.coders.u64, 'encode')
-      .mockReturnValue(Uint8Array.from(byte));
+    const encode = vi.spyOn(AbiEncoding.v1.u64, 'encode').mockReturnValue(Uint8Array.from(byte));
 
     const arrayify = vi.spyOn(arrayifyMod, 'arrayify').mockReturnValue(Uint8Array.from(byte));
 

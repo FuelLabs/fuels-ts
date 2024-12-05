@@ -30,20 +30,10 @@ export const createCoderMatcher = (coders: SupportedCoders) =>
     enum: coders.enum,
     option: coders.option,
 
-    // Unmatchable
-    generic: {
-      type: 'generic',
-      encodedLength: () => {
-        throw new Error('A generic type should not be matched');
-      },
-      encode: () => {
-        throw new Error('A generic type should not be matched');
-      },
-      decode: () => {
-        throw new Error('A generic type should not be matched');
-      },
-    },
     assetId: coders.struct,
     evmAddress: coders.struct,
     result: coders.enum,
+
+    // Unmatchable
+    generic: undefined,
   });

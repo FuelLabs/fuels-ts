@@ -1,13 +1,9 @@
-import { concatBytes } from '@fuel-ts/utils';
+import { FuelError } from '@fuel-ts/errors';
+import { concat } from '@fuel-ts/utils';
 
 import type { AbiTypeComponent } from '../../../parser';
-import type {
-  AbstractCoder,
-  Coder,
-  GetCoderFn,
-  GetCoderParams,
-  TypesOfCoder,
-} from '../../abi-coder-types';
+import { TUPLE_TYPE } from '../encoding-constants';
+import type { Coder, GetCoderFn, GetCoderParams, TypesOfCoder } from '../encoding-types';
 
 /**
  * Tuple coder
@@ -19,37 +15,67 @@ export type TupleDecodeValue<TCoders extends Coder[]> = {
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Decoded'];
 };
 
-export const tuple = <TCoders extends AbstractCoder[]>({
-  coders,
-}: {
-  coders: TCoders;
-}): Coder<TupleEncodeValue<TCoders>, TupleDecodeValue<TCoders>> => ({
-  type: 'tuple',
-  encodedLength: (data: Uint8Array) => {
-    let offset = 0;
-    let currData = data;
+export const tuple = <TCoders extends Coder[]>(
+  coders: TCoders
+): Coder<TupleEncodeValue<TCoders>, TupleDecodeValue<TCoders>> => ({
+  type: TUPLE_TYPE,
+  encode: (value: TupleEncodeValue<TCoders>): Uint8Array => {
+    if (value.length !== coders.length) {
+      throw new FuelError(
+        FuelError.CODES.ENCODE_ERROR,
+        'Invalid tuple value - mismatched inputs.',
+        {
+          paths: coders.reduce(
+            (acc, coder, index) => {
+              acc.push({ path: `[${index}]`, error: 'Field not present.', type: coder.type });
+              return acc;
+            },
+            [] as { path: string; error: string; type: string }[]
+          ),
+        }
+      );
+    }
 
-    return coders.reduce((acc, coder) => {
-      currData = data.slice(offset, data.length);
-      const encodedLength = coder.encodedLength(currData);
-      offset += encodedLength;
-      return acc + encodedLength;
-    }, 0);
-  },
-  encode: (value: TupleEncodeValue<TCoders>): Uint8Array =>
-    concatBytes(coders.map((coder, i) => coder.encode(value[i]))),
-  decode: (data: Uint8Array): TupleDecodeValue<TCoders> => {
-    let offset = 0;
-    let currData = data;
+    const encodedValues = coders.map((elementCoder, elementIndex) => {
+      const elementValue = value[elementIndex];
 
-    const decodedValue = coders.map((coder) => {
-      currData = data.slice(offset, data.length);
-      const fieldLength = coder.encodedLength(currData);
-      const fieldData = currData.slice(0, fieldLength);
-      offset += fieldLength;
-      return coder.decode(fieldData);
+      try {
+        return elementCoder.encode(elementValue);
+      } catch (error) {
+        const e = <FuelError>error;
+        throw new FuelError(
+          FuelError.CODES.ENCODE_ERROR,
+          `Invalid ${TUPLE_TYPE} value - failed to encode field.`,
+          {
+            value,
+            paths: [
+              { path: `[${elementIndex}]`, value: elementValue, error: e.message, ...e.metadata },
+            ],
+          }
+        );
+      }
     });
-    return decodedValue as TupleDecodeValue<TCoders>;
+    return concat(encodedValues);
+  },
+  decode: (data: Uint8Array, initialOffset = 0): [TupleDecodeValue<TCoders>, number] => {
+    try {
+      let offset = initialOffset;
+      let decoded;
+
+      const decodedValue = coders.map((coder) => {
+        [decoded, offset] = coder.decode(data, offset);
+        return decoded;
+      });
+      return [decodedValue as TupleDecodeValue<TCoders>, offset];
+    } catch (error) {
+      throw new FuelError(
+        FuelError.CODES.DECODE_ERROR,
+        `Invalid ${TUPLE_TYPE} data - malformed data.`,
+        {
+          data,
+        }
+      );
+    }
   },
 });
 
@@ -59,5 +85,5 @@ tuple.fromAbi = ({ type: { components } }: GetCoderParams, getCoder: GetCoderFn)
   }
 
   const coders = components.map((component: AbiTypeComponent) => getCoder(component));
-  return tuple({ coders });
+  return tuple(coders);
 };

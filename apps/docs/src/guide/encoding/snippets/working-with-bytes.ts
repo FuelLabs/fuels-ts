@@ -3,24 +3,24 @@ import { randomBytes } from 'crypto';
 import { AbiEncoding, hexlify } from 'fuels';
 
 // #region working-with-bytes-1
-const u8Coder = AbiEncoding.v1.coders.u8;
+const u8Coder = AbiEncoding.v1.u8;
 const encodedU8 = u8Coder.encode(255);
 
-const u16Coder = AbiEncoding.v1.coders.u16;
+const u16Coder = AbiEncoding.v1.u16;
 const encodedU16 = u16Coder.encode(255);
 
-const u32Coder = AbiEncoding.v1.coders.u32;
+const u32Coder = AbiEncoding.v1.u32;
 const encodedU32 = u32Coder.encode(255);
 
-const u64Coder = AbiEncoding.v1.coders.u64;
+const u64Coder = AbiEncoding.v1.u64;
 const encodedU64 = u64Coder.encode(255);
 
-const u256Coder = AbiEncoding.v1.coders.u256;
+const u256Coder = AbiEncoding.v1.u256;
 const encodedU256 = u256Coder.encode(255);
 // #endregion working-with-bytes-1
 
 // #region working-with-bytes-2
-const booleanCoder = AbiEncoding.v1.coders.bool;
+const booleanCoder = AbiEncoding.v1.bool;
 const encodedTrue = booleanCoder.encode(true);
 
 const encodedFalse = booleanCoder.encode(false);
@@ -28,53 +28,45 @@ const encodedFalse = booleanCoder.encode(false);
 // #endregion working-with-bytes-2
 
 // #region working-with-bytes-3
-const stringCoder = AbiEncoding.v1.coders.string({ encodedLength: 5 });
+const stringCoder = AbiEncoding.v1.string(5);
 const encodedString = stringCoder.encode('hello');
 // #endregion working-with-bytes-3
 
 // #region working-with-bytes-4
-const b256Coder = AbiEncoding.v1.coders.b256;
+const b256Coder = AbiEncoding.v1.b256;
 const encodedB256 = b256Coder.encode(hexlify(randomBytes(32)));
-const b512Coder = AbiEncoding.v1.coders.b512;
+const b512Coder = AbiEncoding.v1.b512;
 const encodedB512 = b512Coder.encode(hexlify(randomBytes(64)));
 // #endregion working-with-bytes-4
 
 // #region working-with-bytes-5
-const tupleCoder = AbiEncoding.v1.coders.tuple({
-  coders: [AbiEncoding.v1.coders.u8, AbiEncoding.v1.coders.u16],
-});
+const tupleCoder = AbiEncoding.v1.tuple([
+  AbiEncoding.v1.u8,
+  AbiEncoding.v1.u16,
+]);
 const encodedTuple = tupleCoder.encode([255, 255]);
 
-const structCoder = AbiEncoding.v1.coders.struct({
-  coders: {
-    a: AbiEncoding.v1.coders.u8,
-    b: AbiEncoding.v1.coders.u16,
-  },
+const structCoder = AbiEncoding.v1.struct({
+  a: AbiEncoding.v1.u8,
+  b: AbiEncoding.v1.u16,
 });
 const encodedStruct = structCoder.encode({ a: 255, b: 255 });
 
-const arrayCoder = AbiEncoding.v1.coders.array({
-  coder: AbiEncoding.v1.coders.u8,
-  size: 4,
-});
+const arrayCoder = AbiEncoding.v1.array(AbiEncoding.v1.u8, 4);
 const encodedArray = arrayCoder.encode([255, 0, 255, 0]);
 
-const enumCoder = AbiEncoding.v1.coders.enum({
-  coders: { a: AbiEncoding.v1.coders.u32 },
-});
+const enumCoder = AbiEncoding.v1.enum({ a: AbiEncoding.v1.u32 });
 const encodedEnum = enumCoder.encode({ a: 255 });
 // #endregion working-with-bytes-5
 
 // #region working-with-bytes-6
-const vecCoder = AbiEncoding.v1.coders.vector({
-  coder: AbiEncoding.v1.coders.u8,
-});
+const vecCoder = AbiEncoding.v1.vector(AbiEncoding.v1.u8);
 const encodedVec = vecCoder.encode([255, 0, 255]);
 
-const stdStringCoder = AbiEncoding.v1.coders.stdString;
+const stdStringCoder = AbiEncoding.v1.stdString;
 const encodedStdString = stdStringCoder.encode('hello');
 
-const rawSliceCoder = AbiEncoding.v1.coders.rawSlice;
+const rawSliceCoder = AbiEncoding.v1.rawSlice;
 const encodedRawSlice = rawSliceCoder.encode([1, 2, 3, 4]);
 // #endregion working-with-bytes-6
 // #endregion full

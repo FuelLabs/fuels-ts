@@ -9,24 +9,26 @@ import { tuple } from './tuple';
 import type { SupportedCodersV1 } from './v1.types';
 
 export const v1: SupportedCodersV1 = {
-  void: voidCoder,
   u8,
   u16,
   u32,
   u64,
   u256,
-  bool,
   b256,
   b512,
-  string,
-  array: arrayCoder,
-  enum: enumCoder,
-  option,
-  struct,
-  tuple,
+  bool,
+  void: voidCoder,
   byte,
   rawSlice,
   str,
   stdString,
-  vector,
+  string,
+
+  vector, // Array Iterable
+  array: arrayCoder, // Array Iterable
+  tuple, // Array Iterable
+
+  struct, // Object Iterable
+  enum: enumCoder, // Object Iterable
+  option, // Object Iterable
 };

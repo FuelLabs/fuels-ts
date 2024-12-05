@@ -1,54 +1,82 @@
+import { FuelError } from '@fuel-ts/errors';
 import { concatBytes } from '@fuel-ts/utils';
 
-import type { AbstractCoder, Coder, GetCoderFn, GetCoderParams } from '../../abi-coder-types';
+import { STRUCT_TYPE } from '../encoding-constants';
+import type { Coder, GetCoderFn, GetCoderParams, TypesOfCoder } from '../encoding-types';
 
 /**
  * `struct` coder
  */
-type StructValue<TCoders extends Record<string, Coder>> = Record<
-  string,
-  ReturnType<TCoders[keyof TCoders]['decode']>
->;
+type EnumEncodeValue<TCoders extends Record<string, Coder>> = {
+  [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Input'];
+};
 
-export const struct = <TCoders extends Record<string, AbstractCoder>>(opts: {
-  coders: TCoders;
-}): Coder<StructValue<TCoders>> => ({
-  type: 'struct',
-  encodedLength: (data: Uint8Array) => {
-    let offset = 0;
-    let currData = data;
+type StructDecodeData<TCoders extends Record<string, Coder>> = {
+  [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Decoded'];
+};
 
-    return Object.values(opts.coders).reduce((acc, coder) => {
-      currData = data.slice(offset, data.length);
-      const encodedLength = coder.encodedLength(currData);
-      offset += encodedLength;
-      return acc + encodedLength;
-    }, 0);
-  },
-  encode: (value: StructValue<TCoders>): Uint8Array => {
+export const struct = <TCoders extends Record<string, Coder>>(
+  coders: TCoders
+): Coder<EnumEncodeValue<TCoders>, StructDecodeData<TCoders>> => ({
+  type: STRUCT_TYPE,
+  encode: (value: EnumEncodeValue<TCoders>): Uint8Array => {
+    const expectedKeys = Object.keys(coders);
+    const actualKeys = Object.keys(value);
+
+    // Check if there are any missing keys or extra keys
+    const missingKeys = expectedKeys.filter((key) => !actualKeys.includes(key));
+    const extraKeys = actualKeys.filter((key) => !expectedKeys.includes(key));
+    if (missingKeys.length > 0 || extraKeys.length > 0) {
+      const paths = [
+        ...missingKeys.map((key) => ({ path: key, error: 'Field not present.' })),
+        ...extraKeys.map((key) => ({ path: key, error: 'Field not expected.' })),
+      ];
+      throw new FuelError(
+        FuelError.CODES.ENCODE_ERROR,
+        'Invalid struct value - malformed object.',
+        {
+          value,
+          paths,
+        }
+      );
+    }
+
+    // Encode each value
     const encodedValues = Object.entries(value).map(([key, val]) => {
-      const coder = opts.coders[key];
-      if (!coder) {
-        throw new Error(`No coder found for field "${key}".`);
+      const coder = coders[key];
+      try {
+        return coder.encode(val);
+      } catch (error) {
+        const e = <FuelError>error;
+        throw new FuelError(
+          FuelError.CODES.ENCODE_ERROR,
+          'Invalid struct value - failed to encode field.',
+          {
+            value,
+            paths: [{ path: key, value: val, error: e.message, ...e.metadata }],
+          }
+        );
       }
-      return coder.encode(val);
     });
+
     return concatBytes(encodedValues);
   },
-  decode: (data: Uint8Array): StructValue<TCoders> => {
-    let offset = 0;
-    let currData = data;
+  decode: (data: Uint8Array, initialOffset = 0): [StructDecodeData<TCoders>, number] => {
+    let offset = initialOffset;
+    let decoded;
 
-    const decodedValue = Object.entries(opts.coders).reduce((acc, [caseKey, fieldCoder]) => {
-      currData = data.slice(offset, data.length);
-      const fieldLength = fieldCoder.encodedLength(currData);
-      const fieldData = currData.slice(0, fieldLength);
-      const decoded = fieldCoder.decode(fieldData) as StructValue<TCoders>[string];
-      offset += fieldLength;
-      acc[caseKey as keyof StructValue<TCoders>] = decoded;
-      return acc;
-    }, {} as StructValue<TCoders>);
-    return decodedValue;
+    try {
+      const decodedValue = Object.entries(coders).reduce((acc, [caseKey, fieldCoder]) => {
+        [decoded, offset] = fieldCoder.decode(data, offset);
+        acc[caseKey as keyof StructDecodeData<TCoders>] = decoded;
+        return acc;
+      }, {} as StructDecodeData<TCoders>);
+      return [decodedValue, offset];
+    } catch (error) {
+      throw new FuelError(FuelError.CODES.DECODE_ERROR, 'Invalid struct data - malformed data.', {
+        data,
+      });
+    }
   },
 });
 
@@ -63,5 +91,5 @@ struct.fromAbi = ({ type: { components } }: GetCoderParams, getCoder: GetCoderFn
     o[component.name] = getCoder(component);
     return o;
   }, {});
-  return struct({ coders });
+  return struct(coders);
 };

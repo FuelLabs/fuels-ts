@@ -1,32 +1,43 @@
+import { FuelError } from '@fuel-ts/errors';
+
 import type { AbiTypeComponent } from '../../../parser';
-import type {
-  AbstractCoder,
-  Coder,
-  GetCoderFn,
-  GetCoderParams,
-  Option,
-} from '../../abi-coder-types';
+import { OPTION_TYPE } from '../encoding-constants';
+import type { Coder, GetCoderFn, GetCoderParams, Option } from '../encoding-types';
 
 import { enumCoder } from './enum';
 import type { EnumDecodeValue, EnumEncodeValue } from './enum';
 
 type SwayOption<T> = { None: [] } | { Some: T };
 
-export const option = <TCoders extends Record<string, AbstractCoder>>(opts: {
-  coders: TCoders;
-}) => {
-  const valueCoder = enumCoder({ ...opts, type: 'option' });
+export type OptionEncodeValue<TCoders extends Record<string, Coder>> =
+  | EnumEncodeValue<TCoders>['Some']
+  | undefined;
+
+export type OptionDecodeValue<TCoders extends Record<string, Coder>> =
+  EnumDecodeValue<TCoders>[keyof TCoders];
+
+export const option = <TCoders extends Record<string, Coder>>(
+  coders: TCoders
+): Coder<OptionEncodeValue<TCoders>, OptionDecodeValue<TCoders>> => {
+  const valueCoder = enumCoder(coders, OPTION_TYPE);
   return {
-    type: 'option',
-    encodedLength: (data: Uint8Array) => valueCoder.encodedLength(data),
+    type: OPTION_TYPE,
     encode: (value: Option<unknown>): Uint8Array => {
-      const input: SwayOption<unknown> = value !== undefined ? { Some: value } : { None: [] };
-      return valueCoder.encode(input as unknown as EnumEncodeValue<TCoders>);
+      const input: SwayOption<unknown> = value === undefined ? { None: [] } : { Some: value };
+      try {
+        return valueCoder.encode(input as unknown as EnumEncodeValue<TCoders>);
+      } catch (error) {
+        throw new FuelError(
+          FuelError.CODES.ENCODE_ERROR,
+          `Invalid ${OPTION_TYPE} value - malformed value.`,
+          { value }
+        );
+      }
     },
-    decode: (data: Uint8Array): EnumDecodeValue<TCoders>[string] => {
-      const decoded = valueCoder.decode(data);
+    decode: (data: Uint8Array, initialOffset = 0): [OptionDecodeValue<TCoders>, number] => {
+      const [decoded, offset] = valueCoder.decode(data, initialOffset);
       const optionValue = decoded && 'Some' in decoded ? decoded.Some : undefined;
-      return optionValue as EnumDecodeValue<TCoders>[string];
+      return [optionValue as OptionDecodeValue<TCoders>, offset];
     },
   };
 };
@@ -43,5 +54,5 @@ option.fromAbi = ({ type: { components } }: GetCoderParams, getCoder: GetCoderFn
     return o;
   }, {});
 
-  return option({ coders });
+  return option(coders);
 };

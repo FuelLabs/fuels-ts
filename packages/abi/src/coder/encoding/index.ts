@@ -1,1 +1,2 @@
-export { AbiEncoding } from './encoding';
+export { AbiEncoding } from './AbiEncoding';
+export * from './encoding-types';

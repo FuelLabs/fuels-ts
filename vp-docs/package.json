@@ -1,0 +1,9 @@
+{
+  "type": "module",
+  "dependencies": {
+    "remark-mdx": "^2.3.0",
+    "remark-parse": "^10.0.2",
+    "unified": "^10.1.2",
+    "unist-util-visit": "^5.0.0"
+  }
+}
