@@ -40,8 +40,8 @@
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
-    "@fuel-ts/hasher": "workspace:",
-    "@fuel-ts/interfaces": "workspace:",
+    "@fuel-ts/hasher": "workspace:*",
+    "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/utils": "workspace:*"
   }
