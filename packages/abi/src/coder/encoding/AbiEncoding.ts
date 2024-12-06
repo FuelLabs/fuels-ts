@@ -6,7 +6,7 @@ import { type Matcher } from '../../matchers/sway-type-matchers';
 import type { Coder, GetCoderFn, GetCoderParams } from './encoding-types';
 import { createCoderMatcher, type SupportedCoder, type SupportedCoders } from './matching';
 import { utils } from './utils';
-import { v1 } from './v1/v1';
+import { v1 } from './v1';
 
 export class AbiEncoding {
   /**
