@@ -28,11 +28,10 @@ export interface AbiMetadataTypeV1 {
   readonly typeParameters?: readonly number[];
 }
 
-export interface AbiComponentV1 extends AbiTypeArgumentV1 {
-  readonly name: string;
-}
+export interface AbiComponentV1 extends AbiTypeArgumentV1 {}
 
 export interface AbiTypeArgumentV1 {
+  readonly name: string;
   readonly typeId: number | string; // the type metadata declaration ID or type concrete declaration hash based ID of the type of the component.
   readonly typeArguments?: readonly AbiTypeArgumentV1[];
 }
