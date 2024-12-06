@@ -15,7 +15,7 @@ import { PoliciesCoder } from './policy';
 import { StorageSlotCoder } from './storage-slot';
 import type { StorageSlot } from './storage-slot';
 import type { TxPointer } from './tx-pointer';
-import { TxPointerCoder } from './tx-pointer';
+import { txPointerCoder } from './tx-pointer';
 import { UpgradePurposeCoder, type UpgradePurpose } from './upgrade-purpose';
 import type { Witness } from './witness';
 import { WitnessCoder } from './witness';
@@ -287,7 +287,7 @@ export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint
   encode(value: TransactionMint): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new TxPointerCoder().encode(value.txPointer));
+    parts.push(txPointerCoder.encode(value.txPointer));
     parts.push(new InputContractCoder().encode(value.inputContract));
     parts.push(new OutputContractCoder().encode(value.outputContract));
     parts.push(new BigNumberCoder('u64').encode(value.mintAmount));
@@ -301,7 +301,7 @@ export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint
     let decoded;
     let o = offset;
 
-    [decoded, o] = new TxPointerCoder().decode(data, o);
+    [decoded, o] = txPointerCoder.decode(data, o);
     const txPointer = decoded;
     [decoded, o] = new InputContractCoder().decode(data, o);
     const inputContract = decoded;

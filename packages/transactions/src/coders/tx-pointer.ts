@@ -1,5 +1,7 @@
-import { NumberCoder, StructCoder } from '@fuel-ts/abi-coder';
+import type { Coder } from '@fuel-ts/abi';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+
+import { coders } from './coders';
 
 export type TxPointer = {
   /** Block height (u32) */
@@ -9,18 +11,20 @@ export type TxPointer = {
   txIndex: number;
 };
 
-export class TxPointerCoder extends StructCoder<{
-  blockHeight: NumberCoder;
-  txIndex: NumberCoder;
-}> {
-  constructor() {
-    super('TxPointer', {
-      blockHeight: new NumberCoder('u32', { padToWordSize: true }),
-      txIndex: new NumberCoder('u16', { padToWordSize: true }),
-    });
-  }
+export interface TxPointerCoder extends Coder<TxPointer, TxPointer> {
+  decodeFromGqlScalar: (value: string) => TxPointer;
+}
 
-  public static decodeFromGqlScalar(value: string) {
+const base = coders.struct({
+  blockHeight: coders.u32,
+  txIndex: coders.u16,
+});
+
+export const txPointerCoder: TxPointerCoder = {
+  type: 'TxPointer',
+  encode: base.encode,
+  decode: base.decode,
+  decodeFromGqlScalar: (value: string): TxPointer => {
     // taken from https://github.com/FuelLabs/fuel-vm/blob/7366db6955589cb3444c9b2bb46e45c8539f19f5/fuel-tx/src/tx_pointer.rs#L87
     if (value.length !== 12) {
       throw new FuelError(
@@ -33,5 +37,5 @@ export class TxPointerCoder extends StructCoder<{
       blockHeight: parseInt(blockHeight, 16),
       txIndex: parseInt(txIndex, 16),
     };
-  }
-}
+  },
+};

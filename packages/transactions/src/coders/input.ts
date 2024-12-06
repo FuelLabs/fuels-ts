@@ -9,7 +9,7 @@ import { concat, arrayify } from '@fuel-ts/utils';
 
 import { byteArray } from './byte-array';
 import type { TxPointer } from './tx-pointer';
-import { TxPointerCoder } from './tx-pointer';
+import { txPointerCoder } from './tx-pointer';
 
 export enum InputType {
   Coin = 0,
@@ -70,7 +70,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     parts.push(new B256Coder().encode(value.owner));
     parts.push(new BigNumberCoder('u64').encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
-    parts.push(new TxPointerCoder().encode(value.txPointer));
+    parts.push(txPointerCoder.encode(value.txPointer));
     parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.witnessIndex));
     parts.push(new BigNumberCoder('u64').encode(value.predicateGasUsed));
     parts.push(new BigNumberCoder('u64').encode(value.predicateLength));
@@ -95,7 +95,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     const amount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const assetId = decoded;
-    [decoded, o] = new TxPointerCoder().decode(data, o);
+    [decoded, o] = txPointerCoder.decode(data, o);
     const txPointer = decoded;
     [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
     const witnessIndex = Number(decoded);
@@ -165,7 +165,7 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
     parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.outputIndex));
     parts.push(new B256Coder().encode(value.balanceRoot));
     parts.push(new B256Coder().encode(value.stateRoot));
-    parts.push(new TxPointerCoder().encode(value.txPointer));
+    parts.push(txPointerCoder.encode(value.txPointer));
     parts.push(new B256Coder().encode(value.contractID));
 
     return concat(parts);
@@ -183,7 +183,7 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
     const balanceRoot = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const stateRoot = decoded;
-    [decoded, o] = new TxPointerCoder().decode(data, o);
+    [decoded, o] = txPointerCoder.decode(data, o);
     const txPointer = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const contractID = decoded;
