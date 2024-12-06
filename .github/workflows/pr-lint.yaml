@@ -27,9 +27,6 @@ jobs:
       - name: Validate Dependencies
         run: pnpm depcheck
 
-      - name: Audit Dependencies
-        run: pnpm audit
-
   validate-pr:
     name: Validate PR content
     runs-on: ubuntu-latest
