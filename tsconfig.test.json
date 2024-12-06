@@ -4,6 +4,6 @@
     "noEmit": true,
     "types": ["./vitest.d.ts"]
   },
-  "include": ["**/*.test.ts", "vitest.**/*.ts"],
+  "include": ["**/*.test.ts", "vitest.**/*.ts", "**/*.d.ts"],
   "exclude": ["node_modules", "apps/docs/src/**/*.test.ts"]
 }
