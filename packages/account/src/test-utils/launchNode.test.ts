@@ -117,7 +117,7 @@ describe('launchNode', () => {
   });
 
   test('should throw on error and log error message', { timeout: 15000 }, async () => {
-    const logSpy = vi.spyOn(console, 'log');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
     const invalidCoin = {
       asset_id: 'whatever',
@@ -238,7 +238,7 @@ describe('launchNode', () => {
 
   test('calling cleanup on externally killed node does not throw', async () => {
     const mkdirSyncSpy = vi.spyOn(fsMod, 'mkdirSync');
-    const logSpy = vi.spyOn(console, 'log');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
     const { pid, cleanup } = await launchNode({ loggingEnabled: false });
     expect(mkdirSyncSpy).toHaveBeenCalledTimes(1);
