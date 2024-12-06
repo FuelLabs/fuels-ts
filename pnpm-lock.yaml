@@ -561,6 +561,9 @@ importers:
 
   internal/check-imports:
     dependencies:
+      '@fuel-ts/abi':
+        specifier: workspace:*
+        version: link:../../packages/abi
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../../packages/abi-coder
