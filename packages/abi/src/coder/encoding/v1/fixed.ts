@@ -136,7 +136,6 @@ const createHexCoder = (encodedLength: number, type: CoderType): Coder<string, s
   },
   /**
    * Decode a hex value.
-   * (If the decoded value is zero, it will be padded with zeros to match the expected length.)
    *
    * @param data - The encoded data to decode.
    * @param offset - The offset to start decoding from.
