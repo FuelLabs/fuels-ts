@@ -16,12 +16,10 @@ import { makeLog } from './utils/createLog';
 import { makeType } from './utils/createType';
 
 export class AbiCoder {
-  // Internal properties
   public readonly abi: Abi;
   public readonly specification: AbiSpecification;
-  private encoding: AbiEncoding;
 
-  // Exposed properties
+  private encoding: AbiEncoding;
   public readonly functions: Record<string, AbiCoderFunction>;
   public readonly configurables: Record<string, AbiCoderConfigurable>;
   public readonly logs: Record<string, AbiCoderLog>;
