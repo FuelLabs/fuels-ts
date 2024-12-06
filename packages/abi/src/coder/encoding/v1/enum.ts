@@ -99,52 +99,32 @@ export const enumCoder = <TCoders extends Record<string, Coder>>(
       // Encode the case value
       const valueCoder = coders[caseKey];
 
-      try {
-        const encodedValue = valueCoder.encode(value[caseKey]);
-        return concat([u64.encode(caseIndex), encodedValue]);
-      } catch (error) {
-        const e = <FuelError>error;
-        throw new FuelError(
-          FuelError.CODES.ENCODE_ERROR,
-          `Invalid ${type} value - failed to encode case.`,
-          {
-            value,
-            paths: [{ path: caseKey, value: value[caseKey], error: e.message }],
-          }
-        );
-      }
+      const encodedValue = valueCoder.encode(value[caseKey]);
+      return concat([u64.encode(caseIndex), encodedValue]);
     },
     decode: (data: Uint8Array, initialOffset = 0): [EnumDecodeValue<TCoders>, number] => {
       const [caseKey, caseValueOffset] = caseKeyCoder.decode(data, initialOffset);
 
-      try {
-        // Decode the case value
-        const caseValueCoder = coders[caseKey];
-        const [caseValue, dataOffset] = caseValueCoder.decode(data, caseValueOffset);
+      // Decode the case value
+      const caseValueCoder = coders[caseKey];
+      const [caseValue, dataOffset] = caseValueCoder.decode(data, caseValueOffset);
 
-        if (isNativeCoder(caseValueCoder)) {
-          return [caseKey as unknown as EnumDecodeValue<TCoders>, dataOffset];
-        }
-
-        return [{ [caseKey]: caseValue } as EnumDecodeValue<TCoders>, dataOffset];
-      } catch (error) {
-        const e = <FuelError>error;
-        throw new FuelError(
-          FuelError.CODES.DECODE_ERROR,
-          `Invalid ${type} data - invalid case element.`,
-          {
-            data,
-            paths: [{ path: caseKey, error: e.message }],
-          }
-        );
+      if (isNativeCoder(caseValueCoder)) {
+        return [caseKey as unknown as EnumDecodeValue<TCoders>, dataOffset];
       }
+
+      return [{ [caseKey]: caseValue } as EnumDecodeValue<TCoders>, dataOffset];
     },
   };
 };
 
-enumCoder.fromAbi = ({ type: { components } }: GetCoderParams, getCoder: GetCoderFn) => {
+enumCoder.fromAbi = ({ type: { swayType, components } }: GetCoderParams, getCoder: GetCoderFn) => {
   if (!components) {
-    throw new Error(`The provided Enum type is missing an item of 'components'.`);
+    throw new FuelError(
+      FuelError.CODES.CODER_NOT_FOUND,
+      `The provided ${ENUM_TYPE} type is missing ABI components.`,
+      { swayType, components }
+    );
   }
 
   const coders = components.reduce((obj, component: AbiTypeComponent) => {

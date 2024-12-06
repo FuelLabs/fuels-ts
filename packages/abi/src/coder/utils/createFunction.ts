@@ -36,7 +36,7 @@ export const makeFunction = (fn: AbiFunction, encoding: AbiEncoding): AbiCoderFu
     encodeArguments: (values: InputValue[]): Uint8Array => {
       if (values.length < mandatoryInputLength) {
         throw new FuelError(
-          FuelError.CODES.ABI_TYPES_AND_VALUES_MISMATCH,
+          FuelError.CODES.ENCODE_ERROR,
           `Invalid number of arguments. Expected a minimum of ${mandatoryInputLength} arguments, received ${values.length}`
         );
       }

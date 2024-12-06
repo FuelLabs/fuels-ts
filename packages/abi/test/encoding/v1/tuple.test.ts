@@ -1,10 +1,42 @@
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
+import type { AbiTypeComponent } from '../../../src';
 import { AbiEncoding } from '../../../src';
 import { U64_MAX } from '../../utils/constants';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('tuple', () => {
+  describe('fromAbi', () => {
+    it('should throw when a component is not provided', async () => {
+      const encoding = AbiEncoding.from('1');
+      const swayType = '(u8, bool)';
+      const components: AbiTypeComponent[] | undefined = undefined;
+
+      await expectToThrowFuelError(
+        () => encoding.coders.tuple.fromAbi({ type: { swayType, components } }),
+        new FuelError(
+          FuelError.CODES.CODER_NOT_FOUND,
+          'The provided tuple type is missing ABI components.',
+          { swayType, components }
+        )
+      );
+    });
+
+    it('should get the coder for a valid tuple type', () => {
+      const encoding = AbiEncoding.from('1');
+      const components: AbiTypeComponent[] = [{}] as AbiTypeComponent[];
+      const getCoder = vi.fn();
+
+      const coder = encoding.coders.tuple.fromAbi({ type: { components } }, getCoder);
+
+      expect(coder).toBeDefined();
+    });
+  });
+
   describe('encode', () => {
     it('should encode a tuple [boolean, u64]', () => {
       const coder = AbiEncoding.v1.tuple([AbiEncoding.v1.bool, AbiEncoding.v1.u64]);
@@ -45,9 +77,7 @@ describe('tuple', () => {
 
       await expectToThrowFuelError(
         () => coder.decode(data, 0),
-        new FuelError(FuelError.CODES.DECODE_ERROR, 'Invalid tuple data - malformed data.', {
-          data,
-        })
+        new FuelError(FuelError.CODES.DECODE_ERROR, 'Invalid tuple data - malformed data.')
       );
     });
   });

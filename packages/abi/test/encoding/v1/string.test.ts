@@ -1,6 +1,7 @@
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
+import type { GetCoderParams } from '../../../src';
 import { AbiEncoding } from '../../../src';
 
 /**
@@ -8,6 +9,36 @@ import { AbiEncoding } from '../../../src';
  * @group browser
  */
 describe('string', () => {
+  describe('fromAbi', () => {
+    it('should throw when the array type is not valid', async () => {
+      const encoding = AbiEncoding.from('1');
+      const getCoder = vi.fn();
+      const swayType = 'invalid[123]';
+
+      await expectToThrowFuelError(
+        () => encoding.coders.string.fromAbi({ type: { swayType } } as GetCoderParams, getCoder),
+        new FuelError(
+          FuelError.CODES.CODER_NOT_FOUND,
+          'Unable to find string coder for the provided type "invalid[123]".',
+          { swayType }
+        )
+      );
+    });
+
+    it('should get the coder for a valid array type', () => {
+      const encoding = AbiEncoding.from('1');
+      const getCoder = vi.fn();
+      const swayType = 'str[1]';
+
+      const coder = encoding.coders.string.fromAbi(
+        { type: { swayType } } as GetCoderParams,
+        getCoder
+      );
+
+      expect(coder).toBeDefined();
+    });
+  });
+
   describe('encode', () => {
     it('should encode a string', () => {
       const coder = AbiEncoding.v1.string(4);

@@ -26,6 +26,11 @@ export class AbiCoder {
   public readonly configurables: Record<string, AbiCoderConfigurable>;
   public readonly logs: Record<string, AbiCoderLog>;
 
+  /**
+   * Create an instance of `AbiCoder` from an ABI specification
+   *
+   * @param specification - The ABI specification
+   */
   public constructor(specification: AbiSpecification) {
     this.abi = AbiParser.parse(specification);
     this.specification = specification;
@@ -43,10 +48,22 @@ export class AbiCoder {
     );
   }
 
+  /**
+   * Create an instance of `AbiCoder` from an ABI specification
+   *
+   * @param abi - The ABI specification
+   * @returns The `AbiCoder` instance
+   */
   static fromAbi(abi: AbiSpecification): AbiCoder {
     return new AbiCoder(abi);
   }
 
+  /**
+   * Get a function by its name, signature or selector
+   *
+   * @param nameOrSignatureOrSelector - The function name, signature or selector
+   * @returns The function
+   */
   public getFunction(nameOrSignatureOrSelector: string): AbiCoderFunction {
     const fn = Object.values<AbiCoderFunction>(this.functions).find(
       (f) =>
@@ -65,6 +82,12 @@ export class AbiCoder {
     return fn;
   }
 
+  /**
+   * Get a configurable by its name
+   *
+   * @param name - The configurable name
+   * @returns The configurable
+   */
   public getConfigurable(name: string): AbiCoderConfigurable {
     const configurable = this.configurables[name];
     if (configurable === undefined) {
@@ -77,6 +100,12 @@ export class AbiCoder {
     return configurable;
   }
 
+  /**
+   * Get a log by its log ID
+   *
+   * @param logId - The log ID
+   * @returns The log
+   */
   public getLog(logId: string): AbiCoderLog {
     const log = this.logs[logId];
     if (log === undefined) {
@@ -89,6 +118,12 @@ export class AbiCoder {
     return log;
   }
 
+  /**
+   * Get a type by its concrete type ID
+   *
+   * @param concreteTypeId - The concrete type ID
+   * @returns The type
+   */
   public getType(concreteTypeId: string): AbiCoderType {
     const type = this.abi.types.find((t) => t.concreteTypeId === concreteTypeId);
     if (type === undefined) {

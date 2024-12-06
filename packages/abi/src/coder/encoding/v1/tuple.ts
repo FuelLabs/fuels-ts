@@ -21,39 +21,12 @@ export const tuple = <TCoders extends Coder[]>(
   type: TUPLE_TYPE,
   encode: (value: TupleEncodeValue<TCoders>): Uint8Array => {
     if (value.length !== coders.length) {
-      throw new FuelError(
-        FuelError.CODES.ENCODE_ERROR,
-        'Invalid tuple value - mismatched inputs.',
-        {
-          paths: coders.reduce(
-            (acc, coder, index) => {
-              acc.push({ path: `[${index}]`, error: 'Field not present.', type: coder.type });
-              return acc;
-            },
-            [] as { path: string; error: string; type: string }[]
-          ),
-        }
-      );
+      throw new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid tuple value - mismatched inputs.');
     }
 
     const encodedValues = coders.map((elementCoder, elementIndex) => {
       const elementValue = value[elementIndex];
-
-      try {
-        return elementCoder.encode(elementValue);
-      } catch (error) {
-        const e = <FuelError>error;
-        throw new FuelError(
-          FuelError.CODES.ENCODE_ERROR,
-          `Invalid ${TUPLE_TYPE} value - failed to encode field.`,
-          {
-            value,
-            paths: [
-              { path: `[${elementIndex}]`, value: elementValue, error: e.message, ...e.metadata },
-            ],
-          }
-        );
-      }
+      return elementCoder.encode(elementValue);
     });
     return concat(encodedValues);
   },
@@ -70,18 +43,19 @@ export const tuple = <TCoders extends Coder[]>(
     } catch (error) {
       throw new FuelError(
         FuelError.CODES.DECODE_ERROR,
-        `Invalid ${TUPLE_TYPE} data - malformed data.`,
-        {
-          data,
-        }
+        `Invalid ${TUPLE_TYPE} data - malformed data.`
       );
     }
   },
 });
 
-tuple.fromAbi = ({ type: { components } }: GetCoderParams, getCoder: GetCoderFn) => {
+tuple.fromAbi = ({ type: { swayType, components } }: GetCoderParams, getCoder: GetCoderFn) => {
   if (!components) {
-    throw new Error(`The provided Tuple type is missing an item of 'components'.`);
+    throw new FuelError(
+      FuelError.CODES.CODER_NOT_FOUND,
+      `The provided ${TUPLE_TYPE} type is missing ABI components.`,
+      { swayType, components }
+    );
   }
 
   const coders = components.map((component: AbiTypeComponent) => getCoder(component));

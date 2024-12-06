@@ -3,6 +3,10 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
 import { AbiEncoding } from '../../../src';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('byte', () => {
   describe('encode', () => {
     it('should encode an array of numbers [1, 2, 3]', () => {

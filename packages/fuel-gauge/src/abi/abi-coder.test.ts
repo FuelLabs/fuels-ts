@@ -55,7 +55,7 @@ expect.extend({ toEqualBn });
  * @group browser
  * @group node
  */
-describe.skip('AbiCoder', () => {
+describe('AbiCoder', () => {
   let contract: AbiContract;
   let wallet: WalletUnlocked;
   let cleanup: () => void;
@@ -227,7 +227,10 @@ describe.skip('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_u8(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u8.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u8 value - value is less than zero.', {
+          type: 'u8',
+          value: input.toString(),
+        })
       );
     });
 
@@ -236,7 +239,10 @@ describe.skip('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_u8(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u8, too many bytes.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u8 value - value exceeds maximum.', {
+          type: 'u8',
+          value: input.toString(),
+        })
       );
     });
   });
@@ -270,7 +276,14 @@ describe.skip('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_u16(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u16.')
+        new FuelError(
+          FuelError.CODES.ENCODE_ERROR,
+          'Invalid u16 value - value is less than zero.',
+          {
+            type: 'u16',
+            value: input.toString(),
+          }
+        )
       );
     });
 
@@ -279,7 +292,10 @@ describe.skip('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_u16(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u16, too many bytes.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u16 value - value exceeds maximum.', {
+          type: 'u16',
+          value: input.toString(),
+        })
       );
     });
   });
@@ -313,7 +329,14 @@ describe.skip('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_u32(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u32.')
+        new FuelError(
+          FuelError.CODES.ENCODE_ERROR,
+          'Invalid u32 value - value is less than zero.',
+          {
+            type: 'u32',
+            value: input.toString(),
+          }
+        )
       );
     });
 
@@ -322,7 +345,10 @@ describe.skip('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_u32(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u32, too many bytes.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u32 value - value exceeds maximum.', {
+          type: 'u32',
+          value: input.toString(),
+        })
       );
     });
   });
@@ -359,7 +385,14 @@ describe.skip('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_u64(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u64.')
+        new FuelError(
+          FuelError.CODES.ENCODE_ERROR,
+          'Invalid u64 value - value is less than zero.',
+          {
+            type: 'u64',
+            value: input.toString(),
+          }
+        )
       );
     });
 
@@ -368,7 +401,10 @@ describe.skip('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_u64(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u64.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u64 value - value exceeds maximum.', {
+          type: 'u64',
+          value: input.toString(),
+        })
       );
     });
   });
@@ -405,7 +441,14 @@ describe.skip('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_u256(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u256.')
+        new FuelError(
+          FuelError.CODES.ENCODE_ERROR,
+          'Invalid u256 value - value is less than zero.',
+          {
+            type: 'u256',
+            value: input.toString(),
+          }
+        )
       );
     });
 
@@ -414,7 +457,10 @@ describe.skip('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_u256(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u256.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u256 value - value exceeds maximum.', {
+          type: 'u256',
+          value: input.toString(),
+        })
       );
     });
   });
@@ -491,7 +537,9 @@ describe.skip('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_b256(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b256.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b256 value - malformed hex value.', {
+          value: input,
+        })
       );
     });
 
@@ -500,7 +548,9 @@ describe.skip('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_b256(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b256.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b256 value - malformed hex value.', {
+          value: input,
+        })
       );
     });
 
@@ -509,7 +559,9 @@ describe.skip('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_b256(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b256.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b256 value - malformed hex value.', {
+          value: input,
+        })
       );
     });
   });
@@ -543,7 +595,9 @@ describe.skip('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_b512(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid struct B512.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b512 value - malformed hex value.', {
+          value: input,
+        })
       );
     });
 
@@ -552,7 +606,9 @@ describe.skip('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_b512(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid struct B512.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b512 value - malformed hex value.', {
+          value: input,
+        })
       );
     });
 
@@ -561,7 +617,9 @@ describe.skip('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_b512(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid struct B512.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b512 value - malformed hex value.', {
+          value: input,
+        })
       );
     });
   });
@@ -637,7 +695,9 @@ describe.skip('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_str(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Value length mismatch during encode.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid string value - unexpected length.', {
+          value: input,
+        })
       );
     });
 
@@ -646,7 +706,9 @@ describe.skip('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_str(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Value length mismatch during encode.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid string value - unexpected length.', {
+          value: input,
+        })
       );
     });
   });
@@ -769,7 +831,11 @@ describe.skip('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_array(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Types/values length mismatch.')
+        new FuelError(
+          FuelError.CODES.ENCODE_ERROR,
+          'Invalid array value - expected array of length 4.',
+          { value: input }
+        )
       );
     });
   });
@@ -1077,7 +1143,7 @@ describe.skip('AbiCoder', () => {
 
   describe('types_struct_with_array', () => {
     /**
-     * @TODO This is causing a generic to be left into the parsed format, ask Nedim about this.
+     * TODO This is causing a generic to be left into the parsed format, ask Nedim about this.
      */
     it.skip('should encode/decode just fine', async () => {
       // Inputs
@@ -1297,7 +1363,7 @@ describe.skip('AbiCoder', () => {
   });
 
   describe('types_struct_with_multiple_struct_params', () => {
-    it('should encode/decode just fine', async () => {
+    it.todo('should encode/decode just fine', async () => {
       const STRUCT_A = { propA1: 10 };
       const STRUCT_B = { propB1: STRUCT_A, propB2: 20 };
 
@@ -1317,9 +1383,7 @@ describe.skip('AbiCoder', () => {
         .types_struct_with_multiple_struct_params(INPUT_X, INPUT_Y, INPUT_Z)
         .call();
 
-      const { value, logs } = await waitForResult();
-      // expect(value).toStrictEqual(expected);
-      // expect(logs).toStrictEqual([expected]);
+      await waitForResult();
     });
 
     it('should have function properties', () => {

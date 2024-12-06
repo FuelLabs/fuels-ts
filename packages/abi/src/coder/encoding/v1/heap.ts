@@ -112,24 +112,16 @@ export const vector = <TCoder extends Coder>(coder: TCoder): Coder<VecDecodedVal
       );
     }
 
-    try {
-      const valueArray = Array.isArray(value) ? value : Array.from(value);
+    const valueArray = Array.isArray(value) ? value : Array.from(value);
 
-      // Encode the length of the bytes
-      const dataLengthBytes = u64.encode(valueArray.length);
+    // Encode the length of the bytes
+    const dataLengthBytes = u64.encode(valueArray.length);
 
-      // Encode the value
-      const valueBytes = valueArray.map((elementValue) => coder.encode(elementValue));
+    // Encode the value
+    const valueBytes = valueArray.map((elementValue) => coder.encode(elementValue));
 
-      // Concatenate the encoded length with the bytes
-      return concat([dataLengthBytes, ...valueBytes]);
-    } catch (error) {
-      throw new FuelError(
-        FuelError.CODES.ENCODE_ERROR,
-        `Invalid ${VECTOR_TYPE} value - cannot encode element.`,
-        { value }
-      );
-    }
+    // Concatenate the encoded length with the bytes
+    return concat([dataLengthBytes, ...valueBytes]);
   },
   decode: (data: Uint8Array, initialOffset = 0): [VecDecodedValue<TCoder>, number] => {
     if (data.length > MAX_BYTES) {
@@ -144,41 +136,50 @@ export const vector = <TCoder extends Coder>(coder: TCoder): Coder<VecDecodedVal
       );
     }
 
+    let dataLengthBn;
+    let dataLowerOffset;
+
     try {
       // Obtain the length of the bytes
-      const [dataLengthBn, dataLowerOffset] = u64.decode(data, initialOffset);
-      const dataLength = dataLengthBn.toNumber();
-
-      // Obtain the data bytes
-      const elements: unknown[] = [];
-      let offset = dataLowerOffset;
-      for (let i = 0; i < dataLength; i++) {
-        const [decodedElement, elementOffset] = coder.decode(data, offset);
-        offset = elementOffset;
-        elements.push(decodedElement);
-      }
-
-      return [elements as VecDecodedValue<TCoder>, offset];
+      [dataLengthBn, dataLowerOffset] = u64.decode(data, initialOffset);
     } catch (error) {
       throw new FuelError(
         FuelError.CODES.DECODE_ERROR,
         `Invalid ${VECTOR_TYPE} data - malformed bytes.`,
-        {
-          data,
-        }
+        { data }
       );
     }
+
+    // Obtain the data bytes
+    const elements: unknown[] = [];
+    const dataLength = dataLengthBn.toNumber();
+    let offset = dataLowerOffset;
+    for (let i = 0; i < dataLength; i++) {
+      const [decodedElement, elementOffset] = coder.decode(data, offset);
+      offset = elementOffset;
+      elements.push(decodedElement);
+    }
+
+    return [elements as VecDecodedValue<TCoder>, offset];
   },
 });
 
-vector.fromAbi = ({ name, type: { components } }: GetCoderParams, getCoder: GetCoderFn) => {
+vector.fromAbi = ({ type: { swayType, components } }: GetCoderParams, getCoder: GetCoderFn) => {
   if (!components) {
-    throw new Error(`The provided Vec type is missing an item of 'components'.`);
+    throw new FuelError(
+      FuelError.CODES.CODER_NOT_FOUND,
+      `The provided ${VECTOR_TYPE} type is missing ABI components.`,
+      { swayType, components }
+    );
   }
 
   const bufferComponent = components.find((component) => component.name === 'buf');
   if (!bufferComponent) {
-    throw new Error(`The Vec type provided is missing or has a malformed 'buf' component.`);
+    throw new FuelError(
+      FuelError.CODES.CODER_NOT_FOUND,
+      `The provided ${VECTOR_TYPE} type is missing ABI component "buf".`,
+      { swayType, components }
+    );
   }
 
   const vecElementCoder = getCoder(bufferComponent);

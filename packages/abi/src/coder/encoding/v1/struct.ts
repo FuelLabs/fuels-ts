@@ -44,19 +44,7 @@ export const struct = <TCoders extends Record<string, Coder>>(
     // Encode each value
     const encodedValues = Object.entries(value).map(([key, val]) => {
       const coder = coders[key];
-      try {
-        return coder.encode(val);
-      } catch (error) {
-        const e = <FuelError>error;
-        throw new FuelError(
-          FuelError.CODES.ENCODE_ERROR,
-          'Invalid struct value - failed to encode field.',
-          {
-            value,
-            paths: [{ path: key, value: val, error: e.message, ...e.metadata }],
-          }
-        );
-      }
+      return coder.encode(val);
     });
 
     return concatBytes(encodedValues);
@@ -65,24 +53,22 @@ export const struct = <TCoders extends Record<string, Coder>>(
     let offset = initialOffset;
     let decoded;
 
-    try {
-      const decodedValue = Object.entries(coders).reduce((acc, [caseKey, fieldCoder]) => {
-        [decoded, offset] = fieldCoder.decode(data, offset);
-        acc[caseKey as keyof StructDecodeData<TCoders>] = decoded;
-        return acc;
-      }, {} as StructDecodeData<TCoders>);
-      return [decodedValue, offset];
-    } catch (error) {
-      throw new FuelError(FuelError.CODES.DECODE_ERROR, 'Invalid struct data - malformed data.', {
-        data,
-      });
-    }
+    const decodedValue = Object.entries(coders).reduce((acc, [caseKey, fieldCoder]) => {
+      [decoded, offset] = fieldCoder.decode(data, offset);
+      acc[caseKey as keyof StructDecodeData<TCoders>] = decoded;
+      return acc;
+    }, {} as StructDecodeData<TCoders>);
+    return [decodedValue, offset];
   },
 });
 
-struct.fromAbi = ({ type: { components } }: GetCoderParams, getCoder: GetCoderFn) => {
+struct.fromAbi = ({ type: { swayType, components } }: GetCoderParams, getCoder: GetCoderFn) => {
   if (!components) {
-    throw new Error(`The provided Tuple type is missing an item of 'components'.`);
+    throw new FuelError(
+      FuelError.CODES.CODER_NOT_FOUND,
+      `The provided ${STRUCT_TYPE} type is missing ABI components.`,
+      { swayType, components }
+    );
   }
 
   const coders = components.reduce((obj, component) => {

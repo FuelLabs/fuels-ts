@@ -2,10 +2,56 @@ import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
 
+import type { AbiTypeComponent, GetCoderParams } from '../../../src';
 import { AbiEncoding } from '../../../src';
 import { U64_MAX } from '../../utils/constants';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('enum', () => {
+  describe('fromAbi', () => {
+    it('should throw when a component is not provided', async () => {
+      const encoding = AbiEncoding.from('1');
+      const getCoder = vi.fn();
+      const swayType = 'enum MyEnum';
+      const components: AbiTypeComponent[] | undefined = undefined;
+
+      await expectToThrowFuelError(
+        () =>
+          encoding.coders.enum.fromAbi(
+            { type: { swayType, components } } as GetCoderParams,
+            getCoder
+          ),
+        new FuelError(
+          FuelError.CODES.CODER_NOT_FOUND,
+          'The provided enum type is missing ABI components.',
+          { swayType, components }
+        )
+      );
+    });
+
+    it('should get the coder for a valid enum type', () => {
+      const encoding = AbiEncoding.from('1');
+      const components: AbiTypeComponent[] = [
+        { name: 'a', type: 'bool' } as unknown as AbiTypeComponent,
+        { name: 'b', type: 'u64' } as unknown as AbiTypeComponent,
+      ];
+      const getCoder = vi.fn();
+
+      const coder = encoding.coders.enum.fromAbi(
+        { type: { components } } as GetCoderParams,
+        getCoder
+      );
+
+      expect(getCoder).toHaveBeenCalledWith(components[0]);
+      expect(getCoder).toHaveBeenCalledWith(components[1]);
+      expect(getCoder).toHaveBeenCalledTimes(2);
+      expect(coder).toBeDefined();
+    });
+  });
+
   describe('encode', () => {
     it('should encode an enum [boolean]', () => {
       const coder = AbiEncoding.v1.enum({ a: AbiEncoding.v1.bool, b: AbiEncoding.v1.u64 });
@@ -111,9 +157,8 @@ describe('enum', () => {
       await expectToThrowFuelError(
         // @ts-expect-error invalid case value
         () => coder.encode(value),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid enum value - failed to encode case.', {
-          value,
-          paths: [{ path: 'b', value: true, error: 'Invalid u64 value - expected a BNInput.' }],
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u64 value - expected a BNInput.', {
+          value: true,
         })
       );
     });
@@ -189,9 +234,10 @@ describe('enum', () => {
 
       await expectToThrowFuelError(
         () => coder.decode(data, 0),
-        new FuelError(FuelError.CODES.DECODE_ERROR, 'Invalid enum data - invalid case element.', {
-          data,
-          paths: [{ path: 'b', error: 'Invalid u64 data - unexpected length.' }],
+        new FuelError(FuelError.CODES.DECODE_ERROR, 'Invalid u64 data - unexpected length.', {
+          data: new Uint8Array([]),
+          expectedLength: 8,
+          type: 'u64',
         })
       );
     });

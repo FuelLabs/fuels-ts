@@ -35,24 +35,7 @@ export const arrayCoder = <TCoder extends Coder>(
       );
     }
 
-    const encodedValues = value.map((elementValue, elementIndex) => {
-      try {
-        return coder.encode(elementValue);
-      } catch (error) {
-        const e = <FuelError>error;
-        throw new FuelError(
-          FuelError.CODES.ENCODE_ERROR,
-          `Invalid ${ARRAY_TYPE} value - failed to encode field.`,
-          {
-            value,
-            paths: [
-              { path: `[${elementIndex}]`, value: elementValue, error: e.message, ...e.metadata },
-            ],
-          }
-        );
-      }
-    });
-
+    const encodedValues = value.map((elementValue) => coder.encode(elementValue));
     return concat(encodedValues);
   },
   decode: (data: Uint8Array, initialOffset: number = 0): [ArrayDecodeValue<TCoder>, number] => {
@@ -71,23 +54,13 @@ export const arrayCoder = <TCoder extends Coder>(
     let decoded;
     let offset = initialOffset;
 
-    try {
-      const decodedValue = Array(size)
-        .fill(0)
-        .map(() => {
-          [decoded, offset] = coder.decode(data, offset);
-          return decoded;
-        });
-      return [decodedValue as ArrayDecodeValue<TCoder>, offset];
-    } catch (error) {
-      throw new FuelError(
-        FuelError.CODES.DECODE_ERROR,
-        `Invalid ${ARRAY_TYPE} data - malformed data.`,
-        {
-          data,
-        }
-      );
-    }
+    const decodedValue = Array(size)
+      .fill(0)
+      .map(() => {
+        [decoded, offset] = coder.decode(data, offset);
+        return decoded;
+      });
+    return [decodedValue as ArrayDecodeValue<TCoder>, offset];
   },
 });
 
@@ -95,13 +68,20 @@ arrayCoder.fromAbi = ({ type: { swayType, components } }: GetCoderParams, getCod
   // @TODO change ARRAY_REGEX.length to size (size of the array seems better terminology)
   const arrayMatch = ARRAY_REGEX.exec(swayType)?.groups;
   if (!arrayMatch) {
-    throw new Error(`Unable to parse array length for "${swayType}".`);
+    throw new FuelError(
+      FuelError.CODES.CODER_NOT_FOUND,
+      `The provided ${ARRAY_TYPE} type is missing ABI components.`,
+      { swayType, components }
+    );
   }
 
   const arraySize = parseInt(arrayMatch.length, 10);
   const arrayElement: AbiTypeComponent | undefined = components?.[0];
   if (!arrayElement) {
-    throw new Error(`The provided Array type is missing an item of 'component'.`);
+    throw new FuelError(
+      FuelError.CODES.CODER_NOT_FOUND,
+      `The provided ${ARRAY_TYPE} type is missing a ABI component.`
+    );
   }
 
   const arrayElementCoder = getCoder(arrayElement);

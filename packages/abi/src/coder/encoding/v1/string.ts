@@ -18,7 +18,8 @@ export const string = (encodedLength: number): Coder<string, string> => ({
     if (value.length !== encodedLength) {
       throw new FuelError(
         FuelError.CODES.ENCODE_ERROR,
-        `Invalid ${STRING_TYPE} value - unexpected length.`
+        `Invalid ${STRING_TYPE} value - unexpected length.`,
+        { value }
       );
     }
 
@@ -35,7 +36,11 @@ export const string = (encodedLength: number): Coder<string, string> => ({
 string.fromAbi = ({ type: { swayType } }: GetCoderParams, _getCoder: GetCoderFn) => {
   const match = STRING_REGEX.exec(swayType)?.groups;
   if (!match) {
-    throw new Error(`Unable to parse string length for "${swayType}".`);
+    throw new FuelError(
+      FuelError.CODES.CODER_NOT_FOUND,
+      `Unable to find ${STRING_TYPE} coder for the provided type "${swayType}".`,
+      { swayType }
+    );
   }
   const encodedLength = parseInt(match.length, 10);
   return string(encodedLength);

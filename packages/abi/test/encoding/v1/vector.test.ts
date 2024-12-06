@@ -1,9 +1,65 @@
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
+import type { AbiTypeComponent } from '../../../src';
 import { AbiEncoding, MAX_BYTES } from '../../../src';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('vector', () => {
+  describe('fromAbi', () => {
+    it('should throw when a component is not provided', async () => {
+      const encoding = AbiEncoding.from('1');
+      const swayType = 'struct std::vec::Vec<u64>';
+      const components: AbiTypeComponent[] | undefined = undefined;
+
+      await expectToThrowFuelError(
+        () => encoding.coders.vector.fromAbi({ type: { swayType, components } }),
+        new FuelError(
+          FuelError.CODES.CODER_NOT_FOUND,
+          'The provided vector type is missing ABI components.',
+          { swayType, components }
+        )
+      );
+    });
+
+    it('should throw when a "buf" component is not provided', async () => {
+      const encoding = AbiEncoding.from('1');
+      const swayType = 'struct std::vec::Vec<u64>';
+      const components: AbiTypeComponent[] = [];
+
+      await expectToThrowFuelError(
+        () => encoding.coders.vector.fromAbi({ type: { swayType, components } }),
+        new FuelError(
+          FuelError.CODES.CODER_NOT_FOUND,
+          'The provided vector type is missing ABI component "buf".',
+          { swayType, components }
+        )
+      );
+    });
+
+    it('should get the coder for a valid vector type', () => {
+      const encoding = AbiEncoding.from('1');
+      const swayType = 'struct std::vec::Vec<u64>';
+      const components: AbiTypeComponent[] = [
+        {
+          name: 'buf',
+          type: {
+            swayType: 'u64',
+            concreteTypeId: 'some_hash',
+          },
+        },
+      ];
+      const getCoder = vi.fn();
+
+      const coder = encoding.coders.vector.fromAbi({ type: { swayType, components } }, getCoder);
+
+      expect(coder).toBeDefined();
+    });
+  });
+
   describe('encode', () => {
     it('should encode a vector of booleans [true, false, true, false, true, true]', () => {
       const coder = AbiEncoding.v1.vector(AbiEncoding.v1.bool);
@@ -46,11 +102,10 @@ describe('vector', () => {
 
       await expectToThrowFuelError(
         () => coder.encode(value),
-        new FuelError(
-          FuelError.CODES.ENCODE_ERROR,
-          'Invalid vector value - cannot encode element.',
-          { value }
-        )
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u8 value - value exceeds maximum.', {
+          type: 'u8',
+          value: '256',
+        })
       );
     });
   });
@@ -107,8 +162,10 @@ describe('vector', () => {
 
       await expectToThrowFuelError(
         () => coder.decode(data, 0),
-        new FuelError(FuelError.CODES.DECODE_ERROR, 'Invalid vector data - malformed bytes.', {
-          data,
+        new FuelError(FuelError.CODES.DECODE_ERROR, 'Invalid u8 data - unexpected length.', {
+          data: new Uint8Array([]),
+          expectedLength: 1,
+          type: 'u8',
         })
       );
     });

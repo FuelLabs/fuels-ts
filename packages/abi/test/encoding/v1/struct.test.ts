@@ -1,13 +1,45 @@
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
+import type { AbiTypeComponent } from '../../../src';
 import { AbiEncoding } from '../../../src';
 import { U32_MAX, U64_MAX } from '../../utils/constants';
 import { toEqualBn } from '../../utils/vitest.matcher';
 
 expect.extend({ toEqualBn });
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('struct', () => {
+  describe('fromAbi', () => {
+    it('should throw when a component is not provided', async () => {
+      const encoding = AbiEncoding.from('1');
+      const swayType = 'struct MyStruct';
+      const components: AbiTypeComponent[] | undefined = undefined;
+
+      await expectToThrowFuelError(
+        () => encoding.coders.struct.fromAbi({ type: { swayType, components } }),
+        new FuelError(
+          FuelError.CODES.CODER_NOT_FOUND,
+          'The provided struct type is missing ABI components.',
+          { swayType, components }
+        )
+      );
+    });
+
+    it('should get the coder for a valid struct type', () => {
+      const encoding = AbiEncoding.from('1');
+      const components: AbiTypeComponent[] = [{}] as AbiTypeComponent[];
+      const getCoder = vi.fn();
+
+      const coder = encoding.coders.struct.fromAbi({ type: { components } }, getCoder);
+
+      expect(coder).toBeDefined();
+    });
+  });
+
   describe('encode', () => {
     it('should encode a struct [{ a: boolean, b: u64 }]', () => {
       const coder = AbiEncoding.v1.struct({
@@ -84,21 +116,10 @@ describe('struct', () => {
 
       await expectToThrowFuelError(
         () => coder.encode(value),
-        new FuelError(
-          FuelError.CODES.ENCODE_ERROR,
-          'Invalid struct value - failed to encode field.',
-          {
-            value,
-            paths: [
-              {
-                path: 'b',
-                value: value.b.toString(),
-                type: 'u64',
-                error: 'Invalid u64 value - value exceeds maximum.',
-              },
-            ],
-          }
-        )
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u64 value - value exceeds maximum.', {
+          type: 'u64',
+          value: U64_MAX.add(1).toString(),
+        })
       );
     });
   });
@@ -128,7 +149,7 @@ describe('struct', () => {
 
       await expectToThrowFuelError(
         () => coder.decode(data),
-        new FuelError(FuelError.CODES.DECODE_ERROR, 'Invalid struct data - malformed data.', {
+        new FuelError(FuelError.CODES.DECODE_ERROR, 'Invalid boolean data - not enough data.', {
           data,
         })
       );

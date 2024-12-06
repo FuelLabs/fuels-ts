@@ -1,10 +1,59 @@
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
+import type { AbiTypeComponent } from '../../../src';
 import { AbiEncoding, MAX_BYTES } from '../../../src';
 import { U8_MAX } from '../../utils/constants';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('v1/array', () => {
+  describe('fromAbi', () => {
+    it('should throw when a component is not provided', async () => {
+      const encoding = AbiEncoding.from('1');
+      const swayType = 'enum MyEnum';
+      const components: AbiTypeComponent[] = [];
+
+      await expectToThrowFuelError(
+        () => encoding.coders.array.fromAbi({ type: { swayType, components } }),
+        new FuelError(
+          FuelError.CODES.CODER_NOT_FOUND,
+          'The provided array type is missing ABI components.',
+          { swayType }
+        )
+      );
+    });
+
+    it('should throw when a component is not provided', async () => {
+      const encoding = AbiEncoding.from('1');
+      const swayType = '[u8; 4]';
+      const components: AbiTypeComponent[] = [];
+
+      await expectToThrowFuelError(
+        () => encoding.coders.array.fromAbi({ type: { swayType, components } }),
+        new FuelError(
+          FuelError.CODES.CODER_NOT_FOUND,
+          'The provided array type is missing a ABI component.'
+        )
+      );
+    });
+
+    it('should get the coder for a valid array type', () => {
+      const encoding = AbiEncoding.from('1');
+      const swayType = '[u8; 4]';
+      const components: AbiTypeComponent[] = [{} as AbiTypeComponent];
+      const getCoder = vi.fn();
+
+      const coder = encoding.coders.array.fromAbi({ type: { swayType, components } }, getCoder);
+
+      expect(getCoder).toHaveBeenCalledWith(components[0]);
+      expect(getCoder).toHaveBeenCalledTimes(1);
+      expect(coder).toBeDefined();
+    });
+  });
+
   describe('encode', () => {
     it('should encode an array [u8, length = 0]', () => {
       const coder = AbiEncoding.v1.array(AbiEncoding.v1.u8, 0);
@@ -75,21 +124,10 @@ describe('v1/array', () => {
 
       await expectToThrowFuelError(
         () => coder.encode(input),
-        new FuelError(
-          FuelError.CODES.ENCODE_ERROR,
-          'Invalid array value - failed to encode field.',
-          {
-            value: input,
-            paths: [
-              {
-                path: '[0]',
-                type: 'u8',
-                value: '256',
-                error: 'Invalid u8 value - value exceeds maximum.',
-              },
-            ],
-          }
-        )
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u8 value - value exceeds maximum.', {
+          type: 'u8',
+          value: '256',
+        })
       );
     });
   });
@@ -154,7 +192,7 @@ describe('v1/array', () => {
 
       await expectToThrowFuelError(
         () => coder.decode(data),
-        new FuelError(FuelError.CODES.DECODE_ERROR, 'Invalid array data - malformed data.', {
+        new FuelError(FuelError.CODES.DECODE_ERROR, 'Invalid u8 data - unexpected length.', {
           data,
         })
       );
@@ -166,7 +204,7 @@ describe('v1/array', () => {
 
       await expectToThrowFuelError(
         () => coder.decode(data),
-        new FuelError(FuelError.CODES.DECODE_ERROR, 'Invalid array data - malformed data.', {
+        new FuelError(FuelError.CODES.DECODE_ERROR, 'Invalid u8 data - unexpected length.', {
           data,
         })
       );

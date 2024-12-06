@@ -3,6 +3,10 @@ import { AbiEncoding } from '../AbiEncoding';
 
 import { pad } from './pad-coder';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('padded', () => {
   describe('encode', () => {
     it('should encode and pad to word size [u8]', () => {

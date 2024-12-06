@@ -42,9 +42,13 @@ export const option = <TCoders extends Record<string, Coder>>(
   };
 };
 
-option.fromAbi = ({ type: { components } }: GetCoderParams, getCoder: GetCoderFn) => {
+option.fromAbi = ({ type: { swayType, components } }: GetCoderParams, getCoder: GetCoderFn) => {
   if (!components) {
-    throw new Error(`The provided Enum type is missing an item of 'components'.`);
+    throw new FuelError(
+      FuelError.CODES.CODER_NOT_FOUND,
+      `The provided ${OPTION_TYPE} type is missing ABI components.`,
+      { swayType, components }
+    );
   }
 
   const coders = components.reduce((obj, component: AbiTypeComponent) => {

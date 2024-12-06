@@ -1,3 +1,6 @@
+import { FuelError } from '@fuel-ts/errors';
+import { assertUnreachable } from '@fuel-ts/utils';
+
 import { type Matcher } from '../../matchers/sway-type-matchers';
 
 import type { Coder, GetCoderFn, GetCoderParams } from './encoding-types';
@@ -30,6 +33,13 @@ export class AbiEncoding {
 
   private constructor(version: string) {
     const coders = this.supportedEncodings[version as keyof typeof this.supportedEncodings];
+    if (!coders) {
+      throw new FuelError(
+        FuelError.CODES.UNSUPPORTED_ENCODING_VERSION,
+        `Unsupported encoding version "${version}"`
+      );
+    }
+
     this.coders = coders;
     this.matcher = createCoderMatcher(this.coders);
   }
@@ -52,9 +62,21 @@ export class AbiEncoding {
    */
   public getCoder: GetCoderFn = (opts: GetCoderParams): Coder => {
     const { type, name } = opts;
-    const coder = this.matcher(type);
+    let coder: SupportedCoder | undefined;
+    try {
+      coder = this.matcher(type);
+    } catch (error) {
+      throw new FuelError(
+        FuelError.CODES.CODER_NOT_FOUND,
+        `Unsupported coder type "${type.swayType}" for element "${name}"`
+      );
+    }
+
     if (!coder) {
-      throw new Error(`Unsupported coder type "${type.swayType}" for element "${name}"`);
+      throw new FuelError(
+        FuelError.CODES.CODER_NOT_FOUND,
+        `Unsupported coder type "${type.swayType}" for element "${name}"`
+      );
     }
 
     if (typeof coder === 'object') {
@@ -65,6 +87,7 @@ export class AbiEncoding {
       return coder.fromAbi(opts, this.getCoder) as Coder;
     }
 
-    return coder;
+    // Coders should always be either an object or function
+    return assertUnreachable(coder as never);
   };
 }
