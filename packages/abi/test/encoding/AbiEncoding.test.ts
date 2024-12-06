@@ -10,7 +10,7 @@ import { AbiEncoding } from '../../src/coder/encoding';
  */
 describe('AbiEncoding', () => {
   describe('from', () => {
-    it('should create an from a valid versions', () => {
+    it('should create a AbiEncoding instance just fine', () => {
       const encoding = AbiEncoding.from('1');
 
       expect(encoding).toBeDefined();
