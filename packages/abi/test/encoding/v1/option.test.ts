@@ -1,7 +1,7 @@
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
-import type { AbiTypeComponent } from '../../../src';
+import type { AbiTypeComponent, GetCoderParams } from '../../../src';
 import { AbiEncoding } from '../../../src';
 
 /**
@@ -14,9 +14,14 @@ describe('option', () => {
       const encoding = AbiEncoding.from('1');
       const swayType = 'enum std::option::Option<struct MyStruct>';
       const components: AbiTypeComponent[] | undefined = undefined;
+      const getCoder = vi.fn();
 
       await expectToThrowFuelError(
-        () => encoding.coders.option.fromAbi({ type: { swayType, components } }),
+        () =>
+          encoding.coders.option.fromAbi(
+            { type: { swayType, components } } as GetCoderParams,
+            getCoder
+          ),
         new FuelError(
           FuelError.CODES.CODER_NOT_FOUND,
           'The provided option type is missing ABI components.',
@@ -33,7 +38,10 @@ describe('option', () => {
       ];
       const getCoder = vi.fn();
 
-      const coder = encoding.coders.option.fromAbi({ type: { components } }, getCoder);
+      const coder = encoding.coders.option.fromAbi(
+        { type: { components } } as GetCoderParams,
+        getCoder
+      );
 
       expect(getCoder).toHaveBeenCalledWith(components[0]);
       expect(getCoder).toHaveBeenCalledWith(components[1]);

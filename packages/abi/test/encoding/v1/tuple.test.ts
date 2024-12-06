@@ -1,7 +1,7 @@
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
-import type { AbiTypeComponent } from '../../../src';
+import type { AbiTypeComponent, GetCoderParams } from '../../../src';
 import { AbiEncoding } from '../../../src';
 import { U64_MAX } from '../../utils/constants';
 
@@ -15,9 +15,14 @@ describe('tuple', () => {
       const encoding = AbiEncoding.from('1');
       const swayType = '(u8, bool)';
       const components: AbiTypeComponent[] | undefined = undefined;
+      const getCoder = vi.fn();
 
       await expectToThrowFuelError(
-        () => encoding.coders.tuple.fromAbi({ type: { swayType, components } }),
+        () =>
+          encoding.coders.tuple.fromAbi(
+            { type: { swayType, components } } as GetCoderParams,
+            getCoder
+          ),
         new FuelError(
           FuelError.CODES.CODER_NOT_FOUND,
           'The provided tuple type is missing ABI components.',
@@ -31,7 +36,10 @@ describe('tuple', () => {
       const components: AbiTypeComponent[] = [{}] as AbiTypeComponent[];
       const getCoder = vi.fn();
 
-      const coder = encoding.coders.tuple.fromAbi({ type: { components } }, getCoder);
+      const coder = encoding.coders.tuple.fromAbi(
+        { type: { components } } as GetCoderParams,
+        getCoder
+      );
 
       expect(coder).toBeDefined();
     });

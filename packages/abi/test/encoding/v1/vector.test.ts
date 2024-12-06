@@ -1,7 +1,8 @@
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+import { bn } from '@fuel-ts/math';
 
-import type { AbiTypeComponent } from '../../../src';
+import type { AbiTypeComponent, GetCoderParams } from '../../../src';
 import { AbiEncoding, MAX_BYTES } from '../../../src';
 
 /**
@@ -14,9 +15,14 @@ describe('vector', () => {
       const encoding = AbiEncoding.from('1');
       const swayType = 'struct std::vec::Vec<u64>';
       const components: AbiTypeComponent[] | undefined = undefined;
+      const getCoder = vi.fn();
 
       await expectToThrowFuelError(
-        () => encoding.coders.vector.fromAbi({ type: { swayType, components } }),
+        () =>
+          encoding.coders.vector.fromAbi(
+            { type: { swayType, components } } as GetCoderParams,
+            getCoder
+          ),
         new FuelError(
           FuelError.CODES.CODER_NOT_FOUND,
           'The provided vector type is missing ABI components.',
@@ -29,9 +35,14 @@ describe('vector', () => {
       const encoding = AbiEncoding.from('1');
       const swayType = 'struct std::vec::Vec<u64>';
       const components: AbiTypeComponent[] = [];
+      const getCoder = vi.fn();
 
       await expectToThrowFuelError(
-        () => encoding.coders.vector.fromAbi({ type: { swayType, components } }),
+        () =>
+          encoding.coders.vector.fromAbi(
+            { type: { swayType, components } } as GetCoderParams,
+            getCoder
+          ),
         new FuelError(
           FuelError.CODES.CODER_NOT_FOUND,
           'The provided vector type is missing ABI component "buf".',
@@ -54,7 +65,10 @@ describe('vector', () => {
       ];
       const getCoder = vi.fn();
 
-      const coder = encoding.coders.vector.fromAbi({ type: { swayType, components } }, getCoder);
+      const coder = encoding.coders.vector.fromAbi(
+        { type: { swayType, components } } as GetCoderParams,
+        getCoder
+      );
 
       expect(coder).toBeDefined();
     });
@@ -172,7 +186,7 @@ describe('vector', () => {
 
     it('should throw when decoding an array over the max vec size [VM constraints]', async () => {
       const coder = AbiEncoding.v1.vector(AbiEncoding.v1.u8);
-      const data = new Uint8Array(MAX_BYTES + 1);
+      const data = new Uint8Array(MAX_BYTES);
 
       await expectToThrowFuelError(
         () => coder.decode(data, 0),

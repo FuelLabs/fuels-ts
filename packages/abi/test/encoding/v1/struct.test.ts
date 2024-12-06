@@ -1,7 +1,7 @@
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
-import type { AbiTypeComponent } from '../../../src';
+import type { AbiTypeComponent, GetCoderParams } from '../../../src';
 import { AbiEncoding } from '../../../src';
 import { U32_MAX, U64_MAX } from '../../utils/constants';
 import { toEqualBn } from '../../utils/vitest.matcher';
@@ -18,9 +18,14 @@ describe('struct', () => {
       const encoding = AbiEncoding.from('1');
       const swayType = 'struct MyStruct';
       const components: AbiTypeComponent[] | undefined = undefined;
+      const getCoder = vi.fn();
 
       await expectToThrowFuelError(
-        () => encoding.coders.struct.fromAbi({ type: { swayType, components } }),
+        () =>
+          encoding.coders.struct.fromAbi(
+            { type: { swayType, components } } as GetCoderParams,
+            getCoder
+          ),
         new FuelError(
           FuelError.CODES.CODER_NOT_FOUND,
           'The provided struct type is missing ABI components.',
@@ -34,7 +39,10 @@ describe('struct', () => {
       const components: AbiTypeComponent[] = [{}] as AbiTypeComponent[];
       const getCoder = vi.fn();
 
-      const coder = encoding.coders.struct.fromAbi({ type: { components } }, getCoder);
+      const coder = encoding.coders.struct.fromAbi(
+        { type: { components } } as GetCoderParams,
+        getCoder
+      );
 
       expect(coder).toBeDefined();
     });
