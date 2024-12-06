@@ -77,7 +77,7 @@ const rawSliceTransformer: Coder<number[]> = {
 export const rawSlice: Coder<number[]> = createHeapType(rawSliceTransformer);
 
 /**
- * String based coders
+ * Dynamic Length String based coders
  */
 const createStringCoder = (type: CoderType): Coder<string, string> =>
   createHeapType({
