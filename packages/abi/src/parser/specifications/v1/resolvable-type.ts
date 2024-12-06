@@ -240,10 +240,6 @@ export class ResolvableType {
       this.mapTypeParametersAndArgs(metadataType, typeArgs)
     );
 
-    const allTypeArgsResolved = resolvable.typeParamsArgsMap
-      ?.map(([, typeArg]) => typeArg)
-      .every((ta) => ta instanceof ResolvedType);
-
     /**
      * If all type arguments are resolved, we can resolve the metadata type immediately.
      * This would be the case for every concrete type as it has all the type arguments known.
@@ -251,7 +247,7 @@ export class ResolvableType {
      * then this check will resolve to `false` because there are no concrete type arguments
      * to resolve the generics with.
      */
-    if (allTypeArgsResolved) {
+    if (typeArgs.every((ta) => ta instanceof ResolvedType)) {
       return resolvable.resolveInternal(metadataType.metadataTypeId, undefined);
     }
 
