@@ -46,7 +46,6 @@ const createSignatureContents = ({ type }: { type: AbiType }): string => {
 
   const arrayMatch = ARRAY_REGEX.exec(swayType)?.groups;
   if (arrayMatch) {
-    // TODO: sort out lint error
     const arrayElementSignature = createSignatureForType(components[0]);
     return `[${arrayElementSignature};${arrayMatch.length}]`;
   }
