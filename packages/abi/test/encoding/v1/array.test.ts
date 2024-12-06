@@ -1,7 +1,7 @@
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
-import type { AbiTypeComponent } from '../../../src';
+import type { AbiType, AbiTypeComponent, GetCoderParams } from '../../../src';
 import { AbiEncoding, MAX_BYTES } from '../../../src';
 import { U8_MAX } from '../../utils/constants';
 
@@ -15,9 +15,14 @@ describe('v1/array', () => {
       const encoding = AbiEncoding.from('1');
       const swayType = 'enum MyEnum';
       const components: AbiTypeComponent[] = [];
+      const getCoder = vi.fn();
 
       await expectToThrowFuelError(
-        () => encoding.coders.array.fromAbi({ type: { swayType, components } }),
+        () =>
+          encoding.coders.array.fromAbi(
+            { type: { swayType, components } } as GetCoderParams,
+            getCoder
+          ),
         new FuelError(
           FuelError.CODES.CODER_NOT_FOUND,
           'The provided array type is missing ABI components.',
@@ -30,9 +35,14 @@ describe('v1/array', () => {
       const encoding = AbiEncoding.from('1');
       const swayType = '[u8; 4]';
       const components: AbiTypeComponent[] = [];
+      const getCoder = vi.fn();
 
       await expectToThrowFuelError(
-        () => encoding.coders.array.fromAbi({ type: { swayType, components } }),
+        () =>
+          encoding.coders.array.fromAbi(
+            { type: { swayType, components } } as GetCoderParams,
+            getCoder
+          ),
         new FuelError(
           FuelError.CODES.CODER_NOT_FOUND,
           'The provided array type is missing a ABI component.'
@@ -46,7 +56,10 @@ describe('v1/array', () => {
       const components: AbiTypeComponent[] = [{} as AbiTypeComponent];
       const getCoder = vi.fn();
 
-      const coder = encoding.coders.array.fromAbi({ type: { swayType, components } }, getCoder);
+      const coder = encoding.coders.array.fromAbi(
+        { type: { swayType, components } } as GetCoderParams,
+        getCoder
+      );
 
       expect(getCoder).toHaveBeenCalledWith(components[0]);
       expect(getCoder).toHaveBeenCalledTimes(1);

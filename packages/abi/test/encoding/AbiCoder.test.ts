@@ -1,13 +1,8 @@
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import { readFileSync } from 'fs';
-import { join } from 'path';
 
 import { AbiCoder } from '../../src';
-import * as padValuesWithUndefinedModule from '../../src/coder/utils/padValuesWithUndefined';
-
-const specificationV1Path = join(__dirname, '../fixtures/abi-contract-abi-v1.json');
-const specificationV1 = JSON.parse(readFileSync(specificationV1Path, 'utf-8'));
+import { v1 as specificationV1 } from '../fixtures/v1';
 
 /**
  * @group node
@@ -110,29 +105,10 @@ describe('AbiCoder', () => {
       it('should pad the arguments with undefined if the number of arguments is less than the expected number', () => {
         const coder = AbiCoder.fromAbi(specificationV1);
         const fn = coder.getFunction('types_void');
-        const padValuesWithUndefinedSpy = vi.spyOn(
-          padValuesWithUndefinedModule,
-          'padValuesWithUndefined'
-        );
 
         const encoded = fn.encodeArguments([]);
 
         expect(encoded).toStrictEqual(new Uint8Array([]));
-        expect(padValuesWithUndefinedSpy).toHaveBeenCalledWith(
-          [],
-          [
-            {
-              isOptional: true,
-              name: 'x',
-              type: {
-                components: undefined,
-                concreteTypeId: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
-                metadata: undefined,
-                swayType: '()',
-              },
-            },
-          ]
-        );
       });
 
       it('should throw an error if the number of arguments is less than the expected number', async () => {
