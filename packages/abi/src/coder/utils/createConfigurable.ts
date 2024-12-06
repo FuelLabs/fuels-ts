@@ -5,7 +5,7 @@ import type { AbiConfigurable } from '../../parser';
 import type { AbiCoderConfigurable } from '../abi-coder-types';
 import type { AbiEncoding, DecodedValue } from '../encoding';
 
-export const makeConfigurable = (
+export const createConfigurable = (
   configurable: AbiConfigurable,
   encoding: AbiEncoding
 ): AbiCoderConfigurable => {

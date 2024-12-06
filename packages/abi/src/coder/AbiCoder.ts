@@ -10,10 +10,10 @@ import type {
   AbiCoderType,
 } from './abi-coder-types';
 import { AbiEncoding } from './encoding';
-import { makeConfigurable } from './utils/createConfigurable';
-import { makeFunction } from './utils/createFunction';
-import { makeLog } from './utils/createLog';
-import { makeType } from './utils/createType';
+import { createConfigurable } from './utils/createConfigurable';
+import { createFunction } from './utils/createFunction';
+import { createLog } from './utils/createLog';
+import { createType } from './utils/createType';
 
 export class AbiCoder {
   public readonly abi: Abi;
@@ -36,13 +36,13 @@ export class AbiCoder {
 
     const { functions, configurables, loggedTypes } = this.abi;
     this.functions = Object.fromEntries(
-      functions.map((fn) => [fn.name, makeFunction(fn, this.encoding)])
+      functions.map((fn) => [fn.name, createFunction(fn, this.encoding)])
     );
     this.configurables = Object.fromEntries(
-      configurables.map((conf) => [conf.name, makeConfigurable(conf, this.encoding)])
+      configurables.map((conf) => [conf.name, createConfigurable(conf, this.encoding)])
     );
     this.logs = Object.fromEntries(
-      loggedTypes.map((log) => [log.logId, makeLog(log, this.encoding)])
+      loggedTypes.map((log) => [log.logId, createLog(log, this.encoding)])
     );
   }
 
@@ -131,6 +131,6 @@ export class AbiCoder {
       );
     }
 
-    return makeType(type, this.encoding);
+    return createType(type, this.encoding);
   }
 }

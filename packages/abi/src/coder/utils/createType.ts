@@ -6,7 +6,7 @@ import type { AbiCoderType } from '../abi-coder-types';
 import type { AbiEncoding } from '../encoding';
 import type { DecodedValue } from '../encoding/encoding-types';
 
-export function makeType(type: AbiType, encoding: AbiEncoding): AbiCoderType {
+export function createType(type: AbiType, encoding: AbiEncoding): AbiCoderType {
   const coder = encoding.getCoder({ type });
   return {
     encode: coder.encode,
