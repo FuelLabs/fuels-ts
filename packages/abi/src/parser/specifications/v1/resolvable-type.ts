@@ -29,7 +29,11 @@ export class ResolvableType {
   ) {
     this.metadataType = this.findMetadataType(metadataTypeId);
     this.swayType = this.metadataType.type;
-    this.typeParamsArgsMap ??= this.mapTypeParametersAndArgs(this.metadataType, undefined);
+    this.typeParamsArgsMap ??= this.metadataType.typeParameters?.map((typeParameter) => [
+      typeParameter,
+      new ResolvableType(this.abi, typeParameter, undefined),
+    ]);
+
     let components = this.metadataType.components;
 
     /**
@@ -108,15 +112,8 @@ export class ResolvableType {
 
   private mapTypeParametersAndArgs(
     metadataType: AbiMetadataTypeV1,
-    args: (ResolvableType | ResolvedType)[] | undefined
+    args: (ResolvableType | ResolvedType)[]
   ): Array<[number, ResolvedType | ResolvableType]> | undefined {
-    if (!args) {
-      return metadataType.typeParameters?.map((typeParameter) => [
-        typeParameter,
-        new ResolvableType(this.abi, typeParameter, undefined),
-      ]);
-    }
-
     return metadataType.typeParameters?.map((typeParameter, idx) => [typeParameter, args[idx]]);
   }
 
@@ -126,7 +123,8 @@ export class ResolvableType {
   ): ResolvableComponent {
     const name = (component as AbiComponentV1).name;
 
-    if (typeof component.typeId === 'string') {
+    const isConcreteType = typeof component.typeId === 'string';
+    if (isConcreteType) {
       const concreteType = this.findConcreteType(component.typeId);
       return {
         name,
@@ -145,6 +143,10 @@ export class ResolvableType {
    * Concrete types are *resolved* because everything is known about them.
    */
   private resolveConcreteType(type: AbiConcreteTypeV1): ResolvedType {
+    /**
+     * If the type doesn't have a linked metadata type, we can resolve it immediately.
+     * This is the case for e.g. u8, u16, ...
+     */
     if (type.metadataTypeId === undefined) {
       return new ResolvedType({
         swayType: type.type,
@@ -152,6 +154,12 @@ export class ResolvableType {
       });
     }
 
+    /**
+     * If it has a metadata type associated to it, but it's not generic,
+     * we'll create a ResolvableType with that metadata type,
+     * and then resolve it immediately.
+     * This would be the case for e.g. non-generic structs and enums.
+     */
     if (!type.typeArguments) {
       return new ResolvableType(this.abi, type.metadataTypeId, undefined).resolveInternal(
         type.concreteTypeId,
@@ -159,6 +167,11 @@ export class ResolvableType {
       );
     }
 
+    /**
+     * The type has a generic metadata type associated to it.
+     * We must resolve all the type arguments (which are always concrete),
+     * and then resolve the linked metadata type with these arguments.
+     */
     const metadataType = this.findMetadataType(type.metadataTypeId);
 
     const concreteTypeArgs = type.typeArguments.map((typeArgument) => {
@@ -210,17 +223,32 @@ export class ResolvableType {
       (typeArgument) => this.handleComponent(parent, typeArgument).type
     );
 
+    /**
+     * If there are no type arguments because the metadata type isn't generic,
+     * we can resolve it immediately.
+     * This would be the case for e.g. non-generic structs and enums.
+     */
+    if (!typeArgs?.length) {
+      return new ResolvableType(this.abi, metadataType.metadataTypeId, undefined).resolveInternal(
+        metadataType.metadataTypeId,
+        undefined
+      );
+    }
+
     const resolvable = new ResolvableType(
       this.abi,
       metadataType.metadataTypeId,
       this.mapTypeParametersAndArgs(metadataType, typeArgs)
     );
 
+    /**
+     * If all type arguments are resolved, we can resolve the metadata type immediately.
+     * This would be the case for every concrete type as it has all the type arguments known.
+     * However, if the initial type being resolved is a generic metadata type,
+     * then this check will resolve to `false` because there are no concrete type arguments
+     * to resolve the generics with.
+     */
     if (typeArgs?.every((typeArgument) => typeArgument instanceof ResolvedType)) {
-      return resolvable.resolveInternal(metadataType.metadataTypeId, undefined);
-    }
-
-    if (resolvable.components?.every((component) => component.type instanceof ResolvedType)) {
       return resolvable.resolveInternal(metadataType.metadataTypeId, undefined);
     }
 
@@ -241,6 +269,7 @@ export class ResolvableType {
       const resolvedGenericType = typeArgs?.find(
         ([typeParameterId]) => (component.type as ResolvableType).metadataTypeId === typeParameterId
       )?.[1];
+
       if (resolvedGenericType) {
         return {
           name: component.name,
@@ -290,10 +319,11 @@ export class ResolvableType {
       return this.resolveConcreteType(concreteTypeArg);
     });
 
-    const typeParamsArgsMap = this.mapTypeParametersAndArgs(
-      this.metadataType,
-      concreteTypeArgs
-    ) as Array<[number, ResolvedType]>;
+    const typeParamsArgsMap = concreteTypeArgs?.length
+      ? (this.mapTypeParametersAndArgs(this.metadataType, concreteTypeArgs) as Array<
+          [number, ResolvedType]
+        >)
+      : undefined;
 
     return this.resolveInternal(concreteType.concreteTypeId, typeParamsArgsMap);
   }
