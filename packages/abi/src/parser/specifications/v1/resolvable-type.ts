@@ -234,12 +234,15 @@ export class ResolvableType {
         undefined
       );
     }
-
     const resolvable = new ResolvableType(
       this.abi,
       metadataType.metadataTypeId,
       this.mapTypeParametersAndArgs(metadataType, typeArgs)
     );
+
+    const allTypeArgsResolved = resolvable.typeParamsArgsMap
+      ?.map(([, typeArg]) => typeArg)
+      .every((ta) => ta instanceof ResolvedType);
 
     /**
      * If all type arguments are resolved, we can resolve the metadata type immediately.
@@ -248,7 +251,11 @@ export class ResolvableType {
      * then this check will resolve to `false` because there are no concrete type arguments
      * to resolve the generics with.
      */
-    if (typeArgs?.every((typeArgument) => typeArgument instanceof ResolvedType)) {
+    if (allTypeArgsResolved) {
+      return resolvable.resolveInternal(metadataType.metadataTypeId, undefined);
+    }
+
+    if (resolvable.components?.every((component) => component.type instanceof ResolvedType)) {
       return resolvable.resolveInternal(metadataType.metadataTypeId, undefined);
     }
 
