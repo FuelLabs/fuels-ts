@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import { BYTES_32 } from '@fuel-ts/abi';
 import { Coder, B256Coder, NumberCoder, BigNumberCoder } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { sha256 } from '@fuel-ts/hasher';
@@ -6,7 +7,7 @@ import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { concat, arrayify } from '@fuel-ts/utils';
 
-import { ByteArrayCoder } from './byte-array';
+import { byteArray } from './byte-array';
 import type { TxPointer } from './tx-pointer';
 import { TxPointerCoder } from './tx-pointer';
 
@@ -74,10 +75,8 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     parts.push(new BigNumberCoder('u64').encode(value.predicateGasUsed));
     parts.push(new BigNumberCoder('u64').encode(value.predicateLength));
     parts.push(new BigNumberCoder('u64').encode(value.predicateDataLength));
-    parts.push(new ByteArrayCoder(value.predicateLength.toNumber()).encode(value.predicate));
-    parts.push(
-      new ByteArrayCoder(value.predicateDataLength.toNumber()).encode(value.predicateData)
-    );
+    parts.push(byteArray(value.predicateLength.toNumber()).encode(value.predicate));
+    parts.push(byteArray(value.predicateDataLength.toNumber()).encode(value.predicateData));
 
     return concat(parts);
   }
@@ -106,9 +105,9 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     const predicateLength = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const predicateDataLength = decoded;
-    [decoded, o] = new ByteArrayCoder(predicateLength.toNumber()).decode(data, o);
+    [decoded, o] = byteArray(predicateLength.toNumber()).decode(data, o);
     const predicate = decoded;
-    [decoded, o] = new ByteArrayCoder(predicateDataLength.toNumber()).decode(data, o);
+    [decoded, o] = byteArray(predicateDataLength.toNumber()).decode(data, o);
     const predicateData = decoded;
 
     return [
@@ -254,9 +253,9 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
   ): string {
     const parts: Uint8Array[] = [];
 
-    parts.push(new ByteArrayCoder(32).encode(value.sender));
-    parts.push(new ByteArrayCoder(32).encode(value.recipient));
-    parts.push(new ByteArrayCoder(32).encode(value.nonce));
+    parts.push(byteArray(BYTES_32).encode(value.sender));
+    parts.push(byteArray(BYTES_32).encode(value.recipient));
+    parts.push(byteArray(BYTES_32).encode(value.nonce));
     parts.push(new BigNumberCoder('u64').encode(value.amount));
     parts.push(arrayify(value.data || '0x'));
 
@@ -266,27 +265,25 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
   static encodeData(messageData?: BytesLike): Uint8Array {
     const bytes = arrayify(messageData || '0x');
     const dataLength = bytes.length;
-    return new ByteArrayCoder(dataLength).encode(bytes);
+    return byteArray(dataLength).encode(bytes);
   }
 
   encode(value: InputMessage): Uint8Array {
     const parts: Uint8Array[] = [];
     const data = InputMessageCoder.encodeData(value.data);
 
-    parts.push(new ByteArrayCoder(32).encode(value.sender));
-    parts.push(new ByteArrayCoder(32).encode(value.recipient));
+    parts.push(byteArray(BYTES_32).encode(value.sender));
+    parts.push(byteArray(BYTES_32).encode(value.recipient));
     parts.push(new BigNumberCoder('u64').encode(value.amount));
-    parts.push(new ByteArrayCoder(32).encode(value.nonce));
+    parts.push(byteArray(BYTES_32).encode(value.nonce));
     parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.witnessIndex));
     parts.push(new BigNumberCoder('u64').encode(value.predicateGasUsed));
     parts.push(new BigNumberCoder('u64').encode(data.length));
     parts.push(new BigNumberCoder('u64').encode(value.predicateLength));
     parts.push(new BigNumberCoder('u64').encode(value.predicateDataLength));
-    parts.push(new ByteArrayCoder(data.length).encode(data));
-    parts.push(new ByteArrayCoder(value.predicateLength.toNumber()).encode(value.predicate));
-    parts.push(
-      new ByteArrayCoder(value.predicateDataLength.toNumber()).encode(value.predicateData)
-    );
+    parts.push(byteArray(data.length).encode(data));
+    parts.push(byteArray(value.predicateLength.toNumber()).encode(value.predicate));
+    parts.push(byteArray(value.predicateDataLength.toNumber()).encode(value.predicateData));
 
     return concat(parts);
   }
@@ -294,7 +291,7 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
   static decodeData(messageData: BytesLike): Uint8Array {
     const bytes = arrayify(messageData);
     const dataLength = bytes.length;
-    const [data] = new ByteArrayCoder(dataLength).decode(bytes, 0);
+    const [data] = byteArray(dataLength).decode(bytes, 0);
 
     return arrayify(data);
   }
@@ -321,11 +318,11 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     const predicateLength = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const predicateDataLength = decoded;
-    [decoded, o] = new ByteArrayCoder(dataLength).decode(data, o);
+    [decoded, o] = byteArray(dataLength).decode(data, o);
     const messageData = decoded;
-    [decoded, o] = new ByteArrayCoder(predicateLength.toNumber()).decode(data, o);
+    [decoded, o] = byteArray(predicateLength.toNumber()).decode(data, o);
     const predicate = decoded;
-    [decoded, o] = new ByteArrayCoder(predicateDataLength.toNumber()).decode(data, o);
+    [decoded, o] = byteArray(predicateDataLength.toNumber()).decode(data, o);
     const predicateData = decoded;
 
     return [

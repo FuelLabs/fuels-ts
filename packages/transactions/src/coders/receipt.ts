@@ -6,7 +6,7 @@ import type { AssetId } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { arrayify, concat } from '@fuel-ts/utils';
 
-import { ByteArrayCoder } from './byte-array';
+import { byteArray } from './byte-array';
 
 export enum ReceiptType /* u8 */ {
   Call = 0,
@@ -214,7 +214,7 @@ export class ReceiptReturnDataCoder extends Coder<ReceiptReturnData, ReceiptRetu
     parts.push(new B256Coder().encode(value.digest));
     parts.push(new BigNumberCoder('u64').encode(value.pc));
     parts.push(new BigNumberCoder('u64').encode(value.is));
-    parts.push(new ByteArrayCoder(value.len.toNumber()).encode(value.data));
+    parts.push(byteArray(value.len.toNumber()).encode(value.data));
 
     return concat(parts);
   }
@@ -235,7 +235,7 @@ export class ReceiptReturnDataCoder extends Coder<ReceiptReturnData, ReceiptRetu
     const pc = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const is = decoded;
-    [decoded, o] = new ByteArrayCoder(len.toNumber()).decode(data, o);
+    [decoded, o] = byteArray(len.toNumber()).decode(data, o);
     const returnData = decoded;
 
     return [
@@ -526,7 +526,7 @@ export class ReceiptLogDataCoder extends Coder<ReceiptLogData, ReceiptLogData> {
     parts.push(new B256Coder().encode(value.digest));
     parts.push(new BigNumberCoder('u64').encode(value.pc));
     parts.push(new BigNumberCoder('u64').encode(value.is));
-    parts.push(new ByteArrayCoder(value.len.toNumber()).encode(value.data));
+    parts.push(byteArray(value.len.toNumber()).encode(value.data));
 
     return concat(parts);
   }
@@ -551,7 +551,7 @@ export class ReceiptLogDataCoder extends Coder<ReceiptLogData, ReceiptLogData> {
     const pc = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const is = decoded;
-    [decoded, o] = new ByteArrayCoder(len.toNumber()).decode(data, o);
+    [decoded, o] = byteArray(len.toNumber()).decode(data, o);
     const logData = decoded;
 
     return [
@@ -812,9 +812,9 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
   ): string {
     const parts: Uint8Array[] = [];
 
-    parts.push(new ByteArrayCoder(32).encode(value.sender));
-    parts.push(new ByteArrayCoder(32).encode(value.recipient));
-    parts.push(new ByteArrayCoder(32).encode(value.nonce));
+    parts.push(byteArray(32).encode(value.sender));
+    parts.push(byteArray(32).encode(value.recipient));
+    parts.push(byteArray(32).encode(value.nonce));
     parts.push(new BigNumberCoder('u64').encode(value.amount));
     parts.push(arrayify(value.data || '0x'));
 
@@ -830,7 +830,7 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     parts.push(new B256Coder().encode(value.nonce));
     parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.data.length));
     parts.push(new B256Coder().encode(value.digest));
-    parts.push(new ByteArrayCoder(value.data.length).encode(value.data));
+    parts.push(byteArray(value.data.length).encode(value.data));
 
     return concat(parts);
   }
@@ -851,7 +851,7 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     const len = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const digest = decoded;
-    [decoded, o] = new ByteArrayCoder(len).decode(data, o);
+    [decoded, o] = byteArray(len).decode(data, o);
     const messageData = arrayify(decoded);
 
     const receiptMessageOut: ReceiptMessageOut = {

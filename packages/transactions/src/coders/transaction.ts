@@ -5,7 +5,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { type BN } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 
-import { ByteArrayCoder } from './byte-array';
+import { byteArray } from './byte-array';
 import type { Input, InputContract } from './input';
 import { InputCoder, InputContractCoder } from './input';
 import type { Output, OutputContract } from './output';
@@ -96,8 +96,8 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.inputsCount));
     parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.outputsCount));
     parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.witnessesCount));
-    parts.push(new ByteArrayCoder(value.scriptLength.toNumber()).encode(value.script));
-    parts.push(new ByteArrayCoder(value.scriptDataLength.toNumber()).encode(value.scriptData));
+    parts.push(byteArray(value.scriptLength.toNumber()).encode(value.script));
+    parts.push(byteArray(value.scriptDataLength.toNumber()).encode(value.scriptData));
     parts.push(new PoliciesCoder().encode(value.policies));
     parts.push(new ArrayCoder(new InputCoder(), value.inputsCount).encode(value.inputs));
     parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
@@ -125,9 +125,9 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     const outputsCount = decoded;
     [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
     const witnessesCount = decoded;
-    [decoded, o] = new ByteArrayCoder(scriptLength.toNumber()).decode(data, o);
+    [decoded, o] = byteArray(scriptLength.toNumber()).decode(data, o);
     const script = decoded;
-    [decoded, o] = new ByteArrayCoder(scriptDataLength.toNumber()).decode(data, o);
+    [decoded, o] = byteArray(scriptDataLength.toNumber()).decode(data, o);
     const scriptData = decoded;
     [decoded, o] = new PoliciesCoder().decode(data, o, policyTypes);
     const policies = decoded;

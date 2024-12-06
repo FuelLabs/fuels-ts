@@ -1,7 +1,7 @@
 import { Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import { concat } from '@fuel-ts/utils';
 
-import { ByteArrayCoder } from './byte-array';
+import { byteArray } from './byte-array';
 
 export type Witness = {
   /** Length of witness data byte array */
@@ -24,7 +24,7 @@ export class WitnessCoder extends Coder<Witness, Witness> {
     const parts: Uint8Array[] = [];
 
     parts.push(new NumberCoder('u32', { padToWordSize: true }).encode(value.dataLength));
-    parts.push(new ByteArrayCoder(value.dataLength).encode(value.data));
+    parts.push(byteArray(value.dataLength).encode(value.data));
 
     return concat(parts);
   }
@@ -35,7 +35,7 @@ export class WitnessCoder extends Coder<Witness, Witness> {
 
     [decoded, o] = new NumberCoder('u32', { padToWordSize: true }).decode(data, o);
     const dataLength = decoded;
-    [decoded, o] = new ByteArrayCoder(dataLength).decode(data, o);
+    [decoded, o] = byteArray(dataLength).decode(data, o);
     const witnessData = decoded;
 
     return [
