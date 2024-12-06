@@ -6,7 +6,9 @@ import { option } from './option';
 import { string } from './string';
 import { struct } from './struct';
 import { tuple } from './tuple';
-import type { SupportedCodersV1 } from './v1.types';
+import type { SupportedCodersV1 } from './types';
+
+export * from './types';
 
 export const v1: SupportedCodersV1 = {
   u8,
