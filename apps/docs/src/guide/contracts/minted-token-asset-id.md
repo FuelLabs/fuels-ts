@@ -23,6 +23,6 @@ Since the asset ID depends on the contract ID, which is always dynamic (unlike t
 
 ## Create Asset Id
 
-The SDK provides a helper named `createAssetId` which takes the contract ID and sub ID as parameters. This helper internally calls `getMintedAssetId` and returns the Sway native parameter [AssetId](https://docs.fuel.network/docs/fuels-ts/interfaces/#assetid), ready to be used in a Sway program invocation:
+The SDK provides a helper named `createAssetId` which takes the contract ID and sub ID as parameters. This helper internally calls `getMintedAssetId` and returns the Sway native parameter [AssetId](https://fuels-ts-docs-api.vercel.app/types/_fuel_ts_interfaces.AssetId.html), ready to be used in a Sway program invocation:
 
 <<< @./snippets/utilities/create-asset-id.ts#create-asset-id-1{ts:line-numbers}
