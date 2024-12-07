@@ -4,7 +4,7 @@ When working with contracts, it's crucial to be aware of the available contract 
 
 ## The `getBalance` Method
 
-The [`Contract.getBalance`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_program.Contract.html#getbalance) method retrieves the available balance of a specific asset on your contract. This method is particularly useful for determining the remaining balance after sending assets to a contract and executing contract calls.
+The [`Contract.getBalance`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_program.Contract.html#getBalance) method retrieves the available balance of a specific asset on your contract. This method is particularly useful for determining the remaining balance after sending assets to a contract and executing contract calls.
 
 It is important to note that this method returns the total available contract balance, regardless of how often assets have been sent to it or spent.
 
