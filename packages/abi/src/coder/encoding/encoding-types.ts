@@ -63,7 +63,7 @@ export abstract class Coder<TEncoded = unknown, TDecoded = unknown> {
    *
    * @see {@link CoderType} for a list of supported types
    */
-  abstract type: string;
+  abstract type: CoderType;
 
   /**
    * Encode a value.
