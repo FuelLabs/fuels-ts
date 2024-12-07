@@ -67,3 +67,11 @@ To prevent this issue, the SDK sets a default cache for resources to 20 seconds.
 If you would like to submit multiple transactions without waiting for each transaction to be completed, your account must have multiple UTXOs available. If you only have one UTXO, the first transaction will spend it, and any remaining amount will be converted into a new UTXO with a different ID.
 
 By ensuring your account has multiple UTXOs, you can effectively use the `resourceCacheTTL` flag to manage transactions without conflicts. For more information on UTXOs, refer to the [UTXOs guide](../the-utxo-model/index.md).
+
+### `resourceCacheStrategy`
+
+When submitting transactions via the `Provider`, you may want to have caching enabled to prevent reuse of consumed resources. By default, the provider uses a _global_ caching strategy, which means that the cache is shared across all `Provider` instances within the same dApp.
+
+This may not be ideal in all cases, such as if you are using multiple Providers and you would like to have different TTLs for each of them. In such cases, you may want to use an _instance-specific_ cache strategy, which means that each `Provider` instance will have its own cache.
+
+> **Note:** Using an instance-specific cache strategy will require you to manually manage the cache, for each instance so use this strategy with caution.

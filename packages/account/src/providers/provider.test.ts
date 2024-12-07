@@ -28,12 +28,12 @@ import type { Message } from './message';
 import type { ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
 import Provider, {
   BLOCKS_PAGE_SIZE_LIMIT,
-  DEFAULT_RESOURCE_CACHE_TTL,
   GAS_USED_MODIFIER,
   RESOURCES_PAGE_SIZE_LIMIT,
 } from './provider';
 import type { ExcludeResourcesOption } from './resource';
 import { isCoin } from './resource';
+import { DEFAULT_RESOURCE_CACHE_TTL } from './resource-cache';
 import type { CoinTransactionRequestInput } from './transaction-request';
 import { CreateTransactionRequest, ScriptTransactionRequest } from './transaction-request';
 import { TransactionResponse } from './transaction-response';

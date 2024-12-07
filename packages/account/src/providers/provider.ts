@@ -70,7 +70,6 @@ const MAX_RETRIES = 10;
 export const RESOURCES_PAGE_SIZE_LIMIT = 512;
 export const TRANSACTIONS_PAGE_SIZE_LIMIT = 60;
 export const BLOCKS_PAGE_SIZE_LIMIT = 5;
-export const DEFAULT_RESOURCE_CACHE_TTL = 20_000; // 20 seconds
 export const GAS_USED_MODIFIER = 1.2;
 
 export type DryRunFailureStatusFragment = GqlDryRunFailureStatusFragment;
@@ -433,6 +432,7 @@ export default class Provider {
   options: ProviderOptions = {
     timeout: undefined,
     resourceCacheTTL: undefined,
+    resourceCacheStrategy: undefined,
     fetch: undefined,
     retryOptions: undefined,
     headers: undefined,
@@ -473,13 +473,6 @@ export default class Provider {
   protected constructor(url: string, options: ProviderOptions = {}) {
     const { url: rawUrl, urlWithoutAuth, headers: authHeaders } = Provider.extractBasicAuth(url);
 
-    if (options.resourceCacheTTL) {
-      this.cache = new ResourceCache(
-        options.resourceCacheTTL,
-        options.resourceCacheStrategy || 'global'
-      );
-    }
-
     this.url = rawUrl;
     this.urlWithoutAuth = urlWithoutAuth;
     this.url = url;
@@ -494,15 +487,12 @@ export default class Provider {
     };
 
     this.operations = this.createOperations();
-    const { resourceCacheTTL } = this.options;
-    if (isDefined(resourceCacheTTL)) {
-      if (resourceCacheTTL !== -1) {
-        this.cache = new ResourceCache(resourceCacheTTL);
-      } else {
-        this.cache = undefined;
-      }
+
+    const { resourceCacheTTL, resourceCacheStrategy } = this.options;
+    if (resourceCacheTTL === -1) {
+      this.cache = undefined;
     } else {
-      this.cache = new ResourceCache(DEFAULT_RESOURCE_CACHE_TTL);
+      this.cache = new ResourceCache(resourceCacheTTL, resourceCacheStrategy);
     }
   }
 

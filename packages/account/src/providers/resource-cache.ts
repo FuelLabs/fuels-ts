@@ -4,6 +4,9 @@ import { hexlify } from '@fuel-ts/utils';
 import { GlobalCache } from './global-cache';
 import type { ExcludeResourcesOption } from './resource';
 
+export const DEFAULT_RESOURCE_CACHE_TTL = 20_000; // 20 seconds
+export const DEFAULT_RESOURCE_CACHE_STRATEGY = 'global';
+
 export interface CachedResource {
   utxos: Set<string>;
   messages: Set<string>;
@@ -21,7 +24,10 @@ export class ResourceCache {
   private instanceCache?: Map<string, CachedResource>;
   private globalCache: GlobalCache;
 
-  constructor(ttl: number, strategy: CacheStrategy = 'global') {
+  constructor(
+    ttl: number = DEFAULT_RESOURCE_CACHE_TTL,
+    strategy: CacheStrategy = DEFAULT_RESOURCE_CACHE_STRATEGY
+  ) {
     if (typeof ttl !== 'number' || ttl <= 0) {
       throw new FuelError(
         ErrorCode.INVALID_TTL,
@@ -115,5 +121,9 @@ export class ResourceCache {
 
   getInstanceCache() {
     return this.instanceCache;
+  }
+
+  [Symbol.dispose]() {
+    this.clear();
   }
 }

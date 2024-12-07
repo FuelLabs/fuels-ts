@@ -473,7 +473,7 @@ describe('Funding Transactions', () => {
     expect(result1.blockId).toBe(result2.blockId);
 
     expect(provider.cache).toBeTruthy();
-    expect(provider.cache?.ttl).toBe(DEFAULT_RESOURCE_CACHE_TTL);
+    expect(provider.cache?.getActiveTTL()).toBe(DEFAULT_RESOURCE_CACHE_TTL);
   }, 15_000);
 
   it('should fail when trying to use the same UTXO in multiple TXs without cache', async () => {
