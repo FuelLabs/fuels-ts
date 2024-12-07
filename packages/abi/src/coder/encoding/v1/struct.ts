@@ -25,12 +25,8 @@ export const struct = <TCoders extends Record<string, Coder>>(
 
     // Check if there are any missing keys or extra keys
     const missingKeys = expectedKeys.filter((key) => !actualKeys.includes(key));
-    const extraKeys = actualKeys.filter((key) => !expectedKeys.includes(key));
-    if (missingKeys.length > 0 || extraKeys.length > 0) {
-      const paths = [
-        ...missingKeys.map((key) => ({ path: key, error: 'Field not present.' })),
-        ...extraKeys.map((key) => ({ path: key, error: 'Field not expected.' })),
-      ];
+    if (missingKeys.length > 0) {
+      const paths = missingKeys.map((key) => ({ path: key, error: 'Field not present.' }));
       throw new FuelError(
         FuelError.CODES.ENCODE_ERROR,
         'Invalid struct value - malformed object.',

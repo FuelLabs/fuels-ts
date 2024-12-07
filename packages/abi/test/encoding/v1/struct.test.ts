@@ -79,22 +79,6 @@ describe('struct', () => {
       );
     });
 
-    it('should throw when encoding [extra element]', async () => {
-      const coder = AbiEncoding.v1.struct({
-        a: AbiEncoding.v1.bool,
-        b: AbiEncoding.v1.u64,
-      });
-      const value = { a: true, b: U32_MAX, c: 1 };
-
-      await expectToThrowFuelError(
-        () => coder.encode(value),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid struct value - malformed object.', {
-          value,
-          paths: [{ path: 'c', error: 'Field not expected.' }],
-        })
-      );
-    });
-
     it('should throw when encoding [missing and extra elements]', async () => {
       const coder = AbiEncoding.v1.struct({
         a: AbiEncoding.v1.bool,
@@ -107,10 +91,7 @@ describe('struct', () => {
         () => coder.encode(value),
         new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid struct value - malformed object.', {
           value,
-          paths: [
-            { path: 'b', error: 'Field not present.' },
-            { path: 'c', error: 'Field not expected.' },
-          ],
+          paths: [{ path: 'b', error: 'Field not present.' }],
         })
       );
     });
