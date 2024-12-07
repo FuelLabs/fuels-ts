@@ -1,6 +1,6 @@
 import { createMatcher } from '../../matchers/sway-type-matchers';
 
-import type { SupportedCodersV1 } from './v1/v1.types';
+import type { SupportedCodersV1 } from './v1';
 
 export type SupportedCoders = SupportedCodersV1;
 export type SupportedCoder = SupportedCoders[keyof SupportedCoders];
