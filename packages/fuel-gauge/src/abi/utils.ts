@@ -5,7 +5,6 @@ export enum AbiProjectsEnum {
   ABI_CONTRACT = 'abi-contract',
   ABI_PREDICATE = 'abi-predicate',
   ABI_SCRIPT = 'abi-script',
-  ABI_EXHAUSTIVE_EXAMPLES = 'abi-exhaustive-examples',
 }
 
 const forcProjectsDir = join(__dirname, '../../test/fixtures/forc-projects');

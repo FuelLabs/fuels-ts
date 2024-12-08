@@ -14,6 +14,17 @@ describe('AbiCoder', () => {
       const coder = AbiCoder.fromAbi(specificationV1);
 
       expect(coder).toBeDefined();
+      expect(coder.abi).toBeInstanceOf(Object);
+      expect(coder.specification).toEqual(specificationV1);
+
+      expect(coder.functions).toBeInstanceOf(Object);
+      expect(coder.logs).toBeInstanceOf(Object);
+      expect(coder.configurables).toBeInstanceOf(Object);
+
+      expect(coder.getFunction).toBeInstanceOf(Function);
+      expect(coder.getLog).toBeInstanceOf(Function);
+      expect(coder.getType).toBeInstanceOf(Function);
+      expect(coder.getConfigurable).toBeInstanceOf(Function);
     });
   });
 

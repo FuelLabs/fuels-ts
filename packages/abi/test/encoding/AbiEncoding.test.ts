@@ -3,6 +3,7 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
 import type { GetCoderParams } from '../../src/coder/encoding';
 import { AbiEncoding } from '../../src/coder/encoding';
+import { v1 } from '../../src/coder/encoding/v1';
 
 /**
  * @group node
@@ -10,35 +11,35 @@ import { AbiEncoding } from '../../src/coder/encoding';
  */
 describe('AbiEncoding', () => {
   describe('from', () => {
-    it('should create an from a valid versions', () => {
+    it('should create a AbiEncoding instance just fine', () => {
       const encoding = AbiEncoding.from('1');
 
       expect(encoding).toBeDefined();
       expect(encoding.coders).toBeDefined();
-      expect(encoding.coders.array).toBeDefined();
-      expect(encoding.coders.enum).toBeDefined();
-      expect(encoding.coders.option).toBeDefined();
-      expect(encoding.coders.vector).toBeDefined();
-      expect(encoding.coders.u8).toBeDefined();
-      expect(encoding.coders.u16).toBeDefined();
-      expect(encoding.coders.u32).toBeDefined();
-      expect(encoding.coders.u64).toBeDefined();
-      expect(encoding.coders.u256).toBeDefined();
-      expect(encoding.coders.b256).toBeDefined();
-      expect(encoding.coders.b512).toBeDefined();
-      expect(encoding.coders.bool).toBeDefined();
-      expect(encoding.coders.void).toBeDefined();
-      expect(encoding.coders.byte).toBeDefined();
-      expect(encoding.coders.rawSlice).toBeDefined();
-      expect(encoding.coders.str).toBeDefined();
-      expect(encoding.coders.stdString).toBeDefined();
-      expect(encoding.coders.string).toBeDefined();
-      expect(encoding.coders.vector).toBeDefined();
-      expect(encoding.coders.array).toBeDefined();
-      expect(encoding.coders.tuple).toBeDefined();
-      expect(encoding.coders.struct).toBeDefined();
-      expect(encoding.coders.enum).toBeDefined();
-      expect(encoding.coders.option).toBeDefined();
+      expect(encoding.coders.array).toEqual(v1.array);
+      expect(encoding.coders.enum).toEqual(v1.enum);
+      expect(encoding.coders.option).toEqual(v1.option);
+      expect(encoding.coders.vector).toEqual(v1.vector);
+      expect(encoding.coders.u8).toEqual(v1.u8);
+      expect(encoding.coders.u16).toEqual(v1.u16);
+      expect(encoding.coders.u32).toEqual(v1.u32);
+      expect(encoding.coders.u64).toEqual(v1.u64);
+      expect(encoding.coders.u256).toEqual(v1.u256);
+      expect(encoding.coders.b256).toEqual(v1.b256);
+      expect(encoding.coders.b512).toEqual(v1.b512);
+      expect(encoding.coders.bool).toEqual(v1.bool);
+      expect(encoding.coders.void).toEqual(v1.void);
+      expect(encoding.coders.byte).toEqual(v1.byte);
+      expect(encoding.coders.rawSlice).toEqual(v1.rawSlice);
+      expect(encoding.coders.str).toEqual(v1.str);
+      expect(encoding.coders.stdString).toEqual(v1.stdString);
+      expect(encoding.coders.string).toEqual(v1.string);
+      expect(encoding.coders.vector).toEqual(v1.vector);
+      expect(encoding.coders.array).toEqual(v1.array);
+      expect(encoding.coders.tuple).toEqual(v1.tuple);
+      expect(encoding.coders.struct).toEqual(v1.struct);
+      expect(encoding.coders.enum).toEqual(v1.enum);
+      expect(encoding.coders.option).toEqual(v1.option);
     });
 
     it('should throw an error if the version is not supported', async () => {

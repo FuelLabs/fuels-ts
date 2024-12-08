@@ -6,7 +6,7 @@ import type { AbiCoderLog } from '../abi-coder-types';
 import type { AbiEncoding } from '../encoding';
 import type { DecodedValue } from '../encoding/encoding-types';
 
-export const makeLog = (loggedType: AbiLoggedType, encoding: AbiEncoding): AbiCoderLog => {
+export const createLog = (loggedType: AbiLoggedType, encoding: AbiEncoding): AbiCoderLog => {
   const loggedTypeCoder = encoding.getCoder(loggedType);
   return {
     logId: loggedType.logId,

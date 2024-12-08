@@ -5,7 +5,7 @@ import type { BN } from '@fuel-ts/math';
 import type { AbiType } from '../../parser';
 
 import type { ENCODING_TYPES } from './encoding-constants';
-import type { SupportedCodersV1 } from './v1/v1.types';
+import type { SupportedCodersV1 } from './v1';
 
 /**
  * A type of coder.

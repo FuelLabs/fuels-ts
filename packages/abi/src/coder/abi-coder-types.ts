@@ -11,8 +11,6 @@ export interface AbiCoderFunction {
   selector: string;
   selectorBytes: Uint8Array;
   attributes: AbiFunction['attributes'];
-
-  // Methods
   isReadOnly: () => boolean;
   encodeArguments: (values: InputValue[]) => Uint8Array;
   decodeArguments: (data: BytesLike) => DecodedValue[];

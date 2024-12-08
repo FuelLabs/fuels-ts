@@ -11,7 +11,7 @@ import { createFunctionSignature } from './createFunctionSignature';
 import { getFunctionInputs } from './getFunctionInputs';
 import { padValuesWithUndefined } from './padValuesWithUndefined';
 
-export const makeFunction = (fn: AbiFunction, encoding: AbiEncoding): AbiCoderFunction => {
+export const createFunction = (fn: AbiFunction, encoding: AbiEncoding): AbiCoderFunction => {
   const signature = createFunctionSignature(fn);
   const argumentCoder = encoding.coders.tuple(fn.inputs.map((input) => encoding.getCoder(input)));
   const outputCoder = encoding.getCoder({ type: fn.output });
