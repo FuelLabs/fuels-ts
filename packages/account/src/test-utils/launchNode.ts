@@ -3,7 +3,6 @@ import { randomBytes, randomUUID } from '@fuel-ts/crypto';
 import { FuelError } from '@fuel-ts/errors';
 import type { SnapshotConfigs } from '@fuel-ts/utils';
 import { defaultConsensusKey, hexlify, defaultSnapshotConfigs } from '@fuel-ts/utils';
-import { log } from 'console';
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import os from 'os';
 import path from 'path';
@@ -201,7 +200,8 @@ export const launchNode = async ({
 
     if (loggingEnabled) {
       child.stderr.on('data', (chunk) => {
-        log(chunk.toString());
+        // eslint-disable-next-line no-console
+        console.log(chunk.toString());
       });
     }
 
@@ -269,7 +269,8 @@ export const launchNode = async ({
       }
       if (/error/i.test(text)) {
         if (loggingEnabled) {
-          log(text);
+          // eslint-disable-next-line no-console
+          console.log(text);
         }
         reject(new FuelError(FuelError.CODES.NODE_LAUNCH_FAILED, text));
       }

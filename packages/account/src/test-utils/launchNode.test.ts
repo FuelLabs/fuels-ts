@@ -132,7 +132,7 @@ describe('launchNode', () => {
     const error = await expectToThrowFuelError(
       async () =>
         launchNode({
-          loggingEnabled: false,
+          loggingEnabled: true,
           snapshotConfig: {
             ...defaultSnapshotConfigs,
             stateConfig: {
