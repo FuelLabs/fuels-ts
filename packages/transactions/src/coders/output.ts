@@ -1,8 +1,9 @@
-/* eslint-disable max-classes-per-file */
-import { Coder, B256Coder, NumberCoder, BigNumberCoder } from '@fuel-ts/abi-coder';
+import type { Coder } from '@fuel-ts/abi';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
+
+import { coders, createCoder } from './coders';
 
 export enum OutputType /* u8 */ {
   Coin = 0,
@@ -22,43 +23,12 @@ export type OutputCoin = {
   assetId: string;
 };
 
-export class OutputCoinCoder extends Coder<OutputCoin, OutputCoin> {
-  constructor() {
-    super('OutputCoin', 'struct OutputCoin', 0);
-  }
-
-  encode(value: OutputCoin): Uint8Array {
-    const parts: Uint8Array[] = [];
-
-    parts.push(new B256Coder().encode(value.to));
-    parts.push(new BigNumberCoder('u64').encode(value.amount));
-    parts.push(new B256Coder().encode(value.assetId));
-
-    return concat(parts);
-  }
-
-  decode(data: Uint8Array, offset: number): [OutputCoin, number] {
-    let decoded;
-    let o = offset;
-
-    [decoded, o] = new B256Coder().decode(data, o);
-    const to = decoded;
-    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
-    const amount = decoded;
-    [decoded, o] = new B256Coder().decode(data, o);
-    const assetId = decoded;
-
-    return [
-      {
-        type: OutputType.Coin,
-        to,
-        amount,
-        assetId,
-      },
-      o,
-    ];
-  }
-}
+export const outputCoinCoder = createCoder('OutputCoin', {
+  type: coders.type(OutputType.Coin),
+  to: coders.b256,
+  amount: coders.u64,
+  assetId: coders.b256,
+});
 
 export type OutputContract = {
   type: OutputType.Contract;
@@ -70,43 +40,12 @@ export type OutputContract = {
   stateRoot: string;
 };
 
-export class OutputContractCoder extends Coder<OutputContract, OutputContract> {
-  constructor() {
-    super('OutputContract', 'struct OutputContract', 0);
-  }
-
-  encode(value: OutputContract): Uint8Array {
-    const parts: Uint8Array[] = [];
-
-    parts.push(new NumberCoder('u8', { padToWordSize: true }).encode(value.inputIndex));
-    parts.push(new B256Coder().encode(value.balanceRoot));
-    parts.push(new B256Coder().encode(value.stateRoot));
-
-    return concat(parts);
-  }
-
-  decode(data: Uint8Array, offset: number): [OutputContract, number] {
-    let decoded;
-    let o = offset;
-
-    [decoded, o] = new NumberCoder('u8', { padToWordSize: true }).decode(data, o);
-    const inputIndex = decoded;
-    [decoded, o] = new B256Coder().decode(data, o);
-    const balanceRoot = decoded;
-    [decoded, o] = new B256Coder().decode(data, o);
-    const stateRoot = decoded;
-
-    return [
-      {
-        type: OutputType.Contract,
-        inputIndex,
-        balanceRoot,
-        stateRoot,
-      },
-      o,
-    ];
-  }
-}
+export const outputContractCoder = createCoder('OutputContract', {
+  type: coders.type(OutputType.Contract),
+  inputIndex: coders.u8,
+  balanceRoot: coders.b256,
+  stateRoot: coders.b256,
+});
 
 export type OutputChange = {
   type: OutputType.Change;
@@ -118,43 +57,12 @@ export type OutputChange = {
   assetId: string;
 };
 
-export class OutputChangeCoder extends Coder<OutputChange, OutputChange> {
-  constructor() {
-    super('OutputChange', 'struct OutputChange', 0);
-  }
-
-  encode(value: OutputChange): Uint8Array {
-    const parts: Uint8Array[] = [];
-
-    parts.push(new B256Coder().encode(value.to));
-    parts.push(new BigNumberCoder('u64').encode(value.amount));
-    parts.push(new B256Coder().encode(value.assetId));
-
-    return concat(parts);
-  }
-
-  decode(data: Uint8Array, offset: number): [OutputChange, number] {
-    let decoded;
-    let o = offset;
-
-    [decoded, o] = new B256Coder().decode(data, o);
-    const to = decoded;
-    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
-    const amount = decoded;
-    [decoded, o] = new B256Coder().decode(data, o);
-    const assetId = decoded;
-
-    return [
-      {
-        type: OutputType.Change,
-        to,
-        amount,
-        assetId,
-      },
-      o,
-    ];
-  }
-}
+export const outputChangeCoder = createCoder('OutputChange', {
+  type: coders.type(OutputType.Change),
+  to: coders.b256,
+  amount: coders.u64,
+  assetId: coders.b256,
+});
 
 export type OutputVariable = {
   type: OutputType.Variable;
@@ -166,43 +74,12 @@ export type OutputVariable = {
   assetId: string;
 };
 
-export class OutputVariableCoder extends Coder<OutputVariable, OutputVariable> {
-  constructor() {
-    super('OutputVariable', 'struct OutputVariable', 0);
-  }
-
-  encode(value: OutputVariable): Uint8Array {
-    const parts: Uint8Array[] = [];
-
-    parts.push(new B256Coder().encode(value.to));
-    parts.push(new BigNumberCoder('u64').encode(value.amount));
-    parts.push(new B256Coder().encode(value.assetId));
-
-    return concat(parts);
-  }
-
-  decode(data: Uint8Array, offset: number): [OutputVariable, number] {
-    let decoded;
-    let o = offset;
-
-    [decoded, o] = new B256Coder().decode(data, o);
-    const to = decoded;
-    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
-    const amount = decoded;
-    [decoded, o] = new B256Coder().decode(data, o);
-    const assetId = decoded;
-
-    return [
-      {
-        type: OutputType.Variable,
-        to,
-        amount,
-        assetId,
-      },
-      o,
-    ];
-  }
-}
+export const outputVariableCoder = createCoder('OutputVariable', {
+  type: coders.type(OutputType.Variable),
+  to: coders.b256,
+  amount: coders.u64,
+  assetId: coders.b256,
+});
 
 export type OutputContractCreated = {
   type: OutputType.ContractCreated;
@@ -212,42 +89,11 @@ export type OutputContractCreated = {
   stateRoot: string;
 };
 
-export class OutputContractCreatedCoder extends Coder<
-  OutputContractCreated,
-  OutputContractCreated
-> {
-  constructor() {
-    super('OutputContractCreated', 'struct OutputContractCreated', 0);
-  }
-
-  encode(value: OutputContractCreated): Uint8Array {
-    const parts: Uint8Array[] = [];
-
-    parts.push(new B256Coder().encode(value.contractId));
-    parts.push(new B256Coder().encode(value.stateRoot));
-
-    return concat(parts);
-  }
-
-  decode(data: Uint8Array, offset: number): [OutputContractCreated, number] {
-    let decoded;
-    let o = offset;
-
-    [decoded, o] = new B256Coder().decode(data, o);
-    const contractId = decoded;
-    [decoded, o] = new B256Coder().decode(data, o);
-    const stateRoot = decoded;
-
-    return [
-      {
-        type: OutputType.ContractCreated,
-        contractId,
-        stateRoot,
-      },
-      o,
-    ];
-  }
-}
+export const outputContractCreatedCoder = createCoder('OutputContractCreated', {
+  type: coders.type(OutputType.ContractCreated),
+  contractId: coders.b256,
+  stateRoot: coders.b256,
+});
 
 export type Output =
   | OutputCoin
@@ -256,37 +102,33 @@ export type Output =
   | OutputVariable
   | OutputContractCreated;
 
-export class OutputCoder extends Coder<Output, Output> {
-  constructor() {
-    super('Output', ' struct Output', 0);
-  }
-
-  encode(value: Output): Uint8Array {
+export const outputCoder: Coder<Output, Output> = {
+  type: 'Output',
+  encode: (value: Output): Uint8Array => {
     const parts: Uint8Array[] = [];
 
-    parts.push(new NumberCoder('u8', { padToWordSize: true }).encode(value.type));
-
+    parts.push(coders.u8.encode(value.type));
     const { type } = value;
 
     switch (type) {
       case OutputType.Coin: {
-        parts.push(new OutputCoinCoder().encode(value));
+        parts.push(outputCoinCoder.encode(value));
         break;
       }
       case OutputType.Contract: {
-        parts.push(new OutputContractCoder().encode(value));
+        parts.push(outputContractCoder.encode(value));
         break;
       }
       case OutputType.Change: {
-        parts.push(new OutputChangeCoder().encode(value));
+        parts.push(outputChangeCoder.encode(value));
         break;
       }
       case OutputType.Variable: {
-        parts.push(new OutputVariableCoder().encode(value));
+        parts.push(outputVariableCoder.encode(value));
         break;
       }
       case OutputType.ContractCreated: {
-        parts.push(new OutputContractCreatedCoder().encode(value));
+        parts.push(outputContractCreatedCoder.encode(value));
         break;
       }
       default: {
@@ -298,33 +140,33 @@ export class OutputCoder extends Coder<Output, Output> {
     }
 
     return concat(parts);
-  }
-
-  decode(data: Uint8Array, offset: number): [Output, number] {
+  },
+  decode: (data: Uint8Array, initialOffset: number): [Output, number] => {
     let decoded;
-    let o = offset;
+    let o = initialOffset;
 
-    [decoded, o] = new NumberCoder('u8', { padToWordSize: true }).decode(data, o);
+    [decoded, o] = coders.u8.decode(data, initialOffset);
     const type = decoded as OutputType;
+
     switch (type) {
       case OutputType.Coin: {
-        [decoded, o] = new OutputCoinCoder().decode(data, o);
+        [decoded, o] = outputCoinCoder.decode(data, o);
         return [decoded, o];
       }
       case OutputType.Contract: {
-        [decoded, o] = new OutputContractCoder().decode(data, o);
+        [decoded, o] = outputContractCoder.decode(data, o);
         return [decoded, o];
       }
       case OutputType.Change: {
-        [decoded, o] = new OutputChangeCoder().decode(data, o);
+        [decoded, o] = outputChangeCoder.decode(data, o);
         return [decoded, o];
       }
       case OutputType.Variable: {
-        [decoded, o] = new OutputVariableCoder().decode(data, o);
+        [decoded, o] = outputVariableCoder.decode(data, o);
         return [decoded, o];
       }
       case OutputType.ContractCreated: {
-        [decoded, o] = new OutputContractCreatedCoder().decode(data, o);
+        [decoded, o] = outputContractCreatedCoder.decode(data, o);
         return [decoded, o];
       }
       default: {
@@ -334,5 +176,5 @@ export class OutputCoder extends Coder<Output, Output> {
         );
       }
     }
-  }
-}
+  },
+};
