@@ -12,3 +12,4 @@ export * from './transaction-summary';
 export * from './utils';
 export * from './assets';
 export * from './chains';
+export * from './resource-cache';

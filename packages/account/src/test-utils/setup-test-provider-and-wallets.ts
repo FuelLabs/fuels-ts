@@ -112,6 +112,9 @@ export async function setupTestProviderAndWallets({
     provider,
     wallets,
     cleanup,
-    [Symbol.dispose]: cleanup,
+    [Symbol.dispose]: () => {
+      provider.cache?.reset();
+      cleanup();
+    },
   };
 }

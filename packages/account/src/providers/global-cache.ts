@@ -18,6 +18,12 @@ export class GlobalCache {
     return GlobalCache.instance;
   }
 
+  reset() {
+    GlobalCache.instance = new GlobalCache();
+    this.cache = new Map();
+    this.ttl = 0;
+  }
+
   setTTL(ttl: number) {
     // Only set TTL if not already set or if new TTL is smaller
     if (this.ttl === 0 || ttl < this.ttl) {

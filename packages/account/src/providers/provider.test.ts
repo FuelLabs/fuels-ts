@@ -587,11 +587,11 @@ describe('Provider', () => {
     expect(provider.cache?.getActiveTTL()).toEqual(ttl);
   });
 
-  it('should use resource cache by default', async () => {
+  it('should use global cache strategy with default ttl by default', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
-
     expect(provider.cache?.getActiveTTL()).toEqual(DEFAULT_RESOURCE_CACHE_TTL);
+    expect(provider.cache?.getStrategy()).toEqual('global');
   });
 
   it('should validate resource cache value [invalid numerical]', async () => {
@@ -610,6 +610,55 @@ describe('Provider', () => {
     const { provider } = launched;
 
     expect(provider.cache).toBeUndefined();
+  });
+
+  it('Should allow for different TTLs on instance specific caches', async () => {
+    const providerSetupOne = await setupTestProviderAndWallets({
+      providerOptions: {
+        resourceCacheTTL: 1000,
+        resourceCacheStrategy: 'instance',
+      },
+    });
+    const { provider, cleanup } = providerSetupOne;
+
+    const providerSetupTwo = await setupTestProviderAndWallets({
+      providerOptions: {
+        resourceCacheTTL: 2000,
+        resourceCacheStrategy: 'instance',
+      },
+    });
+    const { provider: providerTwo, cleanup: cleanupTwo } = providerSetupTwo;
+
+    expect(provider.cache?.getActiveTTL()).toEqual(1000);
+    expect(providerTwo.cache?.getActiveTTL()).toEqual(2000);
+
+    cleanup();
+    cleanupTwo();
+  });
+
+  it('should sync ttl if global cache strategy is used', async () => {
+    const ttl = 1000;
+    const providerSetupOne = await setupTestProviderAndWallets({
+      providerOptions: {
+        resourceCacheTTL: ttl,
+        resourceCacheStrategy: 'global',
+      },
+    });
+    const { provider: providerOne, cleanup: cleanupOne } = providerSetupOne;
+
+    const providerSetupTwo = await setupTestProviderAndWallets({
+      providerOptions: {
+        resourceCacheTTL: ttl * 2,
+        resourceCacheStrategy: 'global',
+      },
+    });
+    const { provider: providerTwo, cleanup: cleanupTwo } = providerSetupTwo;
+
+    expect(providerOne.cache?.getActiveTTL()).toEqual(ttl);
+    expect(providerTwo.cache?.getActiveTTL()).toEqual(ttl);
+
+    cleanupOne();
+    cleanupTwo();
   });
 
   it('should cache resources only when TX is successfully submitted', async () => {

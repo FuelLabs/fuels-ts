@@ -54,6 +54,10 @@ export class ResourceCache {
     return this.strategy === 'global' ? this.globalCache.getTTL() : this.ttl;
   }
 
+  getCacheStrategy(): CacheStrategy {
+    return this.strategy;
+  }
+
   set(transactionId: string, resources: Required<ExcludeResourcesOption>): void {
     const currentTime = Date.now();
     const cache = this.getActiveCache();
@@ -123,7 +127,12 @@ export class ResourceCache {
     return this.instanceCache;
   }
 
-  [Symbol.dispose]() {
+  reset() {
     this.clear();
+    this.globalCache.reset();
+  }
+
+  [Symbol.dispose]() {
+    this.reset();
   }
 }
