@@ -1,7 +1,9 @@
-import { BigNumberCoder, Coder, NumberCoder } from '@fuel-ts/abi-coder';
+import { Coder } from '@fuel-ts/abi';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
+
+import { coders } from './coders';
 
 // Bitfield of used policy types.
 export enum PolicyType {
@@ -51,8 +53,13 @@ function validateDuplicatedPolicies(policies: Policy[]): void {
 }
 
 export class PoliciesCoder extends Coder<Policy[], Policy[]> {
-  constructor() {
-    super('Policies', 'array Policy', 0);
+  private policyTypeFilter: number;
+
+  override type = 'Policies';
+
+  public constructor(policyTypeFilter: number = 0) {
+    super();
+    this.policyTypeFilter = policyTypeFilter;
   }
 
   encode(policies: Policy[]): Uint8Array {
@@ -66,11 +73,11 @@ export class PoliciesCoder extends Coder<Policy[], Policy[]> {
         case PolicyType.MaxFee:
         case PolicyType.Tip:
         case PolicyType.WitnessLimit:
-          parts.push(new BigNumberCoder('u64').encode(data));
+          parts.push(coders.u64.encode(data));
           break;
 
         case PolicyType.Maturity:
-          parts.push(new NumberCoder('u32', { padToWordSize: true }).encode(data));
+          parts.push(coders.u32.encode(data));
           break;
 
         default: {
@@ -82,33 +89,30 @@ export class PoliciesCoder extends Coder<Policy[], Policy[]> {
     return concat(parts);
   }
 
-  decode(data: Uint8Array, offset: number, policyTypes: number): [Policy[], number] {
+  decode(data: Uint8Array, offset: number): [Policy[], number] {
     let o = offset;
     const policies: Policy[] = [];
 
-    if (policyTypes & PolicyType.Tip) {
-      const [tip, nextOffset] = new BigNumberCoder('u64').decode(data, o);
+    if (this.policyTypeFilter & PolicyType.Tip) {
+      const [tip, nextOffset] = coders.u64.decode(data, o);
       o = nextOffset;
       policies.push({ type: PolicyType.Tip, data: tip });
     }
 
-    if (policyTypes & PolicyType.WitnessLimit) {
-      const [witnessLimit, nextOffset] = new BigNumberCoder('u64').decode(data, o);
+    if (this.policyTypeFilter & PolicyType.WitnessLimit) {
+      const [witnessLimit, nextOffset] = coders.u64.decode(data, o);
       o = nextOffset;
       policies.push({ type: PolicyType.WitnessLimit, data: witnessLimit });
     }
 
-    if (policyTypes & PolicyType.Maturity) {
-      const [maturity, nextOffset] = new NumberCoder('u32', { padToWordSize: true }).decode(
-        data,
-        o
-      );
+    if (this.policyTypeFilter & PolicyType.Maturity) {
+      const [maturity, nextOffset] = coders.u32.decode(data, o);
       o = nextOffset;
       policies.push({ type: PolicyType.Maturity, data: maturity });
     }
 
-    if (policyTypes & PolicyType.MaxFee) {
-      const [maxFee, nextOffset] = new BigNumberCoder('u64').decode(data, o);
+    if (this.policyTypeFilter & PolicyType.MaxFee) {
+      const [maxFee, nextOffset] = coders.u64.decode(data, o);
       o = nextOffset;
       policies.push({ type: PolicyType.MaxFee, data: maxFee });
     }

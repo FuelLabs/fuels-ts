@@ -130,7 +130,7 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     const script = decoded;
     [decoded, o] = byteArray(scriptDataLength.toNumber()).decode(data, o);
     const scriptData = decoded;
-    [decoded, o] = new PoliciesCoder().decode(data, o, policyTypes);
+    [decoded, o] = new PoliciesCoder(policyTypes).decode(data, o);
     const policies = decoded;
     [decoded, o] = new ArrayCoder(new InputCoder(), inputsCount).decode(data, o);
     const inputs = decoded;
@@ -229,7 +229,7 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
       o
     );
     const storageSlots = decoded;
-    [decoded, o] = new PoliciesCoder().decode(data, o, policyTypes);
+    [decoded, o] = new PoliciesCoder(policyTypes).decode(data, o);
     const policies = decoded;
     [decoded, o] = new ArrayCoder(new InputCoder(), inputsCount).decode(data, o);
     const inputs = decoded;
@@ -372,7 +372,7 @@ export class TransactionUpgradeCoder extends Coder<TransactionUpgrade, Transacti
     const outputsCount = decoded;
     [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
     const witnessesCount = decoded;
-    [decoded, o] = new PoliciesCoder().decode(data, o, policyTypes);
+    [decoded, o] = new PoliciesCoder(policyTypes).decode(data, o);
     const policies = decoded;
     [decoded, o] = new ArrayCoder(new InputCoder(), inputsCount).decode(data, o);
     const inputs = decoded;
@@ -471,7 +471,7 @@ export class TransactionUploadCoder extends Coder<TransactionUpload, Transaction
     const witnessesCount = decoded;
     [decoded, o] = new ArrayCoder(new B256Coder(), proofSetCount).decode(data, o);
     const proofSet = decoded;
-    [decoded, o] = new PoliciesCoder().decode(data, o, policyTypes);
+    [decoded, o] = new PoliciesCoder(policyTypes).decode(data, o);
     const policies = decoded;
     [decoded, o] = new ArrayCoder(new InputCoder(), inputsCount).decode(data, o);
     const inputs = decoded;
@@ -551,7 +551,7 @@ export class TransactionBlobCoder extends Coder<TransactionBlob, TransactionBlob
     const outputsCount = decoded;
     [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
     const witnessesCount = decoded;
-    [decoded, o] = new PoliciesCoder().decode(data, o, policyTypes);
+    [decoded, o] = new PoliciesCoder(policyTypes).decode(data, o);
     const policies = decoded;
     [decoded, o] = new ArrayCoder(new InputCoder(), inputsCount).decode(data, o);
     const inputs = decoded;
