@@ -72,6 +72,6 @@ By ensuring your account has multiple UTXOs, you can effectively use the `resour
 
 When submitting transactions via the `Provider`, you may want to have caching enabled to prevent reuse of consumed resources. By default, the provider uses a _global_ caching strategy, which means that the cache is shared across all `Provider` instances within the same dApp.
 
-This may not be ideal in all cases, such as if you are using multiple Providers and you would like to have different TTLs for each of them. In such cases, you may want to use an _instance-specific_ cache strategy, which means that each `Provider` instance will have its own cache.
+This may not be ideal in all cases, such as if you are using multiple providers and you would like to have different TTLs for each of them. In such cases, you may want to use an _instance-specific_ cache strategy, which means that each `Provider` instance will have its own cache.
 
 > **Note:** Using an instance-specific cache strategy will require you to manually manage the cache for each instance individually, so use this strategy with caution.
