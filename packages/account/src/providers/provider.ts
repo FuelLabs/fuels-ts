@@ -9,7 +9,7 @@ import { checkFuelCoreVersionCompatibility, versions } from '@fuel-ts/versions';
 import { equalBytes } from '@noble/curves/abstract/utils';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
-import type { GraphQLResponse } from 'graphql-request/src/types';
+import type { GraphQLClientResponse, GraphQLResponse } from 'graphql-request/src/types';
 import gql from 'graphql-tag';
 import { clone } from 'ramda';
 
@@ -674,8 +674,9 @@ Supported fuel-core version: ${supportedVersion}.`
   private createOperations(): SdkOperations {
     const fetchFn = Provider.getFetchFn(this.options);
     const gqlClient = new GraphQLClient(this.urlWithoutAuth, {
-      fetch: (url: string, requestInit: RequestInit) => fetchFn(url, requestInit, this.options),
-      responseMiddleware: (response: GraphQLResponse<unknown> | Error) => {
+      fetch: (input: RequestInfo | URL, requestInit?: RequestInit) =>
+        fetchFn(input.toString(), requestInit || {}, this.options),
+      responseMiddleware: (response: GraphQLClientResponse<unknown> | Error) => {
         if ('response' in response) {
           const graphQlResponse = response.response as GraphQLResponse;
 
