@@ -1233,9 +1233,6 @@ importers:
       '@fuel-ts/abi':
         specifier: workspace:*
         version: link:../abi
-      '@fuel-ts/abi-coder':
-        specifier: workspace:*
-        version: link:../abi-coder
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address

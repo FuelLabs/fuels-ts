@@ -38,7 +38,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@fuel-ts/abi": "workspace:*",
-    "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/hasher": "workspace:^",
