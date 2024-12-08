@@ -1,8 +1,9 @@
+/* eslint-disable max-classes-per-file */
 import { Coder } from '@fuel-ts/abi';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { concat } from '@fuel-ts/utils';
 
-import { coders, createCoder } from './coders';
+import { coders } from './coders';
 
 export enum UpgradePurposeTypeEnum {
   ConsensusParameters = 0,
@@ -26,20 +27,43 @@ export interface ConsensusParameters {
   /** The hash of the serialized consensus parameters. */
   checksum: string;
 }
+export class ConsensusParametersCoder extends Coder<ConsensusParameters, ConsensusParameters> {
+  private coder = coders.struct({
+    witnessIndex: coders.u16,
+    checksum: coders.b256,
+  });
 
-export const consensusParameterCoder = createCoder('ConsensusParameters', {
-  witnessIndex: coders.u16,
-  checksum: coders.b256,
-});
+  override type = 'ConsensusParameters';
+
+  encode(value: ConsensusParameters): Uint8Array {
+    return this.coder.encode(value);
+  }
+
+  decode(data: Uint8Array, offset: number): [ConsensusParameters, number] {
+    return this.coder.decode(data, offset);
+  }
+}
 
 export interface StateTransition {
   /** The root of the new bytecode of the state transition function. */
   bytecodeRoot: string;
 }
 
-export const stateTransitionCoder = createCoder('StateTransition', {
-  bytecodeRoot: coders.b256,
-});
+export class StateTransitionCoder extends Coder<StateTransition, StateTransition> {
+  private coder = coders.struct({
+    bytecodeRoot: coders.b256,
+  });
+
+  override type = 'StateTransition';
+
+  encode(value: StateTransition): Uint8Array {
+    return this.coder.encode(value);
+  }
+
+  decode(data: Uint8Array, offset: number): [StateTransition, number] {
+    return this.coder.decode(data, offset);
+  }
+}
 
 export class UpgradePurposeCoder extends Coder<UpgradePurpose, UpgradePurpose> {
   override type = 'UpgradePurpose';
@@ -52,12 +76,12 @@ export class UpgradePurposeCoder extends Coder<UpgradePurpose, UpgradePurpose> {
 
     switch (type) {
       case UpgradePurposeTypeEnum.ConsensusParameters: {
-        parts.push(consensusParameterCoder.encode(upgradePurposeType.data));
+        parts.push(new ConsensusParametersCoder().encode(upgradePurposeType.data));
         break;
       }
 
       case UpgradePurposeTypeEnum.StateTransition: {
-        parts.push(stateTransitionCoder.encode(upgradePurposeType.data));
+        parts.push(new StateTransitionCoder().encode(upgradePurposeType.data));
         break;
       }
 
@@ -77,12 +101,12 @@ export class UpgradePurposeCoder extends Coder<UpgradePurpose, UpgradePurpose> {
 
     switch (type) {
       case UpgradePurposeTypeEnum.ConsensusParameters: {
-        const [decoded, o] = consensusParameterCoder.decode(data, offset);
+        const [decoded, o] = new ConsensusParametersCoder().decode(data, offset);
         return [{ type, data: decoded }, o];
       }
 
       case UpgradePurposeTypeEnum.StateTransition: {
-        const [decoded, o] = stateTransitionCoder.decode(data, offset);
+        const [decoded, o] = new StateTransitionCoder().decode(data, offset);
         return [{ type, data: decoded }, o];
       }
 

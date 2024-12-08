@@ -24,7 +24,7 @@ import type {
   Output,
   TransactionType,
 } from '@fuel-ts/transactions';
-import { OutputType, TransactionCoder, txPointerCoder } from '@fuel-ts/transactions';
+import { OutputType, TransactionCoder, TxPointerCoder } from '@fuel-ts/transactions';
 import { arrayify, assertUnreachable } from '@fuel-ts/utils';
 
 import type {
@@ -192,7 +192,7 @@ export class TransactionResponse {
           const correspondingInput = status.transaction.inputs?.[idx] as { txPointer: string };
           return {
             ...input,
-            txPointer: txPointerCoder.decodeFromGqlScalar(correspondingInput.txPointer),
+            txPointer: TxPointerCoder.decodeFromGqlScalar(correspondingInput.txPointer),
           };
         }
         return input;

@@ -7,9 +7,9 @@ import type { BN } from '@fuel-ts/math';
 import { concat, arrayify } from '@fuel-ts/utils';
 
 import { byteArray } from './byte-array';
-import { coders, createCoder } from './coders';
+import { coders } from './coders';
 import type { TxPointer } from './tx-pointer';
-import { txPointerCoder } from './tx-pointer';
+import { TxPointerCoder } from './tx-pointer';
 
 export enum InputType {
   Coin = 0,
@@ -57,50 +57,50 @@ export type InputCoin = {
   predicateData: string;
 };
 
-export const inputCoinCoder = () => {
-  const primary = coders.struct({
+export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
+  private primary = coders.struct({
     txID: coders.b256,
     outputIndex: coders.u16,
     owner: coders.b256,
     amount: coders.u64,
     assetId: coders.b256,
-    txPointer: txPointerCoder,
+    txPointer: new TxPointerCoder(),
     witnessIndex: coders.u16,
     predicateGasUsed: coders.u64,
     predicateLength: coders.u64,
     predicateDataLength: coders.u64,
   });
 
-  const secondary = (value: Pick<InputCoin, 'predicateLength' | 'predicateDataLength'>) =>
+  private secondary = (value: Pick<InputCoin, 'predicateLength' | 'predicateDataLength'>) =>
     coders.struct({
       predicate: byteArray(value.predicateLength.toNumber()),
       predicateData: byteArray(value.predicateDataLength.toNumber()),
     });
 
-  return {
-    type: 'InputCoin',
-    encode: (value: InputCoin): Uint8Array => {
-      const parts: Uint8Array[] = [];
-      parts.push(primary.encode(value));
-      parts.push(secondary(value).encode(value));
-      return concat(parts);
-    },
-    decode: (data: Uint8Array, offset: number): [InputCoin, number] => {
-      let decoded;
-      let o = offset;
-      [decoded, o] = primary.decode(data, o);
-      const base = decoded;
-      [decoded, o] = secondary(base).decode(data, o);
-      const rest = decoded;
-      const inputCoin: InputCoin = {
-        type: InputType.Coin,
-        ...base,
-        ...rest,
-      };
-      return [inputCoin, o];
-    },
-  };
-};
+  override type = 'InputCoin';
+
+  encode(value: InputCoin): Uint8Array {
+    const parts: Uint8Array[] = [];
+    parts.push(this.primary.encode(value));
+    parts.push(this.secondary(value).encode(value));
+    return concat(parts);
+  }
+
+  decode(data: Uint8Array, offset: number): [InputCoin, number] {
+    let decoded;
+    let o = offset;
+    [decoded, o] = this.primary.decode(data, o);
+    const base = decoded;
+    [decoded, o] = this.secondary(base).decode(data, o);
+    const rest = decoded;
+    const inputCoin: InputCoin = {
+      type: InputType.Coin,
+      ...base,
+      ...rest,
+    };
+    return [inputCoin, o];
+  }
+}
 
 export type InputContract = {
   type: InputType.Contract;
@@ -124,15 +124,27 @@ export type InputContract = {
   contractID: string;
 };
 
-export const inputContractCoder = createCoder('InputContract', {
-  type: coders.type(InputType.Contract),
-  txID: coders.b256,
-  outputIndex: coders.u16,
-  balanceRoot: coders.b256,
-  stateRoot: coders.b256,
-  txPointer: txPointerCoder,
-  contractID: coders.b256,
-});
+export class InputContractCoder extends Coder<InputContract, InputContract> {
+  private coder = coders.struct({
+    type: coders.type(InputType.Contract),
+    txID: coders.b256,
+    outputIndex: coders.u16,
+    balanceRoot: coders.b256,
+    stateRoot: coders.b256,
+    txPointer: new TxPointerCoder(),
+    contractID: coders.b256,
+  });
+
+  override type = 'InputContract';
+
+  encode(value: InputContract): Uint8Array {
+    return this.coder.encode(value);
+  }
+
+  decode(data: Uint8Array, offset: number): [InputContract, number] {
+    return this.coder.decode(data, offset);
+  }
+}
 
 export type InputMessage = {
   type: InputType.Message;
@@ -289,11 +301,11 @@ export class InputCoder extends Coder<Input, Input> {
 
     switch (type) {
       case InputType.Coin: {
-        parts.push(inputCoinCoder().encode(value));
+        parts.push(new InputCoinCoder().encode(value));
         break;
       }
       case InputType.Contract: {
-        parts.push(inputContractCoder.encode(value));
+        parts.push(new InputContractCoder().encode(value));
         break;
       }
       case InputType.Message: {
@@ -319,11 +331,11 @@ export class InputCoder extends Coder<Input, Input> {
     const type = decoded as InputType;
     switch (type) {
       case InputType.Coin: {
-        [decoded, o] = inputCoinCoder().decode(data, o);
+        [decoded, o] = new InputCoinCoder().decode(data, o);
         return [decoded, o];
       }
       case InputType.Contract: {
-        [decoded, o] = inputContractCoder.decode(data, o);
+        [decoded, o] = new InputContractCoder().decode(data, o);
         return [decoded, o];
       }
       case InputType.Message: {

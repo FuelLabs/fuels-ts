@@ -1,4 +1,4 @@
-import type { Coder } from '@fuel-ts/abi';
+import { Coder } from '@fuel-ts/abi';
 import { concat } from '@fuel-ts/utils';
 
 import { byteArray } from './byte-array';
@@ -11,17 +11,19 @@ export type Witness = {
   data: string;
 };
 
-export const witnessCoder: Coder<Witness, Witness> = {
-  type: 'Witness',
-  encode: (value) => {
+export class WitnessCoder extends Coder<Witness, Witness> {
+  override type = 'Witness';
+
+  encode(value: Witness): Uint8Array {
     const parts: Uint8Array[] = [];
 
     parts.push(coders.u32.encode(value.dataLength));
     parts.push(byteArray(value.dataLength).encode(value.data));
 
     return concat(parts);
-  },
-  decode: (data, offset) => {
+  }
+
+  decode(data: Uint8Array, offset: number): [Witness, number] {
     let decoded;
     let o = offset;
 
@@ -31,5 +33,5 @@ export const witnessCoder: Coder<Witness, Witness> = {
     const witnessData = decoded;
 
     return [{ dataLength, data: witnessData }, o];
-  },
-};
+  }
+}

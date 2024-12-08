@@ -1,4 +1,4 @@
-import type { Coder } from '@fuel-ts/abi';
+import { Coder } from '@fuel-ts/abi';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import { coders } from './coders';
@@ -11,20 +11,23 @@ export type TxPointer = {
   txIndex: number;
 };
 
-export interface TxPointerCoder extends Coder<TxPointer, TxPointer> {
-  decodeFromGqlScalar: (value: string) => TxPointer;
-}
-
-const base = coders.struct({
+const txPointerCoder = coders.struct({
   blockHeight: coders.u32,
   txIndex: coders.u16,
 });
 
-export const txPointerCoder: TxPointerCoder = {
-  type: 'TxPointer',
-  encode: base.encode,
-  decode: base.decode,
-  decodeFromGqlScalar: (value: string): TxPointer => {
+export class TxPointerCoder extends Coder<TxPointer, TxPointer> {
+  override type = 'TxPointer';
+
+  encode(value: TxPointer): Uint8Array {
+    return txPointerCoder.encode(value);
+  }
+
+  decode(data: Uint8Array, offset: number): [TxPointer, number] {
+    return txPointerCoder.decode(data, offset);
+  }
+
+  static decodeFromGqlScalar(value: string): TxPointer {
     // taken from https://github.com/FuelLabs/fuel-vm/blob/7366db6955589cb3444c9b2bb46e45c8539f19f5/fuel-tx/src/tx_pointer.rs#L87
     if (value.length !== 12) {
       throw new FuelError(
@@ -37,5 +40,5 @@ export const txPointerCoder: TxPointerCoder = {
       blockHeight: parseInt(blockHeight, 16),
       txIndex: parseInt(txIndex, 16),
     };
-  },
-};
+  }
+}

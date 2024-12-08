@@ -1,7 +1,6 @@
 import { arrayify, hexlify } from '@fuel-ts/utils';
 
-import type { Witness } from './witness';
-import { witnessCoder } from './witness';
+import { WitnessCoder, type Witness } from './witness';
 
 /**
  * @group node
@@ -14,11 +13,11 @@ describe('WitnessCoder', () => {
       data: '0x',
     };
 
-    const encoded = hexlify(witnessCoder.encode(witness));
+    const encoded = hexlify(new WitnessCoder().encode(witness));
 
     expect(encoded).toEqual('0x0000000000000000');
 
-    const [decoded, offset] = witnessCoder.decode(arrayify(encoded), 0);
+    const [decoded, offset] = new WitnessCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual(8);
     expect(decoded).toEqual(witness);
@@ -30,11 +29,11 @@ describe('WitnessCoder', () => {
       data: '0xdeadbeef',
     };
 
-    const encoded = hexlify(witnessCoder.encode(witness));
+    const encoded = hexlify(new WitnessCoder().encode(witness));
 
     expect(encoded).toEqual('0x0000000000000004deadbeef00000000');
 
-    const [decoded, offset] = witnessCoder.decode(arrayify(encoded), 0);
+    const [decoded, offset] = new WitnessCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual(16);
     expect(decoded).toEqual(witness);

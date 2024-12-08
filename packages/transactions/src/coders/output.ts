@@ -1,9 +1,10 @@
-import type { Coder } from '@fuel-ts/abi';
+/* eslint-disable max-classes-per-file */
+import { Coder } from '@fuel-ts/abi';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 
-import { coders, createCoder } from './coders';
+import { coders } from './coders';
 
 export enum OutputType /* u8 */ {
   Coin = 0,
@@ -23,12 +24,24 @@ export type OutputCoin = {
   assetId: string;
 };
 
-export const outputCoinCoder = createCoder('OutputCoin', {
-  type: coders.type(OutputType.Coin),
-  to: coders.b256,
-  amount: coders.u64,
-  assetId: coders.b256,
-});
+export class OutputCoinCoder extends Coder<OutputCoin, OutputCoin> {
+  private coder = coders.struct({
+    type: coders.type(OutputType.Coin),
+    to: coders.b256,
+    amount: coders.u64,
+    assetId: coders.b256,
+  });
+
+  override type = 'OutputCoin';
+
+  encode(value: OutputCoin): Uint8Array {
+    return this.coder.encode(value);
+  }
+
+  decode(data: Uint8Array, offset: number): [OutputCoin, number] {
+    return this.coder.decode(data, offset);
+  }
+}
 
 export type OutputContract = {
   type: OutputType.Contract;
@@ -40,12 +53,24 @@ export type OutputContract = {
   stateRoot: string;
 };
 
-export const outputContractCoder = createCoder('OutputContract', {
-  type: coders.type(OutputType.Contract),
-  inputIndex: coders.u8,
-  balanceRoot: coders.b256,
-  stateRoot: coders.b256,
-});
+export class OutputContractCoder extends Coder<OutputContract, OutputContract> {
+  private coder = coders.struct({
+    type: coders.type(OutputType.Contract),
+    inputIndex: coders.u8,
+    balanceRoot: coders.b256,
+    stateRoot: coders.b256,
+  });
+
+  override type = 'OutputCoin';
+
+  encode(value: OutputContract): Uint8Array {
+    return this.coder.encode(value);
+  }
+
+  decode(data: Uint8Array, offset: number): [OutputContract, number] {
+    return this.coder.decode(data, offset);
+  }
+}
 
 export type OutputChange = {
   type: OutputType.Change;
@@ -57,12 +82,24 @@ export type OutputChange = {
   assetId: string;
 };
 
-export const outputChangeCoder = createCoder('OutputChange', {
-  type: coders.type(OutputType.Change),
-  to: coders.b256,
-  amount: coders.u64,
-  assetId: coders.b256,
-});
+export class OutputChangeCoder extends Coder<OutputChange, OutputChange> {
+  private coder = coders.struct({
+    type: coders.type(OutputType.Change),
+    to: coders.b256,
+    amount: coders.u64,
+    assetId: coders.b256,
+  });
+
+  override type = 'OutputChange';
+
+  encode(value: OutputChange): Uint8Array {
+    return this.coder.encode(value);
+  }
+
+  decode(data: Uint8Array, offset: number): [OutputChange, number] {
+    return this.coder.decode(data, offset);
+  }
+}
 
 export type OutputVariable = {
   type: OutputType.Variable;
@@ -74,12 +111,24 @@ export type OutputVariable = {
   assetId: string;
 };
 
-export const outputVariableCoder = createCoder('OutputVariable', {
-  type: coders.type(OutputType.Variable),
-  to: coders.b256,
-  amount: coders.u64,
-  assetId: coders.b256,
-});
+export class OutputVariableCoder extends Coder<OutputVariable, OutputVariable> {
+  private coder = coders.struct({
+    type: coders.type(OutputType.Variable),
+    to: coders.b256,
+    amount: coders.u64,
+    assetId: coders.b256,
+  });
+
+  override type = 'OutputVariable';
+
+  encode(value: OutputVariable): Uint8Array {
+    return this.coder.encode(value);
+  }
+
+  decode(data: Uint8Array, offset: number): [OutputVariable, number] {
+    return this.coder.decode(data, offset);
+  }
+}
 
 export type OutputContractCreated = {
   type: OutputType.ContractCreated;
@@ -89,11 +138,26 @@ export type OutputContractCreated = {
   stateRoot: string;
 };
 
-export const outputContractCreatedCoder = createCoder('OutputContractCreated', {
-  type: coders.type(OutputType.ContractCreated),
-  contractId: coders.b256,
-  stateRoot: coders.b256,
-});
+export class OutputContractCreatedCoder extends Coder<
+  OutputContractCreated,
+  OutputContractCreated
+> {
+  private coder = coders.struct({
+    type: coders.type(OutputType.ContractCreated),
+    contractId: coders.b256,
+    stateRoot: coders.b256,
+  });
+
+  override type = 'OutputContractCreated';
+
+  encode(value: OutputContractCreated): Uint8Array {
+    return this.coder.encode(value);
+  }
+
+  decode(data: Uint8Array, offset: number): [OutputContractCreated, number] {
+    return this.coder.decode(data, offset);
+  }
+}
 
 export type Output =
   | OutputCoin
@@ -102,9 +166,10 @@ export type Output =
   | OutputVariable
   | OutputContractCreated;
 
-export const outputCoder: Coder<Output, Output> = {
-  type: 'Output',
-  encode: (value: Output): Uint8Array => {
+export class OutputCoder extends Coder<Output, Output> {
+  override type = 'Output';
+
+  encode(value: Output): Uint8Array {
     const parts: Uint8Array[] = [];
 
     parts.push(coders.u8.encode(value.type));
@@ -112,23 +177,23 @@ export const outputCoder: Coder<Output, Output> = {
 
     switch (type) {
       case OutputType.Coin: {
-        parts.push(outputCoinCoder.encode(value));
+        parts.push(new OutputCoinCoder().encode(value));
         break;
       }
       case OutputType.Contract: {
-        parts.push(outputContractCoder.encode(value));
+        parts.push(new OutputContractCoder().encode(value));
         break;
       }
       case OutputType.Change: {
-        parts.push(outputChangeCoder.encode(value));
+        parts.push(new OutputChangeCoder().encode(value));
         break;
       }
       case OutputType.Variable: {
-        parts.push(outputVariableCoder.encode(value));
+        parts.push(new OutputVariableCoder().encode(value));
         break;
       }
       case OutputType.ContractCreated: {
-        parts.push(outputContractCreatedCoder.encode(value));
+        parts.push(new OutputContractCreatedCoder().encode(value));
         break;
       }
       default: {
@@ -140,8 +205,9 @@ export const outputCoder: Coder<Output, Output> = {
     }
 
     return concat(parts);
-  },
-  decode: (data: Uint8Array, initialOffset: number): [Output, number] => {
+  }
+
+  decode(data: Uint8Array, initialOffset: number): [Output, number] {
     let decoded;
     let o = initialOffset;
 
@@ -150,23 +216,23 @@ export const outputCoder: Coder<Output, Output> = {
 
     switch (type) {
       case OutputType.Coin: {
-        [decoded, o] = outputCoinCoder.decode(data, o);
+        [decoded, o] = new OutputCoinCoder().decode(data, o);
         return [decoded, o];
       }
       case OutputType.Contract: {
-        [decoded, o] = outputContractCoder.decode(data, o);
+        [decoded, o] = new OutputContractCoder().decode(data, o);
         return [decoded, o];
       }
       case OutputType.Change: {
-        [decoded, o] = outputChangeCoder.decode(data, o);
+        [decoded, o] = new OutputChangeCoder().decode(data, o);
         return [decoded, o];
       }
       case OutputType.Variable: {
-        [decoded, o] = outputVariableCoder.decode(data, o);
+        [decoded, o] = new OutputVariableCoder().decode(data, o);
         return [decoded, o];
       }
       case OutputType.ContractCreated: {
-        [decoded, o] = outputContractCreatedCoder.decode(data, o);
+        [decoded, o] = new OutputContractCreatedCoder().decode(data, o);
         return [decoded, o];
       }
       default: {
@@ -176,5 +242,5 @@ export const outputCoder: Coder<Output, Output> = {
         );
       }
     }
-  },
-};
+  }
+}
