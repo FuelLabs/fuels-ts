@@ -23,7 +23,7 @@
     "build": "run-s build:package build:recipes build:format",
     "build:package": "tsup",
     "build:recipes": "tsx ./scripts/build-recipes.ts",
-    "build:format": "prettier --config ../../.prettierrc --write .",
+    "build:format": "prettier --config ../../.prettierrc --log-level error --write .",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
   "license": "Apache-2.0",
