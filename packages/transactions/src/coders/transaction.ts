@@ -19,7 +19,7 @@ import type { TxPointer } from './tx-pointer';
 import { txPointerCoder } from './tx-pointer';
 import { UpgradePurposeCoder, type UpgradePurpose } from './upgrade-purpose';
 import type { Witness } from './witness';
-import { WitnessCoder } from './witness';
+import { witnessCoder } from './witness';
 
 export enum TransactionType /* u8 */ {
   Script = 0,
@@ -102,7 +102,7 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     parts.push(new PoliciesCoder().encode(value.policies));
     parts.push(coders.array(new InputCoder(), value.inputsCount).encode(value.inputs));
     parts.push(coders.array(outputCoder, value.outputsCount).encode(value.outputs));
-    parts.push(new ArrayCoder(new WitnessCoder(), value.witnessesCount).encode(value.witnesses));
+    parts.push(coders.array(witnessCoder, value.witnessesCount).encode(value.witnesses));
 
     return concat(parts);
   }
@@ -136,7 +136,7 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     const inputs = decoded;
     [decoded, o] = coders.array(outputCoder, outputsCount).decode(data, o);
     const outputs = decoded;
-    [decoded, o] = new ArrayCoder(new WitnessCoder(), witnessesCount).decode(data, o);
+    [decoded, o] = coders.array(witnessCoder, witnessesCount).decode(data, o);
     const witnesses = decoded;
 
     return [
@@ -201,7 +201,7 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
     parts.push(new PoliciesCoder().encode(value.policies));
     parts.push(coders.array(new InputCoder(), value.inputsCount).encode(value.inputs));
     parts.push(coders.array(outputCoder, value.outputsCount).encode(value.outputs));
-    parts.push(new ArrayCoder(new WitnessCoder(), value.witnessesCount).encode(value.witnesses));
+    parts.push(coders.array(witnessCoder, value.witnessesCount).encode(value.witnesses));
 
     return concat(parts);
   }
@@ -235,7 +235,7 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
     const inputs = decoded;
     [decoded, o] = coders.array(outputCoder, outputsCount).decode(data, o);
     const outputs = decoded;
-    [decoded, o] = new ArrayCoder(new WitnessCoder(), witnessesCount).decode(data, o);
+    [decoded, o] = coders.array(witnessCoder, witnessesCount).decode(data, o);
     const witnesses = decoded;
 
     return [
@@ -353,7 +353,7 @@ export class TransactionUpgradeCoder extends Coder<TransactionUpgrade, Transacti
     parts.push(new PoliciesCoder().encode(value.policies));
     parts.push(coders.array(new InputCoder(), value.inputsCount).encode(value.inputs));
     parts.push(coders.array(outputCoder, value.outputsCount).encode(value.outputs));
-    parts.push(new ArrayCoder(new WitnessCoder(), value.witnessesCount).encode(value.witnesses));
+    parts.push(coders.array(witnessCoder, value.witnessesCount).encode(value.witnesses));
 
     return concat(parts);
   }
@@ -378,7 +378,7 @@ export class TransactionUpgradeCoder extends Coder<TransactionUpgrade, Transacti
     const inputs = decoded;
     [decoded, o] = coders.array(outputCoder, outputsCount).decode(data, o);
     const outputs = decoded;
-    [decoded, o] = new ArrayCoder(new WitnessCoder(), witnessesCount).decode(data, o);
+    [decoded, o] = coders.array(witnessCoder, witnessesCount).decode(data, o);
     const witnesses = decoded;
 
     return [
@@ -442,7 +442,7 @@ export class TransactionUploadCoder extends Coder<TransactionUpload, Transaction
     parts.push(new PoliciesCoder().encode(value.policies));
     parts.push(coders.array(new InputCoder(), value.inputsCount).encode(value.inputs));
     parts.push(coders.array(outputCoder, value.outputsCount).encode(value.outputs));
-    parts.push(new ArrayCoder(new WitnessCoder(), value.witnessesCount).encode(value.witnesses));
+    parts.push(coders.array(witnessCoder, value.witnessesCount).encode(value.witnesses));
 
     return concat(parts);
   }
@@ -477,7 +477,7 @@ export class TransactionUploadCoder extends Coder<TransactionUpload, Transaction
     const inputs = decoded;
     [decoded, o] = coders.array(outputCoder, outputsCount).decode(data, o);
     const outputs = decoded;
-    [decoded, o] = new ArrayCoder(new WitnessCoder(), witnessesCount).decode(data, o);
+    [decoded, o] = coders.array(witnessCoder, witnessesCount).decode(data, o);
     const witnesses = decoded;
 
     return [
@@ -530,7 +530,7 @@ export class TransactionBlobCoder extends Coder<TransactionBlob, TransactionBlob
     parts.push(new PoliciesCoder().encode(value.policies));
     parts.push(coders.array(new InputCoder(), value.inputsCount).encode(value.inputs));
     parts.push(coders.array(outputCoder, value.outputsCount).encode(value.outputs));
-    parts.push(new ArrayCoder(new WitnessCoder(), value.witnessesCount).encode(value.witnesses));
+    parts.push(coders.array(witnessCoder, value.witnessesCount).encode(value.witnesses));
 
     return concat(parts);
   }
@@ -557,7 +557,7 @@ export class TransactionBlobCoder extends Coder<TransactionBlob, TransactionBlob
     const inputs = decoded;
     [decoded, o] = coders.array(outputCoder, outputsCount).decode(data, o);
     const outputs = decoded;
-    [decoded, o] = new ArrayCoder(new WitnessCoder(), witnessesCount).decode(data, o);
+    [decoded, o] = coders.array(witnessCoder, witnessesCount).decode(data, o);
     const witnesses = decoded;
 
     return [
