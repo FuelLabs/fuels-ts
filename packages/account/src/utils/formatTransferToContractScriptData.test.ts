@@ -9,6 +9,8 @@ import {
   formatTransferToContractScriptData,
 } from './formatTransferToContractScriptData';
 
+const MAX_U64 = bn(2).pow(64).sub(1);
+
 /**
  * @group node
  */
@@ -56,7 +58,7 @@ describe('util', () => {
     const arrayify = vi.spyOn(arrayifyMod, 'arrayify').mockReturnValue(Uint8Array.from(byte));
 
     const contractId = getRandomB256();
-    const amount: BigNumberish = bn(0);
+    const amount: BigNumberish = bn(MAX_U64);
     const assetId: BytesLike = getRandomB256();
 
     const scriptData = formatTransferToContractScriptData([
