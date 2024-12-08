@@ -9,7 +9,7 @@ import {
   STR_SLICE_TYPE,
   VECTOR_TYPE,
 } from '../encoding-constants';
-import type { Coder, CoderType, GetCoderFn, GetCoderParams } from '../encoding-types';
+import type { Coder, GetCoderFn, GetCoderParams } from '../encoding-types';
 import { assertEncodedLengthEquals } from '../validation';
 
 import { u64 } from './fixed';
@@ -79,7 +79,7 @@ export const rawSlice: Coder<number[]> = createHeapType(rawSliceTransformer);
 /**
  * Dynamic Length String based coders
  */
-const createStringCoder = (type: CoderType): Coder<string, string> =>
+const createStringCoder = (type: string): Coder<string, string> =>
   createHeapType({
     type,
     encode: (value: string) => toUtf8Bytes(value),
