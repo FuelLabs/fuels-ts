@@ -35,9 +35,7 @@
     "lsof",
     "memfs",
     "open",
-    "textlint",
-    "textlint-rule-no-dead-link",
-    "@elasticpath/textlint-rule-no-dead-relative-link",
+    "markdown-link-check",
     "ts-generator",
     "webdriverio",
     "syncpack"
