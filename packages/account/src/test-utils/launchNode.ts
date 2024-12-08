@@ -276,8 +276,8 @@ export const launchNode = async ({
       }
     });
 
-    // // Increase the max listeners to avoid a warning
-    // process.setMaxListeners(100);
+    // Increase the max listeners to avoid a warning
+    process.setMaxListeners(100);
 
     // Process exit.
     process.on('exit', cleanup);
