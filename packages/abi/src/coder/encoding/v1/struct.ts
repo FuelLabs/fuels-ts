@@ -7,19 +7,19 @@ import type { Coder, GetCoderFn, GetCoderParams, TypesOfCoder } from '../encodin
 /**
  * `struct` coder
  */
-type EnumEncodeValue<TCoders extends Record<string, Coder>> = {
+export type StructEncodeValue<TCoders extends Record<string, Coder>> = {
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Input'];
 };
 
-type StructDecodeData<TCoders extends Record<string, Coder>> = {
+export type StructDecodeData<TCoders extends Record<string, Coder>> = {
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Decoded'];
 };
 
 export const struct = <TCoders extends Record<string, Coder>>(
   coders: TCoders
-): Coder<EnumEncodeValue<TCoders>, StructDecodeData<TCoders>> => ({
+): Coder<StructEncodeValue<TCoders>, StructDecodeData<TCoders>> => ({
   type: STRUCT_TYPE,
-  encode: (value: EnumEncodeValue<TCoders>): Uint8Array => {
+  encode: (value: StructEncodeValue<TCoders>): Uint8Array => {
     const expectedKeys = Object.keys(coders);
     const actualKeys = Object.keys(value);
 
