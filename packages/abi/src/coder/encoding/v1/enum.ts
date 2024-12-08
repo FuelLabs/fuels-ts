@@ -4,7 +4,7 @@ import type { RequireExactlyOne } from 'type-fest';
 
 import type { AbiTypeComponent } from '../../../parser';
 import { ENUM_TYPE, OPTION_TYPE, VOID_TYPE } from '../encoding-constants';
-import type { GetCoderFn, GetCoderParams, Coder, TypesOfCoder, CoderType } from '../encoding-types';
+import type { GetCoderFn, GetCoderParams, Coder, TypesOfCoder } from '../encoding-types';
 
 import { u64 } from './fixed';
 
@@ -17,7 +17,7 @@ export type EnumDecodeValue<TCoders extends Record<string, Coder>> = RequireExac
 
 export const CASE_KEY_WORD_LENGTH = 8;
 
-const createCaseKeyCoder = (type: CoderType, validKeys: string[]): Coder<string, string> => ({
+const createCaseKeyCoder = (type: string, validKeys: string[]): Coder<string, string> => ({
   type,
   encode: u64.encode,
   decode: (data: Uint8Array, initialOffset: number = 0) => {
@@ -47,7 +47,7 @@ const createCaseKeyCoder = (type: CoderType, validKeys: string[]): Coder<string,
 
 export const enumCoder = <TCoders extends Record<string, Coder>>(
   coders: TCoders,
-  type: CoderType = ENUM_TYPE
+  type: string = ENUM_TYPE
 ) => {
   const isNativeValue = (value: EnumEncodeValue<TCoders>) => typeof value === 'string';
   const isNativeCoder = (coder: Coder) => type !== OPTION_TYPE && coder.type === VOID_TYPE;

@@ -1,8 +1,6 @@
 import { FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 
-import type { CoderType } from './encoding-types';
-
 /**
  * Asserts that a value is a boolean.
  *
@@ -52,7 +50,7 @@ export const assertBnValueByteLengthLessThan = (value: BN, max: number, type: st
 export const assertEncodedLengthEquals = (
   data: Uint8Array,
   expectedLength: number,
-  type: CoderType
+  type: string
 ) => {
   if (data.length !== expectedLength) {
     throw new FuelError(FuelError.CODES.DECODE_ERROR, `Invalid ${type} data - unexpected length.`, {

@@ -7,30 +7,26 @@ import type { Coder, GetCoderFn, GetCoderParams, TypesOfCoder } from '../encodin
 /**
  * `struct` coder
  */
-type EnumEncodeValue<TCoders extends Record<string, Coder>> = {
+export type StructEncodeValue<TCoders extends Record<string, Coder>> = {
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Input'];
 };
 
-type StructDecodeData<TCoders extends Record<string, Coder>> = {
+export type StructDecodeData<TCoders extends Record<string, Coder>> = {
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Decoded'];
 };
 
 export const struct = <TCoders extends Record<string, Coder>>(
   coders: TCoders
-): Coder<EnumEncodeValue<TCoders>, StructDecodeData<TCoders>> => ({
+): Coder<StructEncodeValue<TCoders>, StructDecodeData<TCoders>> => ({
   type: STRUCT_TYPE,
-  encode: (value: EnumEncodeValue<TCoders>): Uint8Array => {
+  encode: (value: StructEncodeValue<TCoders>): Uint8Array => {
     const expectedKeys = Object.keys(coders);
     const actualKeys = Object.keys(value);
 
     // Check if there are any missing keys or extra keys
     const missingKeys = expectedKeys.filter((key) => !actualKeys.includes(key));
-    const extraKeys = actualKeys.filter((key) => !expectedKeys.includes(key));
-    if (missingKeys.length > 0 || extraKeys.length > 0) {
-      const paths = [
-        ...missingKeys.map((key) => ({ path: key, error: 'Field not present.' })),
-        ...extraKeys.map((key) => ({ path: key, error: 'Field not expected.' })),
-      ];
+    if (missingKeys.length > 0) {
+      const paths = missingKeys.map((key) => ({ path: key, error: 'Field not present.' }));
       throw new FuelError(
         FuelError.CODES.ENCODE_ERROR,
         'Invalid struct value - malformed object.',
@@ -42,10 +38,7 @@ export const struct = <TCoders extends Record<string, Coder>>(
     }
 
     // Encode each value
-    const encodedValues = Object.entries(value).map(([key, val]) => {
-      const coder = coders[key];
-      return coder.encode(val);
-    });
+    const encodedValues = Object.entries(coders).map(([key, coder]) => coder.encode(value[key]));
 
     return concatBytes(encodedValues);
   },

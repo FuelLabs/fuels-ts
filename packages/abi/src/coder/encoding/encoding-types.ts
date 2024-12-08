@@ -4,15 +4,7 @@ import type { BN } from '@fuel-ts/math';
 
 import type { AbiType } from '../../parser';
 
-import type { ENCODING_TYPES } from './encoding-constants';
 import type { SupportedCodersV1 } from './v1';
-
-/**
- * A type of coder.
- *
- * @see {@link ENCODING_TYPES} for a list of all supported types
- */
-export type CoderType = (typeof ENCODING_TYPES)[number];
 
 /**
  * All the supported coders, across all versions.
@@ -60,10 +52,8 @@ export type TypesOfCoder<TCoder> =
 export abstract class Coder<TEncoded = unknown, TDecoded = unknown> {
   /**
    * The type of the coder
-   *
-   * @see {@link CoderType} for a list of supported types
    */
-  abstract type: CoderType;
+  abstract type: string;
 
   /**
    * Encode a value.

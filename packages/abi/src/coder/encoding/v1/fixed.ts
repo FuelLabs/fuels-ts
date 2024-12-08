@@ -14,7 +14,7 @@ import {
   U8_TYPE,
   VOID_TYPE,
 } from '../encoding-constants';
-import type { Coder, CoderType, FixedLengthCoder } from '../encoding-types';
+import type { Coder, FixedLengthCoder } from '../encoding-types';
 import {
   assertBnValueByteLengthLessThan,
   assertBnValueNonNegative,
@@ -31,7 +31,7 @@ import {
  */
 const createNumberCoder = (
   encodedLength: number,
-  type: CoderType
+  type: string
 ): FixedLengthCoder<number, number> => ({
   type,
   length: encodedLength,
@@ -61,7 +61,7 @@ const createNumberCoder = (
  * @param type - The type of the coder.
  * @returns A big number based coder.
  */
-const createBigNumberCoder = (encodedLength: number, type: CoderType): Coder<BNInput, BN> => ({
+const createBigNumberCoder = (encodedLength: number, type: string): Coder<BNInput, BN> => ({
   type,
   /**
    * Encode a big number value.
@@ -105,7 +105,7 @@ const createBigNumberCoder = (encodedLength: number, type: CoderType): Coder<BNI
  * @param type - The type of the coder.
  * @returns A hex based coder.
  */
-const createHexCoder = (encodedLength: number, type: CoderType): Coder<string, string> => ({
+const createHexCoder = (encodedLength: number, type: string): Coder<string, string> => ({
   type,
   /**
    * Encode a hex value.
