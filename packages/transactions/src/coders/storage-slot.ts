@@ -1,4 +1,4 @@
-import { B256Coder, StructCoder } from '@fuel-ts/abi-coder';
+import { coders, createCoder } from './coders';
 
 export type StorageSlot = {
   /** Key (b256) */
@@ -7,14 +7,7 @@ export type StorageSlot = {
   value: string;
 };
 
-export class StorageSlotCoder extends StructCoder<{
-  key: B256Coder;
-  value: B256Coder;
-}> {
-  constructor() {
-    super('StorageSlot', {
-      key: new B256Coder(),
-      value: new B256Coder(),
-    });
-  }
-}
+export const storageSlotCoder = createCoder('StorageSlot', {
+  key: coders.b256,
+  value: coders.b256,
+});
