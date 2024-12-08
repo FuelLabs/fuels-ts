@@ -272,10 +272,8 @@ export const launchNode = async ({
         });
       }
       if (/error/i.test(text)) {
-        if (loggingEnabled) {
-          // eslint-disable-next-line no-console
-          console.log(text);
-        }
+        // eslint-disable-next-line no-console
+        console.log(text);
         reject(new FuelError(FuelError.CODES.NODE_LAUNCH_FAILED, text));
       }
     });
