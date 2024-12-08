@@ -38,10 +38,7 @@ export const struct = <TCoders extends Record<string, Coder>>(
     }
 
     // Encode each value
-    const encodedValues = Object.entries(value).map(([key, val]) => {
-      const coder = coders[key];
-      return coder.encode(val);
-    });
+    const encodedValues = Object.entries(coders).map(([key, coder]) => coder.encode(value[key]));
 
     return concatBytes(encodedValues);
   },
