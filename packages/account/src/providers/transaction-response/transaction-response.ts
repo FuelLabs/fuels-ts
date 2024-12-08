@@ -420,6 +420,6 @@ export class TransactionResponse {
   }
 
   private unsetResourceCache() {
-    this.provider.cache?.clear();
+    this.provider.cache?.unset(this.id);
   }
 }

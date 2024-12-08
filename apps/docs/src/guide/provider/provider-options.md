@@ -74,4 +74,4 @@ When submitting transactions via the `Provider`, you may want to have caching en
 
 This may not be ideal in all cases, such as if you are using multiple Providers and you would like to have different TTLs for each of them. In such cases, you may want to use an _instance-specific_ cache strategy, which means that each `Provider` instance will have its own cache.
 
-> **Note:** Using an instance-specific cache strategy will require you to manually manage the cache, for each instance so use this strategy with caution.
+> **Note:** Using an instance-specific cache strategy will require you to manually manage the cache for each instance individually, so use this strategy with caution.
