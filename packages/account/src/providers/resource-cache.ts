@@ -54,7 +54,7 @@ export class ResourceCache {
     return this.strategy === 'global' ? this.globalCache.getTTL() : this.ttl;
   }
 
-  getCacheStrategy(): CacheStrategy {
+  getStrategy() {
     return this.strategy;
   }
 
@@ -113,18 +113,6 @@ export class ResourceCache {
 
   clear(): void {
     this.getActiveCache().clear();
-  }
-
-  getStrategy() {
-    return this.strategy;
-  }
-
-  getGlobalCache() {
-    return this.globalCache;
-  }
-
-  getInstanceCache() {
-    return this.instanceCache;
   }
 
   reset() {
