@@ -523,4 +523,75 @@ describe('Funding Transactions', () => {
       /Transaction input validation failed: Transaction id already exists \(id: .*\)/
     );
   }, 15_000);
+
+  it('Proivders that use instance caching strategies should allow for different ttls', async () => {
+    using launched = await launchTestNode({
+      nodeOptions: {
+        // A new block will be generated every 5 seconds
+        args: ['--poa-instant', 'false', '--poa-interval-period', '5s'],
+      },
+      providerOptions: {
+        resourceCacheTTL: 1,
+        resourceCacheStrategy: 'instance',
+      },
+      walletsConfig: {
+        coinsPerAsset: 1,
+        amountPerCoin: 100_500,
+      },
+    });
+    const {
+      provider: provider1,
+      wallets: [fundedWallet1],
+    } = launched;
+
+    using launched2 = await launchTestNode({
+      nodeOptions: {
+        // A new block will be generated every 5 seconds
+        args: ['--poa-instant', 'false', '--poa-interval-period', '5s'],
+      },
+      providerOptions: {
+        resourceCacheTTL: 1000,
+        resourceCacheStrategy: 'instance',
+      },
+      walletsConfig: {
+        amountPerCoin: 100_500,
+        coinsPerAsset: 1,
+      },
+    });
+    const {
+      provider: provider2,
+      wallets: [fundedWallet2],
+    } = launched2;
+
+    const transferAmount = 100_000;
+
+    expect(provider1.cache?.getStrategy()).toEqual('instance');
+    expect(provider2.cache?.getStrategy()).toEqual('instance');
+
+    const receiver = Wallet.generate({ provider: provider1 });
+
+    // Submitting TX 1 of 100_00 which will require the entire balance of the wallet
+    await fundedWallet1.transfer(receiver.address, transferAmount, provider1.getBaseAssetId());
+
+    // Submitting TX 2 of 100_00 which will require the entire balance of the wallet
+    await fundedWallet2.transfer(receiver.address, transferAmount, provider2.getBaseAssetId());
+
+    // Allow time for the Provider1 cache to expire
+    await sleep(100);
+
+    // Given that the cache is set to 1ms, the transaction will be rejected by the node as opposed to
+    // the provider
+    await expect(() =>
+      fundedWallet1.transfer(receiver.address, transferAmount, provider1.getBaseAssetId())
+    ).rejects.toThrowError(
+      /Transaction input validation failed: Transaction id already exists \(id: .*\)/
+    );
+
+    // should fail as this transaction is trying to use the same cached UTXO
+    await expect(() =>
+      fundedWallet2.transfer(receiver.address, transferAmount, provider2.getBaseAssetId())
+    ).rejects.toThrowError(
+      "The account(s) sending the transaction don't have enough funds to cover the transaction."
+    );
+  });
 });

@@ -21,7 +21,7 @@ export type CacheStrategy = 'global' | 'instance';
 export class ResourceCache {
   private readonly ttl: number;
   private readonly strategy: CacheStrategy;
-  private instanceCache?: Map<string, CachedResource>;
+  private instanceCache: Map<string, CachedResource> = new Map();
   private globalCache: GlobalCache;
 
   constructor(
@@ -47,7 +47,7 @@ export class ResourceCache {
   }
 
   getActiveCache(): Map<string, CachedResource> {
-    return this.strategy === 'global' ? this.globalCache.getCache() : this.instanceCache!;
+    return this.strategy === 'global' ? this.globalCache.getCache() : this.instanceCache;
   }
 
   getActiveTTL(): number {
