@@ -1,6 +1,8 @@
-import { B256Coder, Coder, NumberCoder } from '@fuel-ts/abi-coder';
+import { Coder } from '@fuel-ts/abi';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { concat } from '@fuel-ts/utils';
+
+import { coders, createCoder } from './coders';
 
 export enum UpgradePurposeTypeEnum {
   ConsensusParameters = 0,
@@ -25,35 +27,37 @@ export interface ConsensusParameters {
   checksum: string;
 }
 
+export const consensusParameterCoder = createCoder('ConsensusParameters', {
+  witnessIndex: coders.u16,
+  checksum: coders.b256,
+});
+
 export interface StateTransition {
   /** The root of the new bytecode of the state transition function. */
   bytecodeRoot: string;
 }
 
+export const stateTransitionCoder = createCoder('StateTransition', {
+  bytecodeRoot: coders.b256,
+});
+
 export class UpgradePurposeCoder extends Coder<UpgradePurpose, UpgradePurpose> {
-  constructor() {
-    super('UpgradePurpose', 'UpgradePurpose', 0);
-  }
+  override type = 'UpgradePurpose';
 
   encode(upgradePurposeType: UpgradePurpose): Uint8Array {
     const parts: Uint8Array[] = [];
     const { type } = upgradePurposeType;
 
-    parts.push(new NumberCoder('u8', { padToWordSize: true }).encode(type));
+    parts.push(coders.u8.encode(type));
 
     switch (type) {
       case UpgradePurposeTypeEnum.ConsensusParameters: {
-        const data = upgradePurposeType.data as ConsensusParameters;
-
-        parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(data.witnessIndex));
-        parts.push(new B256Coder().encode(data.checksum));
+        parts.push(consensusParameterCoder.encode(upgradePurposeType.data));
         break;
       }
 
       case UpgradePurposeTypeEnum.StateTransition: {
-        const data = upgradePurposeType.data as StateTransition;
-
-        parts.push(new B256Coder().encode(data.bytecodeRoot));
+        parts.push(stateTransitionCoder.encode(upgradePurposeType.data));
         break;
       }
 
@@ -68,28 +72,18 @@ export class UpgradePurposeCoder extends Coder<UpgradePurpose, UpgradePurpose> {
     return concat(parts);
   }
 
-  decode(data: Uint8Array, offset: number): [UpgradePurpose, number] {
-    let o = offset;
-    let decoded;
-
-    [decoded, o] = new NumberCoder('u8', { padToWordSize: true }).decode(data, o);
-    const type = decoded as UpgradePurposeTypeEnum;
+  decode(data: Uint8Array, initialOffset: number): [UpgradePurpose, number] {
+    const [type, offset] = coders.u8.decode(data, initialOffset);
 
     switch (type) {
       case UpgradePurposeTypeEnum.ConsensusParameters: {
-        [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
-        const witnessIndex = decoded;
-        [decoded, o] = new B256Coder().decode(data, o);
-        const checksum = decoded;
-
-        return [{ type, data: { witnessIndex, checksum } }, o];
+        const [decoded, o] = consensusParameterCoder.decode(data, offset);
+        return [{ type, data: decoded }, o];
       }
 
       case UpgradePurposeTypeEnum.StateTransition: {
-        [decoded, o] = new B256Coder().decode(data, o);
-        const bytecodeRoot = decoded;
-
-        return [{ type, data: { bytecodeRoot } }, o];
+        const [decoded, o] = stateTransitionCoder.decode(data, offset);
+        return [{ type, data: decoded }, o];
       }
 
       default: {
