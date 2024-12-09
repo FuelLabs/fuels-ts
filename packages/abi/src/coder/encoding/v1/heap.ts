@@ -3,7 +3,7 @@ import { concat, toUtf8Bytes, toUtf8String } from '@fuel-ts/utils';
 
 import { MAX_BYTES } from '../../constants';
 import {
-  BYTE_TYPE,
+  BYTES_TYPE,
   RAW_SLICE_TYPE,
   STD_STRING_TYPE,
   STR_SLICE_TYPE,
@@ -56,19 +56,13 @@ const createHeapType = <TEncoded extends { length: number }, TDecoded>({
   },
 });
 
-/**
- * Byte
- */
-const byteTransformer: Coder<Uint8Array | number[], Uint8Array> = {
-  type: BYTE_TYPE,
+const bytesTransformer: Coder<Uint8Array | number[], Uint8Array> = {
+  type: BYTES_TYPE,
   encode: (value: Uint8Array | number[]) => (Array.isArray(value) ? new Uint8Array(value) : value),
   decode: (data: Uint8Array, offset: number): [Uint8Array, number] => [data, offset],
 };
-export const byte: Coder<Uint8Array | number[], Uint8Array> = createHeapType(byteTransformer);
+export const bytes: Coder<Uint8Array | number[], Uint8Array> = createHeapType(bytesTransformer);
 
-/**
- * Raw slice
- */
 const rawSliceTransformer: Coder<number[]> = {
   type: RAW_SLICE_TYPE,
   encode: (value: number[]) => new Uint8Array(value),
@@ -76,9 +70,6 @@ const rawSliceTransformer: Coder<number[]> = {
 };
 export const rawSlice: Coder<number[]> = createHeapType(rawSliceTransformer);
 
-/**
- * Dynamic Length String based coders
- */
 const createStringCoder = (type: string): Coder<string, string> =>
   createHeapType({
     type,
@@ -89,9 +80,6 @@ const createStringCoder = (type: string): Coder<string, string> =>
 export const stdString = createStringCoder(STD_STRING_TYPE);
 export const str = createStringCoder(STR_SLICE_TYPE);
 
-/**
- * Vec
- */
 type VecEncodedValue<TCoder extends Coder = Coder> =
   | Array<ReturnType<TCoder['encode']>[0]>
   | Uint8Array;

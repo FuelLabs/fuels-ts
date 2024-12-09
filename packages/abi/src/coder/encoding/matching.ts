@@ -24,7 +24,7 @@ export const createCoderMatcher = (coders: SupportedCoders) =>
     tuple: coders.tuple,
     vector: coders.vector,
     struct: coders.struct,
-    bytes: coders.byte,
+    bytes: coders.bytes,
     stdString: coders.stdString,
     str: coders.str,
     enum: coders.enum,

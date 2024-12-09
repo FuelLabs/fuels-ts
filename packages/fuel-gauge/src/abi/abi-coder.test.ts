@@ -1142,10 +1142,7 @@ describe('AbiCoder', () => {
   });
 
   describe('types_struct_with_array', () => {
-    /**
-     * TODO This is causing a generic to be left into the parsed format, ask Nedim about this.
-     */
-    it.skip('should encode/decode just fine', async () => {
+    it('should encode/decode just fine', async () => {
       // Inputs
       const inputB256: string =
         '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
@@ -1406,7 +1403,7 @@ describe('AbiCoder', () => {
   });
 
   describe('types_struct_with_complex_nested_struct', () => {
-    it('should encode/decode just fine');
+    it.todo('should encode/decode just fine');
 
     it('should have function properties', () => {
       const fn = contract.interface.getFunction('types_struct_with_complex_nested_struct');

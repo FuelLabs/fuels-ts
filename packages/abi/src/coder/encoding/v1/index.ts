@@ -1,7 +1,7 @@
 import { arrayCoder } from './array';
 import { enumCoder } from './enum';
 import { voidCoder, u16, u32, u8, u64, u256, b256, b512, bool } from './fixed';
-import { byte, rawSlice, stdString, str, vector } from './heap';
+import { bytes, rawSlice, stdString, str, vector } from './heap';
 import { option } from './option';
 import { string } from './string';
 import { struct } from './struct';
@@ -20,7 +20,7 @@ export const v1: SupportedCodersV1 = {
   b512,
   bool,
   void: voidCoder,
-  byte,
+  bytes,
   rawSlice,
   str,
   stdString,
