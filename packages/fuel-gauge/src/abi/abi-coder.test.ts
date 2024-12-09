@@ -1142,10 +1142,7 @@ describe('AbiCoder', () => {
   });
 
   describe('types_struct_with_array', () => {
-    /**
-     * TODO This is causing a generic to be left into the parsed format, ask Nedim about this.
-     */
-    it.skip('should encode/decode just fine', async () => {
+    it('should encode/decode just fine', async () => {
       // Inputs
       const inputB256: string =
         '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
