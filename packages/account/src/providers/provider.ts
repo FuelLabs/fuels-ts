@@ -1011,6 +1011,7 @@ Supported fuel-core version: ${supportedVersion}.`
       } = await this.operations.dryRun({
         encodedTransactions: [hexlify(transactionRequest.toTransactionBytes())],
         utxoValidation: false,
+        gasPrice: '0',
       });
 
       receipts = rawReceipts.map(processGqlReceipt);
@@ -1032,6 +1033,7 @@ Supported fuel-core version: ${supportedVersion}.`
 
         const { maxFee } = await this.estimateTxGasAndFee({
           transactionRequest,
+          gasPrice: bn(0),
         });
 
         // eslint-disable-next-line no-param-reassign
@@ -1204,7 +1206,7 @@ Supported fuel-core version: ${supportedVersion}.`
     const { gasPriceFactor, maxGasPerTx } = this.getGasConfig();
 
     const minGas = transactionRequest.calculateMinGas(chainInfo);
-    if (!gasPrice) {
+    if (!isDefined(gasPrice)) {
       gasPrice = await this.estimateGasPrice(10);
     }
 
