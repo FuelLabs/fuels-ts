@@ -1403,7 +1403,7 @@ describe('AbiCoder', () => {
   });
 
   describe('types_struct_with_complex_nested_struct', () => {
-    it('should encode/decode just fine');
+    it.todo('should encode/decode just fine');
 
     it('should have function properties', () => {
       const fn = contract.interface.getFunction('types_struct_with_complex_nested_struct');
