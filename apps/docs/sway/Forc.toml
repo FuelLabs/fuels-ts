@@ -32,6 +32,7 @@ members = [
   "simple-predicate",
   "simple-token",
   "simple-token-abi",
+  "script-call-contract",
   "storage-test-contract",
   "sum-option-u8",
   "token",
