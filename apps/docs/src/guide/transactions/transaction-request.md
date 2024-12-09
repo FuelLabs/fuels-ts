@@ -60,7 +60,7 @@ If needed, you can manually include specific coins or messages in the transactio
 
 Imagine that you have a Sway script that manually calls a contract:
 
-<<< @/../../../../sway/script-call-contract/src/main.sw#transaction-request-7{rs:line-numbers}
+<<< @/../../docs/sway/script-call-contract/src/main.sw#transaction-request-7{rs:line-numbers}
 
 In those cases, you will need to add both an `InputContract` and `OutputContract` to the transaction request:
 
