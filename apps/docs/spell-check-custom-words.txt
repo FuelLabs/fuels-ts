@@ -289,6 +289,7 @@ toolchains
 transactional
 tsconfig
 TTL
+TTLs
 tuple's
 turbofish
 TypeChain
