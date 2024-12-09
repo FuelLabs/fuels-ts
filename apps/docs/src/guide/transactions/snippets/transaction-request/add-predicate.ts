@@ -13,7 +13,7 @@ import { ScriptSum, SimplePredicate } from '../../../../typegend';
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
-// #region transaction-request-5
+// #region transaction-request-9
 // Instantiate the transaction request
 const transactionRequest = new ScriptTransactionRequest({
   script: ScriptSum.bytecode,
@@ -42,4 +42,4 @@ const predicateCoins = await predicate.getResourcesToSpend([
 
 // Add the predicate input and resources
 transactionRequest.addResources(predicateCoins);
-// #endregion transaction-request-5
+// #endregion transaction-request-9
