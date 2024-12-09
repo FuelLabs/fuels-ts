@@ -3,7 +3,7 @@ import { concat, toUtf8Bytes, toUtf8String } from '@fuel-ts/utils';
 
 import { MAX_BYTES } from '../../constants';
 import {
-  BYTE_TYPE,
+  BYTES_TYPE,
   RAW_SLICE_TYPE,
   STD_STRING_TYPE,
   STR_SLICE_TYPE,
@@ -56,12 +56,12 @@ const createHeapType = <TEncoded extends { length: number }, TDecoded>({
   },
 });
 
-const byteTransformer: Coder<Uint8Array | number[], Uint8Array> = {
-  type: BYTE_TYPE,
+const bytesTransformer: Coder<Uint8Array | number[], Uint8Array> = {
+  type: BYTES_TYPE,
   encode: (value: Uint8Array | number[]) => (Array.isArray(value) ? new Uint8Array(value) : value),
   decode: (data: Uint8Array, offset: number): [Uint8Array, number] => [data, offset],
 };
-export const byte: Coder<Uint8Array | number[], Uint8Array> = createHeapType(byteTransformer);
+export const bytes: Coder<Uint8Array | number[], Uint8Array> = createHeapType(bytesTransformer);
 
 const rawSliceTransformer: Coder<number[]> = {
   type: RAW_SLICE_TYPE,

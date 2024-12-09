@@ -7,7 +7,7 @@ export const U256_TYPE = 'u256';
 export const B256_TYPE = 'b256';
 export const B512_TYPE = 'b512';
 export const VOID_TYPE = 'void';
-export const BYTE_TYPE = 'byte';
+export const BYTES_TYPE = 'bytes';
 export const RAW_SLICE_TYPE = 'raw slice';
 export const STD_STRING_TYPE = 'std string';
 export const STR_SLICE_TYPE = 'str';
@@ -29,7 +29,7 @@ export const ENCODING_TYPES = [
   B256_TYPE,
   B512_TYPE,
   VOID_TYPE,
-  BYTE_TYPE,
+  BYTES_TYPE,
   RAW_SLICE_TYPE,
   STD_STRING_TYPE,
   STR_SLICE_TYPE,
