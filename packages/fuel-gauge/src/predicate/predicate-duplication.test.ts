@@ -1,12 +1,14 @@
 import { WalletUnlocked } from '@fuel-ts/account';
 import { launchTestNode } from 'fuels/test-utils';
+
 import { PredicateWithConfigurable } from '../../test/typegen';
-import { processPredicateData } from './utils/predicate/processPredicateData';
-import {
+import type {
   PredicateWithConfigurableConfigurables,
   PredicateWithConfigurableInputs,
 } from '../../test/typegen/predicates/PredicateWithConfigurable';
+
 import { fundPredicate, assertBalance } from './utils/predicate';
+import { processPredicateData } from './utils/predicate/processPredicateData';
 
 /**
  * @group node

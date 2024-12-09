@@ -152,7 +152,7 @@ export class Predicate<
 
   /**
    * Creates a new Predicate instance from an existing Predicate instance.
-   * @overrides - The data and configurable constants to override.
+   * @param overrides - The data and configurable constants to override.
    * @returns A new Predicate instance with the same bytecode, ABI and provider but with the ability to set the data and configurable constants.
    */
   toNewInstance(

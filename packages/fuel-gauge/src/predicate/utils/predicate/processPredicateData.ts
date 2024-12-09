@@ -1,34 +1,6 @@
-import { InputValue, Predicate } from 'fuels';
-
-import { arrayify } from 'fuels';
-
-import { BytesLike, Interface, JsonAbi } from 'fuels';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
-
-export function processPredicateData(
-  bytes: BytesLike,
-  jsonAbi: JsonAbi,
-  configurableConstants?: { [name: string]: unknown }
-) {
-  let predicateBytes = arrayify(bytes);
-  const abiInterface: Interface = new Interface(jsonAbi);
-
-  if (abiInterface.functions.main === undefined) {
-    throw new FuelError(
-      ErrorCode.ABI_MAIN_METHOD_MISSING,
-      'Cannot use ABI without "main" function.'
-    );
-  }
-
-  if (configurableConstants && Object.keys(configurableConstants).length) {
-    predicateBytes = setConfigurableConstants(predicateBytes, configurableConstants, abiInterface);
-  }
-
-  return {
-    predicateBytes,
-    predicateInterface: abiInterface,
-  };
-}
+import { arrayify, Interface } from 'fuels';
+import type { BytesLike, JsonAbi, InputValue } from 'fuels';
 
 function setConfigurableConstants(
   bytes: Uint8Array,
@@ -67,4 +39,29 @@ function setConfigurableConstants(
   }
 
   return mutatedBytes;
+}
+
+export function processPredicateData(
+  bytes: BytesLike,
+  jsonAbi: JsonAbi,
+  configurableConstants?: { [name: string]: unknown }
+) {
+  let predicateBytes = arrayify(bytes);
+  const abiInterface: Interface = new Interface(jsonAbi);
+
+  if (abiInterface.functions.main === undefined) {
+    throw new FuelError(
+      ErrorCode.ABI_MAIN_METHOD_MISSING,
+      'Cannot use ABI without "main" function.'
+    );
+  }
+
+  if (configurableConstants && Object.keys(configurableConstants).length) {
+    predicateBytes = setConfigurableConstants(predicateBytes, configurableConstants, abiInterface);
+  }
+
+  return {
+    predicateBytes,
+    predicateInterface: abiInterface,
+  };
 }
