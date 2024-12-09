@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "types": ["vitest/globals"]
+    "types": ["vitest/globals", "@fuel-ts/utils/global"]
   },
-  "include": ["src", "global.d.ts"]
+  "include": ["src", "test"]
 }
