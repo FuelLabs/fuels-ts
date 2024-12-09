@@ -13,5 +13,4 @@ export const coders = {
   u8: AbiEncoding.utils.pad(base.u8, WORD_SIZE),
   u16: AbiEncoding.utils.pad(base.u16, WORD_SIZE),
   u32: AbiEncoding.utils.pad(base.u32, WORD_SIZE),
-  u64: AbiEncoding.utils.pad(base.u64, WORD_SIZE),
 };
