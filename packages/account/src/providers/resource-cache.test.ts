@@ -11,6 +11,10 @@ import { ResourceCache } from './resource-cache';
 describe('Resource Cache', () => {
   const randomValue = () => hexlify(randomBytes(32));
 
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should throw error if TTL is not a positive number', () => {
     expect(() => new ResourceCache(0)).toThrow(
       new FuelError(ErrorCode.INVALID_TTL, 'Invalid TTL: 0. Use a value greater than zero.')
@@ -38,7 +42,7 @@ describe('Resource Cache', () => {
   });
 
   it('can validade if it is cached [UTXO]', () => {
-    const resourceCache = new ResourceCache(1000);
+    using resourceCache = new ResourceCache(1000);
     const utxoId = randomValue();
 
     expect(resourceCache.isCached(utxoId)).toBeFalsy();
@@ -50,7 +54,7 @@ describe('Resource Cache', () => {
   });
 
   it('can validade if it is cached [Message]', () => {
-    const resourceCache = new ResourceCache(1000);
+    using resourceCache = new ResourceCache(1000);
     const messageNonce = randomValue();
 
     expect(resourceCache.isCached(messageNonce)).toBeFalsy();
@@ -63,7 +67,7 @@ describe('Resource Cache', () => {
 
   it('can get active [no data]', async () => {
     const EXPECTED = { utxos: [], messages: [] };
-    const resourceCache = new ResourceCache(1);
+    using resourceCache = new ResourceCache(1);
 
     await sleep(1);
 
@@ -75,7 +79,7 @@ describe('Resource Cache', () => {
       utxos: [randomValue(), randomValue()],
       messages: [randomValue(), randomValue(), randomValue()],
     };
-    const resourceCache = new ResourceCache(1000);
+    using resourceCache = new ResourceCache(1000);
 
     const txId = randomValue();
     resourceCache.set(txId, EXPECTED);
@@ -88,7 +92,7 @@ describe('Resource Cache', () => {
 
   it('should remove expired when getting active data', () => {
     const ttl = 500;
-    const resourceCache = new ResourceCache(ttl);
+    using resourceCache = new ResourceCache(ttl);
 
     const utxos = [randomValue(), randomValue()];
     const messages = [randomValue()];
@@ -130,7 +134,7 @@ describe('Resource Cache', () => {
   it('should remove cached data based on transaction ID', () => {
     // use long ttl to avoid cache expiration
     const ttl = 10_000;
-    const resourceCache = new ResourceCache(ttl);
+    using resourceCache = new ResourceCache(ttl);
 
     const txId1 = randomValue();
     const txId2 = randomValue();
@@ -169,7 +173,7 @@ describe('Resource Cache', () => {
 
   it('can clear cache', () => {
     // use long ttl to avoid cache expiration
-    const resourceCache = new ResourceCache(10_000);
+    using resourceCache = new ResourceCache(10_000);
 
     const txId1 = randomValue();
     const txId2 = randomValue();
@@ -216,7 +220,7 @@ describe('Resource Cache', () => {
       messages: [randomValue(), randomValue()],
     };
 
-    const newInstance = new ResourceCache(300);
+    using newInstance = new ResourceCache(300);
     newInstance.set(newTxId, newCache);
 
     const activeData = newInstance.getActiveData();
