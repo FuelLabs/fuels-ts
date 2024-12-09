@@ -691,6 +691,34 @@ describe('Contract', () => {
     expect(finalBalance).toBe(initialBalance + amountToContract.toNumber());
   });
 
+  it.only('should transferToContract with a large amount of assets', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs,
+      walletsConfig: {
+        amountPerCoin: 2 ** 62,
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet],
+      contracts: [contract],
+    } = launched;
+
+    const initialBalance = new BN(await contract.getBalance(provider.getBaseAssetId())).toNumber();
+    const amountToContract = bn(2).pow(62); // Very big number
+
+    const tx = await wallet.transferToContract(
+      contract.id,
+      amountToContract,
+      provider.getBaseAssetId()
+    );
+
+    await tx.waitForResult();
+
+    const finalBalance = new BN(await contract.getBalance(provider.getBaseAssetId())).toString();
+    expect(finalBalance).toBe(amountToContract.add(initialBalance).toString());
+  });
+
   it('should transfer assets to deployed contracts just fine', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
