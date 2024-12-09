@@ -691,7 +691,7 @@ describe('Contract', () => {
     expect(finalBalance).toBe(initialBalance + amountToContract.toNumber());
   });
 
-  it.only('should transferToContract with a large amount of assets', async () => {
+  it('should transferToContract with a large amount of assets', async () => {
     using launched = await launchTestNode({
       contractsConfigs,
       walletsConfig: {
@@ -717,6 +717,55 @@ describe('Contract', () => {
 
     const finalBalance = new BN(await contract.getBalance(provider.getBaseAssetId())).toString();
     expect(finalBalance).toBe(amountToContract.add(initialBalance).toString());
+  });
+
+  it('should batch transfer with a large amount of assets', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs,
+      walletsConfig: {
+        amountPerCoin: 2 ** 62,
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet],
+      contracts: [contract],
+    } = launched;
+
+    const baseAssetId = provider.getBaseAssetId();
+    const contractTransferParams: ContractTransferParams[] = [
+      {
+        contractId: contract.id,
+        amount: bn(2).pow(50),
+        assetId: baseAssetId,
+      },
+      {
+        contractId: contract.id,
+        amount: bn(2).pow(10),
+        assetId: baseAssetId,
+      },
+    ];
+
+    const tx = await wallet.batchTransferToContracts(contractTransferParams);
+
+    const { receipts } = await tx.waitForResult();
+
+    const transferReceipts = receipts.filter(
+      ({ type }) => type === ReceiptType.Transfer
+    ) as ReceiptTransfer[];
+
+    expect(transferReceipts.length).toBe(contractTransferParams.length);
+
+    contractTransferParams.forEach(({ amount, contractId, assetId = baseAssetId }) => {
+      const foundReceipt = transferReceipts.find(
+        (r) =>
+          r.amount.eq(amount) &&
+          r.to.toLowerCase() === contractId.toString().toLowerCase() &&
+          r.assetId === assetId
+      );
+
+      expect(foundReceipt).toBeDefined();
+    });
   });
 
   it('should transfer assets to deployed contracts just fine', async () => {
