@@ -44,7 +44,7 @@ If no environment is specified, it will run in the browser and node environments
 pnpm test
 ```
 
-## Writing docs
+## Referencing snippets
 
 To reference a snippet outside of the current directory, you need to use the following syntax (`<<< @/`):
 
