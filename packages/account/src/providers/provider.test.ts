@@ -250,7 +250,7 @@ describe('Provider', () => {
     });
 
     // Spy on console.warn
-    const consoleWarnSpy = vi.spyOn(console, 'warn');
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     // Verify that only one transaction was returned (the known type)
     const transaction = await mockProvider.getTransaction('0x1234567890abcdef');
@@ -298,7 +298,7 @@ describe('Provider', () => {
     });
 
     // Spy on console.warn
-    const consoleWarnSpy = vi.spyOn(console, 'warn');
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     // Verify that only one transaction was returned (the known type)
     const { transactions } = await mockProvider.getTransactions();
@@ -448,7 +448,7 @@ describe('Provider', () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
-    const { cleanup, url } = await launchNode({ port: '0' });
+    const { cleanup, url } = await launchNode({ port: '0', loggingEnabled: false });
 
     const spyFetchChainAndNodeInfo = vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
 
@@ -1181,7 +1181,7 @@ describe('Provider', () => {
     const spy = vi.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
     spy.mockImplementationOnce(() => mock);
 
-    const consoleWarnSpy = vi.spyOn(console, 'warn');
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
@@ -1216,7 +1216,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     const spy = vi.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
     spy.mockImplementationOnce(() => mock);
 
-    const consoleWarnSpy = vi.spyOn(console, 'warn');
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
