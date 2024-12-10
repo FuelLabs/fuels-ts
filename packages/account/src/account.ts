@@ -323,6 +323,7 @@ export class Account extends AbstractAccount {
 
     const { maxFee } = await this.provider.estimateTxGasAndFee({
       transactionRequest: requestToReestimate,
+      gasPrice,
     });
 
     request.maxFee = maxFee;

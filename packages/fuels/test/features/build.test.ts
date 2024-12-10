@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
 import * as deployMod from '../../src/cli/commands/deploy/index';
@@ -24,6 +24,7 @@ describe('build', { timeout: 180000 }, () => {
 
   afterEach(() => {
     resetConfigAndMocks(paths.fuelsConfigPath);
+    rmSync(paths.outputDir, { recursive: true, force: true });
   });
 
   afterAll(() => {
@@ -76,12 +77,12 @@ describe('build', { timeout: 180000 }, () => {
     expect(killChildProcess).toHaveBeenCalledTimes(0);
   });
 
-  it('should run `build` command with contracts-only', async () => {
+  it('should run `build` command with contracts-only [single contract]', async () => {
     const { autoStartFuelCore, killChildProcess, deploy } = mockAll();
 
     await runInit({
       root: paths.root,
-      contracts: paths.contractsDir,
+      contracts: paths.contractsFooDir,
       output: paths.outputDir,
       forcPath: paths.forcPath,
       fuelCorePath: paths.fuelCorePath,
@@ -96,7 +97,42 @@ describe('build', { timeout: 180000 }, () => {
       'index.ts',
     ].map((f) => join(paths.outputDir, f));
 
-    files.forEach((file) => expect(existsSync(file)).toBeTruthy());
+    files.forEach((file) => expect(existsSync(file), `${file} does not exist`).toBeTruthy());
+    expect(readdirSync(paths.outputContractsDir)).toHaveLength(3);
+
+    expect(autoStartFuelCore).toHaveBeenCalledTimes(0);
+    expect(deploy).toHaveBeenCalledTimes(0);
+    expect(killChildProcess).toHaveBeenCalledTimes(0);
+  });
+
+  it('should run `build` command with contracts-only [with glob]', async () => {
+    const { autoStartFuelCore, killChildProcess, deploy } = mockAll();
+
+    await runInit({
+      root: paths.root,
+      contracts: `${paths.contractsDir}/*`,
+      output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
+    });
+
+    await runBuild({ root: paths.root });
+
+    const files = [
+      'contracts/UpgradableChunked.ts',
+      'contracts/UpgradableChunkedFactory.ts',
+      'contracts/Upgradable.ts',
+      'contracts/UpgradableFactory.ts',
+      'contracts/BarFoo.ts',
+      'contracts/BarFooFactory.ts',
+      'contracts/FooBar.ts',
+      'contracts/FooBarFactory.ts',
+      'contracts/index.ts',
+      'index.ts',
+    ].map((f) => join(paths.outputDir, f));
+
+    files.forEach((file) => expect(existsSync(file), `${file} does not exist`).toBeTruthy());
+    expect(readdirSync(paths.outputContractsDir)).toHaveLength(9);
 
     expect(autoStartFuelCore).toHaveBeenCalledTimes(0);
     expect(deploy).toHaveBeenCalledTimes(0);
