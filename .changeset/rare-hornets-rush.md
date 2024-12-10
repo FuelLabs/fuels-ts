@@ -1,5 +1,5 @@
 ---
-"@fuel-ts/utils": minor
+"@fuel-ts/utils": patch
 ---
 
 chore: integrate vitest matchers globally
