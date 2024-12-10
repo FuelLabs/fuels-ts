@@ -87,7 +87,7 @@ describe('init', () => {
   });
 
   it('should error if no inputs/workspace is supplied', async () => {
-    const logSpy = vi.spyOn(console, 'log');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     const exit = vi.spyOn(process, 'exit').mockResolvedValue({} as never);
 
     await runCommand(Commands.init, ['--path', paths.root, '-o', paths.outputDir]);
