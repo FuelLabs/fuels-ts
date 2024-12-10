@@ -60,10 +60,8 @@ describe('Predicate.fromInstance', () => {
       expect(newPredicate.predicateData).toEqual(data);
       expect(newPredicate.interface).toEqual(basePredicate.interface);
       expect(newPredicate.provider).toEqual(basePredicate.provider);
-      expect(newPredicate.bytes).toEqual(
-        processPredicateData(basePredicate.initialBytecode, basePredicate.interface.jsonAbi, {})
-          .predicateBytes
-      );
+      expect(newPredicate.bytes).toEqual(basePredicate.bytes);
+      expect(newPredicate.predicateData).not.toEqual(basePredicate.predicateData);
     });
 
     it('creates new predicate instance with configurable constants', async () => {
