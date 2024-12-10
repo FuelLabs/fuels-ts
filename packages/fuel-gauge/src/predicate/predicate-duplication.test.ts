@@ -121,11 +121,11 @@ describe('Predicate.fromInstance', () => {
       expect(newPredicate.interface).toEqual(basePredicate.interface);
       expect(newPredicate.provider).toEqual(basePredicate.provider);
       expect(newPredicate.bytes).toEqual(
-        processPredicateData(
-          basePredicate.initialBytecode,
-          basePredicate.interface.jsonAbi,
-          configurableConstants
-        ).predicateBytes
+        new PredicateWithConfigurable({
+          provider,
+          data,
+          configurableConstants,
+        }).bytes
       );
     });
 
