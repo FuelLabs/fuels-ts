@@ -1,5 +1,16 @@
 import { bn } from '@fuel-ts/math';
-import type { BNInput } from '@fuel-ts/math';
+import type { BN, BNInput } from '@fuel-ts/math';
+
+interface Matchers<R = BN> {
+  toEqualBn: (expected: BNInput) => R;
+}
+declare module 'vitest' {
+  interface Assertion extends Matchers {}
+  interface AsymmetricMatchersContaining extends Matchers {}
+  interface ExpectStatic {
+    toEqualBn(expected: BNInput): BN;
+  }
+}
 
 export const setupTestMatchers = () => {
   expect.extend({
