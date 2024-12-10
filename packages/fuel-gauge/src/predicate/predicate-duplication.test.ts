@@ -7,7 +7,7 @@ import type {
   PredicateWithConfigurableInputs,
 } from '../../test/typegen/predicates/PredicateWithConfigurable';
 
-import { fundPredicate, assertBalance } from './utils/predicate';
+import { fundAccount, assertBalance } from './utils/predicate';
 
 /**
  * @group node
@@ -200,7 +200,7 @@ describe('Predicate.fromInstance', () => {
 
       const amountToTransfer = 200;
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundAccount(wallet, predicate, amountToPredicate);
 
       const destination = WalletUnlocked.generate({
         provider: wallet.provider,
@@ -242,7 +242,7 @@ describe('Predicate.fromInstance', () => {
 
       const amountToTransfer = 200;
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundAccount(wallet, predicate, amountToPredicate);
 
       const destination = WalletUnlocked.generate({
         provider: wallet.provider,
@@ -285,7 +285,7 @@ describe('Predicate.fromInstance', () => {
 
       const amountToTransfer = 200;
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundAccount(wallet, predicate, amountToPredicate);
 
       const destination = WalletUnlocked.generate({
         provider: wallet.provider,
@@ -331,7 +331,7 @@ describe('Predicate.fromInstance', () => {
 
       const amountToTransfer = 200;
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundAccount(wallet, predicate, amountToPredicate);
 
       const destination = WalletUnlocked.generate({
         provider: wallet.provider,
