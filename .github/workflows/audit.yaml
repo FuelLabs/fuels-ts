@@ -4,10 +4,10 @@ on:
   pull_request:
     branches:
       - master
-      - release/*
 
 jobs:
   audit:
+    if: startsWith(github.head_ref, 'changeset-release')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
