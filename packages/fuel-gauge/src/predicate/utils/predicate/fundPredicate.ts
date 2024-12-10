@@ -1,10 +1,7 @@
 import type { InputValue, BigNumberish, WalletUnlocked, Predicate } from 'fuels';
 import { ScriptTransactionRequest, BN } from 'fuels';
 
-export const fundPredicate = async <
-  T extends InputValue[] = InputValue[],
-  C extends { [name: string]: unknown } | undefined = { [name: string]: unknown },
->(
+export const fundPredicate = async (
   wallet: WalletUnlocked,
   predicate: Predicate<T, C>,
   amountToPredicate: BigNumberish,
