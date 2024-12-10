@@ -53,7 +53,7 @@ Now that the contract is deployed, you can interact with it by submitting a cont
 
 ## Deploying a Large Contract as Blobs
 
-In the above guide we use the recommended `deploy` method. If you are working with a contract that is too large to be deployed in a single transaction, then the SDK will chunk the contract for you and submit it as blobs, to then be accessed later by a create transaction. This process is handled by the [`ContractFactory.deployAsBlobTx`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_contract.index.ContractFactory.html#deployasblobtx) method.
+In the above guide we use the recommended `deploy` method. If you are working with a contract that is too large to be deployed in a single transaction, then the SDK will chunk the contract for you and submit it as blobs, to then be accessed later by a create transaction. This process is handled by the [`ContractFactory.deployAsBlobTx`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_contract.index.ContractFactory.html#deployAsBlobTx) method.
 
 <<< @./snippets/deploying-contracts/deployment.ts#blobs{ts:line-numbers}
 
