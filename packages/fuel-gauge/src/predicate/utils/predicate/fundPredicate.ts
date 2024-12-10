@@ -3,7 +3,7 @@ import { ScriptTransactionRequest, BN } from 'fuels';
 
 export const fundPredicate = async (
   wallet: WalletUnlocked,
-  predicate: Predicate<T, C>,
+  predicate: Predicate,
   amountToPredicate: BigNumberish,
   utxosAmount: number = 1
 ): Promise<BN> => {
