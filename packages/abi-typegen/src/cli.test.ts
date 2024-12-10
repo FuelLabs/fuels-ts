@@ -164,7 +164,7 @@ describe('cli.ts', () => {
   test('should handle errors when running cli action', () => {
     const runTypegenError = new Error('Pretty message');
 
-    const logSpy = vi.spyOn(console, 'log');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     const { exit } = mockDeps({ runTypegenError });
 
     const inputs = ['*-no-abis-here.json'];
