@@ -47,9 +47,6 @@ import {
   U8_MAX,
   U8_MIN,
 } from './constants';
-import { toEqualBn } from './vitest.matcher';
-
-expect.extend({ toEqualBn });
 
 /**
  * @group browser
@@ -761,7 +758,6 @@ describe('AbiCoder', () => {
 
       const EXPECTED_STRUCT = {
         a: {
-          // @ts-expect-error: Custom matcher 'toEqualBn'
           a: expect.toEqualBn(20),
         },
         b: 'B',
@@ -885,7 +881,6 @@ describe('AbiCoder', () => {
   describe('types_struct_with_tuple', () => {
     it('should encode/decode just fine', async () => {
       const input: StructSingleGenericInput<[boolean, BigNumberish]> = { a: [true, 10] };
-      // @ts-expect-error: Custom matcher 'toEqualBn'
       const expected = { a: [false, expect.toEqualBn(20)] };
 
       const { waitForResult } = await contract.functions.types_struct_with_tuple(input).call();
@@ -942,7 +937,6 @@ describe('AbiCoder', () => {
   describe('types_struct_external', () => {
     it('should encode/decode just fine', async () => {
       const input = { value: 10 };
-      // @ts-expect-error: Custom matcher 'toEqualBn'
       const expected = { value: expect.toEqualBn(20) };
 
       const { waitForResult } = await contract.functions.types_struct_external(input).call();
@@ -1136,7 +1130,6 @@ describe('AbiCoder', () => {
     it('should encode/decode just fine', async () => {
       const INPUT_STRUCT = { a: { a: 10 }, b: 'A' };
       const input: StructWithNestedArrayInput = { a: [INPUT_STRUCT, INPUT_STRUCT] };
-      // @ts-expect-error: Custom matcher 'toEqualBn'
       const EXPECTED_STRUCT = { a: { a: expect.toEqualBn(20) }, b: 'B' };
       const EXPECTED = { a: [EXPECTED_STRUCT, EXPECTED_STRUCT] };
 
@@ -1170,7 +1163,6 @@ describe('AbiCoder', () => {
   describe('types_struct_with_nested_tuple', () => {
     it('should encode/decode just fine', async () => {
       const input: StructWithNestedTupleInput = { a: [10, { a: { a: 20 } }, 'ABC'] };
-      // @ts-expect-error: Custom matcher 'toEqualBn'
       const expected = { a: [30, { a: { a: expect.toEqualBn(40) } }, 'CBA'] };
 
       const { waitForResult } = await contract.functions
@@ -1375,7 +1367,6 @@ describe('AbiCoder', () => {
         StructSingleGenericInput<StructSingleGenericInput<BigNumberish>>,
         string,
       ];
-      // @ts-expect-error: Custom matcher 'toEqualBn'
       const expected = [3, { a: { a: expect.toEqualBn(30) } }, 'CBA'];
 
       const { waitForResult } = await contract.functions.types_tuple_complex(input).call();
@@ -1505,7 +1496,6 @@ describe('AbiCoder', () => {
   describe('types_enum_with_builtin_type', () => {
     it('should encode/decode just fine', async () => {
       const input: EnumWithBuiltinTypeInput = { a: true };
-      // @ts-expect-error: Custom matcher 'toEqualBn'
       const expected: EnumWithBuiltinTypeOutput = { b: expect.toEqualBn(20) };
 
       const { waitForResult } = await contract.functions.types_enum_with_builtin_type(input).call();
@@ -2053,7 +2043,6 @@ describe('AbiCoder', () => {
         Ok: 10,
       };
       const expected: Result<BigNumberish, BigNumberish> = {
-        // @ts-expect-error: Custom matcher 'toEqualBn'
         Ok: expect.toEqualBn(2),
       };
 
@@ -2292,7 +2281,6 @@ describe('AbiCoder', () => {
     it('should encode/decode just fine', async () => {
       const inputX = 1;
       const inputY = 2;
-      // @ts-expect-error: Custom matcher 'toEqualBn'
       const expected = expect.toEqualBn(3);
 
       const { waitForResult } = await contract.functions.multi_arg_u64_u64(inputX, inputY).call();
