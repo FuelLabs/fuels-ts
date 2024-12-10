@@ -1,5 +1,11 @@
 # @fuel-ts/versions
 
+## 0.97.1
+
+### Patch Changes
+
+- 165c49c: chore: bump `fuel-core` to `0.40.1`
+
 ## 0.97.0
 
 ### Patch Changes

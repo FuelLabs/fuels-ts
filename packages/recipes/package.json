@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/recipes",
-  "version": "0.97.0",
+  "version": "0.97.1",
   "description": "Recipes for Sway Programs",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
