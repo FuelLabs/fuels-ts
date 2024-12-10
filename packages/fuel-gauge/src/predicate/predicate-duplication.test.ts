@@ -8,7 +8,6 @@ import type {
 } from '../../test/typegen/predicates/PredicateWithConfigurable';
 
 import { fundPredicate, assertBalance } from './utils/predicate';
-import { processPredicateData } from './utils/predicate/processPredicateData';
 
 /**
  * @group node
