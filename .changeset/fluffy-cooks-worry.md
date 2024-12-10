@@ -17,4 +17,4 @@
 "@fuel-ts/math": patch
 ---
 
-chore: dependency pinning
+chore: dependency pinning and auditing
