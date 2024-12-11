@@ -31,7 +31,7 @@ importers:
         version: 6.0.0
       '@codspeed/vitest-plugin':
         specifier: ^3.1.1
-        version: 3.1.1(vite@5.4.9(@types/node@22.5.5)(terser@5.36.0))(vitest@2.0.5)
+        version: 3.1.1(vite@5.4.9(@types/node@22.5.5)(terser@5.36.0))(vitest@2.0.5(@types/node@22.5.5)(@vitest/browser@2.0.5)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.36.0))
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:packages/utils
@@ -70,7 +70,7 @@ importers:
         version: 2.0.5(bufferutil@4.0.8)(playwright@1.47.2)(typescript@5.6.3)(utf-8-validate@6.0.4)(vitest@2.0.5)(webdriverio@9.0.9(bufferutil@4.0.8)(utf-8-validate@6.0.4))
       '@vitest/coverage-istanbul':
         specifier: ~2.0.5
-        version: 2.0.5(vitest@2.0.5)
+        version: 2.0.5(vitest@2.0.5(@types/node@22.5.5)(@vitest/browser@2.0.5)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.36.0))
       autocannon:
         specifier: ^7.15.0
         version: 7.15.0
@@ -18738,7 +18738,7 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@codspeed/vitest-plugin@3.1.1(vite@5.4.9(@types/node@22.5.5)(terser@5.36.0))(vitest@2.0.5)':
+  '@codspeed/vitest-plugin@3.1.1(vite@5.4.9(@types/node@22.5.5)(terser@5.36.0))(vitest@2.0.5(@types/node@22.5.5)(@vitest/browser@2.0.5)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.36.0))':
     dependencies:
       '@codspeed/core': 3.1.1
       vite: 5.4.9(@types/node@22.5.5)(terser@5.36.0)
@@ -22873,7 +22873,7 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@vitest/coverage-istanbul@2.0.5(vitest@2.0.5)':
+  '@vitest/coverage-istanbul@2.0.5(vitest@2.0.5(@types/node@22.5.5)(@vitest/browser@2.0.5)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.36.0))':
     dependencies:
       '@istanbuljs/schema': 0.1.3
       debug: 4.3.7(supports-color@5.5.0)
