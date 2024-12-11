@@ -1,0 +1,4 @@
+---
+---
+
+chore: release deprecation script
