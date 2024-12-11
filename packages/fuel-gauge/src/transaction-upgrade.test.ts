@@ -21,7 +21,7 @@ const setupTestNode = async () => {
   const privileged = Wallet.fromPrivateKey(privateKey);
 
   const consensusParameters = {
-    V1: {
+    V2: {
       privileged_address: privileged.address.toB256(),
       base_asset_id: baseAssetId,
     },
