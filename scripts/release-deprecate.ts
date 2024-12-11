@@ -27,7 +27,7 @@ const getPublicPackages = () => {
 
 const main = async () => {
   const packages = getPublicPackages();
-  await Promise.all(
+  await Promise.allSettled(
     packages.map(async (packageName) => {
       const { versions: packageVersions } = await fetch(
         `https://registry.npmjs.org/${packageName}`
@@ -41,7 +41,7 @@ const main = async () => {
       log('The following versions will be deprecated:');
       log(versionsToDelete.map((v) => `   - ${v}`).join('\n'));
 
-      await Promise.all(
+      await Promise.allSettled(
         versionsToDelete.map(
           async (versionToDelete) =>
             new Promise((resolve, reject) => {
