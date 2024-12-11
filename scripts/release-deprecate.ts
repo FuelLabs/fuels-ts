@@ -5,8 +5,8 @@ import { join } from 'node:path';
 
 const { log, error } = console;
 
-const UNPUBLISH_TAGS = /next|pr|rc/;
-const { version: CURRENT_VERSION } = JSON.parse(
+const deprecateTags = /next|pr|rc/;
+const { version: currentVersion } = JSON.parse(
   readFileSync(join(process.cwd(), '/packages/fuels/package.json')).toString()
 );
 const deprecateVersions = process.env.DEPRECATE_VERSIONS === 'true';
@@ -27,18 +27,23 @@ const getPublicPackages = () => {
 };
 
 const getVersionsToDeprecate = async (packageName: string) => {
-  const { versions: packageVersions } = await fetch(
-    `https://registry.npmjs.org/${packageName}`
-  ).then((resp) => resp.json());
-
-  return Object.keys(packageVersions).filter(
-    (packageVersion) =>
-      packageVersion.search(UNPUBLISH_TAGS) > -1 && !compare(packageVersion, CURRENT_VERSION, '>=')
+  const { versions } = await fetch(`https://registry.npmjs.org/${packageName}`).then((resp) =>
+    resp.json()
   );
+
+  // Only deprecate certain tags
+  const validVersions = Object.keys(versions).filter(
+    (version) => version.search(deprecateTags) > -1 && !compare(version, currentVersion, '>=')
+  );
+
+  // Remove the latest next tag from the deprecation list
+  const latestNextVersion = validVersions.filter((version) => version.search('next') > -1).pop();
+  return validVersions.filter((version) => version !== latestNextVersion);
 };
 
 const main = async () => {
-  const packages = getPublicPackages();
+  // const packages = getPublicPackages();
+  const packages = ['fuels'];
   await Promise.allSettled(
     packages.map(async (packageName) => {
       const versionsToDeprecate = await getVersionsToDeprecate(packageName);
