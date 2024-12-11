@@ -26,25 +26,29 @@ const getPublicPackages = () => {
   return packagesNames.filter((p) => !!p);
 };
 
+const getVersionsToDeprecate = async (packageName: string) => {
+  const { versions: packageVersions } = await fetch(
+    `https://registry.npmjs.org/${packageName}`
+  ).then((resp) => resp.json());
+
+  return Object.keys(packageVersions).filter(
+    (packageVersion) =>
+      packageVersion.search(UNPUBLISH_TAGS) > -1 && !compare(packageVersion, CURRENT_VERSION, '>=')
+  );
+};
+
 const main = async () => {
   const packages = getPublicPackages();
   await Promise.allSettled(
     packages.map(async (packageName) => {
-      const { versions: packageVersions } = await fetch(
-        `https://registry.npmjs.org/${packageName}`
-      ).then((resp) => resp.json());
+      const versionsToDeprecate = await getVersionsToDeprecate(packageName);
 
-      const versionsToDelete = Object.keys(packageVersions).filter(
-        (packageVersion) =>
-          packageVersion.search(UNPUBLISH_TAGS) > -1 &&
-          !compare(packageVersion, CURRENT_VERSION, '>=')
-      );
       log('The following versions will be deprecated:');
-      log(versionsToDelete.map((v) => `   - ${v}`).join('\n'));
+      log(versionsToDeprecate.map((v) => `   - ${v}`).join('\n'));
 
       if (deprecateVersions) {
         await Promise.allSettled(
-          versionsToDelete.map(
+          versionsToDeprecate.map(
             async (versionToDelete) =>
               new Promise((resolve, reject) => {
                 exec(
