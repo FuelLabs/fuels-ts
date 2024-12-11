@@ -5,6 +5,7 @@
   "linked": [],
   "access": "public",
   "baseBranch": "master",
+  "changelog": ["@changesets/cli/changelog", { "repo": "FuelLabs/fuels-ts" }],
   "updateInternalDependencies": "patch",
   "ignore": [
     "fuel-gauge",
