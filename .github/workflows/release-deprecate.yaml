@@ -2,6 +2,11 @@ name: "Deprecate Old Versions"
 
 on:
   workflow_dispatch:
+    inputs:
+      deprecate_versions:
+        type: boolean
+        description: Deprecate versions? Otherwise dry-run mode will be used.
+        default: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -20,3 +25,5 @@ jobs:
 
       - name: Deprecate
         run: pnpm release:deprecate
+        env:
+          DEPRECATE_VERSIONS: ${{ github.event.inputs.deprecate_versions }}

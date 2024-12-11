@@ -9,6 +9,7 @@ const UNPUBLISH_TAGS = /next|pr|rc/;
 const { version: CURRENT_VERSION } = JSON.parse(
   readFileSync(join(process.cwd(), '/packages/fuels/package.json')).toString()
 );
+const deprecateVersions = process.env.DEPRECATE_VERSIONS === 'true';
 
 const getPublicPackages = () => {
   const packagesDir = join(__dirname, '../packages');
@@ -41,30 +42,32 @@ const main = async () => {
       log('The following versions will be deprecated:');
       log(versionsToDelete.map((v) => `   - ${v}`).join('\n'));
 
-      await Promise.allSettled(
-        versionsToDelete.map(
-          async (versionToDelete) =>
-            new Promise((resolve, reject) => {
-              exec(
-                `npm deprecate ${packageName}@${versionToDelete} "Version no longer supported."`,
-                (err, _stdout, stderr) => {
-                  if (err) {
-                    log(`❌ Error ${packageName}@${versionToDelete} not deprecated!\n`);
-                    reject(err);
-                    return;
+      if (deprecateVersions) {
+        await Promise.allSettled(
+          versionsToDelete.map(
+            async (versionToDelete) =>
+              new Promise((resolve, reject) => {
+                exec(
+                  `npm deprecate ${packageName}@${versionToDelete} "Version no longer supported."`,
+                  (err, _stdout, stderr) => {
+                    if (err) {
+                      log(`❌ Error ${packageName}@${versionToDelete} not deprecated!\n`);
+                      reject(err);
+                      return;
+                    }
+                    if (stderr) {
+                      log(`❌ Error ${packageName}@${versionToDelete} not deprecated!\n`);
+                      reject(new Error(stderr));
+                      return;
+                    }
+                    log(`✅ Package ${packageName}@${versionToDelete} deprecated!\n`);
+                    resolve(true);
                   }
-                  if (stderr) {
-                    log(`❌ Error ${packageName}@${versionToDelete} not deprecated!\n`);
-                    reject(new Error(stderr));
-                    return;
-                  }
-                  log(`✅ Package ${packageName}@${versionToDelete} deprecated!\n`);
-                  resolve(true);
-                }
-              );
-            })
-        )
-      );
+                );
+              })
+          )
+        );
+      }
     })
   );
 };
