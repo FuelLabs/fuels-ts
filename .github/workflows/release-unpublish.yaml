@@ -1,28 +1,22 @@
-name: "Unpublish old versions"
+name: "Deprecate Old Versions"
 
 on:
   workflow_dispatch:
-    inputs:
-      delete_packages:
-        type: boolean
-        description: Delete packages? otherwise dry-run mode will be used
-        default: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  clean-npm-versions:
-    name: Unpublish versions next and pr
+  deprecate-npm-versions:
+    name: Deprecate versions next, pr and rc
     runs-on: buildjet-4vcpu-ubuntu-2204
     steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/ci-setup
-      - uses: FuelLabs/github-actions/setups/npm@master
-        with:
-          npm-token: ${{ secrets.NPM_TOKEN }}
-      - run: |
-          node ./scripts/release-unpublish.js
-        env:
-          DELETE_PACKAGES: ${{ github.event.inputs.delete_packages}}
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Deprecate
+        run: pnpm release:deprecate
