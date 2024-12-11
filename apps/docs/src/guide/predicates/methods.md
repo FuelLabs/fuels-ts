@@ -1,6 +1,6 @@
 # Interacting With Predicates
 
-The `Predicate` class extends the [`Account`](https://docs.fuel.network/docs/fuels-ts/account/) class, inheriting all its methods. Therefore, there are multiple ways to interact with predicates, but broadly speaking, we can think about three:
+The `Predicate` class extends the [`Account`](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_account.html) class, inheriting all its methods. Therefore, there are multiple ways to interact with predicates, but broadly speaking, we can think about three:
 
 - `Checking Balances`
 - `Transactions`

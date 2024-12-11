@@ -1,5 +1,14 @@
 # create-fuels
 
+## 0.97.1
+
+### Patch Changes
+
+- Updated dependencies [27e8808]
+- Updated dependencies [165c49c]
+  - @fuel-ts/errors@0.97.1
+  - @fuel-ts/versions@0.97.1
+
 ## 0.97.0
 
 ### Patch Changes

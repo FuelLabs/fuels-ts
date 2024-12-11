@@ -1,5 +1,12 @@
 # @internal/benchmarks
 
+## 1.0.9
+
+### Patch Changes
+
+- Updated dependencies [2cef020]
+  - fuels@0.97.1
+
 ## 1.0.8
 
 ### Patch Changes
