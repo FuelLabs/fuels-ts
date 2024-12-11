@@ -42,8 +42,7 @@ const getVersionsToDeprecate = async (packageName: string) => {
 };
 
 const main = async () => {
-  // const packages = getPublicPackages();
-  const packages = ['fuels'];
+  const packages = getPublicPackages();
   await Promise.allSettled(
     packages.map(async (packageName) => {
       const versionsToDeprecate = await getVersionsToDeprecate(packageName);
