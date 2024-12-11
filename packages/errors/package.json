@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/errors",
-  "version": "0.97.0",
+  "version": "0.97.1",
   "description": "Error class and error codes that the fuels-ts library throws",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
