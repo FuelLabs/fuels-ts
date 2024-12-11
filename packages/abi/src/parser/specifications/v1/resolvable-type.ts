@@ -29,11 +29,7 @@ export class ResolvableType {
   ) {
     this.metadataType = this.findMetadataType(metadataTypeId);
     this.swayType = this.metadataType.type;
-    this.typeParamsArgsMap ??= this.metadataType.typeParameters?.map((typeParameter) => [
-      typeParameter,
-      new ResolvableType(this.abi, typeParameter, undefined),
-    ]);
-
+    this.typeParamsArgsMap ??= this.mapTypeParametersAndArgs(this.metadataType, undefined);
     let components = this.metadataType.components;
 
     /**
@@ -47,7 +43,10 @@ export class ResolvableType {
     if (swayTypeMatchers.vector(this.metadataType.type)) {
       components = components?.map((component) => {
         if (component.name === 'buf') {
-          return component.typeArguments?.[0];
+          return {
+            ...component.typeArguments?.[0],
+            name: component.name,
+          };
         }
         return component;
       }) as AbiComponentV1[];
@@ -112,8 +111,15 @@ export class ResolvableType {
 
   private mapTypeParametersAndArgs(
     metadataType: AbiMetadataTypeV1,
-    args: (ResolvableType | ResolvedType)[]
+    args: (ResolvableType | ResolvedType)[] | undefined
   ): Array<[number, ResolvedType | ResolvableType]> | undefined {
+    if (!args) {
+      return metadataType.typeParameters?.map((typeParameter) => [
+        typeParameter,
+        new ResolvableType(this.abi, typeParameter, undefined),
+      ]);
+    }
+
     return metadataType.typeParameters?.map((typeParameter, idx) => [typeParameter, args[idx]]);
   }
 
@@ -223,17 +229,6 @@ export class ResolvableType {
       (typeArgument) => this.handleComponent(parent, typeArgument).type
     );
 
-    /**
-     * If there are no type arguments because the metadata type isn't generic,
-     * we can resolve it immediately.
-     * This would be the case for e.g. non-generic structs and enums.
-     */
-    if (!typeArgs?.length) {
-      return new ResolvableType(this.abi, metadataType.metadataTypeId, undefined).resolveInternal(
-        metadataType.metadataTypeId,
-        undefined
-      );
-    }
     const resolvable = new ResolvableType(
       this.abi,
       metadataType.metadataTypeId,
@@ -247,7 +242,7 @@ export class ResolvableType {
      * then this check will resolve to `false` because there are no concrete type arguments
      * to resolve the generics with.
      */
-    if (typeArgs.every((ta) => ta instanceof ResolvedType)) {
+    if (typeArgs?.every((typeArgument) => typeArgument instanceof ResolvedType)) {
       return resolvable.resolveInternal(metadataType.metadataTypeId, undefined);
     }
 
@@ -322,11 +317,10 @@ export class ResolvableType {
       return this.resolveConcreteType(concreteTypeArg);
     });
 
-    const typeParamsArgsMap = concreteTypeArgs?.length
-      ? (this.mapTypeParametersAndArgs(this.metadataType, concreteTypeArgs) as Array<
-          [number, ResolvedType]
-        >)
-      : undefined;
+    const typeParamsArgsMap = this.mapTypeParametersAndArgs(
+      this.metadataType,
+      concreteTypeArgs
+    ) as Array<[number, ResolvedType]>;
 
     return this.resolveInternal(concreteType.concreteTypeId, typeParamsArgsMap);
   }
