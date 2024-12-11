@@ -37,6 +37,7 @@ export const autoStartFuelCore = async (config: FuelsConfig) => {
       loggingEnabled: loggingConfig.isLoggingEnabled,
       basePath: config.basePath,
       fuelCorePath: config.fuelCorePath,
+      includeInitialState: true,
     });
 
     fuelCore = {
