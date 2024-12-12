@@ -50,7 +50,6 @@
     "@fuel-ts/program": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
-    "@fuel-ts/versions": "workspace:*",
     "@fuels/vm-asm": "0.58.2",
     "ramda": "^0.30.1"
   },

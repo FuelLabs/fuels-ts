@@ -9,8 +9,6 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@fuel-ts/account": "workspace:^",
-    "@fuel-ts/errors": "workspace:^",
     "fuels": "workspace:*"
   },
   "devDependencies": {

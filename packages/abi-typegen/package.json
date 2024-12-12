@@ -53,7 +53,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@fuel-ts/errors": "workspace:*",
-    "@fuel-ts/interfaces": "workspace:^",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
     "commander": "12.1.0",

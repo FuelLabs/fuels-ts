@@ -110,7 +110,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-tsdoc": "^0.3.0",
     "glob": "^10.4.5",
-    "knip": "^5.30.6",
+    "knip": "^5.39.4",
     "markdown-link-check": "3.12.2",
     "memfs": "^4.14.0",
     "nodemon": "^3.1.7",

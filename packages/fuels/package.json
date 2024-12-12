@@ -72,7 +72,6 @@
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*",
-    "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/program": "workspace:*",
     "@fuel-ts/script": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
