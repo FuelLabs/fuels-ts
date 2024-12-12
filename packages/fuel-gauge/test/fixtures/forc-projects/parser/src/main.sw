@@ -36,7 +36,10 @@ abi VoidContract {
         arg1: GenericStruct<Vec<SimpleStruct>>,
         arg2: NestedGenericStruct<u8>,
     ) -> bool;
-    fn implicit_generic_struct(arg1: StructWithImplicitGenerics<u8, u16>) -> bool;
+    fn implicit_generic_struct(
+        arg1: StructWithImplicitGenerics<u8, u16>,
+        arg2: (bool, StructWithImplicitGenerics<bool, b256>),
+    ) -> bool;
 }
 
 impl VoidContract for Contract {
@@ -52,7 +55,10 @@ impl VoidContract for Contract {
         );
         true
     }
-    fn implicit_generic_struct(arg1: StructWithImplicitGenerics<u8, u16>) -> bool {
+    fn implicit_generic_struct(
+        arg1: StructWithImplicitGenerics<u8, u16>,
+        arg2: (bool, StructWithImplicitGenerics<bool, b256>),
+    ) -> bool {
         true
     }
 }

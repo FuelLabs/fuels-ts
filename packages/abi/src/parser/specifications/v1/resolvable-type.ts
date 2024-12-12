@@ -304,17 +304,6 @@ export class ResolvableType {
     }
 
     /**
-     * If typeParamsArgsMap is undefined,
-     * this means that the underlying metadata type's components are already fully resolved,
-     * as it doesn't need any external typeArgs to substitute those components with.
-     */
-    if (typeParamsArgsMap === undefined) {
-      resolvedType.components = this.components as ResolvedComponent[];
-      resolvedType.typeParamsArgsMap = this.typeParamsArgsMap as [number, ResolvedType][];
-      return resolvedType;
-    }
-
-    /**
      * Before resolving the components,
      * we need to substitute the type parameters of the underlying metadata type
      * with the type arguments of the concrete type,
@@ -331,7 +320,8 @@ export class ResolvableType {
 
       /**
        * Here the component's type is a `ResolvableType`.
-       * If the component is a generic type parameter itself, its corresponding type argument will be found in the typeArgs,
+       * If the component is a generic type parameter itself,
+       * its corresponding type argument will be found in the typeArgs,
        * which will be used to substitute the component with.
        */
       const resolvedGenericType = typeArgs?.find(
@@ -349,13 +339,19 @@ export class ResolvableType {
         name,
         /**
          * The component is a `ResolvableType`, but it's not a generic type parameter itself.
-         * This means that one of its components (or component's components ad infinitum) is a generic type.
+         * This means that one of its components (or component's components)
+         * is a generic type.
          * We need to resolve that first before resolving the component.
          *
-         * Note that we are passing in the original `typeParamsArgsMap`,
-         * which will be used to substitute the component's generic type parameters with their type arguments.
+         * Note that we are passing in the original `typeParamsArgsMap` by default,
+         * which will be used to substitute the component's generic type parameters
+         * with the appropriate type arguments.
+         *
+         * The non-default case of passing `typeArgs` happens only for tuples/arrays
+         * which contain structs with implicit generics,
+         * e.g. `(bool, StructWithImplicitGenerics<bool, b256>)`
          */
-        type: type.resolveInternal(type.metadataTypeId, typeParamsArgsMap),
+        type: type.resolveInternal(type.metadataTypeId, typeParamsArgsMap ?? typeArgs),
       };
     });
 
@@ -366,8 +362,8 @@ export class ResolvableType {
   }
 
   private resolveTypeArgs(
-    typeParamsArgsMap: Array<[number, ResolvedType]>
-  ): [number, ResolvedType][] {
+    typeParamsArgsMap: Array<[number, ResolvedType]> | undefined
+  ): [number, ResolvedType][] | undefined {
     /**
      * This case only happens when the metadata type is *implicitly* generic.
      * The type itself doesn't have any type parameters that should be resolved,
