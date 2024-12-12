@@ -2,8 +2,8 @@
 import { AbiParser } from 'fuels';
 import type { Abi, AbiSpecificationV1 } from 'fuels';
 
-import someAbi from '../../../typegend/contracts/Counter-abi.json';
+import { Counter } from '../../../typegend';
 
-const parsedAbi: Abi = AbiParser.parse(someAbi as AbiSpecificationV1);
+const parsedAbi: Abi = AbiParser.parse(Counter.abi as AbiSpecificationV1);
 // #endregion full
 console.log('Parsed ABI:', parsedAbi);
