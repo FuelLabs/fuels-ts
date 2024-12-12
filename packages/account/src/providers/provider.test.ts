@@ -382,7 +382,7 @@ describe('Provider', () => {
       {
         type: ReceiptType.ScriptResult,
         result: bn(0),
-        gasUsed: bn(159),
+        gasUsed: bn(127),
       },
     ];
 
@@ -835,7 +835,7 @@ describe('Provider', () => {
         snapshotConfig: {
           chainConfig: {
             consensus_parameters: {
-              V1: {
+              V2: {
                 tx_params: {
                   V1: {
                     max_inputs: maxInputs,
@@ -916,7 +916,7 @@ describe('Provider', () => {
         snapshotConfig: {
           chainConfig: {
             consensus_parameters: {
-              V1: {
+              V2: {
                 tx_params: {
                   V1: {
                     max_outputs: maxOutputs,
@@ -1865,7 +1865,19 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   test('getMessageByNonce', async () => {
-    using launched = await setupTestProviderAndWallets();
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        snapshotConfig: {
+          stateConfig: {
+            messages: [
+              new TestMessage({
+                nonce: '0x381de90750098776c71544527fd253412908dec3d07ce9a7367bd1ba975908a0',
+              }).toChainMessage(),
+            ],
+          },
+        },
+      },
+    });
     const { provider } = launched;
 
     const nonce = '0x381de90750098776c71544527fd253412908dec3d07ce9a7367bd1ba975908a0';

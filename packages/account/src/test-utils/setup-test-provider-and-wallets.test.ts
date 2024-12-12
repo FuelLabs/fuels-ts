@@ -16,7 +16,7 @@ import { TestAssetId } from './test-asset-id';
 import type { ChainMessage } from './test-message';
 import { TestMessage } from './test-message';
 
-const BaseAssetId = defaultSnapshotConfigs.chainConfig.consensus_parameters.V1.base_asset_id;
+const BaseAssetId = defaultSnapshotConfigs.chainConfig.consensus_parameters.V2.base_asset_id;
 /**
  * @group node
  */
