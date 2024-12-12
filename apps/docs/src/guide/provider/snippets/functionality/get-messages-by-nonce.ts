@@ -1,9 +1,20 @@
 // #region getMessageByNonce
-import { Provider } from 'fuels';
+import { launchTestNode, TestMessage } from 'fuels/test-utils';
 
-import { LOCAL_NETWORK_URL } from '../../../../env';
-
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const { provider } = await launchTestNode({
+  nodeOptions: {
+    snapshotConfig: {
+      stateConfig: {
+        messages: [
+          new TestMessage({
+            nonce:
+              '0x381de90750098776c71544527fd253412908dec3d07ce9a7367bd1ba975908a0',
+          }).toChainMessage(),
+        ],
+      },
+    },
+  },
+});
 
 const nonce =
   '0x381de90750098776c71544527fd253412908dec3d07ce9a7367bd1ba975908a0';
