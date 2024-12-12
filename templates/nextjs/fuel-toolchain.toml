@@ -1,2 +1,6 @@
 [toolchain]
-channel = "latest"
+channel = "testnet"
+
+[components]
+forc = "0.66.5"
+fuel-core = "0.40.0"
