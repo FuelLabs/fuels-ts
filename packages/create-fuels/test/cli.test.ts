@@ -83,9 +83,13 @@ describe('CLI', { timeout: 15_000 }, () => {
     const fuelToolchain = readFileSync(fuelToolchainPath, 'utf-8');
     const parsedFuelToolchain = toml.parse(fuelToolchain);
 
-    const { toolchain } = parsedFuelToolchain;
+    const { toolchain, components } = parsedFuelToolchain;
 
     expect(toolchain).toEqual({ channel: 'testnet' });
+    expect(components).toEqual({
+      forc: '0.66.5',
+      'fuel-core': '0.40.0',
+    });
   });
 
   test('should rewrite for the appropriate package manager', async () => {
