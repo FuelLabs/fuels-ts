@@ -198,8 +198,8 @@ export class ResolvableType {
 
     /**
      * The concrete type's underlying metadata type is generic.
-     * We must resolve all its type parameters with the provided type arguments
-     * of the concrete type, and then resolve the metadata type itself.
+     * We must resolve all its type parameters with the provided type arguments of the concrete type,
+     * and then resolve the metadata type itself.
      */
     const metadataType = this.findMetadataType(type.metadataTypeId);
 
