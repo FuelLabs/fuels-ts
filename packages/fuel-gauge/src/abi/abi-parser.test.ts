@@ -15,7 +15,10 @@ describe('AbiParser', () => {
     /**
      * This is split up instead of comparing the whole object
      * so that we can see the specific differences
-     * because the JSON is huge and the diff gets cut off in the terminal
+     * because the JSON is huge and the diff gets cut off in the terminal.
+     *
+     * I have also assigned the values to an object with a properly named property
+     * so that it's easier to understand where it's failing when a diff is shown.
      */
     expect({ encodingVersion: parsed.encodingVersion }).toEqual({
       encodingVersion: expected.encodingVersion,
