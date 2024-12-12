@@ -1,0 +1,29 @@
+name: "Deprecate Old Versions"
+
+on:
+  workflow_dispatch:
+    inputs:
+      deprecate_versions:
+        type: boolean
+        description: Deprecate versions? Otherwise dry-run mode will be used.
+        default: false
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deprecate-npm-versions:
+    name: Deprecate versions next, pr and rc
+    runs-on: buildjet-4vcpu-ubuntu-2204
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Deprecate
+        run: pnpm release:deprecate
+        env:
+          DEPRECATE_VERSIONS: ${{ github.event.inputs.deprecate_versions }}
