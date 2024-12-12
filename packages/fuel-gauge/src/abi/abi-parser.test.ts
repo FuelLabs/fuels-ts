@@ -1,5 +1,5 @@
-import { AbiParser, type AbiSpecification } from '@fuel-ts/abi';
 import { writeFileSync } from 'fs';
+import { AbiParser, type AbiSpecification } from 'fuels';
 
 import { Parser } from '../../test/typegen';
 
