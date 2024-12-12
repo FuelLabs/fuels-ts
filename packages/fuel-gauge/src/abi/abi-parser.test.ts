@@ -9,7 +9,7 @@ import expected from './abi-parser.json';
  * @group browser
  */
 describe('AbiParser', () => {
-  test('runs just fine', () => {
+  test('parses as expected', () => {
     const parsed = AbiParser.parse(Parser.abi as AbiSpecification);
 
     expect(parsed).toEqual(expected);
