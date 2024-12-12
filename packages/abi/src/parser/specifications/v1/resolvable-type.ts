@@ -298,7 +298,6 @@ export class ResolvableType {
         swayType: this.swayType,
         typeId,
         metadataType: this.metadataType,
-        typeParamsArgsMap,
       });
     }
 
