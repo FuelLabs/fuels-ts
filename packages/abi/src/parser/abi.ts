@@ -2,7 +2,7 @@
  * This interface serves as a representation of the ABI format outputted by `forc build`
  * that won't be changing with the introduction of new abi specifications in Sway.
  * Its purpose is to provide a stable interface for users to work with,
- * which won't be affected by changes to the ABI specification.
+ * which won't be affected by changing ABI specification versions.
  */
 export interface Abi {
   encodingVersion: string;
