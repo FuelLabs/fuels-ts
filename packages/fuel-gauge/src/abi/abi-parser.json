@@ -1,0 +1,870 @@
+{
+  "metadataTypes": [
+    {
+      "metadataTypeId": 0,
+      "swayType": "(_, _)",
+      "components": [
+        {
+          "name": "__tuple_element",
+          "type": {
+            "swayType": "generic E",
+            "metadata": {
+              "metadataTypeId": 2
+            }
+          }
+        },
+        {
+          "name": "__tuple_element",
+          "type": {
+            "swayType": "generic F",
+            "metadata": {
+              "metadataTypeId": 3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "metadataTypeId": 1,
+      "swayType": "[_; 3]",
+      "components": [
+        {
+          "name": "__array_element",
+          "type": {
+            "swayType": "generic E",
+            "metadata": {
+              "metadataTypeId": 2
+            }
+          }
+        }
+      ]
+    },
+    {
+      "metadataTypeId": 2,
+      "swayType": "generic E"
+    },
+    {
+      "metadataTypeId": 3,
+      "swayType": "generic F"
+    },
+    {
+      "metadataTypeId": 4,
+      "swayType": "generic T"
+    },
+    {
+      "metadataTypeId": 5,
+      "swayType": "raw untyped ptr"
+    },
+    {
+      "metadataTypeId": 6,
+      "swayType": "struct NonGenericStruct",
+      "components": [
+        {
+          "name": "a",
+          "type": {
+            "swayType": "bool",
+            "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
+          }
+        }
+      ]
+    },
+    {
+      "metadataTypeId": 7,
+      "swayType": "struct SampleGenericStruct",
+      "components": [
+        {
+          "name": "a",
+          "type": {
+            "swayType": "struct std::vec::Vec",
+            "metadata": {
+              "metadataTypeId": 11,
+              "typeArguments": [
+                {
+                  "metadataTypeId": 8,
+                  "swayType": "struct SampleStruct",
+                  "components": [
+                    {
+                      "name": "a",
+                      "type": {
+                        "swayType": "bool",
+                        "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
+                      }
+                    },
+                    {
+                      "name": "b",
+                      "type": {
+                        "swayType": "u32",
+                        "metadata": {
+                          "metadataTypeId": 12
+                        }
+                      }
+                    },
+                    {
+                      "name": "c",
+                      "type": {
+                        "swayType": "generic E",
+                        "metadata": {
+                          "metadataTypeId": 2
+                        }
+                      }
+                    }
+                  ],
+                  "typeParameters": [
+                    {
+                      "metadataTypeId": 2,
+                      "swayType": "generic E"
+                    }
+                  ]
+                }
+              ]
+            },
+            "components": [
+              {
+                "name": "",
+                "type": {
+                  "swayType": "struct SampleStruct",
+                  "metadata": {
+                    "metadataTypeId": 8,
+                    "typeArguments": [
+                      {
+                        "metadataTypeId": 2,
+                        "swayType": "generic E"
+                      }
+                    ]
+                  },
+                  "components": [
+                    {
+                      "name": "a",
+                      "type": {
+                        "swayType": "bool",
+                        "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
+                      }
+                    },
+                    {
+                      "name": "b",
+                      "type": {
+                        "swayType": "u32",
+                        "metadata": {
+                          "metadataTypeId": 12
+                        }
+                      }
+                    },
+                    {
+                      "name": "c",
+                      "type": {
+                        "swayType": "generic E",
+                        "metadata": {
+                          "metadataTypeId": 2
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "b",
+          "type": {
+            "swayType": "struct std::vec::Vec",
+            "metadata": {
+              "metadataTypeId": 11,
+              "typeArguments": [
+                {
+                  "concreteTypeId": 8,
+                  "swayType": "struct SampleStruct",
+                  "metadata": {
+                    "metadataTypeId": 8,
+                    "typeArguments": [
+                      {
+                        "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef",
+                        "swayType": "u16"
+                      }
+                    ]
+                  },
+                  "components": [
+                    {
+                      "name": "a",
+                      "type": {
+                        "swayType": "bool",
+                        "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
+                      }
+                    },
+                    {
+                      "name": "b",
+                      "type": {
+                        "swayType": "u32",
+                        "metadata": {
+                          "metadataTypeId": 12
+                        }
+                      }
+                    },
+                    {
+                      "name": "c",
+                      "type": {
+                        "swayType": "u16",
+                        "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "components": [
+              {
+                "name": "",
+                "type": {
+                  "swayType": "struct SampleStruct",
+                  "metadata": {
+                    "metadataTypeId": 8,
+                    "typeArguments": [
+                      {
+                        "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef",
+                        "swayType": "u16"
+                      }
+                    ]
+                  },
+                  "components": [
+                    {
+                      "name": "a",
+                      "type": {
+                        "swayType": "bool",
+                        "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
+                      }
+                    },
+                    {
+                      "name": "b",
+                      "type": {
+                        "swayType": "u32",
+                        "metadata": {
+                          "metadataTypeId": 12
+                        }
+                      }
+                    },
+                    {
+                      "name": "c",
+                      "type": {
+                        "swayType": "u16",
+                        "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "typeParameters": [
+        {
+          "metadataTypeId": 2,
+          "swayType": "generic E"
+        }
+      ]
+    },
+    {
+      "metadataTypeId": 8,
+      "swayType": "struct SampleStruct",
+      "components": [
+        {
+          "name": "a",
+          "type": {
+            "swayType": "bool",
+            "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
+          }
+        },
+        {
+          "name": "b",
+          "type": {
+            "swayType": "u32",
+            "metadata": {
+              "metadataTypeId": 12
+            }
+          }
+        },
+        {
+          "name": "c",
+          "type": {
+            "swayType": "generic T",
+            "metadata": {
+              "metadataTypeId": 4
+            }
+          }
+        }
+      ],
+      "typeParameters": [
+        {
+          "metadataTypeId": 4,
+          "swayType": "generic T"
+        }
+      ]
+    },
+    {
+      "metadataTypeId": 9,
+      "swayType": "struct StructWithImplicitGenerics",
+      "components": [
+        {
+          "name": "a",
+          "type": {
+            "swayType": "[_; 3]",
+            "metadata": {
+              "metadataTypeId": 1
+            },
+            "components": [
+              {
+                "name": "__array_element",
+                "type": {
+                  "swayType": "generic E",
+                  "metadata": {
+                    "metadataTypeId": 2
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "b",
+          "type": {
+            "swayType": "(_, _)",
+            "metadata": {
+              "metadataTypeId": 0
+            },
+            "components": [
+              {
+                "name": "__tuple_element",
+                "type": {
+                  "swayType": "generic E",
+                  "metadata": {
+                    "metadataTypeId": 2
+                  }
+                }
+              },
+              {
+                "name": "__tuple_element",
+                "type": {
+                  "swayType": "generic F",
+                  "metadata": {
+                    "metadataTypeId": 3
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "typeParameters": [
+        {
+          "metadataTypeId": 2,
+          "swayType": "generic E"
+        },
+        {
+          "metadataTypeId": 3,
+          "swayType": "generic F"
+        }
+      ]
+    },
+    {
+      "metadataTypeId": 11,
+      "swayType": "struct std::vec::Vec",
+      "components": [
+        {
+          "name": "",
+          "type": {
+            "swayType": "generic T",
+            "metadata": {
+              "metadataTypeId": 4
+            }
+          }
+        }
+      ],
+      "typeParameters": [
+        {
+          "metadataTypeId": 4,
+          "swayType": "generic T"
+        }
+      ]
+    },
+    {
+      "metadataTypeId": 12,
+      "swayType": "u32"
+    },
+    {
+      "metadataTypeId": 13,
+      "swayType": "u64"
+    }
+  ],
+  "types": [
+    {
+      "swayType": "bool",
+      "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
+    },
+    {
+      "swayType": "struct NonGenericStruct",
+      "concreteTypeId": "bd75e47abe514c2818021f4d6e2db12367f68c77f29bf8352713dfa5b70a4767",
+      "metadata": {
+        "metadataTypeId": 6
+      },
+      "components": [
+        {
+          "name": "a",
+          "type": {
+            "swayType": "bool",
+            "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
+          }
+        }
+      ]
+    },
+    {
+      "concreteTypeId": "60352018729e65e22b2767c13173fc55659dfa7908cd39a682c21c71d18885df",
+      "swayType": "struct SampleGenericStruct",
+      "metadata": {
+        "metadataTypeId": 7,
+        "typeArguments": [
+          {
+            "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b",
+            "swayType": "u8"
+          }
+        ]
+      },
+      "components": [
+        {
+          "name": "a",
+          "type": {
+            "swayType": "struct std::vec::Vec",
+            "metadata": {
+              "metadataTypeId": 11,
+              "typeArguments": [
+                {
+                  "concreteTypeId": 8,
+                  "swayType": "struct SampleStruct",
+                  "metadata": {
+                    "metadataTypeId": 8,
+                    "typeArguments": [
+                      {
+                        "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b",
+                        "swayType": "u8"
+                      }
+                    ]
+                  },
+                  "components": [
+                    {
+                      "name": "a",
+                      "type": {
+                        "swayType": "bool",
+                        "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
+                      }
+                    },
+                    {
+                      "name": "b",
+                      "type": {
+                        "swayType": "u32",
+                        "metadata": {
+                          "metadataTypeId": 12
+                        }
+                      }
+                    },
+                    {
+                      "name": "c",
+                      "type": {
+                        "swayType": "u8",
+                        "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "components": [
+              {
+                "name": "",
+                "type": {
+                  "swayType": "struct SampleStruct",
+                  "metadata": {
+                    "metadataTypeId": 8,
+                    "typeArguments": [
+                      {
+                        "swayType": "u8",
+                        "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b"
+                      }
+                    ]
+                  },
+                  "components": [
+                    {
+                      "name": "a",
+                      "type": {
+                        "swayType": "bool",
+                        "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
+                      }
+                    },
+                    {
+                      "name": "b",
+                      "type": {
+                        "swayType": "u32",
+                        "metadata": {
+                          "metadataTypeId": 12
+                        }
+                      }
+                    },
+                    {
+                      "name": "c",
+                      "type": {
+                        "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b",
+                        "swayType": "u8"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "b",
+          "type": {
+            "swayType": "struct std::vec::Vec",
+            "metadata": {
+              "metadataTypeId": 11,
+              "typeArguments": [
+                {
+                  "concreteTypeId": 8,
+                  "swayType": "struct SampleStruct",
+                  "metadata": {
+                    "metadataTypeId": 8,
+                    "typeArguments": [
+                      {
+                        "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef",
+                        "swayType": "u16"
+                      }
+                    ]
+                  },
+                  "components": [
+                    {
+                      "name": "a",
+                      "type": {
+                        "swayType": "bool",
+                        "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
+                      }
+                    },
+                    {
+                      "name": "b",
+                      "type": {
+                        "swayType": "u32",
+                        "metadata": {
+                          "metadataTypeId": 12
+                        }
+                      }
+                    },
+                    {
+                      "name": "c",
+                      "type": {
+                        "swayType": "u16",
+                        "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "components": [
+              {
+                "name": "",
+                "type": {
+                  "swayType": "struct SampleStruct",
+                  "metadata": {
+                    "metadataTypeId": 8,
+                    "typeArguments": [
+                      {
+                        "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef",
+                        "swayType": "u16"
+                      }
+                    ]
+                  },
+                  "components": [
+                    {
+                      "name": "a",
+                      "type": {
+                        "swayType": "bool",
+                        "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
+                      }
+                    },
+                    {
+                      "name": "b",
+                      "type": {
+                        "swayType": "u32",
+                        "metadata": {
+                          "metadataTypeId": 12
+                        }
+                      }
+                    },
+                    {
+                      "name": "c",
+                      "type": {
+                        "swayType": "u16",
+                        "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "swayType": "struct SampleStruct",
+      "concreteTypeId": "1e660e9b9c8c191cd7cbfd1c9595c7367763d6ed3bcd1a7b4824d5db4af46700",
+      "metadata": {
+        "metadataTypeId": 8,
+        "typeArguments": [
+          {
+            "swayType": "struct std::vec::Vec",
+            "concreteTypeId": "10161b42df4a9c43ea4f52fb80e3a16978828049e0daa278e6e85823a3613928",
+            "metadata": {
+              "metadataTypeId": 11,
+              "typeArguments": [
+                {
+                  "swayType": "struct NonGenericStruct",
+                  "concreteTypeId": "bd75e47abe514c2818021f4d6e2db12367f68c77f29bf8352713dfa5b70a4767",
+                  "metadata": {
+                    "metadataTypeId": 6
+                  },
+                  "components": [
+                    {
+                      "name": "a",
+                      "type": {
+                        "swayType": "bool",
+                        "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "components": [
+              {
+                "name": "",
+                "type": {
+                  "swayType": "struct NonGenericStruct",
+                  "concreteTypeId": "bd75e47abe514c2818021f4d6e2db12367f68c77f29bf8352713dfa5b70a4767",
+                  "metadata": {
+                    "metadataTypeId": 6
+                  },
+                  "components": [
+                    {
+                      "name": "a",
+                      "type": {
+                        "swayType": "bool",
+                        "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "components": [
+        {
+          "name": "a",
+          "type": {
+            "swayType": "bool",
+            "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
+          }
+        },
+        {
+          "name": "b",
+          "type": {
+            "swayType": "u32",
+            "metadata": {
+              "metadataTypeId": 12
+            }
+          }
+        },
+        {
+          "name": "c",
+          "type": {
+            "swayType": "struct std::vec::Vec",
+            "concreteTypeId": "10161b42df4a9c43ea4f52fb80e3a16978828049e0daa278e6e85823a3613928",
+            "metadata": {
+              "metadataTypeId": 11,
+              "typeArguments": [
+                {
+                  "swayType": "struct NonGenericStruct",
+                  "concreteTypeId": "bd75e47abe514c2818021f4d6e2db12367f68c77f29bf8352713dfa5b70a4767",
+                  "metadata": {
+                    "metadataTypeId": 6
+                  },
+                  "components": [
+                    {
+                      "name": "a",
+                      "type": {
+                        "swayType": "bool",
+                        "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "components": [
+              {
+                "name": "",
+                "type": {
+                  "swayType": "struct NonGenericStruct",
+                  "concreteTypeId": "bd75e47abe514c2818021f4d6e2db12367f68c77f29bf8352713dfa5b70a4767",
+                  "metadata": {
+                    "metadataTypeId": 6
+                  },
+                  "components": [
+                    {
+                      "name": "a",
+                      "type": {
+                        "swayType": "bool",
+                        "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "swayType": "struct StructWithImplicitGenerics",
+      "concreteTypeId": "426345c4ea93db9f08eeb9fe6047ef0273294bfb1140600a0660be9f2a08d750",
+      "metadata": {
+        "metadataTypeId": 9,
+        "typeArguments": [
+          {
+            "swayType": "u8",
+            "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b"
+          },
+          {
+            "swayType": "u16",
+            "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef"
+          }
+        ]
+      },
+      "components": [
+        {
+          "name": "a",
+          "type": {
+            "swayType": "[_; 3]",
+            "metadata": {
+              "metadataTypeId": 1
+            },
+            "components": [
+              {
+                "name": "__array_element",
+                "type": {
+                  "swayType": "u8",
+                  "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "b",
+          "type": {
+            "swayType": "(_, _)",
+            "metadata": {
+              "metadataTypeId": 0
+            },
+            "components": [
+              {
+                "name": "__tuple_element",
+                "type": {
+                  "swayType": "u8",
+                  "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b"
+                }
+              },
+              {
+                "name": "__tuple_element",
+                "type": {
+                  "swayType": "u16",
+                  "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "swayType": "struct std::vec::Vec",
+      "concreteTypeId": "10161b42df4a9c43ea4f52fb80e3a16978828049e0daa278e6e85823a3613928",
+      "metadata": {
+        "metadataTypeId": 11,
+        "typeArguments": [
+          {
+            "swayType": "struct NonGenericStruct",
+            "concreteTypeId": "bd75e47abe514c2818021f4d6e2db12367f68c77f29bf8352713dfa5b70a4767",
+            "metadata": {
+              "metadataTypeId": 6
+            },
+            "components": [
+              {
+                "name": "a",
+                "type": {
+                  "swayType": "bool",
+                  "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "components": [
+        {
+          "name": "",
+          "type": {
+            "swayType": "struct NonGenericStruct",
+            "concreteTypeId": "bd75e47abe514c2818021f4d6e2db12367f68c77f29bf8352713dfa5b70a4767",
+            "metadata": {
+              "metadataTypeId": 6
+            },
+            "components": [
+              {
+                "name": "a",
+                "type": {
+                  "swayType": "bool",
+                  "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "swayType": "u16",
+      "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef"
+    },
+    {
+      "swayType": "u8",
+      "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b"
+    }
+  ],
+  "encodingVersion": "1",
+  "programType": "contract",
+  "functions": [
+    {
+      "name": "test",
+      "output": {
+        "swayType": "bool",
+        "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
+      },
+      "inputs": []
+    }
+  ],
+  "loggedTypes": [],
+  "messageTypes": [],
+  "configurables": []
+}

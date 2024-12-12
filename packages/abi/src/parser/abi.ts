@@ -19,16 +19,39 @@ export interface AbiType {
   };
 }
 
-export interface AbiTypeMetadata {
-  metadataTypeId: number;
+export interface AbiTypeC {
   swayType: string;
-  components?: { name: string; type: AbiType | AbiTypeMetadata }[];
+  components?: AbiTypeComponent[];
+  metadata: {
+    metadataTypeId: number;
+    typeArguments?: AbiType[];
+  };
+}
+
+export interface AbiTypeMetadata {
+  swayType: string;
+  metadataTypeId: number;
+  components?: AbiTypeComponent[];
   typeParameters?: AbiTypeMetadata[];
 }
 
 export interface AbiTypeComponent {
   name: string;
-  type: AbiType;
+  type: AbiType | AbiTypeC;
+}
+
+export interface Component {
+  name: string;
+  type:
+    | AbiType
+    | {
+        swayType: string;
+        components?: Component[];
+        metadata: {
+          metadataTypeId: number;
+          typeArguments?: AbiType[];
+        };
+      };
 }
 
 export interface AbiFunctionInput {

@@ -1,6 +1,6 @@
 import { FuelError } from '@fuel-ts/errors';
 
-import type { Abi } from '../../abi';
+import type { Abi, AbiType, AbiTypeMetadata } from '../../abi';
 
 import { mapAttribute } from './map-attribute';
 import { ResolvableType } from './resolvable-type';
@@ -33,7 +33,7 @@ export class AbiParserV1 {
         ? resolvableType.resolve(concreteType)
         : new ResolvedType({ swayType: concreteType.type, typeId: concreteType.concreteTypeId });
 
-      return resolvedType.toAbiType();
+      return resolvedType.toAbiType() as AbiType;
     });
 
     const getType = (concreteTypeId: string) => {
@@ -48,7 +48,7 @@ export class AbiParserV1 {
     };
 
     return {
-      metadataTypes: resolvableTypes.map((rt) => rt.toAbiType()),
+      metadataTypes: resolvableTypes.map((rt) => rt.toAbiType() as AbiTypeMetadata),
       types,
       encodingVersion: abi.encodingVersion,
       programType: abi.programType,
