@@ -2,4 +2,4 @@
 "create-fuels": patch
 ---
 
-fix: use `latest` toolchain channel for `create fuels`
+fix: specify versions in `create fuels` toolchain file
