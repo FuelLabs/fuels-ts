@@ -57,6 +57,40 @@
     },
     {
       "metadataTypeId": 6,
+      "swayType": "struct DoubleGeneric",
+      "components": [
+        {
+          "name": "a",
+          "type": {
+            "swayType": "generic T",
+            "metadata": {
+              "metadataTypeId": 4
+            }
+          }
+        },
+        {
+          "name": "b",
+          "type": {
+            "swayType": "generic F",
+            "metadata": {
+              "metadataTypeId": 3
+            }
+          }
+        }
+      ],
+      "typeParameters": [
+        {
+          "metadataTypeId": 4,
+          "swayType": "generic T"
+        },
+        {
+          "metadataTypeId": 3,
+          "swayType": "generic F"
+        }
+      ]
+    },
+    {
+      "metadataTypeId": 7,
       "swayType": "struct GenericStruct",
       "components": [
         {
@@ -71,7 +105,7 @@
           "type": {
             "swayType": "u32",
             "metadata": {
-              "metadataTypeId": 12
+              "metadataTypeId": 13
             }
           }
         },
@@ -93,7 +127,7 @@
       ]
     },
     {
-      "metadataTypeId": 7,
+      "metadataTypeId": 8,
       "swayType": "struct NestedGenericStruct",
       "components": [
         {
@@ -101,10 +135,10 @@
           "type": {
             "swayType": "struct std::vec::Vec",
             "metadata": {
-              "metadataTypeId": 11,
+              "metadataTypeId": 12,
               "typeArguments": [
                 {
-                  "metadataTypeId": 6,
+                  "metadataTypeId": 7,
                   "swayType": "struct GenericStruct",
                   "components": [
                     {
@@ -119,7 +153,7 @@
                       "type": {
                         "swayType": "u32",
                         "metadata": {
-                          "metadataTypeId": 12
+                          "metadataTypeId": 13
                         }
                       }
                     },
@@ -148,7 +182,7 @@
                 "type": {
                   "swayType": "struct GenericStruct",
                   "metadata": {
-                    "metadataTypeId": 6,
+                    "metadataTypeId": 7,
                     "typeArguments": [
                       {
                         "metadataTypeId": 2,
@@ -169,7 +203,7 @@
                       "type": {
                         "swayType": "u32",
                         "metadata": {
-                          "metadataTypeId": 12
+                          "metadataTypeId": 13
                         }
                       }
                     },
@@ -193,13 +227,13 @@
           "type": {
             "swayType": "struct std::vec::Vec",
             "metadata": {
-              "metadataTypeId": 11,
+              "metadataTypeId": 12,
               "typeArguments": [
                 {
-                  "concreteTypeId": 6,
+                  "concreteTypeId": 7,
                   "swayType": "struct GenericStruct",
                   "metadata": {
-                    "metadataTypeId": 6,
+                    "metadataTypeId": 7,
                     "typeArguments": [
                       {
                         "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef",
@@ -220,7 +254,7 @@
                       "type": {
                         "swayType": "u32",
                         "metadata": {
-                          "metadataTypeId": 12
+                          "metadataTypeId": 13
                         }
                       }
                     },
@@ -241,7 +275,7 @@
                 "type": {
                   "swayType": "struct GenericStruct",
                   "metadata": {
-                    "metadataTypeId": 6,
+                    "metadataTypeId": 7,
                     "typeArguments": [
                       {
                         "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef",
@@ -262,7 +296,7 @@
                       "type": {
                         "swayType": "u32",
                         "metadata": {
-                          "metadataTypeId": 12
+                          "metadataTypeId": 13
                         }
                       }
                     },
@@ -278,6 +312,43 @@
               }
             ]
           }
+        },
+        {
+          "name": "c",
+          "type": {
+            "swayType": "struct DoubleGeneric",
+            "metadata": {
+              "metadataTypeId": 6,
+              "typeArguments": [
+                {
+                  "metadataTypeId": 2,
+                  "swayType": "generic E"
+                },
+                {
+                  "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef",
+                  "swayType": "u16"
+                }
+              ]
+            },
+            "components": [
+              {
+                "name": "a",
+                "type": {
+                  "swayType": "generic E",
+                  "metadata": {
+                    "metadataTypeId": 2
+                  }
+                }
+              },
+              {
+                "name": "b",
+                "type": {
+                  "swayType": "u16",
+                  "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef"
+                }
+              }
+            ]
+          }
         }
       ],
       "typeParameters": [
@@ -288,7 +359,7 @@
       ]
     },
     {
-      "metadataTypeId": 8,
+      "metadataTypeId": 9,
       "swayType": "struct SimpleStruct",
       "components": [
         {
@@ -301,7 +372,7 @@
       ]
     },
     {
-      "metadataTypeId": 9,
+      "metadataTypeId": 10,
       "swayType": "struct StructWithImplicitGenerics",
       "components": [
         {
@@ -366,7 +437,7 @@
       ]
     },
     {
-      "metadataTypeId": 11,
+      "metadataTypeId": 12,
       "swayType": "struct std::vec::Vec",
       "components": [
         {
@@ -387,11 +458,11 @@
       ]
     },
     {
-      "metadataTypeId": 12,
+      "metadataTypeId": 13,
       "swayType": "u32"
     },
     {
-      "metadataTypeId": 13,
+      "metadataTypeId": 14,
       "swayType": "u64"
     }
   ],
@@ -404,19 +475,19 @@
       "concreteTypeId": "8fa64aacdb756049c3c90d3a5fa8d1a7ebedefc8dc2f347e67bb26ef4c7140a7",
       "swayType": "struct GenericStruct",
       "metadata": {
-        "metadataTypeId": 6,
+        "metadataTypeId": 7,
         "typeArguments": [
           {
             "concreteTypeId": "688b6ed7fc2c45e135ea9a2ce11e3f5313a4c057ba5d616e3381937605ea81e4",
             "swayType": "struct std::vec::Vec",
             "metadata": {
-              "metadataTypeId": 11,
+              "metadataTypeId": 12,
               "typeArguments": [
                 {
                   "concreteTypeId": "75f7f7a06026cab5d7a70984d1fde56001e83505e3a091ff9722b92d7f56d8be",
                   "swayType": "struct SimpleStruct",
                   "metadata": {
-                    "metadataTypeId": 8
+                    "metadataTypeId": 9
                   },
                   "components": [
                     {
@@ -437,7 +508,7 @@
                   "swayType": "struct SimpleStruct",
                   "concreteTypeId": "75f7f7a06026cab5d7a70984d1fde56001e83505e3a091ff9722b92d7f56d8be",
                   "metadata": {
-                    "metadataTypeId": 8
+                    "metadataTypeId": 9
                   },
                   "components": [
                     {
@@ -467,7 +538,7 @@
           "type": {
             "swayType": "u32",
             "metadata": {
-              "metadataTypeId": 12
+              "metadataTypeId": 13
             }
           }
         },
@@ -477,13 +548,13 @@
             "swayType": "struct std::vec::Vec",
             "concreteTypeId": "688b6ed7fc2c45e135ea9a2ce11e3f5313a4c057ba5d616e3381937605ea81e4",
             "metadata": {
-              "metadataTypeId": 11,
+              "metadataTypeId": 12,
               "typeArguments": [
                 {
                   "concreteTypeId": "75f7f7a06026cab5d7a70984d1fde56001e83505e3a091ff9722b92d7f56d8be",
                   "swayType": "struct SimpleStruct",
                   "metadata": {
-                    "metadataTypeId": 8
+                    "metadataTypeId": 9
                   },
                   "components": [
                     {
@@ -504,7 +575,7 @@
                   "swayType": "struct SimpleStruct",
                   "concreteTypeId": "75f7f7a06026cab5d7a70984d1fde56001e83505e3a091ff9722b92d7f56d8be",
                   "metadata": {
-                    "metadataTypeId": 8
+                    "metadataTypeId": 9
                   },
                   "components": [
                     {
@@ -526,7 +597,7 @@
       "concreteTypeId": "cc3087210794115a9b7e470ad5b5d554808a3a88aa003ae80bae7b0dc4505f50",
       "swayType": "struct NestedGenericStruct",
       "metadata": {
-        "metadataTypeId": 7,
+        "metadataTypeId": 8,
         "typeArguments": [
           {
             "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b",
@@ -540,13 +611,13 @@
           "type": {
             "swayType": "struct std::vec::Vec",
             "metadata": {
-              "metadataTypeId": 11,
+              "metadataTypeId": 12,
               "typeArguments": [
                 {
-                  "concreteTypeId": 6,
+                  "concreteTypeId": 7,
                   "swayType": "struct GenericStruct",
                   "metadata": {
-                    "metadataTypeId": 6,
+                    "metadataTypeId": 7,
                     "typeArguments": [
                       {
                         "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b",
@@ -567,7 +638,7 @@
                       "type": {
                         "swayType": "u32",
                         "metadata": {
-                          "metadataTypeId": 12
+                          "metadataTypeId": 13
                         }
                       }
                     },
@@ -588,7 +659,7 @@
                 "type": {
                   "swayType": "struct GenericStruct",
                   "metadata": {
-                    "metadataTypeId": 6,
+                    "metadataTypeId": 7,
                     "typeArguments": [
                       {
                         "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b",
@@ -609,7 +680,7 @@
                       "type": {
                         "swayType": "u32",
                         "metadata": {
-                          "metadataTypeId": 12
+                          "metadataTypeId": 13
                         }
                       }
                     },
@@ -631,13 +702,13 @@
           "type": {
             "swayType": "struct std::vec::Vec",
             "metadata": {
-              "metadataTypeId": 11,
+              "metadataTypeId": 12,
               "typeArguments": [
                 {
-                  "concreteTypeId": 6,
+                  "concreteTypeId": 7,
                   "swayType": "struct GenericStruct",
                   "metadata": {
-                    "metadataTypeId": 6,
+                    "metadataTypeId": 7,
                     "typeArguments": [
                       {
                         "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef",
@@ -658,7 +729,7 @@
                       "type": {
                         "swayType": "u32",
                         "metadata": {
-                          "metadataTypeId": 12
+                          "metadataTypeId": 13
                         }
                       }
                     },
@@ -679,7 +750,7 @@
                 "type": {
                   "swayType": "struct GenericStruct",
                   "metadata": {
-                    "metadataTypeId": 6,
+                    "metadataTypeId": 7,
                     "typeArguments": [
                       {
                         "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef",
@@ -700,7 +771,7 @@
                       "type": {
                         "swayType": "u32",
                         "metadata": {
-                          "metadataTypeId": 12
+                          "metadataTypeId": 13
                         }
                       }
                     },
@@ -716,6 +787,41 @@
               }
             ]
           }
+        },
+        {
+          "name": "c",
+          "type": {
+            "swayType": "struct DoubleGeneric",
+            "metadata": {
+              "metadataTypeId": 6,
+              "typeArguments": [
+                {
+                  "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b",
+                  "swayType": "u8"
+                },
+                {
+                  "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef",
+                  "swayType": "u16"
+                }
+              ]
+            },
+            "components": [
+              {
+                "name": "a",
+                "type": {
+                  "swayType": "u8",
+                  "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b"
+                }
+              },
+              {
+                "name": "b",
+                "type": {
+                  "swayType": "u16",
+                  "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef"
+                }
+              }
+            ]
+          }
         }
       ]
     },
@@ -723,7 +829,7 @@
       "concreteTypeId": "75f7f7a06026cab5d7a70984d1fde56001e83505e3a091ff9722b92d7f56d8be",
       "swayType": "struct SimpleStruct",
       "metadata": {
-        "metadataTypeId": 8
+        "metadataTypeId": 9
       },
       "components": [
         {
@@ -739,7 +845,7 @@
       "concreteTypeId": "426345c4ea93db9f08eeb9fe6047ef0273294bfb1140600a0660be9f2a08d750",
       "swayType": "struct StructWithImplicitGenerics",
       "metadata": {
-        "metadataTypeId": 9,
+        "metadataTypeId": 10,
         "typeArguments": [
           {
             "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b",
@@ -801,13 +907,13 @@
       "concreteTypeId": "688b6ed7fc2c45e135ea9a2ce11e3f5313a4c057ba5d616e3381937605ea81e4",
       "swayType": "struct std::vec::Vec",
       "metadata": {
-        "metadataTypeId": 11,
+        "metadataTypeId": 12,
         "typeArguments": [
           {
             "concreteTypeId": "75f7f7a06026cab5d7a70984d1fde56001e83505e3a091ff9722b92d7f56d8be",
             "swayType": "struct SimpleStruct",
             "metadata": {
-              "metadataTypeId": 8
+              "metadataTypeId": 9
             },
             "components": [
               {
@@ -828,7 +934,7 @@
             "swayType": "struct SimpleStruct",
             "concreteTypeId": "75f7f7a06026cab5d7a70984d1fde56001e83505e3a091ff9722b92d7f56d8be",
             "metadata": {
-              "metadataTypeId": 8
+              "metadataTypeId": 9
             },
             "components": [
               {
@@ -868,19 +974,19 @@
             "concreteTypeId": "8fa64aacdb756049c3c90d3a5fa8d1a7ebedefc8dc2f347e67bb26ef4c7140a7",
             "swayType": "struct GenericStruct",
             "metadata": {
-              "metadataTypeId": 6,
+              "metadataTypeId": 7,
               "typeArguments": [
                 {
                   "concreteTypeId": "688b6ed7fc2c45e135ea9a2ce11e3f5313a4c057ba5d616e3381937605ea81e4",
                   "swayType": "struct std::vec::Vec",
                   "metadata": {
-                    "metadataTypeId": 11,
+                    "metadataTypeId": 12,
                     "typeArguments": [
                       {
                         "concreteTypeId": "75f7f7a06026cab5d7a70984d1fde56001e83505e3a091ff9722b92d7f56d8be",
                         "swayType": "struct SimpleStruct",
                         "metadata": {
-                          "metadataTypeId": 8
+                          "metadataTypeId": 9
                         },
                         "components": [
                           {
@@ -901,7 +1007,7 @@
                         "swayType": "struct SimpleStruct",
                         "concreteTypeId": "75f7f7a06026cab5d7a70984d1fde56001e83505e3a091ff9722b92d7f56d8be",
                         "metadata": {
-                          "metadataTypeId": 8
+                          "metadataTypeId": 9
                         },
                         "components": [
                           {
@@ -931,7 +1037,7 @@
                 "type": {
                   "swayType": "u32",
                   "metadata": {
-                    "metadataTypeId": 12
+                    "metadataTypeId": 13
                   }
                 }
               },
@@ -941,13 +1047,13 @@
                   "swayType": "struct std::vec::Vec",
                   "concreteTypeId": "688b6ed7fc2c45e135ea9a2ce11e3f5313a4c057ba5d616e3381937605ea81e4",
                   "metadata": {
-                    "metadataTypeId": 11,
+                    "metadataTypeId": 12,
                     "typeArguments": [
                       {
                         "concreteTypeId": "75f7f7a06026cab5d7a70984d1fde56001e83505e3a091ff9722b92d7f56d8be",
                         "swayType": "struct SimpleStruct",
                         "metadata": {
-                          "metadataTypeId": 8
+                          "metadataTypeId": 9
                         },
                         "components": [
                           {
@@ -968,7 +1074,7 @@
                         "swayType": "struct SimpleStruct",
                         "concreteTypeId": "75f7f7a06026cab5d7a70984d1fde56001e83505e3a091ff9722b92d7f56d8be",
                         "metadata": {
-                          "metadataTypeId": 8
+                          "metadataTypeId": 9
                         },
                         "components": [
                           {
@@ -993,7 +1099,7 @@
             "concreteTypeId": "cc3087210794115a9b7e470ad5b5d554808a3a88aa003ae80bae7b0dc4505f50",
             "swayType": "struct NestedGenericStruct",
             "metadata": {
-              "metadataTypeId": 7,
+              "metadataTypeId": 8,
               "typeArguments": [
                 {
                   "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b",
@@ -1007,13 +1113,13 @@
                 "type": {
                   "swayType": "struct std::vec::Vec",
                   "metadata": {
-                    "metadataTypeId": 11,
+                    "metadataTypeId": 12,
                     "typeArguments": [
                       {
-                        "concreteTypeId": 6,
+                        "concreteTypeId": 7,
                         "swayType": "struct GenericStruct",
                         "metadata": {
-                          "metadataTypeId": 6,
+                          "metadataTypeId": 7,
                           "typeArguments": [
                             {
                               "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b",
@@ -1034,7 +1140,7 @@
                             "type": {
                               "swayType": "u32",
                               "metadata": {
-                                "metadataTypeId": 12
+                                "metadataTypeId": 13
                               }
                             }
                           },
@@ -1055,7 +1161,7 @@
                       "type": {
                         "swayType": "struct GenericStruct",
                         "metadata": {
-                          "metadataTypeId": 6,
+                          "metadataTypeId": 7,
                           "typeArguments": [
                             {
                               "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b",
@@ -1076,7 +1182,7 @@
                             "type": {
                               "swayType": "u32",
                               "metadata": {
-                                "metadataTypeId": 12
+                                "metadataTypeId": 13
                               }
                             }
                           },
@@ -1098,13 +1204,13 @@
                 "type": {
                   "swayType": "struct std::vec::Vec",
                   "metadata": {
-                    "metadataTypeId": 11,
+                    "metadataTypeId": 12,
                     "typeArguments": [
                       {
-                        "concreteTypeId": 6,
+                        "concreteTypeId": 7,
                         "swayType": "struct GenericStruct",
                         "metadata": {
-                          "metadataTypeId": 6,
+                          "metadataTypeId": 7,
                           "typeArguments": [
                             {
                               "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef",
@@ -1125,7 +1231,7 @@
                             "type": {
                               "swayType": "u32",
                               "metadata": {
-                                "metadataTypeId": 12
+                                "metadataTypeId": 13
                               }
                             }
                           },
@@ -1146,7 +1252,7 @@
                       "type": {
                         "swayType": "struct GenericStruct",
                         "metadata": {
-                          "metadataTypeId": 6,
+                          "metadataTypeId": 7,
                           "typeArguments": [
                             {
                               "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef",
@@ -1167,7 +1273,7 @@
                             "type": {
                               "swayType": "u32",
                               "metadata": {
-                                "metadataTypeId": 12
+                                "metadataTypeId": 13
                               }
                             }
                           },
@@ -1179,6 +1285,41 @@
                             }
                           }
                         ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "c",
+                "type": {
+                  "swayType": "struct DoubleGeneric",
+                  "metadata": {
+                    "metadataTypeId": 6,
+                    "typeArguments": [
+                      {
+                        "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b",
+                        "swayType": "u8"
+                      },
+                      {
+                        "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef",
+                        "swayType": "u16"
+                      }
+                    ]
+                  },
+                  "components": [
+                    {
+                      "name": "a",
+                      "type": {
+                        "swayType": "u8",
+                        "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b"
+                      }
+                    },
+                    {
+                      "name": "b",
+                      "type": {
+                        "swayType": "u16",
+                        "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef"
                       }
                     }
                   ]
@@ -1202,7 +1343,7 @@
             "concreteTypeId": "426345c4ea93db9f08eeb9fe6047ef0273294bfb1140600a0660be9f2a08d750",
             "swayType": "struct StructWithImplicitGenerics",
             "metadata": {
-              "metadataTypeId": 9,
+              "metadataTypeId": 10,
               "typeArguments": [
                 {
                   "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b",
@@ -1292,7 +1433,7 @@
   "configurables": [
     {
       "name": "U8_VALUE",
-      "offset": 3904,
+      "offset": 4240,
       "type": {
         "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b",
         "swayType": "u8"

@@ -7,9 +7,15 @@ struct GenericStruct<T> {
     c: T,
 }
 
+pub struct DoubleGeneric<T, F> {
+    pub a: T,
+    pub b: F,
+}
+
 struct NestedGenericStruct<E> {
     a: Vec<GenericStruct<E>>,
     b: Vec<GenericStruct<u16>>,
+    c: DoubleGeneric<E, u16>,
 }
 
 struct SimpleStruct {

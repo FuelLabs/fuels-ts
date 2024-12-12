@@ -384,19 +384,25 @@ export class ResolvableType {
      * with the type arguments of the concrete type.
      */
     return this.typeParamsArgsMap.map(([tp, value]) => {
+      /**
+       * Some type parameters can already be resolved
+       * e.g. `struct MyStruct<E> { a: DoubleGeneric<E, u16> }`
+       * where the second type parameter of DoubleGeneric is already known.
+       */
       if (value instanceof ResolvedType) {
         return [tp, value];
       }
+
       const resolved = typeParamsArgsMap?.find(
         ([typeParameterId]) => typeParameterId === value.metadataTypeId
       );
 
-      if (!resolved) {
-        const val = value.resolveInternal(value.metadataTypeId, typeParamsArgsMap);
-        return [tp, val];
-      }
-
-      return resolved;
+      /**
+       * The type parameter is either directly substituted with a type argument,
+       * or it's metadata type which accepts the type argument,
+       * so that metadata type needs to be resolved first.
+       */
+      return resolved ?? [tp, value.resolveInternal(value.metadataTypeId, typeParamsArgsMap)];
     });
   }
 
