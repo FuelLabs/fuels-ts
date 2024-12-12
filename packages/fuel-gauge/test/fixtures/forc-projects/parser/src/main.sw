@@ -8,8 +8,7 @@ struct SampleStruct<T> {
 
 struct SampleGenericStruct<E> {
     a: Vec<SampleStruct<E>>,
-    b: Vec<SampleStruct<u16>>
-
+    b: Vec<SampleStruct<u16>>,
 }
 
 struct NonGenericStruct {
@@ -22,12 +21,18 @@ pub struct StructWithImplicitGenerics<E, F> {
 }
 
 abi VoidContract {
-    fn sample_struct(arg1: SampleStruct<Vec<NonGenericStruct>>, arg2: SampleGenericStruct<u8>) -> bool;
+    fn sample_struct(
+        arg1: SampleStruct<Vec<NonGenericStruct>>,
+        arg2: SampleGenericStruct<u8>,
+    ) -> bool;
     fn implicit_generics(arg1: StructWithImplicitGenerics<u8, u16>) -> bool;
 }
 
 impl VoidContract for Contract {
-    fn sample_struct(arg1: SampleStruct<Vec<NonGenericStruct>>, arg2: SampleGenericStruct<u8>) -> bool {
+    fn sample_struct(
+        arg1: SampleStruct<Vec<NonGenericStruct>>,
+        arg2: SampleGenericStruct<u8>,
+    ) -> bool {
         true
     }
     fn implicit_generics(arg1: StructWithImplicitGenerics<u8, u16>) -> bool {
