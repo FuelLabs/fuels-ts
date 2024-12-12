@@ -290,15 +290,17 @@ export class ResolvableType {
     typeId: string | number,
     typeParamsArgsMap: Array<[number, ResolvedType]> | undefined
   ): ResolvedType {
+    const resolvedType = new ResolvedType({
+      swayType: this.swayType,
+      typeId,
+      metadataType: this.metadataType,
+    });
+
     /**
      * A type without components can be immediately resolved.
      */
     if (!this.components) {
-      return new ResolvedType({
-        swayType: this.swayType,
-        typeId,
-        metadataType: this.metadataType,
-      });
+      return resolvedType;
     }
 
     /**
@@ -307,13 +309,9 @@ export class ResolvableType {
      * as it doesn't need any external typeArgs to substitute those components with.
      */
     if (typeParamsArgsMap === undefined) {
-      return new ResolvedType({
-        swayType: this.swayType,
-        typeId,
-        components: this.components as ResolvedComponent[],
-        metadataType: this.metadataType,
-        typeParamsArgsMap: this.typeParamsArgsMap as [number, ResolvedType][],
-      });
+      resolvedType.components = this.components as ResolvedComponent[];
+      resolvedType.typeParamsArgsMap = this.typeParamsArgsMap as [number, ResolvedType][];
+      return resolvedType;
     }
 
     /**
@@ -361,13 +359,10 @@ export class ResolvableType {
       };
     });
 
-    return new ResolvedType({
-      swayType: this.swayType,
-      typeId,
-      components,
-      typeParamsArgsMap: typeArgs,
-      metadataType: this.metadataType,
-    });
+    resolvedType.components = components;
+    resolvedType.typeParamsArgsMap = typeArgs;
+
+    return resolvedType;
   }
 
   private resolveTypeArgs(
