@@ -3,4 +3,4 @@
 "fuels": minor
 ---
 
-feat: ABI parser
+feat!: ABI parser
