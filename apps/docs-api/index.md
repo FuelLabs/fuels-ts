@@ -12,6 +12,7 @@
 
 # Modules
 
+- [abi](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_abi.html)
 - [abi-coder](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_abi_coder.html)
 - [abi-typegen](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_abi_typegen.html)
 - [account](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_account.html)

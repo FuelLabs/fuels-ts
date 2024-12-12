@@ -429,6 +429,10 @@ export default defineConfig({
                 text: 'Splitting UTXOs',
                 link: '/guide/cookbook/splitting-utxos',
               },
+              {
+                text: 'Working with the ABI',
+                link: '/guide/cookbook/working-with-the-abi',
+              },
             ],
           },
           {
