@@ -1,8 +1,8 @@
 import { launchTestNode } from 'fuels/test-utils';
 
 import { VoidFactory } from '../test/typegen';
-import type { NativeEnumInput } from '../test/typegen/contracts/Void';
-import type { Option } from '../test/typegen/contracts/common';
+import type { Option } from '../test/typegen/common';
+import { NativeEnum } from '../test/typegen/contracts/VoidTypes';
 
 /**
  * @group node
@@ -35,12 +35,10 @@ describe('Void Tests', () => {
       contracts: [voidContract],
     } = launched;
 
-    const enumValue: NativeEnumInput = 'C' as NativeEnumInput;
-
-    const { waitForResult } = await voidContract.functions.echo_native_enum(enumValue).call();
+    const { waitForResult } = await voidContract.functions.echo_native_enum(NativeEnum.C).call();
     const { value } = await waitForResult();
 
-    expect(value).toEqual(enumValue);
+    expect(value).toEqual(NativeEnum.C);
   });
 
   it('should handle input arguments of type [42, void]', async () => {

@@ -8,6 +8,7 @@ export enum Commands {
   init = 'init',
   versions = 'versions',
   node = 'node',
+  typegen = 'typegen',
 }
 
 export type CommandEvent =
@@ -33,6 +34,10 @@ export type CommandEvent =
     }
   | {
       type: Commands.node;
+      data: void;
+    }
+  | {
+      type: Commands.typegen;
       data: void;
     };
 

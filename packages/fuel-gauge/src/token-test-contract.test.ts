@@ -4,7 +4,7 @@ import { toHex, Wallet, bn } from 'fuels';
 import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
 import { TokenContractFactory } from '../test/typegen';
-import type { AddressInput } from '../test/typegen/contracts/TokenContract';
+import type { AddressInput } from '../test/typegen/contracts/TokenContractTypes';
 
 /**
  * @group node

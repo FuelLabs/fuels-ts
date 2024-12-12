@@ -4,11 +4,7 @@ import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
 import { AbiContractFactory } from '../../test/typegen';
 import type { AbiContract } from '../../test/typegen';
-import {
-  EnumWithNativeInput,
-  EnumWithNativeOutput,
-  ExternalEnumInput,
-} from '../../test/typegen/contracts/AbiContract';
+import { EnumWithNative, ExternalEnum } from '../../test/typegen/contracts/AbiContractTypes';
 import type {
   EnumWithBuiltinTypeInput,
   EnumWithBuiltinTypeOutput,
@@ -32,7 +28,7 @@ import type {
   StructWithEnumArrayOutput,
   StructWithSingleOptionOutput,
   StructWithSingleOptionInput,
-} from '../../test/typegen/contracts/AbiContract';
+} from '../../test/typegen/contracts/AbiContractTypes';
 import type { Option, Result, Vec } from '../../test/typegen/contracts/common';
 
 import {
@@ -1091,14 +1087,10 @@ describe('AbiCoder', () => {
   describe('types_struct_with_array_of_enums', () => {
     it.todo('should encode/decode just fine', async () => {
       const input: StructWithEnumArrayInput = {
-        a: [EnumWithNativeInput.Checked, EnumWithNativeInput.Checked, EnumWithNativeInput.Checked],
+        a: [EnumWithNative.Checked, EnumWithNative.Checked, EnumWithNative.Checked],
       };
       const expected: StructWithEnumArrayOutput = {
-        a: [
-          EnumWithNativeOutput.Pending,
-          EnumWithNativeOutput.Pending,
-          EnumWithNativeOutput.Pending,
-        ],
+        a: [EnumWithNative.Pending, EnumWithNative.Pending, EnumWithNative.Pending],
       };
 
       const { waitForResult } = await contract.functions
@@ -1470,8 +1462,8 @@ describe('AbiCoder', () => {
    */
   describe('types_enum', () => {
     it('should encode/decode just fine', async () => {
-      const input = EnumWithNativeInput.Checked;
-      const expected = EnumWithNativeInput.Pending;
+      const input = EnumWithNative.Checked;
+      const expected = EnumWithNative.Pending;
 
       const { waitForResult } = await contract.functions.types_enum(input).call();
 
@@ -1579,8 +1571,8 @@ describe('AbiCoder', () => {
 
   describe('types_enum_external', () => {
     it('should encode/decode just fine', async () => {
-      const input = ExternalEnumInput.A;
-      const expected = ExternalEnumInput.B;
+      const input = ExternalEnum.A;
+      const expected = ExternalEnum.B;
 
       const { waitForResult } = await contract.functions.types_enum_external(input).call();
 
@@ -1607,7 +1599,7 @@ describe('AbiCoder', () => {
 
   describe('types_enum_with_structs', () => {
     it('should encode/decode just fine', async () => {
-      const input = { a: EnumWithNativeInput.Checked };
+      const input = { a: EnumWithNative.Checked };
       const expected = { b: { a: true, b: 10 } };
 
       const { waitForResult } = await contract.functions.types_enum_with_structs(input).call();

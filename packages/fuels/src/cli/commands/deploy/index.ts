@@ -1,5 +1,5 @@
 import type { FuelsConfig } from '../../types';
-import { generateTypes } from '../build/generateTypes';
+import { generateTypes } from '../typegen';
 
 import { deployContracts } from './deployContracts';
 import { deployPredicates } from './deployPredicates';
@@ -35,9 +35,9 @@ export async function deploy(config: FuelsConfig) {
 
   /**
    * After deploying scripts/predicates, we need to
-   * re-generate factory classe with the loader coee
+   * re-generate factory classes with the loader code
    */
-  await generateTypes(config);
+  generateTypes(config);
 
   return {
     contracts,

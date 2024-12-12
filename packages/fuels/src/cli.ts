@@ -1,4 +1,3 @@
-import { configureCliOptions as configureTypegenCliOptions } from '@fuel-ts/abi-typegen/cli';
 import { versions } from '@fuel-ts/versions';
 import { runVersions } from '@fuel-ts/versions/cli';
 import { Command, Option } from 'commander';
@@ -8,6 +7,7 @@ import { deploy } from './cli/commands/deploy';
 import { dev } from './cli/commands/dev';
 import { init } from './cli/commands/init';
 import { node } from './cli/commands/node';
+import { typegen } from './cli/commands/typegen';
 import { withBinaryPaths } from './cli/commands/withBinaryPaths';
 import { withConfig } from './cli/commands/withConfig';
 import { withProgram } from './cli/commands/withProgram';
@@ -90,10 +90,27 @@ export const configureCli = () => {
    * Routing external commands from sub-packages' CLIs
    */
 
-  // Typegen
-  configureTypegenCliOptions(
-    program.command('typegen').description(`Generate Typescript from Sway ABI JSON files`)
-  );
+  (command = program.command(Commands.typegen))
+    .description(`Generate Typescript from Sway ABI JSON files`)
+    .requiredOption('-i, --inputs <path|glob...>', 'Input paths/globals to your ABI JSON files')
+    .requiredOption('-o, --output <dir>', 'Directory path for generated files')
+    .addOption(
+      new Option('-c, --contract', 'Generate types for Contracts [default]')
+        .conflicts(['script', 'predicate'])
+        .implies({ script: undefined, predicate: undefined })
+    )
+    .addOption(
+      new Option('-s, --script', 'Generate types for Scripts')
+        .conflicts(['contract', 'predicate'])
+        .implies({ contract: undefined, predicate: undefined })
+    )
+    .addOption(
+      new Option('-p, --predicate', 'Generate types for Predicates')
+        .conflicts(['contract', 'script'])
+        .implies({ contract: undefined, script: undefined })
+    )
+    .option('-S, --silent', 'Omit output messages')
+    .action(withProgram(command, Commands.typegen, typegen));
 
   // Versions
   (command = program.command('versions'))

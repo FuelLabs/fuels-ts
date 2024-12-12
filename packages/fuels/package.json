@@ -42,8 +42,8 @@
       "test-utils": [
         "./dist/test-utils.d.ts"
       ],
-      "./cli-utils": [
-        "/dist/cli-utils.d.ts"
+      "cli-utils": [
+        "./dist/cli-utils.d.ts"
       ]
     }
   },

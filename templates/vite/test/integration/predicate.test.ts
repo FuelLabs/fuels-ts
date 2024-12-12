@@ -7,7 +7,10 @@ import { describe, test, expect } from 'vitest';
  *
  * Can't find these imports? Make sure you've run `fuels build` to generate these with typegen.
  */
-import { TestPredicate, TestPredicateInputs } from '../../src/sway-api/predicates/TestPredicate';
+import {
+  TestPredicate,
+  TestPredicateParameters,
+} from '../../src/sway-api/predicates/TestPredicate';
 
 /**
  * @group node
@@ -30,7 +33,7 @@ describe('Predicate', () => {
     } = launched;
 
     // For a predicate, we need to pass in an argument to evaluate the predicate.
-    const predicateData: TestPredicateInputs = [1337];
+    const predicateData: TestPredicateParameters['data'] = [1337];
 
     // Now, we can instantiate our predicate.
     const predicate = new TestPredicate({

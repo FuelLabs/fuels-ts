@@ -2,8 +2,7 @@ import { bn, randomBytes, hexlify } from 'fuels';
 import type { BigNumberish, BN } from 'fuels';
 
 import { VectorsFactory } from '../test/typegen/contracts';
-import { SmallEnumInput } from '../test/typegen/contracts/CoverageContract';
-import type { Vec } from '../test/typegen/contracts/common';
+import { SmallEnum } from '../test/typegen/contracts/CoverageContractTypes';
 
 import { launchTestContract } from './utils';
 
@@ -120,7 +119,7 @@ describe('Vector Tests', () => {
   it('should test (u8, u8) vector input/output', async () => {
     using contractInstance = await setupContract();
 
-    const INPUT: Vec<[BigNumberish, BigNumberish]> = [
+    const INPUT: Array<[BigNumberish, BigNumberish]> = [
       [1, 2],
       [3, 4],
       [5, 6],
@@ -137,7 +136,7 @@ describe('Vector Tests', () => {
   it('should test (u64, u64) vector input/output', async () => {
     using contractInstance = await setupContract();
 
-    const INPUT: Vec<[BigNumberish, BigNumberish]> = [
+    const INPUT: Array<[BigNumberish, BigNumberish]> = [
       [111, 2222],
       [333, 4445],
       [5555, 6],
@@ -168,7 +167,7 @@ describe('Vector Tests', () => {
   it('should test [u64; 5] vector input/output', async () => {
     using contractInstance = await setupContract();
 
-    const INPUT: Vec<[BigNumberish, BigNumberish, BigNumberish, BigNumberish, BigNumberish]> = [
+    const INPUT: Array<[BigNumberish, BigNumberish, BigNumberish, BigNumberish, BigNumberish]> = [
       [1, 2, 3, 4, 5],
       [500, 600, 700, 9000, 9999],
       [11500, 22600, 33700, 55000, 669999],
@@ -183,7 +182,7 @@ describe('Vector Tests', () => {
   it('should test [bool; 2] vector input/output', async () => {
     using contractInstance = await setupContract();
 
-    const INPUT: Vec<[boolean, boolean]> = [
+    const INPUT: Array<[boolean, boolean]> = [
       [true, true],
       [true, false],
       [false, true],
@@ -283,12 +282,12 @@ describe('Vector Tests', () => {
   it('should test SmallEnum vector input/output', async () => {
     using contractInstance = await setupContract();
 
-    const INPUT: Vec<SmallEnumInput> = [
-      SmallEnumInput.Empty,
-      SmallEnumInput.Empty,
-      SmallEnumInput.Empty,
-      SmallEnumInput.Empty,
-      SmallEnumInput.Empty,
+    const INPUT: Array<SmallEnum> = [
+      SmallEnum.Empty,
+      SmallEnum.Empty,
+      SmallEnum.Empty,
+      SmallEnum.Empty,
+      SmallEnum.Empty,
     ];
 
     const { waitForResult } = await contractInstance.functions
@@ -404,7 +403,7 @@ describe('Vector Tests', () => {
   it('should test Vec<u8> and b256 tuple input/output', async () => {
     using contractInstance = await setupContract();
 
-    const INPUT: [Vec<BigNumberish>, string] = [[1, 8, 3, 2, 55, 215], hexlify(randomBytes(32))];
+    const INPUT: [Array<BigNumberish>, string] = [[1, 8, 3, 2, 55, 215], hexlify(randomBytes(32))];
 
     const { waitForResult } = await contractInstance.functions
       .echo_vector_and_b256_tuple(...INPUT)
@@ -417,7 +416,7 @@ describe('Vector Tests', () => {
   it('should test two vectors tuple input/output', async () => {
     using contractInstance = await setupContract();
 
-    const INPUT: [Vec<BigNumberish>, Vec<BigNumberish>] = [
+    const INPUT: [Array<BigNumberish>, Array<BigNumberish>] = [
       [219, 229],
       [1, 254, 55],
     ];
@@ -433,7 +432,7 @@ describe('Vector Tests', () => {
   it('should test u32 and three different vectors tuple input/output', async () => {
     using contractInstance = await setupContract();
 
-    const INPUT: [BigNumberish, Vec<boolean>, Vec<BigNumberish>, Vec<BigNumberish>] = [
+    const INPUT: [BigNumberish, Array<boolean>, Array<BigNumberish>, Array<BigNumberish>] = [
       91000,
       [true, true, false],
       [95000, 153333],

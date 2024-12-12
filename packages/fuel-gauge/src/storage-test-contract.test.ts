@@ -15,7 +15,7 @@ describe('StorageTestContract', () => {
       wallets: [wallet],
     } = launched;
 
-    const { storageSlots } = StorageTestContract;
+    const { storageSlots } = StorageTestContractFactory;
 
     const factory = new ContractFactory(
       StorageTestContractFactory.bytecode,
@@ -96,7 +96,7 @@ describe('StorageTestContract', () => {
   });
 
   it('should automatically load storage slots', async () => {
-    const { storageSlots } = StorageTestContract;
+    const { storageSlots } = StorageTestContractFactory;
     const expectedStorageSlots = storageSlots.map(({ key, value }) => ({
       key: `0x${key}`,
       value: `0x${value}`,

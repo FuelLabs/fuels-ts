@@ -2,10 +2,7 @@ import { bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { StrSliceContractFactory, ScriptStrSlice } from '../test/typegen';
-import {
-  PredicateStrSlice,
-  type PredicateStrSliceInputs,
-} from '../test/typegen/predicates/PredicateStrSlice';
+import { PredicateStrSlice } from '../test/typegen/predicates/PredicateStrSlice';
 
 /**
  * @group node
@@ -37,10 +34,9 @@ describe('str slice', () => {
       provider,
     } = launched;
 
-    const predicateData: PredicateStrSliceInputs = ['predicate-input'];
     const predicate = new PredicateStrSlice({
       provider,
-      data: predicateData,
+      data: ['predicate-input'],
     });
     const baseAssetId = provider.getBaseAssetId();
 

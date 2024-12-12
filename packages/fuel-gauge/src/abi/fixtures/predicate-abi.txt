@@ -1,0 +1,272 @@
+{
+  "programType": "predicate",
+  "specVersion": "1",
+  "encodingVersion": "1",
+  "concreteTypes": [
+    {
+      "type": "b256",
+      "concreteTypeId": "7c5ee1cecf5f8eacd1284feb5f0bf2bdea533a51e2f0c9aabe9236d335989f3b"
+    },
+    {
+      "type": "bool",
+      "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
+    },
+    {
+      "type": "enum MyGenericEnum<u16>",
+      "concreteTypeId": "9d8b215a39e5f5f10fc294290b6ea401edbd53056cfe6e0c9331157abdbc87d0",
+      "metadataTypeId": 1,
+      "typeArguments": [
+        "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef"
+      ]
+    },
+    {
+      "type": "enum std::option::Option<u8>",
+      "concreteTypeId": "2da102c46c7263beeed95818cd7bee801716ba8303dddafdcd0f6c9efda4a0f1",
+      "metadataTypeId": 2,
+      "typeArguments": [
+        "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b"
+      ]
+    },
+    {
+      "type": "enum std::result::Result<struct MyGenericStruct<str[4]>,u64>",
+      "concreteTypeId": "85dace7aaa469c8bb476be79ddec34883ef101b3cde470636f47e299bfcdc3da",
+      "metadataTypeId": 3,
+      "typeArguments": [
+        "c397d34a45fb343f8315bb5af5eed88da9f13347c765e2d86089d99dbf952ef2",
+        "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
+      ]
+    },
+    {
+      "type": "str[4]",
+      "concreteTypeId": "94f0fa95c830be5e4f711963e83259fe7e8bc723278ab6ec34449e791a99b53a"
+    },
+    {
+      "type": "struct Configurables",
+      "concreteTypeId": "2770b4001b55ea9452a58b5063175844ad76bfd1bc30288792fe8962ef9d4169",
+      "metadataTypeId": 7
+    },
+    {
+      "type": "struct MyGenericStruct<str[4]>",
+      "concreteTypeId": "c397d34a45fb343f8315bb5af5eed88da9f13347c765e2d86089d99dbf952ef2",
+      "metadataTypeId": 8,
+      "typeArguments": [
+        "94f0fa95c830be5e4f711963e83259fe7e8bc723278ab6ec34449e791a99b53a"
+      ]
+    },
+    {
+      "type": "struct Validation",
+      "concreteTypeId": "c7cf8c2be429c961ccb5c32a2951a58f1bb2a4f748ffac2206d4d1761082beaa",
+      "metadataTypeId": 9
+    },
+    {
+      "type": "struct std::vec::Vec<struct Validation>",
+      "concreteTypeId": "9b3ded85b5c6e502acc8b7834d5d6df0460764a7a47837eb2b32d4566c4d477b",
+      "metadataTypeId": 11,
+      "typeArguments": [
+        "c7cf8c2be429c961ccb5c32a2951a58f1bb2a4f748ffac2206d4d1761082beaa"
+      ]
+    },
+    {
+      "type": "u16",
+      "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef"
+    },
+    {
+      "type": "u64",
+      "concreteTypeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
+    },
+    {
+      "type": "u8",
+      "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b"
+    }
+  ],
+  "metadataTypes": [
+    {
+      "type": "()",
+      "metadataTypeId": 0
+    },
+    {
+      "type": "enum MyGenericEnum",
+      "metadataTypeId": 1,
+      "components": [
+        {
+          "name": "a",
+          "typeId": 5
+        }
+      ],
+      "typeParameters": [
+        5
+      ]
+    },
+    {
+      "type": "enum std::option::Option",
+      "metadataTypeId": 2,
+      "components": [
+        {
+          "name": "None",
+          "typeId": 0
+        },
+        {
+          "name": "Some",
+          "typeId": 5
+        }
+      ],
+      "typeParameters": [
+        5
+      ]
+    },
+    {
+      "type": "enum std::result::Result",
+      "metadataTypeId": 3,
+      "components": [
+        {
+          "name": "Ok",
+          "typeId": 5
+        },
+        {
+          "name": "Err",
+          "typeId": 4
+        }
+      ],
+      "typeParameters": [
+        5,
+        4
+      ]
+    },
+    {
+      "type": "generic E",
+      "metadataTypeId": 4
+    },
+    {
+      "type": "generic T",
+      "metadataTypeId": 5
+    },
+    {
+      "type": "raw untyped ptr",
+      "metadataTypeId": 6
+    },
+    {
+      "type": "struct Configurables",
+      "metadataTypeId": 7,
+      "components": [
+        {
+          "name": "U8_VALUE",
+          "typeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b"
+        },
+        {
+          "name": "B256_VALUE",
+          "typeId": "7c5ee1cecf5f8eacd1284feb5f0bf2bdea533a51e2f0c9aabe9236d335989f3b"
+        }
+      ]
+    },
+    {
+      "type": "struct MyGenericStruct",
+      "metadataTypeId": 8,
+      "components": [
+        {
+          "name": "a",
+          "typeId": 5
+        }
+      ],
+      "typeParameters": [
+        5
+      ]
+    },
+    {
+      "type": "struct Validation",
+      "metadataTypeId": 9,
+      "components": [
+        {
+          "name": "has_account",
+          "typeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
+        },
+        {
+          "name": "total_complete",
+          "typeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
+        }
+      ]
+    },
+    {
+      "type": "struct std::vec::RawVec",
+      "metadataTypeId": 10,
+      "components": [
+        {
+          "name": "ptr",
+          "typeId": 6
+        },
+        {
+          "name": "cap",
+          "typeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
+        }
+      ],
+      "typeParameters": [
+        5
+      ]
+    },
+    {
+      "type": "struct std::vec::Vec",
+      "metadataTypeId": 11,
+      "components": [
+        {
+          "name": "buf",
+          "typeId": 10,
+          "typeArguments": [
+            {
+              "name": "",
+              "typeId": 5
+            }
+          ]
+        },
+        {
+          "name": "len",
+          "typeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
+        }
+      ],
+      "typeParameters": [
+        5
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "inputs": [
+        {
+          "name": "configurables",
+          "concreteTypeId": "2770b4001b55ea9452a58b5063175844ad76bfd1bc30288792fe8962ef9d4169"
+        },
+        {
+          "name": "vec",
+          "concreteTypeId": "9b3ded85b5c6e502acc8b7834d5d6df0460764a7a47837eb2b32d4566c4d477b"
+        },
+        {
+          "name": "enm",
+          "concreteTypeId": "9d8b215a39e5f5f10fc294290b6ea401edbd53056cfe6e0c9331157abdbc87d0"
+        },
+        {
+          "name": "opt",
+          "concreteTypeId": "2da102c46c7263beeed95818cd7bee801716ba8303dddafdcd0f6c9efda4a0f1"
+        },
+        {
+          "name": "res",
+          "concreteTypeId": "85dace7aaa469c8bb476be79ddec34883ef101b3cde470636f47e299bfcdc3da"
+        }
+      ],
+      "name": "main",
+      "output": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903",
+      "attributes": null
+    }
+  ],
+  "loggedTypes": [],
+  "messagesTypes": [],
+  "configurables": [
+    {
+      "name": "U8_VALUE",
+      "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b",
+      "offset": 1936
+    },
+    {
+      "name": "B256_VALUE",
+      "concreteTypeId": "7c5ee1cecf5f8eacd1284feb5f0bf2bdea533a51e2f0c9aabe9236d335989f3b",
+      "offset": 1904
+    }
+  ]
+}
