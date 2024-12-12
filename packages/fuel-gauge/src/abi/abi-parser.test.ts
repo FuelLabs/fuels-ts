@@ -1,4 +1,3 @@
-import { writeFileSync } from 'fs';
 import { AbiParser, type AbiSpecification } from 'fuels';
 
 import { Parser } from '../../test/typegen';
@@ -13,13 +12,6 @@ describe('AbiParser', () => {
   test('runs just fine', () => {
     const parsed = AbiParser.parse(Parser.abi as AbiSpecification);
 
-    writeFileSync('asdf.json', JSON.stringify(parsed, null, 2));
-
-    expect({ metadataTypes: parsed.metadataTypes }).toEqual({
-      metadataTypes: expected.metadataTypes,
-    });
-    expect({ concreteTypes: parsed.concreteTypes }).toEqual({
-      concreteTypes: expected.concreteTypes,
-    });
+    expect(parsed).toEqual(expected);
   });
 });

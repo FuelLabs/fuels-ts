@@ -1,17 +1,18 @@
 contract;
+use std::message::send_typed_message;
 
-struct SampleStruct<T> {
+struct GenericStruct<T> {
     a: bool,
     b: u32,
     c: T,
 }
 
-struct SampleGenericStruct<E> {
-    a: Vec<SampleStruct<E>>,
-    b: Vec<SampleStruct<u16>>,
+struct NestedGenericStruct<E> {
+    a: Vec<GenericStruct<E>>,
+    b: Vec<GenericStruct<u16>>,
 }
 
-struct NonGenericStruct {
+struct SimpleStruct {
     a: bool,
 }
 
@@ -20,22 +21,32 @@ pub struct StructWithImplicitGenerics<E, F> {
     pub b: (E, F),
 }
 
+configurable {
+    U8_VALUE: u8 = 10,
+}
+
 abi VoidContract {
-    fn sample_struct(
-        arg1: SampleStruct<Vec<NonGenericStruct>>,
-        arg2: SampleGenericStruct<u8>,
+    fn generic_structs(
+        arg1: GenericStruct<Vec<SimpleStruct>>,
+        arg2: NestedGenericStruct<u8>,
     ) -> bool;
-    fn implicit_generics(arg1: StructWithImplicitGenerics<u8, u16>) -> bool;
+    fn implicit_generic_struct(arg1: StructWithImplicitGenerics<u8, u16>) -> bool;
 }
 
 impl VoidContract for Contract {
-    fn sample_struct(
-        arg1: SampleStruct<Vec<NonGenericStruct>>,
-        arg2: SampleGenericStruct<u8>,
+    fn generic_structs(
+        arg1: GenericStruct<Vec<SimpleStruct>>,
+        arg2: NestedGenericStruct<u8>,
     ) -> bool {
+        log(arg1.a);
+        send_typed_message(
+            0x0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20,
+            arg1.a,
+            123,
+        );
         true
     }
-    fn implicit_generics(arg1: StructWithImplicitGenerics<u8, u16>) -> bool {
+    fn implicit_generic_struct(arg1: StructWithImplicitGenerics<u8, u16>) -> bool {
         true
     }
 }

@@ -923,9 +923,6 @@ importers:
 
   packages/fuel-gauge:
     dependencies:
-      '@fuel-ts/abi':
-        specifier: workspace:*
-        version: link:../abi
       fuels:
         specifier: workspace:*
         version: link:../fuels
