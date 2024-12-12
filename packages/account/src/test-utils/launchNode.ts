@@ -40,6 +40,7 @@ export type LaunchNodeOptions = {
    * Passing in a snapshot configuration path via the `--snapshot` flag in `args` will override this.
    * */
   snapshotConfig?: SnapshotConfigs;
+  includeInitialState?: boolean;
 };
 
 export type LaunchNodeResult = Promise<{
@@ -51,7 +52,11 @@ export type LaunchNodeResult = Promise<{
   pid: number;
 }>;
 
-function getFinalStateConfigJSON({ stateConfig, chainConfig }: SnapshotConfigs) {
+function getFinalStateConfigJSON({
+  stateConfig,
+  chainConfig,
+  includeInitialState = false,
+}: SnapshotConfigs & { includeInitialState?: boolean }) {
   const defaultCoins = defaultSnapshotConfigs.stateConfig.coins.map((coin) => ({
     ...coin,
     amount: '18446744073709551615',
@@ -68,6 +73,28 @@ function getFinalStateConfigJSON({ stateConfig, chainConfig }: SnapshotConfigs) 
     .concat(stateConfig.messages.map((msg) => ({ ...msg, amount: msg.amount.toString() })))
     .filter((msg, index, self) => self.findIndex((m) => m.nonce === msg.nonce) === index);
 
+  if (includeInitialState) {
+    // Funds a couple of wallets. Useful for tools like the fuels CLI and create fuels.
+    coins.push({
+      tx_id: '0x0000000000000000000000000000000000000000000000000000000000000001',
+      output_index: 0,
+      tx_pointer_block_height: 0,
+      tx_pointer_tx_idx: 0,
+      owner: '0x94ffcc53b892684acefaebc8a3d4a595e528a8cf664eeb3ef36f1020b0809d0d',
+      amount: '18446744073709551615',
+      asset_id: '0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07',
+    });
+    coins.push({
+      tx_id: '0x0000000000000000000000000000000000000000000000000000000000000002',
+      output_index: 0,
+      tx_pointer_block_height: 0,
+      tx_pointer_tx_idx: 0,
+      owner: '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+      amount: '18446744073709551615',
+      asset_id: '0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07',
+    });
+  }
+
   // If there's no genesis key, generate one and some coins to the genesis block.
   if (!process.env.GENESIS_SECRET) {
     const pk = Signer.generatePrivateKey();
@@ -79,7 +106,7 @@ function getFinalStateConfigJSON({ stateConfig, chainConfig }: SnapshotConfigs) 
       owner: signer.address.toHexString(),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       amount: '18446744073709551615' as any,
-      asset_id: chainConfig.consensus_parameters.V1.base_asset_id,
+      asset_id: chainConfig.consensus_parameters.V2.base_asset_id,
       output_index: 0,
       tx_pointer_block_height: 0,
       tx_pointer_tx_idx: 0,
@@ -104,6 +131,7 @@ function getFinalStateConfigJSON({ stateConfig, chainConfig }: SnapshotConfigs) 
  * @param fuelCorePath - the path to the fuel-core binary. (optional, defaults to 'fuel-core')
  * @param loggingEnabled - whether the node should output logs. (optional, defaults to true)
  * @param basePath - the base path to use for the temporary folder. (optional, defaults to os.tmpdir())
+ * @param includeInitialState - whether to initialise the chain with some default initial state. (optional, defaults to false)
  * */
 // #endregion launchNode-launchNodeOptions
 export const launchNode = async ({
@@ -114,6 +142,7 @@ export const launchNode = async ({
   loggingEnabled = true,
   basePath,
   snapshotConfig = defaultSnapshotConfigs,
+  includeInitialState = false,
 }: LaunchNodeOptions = {}): LaunchNodeResult =>
   // eslint-disable-next-line no-async-promise-executor
   new Promise(async (resolve, reject) => {
@@ -169,7 +198,14 @@ export const launchNode = async ({
       const stateTransitionPath = path.join(tempDir, 'state_transition_bytecode.wasm');
 
       writeFileSync(chainConfigPath, JSON.stringify(snapshotConfig.chainConfig), 'utf8');
-      writeFileSync(stateConfigPath, getFinalStateConfigJSON(snapshotConfig), 'utf8');
+      writeFileSync(
+        stateConfigPath,
+        getFinalStateConfigJSON({
+          ...snapshotConfig,
+          includeInitialState,
+        }),
+        'utf8'
+      );
       writeFileSync(metadataPath, JSON.stringify(metadata), 'utf8');
       writeFileSync(stateTransitionPath, JSON.stringify(''));
 
@@ -236,6 +272,10 @@ export const launchNode = async ({
             console.log(
               `fuel-core node under pid ${child.pid} does not exist. The node might have been killed before cleanup was called. Exiting cleanly.`
             );
+          } else if (error.message.includes('pid must be a positive integer')) {
+            // This is a workaround for a bug with Bun.
+            // See: https://github.com/oven-sh/bun/issues/8787
+            process.kill(+child.pid);
           } else {
             throw e;
           }
@@ -273,6 +313,9 @@ export const launchNode = async ({
         reject(new FuelError(FuelError.CODES.NODE_LAUNCH_FAILED, text));
       }
     });
+
+    // Increase the max listeners to avoid a warning
+    process.setMaxListeners(100);
 
     // Process exit.
     process.on('exit', cleanup);

@@ -2,22 +2,19 @@
 import { execSync } from 'child_process';
 import { globSync } from 'glob';
 
+const { log } = console;
+
 (() => {
   const mdFiles = globSync('**/*.md', {
-    ignore: [
-      '**/node_modules/**',
-      'apps/docs/src/api/**', // generated api
-      '**/CHANGELOG.md',
-      'apps/demo-nextjs/**',
-      'apps/demo-react-cra/**',
-      'apps/demo-react-vite/**',
-      'templates/**',
-      'apps/demo-wallet-sdk-react/**',
-      'apps/create-fuels-counter-guide/**',
-      'internal/forc/sway-repo/**',
-      'internal/fuel-core/fuel-core-repo/**',
-    ],
+    ignore: ['**/node_modules/**', 'apps/demo-*/**', '.changeset/**', '**/CHANGELOG.md'],
   });
 
-  execSync(`pnpm textlint ${mdFiles.join(' ')} --debug`, { stdio: 'inherit' });
+  try {
+    execSync(`pnpm markdown-link-check -q -c ./link-check.config.json ${mdFiles.join(' ')}`, {
+      stdio: 'inherit',
+    });
+  } catch {
+    log('Some files have broken links. Please fix them.');
+    process.exit(1);
+  }
 })();

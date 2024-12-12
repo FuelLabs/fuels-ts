@@ -1,5 +1,15 @@
 import type { BigNumberish, BN, Message } from 'fuels';
-import { arrayify, bn, toHex, Wallet, ScriptTransactionRequest, randomBytes, hexlify } from 'fuels';
+import {
+  bn,
+  toHex,
+  Wallet,
+  ScriptTransactionRequest,
+  randomBytes,
+  hexlify,
+  arrayify,
+  Address,
+} from 'fuels';
+import { TestMessage, type LaunchTestNodeOptions } from 'fuels/test-utils';
 
 import { CoverageContractFactory } from '../test/typegen/contracts';
 import type { MixedNativeEnumInput } from '../test/typegen/contracts/CoverageContract';
@@ -33,10 +43,10 @@ enum MixedNativeEnum {
   NotNative = 12,
 }
 
-function setupContract() {
-  return launchTestContract({
-    factory: CoverageContractFactory,
-  });
+function setupContract({
+  nodeOptions,
+}: Pick<LaunchTestNodeOptions<[typeof CoverageContractFactory]>, 'nodeOptions'> = {}) {
+  return launchTestContract(CoverageContractFactory, { nodeOptions });
 }
 
 /**
@@ -538,10 +548,42 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
   });
 
   it('should get initial state messages from node', async () => {
-    using launched = await setupContract();
+    using launched = await setupContract({
+      nodeOptions: {
+        snapshotConfig: {
+          stateConfig: {
+            messages: [
+              new TestMessage({
+                sender: Address.fromB256(
+                  '0xc43454aa38dd91f88109a4b7aef5efb96ce34e3f24992fe0f81d233ca686f80f'
+                ),
+                recipient: Address.fromB256(
+                  '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba'
+                ),
+                nonce: '0101010101010101010101010101010101010101010101010101010101010101',
+                amount: bn('123').toNumber(),
+                data: '',
+                da_height: 0,
+              }).toChainMessage(),
+              new TestMessage({
+                sender: Address.fromB256(
+                  '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba'
+                ),
+                recipient: Address.fromB256(
+                  '0xc43454aa38dd91f88109a4b7aef5efb96ce34e3f24992fe0f81d233ca686f80f'
+                ),
+                nonce: '0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b',
+                amount: bn('123').toNumber(),
+                data: '',
+                da_height: 0,
+              }).toChainMessage(),
+            ],
+          },
+        },
+      },
+    });
     const { provider } = launched;
 
-    // #region Message-getMessages
     const WALLET_A = Wallet.fromPrivateKey(
       '0x1ff16505df75735a5bcf4cb4cf839903120c181dd9be6781b82cda23543bd242',
       provider
@@ -553,22 +595,22 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
 
     const EXPECTED_MESSAGES_A: Message[] = [
       {
-        messageId: '0x5e4b9a05438f912573515dd32093657499310cb650766ce868f21dfb05f09a1a',
+        messageId: '0xb3b3f933cc51055ed30df72e2a324e1f0224b683b5f1052d4d8acfa207dd72c9',
         sender: WALLET_B.address,
         recipient: WALLET_A.address,
         nonce: '0x0101010101010101010101010101010101010101010101010101010101010101',
-        amount: bn('0xffffffffffffffff', 'hex'),
+        amount: bn('123'),
         data: arrayify('0x'),
         daHeight: bn(0),
       },
     ];
     const EXPECTED_MESSAGES_B: Message[] = [
       {
-        messageId: '0xba5fece66404c865ea533b1a0f8462e9a67c2066a20b70fcf8446ce4f2b82ed4',
+        messageId: '0x9f57053cc18ac7aa83cf4617f603a64feeace171f9e004511083573f6678cfdd',
         sender: WALLET_A.address,
         recipient: WALLET_B.address,
         nonce: '0x0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b',
-        amount: bn('0xffffffffffffffff', 'hex'),
+        amount: bn('123'),
         data: arrayify('0x'),
         daHeight: bn(0),
       },
@@ -584,11 +626,31 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
     expect(bMessages).toStrictEqual(EXPECTED_MESSAGES_B);
     expect(pageInfob.hasNextPage).toBeFalsy();
     expect(pageInfob.hasPreviousPage).toBeFalsy();
-    // #endregion Message-getMessages
   });
 
   it('should test spending input messages', async () => {
-    using contractInstance = await setupContract();
+    using contractInstance = await setupContract({
+      nodeOptions: {
+        snapshotConfig: {
+          stateConfig: {
+            messages: [
+              new TestMessage({
+                sender: Address.fromB256(
+                  '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba'
+                ),
+                recipient: Address.fromB256(
+                  '0xc43454aa38dd91f88109a4b7aef5efb96ce34e3f24992fe0f81d233ca686f80f'
+                ),
+                nonce: '0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b',
+                amount: bn('1000').toNumber(),
+                data: '',
+                da_height: 0,
+              }).toChainMessage(),
+            ],
+          },
+        },
+      },
+    });
 
     const { provider } = contractInstance;
     const request = new ScriptTransactionRequest({ gasLimit: 1000000 });

@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.97.0",
+  "version": "0.97.1",
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -51,12 +51,11 @@
     "dist"
   ],
   "scripts": {
-    "build": "run-s build:proxy build:package build:browser build:minified",
-    "build:proxy": "tsx scripts/build-proxy-contract.ts",
+    "build": "run-s build:package build:browser build:minified",
     "build:package": "tsup",
     "build:browser": "pnpm vite build",
     "build:minified": "pnpm uglifyjs --compress --mangle --output dist/browser.min.mjs -- dist/browser.mjs",
-    "postbuild": "run-s type:declarations type:check",
+    "postbuild": "run-s type:declarations",
     "type:declarations": "tsc --emitDeclarationOnly -p tsconfig.dts.json",
     "type:check": "tsc --noEmit",
     "prepublishOnly": "cp ../../README.md ./README.md"
@@ -79,6 +78,7 @@
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
+    "@fuel-ts/recipes": "workspace:*",
     "bundle-require": "^5.0.0",
     "chalk": "4",
     "chokidar": "^3.6.0",

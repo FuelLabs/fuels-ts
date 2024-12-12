@@ -124,10 +124,16 @@ describe('StorageTestContract', () => {
 
   it('should allow for overriding storage slots', async () => {
     const { storageSlots } = StorageTestContract;
-    const expectedStorageSlots = storageSlots.map(({ key }) => ({
+
+    expect(storageSlots.length).toBeGreaterThan(2);
+    const modifiedStorageSlots = storageSlots.slice(1).map(({ key }) => ({
       key: `0x${key}`,
       value: ZeroBytes32,
     }));
+    const expectedStorageSlots = [
+      { key: `0x${storageSlots[0].key}`, value: `0x${storageSlots[0].value}` },
+      ...modifiedStorageSlots,
+    ];
 
     using launched = await launchTestNode();
 
@@ -138,7 +144,7 @@ describe('StorageTestContract', () => {
     // via constructor
     const storageContractFactory = new StorageTestContractFactory(wallet);
     const deployConstructor = await storageContractFactory.deploy({
-      storageSlots: expectedStorageSlots,
+      storageSlots: modifiedStorageSlots,
     });
     const { transactionResult: transactionResultConstructor } =
       await deployConstructor.waitForResult();
@@ -146,10 +152,68 @@ describe('StorageTestContract', () => {
 
     // via static deploy
     const deployStatically = await StorageTestContractFactory.deploy(wallet, {
-      storageSlots: expectedStorageSlots,
+      storageSlots: modifiedStorageSlots,
     });
     const { transactionResult: transactionResultStatically } =
       await deployStatically.waitForResult();
     expect(transactionResultStatically.transaction.storageSlots).toEqual(expectedStorageSlots);
+
+    // via deployAsBlobTx
+    const deployBlob = await storageContractFactory.deployAsBlobTx({
+      storageSlots: modifiedStorageSlots,
+    });
+
+    const { transactionResult: txResultBlob } = await deployBlob.waitForResult();
+    expect(txResultBlob.transaction.storageSlots).toEqual(expectedStorageSlots);
+
+    // via deployAsCreateTx
+    const deployCreate = await storageContractFactory.deployAsBlobTx({
+      storageSlots: modifiedStorageSlots,
+    });
+
+    const { transactionResult: txResultCreate } = await deployCreate.waitForResult();
+    expect(txResultCreate.transaction.storageSlots).toEqual(expectedStorageSlots);
+  });
+
+  test('automatically loads storage slots when using deployAsCreateTx', async () => {
+    const { storageSlots } = StorageTestContract;
+    const expectedStorageSlots = storageSlots.map(({ key, value }) => ({
+      key: `0x${key}`,
+      value: `0x${value}`,
+    }));
+
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    // via constructor
+    const storageContractFactory = new StorageTestContractFactory(wallet);
+    const deployConstructor = await storageContractFactory.deployAsCreateTx();
+    const { transactionResult: transactionResultConstructor } =
+      await deployConstructor.waitForResult();
+    expect(transactionResultConstructor.transaction.storageSlots).toEqual(expectedStorageSlots);
+  });
+
+  test('automatically loads storage slots when using deployAsBlobTx', async () => {
+    const { storageSlots } = StorageTestContract;
+    const expectedStorageSlots = storageSlots.map(({ key, value }) => ({
+      key: `0x${key}`,
+      value: `0x${value}`,
+    }));
+
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    // via constructor
+    const storageContractFactory = new StorageTestContractFactory(wallet);
+    const deployConstructor = await storageContractFactory.deployAsBlobTx();
+    const { transactionResult: transactionResultConstructor } =
+      await deployConstructor.waitForResult();
+    expect(transactionResultConstructor.transaction.storageSlots).toEqual(expectedStorageSlots);
   });
 });

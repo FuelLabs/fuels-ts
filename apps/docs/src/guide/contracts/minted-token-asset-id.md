@@ -11,11 +11,11 @@ The process involves applying a SHA-256 hash algorithm to the combination of the
 
 Consider the following simplified token contract:
 
-<<< @/../../docs-snippets2/sway/token/src/main.sw#minted-token-asset-id-1{rs:line-numbers}
+<<< @/../../docs/sway/token/src/main.sw#minted-token-asset-id-1{rs:line-numbers}
 
 Imagine that this contract is already deployed and we are about to mint some coins:
 
-<<< @/../../docs-snippets2/src/contracts/utilities/minted-token-asset-id.ts#minted-token-asset-id-2{ts:line-numbers}
+<<< @./snippets/utilities/minted-token-asset-id.ts#minted-token-asset-id-2{ts:line-numbers}
 
 ## Obtaining the Asset ID
 
@@ -23,6 +23,6 @@ Since the asset ID depends on the contract ID, which is always dynamic (unlike t
 
 ## Create Asset Id
 
-The SDK provides a helper named `createAssetId` which takes the contract ID and sub ID as parameters. This helper internally calls `getMintedAssetId` and returns the Sway native parameter [AssetId](https://docs.fuel.network/docs/fuels-ts/interfaces/#assetid), ready to be used in a Sway program invocation:
+The SDK provides a helper named `createAssetId` which takes the contract ID and sub ID as parameters. This helper internally calls `getMintedAssetId` and returns the Sway native parameter [AssetId](https://fuels-ts-docs-api.vercel.app/types/_fuel_ts_interfaces.AssetId.html), ready to be used in a Sway program invocation:
 
-<<< @/../../docs-snippets2/src/contracts/utilities/create-asset-id.ts#create-asset-id-1{ts:line-numbers}
+<<< @./snippets/utilities/create-asset-id.ts#create-asset-id-1{ts:line-numbers}
