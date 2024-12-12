@@ -1,6 +1,6 @@
 ---
-"@fuel-ts/abi": minor
-"fuels": minor
+"@fuel-ts/abi": patch
+"fuels": patch
 ---
 
-feat!: ABI parser
+feat: ABI parser
