@@ -1,11 +1,12 @@
 /**
- * This interface serves as a representation of the ABI file format
- * which won't be changing with the introduction of new abi specifications.
- *
+ * This interface serves as a representation of the ABI format outputted by `forc build`
+ * that won't be changing with the introduction of new abi specifications in Sway.
+ * Its purpose is to provide a stable interface for users to work with,
+ * which won't be affected by changes to the ABI specification.
  */
 export interface Abi {
   encodingVersion: string;
-  programType: string;
+  programType: 'contract' | 'predicate' | 'script' | 'library';
   metadataTypes: AbiMetadataType[];
   concreteTypes: AbiConcreteType[];
   functions: AbiFunction[];
