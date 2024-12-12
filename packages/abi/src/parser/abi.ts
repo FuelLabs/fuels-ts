@@ -1,85 +1,76 @@
+/**
+ * This interface serves as a representation of the ABI file format
+ * which won't be changing with the introduction of new abi specifications.
+ *
+ */
 export interface Abi {
   encodingVersion: string;
   programType: string;
-  metadataTypes: AbiTypeMetadata[];
-  types: AbiType[];
+  metadataTypes: AbiMetadataType[];
+  concreteTypes: AbiConcreteType[];
   functions: AbiFunction[];
   loggedTypes: AbiLoggedType[];
   messageTypes: AbiMessageType[];
   configurables: AbiConfigurable[];
 }
 
-export interface AbiType {
+export interface AbiConcreteType {
   swayType: string;
   concreteTypeId: string;
   components?: AbiTypeComponent[];
   metadata?: {
     metadataTypeId: number;
-    typeArguments?: AbiType[];
+    typeArguments?: AbiConcreteType[];
   };
 }
 
-export interface AbiTypeC {
-  swayType: string;
-  components?: AbiTypeComponent[];
-  metadata: {
-    metadataTypeId: number;
-    typeArguments?: AbiType[];
-  };
-}
-
-export interface AbiTypeMetadata {
+export interface AbiMetadataType {
   swayType: string;
   metadataTypeId: number;
   components?: AbiTypeComponent[];
-  typeParameters?: AbiTypeMetadata[];
+  typeParameters?: AbiMetadataType[];
 }
 
 export interface AbiTypeComponent {
   name: string;
-  type: AbiType | AbiTypeC;
+  type: AbiConcreteType | AbiMetadataComponent;
 }
 
-export interface Component {
-  name: string;
-  type:
-    | AbiType
-    | {
-        swayType: string;
-        components?: Component[];
-        metadata: {
-          metadataTypeId: number;
-          typeArguments?: AbiType[];
-        };
-      };
+export interface AbiMetadataComponent {
+  swayType: string;
+  components?: AbiTypeComponent[];
+  metadata: {
+    metadataTypeId: number;
+    typeArguments?: AbiConcreteType[];
+  };
 }
 
 export interface AbiFunctionInput {
   name: string;
-  type: AbiType;
+  type: AbiConcreteType;
 }
 
 export interface AbiFunction {
   name: string;
   inputs: AbiFunctionInput[];
-  output: AbiType;
+  output: AbiConcreteType;
   attributes?: readonly AbiFunctionAttribute[];
 }
 
 export interface AbiLoggedType {
   logId: string;
-  type: AbiType;
+  type: AbiConcreteType;
 }
 
 export interface AbiMessageType {
   messageId: string;
-  type: AbiType;
+  type: AbiConcreteType;
 }
 
 export interface AbiConfigurable {
   name: string;
   offset: number;
-  type: AbiType;
+  type: AbiConcreteType;
 }
 
 export type AbiFunctionAttribute =

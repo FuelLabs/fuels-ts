@@ -1,7 +1,7 @@
 import { FuelError } from '@fuel-ts/errors';
 
 import { swayTypeMatchers } from '../../../matchers/sway-type-matchers';
-import type { AbiType, AbiTypeComponent, AbiTypeMetadata } from '../../abi';
+import type { AbiConcreteType, AbiTypeComponent, AbiMetadataType } from '../../abi';
 
 import type { ResolvedComponent } from './resolved-type';
 import { ResolvedType } from './resolved-type';
@@ -54,7 +54,7 @@ export class ResolvableType {
     this.components = components?.map((c) => this.handleComponent(this, c));
   }
 
-  toAbiTypeComponentType(): AbiTypeComponent['type'] {
+  toComponentType(): AbiTypeComponent['type'] {
     const res: AbiTypeComponent['type'] = {
       swayType: this.swayType,
       metadata: {
@@ -65,20 +65,20 @@ export class ResolvableType {
     if (this.components) {
       res.components = this.components.map((component) => ({
         name: component.name,
-        type: component.type.toAbiTypeComponentType(),
+        type: component.type.toComponentType(),
       }));
     }
     if (this.typeParamsArgsMap) {
       res.metadata.typeArguments = this.typeParamsArgsMap.map(
-        ([, rt]) => rt.toAbiType() as AbiType
+        ([, rt]) => rt.toAbiType() as AbiConcreteType
       );
     }
 
     return res;
   }
 
-  toAbiType(): AbiTypeMetadata {
-    const res: AbiTypeMetadata = {
+  toAbiType(): AbiMetadataType {
+    const res: AbiMetadataType = {
       metadataTypeId: this.metadataTypeId,
       swayType: this.swayType,
     };
@@ -86,13 +86,13 @@ export class ResolvableType {
     if (this.components) {
       res.components = this.components?.map((component) => ({
         name: component.name,
-        type: component.type.toAbiTypeComponentType(),
+        type: component.type.toComponentType(),
       })) as AbiTypeComponent[];
     }
 
     if (this.typeParamsArgsMap) {
       res.typeParameters = this.typeParamsArgsMap.map(
-        ([, rt]) => rt.toAbiType() as AbiTypeMetadata
+        ([, rt]) => rt.toAbiType() as AbiMetadataType
       );
     }
 
@@ -290,12 +290,14 @@ export class ResolvableType {
       const resolvedGenericType = typeArgs?.find(
         ([typeParameterId]) => type.metadataTypeId === typeParameterId
       )?.[1];
+
       if (resolvedGenericType) {
         return {
           name,
           type: resolvedGenericType,
         };
       }
+
       return {
         name,
         type: type.resolveInternal(type.metadataTypeId, typeParamsArgsMap),

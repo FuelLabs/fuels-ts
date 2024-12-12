@@ -1,6 +1,6 @@
 import { FuelError } from '@fuel-ts/errors';
 
-import type { Abi, AbiType, AbiTypeMetadata } from '../../abi';
+import type { Abi, AbiConcreteType, AbiMetadataType } from '../../abi';
 
 import { mapAttribute } from './map-attribute';
 import { ResolvableType } from './resolvable-type';
@@ -24,7 +24,7 @@ export class AbiParserV1 {
           resolveableType.swayType !== 'struct std::bytes::RawBytes'
       );
 
-    const types = abi.concreteTypes.map((concreteType) => {
+    const concreteTypes = abi.concreteTypes.map((concreteType) => {
       const resolvableType = resolvableTypes.find(
         (resolvable) => resolvable.metadataTypeId === concreteType.metadataTypeId
       );
@@ -33,11 +33,11 @@ export class AbiParserV1 {
         ? resolvableType.resolve(concreteType)
         : new ResolvedType({ swayType: concreteType.type, typeId: concreteType.concreteTypeId });
 
-      return resolvedType.toAbiType() as AbiType;
+      return resolvedType.toAbiType() as AbiConcreteType;
     });
 
     const getType = (concreteTypeId: string) => {
-      const type = types.find((abiType) => abiType.concreteTypeId === concreteTypeId);
+      const type = concreteTypes.find((abiType) => abiType.concreteTypeId === concreteTypeId);
       if (type === undefined) {
         throw new FuelError(
           FuelError.CODES.TYPE_ID_NOT_FOUND,
@@ -48,8 +48,8 @@ export class AbiParserV1 {
     };
 
     return {
-      metadataTypes: resolvableTypes.map((rt) => rt.toAbiType() as AbiTypeMetadata),
-      types,
+      metadataTypes: resolvableTypes.map((rt) => rt.toAbiType() as AbiMetadataType),
+      concreteTypes,
       encodingVersion: abi.encodingVersion,
       programType: abi.programType,
       functions: abi.functions.map((fn: AbiFunctionV1) => ({

@@ -18,6 +18,8 @@ describe('AbiParser', () => {
     expect({ metadataTypes: parsed.metadataTypes }).toEqual({
       metadataTypes: expected.metadataTypes,
     });
-    expect({ concreteTypes: parsed.types }).toEqual({ concreteTypes: expected.types });
+    expect({ concreteTypes: parsed.concreteTypes }).toEqual({
+      concreteTypes: expected.concreteTypes,
+    });
   });
 });
