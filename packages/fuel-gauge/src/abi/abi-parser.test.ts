@@ -21,4 +21,3 @@ describe('AbiParser', () => {
     expect({ concreteTypes: parsed.types }).toEqual({ concreteTypes: expected.types });
   });
 });
-``;
