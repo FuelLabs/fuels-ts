@@ -225,13 +225,25 @@ export class ResolvableType {
     metadataType: AbiMetadataTypeV1,
     typeArguments: AbiComponentV1['typeArguments']
   ): ResolvableType | ResolvedType {
+    /**
+     * If the type is generic, we can't resolve it and thus we create a `ResolvableType` from it.
+     * This propagates to the parent type, forcing it to be a `ResolvableType` as well,
+     * as it can't be resolved until this generic type is substituted with a type argument.
+     */
     if (swayTypeMatchers.generic(metadataType.type)) {
-      const resolvedTypeParameter = parent.typeParamsArgsMap?.find(
+      /**
+       * This search solves the case where an e.g. `generic T` is being substituted by `generic E`.
+       * This can happen when a generic type is nested in another generic type and they have differently-named type parameters.
+       * e.g. `GenericStruct<E>` is nested in `Vec<T>`: `struct MyStruct<A> { a: Vec<GenericStruct<A> }`
+       * We check in the parent's typeParamsArgsMap if the metadata type we're solving for
+       * has been substituted with a different generic type, and then we use that generic type.
+       */
+      const resolvableTypeParameter = parent.typeParamsArgsMap?.find(
         ([typeParameterId]) => typeParameterId === metadataType.metadataTypeId
       )?.[1];
 
       return (
-        resolvedTypeParameter ??
+        resolvableTypeParameter ??
         new ResolvableType(this.abi, metadataType.metadataTypeId, undefined)
       );
     }
@@ -260,15 +272,15 @@ export class ResolvableType {
         : ResolvableType.mapTypeParametersAndArgs(metadataType, typeArgs)
     );
 
-    const isGeneric = resolvable.components?.some(
-      (component) => component.type instanceof ResolvableType
-    );
-
     /**
      * If any component is unresolved, this means that the metadata type is generic.
      * We can't resolve it yet, so we return the resolvable type.
      * If all components are resolved, we can resolve the metadata type immediately.
      */
+    const isGeneric = resolvable.components?.some(
+      (component) => component.type instanceof ResolvableType
+    );
+
     return isGeneric
       ? resolvable
       : resolvable.resolveInternal(metadataType.metadataTypeId, undefined);
@@ -278,15 +290,53 @@ export class ResolvableType {
     typeId: string | number,
     typeParamsArgsMap: Array<[number, ResolvedType]> | undefined
   ): ResolvedType {
+    /**
+     * A type without components can be immediately resolved.
+     */
+    if (!this.components) {
+      return new ResolvedType({
+        swayType: this.swayType,
+        typeId,
+        metadataType: this.metadataType,
+        typeParamsArgsMap,
+      });
+    }
+
+    /**
+     * If typeParamsArgsMap is undefined,
+     * this means that the underlying metadata type's components are already fully resolved,
+     * as it doesn't need any external typeArgs to substitute those components with.
+     */
+    if (typeParamsArgsMap === undefined) {
+      return new ResolvedType({
+        swayType: this.swayType,
+        typeId,
+        components: this.components as ResolvedComponent[],
+        metadataType: this.metadataType,
+        typeParamsArgsMap: this.typeParamsArgsMap as [number, ResolvedType][],
+      });
+    }
+
+    /**
+     * Before resolving the components,
+     * we need to substitute the type parameters of the underlying metadata type
+     * with the type arguments of the concrete type,
+     * so that we can substitute the generic components with them later.
+     */
     const typeArgs = this.resolveTypeArgs(typeParamsArgsMap);
 
-    const components: ResolvedType['components'] = this.components?.map((component) => {
+    const components: ResolvedComponent[] = this.components.map((component) => {
       const { name, type } = component;
 
       if (type instanceof ResolvedType) {
         return component as ResolvedComponent;
       }
 
+      /**
+       * Here the component's type is a `ResolvableType`.
+       * If the component is a generic type parameter itself, its corresponding type argument will be found in the typeArgs,
+       * which will be used to substitute the component with.
+       */
       const resolvedGenericType = typeArgs?.find(
         ([typeParameterId]) => type.metadataTypeId === typeParameterId
       )?.[1];
@@ -300,11 +350,20 @@ export class ResolvableType {
 
       return {
         name,
+        /**
+         * The component is a `ResolvableType`, but it's not a generic type parameter itself.
+         * This means that one of its components (or component's components ad infinitum) is a generic type.
+         * We need to resolve that first before resolving the component.
+         *
+         * Note that we are passing in the original `typeParamsArgsMap`,
+         * which will be used to substitute the component's generic type parameters with their type arguments.
+         */
         type: type.resolveInternal(type.metadataTypeId, typeParamsArgsMap),
       };
     });
+
     return new ResolvedType({
-      swayType: this.metadataType.type,
+      swayType: this.swayType,
       typeId,
       components,
       typeParamsArgsMap: typeArgs,
@@ -313,26 +372,27 @@ export class ResolvableType {
   }
 
   private resolveTypeArgs(
-    typeParamsArgsMap: Array<[number, ResolvedType]> | undefined
-  ): [number, ResolvedType][] | undefined {
-    return this.typeParamsArgsMap === undefined
-      ? typeParamsArgsMap
-      : this.typeParamsArgsMap.map(([tp, value]) => {
-          if (value instanceof ResolvableType) {
-            const resolved = typeParamsArgsMap?.find(
-              ([typeParameterId]) => typeParameterId === value.metadataTypeId
-            );
+    typeParamsArgsMap: Array<[number, ResolvedType]>
+  ): [number, ResolvedType][] {
+    if (this.typeParamsArgsMap === undefined) {
+      return typeParamsArgsMap;
+    }
 
-            if (!resolved) {
-              const val = value.resolveInternal(value.metadataTypeId, typeParamsArgsMap);
-              return [tp, val];
-            }
+    return this.typeParamsArgsMap.map(([tp, value]) => {
+      if (value instanceof ResolvedType) {
+        return [tp, value];
+      }
+      const resolved = typeParamsArgsMap?.find(
+        ([typeParameterId]) => typeParameterId === value.metadataTypeId
+      );
 
-            return resolved;
-          }
+      if (!resolved) {
+        const val = value.resolveInternal(value.metadataTypeId, typeParamsArgsMap);
+        return [tp, val];
+      }
 
-          return [tp, value];
-        });
+      return resolved;
+    });
   }
 
   public resolve(concreteType: AbiConcreteTypeV1) {
