@@ -1,4 +1,5 @@
 {
+  "entry": ["apps/docs/src/versions.data.ts"],
   "ignore": [".github/**"],
   "ignoreDependencies": [
     "bun",

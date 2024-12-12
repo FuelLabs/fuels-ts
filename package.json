@@ -15,7 +15,7 @@
     "build:packages": "turbo run build --filter=!docs --filter=!template-*",
     "ci:test": "./scripts/tests-ci.sh",
     "pretest": "turbo run pretest",
-    "depcheck": "knip --dependencies --tags=-knipignore",
+    "depcheck": "knip --include-libs --dependencies --tags=-knipignore",
     "knip:fix": "knip --fix",
     "depsync:lint": "syncpack list-mismatches",
     "depsync:fix": "syncpack fix-mismatches",

@@ -19,7 +19,6 @@
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
-    "@internal/forc": "workspace:*",
     "@internal/utils": "workspace:*"
   }
 }
