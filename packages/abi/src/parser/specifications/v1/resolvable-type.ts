@@ -368,10 +368,21 @@ export class ResolvableType {
   private resolveTypeArgs(
     typeParamsArgsMap: Array<[number, ResolvedType]>
   ): [number, ResolvedType][] {
+    /**
+     * This case only happens when the metadata type is *implicitly* generic.
+     * The type itself doesn't have any type parameters that should be resolved,
+     * but its components are still generic types.
+     * This happens in the following type:
+     * `struct StructWithImplicitGenerics<E, F> { a: [E; 3], b: (E, F)}`.
+     */
     if (this.typeParamsArgsMap === undefined) {
       return typeParamsArgsMap;
     }
 
+    /**
+     * We resolve the type parameters of the underlying metadata type
+     * with the type arguments of the concrete type.
+     */
     return this.typeParamsArgsMap.map(([tp, value]) => {
       if (value instanceof ResolvedType) {
         return [tp, value];
