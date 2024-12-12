@@ -55,7 +55,7 @@ export class ResolvableType {
   }
 
   toComponentType(): AbiTypeComponent['type'] {
-    const res: AbiTypeComponent['type'] = {
+    const result: AbiTypeComponent['type'] = {
       swayType: this.swayType,
       metadata: {
         metadataTypeId: this.metadataTypeId,
@@ -63,40 +63,40 @@ export class ResolvableType {
     };
 
     if (this.components) {
-      res.components = this.components.map((component) => ({
+      result.components = this.components.map((component) => ({
         name: component.name,
         type: component.type.toComponentType(),
       }));
     }
     if (this.typeParamsArgsMap) {
-      res.metadata.typeArguments = this.typeParamsArgsMap.map(
+      result.metadata.typeArguments = this.typeParamsArgsMap.map(
         ([, rt]) => rt.toAbiType() as AbiConcreteType
       );
     }
 
-    return res;
+    return result;
   }
 
   toAbiType(): AbiMetadataType {
-    const res: AbiMetadataType = {
+    const result: AbiMetadataType = {
       metadataTypeId: this.metadataTypeId,
       swayType: this.swayType,
     };
 
     if (this.components) {
-      res.components = this.components?.map((component) => ({
+      result.components = this.components?.map((component) => ({
         name: component.name,
         type: component.type.toComponentType(),
       })) as AbiTypeComponent[];
     }
 
     if (this.typeParamsArgsMap) {
-      res.typeParameters = this.typeParamsArgsMap.map(
+      result.typeParameters = this.typeParamsArgsMap.map(
         ([, rt]) => rt.toAbiType() as AbiMetadataType
       );
     }
 
-    return res;
+    return result;
   }
 
   /**

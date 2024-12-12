@@ -29,15 +29,15 @@ export class ResolvedType {
   }
 
   public toComponentType(): AbiTypeComponent['type'] {
-    let res: AbiTypeComponent['type'];
+    let result: AbiTypeComponent['type'];
 
     if (typeof this.typeId === 'string') {
-      res = {
+      result = {
         swayType: this.swayType,
         concreteTypeId: this.typeId,
       };
     } else {
-      res = {
+      result = {
         swayType: this.swayType,
         metadata: {
           metadataTypeId: this.typeId,
@@ -46,24 +46,24 @@ export class ResolvedType {
     }
 
     if (this.metadataType) {
-      res.metadata = {
+      result.metadata = {
         metadataTypeId: this.metadataType.metadataTypeId,
       };
       if (this.typeParamsArgsMap && this.metadataType?.typeParameters?.length) {
-        res.metadata.typeArguments = this.typeParamsArgsMap.map(
+        result.metadata.typeArguments = this.typeParamsArgsMap.map(
           (t) => t[1].toAbiType() as AbiConcreteType
         );
       }
     }
 
     if (this.components) {
-      res.components = this.components.map((c) => ({
+      result.components = this.components.map((c) => ({
         name: c.name,
         type: c.type.toComponentType(),
       }));
     }
 
-    return res;
+    return result;
   }
 
   public toAbiType(): AbiConcreteType {
