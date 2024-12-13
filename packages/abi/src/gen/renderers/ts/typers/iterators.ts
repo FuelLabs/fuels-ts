@@ -1,7 +1,7 @@
 import { ARRAY_REGEX } from '../../../../matchers/sway-type-matchers';
 
-import { mapComponents } from './struct';
 import type { Typer } from './types';
+import { mapComponents } from './utils';
 
 export const tupleTyper: Typer = ({ abiType }, typer) =>
   mapComponents({ parent: abiType, includeComponentNames: false, typer });
