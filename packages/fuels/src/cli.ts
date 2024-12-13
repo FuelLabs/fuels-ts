@@ -94,21 +94,6 @@ export const configureCli = () => {
     .description(`Generate Typescript from Sway ABI JSON files`)
     .requiredOption('-i, --inputs <path|glob...>', 'Input paths/globals to your ABI JSON files')
     .requiredOption('-o, --output <dir>', 'Directory path for generated files')
-    .addOption(
-      new Option('-c, --contract', 'Generate types for Contracts [default]')
-        .conflicts(['script', 'predicate'])
-        .implies({ script: undefined, predicate: undefined })
-    )
-    .addOption(
-      new Option('-s, --script', 'Generate types for Scripts')
-        .conflicts(['contract', 'predicate'])
-        .implies({ contract: undefined, predicate: undefined })
-    )
-    .addOption(
-      new Option('-p, --predicate', 'Generate types for Predicates')
-        .conflicts(['contract', 'script'])
-        .implies({ contract: undefined, script: undefined })
-    )
     .option('-S, --silent', 'Omit output messages')
     .action(withProgram(command, Commands.typegen, typegen));
 

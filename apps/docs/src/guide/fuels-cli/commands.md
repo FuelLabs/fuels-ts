@@ -157,9 +157,6 @@ npx fuels@{{fuels}} help typegen
 Options:
   -i, --inputs <path|glob...>  Input paths/globals to your Abi JSON files
   -o, --output <dir>           Directory path for generated files
-  -c, --contract               Generate types for Contracts [default]
-  -s, --script                 Generate types for Scripts
-  -p, --predicate              Generate types for Predicates
   -S, --silent                 Omit output messages
 ```
 
