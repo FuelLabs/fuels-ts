@@ -2,16 +2,13 @@
 import { Provider, Wallet } from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
-import {
-  StorageTestContract,
-  StorageTestContractFactory,
-} from '../../../../typegend';
+import { StorageTestContractFactory } from '../../../../typegend';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 const deployer = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 const deploymentTx = await StorageTestContractFactory.deploy(deployer, {
-  storageSlots: StorageTestContract.storageSlots,
+  storageSlots: StorageTestContractFactory.storageSlots,
 });
 
 await deploymentTx.waitForResult();

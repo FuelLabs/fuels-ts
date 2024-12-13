@@ -6,7 +6,7 @@ import {
   BytecodeInputFactory,
   EchoEmployeeDataVectorFactory,
 } from '../../../typegend';
-import type { EmployeeDataInput } from '../../../typegend/contracts/EchoEmployeeDataVector';
+import type { EmployeeDataInput } from '../../../typegend/contracts/EchoEmployeeDataVectorTypes';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
