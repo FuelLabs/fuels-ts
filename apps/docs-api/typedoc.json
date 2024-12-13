@@ -2,6 +2,7 @@
   "$schema": "https://typedoc.org/schema.json",
   "entryPointStrategy": "packages",
   "entryPoints": [
+    "../../packages/abi",
     "../../packages/abi-coder",
     "../../packages/abi-typegen",
     "../../packages/address",

@@ -37,9 +37,15 @@ import {
   arrayify,
   hexlify,
   createConfig,
+  AbiParser,
 } from 'fuels';
 
 const { log } = console;
+
+/**
+ * abi
+ */
+log(AbiParser);
 
 /**
  * abi-coder
