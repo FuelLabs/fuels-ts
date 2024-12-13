@@ -2,4 +2,4 @@
 "fuels": patch
 ---
 
-chore: convert UI integration tests to TS scripts
+chore: `fuels` UI integration test script to TS script
