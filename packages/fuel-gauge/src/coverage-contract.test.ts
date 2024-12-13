@@ -708,26 +708,35 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
   it('should test native enum [Red->Green]', async () => {
     using contractInstance = await setupContract();
 
-    const { waitForResult } = await contractInstance.functions.color_enum(ColorEnum.Red).call();
+    const INPUT = ColorEnum.Red;
+    const OUTPUT = ColorEnum.Green;
+
+    const { waitForResult } = await contractInstance.functions.color_enum(INPUT).call();
     const { value } = await waitForResult();
 
-    expect(value).toStrictEqual(ColorEnum.Green);
+    expect(value).toStrictEqual(OUTPUT);
   });
 
   it('should test native enum [Green->Blue]', async () => {
     using contractInstance = await setupContract();
 
-    const { waitForResult } = await contractInstance.functions.color_enum(ColorEnum.Green).call();
+    const INPUT = ColorEnum.Green;
+    const OUTPUT = ColorEnum.Blue;
+
+    const { waitForResult } = await contractInstance.functions.color_enum(INPUT).call();
     const { value } = await waitForResult();
-    expect(value).toStrictEqual(ColorEnum.Blue);
+    expect(value).toStrictEqual(OUTPUT);
   });
 
   it('should test native enum [Blue->Red]', async () => {
     using contractInstance = await setupContract();
 
-    const { waitForResult } = await contractInstance.functions.color_enum(ColorEnum.Blue).call();
+    const INPUT = ColorEnum.Blue;
+    const OUTPUT = ColorEnum.Red;
+
+    const { waitForResult } = await contractInstance.functions.color_enum(INPUT).call();
     const { value } = await waitForResult();
-    expect(value).toStrictEqual(ColorEnum.Red);
+    expect(value).toStrictEqual(OUTPUT);
   });
 
   it('should test mixed native enum [Native->NotNative]', async () => {
@@ -804,7 +813,7 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
     expect(isStatusSuccess).toBeTruthy();
   });
 
-  it('should support array in vec', async () => {
+  it('should support vec in array', async () => {
     using contractInstance = await setupContract();
 
     const INPUT: [Array<BigNumberish>, Array<BigNumberish>] = [
