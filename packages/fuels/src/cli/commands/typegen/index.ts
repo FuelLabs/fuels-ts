@@ -16,7 +16,7 @@ interface RunTypegen {
 }
 
 function runFuelsTypegen(options: RunTypegen) {
-  const { inputs, output, silent } = options;
+  const { inputs, output } = options;
 
   const programDetails = getProgramDetails(inputs);
 

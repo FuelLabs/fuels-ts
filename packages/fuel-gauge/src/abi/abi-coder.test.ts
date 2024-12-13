@@ -4,6 +4,7 @@ import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
 import { AbiContractFactory } from '../../test/typegen';
 import type { AbiContract } from '../../test/typegen';
+import type { Option, Result } from '../../test/typegen/common';
 import { EnumWithNative, ExternalEnum } from '../../test/typegen/contracts/AbiContractTypes';
 import type {
   EnumWithBuiltinTypeInput,
@@ -29,7 +30,6 @@ import type {
   StructWithSingleOptionOutput,
   StructWithSingleOptionInput,
 } from '../../test/typegen/contracts/AbiContractTypes';
-import type { Option, Result, Vec } from '../../test/typegen/contracts/common';
 
 import {
   U16_MAX,
@@ -789,7 +789,7 @@ describe('AbiCoder', () => {
 
   describe('types_array_with_vector', () => {
     it('should encode/decode just fine', async () => {
-      const input = [[1, 2, 3]] as [Vec<BigNumberish>];
+      const input = [[1, 2, 3]] as [BigNumberish[]];
       const expected = [[3, 2, 1]];
 
       const { waitForResult } = await contract.functions.types_array_with_vector(input).call();
@@ -1751,8 +1751,8 @@ describe('AbiCoder', () => {
 
   describe('types_vector_option', () => {
     it('should encode/decode just fine', async () => {
-      const input: Vec<StructWithMultiOptionInput> = [{ a: [1, 2, 3, 4, 5] }];
-      const expected: Vec<StructWithMultiOptionOutput> = [{ a: [5, 4, 3, 2, 1] }];
+      const input: StructWithMultiOptionInput[] = [{ a: [1, 2, 3, 4, 5] }];
+      const expected: StructWithMultiOptionOutput[] = [{ a: [5, 4, 3, 2, 1] }];
 
       const { waitForResult } = await contract.functions.types_vector_option(input).call();
 
