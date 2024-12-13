@@ -73,6 +73,7 @@ const voidTyperReturn: TyperReturn = { input: 'undefined', output: 'void' };
 export const voidTyper: Typer = () => voidTyperReturn;
 
 export const genericTyper: Typer = ({ abiType }) => {
+  // extracts the `T` part from `generic T`
   const typeName = GENERIC_REGEX.exec(abiType.swayType)?.[1] as string;
   return {
     input: typeName,
