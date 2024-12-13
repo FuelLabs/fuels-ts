@@ -15,6 +15,5 @@
     "noImplicitOverride": true,
     "types": ["vitest/globals", "node", "node-fetch", "web"]
   },
-  "include": ["vitest.setup-files.ts"],
   "exclude": ["**/dist", "**/node_modules"]
 }
