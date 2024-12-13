@@ -1,7 +1,7 @@
 import { FuelError } from '@fuel-ts/errors';
 
 import { swayTypeMatchers } from '../../../matchers/sway-type-matchers';
-import type { AbiConcreteType, AbiTypeComponent, AbiMetadataType } from '../../abi';
+import type { AbiTypeComponent, AbiMetadataType, AbiTypeArgument } from '../../abi';
 
 import type { ResolvedComponent } from './resolved-type';
 import { ResolvedType } from './resolved-type';
@@ -69,9 +69,29 @@ export class ResolvableType {
       }));
     }
     if (this.typeParamsArgsMap) {
-      result.metadata.typeArguments = this.typeParamsArgsMap.map(
-        ([, rt]) => rt.toAbiType() as AbiConcreteType
-      );
+      result.metadata.typeArguments = this.typeParamsArgsMap.map(([, rt]) => rt.toTypeArgument());
+    }
+
+    return result;
+  }
+
+  toTypeArgument(): AbiTypeArgument {
+    const result: AbiTypeArgument = {
+      swayType: this.swayType,
+      metadata: {
+        metadataTypeId: this.metadataTypeId,
+      },
+    };
+
+    if (this.typeParamsArgsMap) {
+      result.metadata.typeArguments = this.typeParamsArgsMap.map(([, ta]) => ta.toTypeArgument());
+    }
+
+    if (this.components) {
+      result.components = this.components.map((component) => ({
+        name: component.name,
+        type: component.type.toComponentType(),
+      }));
     }
 
     return result;

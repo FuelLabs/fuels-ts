@@ -65,22 +65,24 @@ export interface AbiMetadataType {
 
 export interface AbiTypeComponent {
   name: string;
-  type: AbiConcreteType | AbiMetadataComponent;
+  type: AbiConcreteType | AbiAppliedMetadataType;
 }
 
 /**
- * AbiMetadataComponents point to a metadata type but aren't the same,
+ * AbiAppliedMetadataType point to a metadata type but aren't the same as metadata types,
  * as the metadata type describes the structure of the type,
  * whereas the component is an actual implementation of that type.
  */
-export interface AbiMetadataComponent {
+export interface AbiAppliedMetadataType {
   swayType: string;
   components?: AbiTypeComponent[];
   metadata: {
     metadataTypeId: number;
-    typeArguments?: AbiConcreteType[];
+    typeArguments?: AbiTypeArgument[];
   };
 }
+
+export type AbiTypeArgument = AbiConcreteType | AbiAppliedMetadataType;
 
 export interface AbiFunctionInput {
   name: string;
