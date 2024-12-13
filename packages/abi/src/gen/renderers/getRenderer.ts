@@ -1,6 +1,6 @@
 import { assertUnreachable } from '@fuel-ts/utils';
 
-import type { AbiGenInput } from '../abi-gen';
+import type { AbiGenInput } from '../abi-gen-types';
 
 import { renderTs } from './ts/render-ts';
 import type { Renderer } from './types';

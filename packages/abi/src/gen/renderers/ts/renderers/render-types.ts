@@ -2,7 +2,7 @@ import type { BinaryVersions } from '@fuel-ts/versions';
 
 import { createMatcher, swayTypeMatchers } from '../../../../matchers/sway-type-matchers';
 import type { Abi, AbiFunctionInput } from '../../../../parser';
-import type { ProgramDetails } from '../../../abi-gen';
+import type { ProgramDetails } from '../../../abi-gen-types';
 import type { TsAbiGenResult } from '../../types';
 import typesTemplate from '../templates/types.hbs';
 import { generateTsType } from '../typers/generate-ts-type';

@@ -1,27 +1,5 @@
-import type { BinaryVersions } from '@fuel-ts/versions';
-
-import type { Abi } from '../parser';
-
+import type { AbiGenInput, AbiGenResult } from './abi-gen-types';
 import { getRenderer } from './renderers/getRenderer';
-
-export interface AbiGenInput {
-  programDetails: ProgramDetails[];
-  versions: BinaryVersions;
-  mode?: 'ts';
-}
-
-export interface AbiGenResult {
-  filename: string;
-  content: string;
-}
-
-export interface ProgramDetails {
-  name: string;
-  binCompressed: string;
-  abi: Abi;
-  abiContents: string;
-  storageSlots?: string;
-}
 
 export class AbiGen {
   public static generate({ programDetails, mode, versions }: AbiGenInput): AbiGenResult[] {

@@ -1,7 +1,7 @@
 import type { BinaryVersions } from '@fuel-ts/versions';
 
 import type { Abi } from '../../../../parser';
-import type { AbiGenResult } from '../../../abi-gen';
+import type { AbiGenResult } from '../../../abi-gen-types';
 import indexTemplate from '../templates/index.hbs';
 
 import { getParentDirWrapper } from './get-parent-dir-wrapper';

@@ -1,7 +1,7 @@
 import type { BinaryVersions } from '@fuel-ts/versions';
 
 import type { Abi } from '../../../..';
-import type { AbiGenResult, ProgramDetails } from '../../../abi-gen';
+import type { AbiGenResult, ProgramDetails } from '../../../abi-gen-types';
 
 import { renderIndexFiles } from './render-index-files';
 import { renderProgram } from './render-program';

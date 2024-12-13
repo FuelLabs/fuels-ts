@@ -1,4 +1,4 @@
-import type { AbiGenResult, ProgramDetails } from '../../abi-gen';
+import type { AbiGenResult, ProgramDetails } from '../../abi-gen-types';
 import type { Renderer } from '../types';
 
 import { renderPrograms } from './renderers/render-programs';

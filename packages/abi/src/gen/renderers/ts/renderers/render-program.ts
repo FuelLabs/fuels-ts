@@ -1,7 +1,7 @@
 import { assertUnreachable } from '@fuel-ts/utils';
 import type { BinaryVersions } from '@fuel-ts/versions';
 
-import type { ProgramDetails } from '../../../abi-gen';
+import type { ProgramDetails } from '../../../abi-gen-types';
 import type { TsAbiGenResult } from '../../types';
 import bytecodeTemplate from '../templates/bytecode.hbs';
 import contractFactoryTemplate from '../templates/contract-factory.hbs';
