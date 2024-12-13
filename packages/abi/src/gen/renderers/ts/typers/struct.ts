@@ -1,7 +1,7 @@
 import { assertUnreachable } from '@fuel-ts/utils';
 
 import { ENUM_REGEX, STRUCT_REGEX, TUPLE_REGEX } from '../../../../matchers/sway-type-matchers';
-import type { AbiConcreteType, AbiTypeComponent, AbiMetadataType } from '../../../../parser';
+import type { AbiTypeComponent, AbiMetadataType, AbiTypeArgument } from '../../../../parser';
 
 import { flattenImports } from './helpers';
 import type { TyperReturn, Typer, GlobalTyper, TyperAbiType } from './types';
@@ -22,7 +22,7 @@ function wrapStructContent(text: string, wrap: '{}' | '[]' | 'Enum'): string {
 }
 
 function componentMapper(
-  c: AbiTypeComponent | { name: string; type: AbiConcreteType | AbiMetadataType },
+  c: AbiTypeComponent,
   includeName: boolean,
   generateTsType: GlobalTyper
 ): TyperReturn {
@@ -74,9 +74,7 @@ export function mapComponents(params: {
 }
 
 function mapGenericTypeParameters(
-  typeArgs:
-    | AbiMetadataType['typeParameters']
-    | NonNullable<AbiConcreteType['metadata']>['typeArguments'],
+  typeArgs: AbiTypeArgument[] | AbiMetadataType['typeParameters'],
   typer: GlobalTyper
 ): TyperReturn {
   if (!typeArgs) {
