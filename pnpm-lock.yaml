@@ -1323,7 +1323,7 @@ importers:
         specifier: ^3.4.14
         version: 3.4.14(ts-node@10.9.1(@swc/core@1.7.14(@swc/helpers@0.5.12))(@types/node@22.5.5)(typescript@5.6.3))
       tsx:
-        specifier: ^4.19.2
+        specifier: ^4.19.1
         version: 4.19.2
       typescript:
         specifier: ~5.6.3
@@ -1408,7 +1408,7 @@ importers:
         specifier: ^3.4.14
         version: 3.4.14(ts-node@10.9.1(@swc/core@1.7.14(@swc/helpers@0.5.12))(@types/node@22.7.7)(typescript@5.6.3))
       tsx:
-        specifier: ^4.19.2
+        specifier: ^4.19.1
         version: 4.19.2
       typescript:
         specifier: ~5.6.3

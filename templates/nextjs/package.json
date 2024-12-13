@@ -37,7 +37,7 @@
     "eslint-config-next": "14.2.15",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.14",
-    "tsx": "^4.19.2",
+    "tsx": "^4.19.1",
     "typescript": "~5.6.3",
     "vitest": "~2.0.5"
   }
