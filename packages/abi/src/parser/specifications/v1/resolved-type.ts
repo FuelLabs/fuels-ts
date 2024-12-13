@@ -1,4 +1,4 @@
-import type { AbiConcreteType, AbiTypeComponent } from '../../abi';
+import type { AbiConcreteType, AbiTypeArgument, AbiTypeComponent } from '../../abi';
 
 import type { AbiMetadataTypeV1 } from './specification';
 
@@ -50,9 +50,7 @@ export class ResolvedType {
         metadataTypeId: this.metadataType.metadataTypeId,
       };
       if (this.typeParamsArgsMap && this.metadataType?.typeParameters?.length) {
-        result.metadata.typeArguments = this.typeParamsArgsMap.map(
-          (t) => t[1].toAbiType() as AbiConcreteType
-        );
+        result.metadata.typeArguments = this.typeParamsArgsMap.map((t) => t[1].toTypeArgument());
       }
     }
 
@@ -60,6 +58,32 @@ export class ResolvedType {
       result.components = this.components.map((c) => ({
         name: c.name,
         type: c.type.toComponentType(),
+      }));
+    }
+
+    return result;
+  }
+
+  toTypeArgument(): AbiTypeArgument {
+    if (typeof this.typeId === 'string') {
+      return this.toAbiType();
+    }
+
+    const result: AbiTypeArgument = {
+      swayType: this.swayType,
+      metadata: {
+        metadataTypeId: this.typeId,
+      },
+    };
+
+    if (this.typeParamsArgsMap) {
+      result.metadata.typeArguments = this.typeParamsArgsMap.map(([, rt]) => rt.toTypeArgument());
+    }
+
+    if (this.components) {
+      result.components = this.components.map((component) => ({
+        name: component.name,
+        type: component.type.toComponentType(),
       }));
     }
 

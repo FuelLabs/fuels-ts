@@ -47,7 +47,6 @@
                   "swayType": "bool"
                 },
                 {
-                  "concreteTypeId": 3,
                   "swayType": "b256",
                   "metadata": {
                     "metadataTypeId": 3
@@ -228,8 +227,18 @@
               "metadataTypeId": 14,
               "typeArguments": [
                 {
-                  "metadataTypeId": 9,
                   "swayType": "struct GenericStruct",
+                  "metadata": {
+                    "metadataTypeId": 9,
+                    "typeArguments": [
+                      {
+                        "swayType": "generic E",
+                        "metadata": {
+                          "metadataTypeId": 4
+                        }
+                      }
+                    ]
+                  },
                   "components": [
                     {
                       "name": "a",
@@ -256,12 +265,6 @@
                         }
                       }
                     }
-                  ],
-                  "typeParameters": [
-                    {
-                      "metadataTypeId": 4,
-                      "swayType": "generic E"
-                    }
                   ]
                 }
               ]
@@ -275,8 +278,10 @@
                     "metadataTypeId": 9,
                     "typeArguments": [
                       {
-                        "metadataTypeId": 4,
-                        "swayType": "generic E"
+                        "swayType": "generic E",
+                        "metadata": {
+                          "metadataTypeId": 4
+                        }
                       }
                     ]
                   },
@@ -320,7 +325,6 @@
               "metadataTypeId": 14,
               "typeArguments": [
                 {
-                  "concreteTypeId": 9,
                   "swayType": "struct GenericStruct",
                   "metadata": {
                     "metadataTypeId": 9,
@@ -411,8 +415,10 @@
               "metadataTypeId": 8,
               "typeArguments": [
                 {
-                  "metadataTypeId": 4,
-                  "swayType": "generic E"
+                  "swayType": "generic E",
+                  "metadata": {
+                    "metadataTypeId": 4
+                  }
                 },
                 {
                   "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef",
@@ -583,7 +589,6 @@
                   "swayType": "bool"
                 },
                 {
-                  "concreteTypeId": 3,
                   "swayType": "b256",
                   "metadata": {
                     "metadataTypeId": 3
@@ -789,7 +794,6 @@
               "metadataTypeId": 14,
               "typeArguments": [
                 {
-                  "concreteTypeId": 9,
                   "swayType": "struct GenericStruct",
                   "metadata": {
                     "metadataTypeId": 9,
@@ -880,7 +884,6 @@
               "metadataTypeId": 14,
               "typeArguments": [
                 {
-                  "concreteTypeId": 9,
                   "swayType": "struct GenericStruct",
                   "metadata": {
                     "metadataTypeId": 9,
@@ -1291,7 +1294,6 @@
                     "metadataTypeId": 14,
                     "typeArguments": [
                       {
-                        "concreteTypeId": 9,
                         "swayType": "struct GenericStruct",
                         "metadata": {
                           "metadataTypeId": 9,
@@ -1382,7 +1384,6 @@
                     "metadataTypeId": 14,
                     "typeArguments": [
                       {
-                        "concreteTypeId": 9,
                         "swayType": "struct GenericStruct",
                         "metadata": {
                           "metadataTypeId": 9,
@@ -1605,7 +1606,6 @@
                         "swayType": "bool"
                       },
                       {
-                        "concreteTypeId": 3,
                         "swayType": "b256",
                         "metadata": {
                           "metadataTypeId": 3
