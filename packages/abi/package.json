@@ -26,8 +26,13 @@
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
   "dependencies": {
+    "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
-    "@fuel-ts/utils": "workspace:*"
+    "@fuel-ts/hasher": "workspace:*",
+    "@fuel-ts/interfaces": "workspace:*",
+    "@fuel-ts/math": "workspace:*",
+    "@fuel-ts/utils": "workspace:*",
+    "type-fest": "^4.26.1"
   },
   "devDependencies": {}
 }

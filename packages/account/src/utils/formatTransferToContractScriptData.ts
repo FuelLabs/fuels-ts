@@ -1,4 +1,4 @@
-import { ASSET_ID_LEN, BigNumberCoder, CONTRACT_ID_LEN, WORD_SIZE } from '@fuel-ts/abi-coder';
+import { encoding, ASSET_ID_LEN, CONTRACT_ID_LEN, WORD_SIZE } from '@fuel-ts/abi';
 import { Address } from '@fuel-ts/address';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
@@ -14,7 +14,7 @@ interface AssembleTransferToContractParams {
 export const formatTransferToContractScriptData = (
   transferParams: Array<AssembleTransferToContractParams>
 ) => {
-  const numberCoder = new BigNumberCoder('u64');
+  const numberCoder = encoding.v1.u64;
   return transferParams.reduce((acc, transferParam) => {
     const { assetId, amount, contractId } = transferParam;
     const encoded = numberCoder.encode(amount);

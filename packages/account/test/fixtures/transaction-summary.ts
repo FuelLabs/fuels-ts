@@ -1,4 +1,4 @@
-import type { JsonAbi } from '@fuel-ts/abi-coder';
+import type { AbiSpecification } from '@fuel-ts/abi';
 import { bn } from '@fuel-ts/math';
 import type {
   InputCoin,
@@ -263,7 +263,7 @@ export const MOCK_ABI_MAP: AbiMap = {
     loggedTypes: [],
     messagesTypes: [],
     configurables: [],
-  } as unknown as JsonAbi, // used in skipped test
+  } as unknown as AbiSpecification, // used in skipped test
   // packages/account/src/providers/transaction-summary/operations.test.ts
   // "should ensure getContractCallOperations return contract call operations with calls details"
   // when the test is unskipped, it'll fail and this mock can be adjusted or deleted

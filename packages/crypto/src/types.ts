@@ -15,14 +15,14 @@ export interface IScryptParams {
   dklen: number;
 }
 
-export type Encoding = 'utf-8' | 'base64' | 'hex';
+export type BufferEncoding = 'utf-8' | 'base64' | 'hex';
 
 export interface CryptoApi {
-  bufferFromString(string: string, encoding?: Encoding): Uint8Array;
+  bufferFromString(string: string, encoding?: BufferEncoding): Uint8Array;
   decrypt<T>(password: string, keystore: Keystore): Promise<T>;
   encrypt<T>(password: string, data: T): Promise<Keystore>;
   keyFromPassword(password: string, saltBuffer: Uint8Array): Uint8Array;
-  stringFromBuffer(buffer: Uint8Array, encoding?: Encoding): string;
+  stringFromBuffer(buffer: Uint8Array, encoding?: BufferEncoding): string;
   randomBytes(length: number): Uint8Array;
   scrypt(params: IScryptParams): Uint8Array;
   keccak256(data: Uint8Array): Uint8Array;

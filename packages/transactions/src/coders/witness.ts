@@ -1,7 +1,8 @@
-import { Coder, NumberCoder } from '@fuel-ts/abi-coder';
+import { Coder } from '@fuel-ts/abi';
 import { concat } from '@fuel-ts/utils';
 
-import { ByteArrayCoder } from './byte-array';
+import { byteArray } from './byte-array';
+import { coders } from './coders';
 
 export type Witness = {
   /** Length of witness data byte array */
@@ -11,20 +12,13 @@ export type Witness = {
 };
 
 export class WitnessCoder extends Coder<Witness, Witness> {
-  constructor() {
-    super(
-      'Witness',
-      // Types of dynamic length are not supported in the ABI
-      'unknown',
-      0
-    );
-  }
+  override type = 'Witness';
 
   encode(value: Witness): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new NumberCoder('u32', { padToWordSize: true }).encode(value.dataLength));
-    parts.push(new ByteArrayCoder(value.dataLength).encode(value.data));
+    parts.push(coders.u32.encode(value.dataLength));
+    parts.push(byteArray(value.dataLength).encode(value.data));
 
     return concat(parts);
   }
@@ -33,17 +27,11 @@ export class WitnessCoder extends Coder<Witness, Witness> {
     let decoded;
     let o = offset;
 
-    [decoded, o] = new NumberCoder('u32', { padToWordSize: true }).decode(data, o);
+    [decoded, o] = coders.u32.decode(data, o);
     const dataLength = decoded;
-    [decoded, o] = new ByteArrayCoder(dataLength).decode(data, o);
+    [decoded, o] = byteArray(dataLength).decode(data, o);
     const witnessData = decoded;
 
-    return [
-      {
-        dataLength,
-        data: witnessData,
-      },
-      o,
-    ];
+    return [{ dataLength, data: witnessData }, o];
   }
 }

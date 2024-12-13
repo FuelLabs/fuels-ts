@@ -1,0 +1,2836 @@
+import type { AbiSpecificationV1 } from '../../src';
+
+export const v1: AbiSpecificationV1 = {
+  programType: 'contract',
+  specVersion: '1',
+  encodingVersion: '1',
+  concreteTypes: [
+    {
+      type: '()',
+      concreteTypeId: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+    },
+    {
+      type: '(b256, bool)',
+      concreteTypeId: 'd5f6ab61fc224aae1bf15a89ab88840ed54e312a76a9735d1f60d4d0d1fae640',
+      metadataTypeId: 0,
+    },
+    {
+      type: '(bool, u64)',
+      concreteTypeId: 'c998ca9a5f221fe7b5c66ae70c8a9562b86d964408b00d17f883c906bc1fe4be',
+      metadataTypeId: 8,
+    },
+    {
+      type: '(str[5], bool)',
+      concreteTypeId: 'a1e229302ed2f092752a6bc4fbe66bb9305e0802b1b01ecc5e1d59356702e956',
+      metadataTypeId: 1,
+    },
+    {
+      type: '(str[5], str[5])',
+      concreteTypeId: '30022fd7ad3fda4035d30e4d86b705d4870924d4b4fe054624d2561fa12bb33e',
+      metadataTypeId: 2,
+    },
+    {
+      type: '(struct data_structures::StructDoubleGeneric<[b256; 3],u8>, [struct data_structures::StructDoubleGeneric<u64,bool>; 4], (str[5], bool), struct data_structures::StructSimple)',
+      concreteTypeId: '343f07ddcd75b9385bc193e0419f2e89c75fad67cbf4ad1b36a01a136620817e',
+      metadataTypeId: 13,
+    },
+    {
+      type: '(struct data_structures::StructSimple, struct std::vec::Vec<u8>)',
+      concreteTypeId: '5ebb7c8cdd38d1f676f9c7089a2da12b27114ee3771c2047f3295d4d30f8fd2c',
+      metadataTypeId: 3,
+    },
+    {
+      type: '(struct std::asset_id::AssetId, struct std::asset_id::AssetId, bool)',
+      concreteTypeId: 'a95e1fcceb1451b8a76471f593f66c4a52ca04bde3c227c746ad7aaf988de5c6',
+      metadataTypeId: 10,
+    },
+    {
+      type: '(struct std::vec::Vec<u8>, b256)',
+      concreteTypeId: '52e2726988c7da304606fbe4ed696efac04beb29e9a22e15778f8a0539c9cb94',
+      metadataTypeId: 5,
+    },
+    {
+      type: '(struct std::vec::Vec<u8>, struct std::vec::Vec<u8>)',
+      concreteTypeId: '87a4626758542d7b6a03099839e440a052a4d5a00e3abfdf22bcc564ca19a4fd',
+      metadataTypeId: 6,
+    },
+    {
+      type: '(u32, struct std::vec::Vec<u64>, struct std::vec::Vec<u64>)',
+      concreteTypeId: '18034e13b18b71de3c7e12f8f10a7bd48a23870e0dbb46eaf10faeb26d70f000',
+      metadataTypeId: 9,
+    },
+    {
+      type: '(u64, struct data_structures::StructSimple)',
+      concreteTypeId: '0088c28967dbcdaa34626c7e915e44b2afe72f12415f0e31edc0b5ce70e7c6dc',
+      metadataTypeId: 4,
+    },
+    {
+      type: '(u8, struct data_structures::StructSingleGeneric<struct data_structures::StructSingleGeneric<u64>>, str[3])',
+      concreteTypeId: '6f875be99a39d9920569678a34ffce676a6c3e14b958910db250b9cb4957157f',
+      metadataTypeId: 11,
+    },
+    {
+      type: '(u8, u8, u8)',
+      concreteTypeId: '79239b6d6f2383e2cfbaf4da7fdf7ee7fb59b7bf517acfff2d9433e9e76e8fc4',
+      metadataTypeId: 12,
+    },
+    {
+      type: '[b256; 3]',
+      concreteTypeId: '81342782c917fcfd178741cb2b3a12ea1ebeaa57253fc4ee6700b4d7d6ab32d3',
+      metadataTypeId: 17,
+    },
+    {
+      type: '[struct data_structures::StructDoubleGeneric<struct data_structures::StructSingleGeneric<u64>,str[1]>; 2]',
+      concreteTypeId: 'b8164e36cce9d14142824b5cc55aebc1272036775b966af82c49c78aff114006',
+      metadataTypeId: 15,
+    },
+    {
+      type: '[struct data_structures::StructDoubleGeneric<u64,bool>; 4]',
+      concreteTypeId: 'b22807669faa58263e636f6e2d194df8ddbc6686bb4ea14ee28005fa30adbe85',
+      metadataTypeId: 22,
+    },
+    {
+      type: '[struct data_structures::StructSimple; 3]',
+      concreteTypeId: '38f2594527b516dab2c81b31356901226242d7c32554877e36797c6b23969237',
+      metadataTypeId: 18,
+    },
+    {
+      type: '[struct std::vec::Vec<u32>; 1]',
+      concreteTypeId: '593b39347cc381516d8ed1f8e5e628a8d455bd3f833bd9dfdd5165ba16f9f980',
+      metadataTypeId: 14,
+    },
+    {
+      type: '[u8; 4]',
+      concreteTypeId: 'f28afa065fc5de602456160c4155d4de7d9a61e85a995d209a14eab0b34bd6b4',
+      metadataTypeId: 23,
+    },
+    {
+      type: 'b256',
+      concreteTypeId: '7c5ee1cecf5f8eacd1284feb5f0bf2bdea533a51e2f0c9aabe9236d335989f3b',
+    },
+    {
+      type: 'bool',
+      concreteTypeId: 'b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
+    },
+    {
+      type: 'enum abi-library::ExternalEnum',
+      concreteTypeId: '9a24373d8ce7688609717fd5a9b75360cd8a6bdb224ae095f0c05cc891cadd42',
+      metadataTypeId: 25,
+    },
+    {
+      type: 'enum data_structures::EnumDoubleGeneric<u8,u16>',
+      concreteTypeId: 'd0ed93cd57cc3dfb1c119b22bf63f5d215122402536127bf17087ca6d8186307',
+      metadataTypeId: 26,
+      typeArguments: [
+        'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+        '29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef',
+      ],
+    },
+    {
+      type: 'enum data_structures::EnumWithBuiltinType',
+      concreteTypeId: '2136f16aedeec1ab7f1d912c57cc0566e86c36f20a2cb313e3d679cead6a0e61',
+      metadataTypeId: 27,
+    },
+    {
+      type: 'enum data_structures::EnumWithNative',
+      concreteTypeId: '58ae0e9c51da476db1149dd48b1cda83a12187df4c049f8df5021f0b1696fb93',
+      metadataTypeId: 28,
+    },
+    {
+      type: 'enum data_structures::EnumWithStructs',
+      concreteTypeId: '9ed6dede3ae1e66e0f951e860e863f77fb9b9499f4666a1123bf244c4a201669',
+      metadataTypeId: 29,
+    },
+    {
+      type: 'enum data_structures::EnumWithVector',
+      concreteTypeId: '0272d5aecccd33822994b7be1494b72ec9ad860e4cb51f043deda7ac1e2cae26',
+      metadataTypeId: 30,
+    },
+    {
+      type: 'enum std::identity::Identity',
+      concreteTypeId: 'ab7cd04e05be58e3fc15d424c2c4a57f824a2a2d97d67252440a3925ebdc1335',
+      metadataTypeId: 31,
+    },
+    {
+      type: 'enum std::option::Option<struct data_structures::StructSimple>',
+      concreteTypeId: '25616ce23be3ca41fd26f8c546c053ec256f8fb5593036f60c9c417e86dcc92e',
+      metadataTypeId: 32,
+      typeArguments: ['ef937135956e37401e0bc90406ca8becda92d1b4e387fe938ddef8d27ee192a1'],
+    },
+    {
+      type: 'enum std::option::Option<u8>',
+      concreteTypeId: '2da102c46c7263beeed95818cd7bee801716ba8303dddafdcd0f6c9efda4a0f1',
+      metadataTypeId: 32,
+      typeArguments: ['c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b'],
+    },
+    {
+      type: 'enum std::result::Result<u64,str[10]>',
+      concreteTypeId: '9891b1ee451eed790368ea3969e3c8f550efa87de489b5d7b933e2290800791b',
+      metadataTypeId: 33,
+      typeArguments: [
+        '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+        '338a25cb65b9251663dcce6362b744fe10aa849758299590f4efed5dd299bf50',
+      ],
+    },
+    {
+      type: 'enum std::result::Result<u64,u32>',
+      concreteTypeId: 'b3131b4c08c16cfa55b3150d587c3afa3e4cdebe0399f3f599fa160baaa64e0c',
+      metadataTypeId: 33,
+      typeArguments: [
+        '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+        'd7649d428b9ff33d188ecbf38a7e4d8fd167fa01b2e10fe9a8f9308e52f1d7cc',
+      ],
+    },
+    {
+      type: 'raw untyped slice',
+      concreteTypeId: '1e1c7c52c1c7a9901681337f8669555f62aac58911332c9ff6b4ea8e73786570',
+    },
+    {
+      type: 'str',
+      concreteTypeId: '8c25cb3686462e9a86d2883c5688a22fe738b0bbc85f458d2d2b5f3f667c6d5a',
+    },
+    {
+      type: 'str[10]',
+      concreteTypeId: '338a25cb65b9251663dcce6362b744fe10aa849758299590f4efed5dd299bf50',
+    },
+    {
+      type: 'str[5]',
+      concreteTypeId: '84877f6e98274b9e4721db68b4c0bdb9e52b8e9572c5bd7811c07a41ced882c7',
+    },
+    {
+      type: 'struct abi-library::ExternalStruct',
+      concreteTypeId: 'c3a770db33c4e755ad3ba4586b9c10520511fb80b767feb57dd41da1a88f6978',
+      metadataTypeId: 45,
+    },
+    {
+      type: 'struct data_structures::Configurables',
+      concreteTypeId: '69d4f1cc5ce793681d98a55ab013f42ab56260131d39af6c1e71a5f3531557bc',
+      metadataTypeId: 46,
+    },
+    {
+      type: 'struct data_structures::StructA',
+      concreteTypeId: 'db8b04f624965fbfd7eb7dc3fc3c6a54a71d0019b37d4011a9350d1870136c9d',
+      metadataTypeId: 47,
+    },
+    {
+      type: 'struct data_structures::StructB',
+      concreteTypeId: '9f074fde9cb9194b90bd208c8c95e709bfb1a5c736b063302e5639ce4daad5aa',
+      metadataTypeId: 48,
+    },
+    {
+      type: 'struct data_structures::StructC',
+      concreteTypeId: 'f219acbc9e3b812457419966b5454d10d51594afecacb87fb7745c9311b90012',
+      metadataTypeId: 49,
+    },
+    {
+      type: 'struct data_structures::StructD<u32,u32,struct data_structures::StructF<struct std::vec::Vec<struct data_structures::StructG>>>',
+      concreteTypeId: 'd0494e36b8daeafdf02dfbd1f65f82c66df872fb235c7fd2707fcd4147c6c292',
+      metadataTypeId: 50,
+      typeArguments: [
+        'd7649d428b9ff33d188ecbf38a7e4d8fd167fa01b2e10fe9a8f9308e52f1d7cc',
+        'd7649d428b9ff33d188ecbf38a7e4d8fd167fa01b2e10fe9a8f9308e52f1d7cc',
+        '722eb56989dc44c372c470eb3a6ddb2f91e3924c1c4a0806d21e414046599d35',
+      ],
+    },
+    {
+      type: 'struct data_structures::StructDoubleGeneric<[b256; 3],u8>',
+      concreteTypeId: '7bdc2c1e9c4b8576fdf5be24c5c6569cba3a8feaba3755ed2b95d646a33c73e2',
+      metadataTypeId: 51,
+      typeArguments: [
+        '81342782c917fcfd178741cb2b3a12ea1ebeaa57253fc4ee6700b4d7d6ab32d3',
+        'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+      ],
+    },
+    {
+      type: 'struct data_structures::StructDoubleGeneric<struct data_structures::StructDoubleGeneric<u8,u16>,u32>',
+      concreteTypeId: '08dbec793087c5686c1a493513b158a999bb653126ee51151dfa85fa683edce5',
+      metadataTypeId: 51,
+      typeArguments: [
+        '4946973fc1adce1f6b23e80f9fad29b44e6a4ab25f2b45f3fab95114cfcd33a0',
+        'd7649d428b9ff33d188ecbf38a7e4d8fd167fa01b2e10fe9a8f9308e52f1d7cc',
+      ],
+    },
+    {
+      type: 'struct data_structures::StructDoubleGeneric<u8,u16>',
+      concreteTypeId: '4946973fc1adce1f6b23e80f9fad29b44e6a4ab25f2b45f3fab95114cfcd33a0',
+      metadataTypeId: 51,
+      typeArguments: [
+        'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+        '29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef',
+      ],
+    },
+    {
+      type: 'struct data_structures::StructF<struct std::vec::Vec<struct data_structures::StructG>>',
+      concreteTypeId: '722eb56989dc44c372c470eb3a6ddb2f91e3924c1c4a0806d21e414046599d35',
+      metadataTypeId: 53,
+      typeArguments: ['49f761c61dce644e212b8182e30557d35b6b4ad46693140be677eee0d6ef2733'],
+    },
+    {
+      type: 'struct data_structures::StructG',
+      concreteTypeId: 'dfd8875bb49716b14dd336285ba667f953ed9aec4e918c0d7a2eb19ff644d60e',
+      metadataTypeId: 54,
+    },
+    {
+      type: 'struct data_structures::StructGenericWithEnum<u8,u16>',
+      concreteTypeId: '8986b78b19c146ced98454ffbe32d17f1e9e468128ba8dcb2a32f16aaf208db2',
+      metadataTypeId: 55,
+      typeArguments: [
+        'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+        '29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef',
+      ],
+    },
+    {
+      type: 'struct data_structures::StructSimple',
+      concreteTypeId: 'ef937135956e37401e0bc90406ca8becda92d1b4e387fe938ddef8d27ee192a1',
+      metadataTypeId: 56,
+    },
+    {
+      type: 'struct data_structures::StructSingleGeneric<(bool, u64)>',
+      concreteTypeId: 'fc0793960700fbabd2722134cff2a546743fc832b98d89aac1ec30fc669fd698',
+      metadataTypeId: 57,
+      typeArguments: ['c998ca9a5f221fe7b5c66ae70c8a9562b86d964408b00d17f883c906bc1fe4be'],
+    },
+    {
+      type: 'struct data_structures::StructSingleGeneric<u8>',
+      concreteTypeId: '7cbc352969caf2e9caa716d89c3be65e707447e2a197c779cc4ef382d0602de6',
+      metadataTypeId: 57,
+      typeArguments: ['c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b'],
+    },
+    {
+      type: 'struct data_structures::StructWithEnumArray',
+      concreteTypeId: 'd5266ee32061dbfec8c96f2ba8a054243875e4e6a586104d6366b11e3bc86f2e',
+      metadataTypeId: 58,
+    },
+    {
+      type: 'struct data_structures::StructWithGenericArray<b256>',
+      concreteTypeId: '29843de0bbb48b2d3c601b61823f2e106cfa5833e18b482571f1fa58b507a7ad',
+      metadataTypeId: 59,
+      typeArguments: ['7c5ee1cecf5f8eacd1284feb5f0bf2bdea533a51e2f0c9aabe9236d335989f3b'],
+    },
+    {
+      type: 'struct data_structures::StructWithImplicitGenerics<b256,u8>',
+      concreteTypeId: '549c0f0c43c9e33f7e958e0473d84e78eca4737f9f159c64614ca5dff2d91b60',
+      metadataTypeId: 60,
+      typeArguments: [
+        '7c5ee1cecf5f8eacd1284feb5f0bf2bdea533a51e2f0c9aabe9236d335989f3b',
+        'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+      ],
+    },
+    {
+      type: 'struct data_structures::StructWithMultiOption',
+      concreteTypeId: 'aa87500bb34c8bb09ffd60ab55cb1725898c366c58d3ff3aaaf8c9b532934fd1',
+      metadataTypeId: 61,
+    },
+    {
+      type: 'struct data_structures::StructWithNestedArray',
+      concreteTypeId: 'e7807205e98b513a8beeb5bcf446f0b2d684d0dce6bfeff0f324fa31df1b8948',
+      metadataTypeId: 62,
+    },
+    {
+      type: 'struct data_structures::StructWithNestedStruct',
+      concreteTypeId: '8651356d9584265a78cb58de01c22d405dfc7006ea2f5f74fddcbe3f047f109a',
+      metadataTypeId: 63,
+    },
+    {
+      type: 'struct data_structures::StructWithNestedTuple',
+      concreteTypeId: 'd042dca573565aa653542415397934b3e95452917664e04d27c32a22091aa9a5',
+      metadataTypeId: 64,
+    },
+    {
+      type: 'struct data_structures::StructWithSingleOption',
+      concreteTypeId: '089f2c4466ef415255917812d05776ebcb386be53e5f94bdad1ca8095f02845c',
+      metadataTypeId: 65,
+    },
+    {
+      type: 'struct data_structures::StructWithVector',
+      concreteTypeId: 'eac45984af86a06e11e1c5ff744bc1242e004db8404308cb7e574b4c2afaf621',
+      metadataTypeId: 66,
+    },
+    {
+      type: 'struct std::address::Address',
+      concreteTypeId: 'f597b637c3b0f588fb8d7086c6f4735caa3122b85f0423b82e489f9bb58e2308',
+      metadataTypeId: 67,
+    },
+    {
+      type: 'struct std::asset_id::AssetId',
+      concreteTypeId: 'c0710b6731b1dd59799cf6bef33eee3b3b04a2e40e80a0724090215bbf2ca974',
+      metadataTypeId: 68,
+    },
+    {
+      type: 'struct std::b512::B512',
+      concreteTypeId: '745e252e80bec590efc3999ae943f07ccea4d5b45b00bb6575499b64abdd3322',
+      metadataTypeId: 69,
+    },
+    {
+      type: 'struct std::bytes::Bytes',
+      concreteTypeId: 'cdd87b7d12fe505416570c294c884bca819364863efe3bf539245fa18515fbbb',
+      metadataTypeId: 70,
+    },
+    {
+      type: 'struct std::contract_id::ContractId',
+      concreteTypeId: '29c10735d33b5159f0c71ee1dbd17b36a3e69e41f00fab0d42e1bd9f428d8a54',
+      metadataTypeId: 72,
+    },
+    {
+      type: 'struct std::string::String',
+      concreteTypeId: '9a7f1d3e963c10e0a4ea70a8e20a4813d1dc5682e28f74cb102ae50d32f7f98c',
+      metadataTypeId: 73,
+    },
+    {
+      type: 'struct std::vec::Vec<bool>',
+      concreteTypeId: '6b97d5d738359413c9fac402aced252c23902c28382469ffe27f07381e9f6f31',
+      metadataTypeId: 75,
+      typeArguments: ['b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903'],
+    },
+    {
+      type: 'struct std::vec::Vec<struct data_structures::StructG>',
+      concreteTypeId: '49f761c61dce644e212b8182e30557d35b6b4ad46693140be677eee0d6ef2733',
+      metadataTypeId: 75,
+      typeArguments: ['dfd8875bb49716b14dd336285ba667f953ed9aec4e918c0d7a2eb19ff644d60e'],
+    },
+    {
+      type: 'struct std::vec::Vec<struct data_structures::StructSimple>',
+      concreteTypeId: '9168b00268bbefd158090041178f058b032504f76c4b9644157d5d6b5b183468',
+      metadataTypeId: 75,
+      typeArguments: ['ef937135956e37401e0bc90406ca8becda92d1b4e387fe938ddef8d27ee192a1'],
+    },
+    {
+      type: 'struct std::vec::Vec<struct data_structures::StructWithMultiOption>',
+      concreteTypeId: 'c0de252b9f65a31c6d03071b4b18a935c88c5bb0b2401a447fd30d342fd5a04d',
+      metadataTypeId: 75,
+      typeArguments: ['aa87500bb34c8bb09ffd60ab55cb1725898c366c58d3ff3aaaf8c9b532934fd1'],
+    },
+    {
+      type: 'struct std::vec::Vec<struct std::vec::Vec<u32>>',
+      concreteTypeId: 'e06c82714c52b8afd2293d5d37d05783d09d71c956311c6050ac012cab06364e',
+      metadataTypeId: 75,
+      typeArguments: ['13c38f4111bad6468fad4f8ea82fd744546b63be49db9439fb3d94e14ae2bb3a'],
+    },
+    {
+      type: 'struct std::vec::Vec<u32>',
+      concreteTypeId: '13c38f4111bad6468fad4f8ea82fd744546b63be49db9439fb3d94e14ae2bb3a',
+      metadataTypeId: 75,
+      typeArguments: ['d7649d428b9ff33d188ecbf38a7e4d8fd167fa01b2e10fe9a8f9308e52f1d7cc'],
+    },
+    {
+      type: 'struct std::vec::Vec<u64>',
+      concreteTypeId: 'd5bfe1d4e1ace20166c9b50cadd47e862020561bde24f5189cfc2723f5ed76f4',
+      metadataTypeId: 75,
+      typeArguments: ['1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0'],
+    },
+    {
+      type: 'struct std::vec::Vec<u8>',
+      concreteTypeId: '27a0fb3d3a821e04e7a3f17ab6a617f0eb10f11e6eeb0f2c0ff9e6237207319e',
+      metadataTypeId: 75,
+      typeArguments: ['c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b'],
+    },
+    {
+      type: 'struct std::vm::evm::evm_address::EvmAddress',
+      concreteTypeId: '05a44d8c3e00faf7ed545823b7a2b32723545d8715d87a0ab3cf65904948e8d2',
+      metadataTypeId: 76,
+    },
+    {
+      type: 'u16',
+      concreteTypeId: '29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef',
+    },
+    {
+      type: 'u256',
+      concreteTypeId: '1b5759d94094368cfd443019e7ca5ec4074300e544e5ea993a979f5da627261e',
+    },
+    {
+      type: 'u32',
+      concreteTypeId: 'd7649d428b9ff33d188ecbf38a7e4d8fd167fa01b2e10fe9a8f9308e52f1d7cc',
+    },
+    {
+      type: 'u64',
+      concreteTypeId: '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+    },
+    {
+      type: 'u8',
+      concreteTypeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+    },
+  ],
+  metadataTypes: [
+    {
+      type: '(_, _)',
+      metadataTypeId: 0,
+      components: [
+        {
+          name: '__tuple_element',
+          typeId: '7c5ee1cecf5f8eacd1284feb5f0bf2bdea533a51e2f0c9aabe9236d335989f3b',
+        },
+        {
+          name: '__tuple_element',
+          typeId: 'b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
+        },
+      ],
+    },
+    {
+      type: '(_, _)',
+      metadataTypeId: 1,
+      components: [
+        {
+          name: '__tuple_element',
+          typeId: '84877f6e98274b9e4721db68b4c0bdb9e52b8e9572c5bd7811c07a41ced882c7',
+        },
+        {
+          name: '__tuple_element',
+          typeId: 'b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
+        },
+      ],
+    },
+    {
+      type: '(_, _)',
+      metadataTypeId: 2,
+      components: [
+        {
+          name: '__tuple_element',
+          typeId: '84877f6e98274b9e4721db68b4c0bdb9e52b8e9572c5bd7811c07a41ced882c7',
+        },
+        {
+          name: '__tuple_element',
+          typeId: '84877f6e98274b9e4721db68b4c0bdb9e52b8e9572c5bd7811c07a41ced882c7',
+        },
+      ],
+    },
+    {
+      type: '(_, _)',
+      metadataTypeId: 3,
+      components: [
+        {
+          name: '__tuple_element',
+          typeId: 56,
+        },
+        {
+          name: '__tuple_element',
+          typeId: 75,
+          typeArguments: [
+            {
+              name: '',
+              typeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: '(_, _)',
+      metadataTypeId: 4,
+      components: [
+        {
+          name: '__tuple_element',
+          typeId: '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+        },
+        {
+          name: '__tuple_element',
+          typeId: 56,
+        },
+      ],
+    },
+    {
+      type: '(_, _)',
+      metadataTypeId: 5,
+      components: [
+        {
+          name: '__tuple_element',
+          typeId: 75,
+          typeArguments: [
+            {
+              name: '',
+              typeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+            },
+          ],
+        },
+        {
+          name: '__tuple_element',
+          typeId: '7c5ee1cecf5f8eacd1284feb5f0bf2bdea533a51e2f0c9aabe9236d335989f3b',
+        },
+      ],
+    },
+    {
+      type: '(_, _)',
+      metadataTypeId: 6,
+      components: [
+        {
+          name: '__tuple_element',
+          typeId: 75,
+          typeArguments: [
+            {
+              name: '',
+              typeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+            },
+          ],
+        },
+        {
+          name: '__tuple_element',
+          typeId: 75,
+          typeArguments: [
+            {
+              name: '',
+              typeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: '(_, _)',
+      metadataTypeId: 7,
+      components: [
+        {
+          name: '__tuple_element',
+          typeId: 34,
+        },
+        {
+          name: '__tuple_element',
+          typeId: 35,
+        },
+      ],
+    },
+    {
+      type: '(_, _)',
+      metadataTypeId: 8,
+      components: [
+        {
+          name: '__tuple_element',
+          typeId: 'b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
+        },
+        {
+          name: '__tuple_element',
+          typeId: '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+        },
+      ],
+    },
+    {
+      type: '(_, _, _)',
+      metadataTypeId: 9,
+      components: [
+        {
+          name: '__tuple_element',
+          typeId: 'd7649d428b9ff33d188ecbf38a7e4d8fd167fa01b2e10fe9a8f9308e52f1d7cc',
+        },
+        {
+          name: '__tuple_element',
+          typeId: 75,
+          typeArguments: [
+            {
+              name: '',
+              typeId: '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+            },
+          ],
+        },
+        {
+          name: '__tuple_element',
+          typeId: 75,
+          typeArguments: [
+            {
+              name: '',
+              typeId: '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: '(_, _, _)',
+      metadataTypeId: 10,
+      components: [
+        {
+          name: '__tuple_element',
+          typeId: 68,
+        },
+        {
+          name: '__tuple_element',
+          typeId: 68,
+        },
+        {
+          name: '__tuple_element',
+          typeId: 'b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
+        },
+      ],
+    },
+    {
+      type: '(_, _, _)',
+      metadataTypeId: 11,
+      components: [
+        {
+          name: '__tuple_element',
+          typeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+        },
+        {
+          name: '__tuple_element',
+          typeId: 57,
+          typeArguments: [
+            {
+              name: '',
+              typeId: 57,
+              typeArguments: [
+                {
+                  name: '',
+                  typeId: '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: '__tuple_element',
+          typeId: 44,
+        },
+      ],
+    },
+    {
+      type: '(_, _, _)',
+      metadataTypeId: 12,
+      components: [
+        {
+          name: '__tuple_element',
+          typeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+        },
+        {
+          name: '__tuple_element',
+          typeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+        },
+        {
+          name: '__tuple_element',
+          typeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+        },
+      ],
+    },
+    {
+      type: '(_, _, _, _)',
+      metadataTypeId: 13,
+      components: [
+        {
+          name: '__tuple_element',
+          typeId: 51,
+          typeArguments: [
+            {
+              name: '',
+              typeId: 17,
+            },
+            {
+              name: '',
+              typeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+            },
+          ],
+        },
+        {
+          name: '__tuple_element',
+          typeId: 22,
+        },
+        {
+          name: '__tuple_element',
+          typeId: 1,
+        },
+        {
+          name: '__tuple_element',
+          typeId: 56,
+        },
+      ],
+    },
+    {
+      type: '[_; 1]',
+      metadataTypeId: 14,
+      components: [
+        {
+          name: '__array_element',
+          typeId: 75,
+          typeArguments: [
+            {
+              name: '',
+              typeId: 'd7649d428b9ff33d188ecbf38a7e4d8fd167fa01b2e10fe9a8f9308e52f1d7cc',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: '[_; 2]',
+      metadataTypeId: 15,
+      components: [
+        {
+          name: '__array_element',
+          typeId: 51,
+          typeArguments: [
+            {
+              name: '',
+              typeId: 57,
+              typeArguments: [
+                {
+                  name: '',
+                  typeId: '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+                },
+              ],
+            },
+            {
+              name: '',
+              typeId: 43,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: '[_; 2]',
+      metadataTypeId: 16,
+      components: [
+        {
+          name: '__array_element',
+          typeId: '7c5ee1cecf5f8eacd1284feb5f0bf2bdea533a51e2f0c9aabe9236d335989f3b',
+        },
+      ],
+    },
+    {
+      type: '[_; 3]',
+      metadataTypeId: 17,
+      components: [
+        {
+          name: '__array_element',
+          typeId: '7c5ee1cecf5f8eacd1284feb5f0bf2bdea533a51e2f0c9aabe9236d335989f3b',
+        },
+      ],
+    },
+    {
+      type: '[_; 3]',
+      metadataTypeId: 18,
+      components: [
+        {
+          name: '__array_element',
+          typeId: 56,
+        },
+      ],
+    },
+    {
+      type: '[_; 3]',
+      metadataTypeId: 19,
+      components: [
+        {
+          name: '__array_element',
+          typeId: 51,
+          typeArguments: [
+            {
+              name: '',
+              typeId: 36,
+            },
+            {
+              name: '',
+              typeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: '[_; 3]',
+      metadataTypeId: 20,
+      components: [
+        {
+          name: '__array_element',
+          typeId: 28,
+        },
+      ],
+    },
+    {
+      type: '[_; 3]',
+      metadataTypeId: 21,
+      components: [
+        {
+          name: '__array_element',
+          typeId: 34,
+        },
+      ],
+    },
+    {
+      type: '[_; 4]',
+      metadataTypeId: 22,
+      components: [
+        {
+          name: '__array_element',
+          typeId: 51,
+          typeArguments: [
+            {
+              name: '',
+              typeId: '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+            },
+            {
+              name: '',
+              typeId: 'b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: '[_; 4]',
+      metadataTypeId: 23,
+      components: [
+        {
+          name: '__array_element',
+          typeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+        },
+      ],
+    },
+    {
+      type: '[_; 5]',
+      metadataTypeId: 24,
+      components: [
+        {
+          name: '__array_element',
+          typeId: 32,
+          typeArguments: [
+            {
+              name: '',
+              typeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'enum abi-library::ExternalEnum',
+      metadataTypeId: 25,
+      components: [
+        {
+          name: 'A',
+          typeId: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+        },
+        {
+          name: 'B',
+          typeId: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+        },
+      ],
+    },
+    {
+      type: 'enum data_structures::EnumDoubleGeneric',
+      metadataTypeId: 26,
+      components: [
+        {
+          name: 'a',
+          typeId: 38,
+        },
+        {
+          name: 'b',
+          typeId: 39,
+        },
+      ],
+      typeParameters: [38, 39],
+    },
+    {
+      type: 'enum data_structures::EnumWithBuiltinType',
+      metadataTypeId: 27,
+      components: [
+        {
+          name: 'a',
+          typeId: 'b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
+        },
+        {
+          name: 'b',
+          typeId: '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+        },
+      ],
+    },
+    {
+      type: 'enum data_structures::EnumWithNative',
+      metadataTypeId: 28,
+      components: [
+        {
+          name: 'Checked',
+          typeId: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+        },
+        {
+          name: 'Pending',
+          typeId: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+        },
+      ],
+    },
+    {
+      type: 'enum data_structures::EnumWithStructs',
+      metadataTypeId: 29,
+      components: [
+        {
+          name: 'a',
+          typeId: 28,
+        },
+        {
+          name: 'b',
+          typeId: 56,
+        },
+        {
+          name: 'c',
+          typeId: 51,
+          typeArguments: [
+            {
+              name: '',
+              typeId: '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+            },
+            {
+              name: '',
+              typeId: 56,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'enum data_structures::EnumWithVector',
+      metadataTypeId: 30,
+      components: [
+        {
+          name: 'a',
+          typeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+        },
+        {
+          name: 'b',
+          typeId: 75,
+          typeArguments: [
+            {
+              name: '',
+              typeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'enum std::identity::Identity',
+      metadataTypeId: 31,
+      components: [
+        {
+          name: 'Address',
+          typeId: 67,
+        },
+        {
+          name: 'ContractId',
+          typeId: 72,
+        },
+      ],
+    },
+    {
+      type: 'enum std::option::Option',
+      metadataTypeId: 32,
+      components: [
+        {
+          name: 'None',
+          typeId: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+        },
+        {
+          name: 'Some',
+          typeId: 37,
+        },
+      ],
+      typeParameters: [37],
+    },
+    {
+      type: 'enum std::result::Result',
+      metadataTypeId: 33,
+      components: [
+        {
+          name: 'Ok',
+          typeId: 37,
+        },
+        {
+          name: 'Err',
+          typeId: 34,
+        },
+      ],
+      typeParameters: [37, 34],
+    },
+    {
+      type: 'generic E',
+      metadataTypeId: 34,
+    },
+    {
+      type: 'generic F',
+      metadataTypeId: 35,
+    },
+    {
+      type: 'generic K',
+      metadataTypeId: 36,
+    },
+    {
+      type: 'generic T',
+      metadataTypeId: 37,
+    },
+    {
+      type: 'generic T1',
+      metadataTypeId: 38,
+    },
+    {
+      type: 'generic T2',
+      metadataTypeId: 39,
+    },
+    {
+      type: 'generic U',
+      metadataTypeId: 40,
+    },
+    {
+      type: 'generic V',
+      metadataTypeId: 41,
+    },
+    {
+      type: 'raw untyped ptr',
+      metadataTypeId: 42,
+    },
+    {
+      type: 'str[1]',
+      metadataTypeId: 43,
+    },
+    {
+      type: 'str[3]',
+      metadataTypeId: 44,
+    },
+    {
+      type: 'struct abi-library::ExternalStruct',
+      metadataTypeId: 45,
+      components: [
+        {
+          name: 'value',
+          typeId: '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+        },
+      ],
+    },
+    {
+      type: 'struct data_structures::Configurables',
+      metadataTypeId: 46,
+      components: [
+        {
+          name: 'U8_VALUE',
+          typeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+        },
+        {
+          name: 'BOOL_VALUE',
+          typeId: 'b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
+        },
+        {
+          name: 'B256_VALUE',
+          typeId: '7c5ee1cecf5f8eacd1284feb5f0bf2bdea533a51e2f0c9aabe9236d335989f3b',
+        },
+        {
+          name: 'OPTION_U8_VALUE',
+          typeId: 32,
+          typeArguments: [
+            {
+              name: '',
+              typeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+            },
+          ],
+        },
+        {
+          name: 'GENERIC_STRUCT_VALUE',
+          typeId: 51,
+          typeArguments: [
+            {
+              name: '',
+              typeId: 51,
+              typeArguments: [
+                {
+                  name: '',
+                  typeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+                },
+                {
+                  name: '',
+                  typeId: '29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef',
+                },
+              ],
+            },
+            {
+              name: '',
+              typeId: 'd7649d428b9ff33d188ecbf38a7e4d8fd167fa01b2e10fe9a8f9308e52f1d7cc',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'struct data_structures::StructA',
+      metadataTypeId: 47,
+      components: [
+        {
+          name: 'propA1',
+          typeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+        },
+      ],
+    },
+    {
+      type: 'struct data_structures::StructB',
+      metadataTypeId: 48,
+      components: [
+        {
+          name: 'propB1',
+          typeId: 47,
+        },
+        {
+          name: 'propB2',
+          typeId: '29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef',
+        },
+      ],
+    },
+    {
+      type: 'struct data_structures::StructC',
+      metadataTypeId: 49,
+      components: [
+        {
+          name: 'propC1',
+          typeId: 47,
+        },
+        {
+          name: 'propC2',
+          typeId: 75,
+          typeArguments: [
+            {
+              name: '',
+              typeId: 48,
+            },
+          ],
+        },
+        {
+          name: 'propC3',
+          typeId: 50,
+          typeArguments: [
+            {
+              name: '',
+              typeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+            },
+            {
+              name: '',
+              typeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+            },
+            {
+              name: '',
+              typeId: 53,
+              typeArguments: [
+                {
+                  name: '',
+                  typeId: 43,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'struct data_structures::StructD',
+      metadataTypeId: 50,
+      components: [
+        {
+          name: 'propD1',
+          typeId: 75,
+          typeArguments: [
+            {
+              name: '',
+              typeId: 52,
+              typeArguments: [
+                {
+                  name: '',
+                  typeId: 37,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: 'propD2',
+          typeId: 40,
+        },
+        {
+          name: 'propD3',
+          typeId: 41,
+        },
+      ],
+      typeParameters: [37, 40, 41],
+    },
+    {
+      type: 'struct data_structures::StructDoubleGeneric',
+      metadataTypeId: 51,
+      components: [
+        {
+          name: 'a',
+          typeId: 38,
+        },
+        {
+          name: 'b',
+          typeId: 39,
+        },
+      ],
+      typeParameters: [38, 39],
+    },
+    {
+      type: 'struct data_structures::StructE',
+      metadataTypeId: 52,
+      components: [
+        {
+          name: 'propE1',
+          typeId: 47,
+        },
+        {
+          name: 'propE2',
+          typeId: 48,
+        },
+        {
+          name: 'propE3',
+          typeId: 37,
+        },
+      ],
+      typeParameters: [37],
+    },
+    {
+      type: 'struct data_structures::StructF',
+      metadataTypeId: 53,
+      components: [
+        {
+          name: 'propF1',
+          typeId: '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+        },
+        {
+          name: 'propF2',
+          typeId: 37,
+        },
+      ],
+      typeParameters: [37],
+    },
+    {
+      type: 'struct data_structures::StructG',
+      metadataTypeId: 54,
+      components: [
+        {
+          name: 'propG1',
+          typeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+        },
+      ],
+    },
+    {
+      type: 'struct data_structures::StructGenericWithEnum',
+      metadataTypeId: 55,
+      components: [
+        {
+          name: 'a',
+          typeId: 38,
+        },
+        {
+          name: 'b',
+          typeId: 26,
+          typeArguments: [
+            {
+              name: '',
+              typeId: 38,
+            },
+            {
+              name: '',
+              typeId: 39,
+            },
+          ],
+        },
+      ],
+      typeParameters: [38, 39],
+    },
+    {
+      type: 'struct data_structures::StructSimple',
+      metadataTypeId: 56,
+      components: [
+        {
+          name: 'a',
+          typeId: 'b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
+        },
+        {
+          name: 'b',
+          typeId: 'd7649d428b9ff33d188ecbf38a7e4d8fd167fa01b2e10fe9a8f9308e52f1d7cc',
+        },
+      ],
+    },
+    {
+      type: 'struct data_structures::StructSingleGeneric',
+      metadataTypeId: 57,
+      components: [
+        {
+          name: 'a',
+          typeId: 37,
+        },
+      ],
+      typeParameters: [37],
+    },
+    {
+      type: 'struct data_structures::StructWithEnumArray',
+      metadataTypeId: 58,
+      components: [
+        {
+          name: 'a',
+          typeId: 20,
+        },
+      ],
+    },
+    {
+      type: 'struct data_structures::StructWithGenericArray',
+      metadataTypeId: 59,
+      components: [
+        {
+          name: 'a',
+          typeId: 19,
+        },
+      ],
+      typeParameters: [36],
+    },
+    {
+      type: 'struct data_structures::StructWithImplicitGenerics',
+      metadataTypeId: 60,
+      components: [
+        {
+          name: 'a',
+          typeId: 21,
+        },
+        {
+          name: 'b',
+          typeId: 7,
+        },
+      ],
+      typeParameters: [34, 35],
+    },
+    {
+      type: 'struct data_structures::StructWithMultiOption',
+      metadataTypeId: 61,
+      components: [
+        {
+          name: 'a',
+          typeId: 24,
+        },
+      ],
+    },
+    {
+      type: 'struct data_structures::StructWithNestedArray',
+      metadataTypeId: 62,
+      components: [
+        {
+          name: 'a',
+          typeId: 15,
+        },
+      ],
+    },
+    {
+      type: 'struct data_structures::StructWithNestedStruct',
+      metadataTypeId: 63,
+      components: [
+        {
+          name: 'a',
+          typeId: 51,
+          typeArguments: [
+            {
+              name: '',
+              typeId: 57,
+              typeArguments: [
+                {
+                  name: '',
+                  typeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+                },
+              ],
+            },
+            {
+              name: '',
+              typeId: '29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'struct data_structures::StructWithNestedTuple',
+      metadataTypeId: 64,
+      components: [
+        {
+          name: 'a',
+          typeId: 11,
+        },
+      ],
+    },
+    {
+      type: 'struct data_structures::StructWithSingleOption',
+      metadataTypeId: 65,
+      components: [
+        {
+          name: 'a',
+          typeId: 32,
+          typeArguments: [
+            {
+              name: '',
+              typeId: 61,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'struct data_structures::StructWithVector',
+      metadataTypeId: 66,
+      components: [
+        {
+          name: 'a',
+          typeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+        },
+        {
+          name: 'b',
+          typeId: 75,
+          typeArguments: [
+            {
+              name: '',
+              typeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'struct std::address::Address',
+      metadataTypeId: 67,
+      components: [
+        {
+          name: 'bits',
+          typeId: '7c5ee1cecf5f8eacd1284feb5f0bf2bdea533a51e2f0c9aabe9236d335989f3b',
+        },
+      ],
+    },
+    {
+      type: 'struct std::asset_id::AssetId',
+      metadataTypeId: 68,
+      components: [
+        {
+          name: 'bits',
+          typeId: '7c5ee1cecf5f8eacd1284feb5f0bf2bdea533a51e2f0c9aabe9236d335989f3b',
+        },
+      ],
+    },
+    {
+      type: 'struct std::b512::B512',
+      metadataTypeId: 69,
+      components: [
+        {
+          name: 'bits',
+          typeId: 16,
+        },
+      ],
+    },
+    {
+      type: 'struct std::bytes::Bytes',
+      metadataTypeId: 70,
+      components: [
+        {
+          name: 'buf',
+          typeId: 71,
+        },
+        {
+          name: 'len',
+          typeId: '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+        },
+      ],
+    },
+    {
+      type: 'struct std::bytes::RawBytes',
+      metadataTypeId: 71,
+      components: [
+        {
+          name: 'ptr',
+          typeId: 42,
+        },
+        {
+          name: 'cap',
+          typeId: '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+        },
+      ],
+    },
+    {
+      type: 'struct std::contract_id::ContractId',
+      metadataTypeId: 72,
+      components: [
+        {
+          name: 'bits',
+          typeId: '7c5ee1cecf5f8eacd1284feb5f0bf2bdea533a51e2f0c9aabe9236d335989f3b',
+        },
+      ],
+    },
+    {
+      type: 'struct std::string::String',
+      metadataTypeId: 73,
+      components: [
+        {
+          name: 'bytes',
+          typeId: 70,
+        },
+      ],
+    },
+    {
+      type: 'struct std::vec::RawVec',
+      metadataTypeId: 74,
+      components: [
+        {
+          name: 'ptr',
+          typeId: 42,
+        },
+        {
+          name: 'cap',
+          typeId: '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+        },
+      ],
+      typeParameters: [37],
+    },
+    {
+      type: 'struct std::vec::Vec',
+      metadataTypeId: 75,
+      components: [
+        {
+          name: 'buf',
+          typeId: 74,
+          typeArguments: [
+            {
+              name: '',
+              typeId: 37,
+            },
+          ],
+        },
+        {
+          name: 'len',
+          typeId: '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+        },
+      ],
+      typeParameters: [37],
+    },
+    {
+      type: 'struct std::vm::evm::evm_address::EvmAddress',
+      metadataTypeId: 76,
+      components: [
+        {
+          name: 'bits',
+          typeId: '7c5ee1cecf5f8eacd1284feb5f0bf2bdea533a51e2f0c9aabe9236d335989f3b',
+        },
+      ],
+    },
+  ],
+  functions: [
+    {
+      inputs: [],
+      name: 'attributes_doc_comment',
+      output: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+      attributes: [
+        {
+          name: 'doc-comment',
+          arguments: [' This is a doc'],
+        },
+        {
+          name: 'doc-comment',
+          arguments: [' This is another doc comment'],
+        },
+      ],
+    },
+    {
+      inputs: [],
+      name: 'attributes_inline_always',
+      output: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+      attributes: [
+        {
+          name: 'inline',
+          arguments: ['always'],
+        },
+      ],
+    },
+    {
+      inputs: [],
+      name: 'attributes_inline_never',
+      output: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+      attributes: [
+        {
+          name: 'inline',
+          arguments: ['never'],
+        },
+      ],
+    },
+    {
+      inputs: [],
+      name: 'attributes_none',
+      output: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+      attributes: null,
+    },
+    {
+      inputs: [],
+      name: 'attributes_payable',
+      output: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+      attributes: [
+        {
+          name: 'payable',
+          arguments: [],
+        },
+      ],
+    },
+    {
+      inputs: [],
+      name: 'attributes_storage_read',
+      output: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read'],
+        },
+      ],
+    },
+    {
+      inputs: [],
+      name: 'attributes_storage_read_write',
+      output: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read', 'write'],
+        },
+      ],
+    },
+    {
+      inputs: [],
+      name: 'attributes_storage_write',
+      output: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['write'],
+        },
+      ],
+    },
+    {
+      inputs: [],
+      name: 'attributes_test',
+      output: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+      attributes: [
+        {
+          name: 'test',
+          arguments: [],
+        },
+      ],
+    },
+    {
+      inputs: [],
+      name: 'configurables',
+      output: '69d4f1cc5ce793681d98a55ab013f42ab56260131d39af6c1e71a5f3531557bc',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '7c5ee1cecf5f8eacd1284feb5f0bf2bdea533a51e2f0c9aabe9236d335989f3b',
+        },
+        {
+          name: 'y',
+          concreteTypeId: 'b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
+        },
+      ],
+      name: 'multi_arg_b256_bool',
+      output: 'd5f6ab61fc224aae1bf15a89ab88840ed54e312a76a9735d1f60d4d0d1fae640',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '7bdc2c1e9c4b8576fdf5be24c5c6569cba3a8feaba3755ed2b95d646a33c73e2',
+        },
+        {
+          name: 'y',
+          concreteTypeId: 'b22807669faa58263e636f6e2d194df8ddbc6686bb4ea14ee28005fa30adbe85',
+        },
+        {
+          name: 'z',
+          concreteTypeId: 'a1e229302ed2f092752a6bc4fbe66bb9305e0802b1b01ecc5e1d59356702e956',
+        },
+        {
+          name: 'a',
+          concreteTypeId: 'ef937135956e37401e0bc90406ca8becda92d1b4e387fe938ddef8d27ee192a1',
+        },
+      ],
+      name: 'multi_arg_complex',
+      output: '343f07ddcd75b9385bc193e0419f2e89c75fad67cbf4ad1b36a01a136620817e',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '84877f6e98274b9e4721db68b4c0bdb9e52b8e9572c5bd7811c07a41ced882c7',
+        },
+        {
+          name: 'y',
+          concreteTypeId: '84877f6e98274b9e4721db68b4c0bdb9e52b8e9572c5bd7811c07a41ced882c7',
+        },
+      ],
+      name: 'multi_arg_str_str',
+      output: '30022fd7ad3fda4035d30e4d86b705d4870924d4b4fe054624d2561fa12bb33e',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'ef937135956e37401e0bc90406ca8becda92d1b4e387fe938ddef8d27ee192a1',
+        },
+        {
+          name: 'y',
+          concreteTypeId: '27a0fb3d3a821e04e7a3f17ab6a617f0eb10f11e6eeb0f2c0ff9e6237207319e',
+        },
+      ],
+      name: 'multi_arg_struct_vector',
+      output: '5ebb7c8cdd38d1f676f9c7089a2da12b27114ee3771c2047f3295d4d30f8fd2c',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'd7649d428b9ff33d188ecbf38a7e4d8fd167fa01b2e10fe9a8f9308e52f1d7cc',
+        },
+        {
+          name: 'y',
+          concreteTypeId: 'd5bfe1d4e1ace20166c9b50cadd47e862020561bde24f5189cfc2723f5ed76f4',
+        },
+        {
+          name: 'z',
+          concreteTypeId: 'd5bfe1d4e1ace20166c9b50cadd47e862020561bde24f5189cfc2723f5ed76f4',
+        },
+      ],
+      name: 'multi_arg_u32_vector_vector',
+      output: '18034e13b18b71de3c7e12f8f10a7bd48a23870e0dbb46eaf10faeb26d70f000',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+        },
+        {
+          name: 'y',
+          concreteTypeId: 'ef937135956e37401e0bc90406ca8becda92d1b4e387fe938ddef8d27ee192a1',
+        },
+      ],
+      name: 'multi_arg_u64_struct',
+      output: '0088c28967dbcdaa34626c7e915e44b2afe72f12415f0e31edc0b5ce70e7c6dc',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+        },
+        {
+          name: 'y',
+          concreteTypeId: '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+        },
+      ],
+      name: 'multi_arg_u64_u64',
+      output: '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '27a0fb3d3a821e04e7a3f17ab6a617f0eb10f11e6eeb0f2c0ff9e6237207319e',
+        },
+        {
+          name: 'y',
+          concreteTypeId: '7c5ee1cecf5f8eacd1284feb5f0bf2bdea533a51e2f0c9aabe9236d335989f3b',
+        },
+      ],
+      name: 'multi_arg_vector_b256',
+      output: '52e2726988c7da304606fbe4ed696efac04beb29e9a22e15778f8a0539c9cb94',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '27a0fb3d3a821e04e7a3f17ab6a617f0eb10f11e6eeb0f2c0ff9e6237207319e',
+        },
+        {
+          name: 'y',
+          concreteTypeId: '27a0fb3d3a821e04e7a3f17ab6a617f0eb10f11e6eeb0f2c0ff9e6237207319e',
+        },
+      ],
+      name: 'multi_arg_vector_vector',
+      output: '87a4626758542d7b6a03099839e440a052a4d5a00e3abfdf22bcc564ca19a4fd',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'f597b637c3b0f588fb8d7086c6f4735caa3122b85f0423b82e489f9bb58e2308',
+        },
+      ],
+      name: 'types_address',
+      output: 'f597b637c3b0f588fb8d7086c6f4735caa3122b85f0423b82e489f9bb58e2308',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'a95e1fcceb1451b8a76471f593f66c4a52ca04bde3c227c746ad7aaf988de5c6',
+        },
+      ],
+      name: 'types_alias_tuple_with_native_types',
+      output: 'a95e1fcceb1451b8a76471f593f66c4a52ca04bde3c227c746ad7aaf988de5c6',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'f28afa065fc5de602456160c4155d4de7d9a61e85a995d209a14eab0b34bd6b4',
+        },
+      ],
+      name: 'types_array',
+      output: 'f28afa065fc5de602456160c4155d4de7d9a61e85a995d209a14eab0b34bd6b4',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '38f2594527b516dab2c81b31356901226242d7c32554877e36797c6b23969237',
+        },
+      ],
+      name: 'types_array_struct',
+      output: '38f2594527b516dab2c81b31356901226242d7c32554877e36797c6b23969237',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'b8164e36cce9d14142824b5cc55aebc1272036775b966af82c49c78aff114006',
+        },
+      ],
+      name: 'types_array_with_generic_struct',
+      output: 'b8164e36cce9d14142824b5cc55aebc1272036775b966af82c49c78aff114006',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '593b39347cc381516d8ed1f8e5e628a8d455bd3f833bd9dfdd5165ba16f9f980',
+        },
+      ],
+      name: 'types_array_with_vector',
+      output: '593b39347cc381516d8ed1f8e5e628a8d455bd3f833bd9dfdd5165ba16f9f980',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'c0710b6731b1dd59799cf6bef33eee3b3b04a2e40e80a0724090215bbf2ca974',
+        },
+      ],
+      name: 'types_asset_id',
+      output: 'c0710b6731b1dd59799cf6bef33eee3b3b04a2e40e80a0724090215bbf2ca974',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '7c5ee1cecf5f8eacd1284feb5f0bf2bdea533a51e2f0c9aabe9236d335989f3b',
+        },
+      ],
+      name: 'types_b256',
+      output: '7c5ee1cecf5f8eacd1284feb5f0bf2bdea533a51e2f0c9aabe9236d335989f3b',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '745e252e80bec590efc3999ae943f07ccea4d5b45b00bb6575499b64abdd3322',
+        },
+      ],
+      name: 'types_b512',
+      output: '745e252e80bec590efc3999ae943f07ccea4d5b45b00bb6575499b64abdd3322',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
+        },
+      ],
+      name: 'types_bool',
+      output: 'b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'cdd87b7d12fe505416570c294c884bca819364863efe3bf539245fa18515fbbb',
+        },
+      ],
+      name: 'types_bytes',
+      output: 'cdd87b7d12fe505416570c294c884bca819364863efe3bf539245fa18515fbbb',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '29c10735d33b5159f0c71ee1dbd17b36a3e69e41f00fab0d42e1bd9f428d8a54',
+        },
+      ],
+      name: 'types_contract_id',
+      output: '29c10735d33b5159f0c71ee1dbd17b36a3e69e41f00fab0d42e1bd9f428d8a54',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '58ae0e9c51da476db1149dd48b1cda83a12187df4c049f8df5021f0b1696fb93',
+        },
+      ],
+      name: 'types_enum',
+      output: '58ae0e9c51da476db1149dd48b1cda83a12187df4c049f8df5021f0b1696fb93',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '9a24373d8ce7688609717fd5a9b75360cd8a6bdb224ae095f0c05cc891cadd42',
+        },
+      ],
+      name: 'types_enum_external',
+      output: '9a24373d8ce7688609717fd5a9b75360cd8a6bdb224ae095f0c05cc891cadd42',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '2136f16aedeec1ab7f1d912c57cc0566e86c36f20a2cb313e3d679cead6a0e61',
+        },
+      ],
+      name: 'types_enum_with_builtin_type',
+      output: '2136f16aedeec1ab7f1d912c57cc0566e86c36f20a2cb313e3d679cead6a0e61',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '9ed6dede3ae1e66e0f951e860e863f77fb9b9499f4666a1123bf244c4a201669',
+        },
+      ],
+      name: 'types_enum_with_structs',
+      output: '9ed6dede3ae1e66e0f951e860e863f77fb9b9499f4666a1123bf244c4a201669',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '0272d5aecccd33822994b7be1494b72ec9ad860e4cb51f043deda7ac1e2cae26',
+        },
+      ],
+      name: 'types_enum_with_vector',
+      output: '0272d5aecccd33822994b7be1494b72ec9ad860e4cb51f043deda7ac1e2cae26',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '05a44d8c3e00faf7ed545823b7a2b32723545d8715d87a0ab3cf65904948e8d2',
+        },
+      ],
+      name: 'types_evm_address',
+      output: '05a44d8c3e00faf7ed545823b7a2b32723545d8715d87a0ab3cf65904948e8d2',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'd0ed93cd57cc3dfb1c119b22bf63f5d215122402536127bf17087ca6d8186307',
+        },
+      ],
+      name: 'types_generic_enum',
+      output: 'd0ed93cd57cc3dfb1c119b22bf63f5d215122402536127bf17087ca6d8186307',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'ab7cd04e05be58e3fc15d424c2c4a57f824a2a2d97d67252440a3925ebdc1335',
+        },
+      ],
+      name: 'types_identity_address',
+      output: 'ab7cd04e05be58e3fc15d424c2c4a57f824a2a2d97d67252440a3925ebdc1335',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'ab7cd04e05be58e3fc15d424c2c4a57f824a2a2d97d67252440a3925ebdc1335',
+        },
+      ],
+      name: 'types_identity_contract_id',
+      output: 'ab7cd04e05be58e3fc15d424c2c4a57f824a2a2d97d67252440a3925ebdc1335',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '2da102c46c7263beeed95818cd7bee801716ba8303dddafdcd0f6c9efda4a0f1',
+        },
+      ],
+      name: 'types_option',
+      output: '2da102c46c7263beeed95818cd7bee801716ba8303dddafdcd0f6c9efda4a0f1',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '25616ce23be3ca41fd26f8c546c053ec256f8fb5593036f60c9c417e86dcc92e',
+        },
+      ],
+      name: 'types_option_struct',
+      output: '25616ce23be3ca41fd26f8c546c053ec256f8fb5593036f60c9c417e86dcc92e',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '1e1c7c52c1c7a9901681337f8669555f62aac58911332c9ff6b4ea8e73786570',
+        },
+      ],
+      name: 'types_raw_slice',
+      output: '1e1c7c52c1c7a9901681337f8669555f62aac58911332c9ff6b4ea8e73786570',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'b3131b4c08c16cfa55b3150d587c3afa3e4cdebe0399f3f599fa160baaa64e0c',
+        },
+      ],
+      name: 'types_result',
+      output: '9891b1ee451eed790368ea3969e3c8f550efa87de489b5d7b933e2290800791b',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '9a7f1d3e963c10e0a4ea70a8e20a4813d1dc5682e28f74cb102ae50d32f7f98c',
+        },
+      ],
+      name: 'types_std_string',
+      output: '9a7f1d3e963c10e0a4ea70a8e20a4813d1dc5682e28f74cb102ae50d32f7f98c',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '84877f6e98274b9e4721db68b4c0bdb9e52b8e9572c5bd7811c07a41ced882c7',
+        },
+      ],
+      name: 'types_str',
+      output: '84877f6e98274b9e4721db68b4c0bdb9e52b8e9572c5bd7811c07a41ced882c7',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '8c25cb3686462e9a86d2883c5688a22fe738b0bbc85f458d2d2b5f3f667c6d5a',
+        },
+      ],
+      name: 'types_str_slice',
+      output: '8c25cb3686462e9a86d2883c5688a22fe738b0bbc85f458d2d2b5f3f667c6d5a',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '8986b78b19c146ced98454ffbe32d17f1e9e468128ba8dcb2a32f16aaf208db2',
+        },
+      ],
+      name: 'types_struct_double_generic',
+      output: '8986b78b19c146ced98454ffbe32d17f1e9e468128ba8dcb2a32f16aaf208db2',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'c3a770db33c4e755ad3ba4586b9c10520511fb80b767feb57dd41da1a88f6978',
+        },
+      ],
+      name: 'types_struct_external',
+      output: 'c3a770db33c4e755ad3ba4586b9c10520511fb80b767feb57dd41da1a88f6978',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '7cbc352969caf2e9caa716d89c3be65e707447e2a197c779cc4ef382d0602de6',
+        },
+      ],
+      name: 'types_struct_generic',
+      output: '7cbc352969caf2e9caa716d89c3be65e707447e2a197c779cc4ef382d0602de6',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'ef937135956e37401e0bc90406ca8becda92d1b4e387fe938ddef8d27ee192a1',
+        },
+      ],
+      name: 'types_struct_simple',
+      output: 'ef937135956e37401e0bc90406ca8becda92d1b4e387fe938ddef8d27ee192a1',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '29843de0bbb48b2d3c601b61823f2e106cfa5833e18b482571f1fa58b507a7ad',
+        },
+      ],
+      name: 'types_struct_with_array',
+      output: '29843de0bbb48b2d3c601b61823f2e106cfa5833e18b482571f1fa58b507a7ad',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'd5266ee32061dbfec8c96f2ba8a054243875e4e6a586104d6366b11e3bc86f2e',
+        },
+      ],
+      name: 'types_struct_with_array_of_enums',
+      output: 'd5266ee32061dbfec8c96f2ba8a054243875e4e6a586104d6366b11e3bc86f2e',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'd0494e36b8daeafdf02dfbd1f65f82c66df872fb235c7fd2707fcd4147c6c292',
+        },
+      ],
+      name: 'types_struct_with_complex_nested_struct',
+      output: 'b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '549c0f0c43c9e33f7e958e0473d84e78eca4737f9f159c64614ca5dff2d91b60',
+        },
+      ],
+      name: 'types_struct_with_implicit_generics',
+      output: '549c0f0c43c9e33f7e958e0473d84e78eca4737f9f159c64614ca5dff2d91b60',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'db8b04f624965fbfd7eb7dc3fc3c6a54a71d0019b37d4011a9350d1870136c9d',
+        },
+        {
+          name: 'y',
+          concreteTypeId: '9f074fde9cb9194b90bd208c8c95e709bfb1a5c736b063302e5639ce4daad5aa',
+        },
+        {
+          name: 'z',
+          concreteTypeId: 'f219acbc9e3b812457419966b5454d10d51594afecacb87fb7745c9311b90012',
+        },
+      ],
+      name: 'types_struct_with_multiple_struct_params',
+      output: 'b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'e7807205e98b513a8beeb5bcf446f0b2d684d0dce6bfeff0f324fa31df1b8948',
+        },
+      ],
+      name: 'types_struct_with_nested_array',
+      output: 'e7807205e98b513a8beeb5bcf446f0b2d684d0dce6bfeff0f324fa31df1b8948',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '8651356d9584265a78cb58de01c22d405dfc7006ea2f5f74fddcbe3f047f109a',
+        },
+      ],
+      name: 'types_struct_with_nested_struct',
+      output: '8651356d9584265a78cb58de01c22d405dfc7006ea2f5f74fddcbe3f047f109a',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'd042dca573565aa653542415397934b3e95452917664e04d27c32a22091aa9a5',
+        },
+      ],
+      name: 'types_struct_with_nested_tuple',
+      output: 'd042dca573565aa653542415397934b3e95452917664e04d27c32a22091aa9a5',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '089f2c4466ef415255917812d05776ebcb386be53e5f94bdad1ca8095f02845c',
+        },
+      ],
+      name: 'types_struct_with_single_option',
+      output: '089f2c4466ef415255917812d05776ebcb386be53e5f94bdad1ca8095f02845c',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'fc0793960700fbabd2722134cff2a546743fc832b98d89aac1ec30fc669fd698',
+        },
+      ],
+      name: 'types_struct_with_tuple',
+      output: 'fc0793960700fbabd2722134cff2a546743fc832b98d89aac1ec30fc669fd698',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'eac45984af86a06e11e1c5ff744bc1242e004db8404308cb7e574b4c2afaf621',
+        },
+      ],
+      name: 'types_struct_with_vector',
+      output: 'eac45984af86a06e11e1c5ff744bc1242e004db8404308cb7e574b4c2afaf621',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '79239b6d6f2383e2cfbaf4da7fdf7ee7fb59b7bf517acfff2d9433e9e76e8fc4',
+        },
+      ],
+      name: 'types_tuple',
+      output: '79239b6d6f2383e2cfbaf4da7fdf7ee7fb59b7bf517acfff2d9433e9e76e8fc4',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '6f875be99a39d9920569678a34ffce676a6c3e14b958910db250b9cb4957157f',
+        },
+      ],
+      name: 'types_tuple_complex',
+      output: '6f875be99a39d9920569678a34ffce676a6c3e14b958910db250b9cb4957157f',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'a95e1fcceb1451b8a76471f593f66c4a52ca04bde3c227c746ad7aaf988de5c6',
+        },
+      ],
+      name: 'types_tuple_with_native_types',
+      output: 'a95e1fcceb1451b8a76471f593f66c4a52ca04bde3c227c746ad7aaf988de5c6',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef',
+        },
+      ],
+      name: 'types_u16',
+      output: '29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '1b5759d94094368cfd443019e7ca5ec4074300e544e5ea993a979f5da627261e',
+        },
+      ],
+      name: 'types_u256',
+      output: '1b5759d94094368cfd443019e7ca5ec4074300e544e5ea993a979f5da627261e',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'd7649d428b9ff33d188ecbf38a7e4d8fd167fa01b2e10fe9a8f9308e52f1d7cc',
+        },
+      ],
+      name: 'types_u32',
+      output: 'd7649d428b9ff33d188ecbf38a7e4d8fd167fa01b2e10fe9a8f9308e52f1d7cc',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+        },
+      ],
+      name: 'types_u64',
+      output: '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+        },
+      ],
+      name: 'types_u8',
+      output: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+        },
+        {
+          name: 'y',
+          concreteTypeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+        },
+        {
+          name: 'z',
+          concreteTypeId: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+        },
+        {
+          name: 'a',
+          concreteTypeId: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+        },
+      ],
+      name: 'types_value_then_value_then_void_then_void',
+      output: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+        },
+        {
+          name: 'y',
+          concreteTypeId: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+        },
+      ],
+      name: 'types_value_then_void',
+      output: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+        },
+        {
+          name: 'y',
+          concreteTypeId: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+        },
+        {
+          name: 'z',
+          concreteTypeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+        },
+      ],
+      name: 'types_value_then_void_then_value',
+      output: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '6b97d5d738359413c9fac402aced252c23902c28382469ffe27f07381e9f6f31',
+        },
+      ],
+      name: 'types_vector_boolean',
+      output: '6b97d5d738359413c9fac402aced252c23902c28382469ffe27f07381e9f6f31',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'e06c82714c52b8afd2293d5d37d05783d09d71c956311c6050ac012cab06364e',
+        },
+      ],
+      name: 'types_vector_inside_vector',
+      output: 'e06c82714c52b8afd2293d5d37d05783d09d71c956311c6050ac012cab06364e',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'c0de252b9f65a31c6d03071b4b18a935c88c5bb0b2401a447fd30d342fd5a04d',
+        },
+      ],
+      name: 'types_vector_option',
+      output: 'c0de252b9f65a31c6d03071b4b18a935c88c5bb0b2401a447fd30d342fd5a04d',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '27a0fb3d3a821e04e7a3f17ab6a617f0eb10f11e6eeb0f2c0ff9e6237207319e',
+        },
+      ],
+      name: 'types_vector_u8',
+      output: '27a0fb3d3a821e04e7a3f17ab6a617f0eb10f11e6eeb0f2c0ff9e6237207319e',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '9168b00268bbefd158090041178f058b032504f76c4b9644157d5d6b5b183468',
+        },
+      ],
+      name: 'types_vector_with_struct',
+      output: '9168b00268bbefd158090041178f058b032504f76c4b9644157d5d6b5b183468',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+        },
+      ],
+      name: 'types_void',
+      output: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+        },
+        {
+          name: 'y',
+          concreteTypeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+        },
+      ],
+      name: 'types_void_then_value',
+      output: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+      attributes: null,
+    },
+  ],
+  loggedTypes: [
+    {
+      logId: '8961848586872524460',
+      concreteTypeId: '7c5ee1cecf5f8eacd1284feb5f0bf2bdea533a51e2f0c9aabe9236d335989f3b',
+    },
+    {
+      logId: '13213829929622723620',
+      concreteTypeId: 'b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
+    },
+    {
+      logId: '15417698811679754926',
+      concreteTypeId: 'd5f6ab61fc224aae1bf15a89ab88840ed54e312a76a9735d1f60d4d0d1fae640',
+    },
+    {
+      logId: '3764736462721235256',
+      concreteTypeId: '343f07ddcd75b9385bc193e0419f2e89c75fad67cbf4ad1b36a01a136620817e',
+    },
+    {
+      logId: '10098701174489624218',
+      concreteTypeId: '8c25cb3686462e9a86d2883c5688a22fe738b0bbc85f458d2d2b5f3f667c6d5a',
+    },
+    {
+      logId: '3459380067145079360',
+      concreteTypeId: '30022fd7ad3fda4035d30e4d86b705d4870924d4b4fe054624d2561fa12bb33e',
+    },
+    {
+      logId: '6826186604658872822',
+      concreteTypeId: '5ebb7c8cdd38d1f676f9c7089a2da12b27114ee3771c2047f3295d4d30f8fd2c',
+    },
+    {
+      logId: '1730312528330453470',
+      concreteTypeId: '18034e13b18b71de3c7e12f8f10a7bd48a23870e0dbb46eaf10faeb26d70f000',
+    },
+    {
+      logId: '38494492241415594',
+      concreteTypeId: '0088c28967dbcdaa34626c7e915e44b2afe72f12415f0e31edc0b5ce70e7c6dc',
+    },
+    {
+      logId: '1515152261580153489',
+      concreteTypeId: '1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0',
+    },
+    {
+      logId: '5972461853438630448',
+      concreteTypeId: '52e2726988c7da304606fbe4ed696efac04beb29e9a22e15778f8a0539c9cb94',
+    },
+    {
+      logId: '9774045287303884155',
+      concreteTypeId: '87a4626758542d7b6a03099839e440a052a4d5a00e3abfdf22bcc564ca19a4fd',
+    },
+    {
+      logId: '17696813611398264200',
+      concreteTypeId: 'f597b637c3b0f588fb8d7086c6f4735caa3122b85f0423b82e489f9bb58e2308',
+    },
+    {
+      logId: '12204227005198389688',
+      concreteTypeId: 'a95e1fcceb1451b8a76471f593f66c4a52ca04bde3c227c746ad7aaf988de5c6',
+    },
+    {
+      logId: '17477056209248181856',
+      concreteTypeId: 'f28afa065fc5de602456160c4155d4de7d9a61e85a995d209a14eab0b34bd6b4',
+    },
+    {
+      logId: '4103440364041737946',
+      concreteTypeId: '38f2594527b516dab2c81b31356901226242d7c32554877e36797c6b23969237',
+    },
+    {
+      logId: '13264875749739450689',
+      concreteTypeId: 'b8164e36cce9d14142824b5cc55aebc1272036775b966af82c49c78aff114006',
+    },
+    {
+      logId: '6429795790595785041',
+      concreteTypeId: '593b39347cc381516d8ed1f8e5e628a8d455bd3f833bd9dfdd5165ba16f9f980',
+    },
+    {
+      logId: '13866877265493744985',
+      concreteTypeId: 'c0710b6731b1dd59799cf6bef33eee3b3b04a2e40e80a0724090215bbf2ca974',
+    },
+    {
+      logId: '8385180437869151632',
+      concreteTypeId: '745e252e80bec590efc3999ae943f07ccea4d5b45b00bb6575499b64abdd3322',
+    },
+    {
+      logId: '14832741149864513620',
+      concreteTypeId: 'cdd87b7d12fe505416570c294c884bca819364863efe3bf539245fa18515fbbb',
+    },
+    {
+      logId: '3008693953818743129',
+      concreteTypeId: '29c10735d33b5159f0c71ee1dbd17b36a3e69e41f00fab0d42e1bd9f428d8a54',
+    },
+    {
+      logId: '6390060985836259181',
+      concreteTypeId: '58ae0e9c51da476db1149dd48b1cda83a12187df4c049f8df5021f0b1696fb93',
+    },
+    {
+      logId: '11107063318498994310',
+      concreteTypeId: '9a24373d8ce7688609717fd5a9b75360cd8a6bdb224ae095f0c05cc891cadd42',
+    },
+    {
+      logId: '2393365693554672043',
+      concreteTypeId: '2136f16aedeec1ab7f1d912c57cc0566e86c36f20a2cb313e3d679cead6a0e61',
+    },
+    {
+      logId: '11445580549060683374',
+      concreteTypeId: '9ed6dede3ae1e66e0f951e860e863f77fb9b9499f4666a1123bf244c4a201669',
+    },
+    {
+      logId: '176438282157896578',
+      concreteTypeId: '0272d5aecccd33822994b7be1494b72ec9ad860e4cb51f043deda7ac1e2cae26',
+    },
+    {
+      logId: '406535131101199095',
+      concreteTypeId: '05a44d8c3e00faf7ed545823b7a2b32723545d8715d87a0ab3cf65904948e8d2',
+    },
+    {
+      logId: '15054851639520017915',
+      concreteTypeId: 'd0ed93cd57cc3dfb1c119b22bf63f5d215122402536127bf17087ca6d8186307',
+    },
+    {
+      logId: '12356980511120185571',
+      concreteTypeId: 'ab7cd04e05be58e3fc15d424c2c4a57f824a2a2d97d67252440a3925ebdc1335',
+    },
+    {
+      logId: '3287912245613454270',
+      concreteTypeId: '2da102c46c7263beeed95818cd7bee801716ba8303dddafdcd0f6c9efda4a0f1',
+    },
+    {
+      logId: '2693553771067460161',
+      concreteTypeId: '25616ce23be3ca41fd26f8c546c053ec256f8fb5593036f60c9c417e86dcc92e',
+    },
+    {
+      logId: '2169745815365986704',
+      concreteTypeId: '1e1c7c52c1c7a9901681337f8669555f62aac58911332c9ff6b4ea8e73786570',
+    },
+    {
+      logId: '11132648958528852192',
+      concreteTypeId: '9a7f1d3e963c10e0a4ea70a8e20a4813d1dc5682e28f74cb102ae50d32f7f98c',
+    },
+    {
+      logId: '9549741647838268318',
+      concreteTypeId: '84877f6e98274b9e4721db68b4c0bdb9e52b8e9572c5bd7811c07a41ced882c7',
+    },
+    {
+      logId: '9909809838135789262',
+      concreteTypeId: '8986b78b19c146ced98454ffbe32d17f1e9e468128ba8dcb2a32f16aaf208db2',
+    },
+    {
+      logId: '14098361245275318101',
+      concreteTypeId: 'c3a770db33c4e755ad3ba4586b9c10520511fb80b767feb57dd41da1a88f6978',
+    },
+    {
+      logId: '8988117408309506793',
+      concreteTypeId: '7cbc352969caf2e9caa716d89c3be65e707447e2a197c779cc4ef382d0602de6',
+    },
+    {
+      logId: '17263266271595476800',
+      concreteTypeId: 'ef937135956e37401e0bc90406ca8becda92d1b4e387fe938ddef8d27ee192a1',
+    },
+    {
+      logId: '2991584087911992109',
+      concreteTypeId: '29843de0bbb48b2d3c601b61823f2e106cfa5833e18b482571f1fa58b507a7ad',
+    },
+    {
+      logId: '15359085500973571070',
+      concreteTypeId: 'd5266ee32061dbfec8c96f2ba8a054243875e4e6a586104d6366b11e3bc86f2e',
+    },
+    {
+      logId: '6096764540904137535',
+      concreteTypeId: '549c0f0c43c9e33f7e958e0473d84e78eca4737f9f159c64614ca5dff2d91b60',
+    },
+    {
+      logId: '16681458389498941754',
+      concreteTypeId: 'e7807205e98b513a8beeb5bcf446f0b2d684d0dce6bfeff0f324fa31df1b8948',
+    },
+    {
+      logId: '9678575818972079706',
+      concreteTypeId: '8651356d9584265a78cb58de01c22d405dfc7006ea2f5f74fddcbe3f047f109a',
+    },
+    {
+      logId: '15006799511514667686',
+      concreteTypeId: 'd042dca573565aa653542415397934b3e95452917664e04d27c32a22091aa9a5',
+    },
+    {
+      logId: '621263945896771922',
+      concreteTypeId: '089f2c4466ef415255917812d05776ebcb386be53e5f94bdad1ca8095f02845c',
+    },
+    {
+      logId: '18160646294966696875',
+      concreteTypeId: 'fc0793960700fbabd2722134cff2a546743fc832b98d89aac1ec30fc669fd698',
+    },
+    {
+      logId: '16916744526725816430',
+      concreteTypeId: 'eac45984af86a06e11e1c5ff744bc1242e004db8404308cb7e574b4c2afaf621',
+    },
+    {
+      logId: '8728991397092492258',
+      concreteTypeId: '79239b6d6f2383e2cfbaf4da7fdf7ee7fb59b7bf517acfff2d9433e9e76e8fc4',
+    },
+    {
+      logId: '8036493118938929554',
+      concreteTypeId: '6f875be99a39d9920569678a34ffce676a6c3e14b958910db250b9cb4957157f',
+    },
+    {
+      logId: '2992671284987479467',
+      concreteTypeId: '29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef',
+    },
+    {
+      logId: '1970142151624111756',
+      concreteTypeId: '1b5759d94094368cfd443019e7ca5ec4074300e544e5ea993a979f5da627261e',
+    },
+    {
+      logId: '15520703124961489725',
+      concreteTypeId: 'd7649d428b9ff33d188ecbf38a7e4d8fd167fa01b2e10fe9a8f9308e52f1d7cc',
+    },
+    {
+      logId: '14454674236531057292',
+      concreteTypeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+    },
+    {
+      logId: '7752900403879318547',
+      concreteTypeId: '6b97d5d738359413c9fac402aced252c23902c28382469ffe27f07381e9f6f31',
+    },
+    {
+      logId: '16171443785104013487',
+      concreteTypeId: 'e06c82714c52b8afd2293d5d37d05783d09d71c956311c6050ac012cab06364e',
+    },
+    {
+      logId: '13897586369399989020',
+      concreteTypeId: 'c0de252b9f65a31c6d03071b4b18a935c88c5bb0b2401a447fd30d342fd5a04d',
+    },
+    {
+      logId: '2855558404146077188',
+      concreteTypeId: '27a0fb3d3a821e04e7a3f17ab6a617f0eb10f11e6eeb0f2c0ff9e6237207319e',
+    },
+    {
+      logId: '10477818057471029201',
+      concreteTypeId: '9168b00268bbefd158090041178f058b032504f76c4b9644157d5d6b5b183468',
+    },
+    {
+      logId: '3330666440490685604',
+      concreteTypeId: '2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d',
+    },
+  ],
+  messagesTypes: [],
+  configurables: [
+    {
+      name: 'U8_VALUE',
+      concreteTypeId: 'c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b',
+      offset: 113392,
+    },
+    {
+      name: 'BOOL_VALUE',
+      concreteTypeId: 'b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
+      offset: 113360,
+    },
+    {
+      name: 'B256_VALUE',
+      concreteTypeId: '7c5ee1cecf5f8eacd1284feb5f0bf2bdea533a51e2f0c9aabe9236d335989f3b',
+      offset: 113328,
+    },
+    {
+      name: 'OPTION_U8_VALUE',
+      concreteTypeId: '2da102c46c7263beeed95818cd7bee801716ba8303dddafdcd0f6c9efda4a0f1',
+      offset: 113376,
+    },
+    {
+      name: 'GENERIC_STRUCT_VALUE',
+      concreteTypeId: '08dbec793087c5686c1a493513b158a999bb653126ee51151dfa85fa683edce5',
+      offset: 113368,
+    },
+  ],
+};

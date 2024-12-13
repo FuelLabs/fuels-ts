@@ -15,7 +15,11 @@ describe('mapped error messages', () => {
 
     const emptyWallet = Wallet.generate({ provider: contract.provider });
 
-    const emptyWalletContract = new Contract(contract.id, contract.interface.jsonAbi, emptyWallet);
+    const emptyWalletContract = new Contract(
+      contract.id,
+      contract.interface.specification,
+      emptyWallet
+    );
 
     await expectToThrowFuelError(() => emptyWalletContract.functions.return_void().call(), {
       code: ErrorCode.NOT_ENOUGH_FUNDS,

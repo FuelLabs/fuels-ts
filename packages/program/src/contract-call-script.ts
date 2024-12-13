@@ -1,11 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  WORD_SIZE,
-  B256Coder,
-  ASSET_ID_LEN,
-  BigNumberCoder,
-  CONTRACT_ID_LEN,
-} from '@fuel-ts/abi-coder';
+import { WORD_SIZE, ASSET_ID_LEN, CONTRACT_ID_LEN, encoding } from '@fuel-ts/abi';
 import type {
   CallResult,
   TransactionResultCallReceipt,
@@ -126,7 +120,7 @@ const scriptResultDecoder = (contractId: AbstractAddress) => (result: ScriptResu
         return [];
       }
       if (receipt.type === ReceiptType.Return) {
-        return [new BigNumberCoder('u64').encode((receipt as TransactionResultReturnReceipt).val)];
+        return [encoding.v1.u64.encode((receipt as TransactionResultReturnReceipt).val)];
       }
       if (receipt.type === ReceiptType.ReturnData) {
         const encodedScriptReturn = arrayify(receipt.data);
@@ -200,15 +194,15 @@ export const getContractCallScript = (
         let gasForwardedOffset = 0;
 
         // 1. Amount
-        scriptData.push(new BigNumberCoder('u64').encode(call.amount || 0));
+        scriptData.push(encoding.v1.u64.encode(call.amount || 0));
         // 2. Asset ID
-        scriptData.push(new B256Coder().encode(call.assetId?.toString() || ZeroBytes32));
+        scriptData.push(encoding.v1.b256.encode(call.assetId?.toString() || ZeroBytes32));
         // 3. Contract ID
         scriptData.push(call.contractId.toBytes());
         // 4. Function selector offset
-        scriptData.push(new BigNumberCoder('u64').encode(encodedSelectorOffset));
+        scriptData.push(encoding.v1.u64.encode(encodedSelectorOffset));
         // 5. Encoded argument offset
-        scriptData.push(new BigNumberCoder('u64').encode(encodedArgsOffset));
+        scriptData.push(encoding.v1.u64.encode(encodedArgsOffset));
         // 6. Encoded function selector
         scriptData.push(call.fnSelectorBytes);
         // 7. Encoded arguments
@@ -216,7 +210,7 @@ export const getContractCallScript = (
 
         // 8. Gas to be forwarded
         if (call.gas) {
-          scriptData.push(new BigNumberCoder('u64').encode(call.gas));
+          scriptData.push(encoding.v1.u64.encode(call.gas));
           gasForwardedOffset = encodedArgsOffset + encodedArgs.byteLength;
         }
 

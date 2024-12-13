@@ -1,6 +1,9 @@
-import { B256Coder, Coder, NumberCoder } from '@fuel-ts/abi-coder';
+/* eslint-disable max-classes-per-file */
+import { Coder } from '@fuel-ts/abi';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { concat } from '@fuel-ts/utils';
+
+import { coders } from './coders';
 
 export enum UpgradePurposeTypeEnum {
   ConsensusParameters = 0,
@@ -24,36 +27,61 @@ export interface ConsensusParameters {
   /** The hash of the serialized consensus parameters. */
   checksum: string;
 }
+export class ConsensusParametersCoder extends Coder<ConsensusParameters, ConsensusParameters> {
+  private coder = coders.struct({
+    witnessIndex: coders.u16,
+    checksum: coders.b256,
+  });
+
+  override type = 'ConsensusParameters';
+
+  encode(value: ConsensusParameters): Uint8Array {
+    return this.coder.encode(value);
+  }
+
+  decode(data: Uint8Array, offset: number): [ConsensusParameters, number] {
+    return this.coder.decode(data, offset);
+  }
+}
 
 export interface StateTransition {
   /** The root of the new bytecode of the state transition function. */
   bytecodeRoot: string;
 }
 
-export class UpgradePurposeCoder extends Coder<UpgradePurpose, UpgradePurpose> {
-  constructor() {
-    super('UpgradePurpose', 'UpgradePurpose', 0);
+export class StateTransitionCoder extends Coder<StateTransition, StateTransition> {
+  private coder = coders.struct({
+    bytecodeRoot: coders.b256,
+  });
+
+  override type = 'StateTransition';
+
+  encode(value: StateTransition): Uint8Array {
+    return this.coder.encode(value);
   }
+
+  decode(data: Uint8Array, offset: number): [StateTransition, number] {
+    return this.coder.decode(data, offset);
+  }
+}
+
+export class UpgradePurposeCoder extends Coder<UpgradePurpose, UpgradePurpose> {
+  override type = 'UpgradePurpose';
 
   encode(upgradePurposeType: UpgradePurpose): Uint8Array {
     const parts: Uint8Array[] = [];
     const { type } = upgradePurposeType;
 
-    parts.push(new NumberCoder('u8', { padToWordSize: true }).encode(type));
+    parts.push(coders.u8.encode(type));
 
     switch (type) {
       case UpgradePurposeTypeEnum.ConsensusParameters: {
-        const data = upgradePurposeType.data as ConsensusParameters;
-
-        parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(data.witnessIndex));
-        parts.push(new B256Coder().encode(data.checksum));
+        parts.push(new ConsensusParametersCoder().encode(upgradePurposeType.data));
         break;
       }
 
       case UpgradePurposeTypeEnum.StateTransition: {
-        const data = upgradePurposeType.data as StateTransition;
-
-        parts.push(new B256Coder().encode(data.bytecodeRoot));
+        parts.push(new StateTransitionCoder().encode(upgradePurposeType.data));
         break;
       }
 
@@ -68,28 +96,18 @@ export class UpgradePurposeCoder extends Coder<UpgradePurpose, UpgradePurpose> {
     return concat(parts);
   }
 
-  decode(data: Uint8Array, offset: number): [UpgradePurpose, number] {
-    let o = offset;
-    let decoded;
-
-    [decoded, o] = new NumberCoder('u8', { padToWordSize: true }).decode(data, o);
-    const type = decoded as UpgradePurposeTypeEnum;
+  decode(data: Uint8Array, initialOffset: number): [UpgradePurpose, number] {
+    const [type, offset] = coders.u8.decode(data, initialOffset);
 
     switch (type) {
       case UpgradePurposeTypeEnum.ConsensusParameters: {
-        [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
-        const witnessIndex = decoded;
-        [decoded, o] = new B256Coder().decode(data, o);
-        const checksum = decoded;
-
-        return [{ type, data: { witnessIndex, checksum } }, o];
+        const [decoded, o] = new ConsensusParametersCoder().decode(data, offset);
+        return [{ type, data: decoded }, o];
       }
 
       case UpgradePurposeTypeEnum.StateTransition: {
-        [decoded, o] = new B256Coder().decode(data, o);
-        const bytecodeRoot = decoded;
-
-        return [{ type, data: { bytecodeRoot } }, o];
+        const [decoded, o] = new StateTransitionCoder().decode(data, offset);
+        return [{ type, data: decoded }, o];
       }
 
       default: {

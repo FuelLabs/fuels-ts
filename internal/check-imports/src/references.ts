@@ -1,3 +1,4 @@
+import { AbiCoder, encoding } from '@fuel-ts/abi';
 import { Interface, StringCoder } from '@fuel-ts/abi-coder';
 import { AbiTypeGen } from '@fuel-ts/abi-typegen';
 import { runCliAction } from '@fuel-ts/abi-typegen/cli';
@@ -45,6 +46,10 @@ const { log } = console;
 /**
  * abi
  */
+log(AbiCoder);
+log(encoding);
+log(encoding.v1.string);
+log(encoding.v1.string(8));
 log(AbiParser);
 
 /**

@@ -11,6 +11,7 @@
 */
 
 import {
+  AbiSpecification,
   Account,
   BigNumberish,
   decompressBytecode,
@@ -27,7 +28,7 @@ export type MyScriptConfigurables = Partial<{
   SHOULD_RETURN: boolean;
 }>;
 
-const abi = {
+const abi: AbiSpecification = {
   "programType": "script",
   "specVersion": "1",
   "encodingVersion": "1",

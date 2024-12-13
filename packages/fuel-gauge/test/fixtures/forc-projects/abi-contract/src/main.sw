@@ -26,6 +26,23 @@ fn divide(numerator: u64, denominator: u64) -> Result<u64, MyContractError> {
 abi AbiContract {
     fn configurables() -> Configurables;
 
+    fn attributes_none() -> ();
+    #[storage(read)]
+    fn attributes_storage_read() -> ();
+    #[storage(write)]
+    fn attributes_storage_write() -> ();
+    #[storage(read, write)]
+    fn attributes_storage_read_write() -> ();
+    #[payable]
+    fn attributes_payable() -> ();
+    #[test]
+    fn attributes_test() -> ();
+    #[inline(never)]
+    fn attributes_inline_never() -> ();
+    #[inline(always)]
+    fn attributes_inline_always() -> ();
+    fn attributes_doc_comment() -> ();
+
     fn types_u8(x: u8) -> u8;
     fn types_u16(x: u16) -> u16;
     fn types_u32(x: u32) -> u32;
@@ -143,6 +160,51 @@ impl AbiContract for Contract {
             OPTION_U8_VALUE: OPTION_U8_VALUE,
             GENERIC_STRUCT_VALUE: GENERIC_STRUCT_VALUE,
         }
+    }
+
+    fn attributes_none() -> () {
+        ()
+    }
+
+    #[storage(read)]
+    fn attributes_storage_read() -> () {
+        ()
+    }
+
+    #[storage(write)]
+    fn attributes_storage_write() -> () {
+        ()
+    }
+
+    #[storage(read, write)]
+    fn attributes_storage_read_write() -> () {
+        ()
+    }
+
+    #[payable]
+    fn attributes_payable() -> () {
+        ()
+    }
+
+    #[test]
+    fn attributes_test() -> () {
+        ()
+    }
+
+    #[inline(never)]
+    fn attributes_inline_never() -> () {
+        ()
+    }
+
+    #[inline(always)]
+    fn attributes_inline_always() -> () {
+        ()
+    }
+
+    /// This is a doc
+    /// This is another doc comment
+    fn attributes_doc_comment() -> () {
+        ()
     }
 
     fn types_u8(x: u8) -> u8 {

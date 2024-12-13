@@ -561,6 +561,9 @@ importers:
 
   internal/check-imports:
     dependencies:
+      '@fuel-ts/abi':
+        specifier: workspace:*
+        version: link:../../packages/abi
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../../packages/abi-coder
@@ -637,12 +640,27 @@ importers:
 
   packages/abi:
     dependencies:
+      '@fuel-ts/crypto':
+        specifier: workspace:*
+        version: link:../crypto
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
+      '@fuel-ts/hasher':
+        specifier: workspace:*
+        version: link:../hasher
+      '@fuel-ts/interfaces':
+        specifier: workspace:*
+        version: link:../interfaces
+      '@fuel-ts/math':
+        specifier: workspace:*
+        version: link:../math
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
+      type-fest:
+        specifier: ^4.26.1
+        version: 4.26.1
 
   packages/abi-coder:
     dependencies:
@@ -713,9 +731,9 @@ importers:
 
   packages/account:
     dependencies:
-      '@fuel-ts/abi-coder':
+      '@fuel-ts/abi':
         specifier: workspace:*
-        version: link:../abi-coder
+        version: link:../abi
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
@@ -816,9 +834,9 @@ importers:
 
   packages/contract:
     dependencies:
-      '@fuel-ts/abi-coder':
+      '@fuel-ts/abi':
         specifier: workspace:*
-        version: link:../abi-coder
+        version: link:../abi
       '@fuel-ts/account':
         specifier: workspace:*
         version: link:../account
@@ -1111,9 +1129,9 @@ importers:
 
   packages/program:
     dependencies:
-      '@fuel-ts/abi-coder':
+      '@fuel-ts/abi':
         specifier: workspace:*
-        version: link:../abi-coder
+        version: link:../abi
       '@fuel-ts/account':
         specifier: workspace:*
         version: link:../account
@@ -1148,9 +1166,9 @@ importers:
 
   packages/recipes:
     dependencies:
-      '@fuel-ts/abi-coder':
+      '@fuel-ts/abi':
         specifier: workspace:*
-        version: link:../abi-coder
+        version: link:../abi
       '@fuel-ts/abi-typegen':
         specifier: workspace:*
         version: link:../abi-typegen
@@ -1175,9 +1193,9 @@ importers:
 
   packages/script:
     dependencies:
-      '@fuel-ts/abi-coder':
+      '@fuel-ts/abi':
         specifier: workspace:*
-        version: link:../abi-coder
+        version: link:../abi
       '@fuel-ts/account':
         specifier: workspace:*
         version: link:../account
@@ -1209,9 +1227,9 @@ importers:
 
   packages/transactions:
     dependencies:
-      '@fuel-ts/abi-coder':
+      '@fuel-ts/abi':
         specifier: workspace:*
-        version: link:../abi-coder
+        version: link:../abi
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
@@ -13006,7 +13024,6 @@ packages:
     engines: {node: '>=0.6.0', teleport: '>=0.2.0'}
     deprecated: |-
       You or someone you depend on is using Q, the JavaScript Promise library that gave JavaScript developers strong feelings about promises. They can almost certainly migrate to the native JavaScript promise now. Thank you literally everyone for joining me in this bet against the odds. Be excellent to each other.
-
       (For a CapTP with native promises, see @endo/eventual-send and @endo/captp)
 
   qr-code-styling@1.6.0-rc.1:

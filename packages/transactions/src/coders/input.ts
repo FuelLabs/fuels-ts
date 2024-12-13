@@ -1,12 +1,13 @@
 /* eslint-disable max-classes-per-file */
-import { Coder, B256Coder, NumberCoder, BigNumberCoder } from '@fuel-ts/abi-coder';
+import { Coder, BYTES_32 } from '@fuel-ts/abi';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { sha256 } from '@fuel-ts/hasher';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { concat, arrayify } from '@fuel-ts/utils';
 
-import { ByteArrayCoder } from './byte-array';
+import { byteArray } from './byte-array';
+import { coders } from './coders';
 import type { TxPointer } from './tx-pointer';
 import { TxPointerCoder } from './tx-pointer';
 
@@ -57,78 +58,47 @@ export type InputCoin = {
 };
 
 export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
-  constructor() {
-    super('InputCoin', 'struct InputCoin', 0);
-  }
+  private primary = coders.struct({
+    txID: coders.b256,
+    outputIndex: coders.u16,
+    owner: coders.b256,
+    amount: coders.u64,
+    assetId: coders.b256,
+    txPointer: new TxPointerCoder(),
+    witnessIndex: coders.u16,
+    predicateGasUsed: coders.u64,
+    predicateLength: coders.u64,
+    predicateDataLength: coders.u64,
+  });
+
+  private secondary = (value: Pick<InputCoin, 'predicateLength' | 'predicateDataLength'>) =>
+    coders.struct({
+      predicate: byteArray(value.predicateLength.toNumber()),
+      predicateData: byteArray(value.predicateDataLength.toNumber()),
+    });
+
+  override type = 'InputCoin';
 
   encode(value: InputCoin): Uint8Array {
     const parts: Uint8Array[] = [];
-
-    parts.push(new B256Coder().encode(value.txID));
-    parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.outputIndex));
-    parts.push(new B256Coder().encode(value.owner));
-    parts.push(new BigNumberCoder('u64').encode(value.amount));
-    parts.push(new B256Coder().encode(value.assetId));
-    parts.push(new TxPointerCoder().encode(value.txPointer));
-    parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.witnessIndex));
-    parts.push(new BigNumberCoder('u64').encode(value.predicateGasUsed));
-    parts.push(new BigNumberCoder('u64').encode(value.predicateLength));
-    parts.push(new BigNumberCoder('u64').encode(value.predicateDataLength));
-    parts.push(new ByteArrayCoder(value.predicateLength.toNumber()).encode(value.predicate));
-    parts.push(
-      new ByteArrayCoder(value.predicateDataLength.toNumber()).encode(value.predicateData)
-    );
-
+    parts.push(this.primary.encode(value));
+    parts.push(this.secondary(value).encode(value));
     return concat(parts);
   }
 
   decode(data: Uint8Array, offset: number): [InputCoin, number] {
     let decoded;
     let o = offset;
-
-    [decoded, o] = new B256Coder().decode(data, o);
-    const txID = decoded;
-    [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
-    const outputIndex = decoded;
-    [decoded, o] = new B256Coder().decode(data, o);
-    const owner = decoded;
-    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
-    const amount = decoded;
-    [decoded, o] = new B256Coder().decode(data, o);
-    const assetId = decoded;
-    [decoded, o] = new TxPointerCoder().decode(data, o);
-    const txPointer = decoded;
-    [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
-    const witnessIndex = Number(decoded);
-    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
-    const predicateGasUsed = decoded;
-    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
-    const predicateLength = decoded;
-    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
-    const predicateDataLength = decoded;
-    [decoded, o] = new ByteArrayCoder(predicateLength.toNumber()).decode(data, o);
-    const predicate = decoded;
-    [decoded, o] = new ByteArrayCoder(predicateDataLength.toNumber()).decode(data, o);
-    const predicateData = decoded;
-
-    return [
-      {
-        type: InputType.Coin,
-        txID,
-        outputIndex,
-        owner,
-        amount,
-        assetId,
-        txPointer,
-        witnessIndex,
-        predicateGasUsed,
-        predicateLength,
-        predicateDataLength,
-        predicate,
-        predicateData,
-      },
-      o,
-    ];
+    [decoded, o] = this.primary.decode(data, o);
+    const base = decoded;
+    [decoded, o] = this.secondary(base).decode(data, o);
+    const rest = decoded;
+    const inputCoin: InputCoin = {
+      type: InputType.Coin,
+      ...base,
+      ...rest,
+    };
+    return [inputCoin, o];
   }
 }
 
@@ -155,52 +125,24 @@ export type InputContract = {
 };
 
 export class InputContractCoder extends Coder<InputContract, InputContract> {
-  constructor() {
-    super('InputContract', 'struct InputContract', 0);
-  }
+  private coder = coders.struct({
+    type: coders.type(InputType.Contract),
+    txID: coders.b256,
+    outputIndex: coders.u16,
+    balanceRoot: coders.b256,
+    stateRoot: coders.b256,
+    txPointer: new TxPointerCoder(),
+    contractID: coders.b256,
+  });
+
+  override type = 'InputContract';
 
   encode(value: InputContract): Uint8Array {
-    const parts: Uint8Array[] = [];
-
-    parts.push(new B256Coder().encode(value.txID));
-    parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.outputIndex));
-    parts.push(new B256Coder().encode(value.balanceRoot));
-    parts.push(new B256Coder().encode(value.stateRoot));
-    parts.push(new TxPointerCoder().encode(value.txPointer));
-    parts.push(new B256Coder().encode(value.contractID));
-
-    return concat(parts);
+    return this.coder.encode(value);
   }
 
   decode(data: Uint8Array, offset: number): [InputContract, number] {
-    let decoded;
-    let o = offset;
-
-    [decoded, o] = new B256Coder().decode(data, o);
-    const txID = decoded;
-    [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
-    const outputIndex = decoded;
-    [decoded, o] = new B256Coder().decode(data, o);
-    const balanceRoot = decoded;
-    [decoded, o] = new B256Coder().decode(data, o);
-    const stateRoot = decoded;
-    [decoded, o] = new TxPointerCoder().decode(data, o);
-    const txPointer = decoded;
-    [decoded, o] = new B256Coder().decode(data, o);
-    const contractID = decoded;
-
-    return [
-      {
-        type: InputType.Contract,
-        txID,
-        outputIndex,
-        balanceRoot,
-        stateRoot,
-        txPointer,
-        contractID,
-      },
-      o,
-    ];
+    return this.coder.decode(data, offset);
   }
 }
 
@@ -245,19 +187,17 @@ export type InputMessage = {
 };
 
 export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
-  constructor() {
-    super('InputMessage', 'struct InputMessage', 0);
-  }
+  override type = 'InputMessage';
 
   static getMessageId(
     value: Pick<InputMessage, 'sender' | 'recipient' | 'nonce' | 'amount' | 'data'>
   ): string {
     const parts: Uint8Array[] = [];
 
-    parts.push(new ByteArrayCoder(32).encode(value.sender));
-    parts.push(new ByteArrayCoder(32).encode(value.recipient));
-    parts.push(new ByteArrayCoder(32).encode(value.nonce));
-    parts.push(new BigNumberCoder('u64').encode(value.amount));
+    parts.push(byteArray(BYTES_32).encode(value.sender));
+    parts.push(byteArray(BYTES_32).encode(value.recipient));
+    parts.push(byteArray(BYTES_32).encode(value.nonce));
+    parts.push(coders.u64.encode(value.amount));
     parts.push(arrayify(value.data || '0x'));
 
     return sha256(concat(parts));
@@ -266,27 +206,25 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
   static encodeData(messageData?: BytesLike): Uint8Array {
     const bytes = arrayify(messageData || '0x');
     const dataLength = bytes.length;
-    return new ByteArrayCoder(dataLength).encode(bytes);
+    return byteArray(dataLength).encode(bytes);
   }
 
-  encode(value: InputMessage): Uint8Array {
+  override encode(value: InputMessage): Uint8Array {
     const parts: Uint8Array[] = [];
     const data = InputMessageCoder.encodeData(value.data);
 
-    parts.push(new ByteArrayCoder(32).encode(value.sender));
-    parts.push(new ByteArrayCoder(32).encode(value.recipient));
-    parts.push(new BigNumberCoder('u64').encode(value.amount));
-    parts.push(new ByteArrayCoder(32).encode(value.nonce));
-    parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.witnessIndex));
-    parts.push(new BigNumberCoder('u64').encode(value.predicateGasUsed));
-    parts.push(new BigNumberCoder('u64').encode(data.length));
-    parts.push(new BigNumberCoder('u64').encode(value.predicateLength));
-    parts.push(new BigNumberCoder('u64').encode(value.predicateDataLength));
-    parts.push(new ByteArrayCoder(data.length).encode(data));
-    parts.push(new ByteArrayCoder(value.predicateLength.toNumber()).encode(value.predicate));
-    parts.push(
-      new ByteArrayCoder(value.predicateDataLength.toNumber()).encode(value.predicateData)
-    );
+    parts.push(byteArray(BYTES_32).encode(value.sender));
+    parts.push(byteArray(BYTES_32).encode(value.recipient));
+    parts.push(coders.u64.encode(value.amount));
+    parts.push(byteArray(BYTES_32).encode(value.nonce));
+    parts.push(coders.u16.encode(value.witnessIndex));
+    parts.push(coders.u64.encode(value.predicateGasUsed));
+    parts.push(coders.u64.encode(data.length));
+    parts.push(coders.u64.encode(value.predicateLength));
+    parts.push(coders.u64.encode(value.predicateDataLength));
+    parts.push(byteArray(data.length).encode(data));
+    parts.push(byteArray(value.predicateLength.toNumber()).encode(value.predicate));
+    parts.push(byteArray(value.predicateDataLength.toNumber()).encode(value.predicateData));
 
     return concat(parts);
   }
@@ -294,38 +232,38 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
   static decodeData(messageData: BytesLike): Uint8Array {
     const bytes = arrayify(messageData);
     const dataLength = bytes.length;
-    const [data] = new ByteArrayCoder(dataLength).decode(bytes, 0);
+    const [data] = byteArray(dataLength).decode(bytes, 0);
 
     return arrayify(data);
   }
 
-  decode(data: Uint8Array, offset: number): [InputMessage, number] {
+  override decode(data: Uint8Array, offset: number): [InputMessage, number] {
     let decoded;
     let o = offset;
 
-    [decoded, o] = new B256Coder().decode(data, o);
+    [decoded, o] = coders.b256.decode(data, o);
     const sender = decoded;
-    [decoded, o] = new B256Coder().decode(data, o);
+    [decoded, o] = coders.b256.decode(data, o);
     const recipient = decoded;
-    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
+    [decoded, o] = coders.u64.decode(data, o);
     const amount = decoded;
-    [decoded, o] = new B256Coder().decode(data, o);
+    [decoded, o] = coders.b256.decode(data, o);
     const nonce = decoded;
-    [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
+    [decoded, o] = coders.u16.decode(data, o);
     const witnessIndex = Number(decoded);
-    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
+    [decoded, o] = coders.u64.decode(data, o);
     const predicateGasUsed = decoded;
-    [decoded, o] = new NumberCoder('u32', { padToWordSize: true }).decode(data, o);
+    [decoded, o] = coders.u32.decode(data, o);
     const dataLength = decoded;
-    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
+    [decoded, o] = coders.u64.decode(data, o);
     const predicateLength = decoded;
-    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
+    [decoded, o] = coders.u64.decode(data, o);
     const predicateDataLength = decoded;
-    [decoded, o] = new ByteArrayCoder(dataLength).decode(data, o);
+    [decoded, o] = byteArray(dataLength).decode(data, o);
     const messageData = decoded;
-    [decoded, o] = new ByteArrayCoder(predicateLength.toNumber()).decode(data, o);
+    [decoded, o] = byteArray(predicateLength.toNumber()).decode(data, o);
     const predicate = decoded;
-    [decoded, o] = new ByteArrayCoder(predicateDataLength.toNumber()).decode(data, o);
+    [decoded, o] = byteArray(predicateDataLength.toNumber()).decode(data, o);
     const predicateData = decoded;
 
     return [
@@ -352,14 +290,12 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
 export type Input = InputCoin | InputContract | InputMessage;
 
 export class InputCoder extends Coder<Input, Input> {
-  constructor() {
-    super('Input', 'struct Input', 0);
-  }
+  override type = 'Input';
 
-  encode(value: Input): Uint8Array {
+  override encode(value: Input): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new NumberCoder('u8', { padToWordSize: true }).encode(value.type));
+    parts.push(coders.u8.encode(value.type));
 
     const { type } = value;
 
@@ -391,7 +327,7 @@ export class InputCoder extends Coder<Input, Input> {
     let decoded;
     let o = offset;
 
-    [decoded, o] = new NumberCoder('u8', { padToWordSize: true }).decode(data, o);
+    [decoded, o] = coders.u8.decode(data, o);
     const type = decoded as InputType;
     switch (type) {
       case InputType.Coin: {

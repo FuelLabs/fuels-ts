@@ -1,4 +1,4 @@
-import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
+import type { AbiCoderFunction, AbiSpecification } from '@fuel-ts/abi';
 import type {
   CallResult,
   CoinQuantity,
@@ -22,7 +22,7 @@ export type ContractCall = {
   amount?: BigNumberish;
   assetId?: BytesLike;
   gas?: BigNumberish;
-  externalContractsAbis?: Record<string, JsonAbi>;
+  externalContractsAbis?: Record<string, AbiSpecification>;
 };
 
 /**
@@ -51,12 +51,12 @@ export type TxParams = Partial<{
  * @template T - Type of the function's arguments.
  */
 export type CallConfig<T = unknown> = {
-  func: FunctionFragment;
+  func: AbiCoderFunction;
   program: AbstractProgram;
   callParameters?: CallParams;
   txParameters?: TxParams;
   forward?: CoinQuantity;
-  externalAbis: Record<string, JsonAbi>;
+  externalAbis: Record<string, AbiSpecification>;
   args: T;
 };
 

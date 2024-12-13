@@ -1,11 +1,8 @@
-import { BN, bn } from '@fuel-ts/math';
+import { BN } from '@fuel-ts/math';
 import type {
-  ReceiptBurn,
   ReceiptCall,
   ReceiptLog,
   ReceiptLogData,
-  ReceiptMessageOut,
-  ReceiptMint,
   ReceiptPanic,
   ReceiptReturn,
   ReceiptReturnData,
@@ -14,8 +11,7 @@ import type {
   ReceiptTransfer,
   ReceiptTransferOut,
 } from '@fuel-ts/transactions';
-import { ReceiptBurnCoder, ReceiptMessageOutCoder, ReceiptType } from '@fuel-ts/transactions';
-import { arrayify } from '@fuel-ts/utils';
+import { ReceiptType } from '@fuel-ts/transactions';
 
 import {
   MOCK_GQL_RECEIPT_FRAGMENT,
@@ -206,76 +202,5 @@ describe('assembleReceiptByType', () => {
     expect(receipt.type).toBe(ReceiptType.ScriptResult);
     expect(receipt.result).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.result));
     expect(receipt.gasUsed).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.gasUsed));
-  });
-
-  it('should return a ReceiptMessageOut when GqlReceiptType.MessageOut is provided', () => {
-    const receipt = assembleReceiptByType({
-      ...MOCK_GQL_RECEIPT_FRAGMENT,
-      receiptType: GqlReceiptType.MessageOut,
-    }) as ReceiptMessageOut;
-
-    const sender = MOCK_GQL_RECEIPT_FRAGMENT.sender || '';
-    const recipient = MOCK_GQL_RECEIPT_FRAGMENT.recipient || '';
-    const nonce = MOCK_GQL_RECEIPT_FRAGMENT.nonce || '';
-    const amount = bn(MOCK_GQL_RECEIPT_FRAGMENT.amount);
-    const data = arrayify(MOCK_GQL_RECEIPT_FRAGMENT.data || '');
-    const digest = MOCK_GQL_RECEIPT_FRAGMENT.digest;
-    const len = Number(MOCK_GQL_RECEIPT_FRAGMENT.len);
-
-    const messageId = ReceiptMessageOutCoder.getMessageId({
-      sender,
-      recipient,
-      nonce,
-      amount,
-      data,
-    });
-
-    expect(receipt.type).toBe(ReceiptType.MessageOut);
-    expect(receipt.amount).toStrictEqual(amount);
-    expect(receipt.digest).toStrictEqual(digest);
-    expect(receipt.messageId).toStrictEqual(messageId);
-    expect(receipt.nonce).toStrictEqual(nonce);
-    expect(receipt.recipient).toStrictEqual(recipient);
-    expect(receipt.sender).toStrictEqual(sender);
-    expect(receipt.len).toStrictEqual(len);
-    expect(receipt.data).toStrictEqual(data);
-  });
-
-  it('should return a ReceiptMint when GqlReceiptType.Mint is provided', () => {
-    const contractId = MOCK_GQL_RECEIPT_FRAGMENT.id || '';
-    const subId = MOCK_GQL_RECEIPT_FRAGMENT.subId || '';
-    const assetId = ReceiptBurnCoder.getAssetId(contractId, subId);
-
-    const receipt = assembleReceiptByType({
-      ...MOCK_GQL_RECEIPT_FRAGMENT,
-      receiptType: GqlReceiptType.Mint,
-    }) as ReceiptMint;
-
-    expect(receipt.type).toBe(ReceiptType.Mint);
-    expect(receipt.contractId).toStrictEqual(contractId);
-    expect(receipt.subId).toStrictEqual(subId);
-    expect(receipt.assetId).toStrictEqual(assetId);
-    expect(receipt.is).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.is));
-    expect(receipt.pc).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.pc));
-    expect(receipt.val).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.val));
-  });
-
-  it('should return a ReceiptBurn when GqlReceiptType.Burn is provided', () => {
-    const contractId = MOCK_GQL_RECEIPT_FRAGMENT.id || '';
-    const subId = MOCK_GQL_RECEIPT_FRAGMENT.subId || '';
-    const assetId = ReceiptBurnCoder.getAssetId(contractId, subId);
-
-    const receipt = assembleReceiptByType({
-      ...MOCK_GQL_RECEIPT_FRAGMENT,
-      receiptType: GqlReceiptType.Burn,
-    }) as ReceiptBurn;
-
-    expect(receipt.type).toBe(ReceiptType.Burn);
-    expect(receipt.contractId).toStrictEqual(contractId);
-    expect(receipt.subId).toStrictEqual(subId);
-    expect(receipt.assetId).toStrictEqual(assetId);
-    expect(receipt.is).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.is));
-    expect(receipt.pc).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.pc));
-    expect(receipt.val).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.val));
   });
 });

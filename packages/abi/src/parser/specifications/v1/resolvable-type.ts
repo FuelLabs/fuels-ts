@@ -45,7 +45,7 @@ export class ResolvableType {
      * as it's then easier to reason about the vector
      * (you just treat is as a regular struct).
      */
-    if (swayTypeMatchers.vector(this.metadataType.type)) {
+    if (swayTypeMatchers.vector({ swayType: this.swayType })) {
       components = components
         ?.map((component) => (component.name === 'buf' ? component.typeArguments?.[0] : undefined))
         .filter((x) => x !== undefined) as AbiComponentV1[];
@@ -250,7 +250,7 @@ export class ResolvableType {
      * This propagates to the parent type, forcing it to be a `ResolvableType` as well,
      * as it can't be resolved until this generic type is substituted with a type argument.
      */
-    if (swayTypeMatchers.generic(metadataType.type)) {
+    if (swayTypeMatchers.generic({ swayType: metadataType.type })) {
       /**
        * This search solves the case where an e.g. `generic T` is being substituted by `generic E`.
        * This can happen when a generic type is nested in another generic type and they have differently-named type parameters.

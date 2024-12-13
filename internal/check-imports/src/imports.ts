@@ -1,3 +1,4 @@
+import * as abi from '@fuel-ts/abi';
 import * as abiCoder from '@fuel-ts/abi-coder';
 import * as abiTypegen from '@fuel-ts/abi-typegen';
 import * as account from '@fuel-ts/account';
@@ -21,6 +22,7 @@ import * as fuels from 'fuels';
 const { log } = console;
 
 log([
+  abi,
   abiCoder,
   abiTypegen,
   address,

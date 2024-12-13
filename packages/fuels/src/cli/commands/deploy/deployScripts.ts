@@ -31,7 +31,7 @@ export async function deployScripts(config: FuelsConfig) {
     const script = new Script(bytecode, abi, wallet);
     const {
       bytes: loaderBytecode,
-      interface: { jsonAbi },
+      interface: { specification },
     } = await (await script.deploy(wallet)).waitForResult();
 
     debug(`Script deployed: ${projectName}`);
@@ -39,7 +39,7 @@ export async function deployScripts(config: FuelsConfig) {
     scripts.push({
       path: scriptPath,
       loaderBytecode,
-      abi: jsonAbi,
+      abi: specification,
     });
   }
 

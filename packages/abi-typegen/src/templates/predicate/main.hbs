@@ -57,7 +57,7 @@ export type {{capitalizedName}}Parameters = Omit<
   'abi' | 'bytecode'
 >;
 
-const abi = {{abiJsonString}};
+const abi: AbiSpecification = {{abiJsonString}};
 
 const bytecode = decompressBytecode('{{compressedBytecode}}');
 

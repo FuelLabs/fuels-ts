@@ -75,7 +75,7 @@ export class FunctionFragment {
     return new TupleCoder(coders).encode(argumentValues);
   }
 
-  decodeArguments(data: BytesLike) {
+  decodeArguments(data: BytesLike): unknown[] | undefined {
     const bytes = arrayify(data);
     const nonVoidInputs = findNonVoidInputs(this.jsonAbiOld, this.jsonFnOld.inputs);
 

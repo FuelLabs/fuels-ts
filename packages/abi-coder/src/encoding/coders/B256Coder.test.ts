@@ -18,7 +18,7 @@ describe('B256Coder', () => {
 
   const coder = new B256Coder();
 
-  it('should encode zero as a 256 bit hash string', () => {
+  it('should encode [zero] as a 256 bit hash string', () => {
     const expected = B256_ZERO_ENCODED;
     const actual = coder.encode(B256_ZERO_DECODED);
 
