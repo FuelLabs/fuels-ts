@@ -16,28 +16,19 @@ import { bytecode } from './AbiContract-bytecode';
 import abi from './AbiContract-abi.json';
 import storageSlots from './AbiContract-storage-slots.json';
 
-export class AbiContractFactory extends ContractFactory {
+export class AbiContractFactory extends ContractFactory<AbiContract> {
 
   static readonly bytecode = bytecode;
   static readonly storageSlots: StorageSlot[] = storageSlots;
 
   constructor(accountOrProvider: Account | Provider) {
-    super(bytecode, abi, accountOrProvider);
+    super(bytecode, abi, accountOrProvider, AbiContractFactory.storageSlots);
   }
 
-  override deploy<TContract extends Contract = AbiContract>(
-    deployOptions?: DeployContractOptions
-  ): Promise<DeployContractResult<TContract>> {
-    return super.deploy({
-      storageSlots: AbiContractFactory.storageSlots,
-      ...deployOptions,
-    });
-  }
-
-  static async deploy (
+  static deploy (
     wallet: Account,
     options: DeployContractOptions = {}
-  ): Promise<DeployContractResult<AbiContract>> {
+  ) {
     const factory = new AbiContractFactory(wallet);
     return factory.deploy(options);
   }

@@ -123,7 +123,7 @@ describe('StorageTestContract', () => {
   });
 
   it('should allow for overriding storage slots', async () => {
-    const { storageSlots } = StorageTestContract;
+    const { storageSlots } = StorageTestContractFactory;
 
     expect(storageSlots.length).toBeGreaterThan(2);
     const modifiedStorageSlots = storageSlots.slice(1).map(({ key }) => ({
@@ -176,7 +176,7 @@ describe('StorageTestContract', () => {
   });
 
   test('automatically loads storage slots when using deployAsCreateTx', async () => {
-    const { storageSlots } = StorageTestContract;
+    const { storageSlots } = StorageTestContractFactory;
     const expectedStorageSlots = storageSlots.map(({ key, value }) => ({
       key: `0x${key}`,
       value: `0x${value}`,
@@ -197,7 +197,7 @@ describe('StorageTestContract', () => {
   });
 
   test('automatically loads storage slots when using deployAsBlobTx', async () => {
-    const { storageSlots } = StorageTestContract;
+    const { storageSlots } = StorageTestContractFactory;
     const expectedStorageSlots = storageSlots.map(({ key, value }) => ({
       key: `0x${key}`,
       value: `0x${value}`,

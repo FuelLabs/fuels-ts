@@ -7,28 +7,19 @@ import { bytecode } from './{{name}}-bytecode';
 import abi from './{{name}}-abi.json';
 import storageSlots from './{{name}}-storage-slots.json';
 
-export class {{name}}Factory extends ContractFactory {
+export class {{name}}Factory extends ContractFactory<{{name}}> {
 
   static readonly bytecode = bytecode;
   static readonly storageSlots: StorageSlot[] = storageSlots;
 
   constructor(accountOrProvider: Account | Provider) {
-    super(bytecode, abi, accountOrProvider);
+    super(bytecode, abi, accountOrProvider, {{name}}Factory.storageSlots);
   }
 
-  override deploy<TContract extends Contract = {{name}}>(
-    deployOptions?: DeployContractOptions
-  ): Promise<DeployContractResult<TContract>> {
-    return super.deploy({
-      storageSlots: {{name}}Factory.storageSlots,
-      ...deployOptions,
-    });
-  }
-
-  static async deploy (
+  static deploy (
     wallet: Account,
     options: DeployContractOptions = {}
-  ): Promise<DeployContractResult<{{name}}>> {
+  ) {
     const factory = new {{name}}Factory(wallet);
     return factory.deploy(options);
   }

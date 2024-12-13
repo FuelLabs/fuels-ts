@@ -10,9 +10,9 @@
     "forc:script": "pnpm fuels-forc build -p demo-script --release",
     "forc:predicate": "pnpm fuels-forc build -p demo-predicate --release",
     "build:types": "run-p types:*",
-    "types:contract": "pnpm fuels typegen -i demo-contract/out/release/demo-contract-abi.json -o src/contract-types",
-    "types:script": "pnpm fuels typegen -i demo-script/out/release/demo-script-abi.json -o src/script-types --script",
-    "types:predicate": "pnpm fuels typegen -i demo-predicate/out/release/demo-predicate-abi.json -o src/predicate-types --predicate"
+    "types:contract": "pnpm fuels typegen -i demo-contract/out/release -o src/contract-types",
+    "types:script": "pnpm fuels typegen -i demo-script/out/release -o src/script-types",
+    "types:predicate": "pnpm fuels typegen -i demo-predicate/out/release -o src/predicate-types"
   },
   "license": "Apache-2.0",
   "dependencies": {
