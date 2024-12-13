@@ -1,7 +1,8 @@
 import type { BinaryVersions } from '@fuel-ts/versions';
 
-import { createMatcher, swayTypeMatchers } from '../../../../matchers/sway-type-matchers';
-import type { Abi, AbiFunctionInput } from '../../../../parser';
+import { createMatcher } from '../../../../matchers/sway-type-matchers';
+import type { Abi } from '../../../../parser';
+import { evaluateFunctionInputsOptionality } from '../../../../utils/evaluate-function-inputs-optionality';
 import type { ProgramDetails } from '../../../abi-gen-types';
 import type { TsAbiGenResult } from '../../types';
 import typesTemplate from '../templates/types.hbs';
@@ -64,18 +65,7 @@ function mergeTypeImports(mTypes: TyperReturn[], cTypesMap: Record<string, Typer
 
 function mapFunctions(abi: Abi, cTypes: Record<string, TyperReturn>) {
   return abi.functions.map((fn) => {
-    let isMandatory = false;
-    const inputs = fn.inputs.reduceRight<(AbiFunctionInput & { isOptional: boolean })[]>(
-      (result, input) => {
-        const isTypeMandatory =
-          !swayTypeMatchers.void(input.type.swayType) &&
-          !swayTypeMatchers.option(input.type.swayType);
-
-        isMandatory = isMandatory || isTypeMandatory;
-        return [{ ...input, isOptional: !isMandatory }, ...result];
-      },
-      []
-    );
+    const inputs = evaluateFunctionInputsOptionality(fn);
 
     return {
       name: fn.name,
