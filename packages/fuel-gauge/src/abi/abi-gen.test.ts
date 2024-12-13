@@ -14,23 +14,23 @@ describe('AbiGen', () => {
       ['index', 'index.ts'],
       ['common', 'common.ts'],
 
-      ['contract-index', 'contracts/index.ts'],
-      ['contract', 'contracts/AbiContract.ts'],
-      ['contract-types', 'contracts/AbiContractTypes.ts'],
-      ['contract-factory', 'contracts/AbiContractFactory.ts'],
-      ['contract-bytecode', 'contracts/AbiContract-bytecode.ts'],
-      ['contract-abi', 'contracts/AbiContract-abi.json'],
-      ['contract-storage-slots', 'contracts/AbiContract-storage-slots.json'],
+      ['contracts/contract-index', 'contracts/index.ts'],
+      ['contracts/contract', 'contracts/AbiContract.ts'],
+      ['contracts/contract-types', 'contracts/AbiContractTypes.ts'],
+      ['contracts/contract-factory', 'contracts/AbiContractFactory.ts'],
+      ['contracts/contract-bytecode', 'contracts/AbiContract-bytecode.ts'],
+      ['contracts/contract-abi', 'contracts/AbiContract-abi.json'],
+      ['contracts/contract-storage-slots', 'contracts/AbiContract-storage-slots.json'],
 
-      ['predicate-index', 'predicates/index.ts'],
-      ['predicate', 'predicates/AbiPredicate.ts'],
-      ['predicate-types', 'predicates/AbiPredicateTypes.ts'],
-      ['predicate-abi', 'predicates/AbiPredicate-abi.json'],
+      ['predicates/predicate-index', 'predicates/index.ts'],
+      ['predicates/predicate', 'predicates/AbiPredicate.ts'],
+      ['predicates/predicate-types', 'predicates/AbiPredicateTypes.ts'],
+      ['predicates/predicate-abi', 'predicates/AbiPredicate-abi.json'],
 
-      ['script-index', 'scripts/index.ts'],
-      ['script', 'scripts/AbiScript.ts'],
-      ['script-types', 'scripts/AbiScriptTypes.ts'],
-      ['script-abi', 'scripts/AbiScript-abi.json'],
+      ['scripts/script-index', 'scripts/index.ts'],
+      ['scripts/script', 'scripts/AbiScript.ts'],
+      ['scripts/script-types', 'scripts/AbiScriptTypes.ts'],
+      ['scripts/script-abi', 'scripts/AbiScript-abi.json'],
     ]);
 
     const { buildDir: contractDir } = getAbiForcProject(AbiProjectsEnum.ABI_CONTRACT);
