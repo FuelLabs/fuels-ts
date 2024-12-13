@@ -1,6 +1,4 @@
-import { FuelError } from '@fuel-ts/errors';
-
-import type { Abi } from '../../abi';
+import type { Abi, AbiConcreteType } from '../../abi';
 
 import { mapAttribute } from './map-attribute';
 import { ResolvableType } from './resolvable-type';
@@ -36,16 +34,9 @@ export class AbiParserV1 {
       return resolvedType.toAbiType();
     });
 
-    const getType = (concreteTypeId: string) => {
-      const type = concreteTypes.find((abiType) => abiType.concreteTypeId === concreteTypeId);
-      if (type === undefined) {
-        throw new FuelError(
-          FuelError.CODES.TYPE_ID_NOT_FOUND,
-          `A type with concrete type id of "${concreteTypeId}" was not found.`
-        );
-      }
-      return type;
-    };
+    const getType = (concreteTypeId: string) =>
+      // this will always be defined because it's in the context of the same ABI
+      concreteTypes.find((abiType) => abiType.concreteTypeId === concreteTypeId) as AbiConcreteType;
 
     return {
       metadataTypes: resolvableTypes.map((rt) => rt.toAbiType()),
