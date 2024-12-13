@@ -7,6 +7,11 @@ import { renderIndexFiles } from './render-index-files';
 import { renderProgram } from './render-program';
 import { renderTypes } from './render-types';
 
+/**
+ * For the given program details, render all program-related files.
+ * That includes the abi, bytecode, program-related classes,
+ * type files and the index files.
+ */
 export function renderPrograms(details: ProgramDetails[], versions: BinaryVersions) {
   const results: AbiGenResult[] = [];
   const indexContents = new Map<Abi['programType'], string[]>();

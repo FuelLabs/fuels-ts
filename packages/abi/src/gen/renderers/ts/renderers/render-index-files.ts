@@ -7,6 +7,10 @@ import indexTemplate from '../templates/index.hbs';
 import { getParentDirWrapper } from './get-parent-dir-wrapper';
 import { templateRenderer } from './template-renderer';
 
+/**
+ * @returns an array of index files
+ * that includes the root index.ts and the index.ts for each provided program type.
+ */
 export function renderIndexFiles(
   indexContents: Map<Abi['programType'], string[]>,
   versions: BinaryVersions

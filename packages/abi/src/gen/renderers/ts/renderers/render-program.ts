@@ -12,6 +12,12 @@ import scriptTemplate from '../templates/script.hbs';
 import { getParentDirWrapper } from './get-parent-dir-wrapper';
 import { templateRenderer } from './template-renderer';
 
+/**
+ * Renders program-related files based on the program type.
+ * @returns An array of results containing filenames and their corresponding content.
+ * The files returned are all related to the program except the types.
+ * This includes the abi, bytecode, and the program-related classes.
+ */
 export function renderProgram(
   { abi, binCompressed, name, abiContents, storageSlots }: ProgramDetails,
   versions: BinaryVersions

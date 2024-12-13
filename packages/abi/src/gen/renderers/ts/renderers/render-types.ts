@@ -75,6 +75,11 @@ function mapFunctions(abi: Abi, cTypes: Record<string, TyperReturn>) {
   });
 }
 
+/**
+ * Renders the types file for a program.
+ * @returns An object containing the filename and the content of the types file.
+ * The type rendering logic is the same for all program types.
+ */
 export function renderTypes(
   { name, abi }: ProgramDetails,
   versions: BinaryVersions
