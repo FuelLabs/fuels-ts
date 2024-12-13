@@ -15,7 +15,6 @@ export type TyperParams = {
   asReference?: boolean;
 };
 
-// TODO: Better naming?
 export type GlobalTyper = (p: TyperParams) => TyperReturn;
 
 export type Typer = (params: TyperParams, typer: GlobalTyper) => TyperReturn;
