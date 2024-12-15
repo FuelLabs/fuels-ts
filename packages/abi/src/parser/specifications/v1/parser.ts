@@ -1,7 +1,6 @@
-import { FuelError } from '@fuel-ts/errors';
+import type { Abi, AbiConcreteType } from '../../abi';
 
-import type { Abi, AbiConcreteType, AbiMetadataType } from '../../abi';
-
+import { cleanupAbi } from './cleanup-abi';
 import { mapAttribute } from './map-attribute';
 import { ResolvableType } from './resolvable-type';
 import { ResolvedType } from './resolved-type';
@@ -16,15 +15,12 @@ import type {
 
 export class AbiParserV1 {
   static parse(abi: AbiSpecificationV1): Abi {
-    const resolvableTypes = abi.metadataTypes
-      .map((metadataType) => new ResolvableType(abi, metadataType.metadataTypeId, undefined))
-      .filter(
-        (resolveableType) =>
-          resolveableType.swayType !== 'struct std::vec::RawVec' &&
-          resolveableType.swayType !== 'struct std::bytes::RawBytes'
-      );
+    const cleanAbi = cleanupAbi(abi);
+    const resolvableTypes = cleanAbi.metadataTypes.map(
+      (metadataType) => new ResolvableType(cleanAbi, metadataType.metadataTypeId, undefined)
+    );
 
-    const concreteTypes = abi.concreteTypes.map((concreteType) => {
+    const concreteTypes = cleanAbi.concreteTypes.map((concreteType) => {
       const resolvableType = resolvableTypes.find(
         (resolvable) => resolvable.metadataTypeId === concreteType.metadataTypeId
       );
@@ -33,26 +29,19 @@ export class AbiParserV1 {
         ? resolvableType.resolve(concreteType)
         : new ResolvedType({ swayType: concreteType.type, typeId: concreteType.concreteTypeId });
 
-      return resolvedType.toAbiType() as AbiConcreteType;
+      return resolvedType.toAbiType();
     });
 
-    const getType = (concreteTypeId: string) => {
-      const type = concreteTypes.find((abiType) => abiType.concreteTypeId === concreteTypeId);
-      if (type === undefined) {
-        throw new FuelError(
-          FuelError.CODES.TYPE_ID_NOT_FOUND,
-          `A type with concrete type id of "${concreteTypeId}" was not found.`
-        );
-      }
-      return type;
-    };
+    const getType = (concreteTypeId: string) =>
+      // this will always be defined because it's in the context of the same ABI
+      concreteTypes.find((abiType) => abiType.concreteTypeId === concreteTypeId) as AbiConcreteType;
 
     return {
-      metadataTypes: resolvableTypes.map((rt) => rt.toAbiType() as AbiMetadataType),
+      metadataTypes: resolvableTypes.map((rt) => rt.toAbiType()),
       concreteTypes,
-      encodingVersion: abi.encodingVersion,
-      programType: abi.programType as Abi['programType'],
-      functions: abi.functions.map((fn: AbiFunctionV1) => ({
+      encodingVersion: cleanAbi.encodingVersion,
+      programType: cleanAbi.programType as Abi['programType'],
+      functions: cleanAbi.functions.map((fn: AbiFunctionV1) => ({
         attributes: fn.attributes?.map(mapAttribute) ?? undefined,
         name: fn.name,
         output: getType(fn.output),
@@ -61,15 +50,15 @@ export class AbiParserV1 {
           type: getType(input.concreteTypeId),
         })),
       })),
-      loggedTypes: abi.loggedTypes.map((loggedType: AbiLoggedTypeV1) => ({
+      loggedTypes: cleanAbi.loggedTypes.map((loggedType: AbiLoggedTypeV1) => ({
         logId: loggedType.logId,
         type: getType(loggedType.concreteTypeId),
       })),
-      messageTypes: abi.messagesTypes.map((messageType: AbiMessageTypeV1) => ({
+      messageTypes: cleanAbi.messagesTypes.map((messageType: AbiMessageTypeV1) => ({
         messageId: messageType.messageId,
         type: getType(messageType.concreteTypeId),
       })),
-      configurables: abi.configurables.map((configurable: AbiConfigurableV1) => ({
+      configurables: cleanAbi.configurables.map((configurable: AbiConfigurableV1) => ({
         name: configurable.name,
         offset: configurable.offset,
         type: getType(configurable.concreteTypeId),
