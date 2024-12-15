@@ -24,7 +24,6 @@ export type SwayType =
   | 'array'
   | 'assetId'
   | 'evmAddress'
-  | 'rawUntypedPtr'
   | 'rawUntypedSlice';
 
 type Matcher = (type: string) => boolean;
@@ -100,7 +99,6 @@ export const swayTypeMatchers: Record<SwayType, Matcher> = {
   option,
   result,
 
-  rawUntypedPtr,
   rawUntypedSlice,
 };
 
