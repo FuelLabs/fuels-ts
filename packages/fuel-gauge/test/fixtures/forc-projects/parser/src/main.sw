@@ -1,4 +1,5 @@
 contract;
+use std::bytes::Bytes;
 use std::message::send_typed_message;
 
 struct GenericStruct<T> {
@@ -40,6 +41,7 @@ abi VoidContract {
         arg1: StructWithImplicitGenerics<u8, u16>,
         arg2: (bool, StructWithImplicitGenerics<bool, b256>),
     ) -> bool;
+    fn bytes(arg: Bytes) -> bool;
 }
 
 impl VoidContract for Contract {
@@ -59,6 +61,9 @@ impl VoidContract for Contract {
         arg1: StructWithImplicitGenerics<u8, u16>,
         arg2: (bool, StructWithImplicitGenerics<bool, b256>),
     ) -> bool {
+        true
+    }
+    fn bytes(arg: Bytes) -> bool {
         true
     }
 }
