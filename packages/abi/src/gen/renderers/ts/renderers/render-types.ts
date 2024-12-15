@@ -37,7 +37,6 @@ const metadataTypeFilter = createMatcher<boolean>({
   tuple: false,
   array: false,
   evmAddress: false,
-  rawUntypedPtr: false,
   rawUntypedSlice: false,
 });
 

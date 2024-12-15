@@ -48,7 +48,4 @@ export const typerMatcher = createMatcher<Typer>({
   void: voidTyper,
   assetId: structTyper,
   evmAddress: evmAddressTyper,
-  rawUntypedPtr: () => {
-    throw new Error('not implemented');
-  },
 });
