@@ -8,6 +8,8 @@ import {
 } from '../../matchers/sway-type-matchers';
 import type { AbiFunction, AbiConcreteType, AbiTypeComponent } from '../../parser';
 
+const HEAP_TYPE_SIGNATURE = '(rawptr,u64),u64';
+
 const createSignaturePrefix = ({
   type,
 }: {
@@ -48,6 +50,10 @@ const createSignatureContents = ({
     return `str[${strMatch.length}]`;
   }
 
+  if (swayTypeMatchers.bytes(type)) {
+    return `(s${HEAP_TYPE_SIGNATURE})`;
+  }
+
   if (components === undefined) {
     return swayType;
   }
@@ -64,8 +70,11 @@ const createSignatureContents = ({
         .join(',')}>`
     : '';
 
+  if (type.swayType === 'struct std::bytes::Bytes') {
+    console.log(type, swayTypeMatchers.bytes(type));
+  }
   const componentsSignature = swayTypeMatchers.vector(type)
-    ? `s${typeArgumentsSignature}(rawptr,u64),u64`
+    ? `s${typeArgumentsSignature}${HEAP_TYPE_SIGNATURE}`
     : components.map(createSignatureForType).join(',');
 
   return `${typeArgumentsSignature}(${componentsSignature})`;
