@@ -70,7 +70,6 @@ export const ENUM_REGEX = /^enum (.+::)?(?<name>.+)$/m;
 const enumMatcher: Matcher = (opts) =>
   !option(opts) && !result(opts) && ENUM_REGEX.test(opts.swayType);
 
-const rawUntypedPtr: Matcher = ({ swayType }) => swayType === 'raw untyped ptr';
 const rawUntypedSlice: Matcher = ({ swayType }) => swayType === 'raw untyped slice';
 
 export const swayTypeMatchers: Record<SwayType, Matcher> = {
