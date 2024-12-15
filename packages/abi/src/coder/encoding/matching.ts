@@ -8,7 +8,6 @@ export const createCoderMatcher = (coders: SupportedCoders) =>
     u16: coders.u16,
     u32: coders.u32,
     u64: coders.u64,
-    rawUntypedPtr: coders.u64,
     u256: coders.u256,
     rawUntypedSlice: coders.rawSlice,
     b256: coders.b256,

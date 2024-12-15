@@ -37,10 +37,6 @@ const createSignatureContents = ({
 }): string => {
   const { swayType, components, metadata } = type;
 
-  if (swayTypeMatchers.rawUntypedPtr(type)) {
-    return 'rawptr';
-  }
-
   if (swayTypeMatchers.rawUntypedSlice(type)) {
     return 'rawslice';
   }
