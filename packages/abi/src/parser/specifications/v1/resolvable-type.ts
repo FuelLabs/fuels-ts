@@ -35,23 +35,7 @@ export class ResolvableType {
       new ResolvableType(this.abi, tp, undefined),
     ]);
 
-    let components = this.metadataType.components;
-
-    /**
-     * Vectors consist of multiple components,
-     * but we only care about the `buf`'s first type argument
-     * which defines the type of the vector data.
-     * Everything else is being ignored,
-     * as it's then easier to reason about the vector
-     * (you just treat is as a regular struct).
-     */
-    if (swayTypeMatchers.vector(this.metadataType.type)) {
-      components = components
-        ?.map((component) => (component.name === 'buf' ? component.typeArguments?.[0] : undefined))
-        .filter((x) => x !== undefined) as AbiComponentV1[];
-    }
-
-    this.components = components?.map((c) => this.handleComponent(this, c));
+    this.components = this.metadataType.components?.map((c) => this.handleComponent(this, c));
   }
 
   toComponentType(): AbiTypeComponent['type'] {
