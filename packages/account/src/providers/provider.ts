@@ -364,7 +364,7 @@ export type ProviderCallParams = UTXOValidationParams & EstimateTransactionParam
  * Provider Send transaction params
  */
 export type ProviderSendTxParams = EstimateTransactionParams & {
-  onBeforeSend?: (txRequest: TransactionRequest) => TransactionRequest;
+  onBeforeSend?: (txRequest: TransactionRequest) => Promise<TransactionRequest>;
 };
 
 /**
