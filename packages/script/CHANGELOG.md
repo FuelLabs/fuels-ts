@@ -1,5 +1,22 @@
 # Change Log
 
+## 0.97.2
+
+### Patch Changes
+
+- Updated dependencies [0970bc4]
+- Updated dependencies [896bf5b]
+- Updated dependencies [ebe5ecd]
+  - @fuel-ts/utils@0.97.2
+  - @fuel-ts/account@0.97.2
+  - @fuel-ts/abi-coder@0.97.2
+  - @fuel-ts/address@0.97.2
+  - @fuel-ts/program@0.97.2
+  - @fuel-ts/transactions@0.97.2
+  - @fuel-ts/errors@0.97.2
+  - @fuel-ts/math@0.97.2
+  - @fuel-ts/interfaces@0.97.2
+
 ## 0.97.1
 
 ### Patch Changes
