@@ -1,5 +1,18 @@
 # @fuel-ts/utils
 
+## 0.97.2
+
+### Patch Changes
+
+- 0970bc4: fix: Vitest matcher integration
+- 896bf5b: chore: integrate vitest matchers globally
+- ebe5ecd: chore: update internally used chain config
+- Updated dependencies [5ec254d]
+  - @fuel-ts/versions@0.97.2
+  - @fuel-ts/errors@0.97.2
+  - @fuel-ts/math@0.97.2
+  - @fuel-ts/interfaces@0.97.2
+
 ## 0.97.1
 
 ### Patch Changes

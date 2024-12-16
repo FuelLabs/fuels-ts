@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.97.2
+
+### Patch Changes
+
+- @fuel-ts/hasher@0.97.2
+- @fuel-ts/math@0.97.2
+
 ## 0.97.1
 
 ### Patch Changes
