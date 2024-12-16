@@ -8,8 +8,8 @@
   Forc version: 0.66.5
 */
 
-
-import type { FunctionFragment, InvokeFunction } from 'fuels';
+import { type FunctionFragment } from '@fuel-ts/abi-coder';
+import { type InvokeFunction } from '@fuel-ts/program';
 
 /**
  * Mimics Sway Enum.

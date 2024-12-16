@@ -4,7 +4,13 @@ import { join } from 'path';
 
 execSync(`fuels typegen -i src/contracts/src14 -o src/types`);
 
-const supportedRecipes = ['Src14OwnedProxy'].map((s) => [s, `${s}Factory`]).flat();
+const typesPath = join(__dirname, '..', 'src', 'types');
+const supportedRecipes = ['Src14OwnedProxy']
+  .map((s) => [s, `${s}Factory`, `${s}Types`, `${s}-bytecode`, `${s}-storage-slots`])
+  .flat()
+  .map((s) => join(typesPath, 'contracts', `${s}.ts`))
+  .concat([join(typesPath, 'common.ts')]);
+
 const importReplacementMap = {
   Contract: '@fuel-ts/program',
   ContractFactory: '@fuel-ts/contract',
@@ -20,12 +26,11 @@ const importReplacementMap = {
   decompressBytecode: '@fuel-ts/utils',
 };
 
-for (const recipe of supportedRecipes) {
-  const contractPath = join(__dirname, '..', 'src', 'types', `${recipe}.ts`);
-  let contractContents = readFileSync(contractPath, 'utf-8');
+for (const filepath of supportedRecipes) {
+  let contents = readFileSync(filepath, 'utf-8');
   // Find all imports from 'fuels'
   const fuelImportsRegex = /import\s+(type\s+)?{([^}]+)}\s+from\s+['"]fuels['"];?/gs;
-  const matches = [...contractContents.matchAll(fuelImportsRegex)];
+  const matches = [...contents.matchAll(fuelImportsRegex)];
 
   // Extract the imported items and create new import statements
   const importsByPackage = new Map<string, Set<string>>();
@@ -58,18 +63,15 @@ for (const recipe of supportedRecipes) {
     .map(([pkg, imports]) => `import { ${Array.from(imports).join(', ')} } from '${pkg}';`)
     .join('\n');
 
+  // Add new imports at the top of the file
+  const importRegex = /.*(?=import )/s;
+  contents = contents.replace(importRegex, (match) => `${match}\n${newImports}`);
+
   // Replace all 'fuels' imports with the new imports
   matches.forEach((match) => {
-    contractContents = contractContents.replace(match[0], '');
+    contents = contents.replace(match[0], '');
   });
 
-  // Add new imports at the top of the file
-  const versionCommentRegex = /\/\*\s*Fuels version: \d+\.\d+\.\d+\s*\*\/\s*/;
-  contractContents = contractContents.replace(
-    versionCommentRegex,
-    (match) => `${match}\n${newImports}`
-  );
-
   // Write the modified contents back to the file
-  writeFileSync(contractPath, contractContents);
+  writeFileSync(filepath, contents);
 }

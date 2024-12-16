@@ -8,4 +8,5 @@
   Forc version: 0.66.5
 */
 
-export * from './contracts';
+export * from './Src14OwnedProxy';
+export * from './Src14OwnedProxyFactory';
