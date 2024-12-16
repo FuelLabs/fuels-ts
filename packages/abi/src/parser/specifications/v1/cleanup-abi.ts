@@ -26,7 +26,7 @@ export function cleanupAbi(abi: AbiSpecificationV1): AbiSpecificationV1 {
            * but we only care about the `buf`'s first type argument
            * which defines the type of the vector data.
            * Everything else is being ignored,
-           * as it's then easier to reason about the vector
+           * as it's then easier to reason about the vector.
            */
           case 'struct std::vec::Vec':
             return {
