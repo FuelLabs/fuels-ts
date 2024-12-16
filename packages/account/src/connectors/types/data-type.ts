@@ -1,5 +1,6 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import type { RequireAtLeastOne } from 'type-fest';
+
 import type { TransactionRequest } from '../../providers';
 
 /**
