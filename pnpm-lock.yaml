@@ -1254,6 +1254,9 @@ importers:
       fflate:
         specifier: ^0.8.2
         version: 0.8.2
+      vitest:
+        specifier: ~2.0.5
+        version: 2.0.5(@types/node@22.7.5)(@vitest/browser@2.0.5)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(terser@5.34.1)
 
   packages/versions:
     dependencies:
