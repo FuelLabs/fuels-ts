@@ -20,9 +20,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "run-s build:recipes build:package build:format",
+    "build:all": "run-s build:recipes build build:format",
     "build:recipes": "tsx ./scripts/build-recipes.ts",
-    "build:package": "tsup",
+    "build": "tsup",
     "build:format": "prettier --config ../../.prettierrc --log-level error --write .",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
