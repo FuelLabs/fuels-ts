@@ -1,5 +1,5 @@
 ---
-"@fuel-ts/abi": minorgp
+"@fuel-ts/abi": minor
 "fuels": minor
 ---
 
