@@ -74,58 +74,54 @@ function mapFunctions(abi: Abi, cTypes: Record<string, TyperReturn>) {
   });
 }
 
+function mapConfigurables(abi: Abi, cTypes: Record<string, TyperReturn>) {
+  return abi.configurables.length > 0
+    ? abi.configurables.map(({ name, type }) => ({
+        name,
+        input: cTypes[type.concreteTypeId].input,
+      }))
+    : undefined;
+}
+
 /**
  * Renders the types file for a program.
  * @returns An object containing the filename and the content of the types file.
  * The type rendering logic is the same for all program types.
  */
 export function renderTypes(
-  { name, abi }: ProgramDetails,
+  { name: programName, abi }: ProgramDetails,
   versions: BinaryVersions
 ): TsAbiGenResult {
   const mTypes = abi.metadataTypes
     .filter(metadataTypeFilter)
-    .map((t) => generateTsType({ abiType: t }));
+    .map((abiType) => generateTsType({ abiType }));
 
   const cTypes = abi.concreteTypes.reduce<Record<string, TyperReturn>>((res, abiType) => {
     res[abiType.concreteTypeId] = generateTsType({ abiType, asReference: true });
     return res;
   }, {});
 
-  const functions = mapFunctions(abi, cTypes);
-
-  const configurables =
-    abi.configurables.length > 0
-      ? abi.configurables.map((c) => ({
-          name: c.name,
-          input: cTypes[c.type.concreteTypeId].input,
-        }))
-      : undefined;
-
   const { fuelsTypeImports, commonTypeImports } = mergeTypeImports(mTypes, cTypes);
-
-  const enums = mTypes.filter((t) => t.tsType === 'enum').sort(sortAlphabetically);
-  const types = mTypes.filter((t) => t.tsType === 'type').sort(sortAlphabetically);
 
   const content = templateRenderer({
     template: typesTemplate,
     versions,
     data: {
       isContract: abi.programType === 'contract',
-      name,
+      name: programName,
       fuelsTypeImports,
       commonTypeImports,
-      enums,
-      types,
-      functions,
-      configurables,
+      enums: mTypes.filter((t) => t.tsType === 'enum').sort(sortAlphabetically),
+      types: mTypes.filter((t) => t.tsType === 'type').sort(sortAlphabetically),
+      functions: mapFunctions(abi, cTypes),
+      configurables: mapConfigurables(abi, cTypes),
     },
   });
 
   const { withParentDir } = getParentDirWrapper(abi.programType);
 
   return {
-    filename: withParentDir(`${name}Types.ts`),
+    filename: withParentDir(`${programName}Types.ts`),
     content,
   };
 }
