@@ -2,7 +2,7 @@ import { execSync } from 'child_process';
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
-execSync(`fuels-typegen -i src/contracts/**/*-abi.json -o src/types`);
+execSync(`fuels typegen -i src/contracts/src14 -o src/types`);
 
 const supportedRecipes = ['Src14OwnedProxy'].map((s) => [s, `${s}Factory`]).flat();
 const importReplacementMap = {
