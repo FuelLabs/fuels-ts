@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync } from 'fs';
 import { AbiGen } from 'fuels';
 import { getProgramDetails } from 'fuels/cli-utils';
 import { join } from 'path';

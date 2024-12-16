@@ -34,13 +34,13 @@ describe('recipes', () => {
       .proxy_target()
       .call();
     const firstTarget = await waitForFirstTarget();
-    expect(firstTarget.value.bits).toEqual(targetAddress);
+    expect(firstTarget.value?.bits).toEqual(targetAddress);
 
     const anotherProxy = new Src14OwnedProxy(proxyAddress, wallet);
     const { waitForResult: waitForAnotherTarget } = await anotherProxy.functions
       .proxy_target()
       .call();
     const anotherTarget = await waitForAnotherTarget();
-    expect(anotherTarget.value.bits).toEqual(targetAddress);
+    expect(anotherTarget.value?.bits).toEqual(targetAddress);
   });
 });
