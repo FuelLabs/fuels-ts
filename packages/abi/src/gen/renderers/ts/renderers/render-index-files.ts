@@ -21,22 +21,25 @@ export function renderIndexFiles(
     const { withParentDir, removeParentDir } = getParentDirWrapper(programType);
 
     results.push({
+      // from index.ts to e.g. contracts/index.ts
       filename: withParentDir('index.ts'),
       content: templateRenderer({
         versions,
         template: indexTemplate,
         data: {
-          paths: files.map(
-            (filename) =>
-              // remove .ts extension
-              removeParentDir(filename).split('.')[0]
-          ),
+          paths: files.map((filename) => {
+            // from e.g. contracts/AbiContract.ts to AbiContract.ts
+            const relativePathToFile = removeParentDir(filename);
+            // remove .ts extension
+            return relativePathToFile.split('.')[0];
+          }),
         },
       }),
     });
   });
 
   results.push({
+    // this is the main index.ts file in the root directory
     filename: 'index.ts',
     content: templateRenderer({
       versions,
