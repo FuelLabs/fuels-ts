@@ -66,9 +66,6 @@ const createSignatureContents = ({
         .join(',')}>`
     : '';
 
-  if (type.swayType === 'struct std::bytes::Bytes') {
-    console.log(type, swayTypeMatchers.bytes(type));
-  }
   const componentsSignature = swayTypeMatchers.vector(type)
     ? `s${typeArgumentsSignature}${HEAP_TYPE_SIGNATURE}`
     : components.map(createSignatureForType).join(',');
