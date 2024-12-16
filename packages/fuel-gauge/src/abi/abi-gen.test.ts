@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import { AbiGen } from 'fuels';
 import { getProgramDetails } from 'fuels/cli-utils';
 import { join } from 'path';
@@ -19,18 +19,18 @@ describe('AbiGen', () => {
       ['contracts/contract-types', 'contracts/AbiContractTypes.ts'],
       ['contracts/contract-factory', 'contracts/AbiContractFactory.ts'],
       ['contracts/contract-bytecode', 'contracts/AbiContract-bytecode.ts'],
-      ['contracts/contract-abi', 'contracts/AbiContract-abi.json'],
-      ['contracts/contract-storage-slots', 'contracts/AbiContract-storage-slots.json'],
+      ['contracts/contract-abi', 'contracts/AbiContract-abi.ts'],
+      ['contracts/contract-storage-slots', 'contracts/AbiContract-storage-slots.ts'],
 
       ['predicates/predicate-index', 'predicates/index.ts'],
       ['predicates/predicate', 'predicates/AbiPredicate.ts'],
       ['predicates/predicate-types', 'predicates/AbiPredicateTypes.ts'],
-      ['predicates/predicate-abi', 'predicates/AbiPredicate-abi.json'],
+      ['predicates/predicate-abi', 'predicates/AbiPredicate-abi.ts'],
 
       ['scripts/script-index', 'scripts/index.ts'],
       ['scripts/script', 'scripts/AbiScript.ts'],
       ['scripts/script-types', 'scripts/AbiScriptTypes.ts'],
-      ['scripts/script-abi', 'scripts/AbiScript-abi.json'],
+      ['scripts/script-abi', 'scripts/AbiScript-abi.ts'],
     ]);
 
     const { buildDir: contractDir } = getAbiForcProject(AbiProjectsEnum.ABI_CONTRACT);
@@ -49,7 +49,6 @@ describe('AbiGen', () => {
         `packages/fuel-gauge/src/abi/fixtures/${fixture}.txt`
       );
       const fixtureContent = readFileSync(fixtureFile).toString();
-
       const result = results.find((r) => r.filename === filename);
       expect(result?.content).toEqual(fixtureContent);
 

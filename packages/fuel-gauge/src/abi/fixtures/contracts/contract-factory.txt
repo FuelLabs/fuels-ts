@@ -10,16 +10,16 @@
 
 
 import { Contract, ContractFactory } from 'fuels';
-import type { Account, Provider, DeployContractOptions, DeployContractResult, StorageSlot } from 'fuels';
+import type { Account, Provider, DeployContractOptions, DeployContractResult } from 'fuels';
 import { AbiContract } from './AbiContract';
 import { bytecode } from './AbiContract-bytecode';
-import abi from './AbiContract-abi.json';
-import storageSlots from './AbiContract-storage-slots.json';
+import { abi } from './AbiContract-abi';
+import { storageSlots } from './AbiContract-storage-slots';
 
 export class AbiContractFactory extends ContractFactory<AbiContract> {
 
   static readonly bytecode = bytecode;
-  static readonly storageSlots: StorageSlot[] = storageSlots;
+  static readonly storageSlots = storageSlots;
 
   constructor(accountOrProvider: Account | Provider) {
     super(bytecode, abi, accountOrProvider, AbiContractFactory.storageSlots);

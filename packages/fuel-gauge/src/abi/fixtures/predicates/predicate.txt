@@ -11,7 +11,7 @@
 
 import { Predicate } from 'fuels';
 import type { PredicateParams } from 'fuels';
-import abi from './AbiPredicate-abi.json';
+import { abi } from './AbiPredicate-abi';
 import { bytecode } from './AbiPredicate-bytecode';
 import type { AbiPredicateTypes } from './AbiPredicateTypes';
 

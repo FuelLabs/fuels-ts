@@ -3,11 +3,13 @@ import type { BinaryVersions } from '@fuel-ts/versions';
 
 import type { ProgramDetails } from '../../../abi-gen-types';
 import type { TsAbiGenResult } from '../../types';
+import abiTemplate from '../templates/abi.hbs';
 import bytecodeTemplate from '../templates/bytecode.hbs';
 import contractFactoryTemplate from '../templates/contract-factory.hbs';
 import contractTemplate from '../templates/contract.hbs';
 import predicateTemplate from '../templates/predicate.hbs';
 import scriptTemplate from '../templates/script.hbs';
+import storageSlotsTemplate from '../templates/storage-slots.hbs';
 
 import { getParentDirWrapper } from './get-parent-dir-wrapper';
 import { templateRenderer } from './template-renderer';
@@ -24,8 +26,8 @@ export function renderProgram(
 ): TsAbiGenResult[] {
   const results: TsAbiGenResult[] = [
     {
-      filename: `${name}-abi.json`,
-      content: abiContents,
+      filename: `${name}-abi.ts`,
+      content: templateRenderer({ template: abiTemplate, versions, data: { abiContents } }),
     },
     {
       filename: `${name}-bytecode.ts`,
@@ -55,8 +57,12 @@ export function renderProgram(
           exportInIndexFile: true,
         },
         {
-          filename: `${name}-storage-slots.json`,
-          content: storageSlots as string,
+          filename: `${name}-storage-slots.ts`,
+          content: templateRenderer({
+            template: storageSlotsTemplate,
+            versions,
+            data: { storageSlots },
+          }),
         }
       );
       break;
