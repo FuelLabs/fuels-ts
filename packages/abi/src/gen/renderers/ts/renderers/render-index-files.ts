@@ -20,37 +20,46 @@ export function renderIndexFiles(
   indexContents.forEach((files, programType) => {
     const { withParentDir, removeParentDir } = getParentDirWrapper(programType);
 
+    // from index.ts to e.g. contracts/index.ts
+    const indexFilename = withParentDir('index.ts');
+
+    const pathsToFiles = files.map((file) => {
+      // from e.g. contracts/AbiContract.ts to AbiContract.ts
+      const relativePathToFile = removeParentDir(file);
+      // remove .ts extension
+      return relativePathToFile.split('.')[0];
+    });
+
+    const content = templateRenderer({
+      versions,
+      template: indexTemplate,
+      data: {
+        paths: pathsToFiles,
+      },
+    });
+
     results.push({
-      // from index.ts to e.g. contracts/index.ts
-      filename: withParentDir('index.ts'),
-      content: templateRenderer({
-        versions,
-        template: indexTemplate,
-        data: {
-          paths: files.map((filename) => {
-            // from e.g. contracts/AbiContract.ts to AbiContract.ts
-            const relativePathToFile = removeParentDir(filename);
-            // remove .ts extension
-            return relativePathToFile.split('.')[0];
-          }),
-        },
-      }),
+      filename: indexFilename,
+      content,
     });
   });
 
-  results.push({
-    // this is the main index.ts file in the root directory
+  const mainIndexFileImportPaths = [...indexContents.keys()]
+    .sort()
+    .map((programType) => getParentDirWrapper(programType).parentDir);
+
+  const mainIndexFile: AbiGenResult = {
     filename: 'index.ts',
     content: templateRenderer({
       versions,
       template: indexTemplate,
       data: {
-        paths: [...indexContents.keys()]
-          .sort()
-          .map((programType) => getParentDirWrapper(programType).parentDir),
+        paths: mainIndexFileImportPaths,
       },
     }),
-  });
+  };
+
+  results.push(mainIndexFile);
 
   return results;
 }
