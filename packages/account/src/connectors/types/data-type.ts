@@ -1,5 +1,6 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import type { RequireAtLeastOne } from 'type-fest';
+import type { TransactionRequest } from '../../providers';
 
 /**
  * @name Version
@@ -42,3 +43,7 @@ export type SelectNetworkArguments = RequireAtLeastOne<Network, 'chainId' | 'url
  * Read more at: https://docs.fuel.network/docs/specs/abi/json-abi-format/
  */
 export type FuelABI = JsonAbi;
+
+export type SendTransactionParams = {
+  onBeforeSend?: (txRequest: TransactionRequest) => TransactionRequest;
+}
