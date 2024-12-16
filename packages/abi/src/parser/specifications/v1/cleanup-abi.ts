@@ -27,7 +27,6 @@ export function cleanupAbi(abi: AbiSpecificationV1): AbiSpecificationV1 {
            * which defines the type of the vector data.
            * Everything else is being ignored,
            * as it's then easier to reason about the vector
-           * (you just treat is as a regular struct).
            */
           case 'struct std::vec::Vec':
             return {
