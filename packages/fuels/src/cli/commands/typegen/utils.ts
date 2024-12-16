@@ -1,4 +1,5 @@
 import { type ProgramDetails, type AbiSpecification, AbiParser } from '@fuel-ts/abi';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { compressBytecode, hexlify } from '@fuel-ts/utils';
 import { readFileSync } from 'fs';
 import { globSync } from 'glob';
@@ -29,8 +30,7 @@ function normalizeProjectName(str: string): string {
     const errMsg = `The provided string '${str}' results in an empty output after`.concat(
       ` normalization, therefore, it can't normalize string.`
     );
-    // throw new FuelError(ErrorCode.PARSE_FAILED, errMsg);
-    throw new Error(errMsg);
+    throw new FuelError(ErrorCode.PARSE_FAILED, errMsg);
   }
 
   return output;
