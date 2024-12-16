@@ -4,13 +4,11 @@ import { createMatcher } from '../../../../matchers/sway-type-matchers';
 import type { Abi } from '../../../../parser';
 import { evaluateFunctionInputsOptionality } from '../../../../utils/evaluate-function-inputs-optionality';
 import type { ProgramDetails } from '../../../abi-gen-types';
-import type { TsAbiGenResult } from '../../types';
 import typesTemplate from '../templates/types.hbs';
 import { generateTsType } from '../typers/generate-ts-type';
 import { flattenImports } from '../typers/helpers';
 import type { TyperReturn } from '../typers/types';
 
-import { getParentDirWrapper } from './get-parent-dir-wrapper';
 import { templateRenderer } from './template-renderer';
 
 const metadataTypeFilter = createMatcher<boolean>({
@@ -40,7 +38,7 @@ const metadataTypeFilter = createMatcher<boolean>({
   rawUntypedSlice: false,
 });
 
-function sortAlphabetically(a: TyperReturn, b: TyperReturn) {
+export function sortAlphabetically(a: TyperReturn, b: TyperReturn) {
   if (a.input < b.input) {
     return -1;
   }
@@ -91,7 +89,7 @@ function mapConfigurables(abi: Abi, cTypes: Record<string, TyperReturn>) {
 export function renderTypes(
   { name: programName, abi }: ProgramDetails,
   versions: BinaryVersions
-): TsAbiGenResult {
+): string {
   const mTypes = abi.metadataTypes
     .filter(metadataTypeFilter)
     .map((abiType) => generateTsType({ abiType }));
@@ -111,17 +109,12 @@ export function renderTypes(
       name: programName,
       fuelsTypeImports,
       commonTypeImports,
-      enums: mTypes.filter((t) => t.tsType === 'enum').sort(sortAlphabetically),
-      types: mTypes.filter((t) => t.tsType === 'type').sort(sortAlphabetically),
+      enums: mTypes.filter(({ tsType }) => tsType === 'enum').sort(sortAlphabetically),
+      types: mTypes.filter(({ tsType }) => tsType === 'type').sort(sortAlphabetically),
       functions: mapFunctions(abi, cTypes),
       configurables: mapConfigurables(abi, cTypes),
     },
   });
 
-  const { withParentDir } = getParentDirWrapper(abi.programType);
-
-  return {
-    filename: withParentDir(`${programName}Types.ts`),
-    content,
-  };
+  return content;
 }

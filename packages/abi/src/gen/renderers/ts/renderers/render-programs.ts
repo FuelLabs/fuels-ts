@@ -5,7 +5,6 @@ import type { AbiGenResult, ProgramDetails } from '../../../abi-gen-types';
 
 import { renderIndexFiles } from './render-index-files';
 import { renderProgram } from './render-program';
-import { renderTypes } from './render-types';
 
 /**
  * For the given program details, render all program-related files.
@@ -17,19 +16,17 @@ export function renderPrograms(details: ProgramDetails[], versions: BinaryVersio
   const indexContents = new Map<Abi['programType'], string[]>();
 
   for (const d of details) {
-    const program = renderProgram(d, versions);
-    const types = renderTypes(d, versions);
-    const renderResults = [program, types].flat();
+    const files = renderProgram(d, versions);
 
-    results.push(...renderResults);
+    results.push(...files);
 
-    renderResults.forEach((r) => {
-      if (!r.exportInIndexFile) {
+    files.forEach((file) => {
+      if (!file.exportInIndexFile) {
         return;
       }
 
       const contents = indexContents.get(d.abi.programType) ?? [];
-      contents.push(r.filename);
+      contents.push(file.filename);
       indexContents.set(d.abi.programType, contents);
     });
   }

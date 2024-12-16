@@ -12,6 +12,7 @@ import scriptTemplate from '../templates/script.hbs';
 import storageSlotsTemplate from '../templates/storage-slots.hbs';
 
 import { getParentDirWrapper } from './get-parent-dir-wrapper';
+import { renderTypes } from './render-types';
 import { templateRenderer } from './template-renderer';
 
 /**
@@ -20,11 +21,14 @@ import { templateRenderer } from './template-renderer';
  * The files returned are all related to the program except the types.
  * This includes the abi, bytecode, and the program-related classes.
  */
-export function renderProgram(
-  { abi, binCompressed, name, abiContents, storageSlots }: ProgramDetails,
-  versions: BinaryVersions
-): TsAbiGenResult[] {
+export function renderProgram(details: ProgramDetails, versions: BinaryVersions): TsAbiGenResult[] {
+  const { abi, binCompressed, name, abiContents, storageSlots } = details;
+
   const results: TsAbiGenResult[] = [
+    {
+      filename: `${name}Types.ts`,
+      content: renderTypes(details, versions),
+    },
     {
       filename: `${name}-abi.ts`,
       content: templateRenderer({ template: abiTemplate, versions, data: { abiContents } }),
