@@ -17,14 +17,14 @@ import type { AbiPredicateTypes } from './AbiPredicateTypes';
 
 export type AbiPredicateParameters = Omit<
   PredicateParams<
-    AbiPredicateTypes['functions']['main']['inputs'],
+    AbiPredicateTypes['inputs'],
     AbiPredicateTypes['configurables']
   >,
   'abi' | 'bytecode'
 >;
 
 export class AbiPredicate extends Predicate<
-  AbiPredicateTypes['functions']['main']['inputs'],
+  AbiPredicateTypes['inputs'],
   AbiPredicateTypes['configurables']
 > {
     public static readonly abi = abi;

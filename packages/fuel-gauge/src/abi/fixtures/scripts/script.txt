@@ -16,8 +16,8 @@ import { bytecode } from './AbiScript-bytecode';
 import type { AbiScriptTypes } from './AbiScriptTypes';
 
 export class AbiScript extends Script<
-  AbiScriptTypes['functions']['main']['inputs'],
-  AbiScriptTypes['functions']['main']['output']
+  AbiScriptTypes['inputs'],
+  AbiScriptTypes['output']
 > {
     public static readonly abi = abi;
     public static readonly bytecode = bytecode;

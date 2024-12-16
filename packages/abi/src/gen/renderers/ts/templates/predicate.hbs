@@ -8,14 +8,14 @@ import type { {{name}}Types } from './{{name}}Types';
 
 export type {{name}}Parameters = Omit<
   PredicateParams<
-    {{name}}Types['functions']['main']['inputs'],
+    {{name}}Types['inputs'],
     {{name}}Types['configurables']
   >,
   'abi' | 'bytecode'
 >;
 
 export class {{name}} extends Predicate<
-  {{name}}Types['functions']['main']['inputs'],
+  {{name}}Types['inputs'],
   {{name}}Types['configurables']
 > {
     public static readonly abi = abi;

@@ -9,8 +9,8 @@
 */
 
 
-import { Contract, ContractFactory } from 'fuels';
-import type { Account, Provider, DeployContractOptions, DeployContractResult } from 'fuels';
+import { ContractFactory } from 'fuels';
+import type { Account, Provider, DeployContractOptions } from 'fuels';
 import { AbiContract } from './AbiContract';
 import { bytecode } from './AbiContract-bytecode';
 import { abi } from './AbiContract-abi';

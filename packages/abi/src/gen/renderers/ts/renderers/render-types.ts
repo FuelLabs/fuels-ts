@@ -111,6 +111,7 @@ export function renderTypes(
     template: typesTemplate,
     versions,
     data: {
+      isContract: abi.programType === 'contract',
       name,
       fuelsTypeImports,
       commonTypeImports,

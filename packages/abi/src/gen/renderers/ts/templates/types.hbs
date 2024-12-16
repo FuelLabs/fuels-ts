@@ -13,6 +13,7 @@ export type {{output}};
 {{/each}}
 
 export interface {{name}}Types {
+    {{#if isContract}}
     functions: {
         {{#each functions}}
         {{name}}: {
@@ -21,6 +22,12 @@ export interface {{name}}Types {
         };
         {{/each}}
     };
+    {{else}}
+    {{#each functions}}
+    inputs: {{inputs}};
+    output: {{output}};
+    {{/each}}
+    {{/if}}
     configurables: {{#if configurables}}Partial<{
         {{#each configurables}}
         {{name}}: {{input}};
