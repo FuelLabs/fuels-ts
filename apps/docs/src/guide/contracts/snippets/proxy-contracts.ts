@@ -1,10 +1,5 @@
 // #region proxy-2
-import {
-  Provider,
-  Wallet,
-  Src14OwnedProxy,
-  Src14OwnedProxyFactory,
-} from 'fuels';
+import { Provider, Wallet, Src14OwnedProxyFactory } from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../env';
 import {
@@ -28,7 +23,7 @@ const { contract: counterContract } = await deploy.waitForResult();
  * initialize the storage slots.
  */
 const storageSlots = counterContractFactory.storageSlots.concat(
-  Src14OwnedProxy.storageSlots
+  Src14OwnedProxyFactory.storageSlots
 );
 /**
  * These configurables are specific to our recommended SRC14 compliant
