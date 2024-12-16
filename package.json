@@ -55,6 +55,7 @@
     "changeset:update-changelog": "tsx ./scripts/changeset/update-changelog.mts",
     "changeset:get-latest-release": "tsx ./scripts/changeset/get-latest-release.mts",
     "changeset:dependabot": "./scripts/changeset/dependabot-changeset.sh",
+    "release:deprecate": "tsx ./scripts/release-deprecate.ts",
     "forc:update": "tsx ./scripts/forc-update",
     "forc:check": "./scripts/forc-check.sh",
     "forc:format": "./scripts/forc-format.sh",

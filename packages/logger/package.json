@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/logger",
-  "version": "0.97.1",
+  "version": "0.97.2",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "description": "A logger for the Fuel-TS ecosystem",
   "main": "dist/index.js",

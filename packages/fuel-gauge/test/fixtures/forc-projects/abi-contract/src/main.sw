@@ -1,8 +1,8 @@
 contract;
 
-mod data_structures;
-mod equality;
-mod utils;
+pub mod data_structures;
+pub mod equality;
+pub mod utils;
 
 use data_structures::*;
 use equality::*;
