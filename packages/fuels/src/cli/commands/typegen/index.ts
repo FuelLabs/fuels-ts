@@ -12,7 +12,6 @@ import { getProgramDetails } from './utils';
 interface RunTypegen {
   inputs: string[];
   output: string;
-  silent: boolean;
 }
 
 function runFuelsTypegen(options: RunTypegen) {
@@ -45,9 +44,9 @@ function runFuelsTypegen(options: RunTypegen) {
 
 export function typegen(program: Command) {
   const options = program.opts();
-  const { inputs, output, silent } = options;
+  const { inputs, output } = options;
 
-  runFuelsTypegen({ inputs, output, silent });
+  runFuelsTypegen({ inputs, output });
 }
 
 export function generateTypes(config: FuelsConfig) {
@@ -62,5 +61,5 @@ export function generateTypes(config: FuelsConfig) {
     .map((path) => `${path}/out/${config.buildMode}`)
     .concat(loaderPaths);
 
-  runFuelsTypegen({ inputs: paths, output, silent: false });
+  runFuelsTypegen({ inputs: paths, output });
 }
