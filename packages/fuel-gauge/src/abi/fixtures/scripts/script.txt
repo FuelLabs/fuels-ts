@@ -13,11 +13,13 @@ import { Script } from 'fuels';
 import type { Account } from 'fuels';
 import { abi } from './AbiScript-abi';
 import { bytecode } from './AbiScript-bytecode';
-import type { AbiScriptTypes } from './AbiScriptTypes';
+import type { AbiScriptTypes as Types } from './AbiScriptTypes';
+
+export type AbiScriptTypes = Types;
 
 export class AbiScript extends Script<
-  AbiScriptTypes['inputs'],
-  AbiScriptTypes['output']
+  Types['inputs'],
+  Types['output']
 > {
     public static readonly abi = abi;
     public static readonly bytecode = bytecode;

@@ -13,19 +13,21 @@ import { Predicate } from 'fuels';
 import type { PredicateParams } from 'fuels';
 import { abi } from './AbiPredicate-abi';
 import { bytecode } from './AbiPredicate-bytecode';
-import type { AbiPredicateTypes } from './AbiPredicateTypes';
+import type { AbiPredicateTypes as Types } from './AbiPredicateTypes';
+
+export type AbiPredicateTypes = Types;
 
 export type AbiPredicateParameters = Omit<
   PredicateParams<
-    AbiPredicateTypes['inputs'],
-    AbiPredicateTypes['configurables']
+    Types['inputs'],
+    Types['configurables']
   >,
   'abi' | 'bytecode'
 >;
 
 export class AbiPredicate extends Predicate<
-  AbiPredicateTypes['inputs'],
-  AbiPredicateTypes['configurables']
+  Types['inputs'],
+  Types['configurables']
 > {
     public static readonly abi = abi;
     public static readonly bytecode = bytecode;

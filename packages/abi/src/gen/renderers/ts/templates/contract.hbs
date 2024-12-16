@@ -2,12 +2,14 @@
 
 import { Contract, Interface } from "fuels";
 import type { AbstractAddress, Account, Provider } from 'fuels';
-import type { {{name}}Types } from './{{name}}Types';
+import type { {{name}}Types as Types } from './{{name}}Types';
 import type { InterfaceFunctionMapper, ProgramFunctionMapper } from '../common';
 import { abi } from './{{name}}-abi';
 
+export type {{name}}Types = Types;
+
 export class {{name}}Interface extends Interface {
-  declare functions: InterfaceFunctionMapper<{{name}}Types['functions']>;
+  declare functions: InterfaceFunctionMapper<Types['functions']>;
 
   constructor() {
     super(abi);
@@ -16,7 +18,7 @@ export class {{name}}Interface extends Interface {
 
 export class {{name}} extends Contract {
     declare interface: {{name}}Interface;
-    declare functions: ProgramFunctionMapper<{{name}}Types['functions']>;
+    declare functions: ProgramFunctionMapper<Types['functions']>;
 
     public static readonly abi = abi;
 

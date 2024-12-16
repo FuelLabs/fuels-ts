@@ -4,19 +4,21 @@ import { Predicate } from 'fuels';
 import type { PredicateParams } from 'fuels';
 import { abi } from './{{name}}-abi';
 import { bytecode } from './{{name}}-bytecode';
-import type { {{name}}Types } from './{{name}}Types';
+import type { {{name}}Types as Types } from './{{name}}Types';
+
+export type {{name}}Types = Types;
 
 export type {{name}}Parameters = Omit<
   PredicateParams<
-    {{name}}Types['inputs'],
-    {{name}}Types['configurables']
+    Types['inputs'],
+    Types['configurables']
   >,
   'abi' | 'bytecode'
 >;
 
 export class {{name}} extends Predicate<
-  {{name}}Types['inputs'],
-  {{name}}Types['configurables']
+  Types['inputs'],
+  Types['configurables']
 > {
     public static readonly abi = abi;
     public static readonly bytecode = bytecode;

@@ -4,7 +4,7 @@ import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
 import { DemoContract, DemoContractFactory } from './contract-types';
 import { DemoPredicate } from './predicate-types';
-import type { DemoPredicateParameters } from './predicate-types';
+import type { DemoPredicateTypes } from './predicate-types';
 import { DemoScript } from './script-types';
 
 /**
@@ -162,7 +162,7 @@ test('Example predicate', async () => {
 
   const receiver = Wallet.fromAddress(Address.fromRandom(), provider);
 
-  const predicateData: DemoPredicateParameters['data'] = [];
+  const predicateData: DemoPredicateTypes['inputs'] = [];
   const predicate = new DemoPredicate({
     provider,
     data: predicateData,

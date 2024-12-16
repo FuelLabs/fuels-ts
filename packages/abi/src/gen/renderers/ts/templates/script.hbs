@@ -4,11 +4,13 @@ import { Script } from 'fuels';
 import type { Account } from 'fuels';
 import { abi } from './{{name}}-abi';
 import { bytecode } from './{{name}}-bytecode';
-import type { {{name}}Types } from './{{name}}Types';
+import type { {{name}}Types as Types } from './{{name}}Types';
+
+export type {{name}}Types = Types;
 
 export class {{name}} extends Script<
-  {{name}}Types['inputs'],
-  {{name}}Types['output']
+  Types['inputs'],
+  Types['output']
 > {
     public static readonly abi = abi;
     public static readonly bytecode = bytecode;

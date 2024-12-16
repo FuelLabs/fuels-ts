@@ -3,7 +3,7 @@ import { Provider, ScriptTransactionRequest, Wallet } from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../env';
 import { ConfigurablePin } from '../../../typegend';
-import type { ConfigurablePinParameters } from '../../../typegend/predicates/ConfigurablePin';
+import type { ConfigurablePinTypes } from '../../../typegend/predicates/ConfigurablePin';
 
 // Setup
 const provider = await Provider.create(LOCAL_NETWORK_URL);
@@ -15,7 +15,7 @@ const amountToReceiver = 100_000;
 
 // Instantiate the predicate using valid predicate data, aka the pin we need
 // to send the funds to the receiver
-const data: ConfigurablePinParameters['data'] = [1337];
+const data: ConfigurablePinTypes['inputs'] = [1337];
 const predicate = new ConfigurablePin({ provider, data });
 
 // Fund the predicate, so that we can send these funds via predicate logic
