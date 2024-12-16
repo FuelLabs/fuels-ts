@@ -35,7 +35,9 @@ export class ResolvableType {
       new ResolvableType(this.abi, tp, undefined),
     ]);
 
-    this.components = this.metadataType.components?.map((c) => this.handleComponent(this, c));
+    this.components = this.metadataType.components?.map((c) =>
+      this.createResolvableComponent(this, c)
+    );
   }
 
   toComponentType(): AbiTypeComponent['type'] {
@@ -150,26 +152,24 @@ export class ResolvableType {
     return metadataType.typeParameters?.map((typeParameter, idx) => [typeParameter, args[idx]]);
   }
 
-  private handleComponent(
+  private createResolvableComponent(
     parent: ResolvableType,
-    component: AbiComponentV1 | AbiTypeArgumentV1
+    { typeId, typeArguments, name }: AbiComponentV1 | AbiTypeArgumentV1
   ): ResolvableComponent {
-    const name = (component as AbiComponentV1).name;
-
-    const isConcreteType = typeof component.typeId === 'string';
+    const isConcreteType = typeof typeId === 'string';
 
     if (isConcreteType) {
-      const concreteType = this.findConcreteType(component.typeId);
+      const concreteType = this.findConcreteType(typeId);
       return {
         name,
         type: this.resolveConcreteType(concreteType),
       };
     }
 
-    const metadataType = this.findMetadataType(component.typeId);
+    const metadataType = this.findMetadataType(typeId);
     return {
       name,
-      type: this.handleMetadataType(parent, metadataType, component.typeArguments),
+      type: this.handleMetadataType(parent, metadataType, typeArguments),
     };
   }
 
@@ -265,7 +265,7 @@ export class ResolvableType {
     }
 
     const typeArgs = typeArguments?.map(
-      (typeArgument) => this.handleComponent(parent, typeArgument).type
+      (typeArgument) => this.createResolvableComponent(parent, typeArgument).type
     );
 
     const resolvable = new ResolvableType(
