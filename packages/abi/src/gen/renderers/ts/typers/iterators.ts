@@ -1,4 +1,5 @@
 import { ARRAY_REGEX } from '../../../../matchers/sway-type-matchers';
+import type { AbiTypeComponent } from '../../../../parser';
 
 import type { Typer } from './types';
 import { mapComponents } from './utils';
@@ -9,8 +10,7 @@ export const tupleTyper: Typer = ({ abiType }, typer) =>
 export const arrayTyper: Typer = ({ abiType }, typer) => {
   const length = ARRAY_REGEX.exec(abiType.swayType)?.[2];
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const { type } = abiType.components![0]!;
+  const { type } = abiType.components?.[0] as AbiTypeComponent;
   const mapped = typer({ abiType: type, asReference: true });
 
   const input = `ArrayOfLength<${mapped.input}, ${length}>`;
@@ -25,8 +25,7 @@ export const arrayTyper: Typer = ({ abiType }, typer) => {
 };
 
 export const vectorTyper: Typer = ({ abiType }, typer) => {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const { type } = abiType.components![0]!;
+  const { type } = abiType.components?.[0] as AbiTypeComponent;
   const mapped = typer({ abiType: type, asReference: true });
   const input = `${mapped.input}[]`;
   const output = `${mapped.output}[]`;
