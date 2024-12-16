@@ -16,6 +16,7 @@ import type { InterfaceFunctionMapper, ProgramFunctionMapper } from '../common';
 import { abi } from './AbiContract-abi';
 
 export type AbiContractTypes = Types;
+export type AbiContractConfigurables = Types['configurables'];
 
 export class AbiContractInterface extends Interface {
   declare functions: InterfaceFunctionMapper<Types['functions']>;

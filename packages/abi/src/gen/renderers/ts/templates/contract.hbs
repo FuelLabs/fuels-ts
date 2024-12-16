@@ -7,6 +7,7 @@ import type { InterfaceFunctionMapper, ProgramFunctionMapper } from '../common';
 import { abi } from './{{name}}-abi';
 
 export type {{name}}Types = Types;
+export type {{name}}Configurables = Types['configurables'];
 
 export class {{name}}Interface extends Interface {
   declare functions: InterfaceFunctionMapper<Types['functions']>;

@@ -16,6 +16,9 @@ import { bytecode } from './AbiPredicate-bytecode';
 import type { AbiPredicateTypes as Types } from './AbiPredicateTypes';
 
 export type AbiPredicateTypes = Types;
+export type AbiPredicateInputs = Types['inputs'];
+export type AbiPredicateOutput = Types['output'];
+export type AbiPredicateConfigurables = Types['configurables'];
 
 export type AbiPredicateParameters = Omit<
   PredicateParams<

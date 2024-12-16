@@ -7,6 +7,9 @@ import { bytecode } from './{{name}}-bytecode';
 import type { {{name}}Types as Types } from './{{name}}Types';
 
 export type {{name}}Types = Types;
+export type {{name}}Inputs = Types['inputs'];
+export type {{name}}Output = Types['output'];
+export type {{name}}Configurables = Types['configurables'];
 
 export type {{name}}Parameters = Omit<
   PredicateParams<
