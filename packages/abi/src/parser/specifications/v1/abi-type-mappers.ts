@@ -15,7 +15,7 @@ function mapMetadata(type: ResolvableType | ResolvedType) {
   };
 
   if (type.typeParamsArgsMap && type.metadataType?.typeParameters?.length) {
-    result.typeArguments = type.typeParamsArgsMap.map((t) => toTypeArgument(t[1]));
+    result.typeArguments = [...type.typeParamsArgsMap.values()].map((rt) => toTypeArgument(rt));
   }
 
   return result;
@@ -81,8 +81,10 @@ export function toAbiType(t: ResolvableType | ResolvedType): AbiConcreteType | A
       metadataTypeId: t.metadataType?.metadataTypeId as number,
     };
 
-    if (t.typeParamsArgsMap) {
-      result.typeParameters = t.typeParamsArgsMap.map(([, rt]) => toAbiType(rt) as AbiMetadataType);
+    if (t.typeParamsArgsMap && t.metadataType?.typeParameters?.length) {
+      result.typeParameters = [...t.typeParamsArgsMap.values()].map(
+        (rt) => toAbiType(rt) as AbiMetadataType
+      );
     }
   }
 
