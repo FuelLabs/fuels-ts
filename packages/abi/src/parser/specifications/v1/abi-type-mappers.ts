@@ -21,14 +21,12 @@ function mapMetadata(type: ResolvableType | ResolvedType) {
   return result;
 }
 
-function isResolvedType(type: ResolvableType | ResolvedType): type is ResolvedType {
-  return 'typeId' in type;
-}
-
 function isResolvedConcreteType(
   type: ResolvableType | ResolvedType
 ): type is ResolvedType & { typeId: string } {
-  return isResolvedType(type) && typeof type.typeId === 'string';
+  const isResolvedType = 'typeId' in type;
+
+  return isResolvedType && typeof type.typeId === 'string';
 }
 
 function mapComponentType(component: ResolvableComponent): AbiTypeComponent {
