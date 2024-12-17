@@ -18,8 +18,13 @@ export class AbiParserV1 {
   static parse(abi: AbiSpecificationV1): Abi {
     const cleanAbi = cleanupAbi(abi);
 
+    const abiTypeMaps = {
+      metadataTypes: new Map(cleanAbi.metadataTypes.map((type) => [type.metadataTypeId, type])),
+      concreteTypes: new Map(cleanAbi.concreteTypes.map((type) => [type.concreteTypeId, type])),
+    };
+
     const resolvableTypes = cleanAbi.metadataTypes.map(
-      (metadataType) => new ResolvableType(cleanAbi, metadataType.metadataTypeId, undefined)
+      (metadataType) => new ResolvableType(abiTypeMaps, metadataType.metadataTypeId, undefined)
     );
 
     const concreteTypes = cleanAbi.concreteTypes.map((concreteType) => {
