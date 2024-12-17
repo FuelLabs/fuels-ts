@@ -1,7 +1,6 @@
 import { FuelError } from '@fuel-ts/errors';
 
 import { swayTypeMatchers } from '../../../matchers/sway-type-matchers';
-import type { AbiTypeComponent, AbiMetadataType, AbiTypeArgument } from '../../abi';
 
 import type { ResolvedComponent } from './resolved-type';
 import { ResolvedType } from './resolved-type';
@@ -13,13 +12,13 @@ import type {
   AbiTypeArgumentV1,
 } from './specification';
 
-interface ResolvableComponent {
+export interface ResolvableComponent {
   name: string;
   type: ResolvableType | ResolvedType;
 }
 
 export class ResolvableType {
-  private metadataType: AbiMetadataTypeV1;
+  metadataType: AbiMetadataTypeV1;
   swayType: string;
   components: ResolvableComponent[] | undefined;
 
@@ -38,71 +37,6 @@ export class ResolvableType {
     this.components = this.metadataType.components?.map((c) =>
       this.createResolvableComponent(this, c)
     );
-  }
-
-  toComponentType(): AbiTypeComponent['type'] {
-    const result: AbiTypeComponent['type'] = {
-      swayType: this.swayType,
-      metadata: {
-        metadataTypeId: this.metadataTypeId,
-      },
-    };
-
-    if (this.components) {
-      result.components = this.components.map((component) => ({
-        name: component.name,
-        type: component.type.toComponentType(),
-      }));
-    }
-    if (this.typeParamsArgsMap) {
-      result.metadata.typeArguments = this.typeParamsArgsMap.map(([, rt]) => rt.toTypeArgument());
-    }
-
-    return result;
-  }
-
-  toTypeArgument(): AbiTypeArgument {
-    const result: AbiTypeArgument = {
-      swayType: this.swayType,
-      metadata: {
-        metadataTypeId: this.metadataTypeId,
-      },
-    };
-
-    if (this.typeParamsArgsMap) {
-      result.metadata.typeArguments = this.typeParamsArgsMap.map(([, ta]) => ta.toTypeArgument());
-    }
-
-    if (this.components) {
-      result.components = this.components.map((component) => ({
-        name: component.name,
-        type: component.type.toComponentType(),
-      }));
-    }
-
-    return result;
-  }
-
-  toAbiType(): AbiMetadataType {
-    const result: AbiMetadataType = {
-      metadataTypeId: this.metadataTypeId,
-      swayType: this.swayType,
-    };
-
-    if (this.components) {
-      result.components = this.components?.map((component) => ({
-        name: component.name,
-        type: component.type.toComponentType(),
-      })) as AbiTypeComponent[];
-    }
-
-    if (this.typeParamsArgsMap) {
-      result.typeParameters = this.typeParamsArgsMap.map(
-        ([, rt]) => rt.toAbiType() as AbiMetadataType
-      );
-    }
-
-    return result;
   }
 
   /**

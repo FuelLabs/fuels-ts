@@ -1,5 +1,6 @@
-import type { Abi, AbiConcreteType } from '../../abi';
+import type { Abi, AbiConcreteType, AbiMetadataType } from '../../abi';
 
+import { toAbiType } from './abi-type-mappers';
 import { cleanupAbi } from './cleanup-abi';
 import { mapAttribute } from './map-attribute';
 import { ResolvableType } from './resolvable-type';
@@ -16,6 +17,7 @@ import type {
 export class AbiParserV1 {
   static parse(abi: AbiSpecificationV1): Abi {
     const cleanAbi = cleanupAbi(abi);
+
     const resolvableTypes = cleanAbi.metadataTypes.map(
       (metadataType) => new ResolvableType(cleanAbi, metadataType.metadataTypeId, undefined)
     );
@@ -29,7 +31,7 @@ export class AbiParserV1 {
         ? resolvableType.resolve(concreteType)
         : new ResolvedType({ swayType: concreteType.type, typeId: concreteType.concreteTypeId });
 
-      return resolvedType.toAbiType();
+      return toAbiType(resolvedType) as AbiConcreteType;
     });
 
     const getType = (concreteTypeId: string) =>
@@ -37,7 +39,7 @@ export class AbiParserV1 {
       concreteTypes.find((abiType) => abiType.concreteTypeId === concreteTypeId) as AbiConcreteType;
 
     return {
-      metadataTypes: resolvableTypes.map((rt) => rt.toAbiType()),
+      metadataTypes: resolvableTypes.map((rt) => toAbiType(rt) as AbiMetadataType),
       concreteTypes,
       encodingVersion: cleanAbi.encodingVersion,
       programType: cleanAbi.programType as Abi['programType'],
