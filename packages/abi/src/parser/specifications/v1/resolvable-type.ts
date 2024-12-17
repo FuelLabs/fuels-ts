@@ -1,7 +1,6 @@
 import { FuelError } from '@fuel-ts/errors';
 
 import { swayTypeMatchers } from '../../../matchers/sway-type-matchers';
-import type { AbiTypeComponent, AbiMetadataType, AbiTypeArgument } from '../../abi';
 
 import type { ResolvedComponent } from './resolved-type';
 import { ResolvedType } from './resolved-type';
@@ -9,22 +8,24 @@ import type {
   AbiComponentV1,
   AbiConcreteTypeV1,
   AbiMetadataTypeV1,
-  AbiSpecificationV1,
   AbiTypeArgumentV1,
 } from './specification';
 
-interface ResolvableComponent {
+export interface ResolvableComponent {
   name: string;
   type: ResolvableType | ResolvedType;
 }
 
 export class ResolvableType {
-  private metadataType: AbiMetadataTypeV1;
+  metadataType: AbiMetadataTypeV1;
   swayType: string;
   components: ResolvableComponent[] | undefined;
 
   constructor(
-    private abi: AbiSpecificationV1,
+    private abiTypeMaps: {
+      metadataTypes: Map<number, AbiMetadataTypeV1>;
+      concreteTypes: Map<string, AbiConcreteTypeV1>;
+    },
     public metadataTypeId: number,
     public typeParamsArgsMap: Array<[number, ResolvedType | ResolvableType]> | undefined
   ) {
@@ -32,75 +33,12 @@ export class ResolvableType {
     this.swayType = this.metadataType.type;
     this.typeParamsArgsMap ??= this.metadataType.typeParameters?.map((tp) => [
       tp,
-      new ResolvableType(this.abi, tp, undefined),
+      new ResolvableType(this.abiTypeMaps, tp, undefined),
     ]);
 
-    this.components = this.metadataType.components?.map((c) => this.handleComponent(this, c));
-  }
-
-  toComponentType(): AbiTypeComponent['type'] {
-    const result: AbiTypeComponent['type'] = {
-      swayType: this.swayType,
-      metadata: {
-        metadataTypeId: this.metadataTypeId,
-      },
-    };
-
-    if (this.components) {
-      result.components = this.components.map((component) => ({
-        name: component.name,
-        type: component.type.toComponentType(),
-      }));
-    }
-    if (this.typeParamsArgsMap) {
-      result.metadata.typeArguments = this.typeParamsArgsMap.map(([, rt]) => rt.toTypeArgument());
-    }
-
-    return result;
-  }
-
-  toTypeArgument(): AbiTypeArgument {
-    const result: AbiTypeArgument = {
-      swayType: this.swayType,
-      metadata: {
-        metadataTypeId: this.metadataTypeId,
-      },
-    };
-
-    if (this.typeParamsArgsMap) {
-      result.metadata.typeArguments = this.typeParamsArgsMap.map(([, ta]) => ta.toTypeArgument());
-    }
-
-    if (this.components) {
-      result.components = this.components.map((component) => ({
-        name: component.name,
-        type: component.type.toComponentType(),
-      }));
-    }
-
-    return result;
-  }
-
-  toAbiType(): AbiMetadataType {
-    const result: AbiMetadataType = {
-      metadataTypeId: this.metadataTypeId,
-      swayType: this.swayType,
-    };
-
-    if (this.components) {
-      result.components = this.components?.map((component) => ({
-        name: component.name,
-        type: component.type.toComponentType(),
-      })) as AbiTypeComponent[];
-    }
-
-    if (this.typeParamsArgsMap) {
-      result.typeParameters = this.typeParamsArgsMap.map(
-        ([, rt]) => rt.toAbiType() as AbiMetadataType
-      );
-    }
-
-    return result;
+    this.components = this.metadataType.components?.map((c) =>
+      this.createResolvableComponent(this, c)
+    );
   }
 
   /**
@@ -111,9 +49,8 @@ export class ResolvableType {
    * @throws  If the metadata type can not be found in the ABI.
    */
   private findMetadataType(metadataTypeId: number): AbiMetadataTypeV1 {
-    const metadataType = this.abi.metadataTypes.find(
-      (type) => type.metadataTypeId === metadataTypeId
-    );
+    const metadataType = this.abiTypeMaps.metadataTypes.get(metadataTypeId);
+
     if (!metadataType) {
       throw new FuelError(
         FuelError.CODES.TYPE_NOT_FOUND,
@@ -131,9 +68,8 @@ export class ResolvableType {
    * @throws  If the concrete type can not be found in the ABI.
    */
   private findConcreteType(concreteTypeId: string): AbiConcreteTypeV1 {
-    const concreteType = this.abi.concreteTypes.find(
-      (type) => type.concreteTypeId === concreteTypeId
-    );
+    const concreteType = this.abiTypeMaps.concreteTypes.get(concreteTypeId);
+
     if (!concreteType) {
       throw new FuelError(
         FuelError.CODES.TYPE_NOT_FOUND,
@@ -150,26 +86,24 @@ export class ResolvableType {
     return metadataType.typeParameters?.map((typeParameter, idx) => [typeParameter, args[idx]]);
   }
 
-  private handleComponent(
+  private createResolvableComponent(
     parent: ResolvableType,
-    component: AbiComponentV1 | AbiTypeArgumentV1
+    { typeId, typeArguments, name }: AbiComponentV1 | AbiTypeArgumentV1
   ): ResolvableComponent {
-    const name = (component as AbiComponentV1).name;
-
-    const isConcreteType = typeof component.typeId === 'string';
+    const isConcreteType = typeof typeId === 'string';
 
     if (isConcreteType) {
-      const concreteType = this.findConcreteType(component.typeId);
+      const concreteType = this.findConcreteType(typeId);
       return {
         name,
         type: this.resolveConcreteType(concreteType),
       };
     }
 
-    const metadataType = this.findMetadataType(component.typeId);
+    const metadataType = this.findMetadataType(typeId);
     return {
       name,
-      type: this.handleMetadataType(parent, metadataType, component.typeArguments),
+      type: this.handleMetadataType(parent, metadataType, typeArguments),
     };
   }
 
@@ -194,7 +128,7 @@ export class ResolvableType {
      * This would be the case for e.g. non-generic structs and enums.
      */
     if (!type.typeArguments) {
-      return new ResolvableType(this.abi, type.metadataTypeId, undefined).resolveInternal(
+      return new ResolvableType(this.abiTypeMaps, type.metadataTypeId, undefined).resolveInternal(
         type.concreteTypeId,
         undefined
       );
@@ -213,7 +147,7 @@ export class ResolvableType {
     });
 
     return new ResolvableType(
-      this.abi,
+      this.abiTypeMaps,
       type.metadataTypeId,
       ResolvableType.mapTypeParametersAndArgs(metadataType, concreteTypeArgs)
     ).resolveInternal(type.concreteTypeId, undefined);
@@ -248,7 +182,7 @@ export class ResolvableType {
 
       return (
         resolvableTypeParameter ??
-        new ResolvableType(this.abi, metadataType.metadataTypeId, undefined)
+        new ResolvableType(this.abiTypeMaps, metadataType.metadataTypeId, undefined)
       );
     }
 
@@ -258,18 +192,19 @@ export class ResolvableType {
        * if they aren't used _directly_ in a function-input/function-output/log/configurable/messageType
        * These types are characterized by not having components and we can resolve them as-is
        */
-      return new ResolvableType(this.abi, metadataType.metadataTypeId, undefined).resolveInternal(
+      return new ResolvableType(
+        this.abiTypeMaps,
         metadataType.metadataTypeId,
         undefined
-      );
+      ).resolveInternal(metadataType.metadataTypeId, undefined);
     }
 
     const typeArgs = typeArguments?.map(
-      (typeArgument) => this.handleComponent(parent, typeArgument).type
+      (typeArgument) => this.createResolvableComponent(parent, typeArgument).type
     );
 
     const resolvable = new ResolvableType(
-      this.abi,
+      this.abiTypeMaps,
       metadataType.metadataTypeId,
       !typeArgs?.length
         ? undefined
