@@ -338,8 +338,8 @@ export class ResolvableType {
 
       /**
        * The type parameter is either directly substituted with a type argument,
-       * or it's metadata type which accepts the type argument,
-       * so that metadata type needs to be resolved first.
+       * or it's a metadata type which accepts the type argument,
+       * so that metadata type will be resolved and subsitute the type parameter.
        */
       const resolved =
         typeParamsArgsMap?.get(arg.metadataTypeId) ??
@@ -351,7 +351,11 @@ export class ResolvableType {
     return newMap;
   }
 
-  public resolve(concreteType: AbiConcreteTypeV1) {
+  /**
+   * Resolves the instance of `ResolvableType` with the specific concrete type's data.
+   * @returns a `ResolvedType` in which all its components are resolved.
+   */
+  public resolve(concreteType: AbiConcreteTypeV1): ResolvedType {
     const concreteTypeArgs = concreteType.typeArguments?.map((typeArgument) => {
       const concreteTypeArg = this.findConcreteType(typeArgument);
       return this.resolveConcreteType(concreteTypeArg);
