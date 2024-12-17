@@ -34,9 +34,9 @@ export class ResolvableType {
     this.typeParamsArgsMap ??=
       this.metadataType.typeParameters &&
       new Map(
-        this.metadataType.typeParameters.map((tp) => [
-          tp,
-          new ResolvableType(this.abiTypeMaps, tp, undefined),
+        this.metadataType.typeParameters.map((typeParameter) => [
+          typeParameter,
+          new ResolvableType(this.abiTypeMaps, typeParameter, undefined),
         ])
       );
 
@@ -325,14 +325,14 @@ export class ResolvableType {
      * We resolve the type parameters of the underlying metadata type
      * with the type arguments of the concrete type.
      */
-    this.typeParamsArgsMap.forEach((value, tp) => {
+    this.typeParamsArgsMap.forEach((arg, typeParameter) => {
       /**
        * Some type parameters can already be resolved
        * e.g. `struct MyStruct<E> { a: DoubleGeneric<E, u16> }`
        * where the second type parameter of DoubleGeneric is already known.
        */
-      if (value instanceof ResolvedType) {
-        newMap.set(tp, value);
+      if (arg instanceof ResolvedType) {
+        newMap.set(typeParameter, arg);
         return;
       }
 
@@ -342,10 +342,10 @@ export class ResolvableType {
        * so that metadata type needs to be resolved first.
        */
       const resolved =
-        typeParamsArgsMap?.get(value.metadataTypeId) ??
-        value.resolveInternal(value.metadataTypeId, typeParamsArgsMap);
+        typeParamsArgsMap?.get(arg.metadataTypeId) ??
+        arg.resolveInternal(arg.metadataTypeId, typeParamsArgsMap);
 
-      newMap.set(value.metadataTypeId, resolved);
+      newMap.set(arg.metadataTypeId, resolved);
     });
 
     return newMap;
