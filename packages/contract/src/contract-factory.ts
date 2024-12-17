@@ -17,10 +17,10 @@ import {
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { hash } from '@fuel-ts/hasher';
-import type { BytesLike } from '@fuel-ts/interfaces';
 import { bn } from '@fuel-ts/math';
 import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
+import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, isDefined } from '@fuel-ts/utils';
 
 import { getLoaderInstructions, getContractChunks } from './loader';

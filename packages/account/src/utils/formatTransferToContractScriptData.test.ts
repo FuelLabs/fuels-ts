@@ -1,8 +1,8 @@
 import { BigNumberCoder } from '@fuel-ts/abi-coder';
 import { getRandomB256 } from '@fuel-ts/address';
-import type { BytesLike } from '@fuel-ts/interfaces';
 import { bn, type BigNumberish } from '@fuel-ts/math';
 import * as arrayifyMod from '@fuel-ts/utils';
+import type { BytesLike } from '@fuel-ts/utils';
 
 import {
   assembleTransferToContractScript,

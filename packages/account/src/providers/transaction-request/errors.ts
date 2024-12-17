@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import type { AbstractAddress } from '@fuel-ts/interfaces';
+import type { Address } from '@fuel-ts/address';
 
 /**
  * @hidden
@@ -26,7 +26,7 @@ export class NoWitnessAtIndexError extends Error {
  */
 export class NoWitnessByOwnerError extends Error {
   override name = 'NoWitnessByOwnerError';
-  constructor(public readonly owner: AbstractAddress) {
+  constructor(public readonly owner: Address) {
     super();
     this.message = `A witness for the given owner "${owner}" was not found`;
   }

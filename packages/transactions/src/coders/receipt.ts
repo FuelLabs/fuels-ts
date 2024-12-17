@@ -1,8 +1,8 @@
 /* eslint-disable max-classes-per-file */
 import { Coder, BigNumberCoder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
+import type { AssetId } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { sha256 } from '@fuel-ts/hasher';
-import type { AssetId } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { arrayify, concat } from '@fuel-ts/utils';
 

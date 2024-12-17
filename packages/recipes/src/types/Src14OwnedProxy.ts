@@ -5,14 +5,15 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 
 /*
-  Fuels version: 0.97.0
+  Fuels version: 0.97.2
 */
 
 import { Contract, type InvokeFunction } from '@fuel-ts/program';
 import { Interface, type FunctionFragment } from '@fuel-ts/abi-coder';
 import { type Provider, type Account } from '@fuel-ts/account';
 import { type StorageSlot } from '@fuel-ts/transactions';
-import { type AbstractAddress, type StrSlice } from '@fuel-ts/interfaces';
+import { type Address } from '@fuel-ts/address';
+import { type StrSlice } from '@fuel-ts/abi-coder';
 import type { Option, Enum } from './common';
 
 export enum AccessErrorInput {
@@ -679,7 +680,7 @@ export class Src14OwnedProxy extends Contract {
     set_proxy_owner: InvokeFunction<[new_proxy_owner: StateInput], void>;
   };
 
-  constructor(id: string | AbstractAddress, accountOrProvider: Account | Provider) {
+  constructor(id: string | Address, accountOrProvider: Account | Provider) {
     super(id, abi, accountOrProvider);
   }
 }

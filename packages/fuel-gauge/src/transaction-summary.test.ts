@@ -3,10 +3,10 @@ import type {
   Operation,
   TransactionSummary,
   TransactionResult,
-  AbstractAddress,
   OutputChange,
 } from 'fuels';
 import {
+  Address,
   BN,
   getTransactionsSummaries,
   getTransactionSummary,
@@ -16,7 +16,6 @@ import {
   Wallet,
   AddressType,
   OperationName,
-  Address,
   ChainName,
   bn,
   OutputType,
@@ -307,8 +306,8 @@ describe('TransactionSummary', () => {
   describe('Transfer Operations', () => {
     const validateTransferOperation = (params: {
       operations: Operation[];
-      sender: AbstractAddress;
-      recipients: { address: AbstractAddress; quantities: { amount: number; assetId: string }[] }[];
+      sender: Address;
+      recipients: { address: Address; quantities: { amount: number; assetId: string }[] }[];
       fromType: AddressType;
       toType: AddressType;
     }) => {

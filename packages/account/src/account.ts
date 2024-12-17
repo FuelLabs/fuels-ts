@@ -2,11 +2,10 @@ import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { AbstractAccount } from '@fuel-ts/interfaces';
-import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { InputType } from '@fuel-ts/transactions';
+import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, isDefined } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
@@ -46,6 +45,7 @@ import {
   isRequestInputResource,
 } from './providers/transaction-request/helpers';
 import { mergeQuantities } from './providers/utils/merge-quantities';
+import { AbstractAccount } from './types';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
 
 export type TxParamsType = Pick<
@@ -54,13 +54,13 @@ export type TxParamsType = Pick<
 >;
 
 export type TransferParams = {
-  destination: string | AbstractAddress;
+  destination: string | Address;
   amount: BigNumberish;
   assetId?: BytesLike;
 };
 
 export type ContractTransferParams = {
-  contractId: string | AbstractAddress;
+  contractId: string | Address;
   amount: BigNumberish;
   assetId?: BytesLike;
 };
@@ -80,7 +80,7 @@ export class Account extends AbstractAccount {
   /**
    * The address associated with the account.
    */
-  readonly address: AbstractAddress;
+  readonly address: Address;
 
   /**
    * The provider used to interact with the network.
@@ -99,7 +99,7 @@ export class Account extends AbstractAccount {
    * @param provider - A Provider instance  (optional).
    * @param connector - A FuelConnector instance (optional).
    */
-  constructor(address: string | AbstractAddress, provider?: Provider, connector?: FuelConnector) {
+  constructor(address: string | Address, provider?: Provider, connector?: FuelConnector) {
     super();
     this._provider = provider;
     this._connector = connector;
@@ -341,7 +341,7 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves to the prepared transaction request.
    */
   async createTransfer(
-    destination: string | AbstractAddress,
+    destination: string | Address,
     amount: BigNumberish,
     assetId?: BytesLike,
     txParams: TxParamsType = {}
@@ -362,7 +362,7 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves to the transaction response.
    */
   async transfer(
-    destination: string | AbstractAddress,
+    destination: string | Address,
     amount: BigNumberish,
     assetId?: BytesLike,
     txParams: TxParamsType = {}
@@ -435,7 +435,7 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves to the transaction response.
    */
   async transferToContract(
-    contractId: string | AbstractAddress,
+    contractId: string | Address,
     amount: BigNumberish,
     assetId?: BytesLike,
     txParams: TxParamsType = {}
@@ -497,7 +497,7 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves to the transaction response.
    */
   async withdrawToBaseLayer(
-    recipient: string | AbstractAddress,
+    recipient: string | Address,
     amount: BigNumberish,
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {

@@ -1,5 +1,5 @@
+import type { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAddress } from '@fuel-ts/interfaces';
 
 import { Account } from '../account';
 import { Provider } from '../providers';
@@ -62,10 +62,7 @@ interface FuelSdk {
   hasWallet(): Promise<boolean>;
   // #endregion connector-manager-method-hasWallet
   // #region connector-manager-method-getWallet
-  getWallet(
-    address: string | AbstractAddress,
-    providerOrNetwork?: Provider | Network
-  ): Promise<Account>;
+  getWallet(address: string | Address, providerOrNetwork?: Provider | Network): Promise<Account>;
   // #endregion connector-manager-method-getWallet
   // #region connector-manager-method-unsubscribe
   unsubscribe(): void;
@@ -465,7 +462,7 @@ export class Fuel extends FuelConnector implements FuelSdk {
    * connectors.
    */
   async getWallet(
-    address: string | AbstractAddress,
+    address: string | Address,
     providerOrNetwork?: Provider | Network
   ): Promise<Account> {
     const provider = await this._getProvider(providerOrNetwork);

@@ -5,12 +5,17 @@ import type {
   CallResult,
 } from '@fuel-ts/account';
 import { getGasUsedFromReceipts } from '@fuel-ts/account';
-import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import type { TransactionType } from '@fuel-ts/transactions';
 
 import { decodeContractCallScriptResult } from './contract-call-script';
 import { callResultToInvocationResult } from './script-request';
-import type { InvocationScopeLike, FunctionResult, DryRunResult } from './types';
+import type {
+  AbstractContract,
+  AbstractProgram,
+  InvocationScopeLike,
+  FunctionResult,
+  DryRunResult,
+} from './types';
 import { getResultLogs } from './utils';
 
 /** @hidden */

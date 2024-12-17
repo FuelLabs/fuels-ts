@@ -1,4 +1,4 @@
-import type { AbstractAddress } from '@fuel-ts/interfaces';
+import type { Address } from '@fuel-ts/address';
 import { BN } from '@fuel-ts/math';
 import debug from 'debug';
 import type { MockInstance } from 'vitest';
@@ -86,7 +86,7 @@ describe('Logger Tests', () => {
     expect(formatted).toBe('undefined');
   });
 
-  it('should format AbstractAddress to b256 string using formatter b', () => {
+  it('should format Address to b256 string using formatter b', () => {
     const mockAddress = {
       toB256: () => '0xabcdef1234567890',
     };
@@ -99,8 +99,8 @@ describe('Logger Tests', () => {
     expect(formatted).toBe('undefined');
   });
 
-  it('should format AbstractAddress to bech32 string using formatter c', () => {
-    const mockAddress: AbstractAddress = {
+  it('should format Address to bech32 string using formatter c', () => {
+    const mockAddress: Address = {
       toJSON: () => '',
       toString: () => '0x000000000000000000000000000000000000000000000000000000000000002a',
       toAddress: () => 'fuel1xyzabc123',

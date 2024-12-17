@@ -12,9 +12,9 @@ import type {
   TransactionResultReturnDataReceipt,
   TransactionResultReturnReceipt,
 } from '@fuel-ts/account';
+import type { Address } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
 import { ReceiptType } from '@fuel-ts/transactions';
@@ -107,7 +107,7 @@ const getMainCallReceipt = (
       type === ReceiptType.Call && from === SCRIPT_WRAPPER_CONTRACT_ID && to === contractId
   );
 
-const scriptResultDecoder = (contractId: AbstractAddress) => (result: ScriptResult) => {
+const scriptResultDecoder = (contractId: Address) => (result: ScriptResult) => {
   if (toNumber(result.code) !== 0) {
     throw new FuelError(ErrorCode.SCRIPT_REVERTED, `Transaction reverted.`);
   }
@@ -140,7 +140,7 @@ const scriptResultDecoder = (contractId: AbstractAddress) => (result: ScriptResu
 
 export const decodeContractCallScriptResult = (
   callResult: CallResult,
-  contractId: AbstractAddress,
+  contractId: Address,
   logs: Array<any> = []
 ): Uint8Array[] => decodeCallResult(callResult, scriptResultDecoder(contractId), logs);
 

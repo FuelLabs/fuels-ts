@@ -1,11 +1,11 @@
 /* eslint-disable max-classes-per-file */
+import type { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAddress } from '@fuel-ts/interfaces';
 
 import type { WalletUnlocked } from '../wallet';
 
 export type WalletManagerAccount = {
-  address: AbstractAddress;
+  address: Address;
   publicKey: string;
   vaultId?: number;
 };
@@ -50,11 +50,11 @@ export abstract class Vault<TOptions = { secret?: string }> {
     throw new FuelError(ErrorCode.NOT_IMPLEMENTED, 'Not implemented.');
   }
 
-  exportAccount(_address: AbstractAddress): string {
+  exportAccount(_address: Address): string {
     throw new FuelError(ErrorCode.NOT_IMPLEMENTED, 'Not implemented.');
   }
 
-  getWallet(_address: AbstractAddress): WalletUnlocked {
+  getWallet(_address: Address): WalletUnlocked {
     throw new FuelError(ErrorCode.NOT_IMPLEMENTED, 'Not implemented.');
   }
 }

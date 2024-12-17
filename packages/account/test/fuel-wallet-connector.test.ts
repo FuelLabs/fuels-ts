@@ -2,9 +2,9 @@ import { Address } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
+import type { BytesLike } from '@fuel-ts/utils';
 import { TESTNET_NETWORK_URL } from '@internal/utils';
 import { EventEmitter } from 'events';
 
@@ -591,10 +591,7 @@ describe('Fuel Connector', () => {
       }
 
       // eslint-disable-next-line @typescript-eslint/require-await
-      override async getBalance(
-        _owner: AbstractAddress,
-        _assetId: BytesLike = ZeroBytes32
-      ): Promise<BN> {
+      override async getBalance(_owner: Address, _assetId: BytesLike = ZeroBytes32): Promise<BN> {
         return bn(1234);
       }
     }

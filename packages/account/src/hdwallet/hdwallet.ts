@@ -1,8 +1,8 @@
 import { computeHmac, ripemd160 } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { sha256 } from '@fuel-ts/hasher';
-import type { BytesLike } from '@fuel-ts/interfaces';
 import { bn, toBytes, toHex } from '@fuel-ts/math';
+import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, concat, dataSlice, encodeBase58, decodeBase58 } from '@fuel-ts/utils';
 
 import { Mnemonic } from '../mnemonic';

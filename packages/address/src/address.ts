@@ -1,15 +1,8 @@
 import { FuelError } from '@fuel-ts/errors';
-import { AbstractAddress } from '@fuel-ts/interfaces';
-import type {
-  Bech32Address,
-  B256Address,
-  EvmAddress,
-  AssetId,
-  ChecksumAddress,
-} from '@fuel-ts/interfaces';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 import { sha256 } from '@noble/hashes/sha256';
 
+import type { Bech32Address, B256Address, EvmAddress, AssetId, ChecksumAddress } from './types';
 import {
   normalizeBech32,
   isBech32,
@@ -28,7 +21,7 @@ import {
  * `Address` provides a type safe wrapper for converting between different address formats
  * ands comparing them for equality.
  */
-export default class Address extends AbstractAddress {
+export class Address {
   // #region address-2
   /**
    * @deprecated
@@ -41,8 +34,6 @@ export default class Address extends AbstractAddress {
    * @param address - A Bech32 address or B256 address
    */
   constructor(address: Bech32Address | B256Address) {
-    super();
-
     if (isB256(address)) {
       this.bech32Address = toBech32(address);
     } else {
@@ -144,7 +135,7 @@ export default class Address extends AbstractAddress {
    * Wraps the B256 address `checksum` and returns it as a string
    * @returns The B256 address `checksum` as a string
    */
-  override valueOf(): string {
+  valueOf(): string {
     return this.toChecksum();
   }
 
@@ -213,19 +204,19 @@ export default class Address extends AbstractAddress {
    *
    * @returns a new `Address` instance
    */
-  static fromAddressOrString(address: string | AbstractAddress): AbstractAddress {
+  static fromAddressOrString(address: string | Address): Address {
     return typeof address === 'string' ? this.fromString(address) : address;
   }
 
   /**
-   * Takes a dynamic string or `AbstractAddress` and creates an `Address`
+   * Takes a dynamic string or `Address` and creates an `Address`
    *
    * @param addressId - A string containing Bech32, B256, or Public Key
    * @throws Error - Unknown address if the format is not recognised
    * @returns A new `Address` instance
    */
-  static fromDynamicInput(address: string | AbstractAddress): Address {
-    // If address is a object than we assume it's a AbstractAddress
+  static fromDynamicInput(address: string | Address): Address {
+    // If address is a object than we assume it's a Address
     // we don't check by instanceof because it's possible to
     // the host app to have a different reference to this same class type
     if (typeof address !== 'string' && 'toB256' in address) {

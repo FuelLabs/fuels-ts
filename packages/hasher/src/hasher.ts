@@ -1,5 +1,5 @@
 import { bufferFromString } from '@fuel-ts/crypto';
-import type { BytesLike } from '@fuel-ts/interfaces';
+import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 import { sha256 as sha256AsBytes } from '@noble/hashes/sha256';
 

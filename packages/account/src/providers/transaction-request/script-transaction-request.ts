@@ -1,12 +1,13 @@
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { addressify } from '@fuel-ts/address';
+import type { ContractIdLike } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
-import type { AbstractScriptRequest, ContractIdLike, BytesLike } from '@fuel-ts/interfaces';
 import { bn } from '@fuel-ts/math';
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import type { TransactionScript } from '@fuel-ts/transactions';
 import { InputType, OutputType, TransactionType } from '@fuel-ts/transactions';
+import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
@@ -19,7 +20,7 @@ import type { ContractTransactionRequestOutput, VariableTransactionRequestOutput
 import { returnZeroScript } from './scripts';
 import type { BaseTransactionRequestLike } from './transaction-request';
 import { BaseTransactionRequest } from './transaction-request';
-import type { JsonAbisFromAllCalls } from './types';
+import type { AbstractScriptRequest, JsonAbisFromAllCalls } from './types';
 
 /**
  * @hidden

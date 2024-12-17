@@ -9,11 +9,11 @@ import type {
   TransferParams,
   TransactionResponse,
   TransactionCost,
+  AbstractAccount,
 } from '@fuel-ts/account';
 import { ScriptTransactionRequest, Wallet } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAccount, AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { InputType, TransactionType } from '@fuel-ts/transactions';
@@ -29,6 +29,8 @@ import type {
   TxParams,
   FunctionResult,
   DryRunResult,
+  AbstractContract,
+  AbstractProgram,
 } from '../types';
 import { assert, getAbisFromAllCalls } from '../utils';
 

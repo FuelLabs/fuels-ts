@@ -13,7 +13,7 @@ You can read more about the `Bech32` type [here](https://thebitcoinmanual.com/ar
 
 A `Bech32` address consists of an HRP (Human-Readable Part) followed by the number `1`, which acts as a separator:
 
-<<< @/../../../packages/interfaces/src/index.ts#bech32-1{ts:line-numbers}
+<<< @/../../../packages/address/src/types.ts#bech32-1{ts:line-numbers}
 
 A complete `Bech32` address will resemble the following:
 

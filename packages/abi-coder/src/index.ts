@@ -14,3 +14,4 @@ export {
   calculateVmTxMemory,
   ENCODING_V1,
 } from './utils/constants';
+export type { Bytes, RawSlice, StdString, StrSlice } from './utils/types';

@@ -1,7 +1,7 @@
-import type { BytesLike } from '@fuel-ts/interfaces';
 import { gzipSync, gunzipSync } from 'fflate';
 
 import { arrayify } from './arrayify';
+import type { BytesLike } from './arrayify';
 
 export const compressBytecode = (bytecodeAsBinary?: BytesLike) => {
   if (!bytecodeAsBinary) {

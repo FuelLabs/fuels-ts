@@ -1,4 +1,5 @@
 export * from './account';
+export * from './types';
 export * from './wallet';
 export * from './hdwallet';
 export * from './mnemonic';

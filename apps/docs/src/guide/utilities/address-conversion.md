@@ -48,13 +48,13 @@ And by using the `isB256` and `toBech32` utilities:
 
 ## Converting a Contract ID
 
-The Contract `id` property has the [`AbstractAddress`](../types/address.md#abstractaddress-class) type. Therefore, it can be converted using the [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class functions such as `toAddress` and `toB256`:
+The Contract `id` property is an instance of the [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class. Therefore, it can be converted using the [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class functions such as `toAddress` and `toB256`:
 
 <<< @./snippets/address-conversion/contract.ts#conversion-2{ts:line-numbers}
 
 ## Converting a Wallet Address
 
-Similarly, the Wallet `address` property is also of type [`AbstractAddress`](../types/address.md#abstractaddress-class) and can therefore use the same [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class functions for conversion:
+Similarly, the Wallet `address` property is also of type [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) and can therefore use the same [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class functions for conversion:
 
 <<< @./snippets/address-conversion/wallet.ts#conversion-3{ts:line-numbers}
 

@@ -1,8 +1,8 @@
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import type { AssetId, B256AddressEvm, Bech32Address, EvmAddress } from '@fuel-ts/interfaces';
 
-import Address from './address';
+import { Address } from './address';
+import type { AssetId, B256AddressEvm, Bech32Address, EvmAddress } from './types';
 import * as utils from './utils';
 
 const PUBLIC_KEY =

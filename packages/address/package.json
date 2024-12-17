@@ -39,7 +39,6 @@
   "dependencies": {
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
-    "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/utils": "workspace:^",
     "@noble/hashes": "^1.5.0",
     "bech32": "^2.0.0"

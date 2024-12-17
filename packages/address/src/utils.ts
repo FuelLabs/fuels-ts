@@ -1,18 +1,18 @@
 import { randomBytes } from '@fuel-ts/crypto';
 import { FuelError } from '@fuel-ts/errors';
-import { AbstractContract, AbstractAccount } from '@fuel-ts/interfaces';
-import type {
-  Bech32Address,
-  B256Address,
-  AddressLike,
-  ContractIdLike,
-  AbstractAddress,
-  B256AddressEvm,
-  BytesLike,
-} from '@fuel-ts/interfaces';
+import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 import type { Decoded } from 'bech32';
 import { bech32m } from 'bech32';
+
+import type { Address } from './address';
+import type {
+  AddressLike,
+  ContractIdLike,
+  B256Address,
+  B256AddressEvm,
+  Bech32Address,
+} from './types';
 
 /**
  * Fuel Network HRP (human-readable part) for bech32 encoding
@@ -124,20 +124,34 @@ export function normalizeBech32(address: Bech32Address): Bech32Address {
 }
 
 /**
+ * A simple type guard to check if an object is an Address
+ *
+ * @hidden
+ */
+export function isAddress(address: object): address is Address {
+  return 'bech32Address' in address;
+}
+
+/**
  * Takes an indeterminate address type and returns an address
  *
  * @hidden
  */
-export const addressify = (addressLike: AddressLike | ContractIdLike): AbstractAddress => {
-  if (addressLike instanceof AbstractAccount) {
+export const addressify = (addressLike: AddressLike | ContractIdLike): Address => {
+  if (isAddress(addressLike)) {
+    return addressLike;
+  }
+
+  if ('address' in addressLike && isAddress(addressLike.address)) {
     return addressLike.address;
   }
 
-  if (addressLike instanceof AbstractContract) {
+  if ('id' in addressLike && isAddress(addressLike.id)) {
     return addressLike.id;
   }
 
-  return addressLike;
+  // TODO: add error code
+  throw new FuelError(FuelError.CODES.INVALID_ADDRESS, 'Invalid address');
 };
 
 /**

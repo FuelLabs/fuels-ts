@@ -17,10 +17,10 @@ import type {
 } from '@fuel-ts/account';
 import { extractTxError } from '@fuel-ts/account';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import type { ReceiptScriptResult } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
+import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify } from '@fuel-ts/utils';
 
 import type { CallConfig } from './types';

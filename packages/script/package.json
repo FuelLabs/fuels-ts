@@ -31,7 +31,6 @@
     "@fuel-ts/account": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
-    "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/program": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",

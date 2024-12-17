@@ -8,7 +8,6 @@ import * as errors from '@fuel-ts/errors';
 // forc-bin
 // fuels-gauge
 import * as hasher from '@fuel-ts/hasher';
-import * as interfaces from '@fuel-ts/interfaces';
 import * as math from '@fuel-ts/math';
 import * as merkle from '@fuel-ts/merkle';
 import * as program from '@fuel-ts/program';
@@ -28,7 +27,6 @@ log([
   errors,
   fuels,
   hasher,
-  interfaces,
   crypto,
   math,
   merkle,

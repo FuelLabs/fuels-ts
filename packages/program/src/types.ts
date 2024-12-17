@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
 import type {
   CallResult,
@@ -6,17 +7,38 @@ import type {
   TransactionResponse,
   TransactionResult,
   TransactionType,
+  AbstractAccount,
 } from '@fuel-ts/account';
-import type { AbstractProgram, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
+import type { Address } from '@fuel-ts/address';
 import type { BN, BigNumberish } from '@fuel-ts/math';
+import type { BytesLike } from '@fuel-ts/utils';
 
 import type { FunctionInvocationScope } from './functions/invocation-scope';
+
+/**
+ * @hidden
+ */
+export abstract class AbstractProgram {
+  abstract account: AbstractAccount | null;
+  abstract interface: {
+    readonly jsonAbi: any;
+  };
+
+  abstract provider: {
+    sendTransaction(transactionRequest: any, options?: any): any;
+    getTransactionCost(transactionRequest: any, options?: any): Promise<any>;
+  } | null;
+}
+
+export abstract class AbstractContract extends AbstractProgram {
+  abstract id: Address;
+}
 
 /**
  * Represents a contract call.
  */
 export type ContractCall = {
-  contractId: AbstractAddress;
+  contractId: Address;
   data: BytesLike;
   fnSelectorBytes: Uint8Array;
   amount?: BigNumberish;

@@ -33,7 +33,6 @@
 
 import { toBech32 } from '@fuel-ts/address';
 import type { Address } from '@fuel-ts/address';
-import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import debug from 'debug';
@@ -106,11 +105,10 @@ debug.formatters.a = (v?: BN): string => {
 };
 
 // Add a formatter for converting to a b256 string
-debug.formatters.b = (v?: AbstractAddress): string => (v == null ? 'undefined' : v.toB256());
+debug.formatters.b = (v?: Address): string => (v == null ? 'undefined' : v.toB256());
 
 // Add a formatter for outputting a bech32 address
-debug.formatters.c = (v?: AbstractAddress): string =>
-  v == null ? 'undefined' : toBech32(v.toString());
+debug.formatters.c = (v?: Address): string => (v == null ? 'undefined' : toBech32(v.toString()));
 
 // Add a formatter for outputting a BN hex string
 debug.formatters.h = (v?: BN): string => (v == null ? 'undefined' : v.toHex());
