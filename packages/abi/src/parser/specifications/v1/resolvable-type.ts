@@ -27,14 +27,18 @@ export class ResolvableType {
       concreteTypes: Map<string, AbiConcreteTypeV1>;
     },
     public metadataTypeId: number,
-    public typeParamsArgsMap: Array<[number, ResolvedType | ResolvableType]> | undefined
+    public typeParamsArgsMap: Map<number, ResolvedType | ResolvableType> | undefined
   ) {
     this.metadataType = this.findMetadataType(metadataTypeId);
     this.swayType = this.metadataType.type;
-    this.typeParamsArgsMap ??= this.metadataType.typeParameters?.map((tp) => [
-      tp,
-      new ResolvableType(this.abiTypeMaps, tp, undefined),
-    ]);
+    this.typeParamsArgsMap ??=
+      this.metadataType.typeParameters &&
+      new Map(
+        this.metadataType.typeParameters.map((tp) => [
+          tp,
+          new ResolvableType(this.abiTypeMaps, tp, undefined),
+        ])
+      );
 
     this.components = this.metadataType.components?.map((c) =>
       this.createResolvableComponent(this, c)
@@ -82,8 +86,13 @@ export class ResolvableType {
   private static mapTypeParametersAndArgs(
     metadataType: AbiMetadataTypeV1,
     args: (ResolvableType | ResolvedType)[]
-  ): Array<[number, ResolvedType | ResolvableType]> | undefined {
-    return metadataType.typeParameters?.map((typeParameter, idx) => [typeParameter, args[idx]]);
+  ): Map<number, ResolvedType | ResolvableType> | undefined {
+    return (
+      metadataType.typeParameters &&
+      new Map<number, ResolvedType | ResolvableType>(
+        metadataType.typeParameters.map((typeParameter, idx) => [typeParameter, args[idx]])
+      )
+    );
   }
 
   private createResolvableComponent(
@@ -176,9 +185,7 @@ export class ResolvableType {
        * We check in the parent's typeParamsArgsMap if the metadata type we're solving for
        * has been substituted with a different generic type, and then we use that generic type.
        */
-      const resolvableTypeParameter = parent.typeParamsArgsMap?.find(
-        ([typeParameterId]) => typeParameterId === metadataType.metadataTypeId
-      )?.[1];
+      const resolvableTypeParameter = parent.typeParamsArgsMap?.get(metadataType.metadataTypeId);
 
       return (
         resolvableTypeParameter ??
@@ -227,7 +234,7 @@ export class ResolvableType {
 
   private resolveInternal(
     typeId: string | number,
-    typeParamsArgsMap: Array<[number, ResolvedType]> | undefined
+    typeParamsArgsMap: Map<number, ResolvedType> | undefined
   ): ResolvedType {
     const resolvedType = new ResolvedType({
       swayType: this.swayType,
@@ -263,9 +270,7 @@ export class ResolvableType {
        * its corresponding type argument will be found in the typeArgs,
        * which will be used to substitute the component with.
        */
-      const resolvedGenericType = typeArgs?.find(
-        ([typeParameterId]) => type.metadataTypeId === typeParameterId
-      )?.[1];
+      const resolvedGenericType = typeArgs?.get(type.metadataTypeId);
 
       if (resolvedGenericType) {
         return {
@@ -301,8 +306,8 @@ export class ResolvableType {
   }
 
   private resolveTypeArgs(
-    typeParamsArgsMap: Array<[number, ResolvedType]> | undefined
-  ): [number, ResolvedType][] | undefined {
+    typeParamsArgsMap: Map<number, ResolvedType> | undefined
+  ): Map<number, ResolvedType> | undefined {
     /**
      * This case only happens when the metadata type is *implicitly* generic.
      * The type itself doesn't have any type parameters that should be resolved,
@@ -314,31 +319,36 @@ export class ResolvableType {
       return typeParamsArgsMap;
     }
 
+    const newMap = new Map<number, ResolvedType>();
+
     /**
      * We resolve the type parameters of the underlying metadata type
      * with the type arguments of the concrete type.
      */
-    return this.typeParamsArgsMap.map(([tp, value]) => {
+    this.typeParamsArgsMap.forEach((value, tp) => {
       /**
        * Some type parameters can already be resolved
        * e.g. `struct MyStruct<E> { a: DoubleGeneric<E, u16> }`
        * where the second type parameter of DoubleGeneric is already known.
        */
       if (value instanceof ResolvedType) {
-        return [tp, value];
+        newMap.set(tp, value);
+        return;
       }
-
-      const resolved = typeParamsArgsMap?.find(
-        ([typeParameterId]) => typeParameterId === value.metadataTypeId
-      );
 
       /**
        * The type parameter is either directly substituted with a type argument,
        * or it's metadata type which accepts the type argument,
        * so that metadata type needs to be resolved first.
        */
-      return resolved ?? [tp, value.resolveInternal(value.metadataTypeId, typeParamsArgsMap)];
+      const resolved =
+        typeParamsArgsMap?.get(value.metadataTypeId) ??
+        value.resolveInternal(value.metadataTypeId, typeParamsArgsMap);
+
+      newMap.set(value.metadataTypeId, resolved);
     });
+
+    return newMap;
   }
 
   public resolve(concreteType: AbiConcreteTypeV1) {
@@ -348,8 +358,9 @@ export class ResolvableType {
     });
 
     const typeParamsArgsMap = concreteTypeArgs
-      ? (ResolvableType.mapTypeParametersAndArgs(this.metadataType, concreteTypeArgs) as Array<
-          [number, ResolvedType]
+      ? (ResolvableType.mapTypeParametersAndArgs(this.metadataType, concreteTypeArgs) as Map<
+          number,
+          ResolvedType
         >)
       : undefined;
 
