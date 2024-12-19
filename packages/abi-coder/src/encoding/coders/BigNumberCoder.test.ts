@@ -23,6 +23,35 @@ describe('BigNumberCoder', () => {
     expect(actual).toStrictEqual(expected);
   });
 
+  it('should encode a u64 [max safe integer]', () => {
+    const coder = new BigNumberCoder('u64');
+    const value: number = Number.MAX_SAFE_INTEGER;
+    const expected = new Uint8Array([0, 31, 255, 255, 255, 255, 255, 255]);
+
+    const data = coder.encode(value);
+
+    expect(data).toEqual(expected);
+  });
+
+  it('should encode a u64 [very big number - as string]', () => {
+    const coder = new BigNumberCoder('u64');
+    const value: string = (Number.MAX_SAFE_INTEGER + 1).toString();
+    const expected = new Uint8Array([0, 32, 0, 0, 0, 0, 0, 0]);
+
+    const data = coder.encode(value);
+
+    expect(data).toEqual(expected);
+  });
+
+  it('should throw an error when encoding [number more than max safe integer]', () => {
+    const coder = new BigNumberCoder('u64');
+    const value: number = Number.MAX_SAFE_INTEGER + 1;
+
+    expect(() => coder.encode(value)).toThrow(
+      new FuelError(ErrorCode.ENCODE_ERROR, 'Invalid u64 type - number value is too large.')
+    );
+  });
+
   it('should decode a u64 number', () => {
     const coder = new BigNumberCoder('u64');
     const expectedValue = 0;
@@ -32,6 +61,17 @@ describe('BigNumberCoder', () => {
     expect(actualValue).toBeInstanceOf(BN);
     expect(actualValue.toNumber()).toBe(expectedValue);
     expect(actualLength).toBe(expectedLength);
+  });
+
+  it('should decode a u64 [very big number]', () => {
+    const coder = new BigNumberCoder('u64');
+    const data = new Uint8Array([1, 15, 174, 231, 121, 200, 89, 80]);
+    const expectedValue = bn('76472027892439376');
+
+    const [actualValue, actualLength] = coder.decode(data, 0);
+
+    expect(actualValue).toEqualBn(expectedValue);
+    expect(actualLength).toEqual(8);
   });
 
   it('should encode u8 max number', () => {

@@ -20,6 +20,13 @@ export class BigNumberCoder extends Coder<BNInput, BN> {
   encode(value: BNInput): Uint8Array {
     let bytes;
 
+    if (typeof value === 'number' && value > Number.MAX_SAFE_INTEGER) {
+      throw new FuelError(
+        ErrorCode.ENCODE_ERROR,
+        `Invalid ${this.type} type - number value is too large.`
+      );
+    }
+
     try {
       bytes = toBytes(value, this.encodedLength);
     } catch (error) {
