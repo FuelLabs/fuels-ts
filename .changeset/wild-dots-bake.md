@@ -17,4 +17,4 @@
 "@fuel-ts/utils": patch
 ---
 
-!chore: redistributed the `@fuel-ts/interfaces` package
+chore!: redistributed the `@fuel-ts/interfaces` package
