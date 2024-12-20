@@ -20,6 +20,9 @@ export class BigNumberCoder extends Coder<BNInput, BN> {
   encode(value: BNInput): Uint8Array {
     let bytes;
 
+    // We throw an error if the value is a number and it's more than the max safe integer
+    // This is because we can experience some odd behavior with integers more than the max safe integer
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER#description
     if (typeof value === 'number' && value > Number.MAX_SAFE_INTEGER) {
       throw new FuelError(
         ErrorCode.ENCODE_ERROR,
