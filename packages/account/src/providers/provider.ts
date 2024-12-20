@@ -365,6 +365,7 @@ export type ProviderCallParams = UTXOValidationParams & EstimateTransactionParam
  */
 export type ProviderSendTxParams = EstimateTransactionParams & {
   onBeforeSend?: (txRequest: TransactionRequest) => Promise<TransactionRequest>;
+  skipCustomFee?: boolean;
 };
 
 /**

@@ -46,5 +46,6 @@ export type SelectNetworkArguments = RequireAtLeastOne<Network, 'chainId' | 'url
 export type FuelABI = JsonAbi;
 
 export type SendTransactionParams = {
+  skipCustomFee?: boolean;
   onBeforeSend?: (txRequest: TransactionRequest) => Promise<TransactionRequest>;
-}
+};

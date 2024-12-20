@@ -646,12 +646,17 @@ export class Account extends AbstractAccount {
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true, onBeforeSend }: ProviderSendTxParams = {}
+    {
+      estimateTxDependencies = true,
+      onBeforeSend,
+      skipCustomFee = false
+    }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     if (this._connector) {
       return this.provider.getTransactionResponse(
         await this._connector.sendTransaction(this.address.toString(), transactionRequestLike, {
           onBeforeSend,
+          skipCustomFee,
         })
       );
     }
