@@ -1,4 +1,4 @@
-import type { Address } from '@fuel-ts/address';
+import { Address } from '@fuel-ts/address';
 import { BN } from '@fuel-ts/math';
 import debug from 'debug';
 import type { MockInstance } from 'vitest';
@@ -100,16 +100,8 @@ describe('Logger Tests', () => {
   });
 
   it('should format Address to bech32 string using formatter c', () => {
-    const mockAddress: Address = {
-      toJSON: () => '',
-      toString: () => '0x000000000000000000000000000000000000000000000000000000000000002a',
-      toAddress: () => 'fuel1xyzabc123',
-      toB256: () => '',
-      toHexString: () => '',
-      toBytes: () => new Uint8Array(),
-      equals: () => false,
-    };
-    const formatted = debug.formatters.c(mockAddress);
+    const address = new Address('fuel1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq4qvpkv30');
+    const formatted = debug.formatters.c(address);
     expect(formatted).toBe('fuel1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq4qvpkv30');
   });
 
