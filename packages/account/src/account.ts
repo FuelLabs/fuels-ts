@@ -1,4 +1,5 @@
 import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
+import type { WithAddress } from '@fuel-ts/address';
 import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -76,7 +77,7 @@ export type FakeResources = Partial<Coin> & Required<Pick<Coin, 'amount' | 'asse
 /**
  * `Account` provides an abstraction for interacting with accounts or wallets on the network.
  */
-export class Account extends AbstractAccount {
+export class Account extends AbstractAccount implements WithAddress {
   /**
    * The address associated with the account.
    */

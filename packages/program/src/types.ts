@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
+import type { FunctionFragment, JsonAbi, Interface } from '@fuel-ts/abi-coder';
 import type {
   CallResult,
   CoinQuantity,
@@ -8,8 +8,9 @@ import type {
   TransactionResult,
   TransactionType,
   AbstractAccount,
+  Provider,
 } from '@fuel-ts/account';
-import type { Address } from '@fuel-ts/address';
+import type { Address, WithContractId } from '@fuel-ts/address';
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import type { BytesLike } from '@fuel-ts/utils';
 
@@ -20,17 +21,11 @@ import type { FunctionInvocationScope } from './functions/invocation-scope';
  */
 export abstract class AbstractProgram {
   abstract account: AbstractAccount | null;
-  abstract interface: {
-    readonly jsonAbi: any;
-  };
-
-  abstract provider: {
-    sendTransaction(transactionRequest: any, options?: any): any;
-    getTransactionCost(transactionRequest: any, options?: any): Promise<any>;
-  } | null;
+  abstract interface: Pick<Interface, 'jsonAbi'>;
+  abstract provider: Pick<Provider, 'sendTransaction' | 'getTransactionCost'> | null;
 }
 
-export abstract class AbstractContract extends AbstractProgram {
+export abstract class AbstractContract extends AbstractProgram implements WithContractId {
   abstract id: Address;
 }
 

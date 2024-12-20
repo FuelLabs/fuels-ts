@@ -9,11 +9,10 @@
 */
 
 import { Contract, type InvokeFunction } from '@fuel-ts/program';
-import { Interface, type FunctionFragment } from '@fuel-ts/abi-coder';
+import { Interface, type FunctionFragment, type StrSlice } from '@fuel-ts/abi-coder';
 import { type Provider, type Account } from '@fuel-ts/account';
 import { type StorageSlot } from '@fuel-ts/transactions';
 import { type Address } from '@fuel-ts/address';
-import { type StrSlice } from '@fuel-ts/abi-coder';
 import type { Option, Enum } from './common';
 
 export enum AccessErrorInput {
