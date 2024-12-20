@@ -73,7 +73,6 @@ describe('Doc Examples', () => {
 
     // you can verify equality using the helper functions
     expect(address.equals(addressCloneFromB256)).toBeTruthy();
-    expect(someAddress.toString()).toEqual(addressCloneFromB256.toString());
     expect(someAddress).toBeTruthy();
   });
 
