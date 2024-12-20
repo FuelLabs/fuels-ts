@@ -484,10 +484,6 @@ export default defineConfig({
                 link: '/guide/types/asset-id',
               },
               {
-                text: 'Bech32',
-                link: '/guide/types/bech32',
-              },
-              {
                 text: 'Bits256',
                 link: '/guide/types/bits256',
               },

@@ -14,7 +14,7 @@ describe('Keystore Wallet', () => {
   const privateKey = '0xeac85e732b683119e62fb52ce3b04c0d2f60539cd55af34c731fcdcf802e5ef4';
 
   const address = Address.fromAddressOrString(
-    'fuel1v77yj3g6xcatrhkcz72m2njx4cxxzgj8yepywz7ylf4fhkpptawqkh3dft'
+    '0x67bc49451a363ab1ded81795b54e46ae0c6122472642470bc4fa6a9bd8215f5c'
   );
   const password = '123456';
 
