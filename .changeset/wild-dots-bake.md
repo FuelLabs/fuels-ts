@@ -13,7 +13,7 @@
 "@fuel-ts/hasher": patch
 "@fuel-ts/logger": patch
 "@fuel-ts/script": patch
-"fuels": patch
+"fuels": minor
 "@fuel-ts/utils": patch
 ---
 
