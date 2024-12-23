@@ -2,4 +2,4 @@
 "@fuel-ts/abi-coder": patch
 ---
 
-fix: handling very large numbers gracefully
+fix: validation and handling of unsafe integers
