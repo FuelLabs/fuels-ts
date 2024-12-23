@@ -94,7 +94,6 @@ export const configureCli = () => {
     .description(`Generate Typescript from Sway ABI JSON files`)
     .requiredOption('-i, --inputs <path|glob...>', 'Input paths/globals to your ABI JSON files')
     .requiredOption('-o, --output <dir>', 'Directory path for generated files')
-    .option('-S, --silent', 'Omit output messages')
     .action(withProgram(command, Commands.typegen, typegen));
 
   // Versions
