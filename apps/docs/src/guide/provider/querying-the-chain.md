@@ -2,7 +2,7 @@
 
 Once you have set up a provider, you're ready to interact with the Fuel blockchain.
 
-- [Connecting to the Network](../getting-started/connecting-to-network.md)
+- [Connecting to the Network](../getting-started/connecting-to-the-network.md)
 
 Let's look at a few examples below.
 

@@ -2,7 +2,7 @@
 
 After [installing](./installation.md) the `fuels` package, it's easy to connect to the Network:
 
-<<< @./snippets/connecting-to-network.ts#main{ts:line-numbers}
+<<< @./snippets/connecting-to-the-network.ts#main{ts:line-numbers}
 
 # RPC URLs
 

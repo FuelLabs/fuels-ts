@@ -52,7 +52,7 @@ export default defineConfig({
               },
               {
                 text: 'Connecting to the Network',
-                link: '/guide/getting-started/connecting-to-network',
+                link: '/guide/getting-started/connecting-to-the-network',
               },
               {
                 text: 'Running a local Fuel node',

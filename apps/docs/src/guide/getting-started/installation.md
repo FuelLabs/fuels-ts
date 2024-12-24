@@ -27,4 +27,4 @@ npm install fuels@{{fuels}} --save
 
 Now you are ready to:
 
-- [Connect to the Network](./connecting-to-network.md)
+- [Connect to the Network](./connecting-to-the-network.md)
