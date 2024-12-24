@@ -56,7 +56,7 @@ export default defineConfig({
               },
               {
                 text: 'Running a local Fuel node',
-                link: '/guide/getting-started/running-local-node',
+                link: '/guide/getting-started/running-a-local-fuel-node',
               },
               {
                 text: 'React Example',

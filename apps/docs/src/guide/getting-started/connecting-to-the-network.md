@@ -27,4 +27,4 @@ You can also access all our apps directly:
 
 If you want to connect to `localhost`, check this:
 
-- [Running a local Fuel node](./running-local-node.md)
+- [Running a local Fuel node](./running-a-local-fuel-node.md)
