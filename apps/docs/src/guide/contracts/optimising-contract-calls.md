@@ -12,7 +12,7 @@ The below flowchart shows this entire process:
 
 The SDK will prepare the contract call _after_ the user has submitted the transaction at the application level. This is so the transaction is funded in it's finalised state. However this makes the chain feel slower than it actually is as we are making two network requests.
 
-This can be mitigated by preparing the contract call _before_ the user presses 'Submit Transaction'. If the transaction is prepared beforehand, the SDK only has to send the transaction to the network and wait for it to be confirmed. This reflects the actual speed of the chain to the user.
+This can be mitigated by preparing the contract call _before_ the user submits the transaction. If the transaction is prepared beforehand, the SDK only has to send the transaction to the network and wait for it to be confirmed. This reflects the actual speed of the chain to the user.
 
 You can experience this yourself by trying out this [demo](https://fuel-wallet-prefetch-experiment-75ug.vercel.app/).
 
