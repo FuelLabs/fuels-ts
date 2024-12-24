@@ -8,7 +8,7 @@ When you call a contract function via the SDK, it makes two essential network re
 
 The below flowchart shows this entire process:
 
-![Transaction Lifecycle in the SDK without prefetching](/public/txdep1.png)
+![Transaction Lifecycle in the SDK without prefetching](../../public/txdep1.png)
 
 The SDK will prepare the contract call _after_ the user has submitted the transaction at the application level. This is so the transaction is funded in it's finalised state. However this makes the chain feel slower than it actually is as we are making two network requests.
 
@@ -16,7 +16,7 @@ This can be mitigated by preparing the contract call _before_ the user submits t
 
 You can experience this yourself by trying out this [demo](https://fuel-wallet-prefetch-experiment-75ug.vercel.app/).
 
-![Transaction Lifecycle in the SDK with prefetching](/public/txdep2.png)
+![Transaction Lifecycle in the SDK with prefetching](../../public/txdep2.png)
 
 Because of the massive performance gains, we recommend this strategy for all contract calls.
 
