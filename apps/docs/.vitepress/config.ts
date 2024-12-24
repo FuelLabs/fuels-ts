@@ -67,8 +67,8 @@ export default defineConfig({
                 link: '/guide/getting-started/cdn-usage',
               },
               {
-                text: 'Further Resources',
-                link: '/guide/getting-started/further-resources',
+                text: 'Next Steps',
+                link: '/guide/getting-started/next-steps',
               },
             ],
           },

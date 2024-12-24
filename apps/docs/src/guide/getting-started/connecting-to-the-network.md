@@ -12,6 +12,10 @@ These are our official RPC URLs:
 | ----------------------------------------- | ----------------------------------------- |
 | `https://mainnet.fuel.network/v1/graphql` | `https://testnet.fuel.network/v1/graphql` |
 
+You can also connect to `localhost`:
+
+- [Running a local Fuel node](./running-a-local-fuel-node.md)
+
 # Resources
 
 You can also access all our apps directly:
@@ -22,9 +26,3 @@ You can also access all our apps directly:
 | Explorer | https://app.fuel.network                   | https://app-testnet.fuel.network           |
 | Bridge   | https://app.fuel.network/bridge            | https://app-testnet.fuel.network/bridge    |
 | GraphQL  | https://mainnet.fuel.network/v1/playground | https://testnet.fuel.network/v1/playground |
-
-# More
-
-If you want to connect to `localhost`, check this:
-
-- [Running a local Fuel node](./running-a-local-fuel-node.md)
