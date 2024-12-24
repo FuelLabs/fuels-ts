@@ -51,16 +51,20 @@ export default defineConfig({
                 link: '/guide/getting-started/installation',
               },
               {
-                text: 'Usage',
-                link: '/guide/getting-started/usage',
+                text: 'Connecting to the Network',
+                link: '/guide/getting-started/connecting-to-network',
               },
               {
-                text: 'Connecting to Testnet',
-                link: '/guide/getting-started/connecting-to-testnet',
+                text: 'Running a local Fuel node',
+                link: '/guide/getting-started/running-local-node',
               },
               {
-                text: 'Connecting to a Local Node',
-                link: '/guide/getting-started/connecting-to-a-local-node',
+                text: 'React Example',
+                link: '/guide/getting-started/react-example',
+              },
+              {
+                text: 'CDN Usage',
+                link: '/guide/getting-started/cdn-usage',
               },
               {
                 text: 'Further Resources',
