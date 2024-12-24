@@ -44,3 +44,8 @@ Configure your project for the `fuels` CLI using a `fuels.config.ts` file:
 It makes development easier with a hot-reload experience:
 
 - [Using the `fuels dev` command](../fuels-cli/commands.md#fuels-dev)
+
+# More
+
+- [React Example](./react-example.md)
+- [CDN Usage](./cdn-usage.md)

@@ -29,3 +29,7 @@ function App() {
 
 export default App;
 ```
+
+# More
+
+- [CDN Usage](./cdn-usage.md)

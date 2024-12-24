@@ -1,4 +1,4 @@
-# Next Steps
+# Done!
 
 Wait no more, let's build your first Fuel dApp!
 
