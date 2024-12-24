@@ -33,11 +33,14 @@ export function renderProgram(details: ProgramDetails, versions: BinaryVersions)
       filename: `${name}-abi.ts`,
       content: templateRenderer({ template: abiTemplate, versions, data: { abiContents } }),
     },
-    {
+  ];
+
+  if (binCompressed) {
+    results.push({
       filename: `${name}-bytecode.ts`,
       content: templateRenderer({ template: bytecodeTemplate, versions, data: { binCompressed } }),
-    },
-  ];
+    });
+  }
 
   switch (abi.programType) {
     case 'contract':
@@ -51,15 +54,7 @@ export function renderProgram(details: ProgramDetails, versions: BinaryVersions)
           }),
           exportInIndexFile: true,
         },
-        {
-          filename: `${name}Factory.ts`,
-          content: templateRenderer({
-            template: contractFactoryTemplate,
-            versions,
-            data: { name },
-          }),
-          exportInIndexFile: true,
-        },
+
         {
           filename: `${name}-storage-slots.ts`,
           content: templateRenderer({
@@ -69,6 +64,18 @@ export function renderProgram(details: ProgramDetails, versions: BinaryVersions)
           }),
         }
       );
+
+      if (binCompressed) {
+        results.push({
+          filename: `${name}Factory.ts`,
+          content: templateRenderer({
+            template: contractFactoryTemplate,
+            versions,
+            data: { name },
+          }),
+          exportInIndexFile: true,
+        });
+      }
       break;
     case 'predicate':
       results.push({

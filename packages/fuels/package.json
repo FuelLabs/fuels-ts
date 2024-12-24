@@ -59,7 +59,8 @@
     "build:recipes": "cd ../recipes && pnpm build:all && cd ../fuels",
     "type:declarations": "tsc --emitDeclarationOnly -p tsconfig.dts.json",
     "type:check": "tsc --noEmit",
-    "prepublishOnly": "cp ../../README.md ./README.md"
+    "prepublishOnly": "cp ../../README.md ./README.md",
+    "pretest": "pnpm fuels build --path $PWD/test/fixtures --deploy"
   },
   "license": "Apache-2.0",
   "dependencies": {

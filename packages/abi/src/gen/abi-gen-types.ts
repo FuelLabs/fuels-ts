@@ -39,7 +39,7 @@ export interface ProgramDetails {
   /**
    * The compressed bytecode of the program in base64 format.
    */
-  binCompressed: string;
+  binCompressed?: string;
   /**
    * The abi of the program in the format returned via `AbiParser`.
    */

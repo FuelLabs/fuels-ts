@@ -1,6 +1,6 @@
 import { type ProgramDetails, type AbiSpecification, AbiParser } from '@fuel-ts/abi';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { compressBytecode, hexlify } from '@fuel-ts/utils';
+import { assertUnreachable, compressBytecode, hexlify } from '@fuel-ts/utils';
 import { readFileSync } from 'fs';
 import { globSync } from 'glob';
 
@@ -13,7 +13,7 @@ import { log } from '../../utils/logger';
  *  myFile.ts —— MyFileTs
  *  my-abi.json —— MyAbiJson
  */
-function normalizeProjectName(str: string): string {
+export function normalizeProjectName(str: string): string {
   const transformations: ((s: string) => string)[] = [
     (s) => s.replace(/\s+/g, '-'), // spaces to -
     (s) => s.replace(/\./g, '-'), // dots to -
@@ -21,7 +21,6 @@ function normalizeProjectName(str: string): string {
     (s) => s.replace(/-[a-z]/g, (match) => match.slice(-1).toUpperCase()), // delete '-' and capitalize the letter after them
     (s) => s.replace(/-/g, ''), // delete any '-' left
     (s) => s.replace(/^\d+/, ''), // removes leading digits
-    (s) => s[0].toUpperCase() + s.slice(1), // capitalize first letter
   ];
 
   const output = transformations.reduce((s, t) => t(s), str);
@@ -33,28 +32,67 @@ function normalizeProjectName(str: string): string {
     throw new FuelError(ErrorCode.PARSE_FAILED, errMsg);
   }
 
-  return output;
+  return output[0].toUpperCase() + output.slice(1); // capitalize first letter
 }
 
-export function getProgramDetails(buildDirs: string[]) {
+function handleMissingBinary(path: string, abi: AbiSpecification) {
+  const programType = abi.programType as 'predicate' | 'script' | 'contract' | 'library';
+  switch (programType) {
+    case 'predicate':
+      throw new FuelError(
+        ErrorCode.BIN_FILE_NOT_FOUND,
+        `For predicates, the bytecode is required. No bytecode found for predicate at ${path}.`
+      );
+    case 'script':
+      throw new FuelError(
+        ErrorCode.BIN_FILE_NOT_FOUND,
+        `For scripts, the bytecode is required. No bytecode found for script at ${path}.`
+      );
+    case 'contract':
+      log(`No bytecode found for contract at ${path}, will not generate ContractFactory for it.`);
+
+      break;
+    case 'library':
+      // ignore;
+      break;
+    default:
+      assertUnreachable(programType);
+  }
+}
+
+/**
+ *
+ * @param paths paths to the build outputs. The path can also be to the abi json file.
+ * @returns program details for the AbiGen to work with.
+ */
+export function getProgramDetails(paths: string[]) {
   const details: ProgramDetails[] = [];
-  buildDirs.forEach((dir) => {
+  paths.forEach((path) => {
+    const abiPath = path.match(/.+-abi\.json/) ? path : globSync(`${path}/*-abi.json`)[0];
+    if (abiPath === undefined) {
+      throw new FuelError(ErrorCode.NO_ABIS_FOUND, `No abi file found in ${path}`);
+    }
+
+    const dir = abiPath.match(/.*\//)?.[0] as string;
+    const projectName = abiPath.match(/([^/])+(?=-abi\.json)/)?.[0] as string;
+    const abiContentsStr = readFileSync(abiPath).toString();
+    const abi = JSON.parse(abiContentsStr) as AbiSpecification;
+
+    const [storageSlotsPath] = globSync(`${dir}/*-storage_slots.json`);
+    const storageSlots = storageSlotsPath ? readFileSync(storageSlotsPath).toString() : undefined;
+
     const [binPath] = globSync(`${dir}/*.bin`);
     if (binPath === undefined) {
-      log(`No build outputs found in ${dir}, skipping...`);
-      return;
+      handleMissingBinary(path, abi);
     }
-    const [storageSlotsPath] = globSync(`${dir}/*-storage_slots.json`);
-    const projectName = binPath.match(/([^/])+(?=\.bin)/)?.[0] as string;
-    const abiContents = readFileSync(`${dir}/${projectName}-abi.json`).toString();
-    const storageSlots = storageSlotsPath ? readFileSync(storageSlotsPath).toString() : undefined;
-    const binCompressed = compressBytecode(hexlify(readFileSync(binPath)));
+
+    const binCompressed = binPath && compressBytecode(hexlify(readFileSync(binPath)));
 
     details.push({
       name: normalizeProjectName(projectName),
-      abi: AbiParser.parse(JSON.parse(abiContents) as AbiSpecification),
+      abi: AbiParser.parse(JSON.parse(abiContentsStr) as AbiSpecification),
       binCompressed,
-      abiContents,
+      abiContents: abiContentsStr,
       storageSlots,
     });
   });

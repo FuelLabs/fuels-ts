@@ -1,15 +1,30 @@
-import { readFileSync } from 'fs';
-import { AbiGen } from 'fuels';
+import { cpSync, mkdirSync, readFileSync, rmdirSync, rmSync } from 'fs';
+import { AbiGen, randomUUID } from 'fuels';
 import { getProgramDetails } from 'fuels/cli-utils';
 import { join } from 'path';
 
 import { AbiProjectsEnum, getAbiForcProject } from './utils';
 
+function getUniqueBuildOutputs(buildOutputsPath: string) {
+  const uniquePath = join(buildOutputsPath, '../', randomUUID());
+
+  mkdirSync(uniquePath, { recursive: true });
+
+  cpSync(buildOutputsPath, uniquePath, { recursive: true });
+
+  return {
+    path: uniquePath,
+    [Symbol.dispose]: () => {
+      rmdirSync(uniquePath, { recursive: true });
+    },
+  };
+}
+
 /**
  * @group node
  */
 describe('AbiGen', () => {
-  test('AbiGen generates all files correctly', () => {
+  test('Generates all files correctly', () => {
     const fixtureResultMap = new Map([
       ['index', 'index.ts'],
       ['common', 'common.ts'],
@@ -55,5 +70,21 @@ describe('AbiGen', () => {
       // verify only one file generated
       expect(results.filter((r) => r.filename === filename)).toHaveLength(1);
     });
+  });
+
+  test('skips contract factory and bytecode generation when bytecode is missing', () => {
+    const { buildDir, name } = getAbiForcProject(AbiProjectsEnum.ABI_CONTRACT);
+    using customBuildOutputs = getUniqueBuildOutputs(buildDir);
+
+    rmSync(join(customBuildOutputs.path, `${name}.bin`));
+    const programDetails = getProgramDetails([customBuildOutputs.path]);
+
+    const results = AbiGen.generate({
+      programDetails,
+      versions: { FUELS: '0.94.8', FORC: '0.64.0' },
+    });
+
+    expect(results.map((r) => r.filename)).not.toContain(/AbiContractFactory.ts/);
+    expect(results.map((r) => r.filename)).not.toContain(/AbiContract-bytecode.ts/);
   });
 });
