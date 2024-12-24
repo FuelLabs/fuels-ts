@@ -181,6 +181,8 @@ Macbook
 macOS
 MacOS
 mainnet
+memoize
+memoized
 mempool
 merkle
 Merkle
@@ -229,6 +231,7 @@ relayer
 relayers
 repo
 repos
+reprepare
 reuploaded
 rhs
 RPC
