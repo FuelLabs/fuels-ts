@@ -2,7 +2,7 @@
 
 When you call a contract function via the SDK, it makes two essential network requests:
 
-1. **Preparing the transaction**: This involves creating the transaction request, fetching dependencies for it, and funding it properly.
+1. **Preparing the transaction**: This involves creating the transaction request, fetching dependencies for it and funding it properly.
 
 2. **Sending the transaction**: This involves sending the transaction to the network and waiting for it to be confirmed.
 
