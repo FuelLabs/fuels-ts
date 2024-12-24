@@ -1,6 +1,6 @@
 # Optimising Contract Calls
 
-When you call a contract function via the SDK, it makes two major network requests:
+When you call a contract function via the SDK, it makes two essential network requests:
 
 1. **Preparing the transaction**: This involves creating the transaction request, fetching dependencies for it, and funding it properly.
 
