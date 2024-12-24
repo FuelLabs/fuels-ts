@@ -1,4 +1,4 @@
-# Optimising Contract Calls
+# Optimizing Contract Calls
 
 When you call a contract function via the SDK, it makes two essential network requests:
 
