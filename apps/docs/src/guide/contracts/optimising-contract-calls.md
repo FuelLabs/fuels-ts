@@ -10,7 +10,7 @@ The below flowchart shows this entire process:
 
 ![Transaction Lifecycle in the SDK without prefetching](/public/txdep1.png)
 
-Since the SDK prepares the contract call _after_ the user presses 'Submit Transaction' (or your code invokes the `call` method), the chain feels slower to the user than it actually is. This is because of the network request needed to prepare the transaction.
+The SDK will prepare the contract call _after_ the user has submitted the transaction at the application level. This is so the transaction is funded in it's finalised state. However this makes the chain feel slower than it actually is as we are making two network requests.
 
 This can be mitigated by preparing the contract call _before_ the user presses 'Submit Transaction'. If the transaction is prepared beforehand, the SDK only has to send the transaction to the network and wait for it to be confirmed. This reflects the actual speed of the chain to the user.
 
