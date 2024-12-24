@@ -196,6 +196,10 @@ export default defineConfig({
                 link: '/guide/contracts/methods',
               },
               {
+                text: 'Optimising Contract Calls',
+                link: '/guide/contracts/optimising-contract-calls',
+              },
+              {
                 text: 'Call Parameters',
                 link: '/guide/contracts/call-parameters',
               },
