@@ -15,7 +15,8 @@ import { abi } from './AbiScript-abi';
 import { bytecode } from './AbiScript-bytecode';
 import type { AbiScriptTypes as Types } from './AbiScriptTypes';
 
-export type AbiScriptTypes = Types;
+export * from './AbiScriptTypes';
+
 export type AbiScriptInputs = Types['inputs'];
 export type AbiScriptOutput = Types['output'];
 export type AbiScriptConfigurables = Types['configurables'];
