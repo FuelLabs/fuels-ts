@@ -51,7 +51,7 @@ export function renderIndexFiles(
     });
   });
 
-  const mainIndexFileImportPaths = [...indexContents.keys()]
+  const mainIndexFileExports = [...indexContents.keys()]
     .sort()
     .map((programType) => getParentDirWrapper(programType).parentDir)
     .map((path) => ({ path, exportedContent: '*' }));
@@ -62,7 +62,7 @@ export function renderIndexFiles(
       versions,
       template: indexTemplate,
       data: {
-        exports: mainIndexFileImportPaths,
+        exports: mainIndexFileExports,
       },
     }),
   };
