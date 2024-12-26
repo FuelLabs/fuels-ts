@@ -25,6 +25,20 @@ export const packageMangers = {
   },
 } as const;
 
+export function getUserPkgManager(): PackageManager {
+  const userAgent = process.env.npm_config_user_agent || '';
+
+  if (userAgent.startsWith('pnpm')) {
+    return 'pnpm';
+  }
+
+  if (userAgent.startsWith('bun')) {
+    return 'bun';
+  }
+
+  return 'npm';
+}
+
 export const getPackageManager = (opts: ProgramOptions) => {
   const packageMangerOpts = {
     pnpm: opts.pnpm,
@@ -42,7 +56,14 @@ export const getPackageManager = (opts: ProgramOptions) => {
   }
 
   if (!packageManager) {
-    packageManager = 'npm'; // default to npm if the user has not specified a package manager (eg. --pnpm, --bun)
+    packageManager = getUserPkgManager();
   }
+
+  if (!packageManager) {
+    packageManager = 'npm';
+  }
+
+  console.log('packageManager', packageManager);
+
   return packageMangers[packageManager];
 };
