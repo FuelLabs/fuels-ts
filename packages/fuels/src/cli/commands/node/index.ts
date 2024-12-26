@@ -26,7 +26,7 @@ export const closeAllFileHandlers = (handlers: FSWatcher[]) => {
 };
 
 export const configFileChanged = (state: NodeState) => async (_event: string, path: string) => {
-  log(`\nFile changed: ${path}`);
+  log(`\nFile changed config: ${path}`);
 
   closeAllFileHandlers(state.watchHandlers);
   state.fuelCore?.killChildProcess();

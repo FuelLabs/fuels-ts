@@ -15,7 +15,7 @@ async function generateTypesForProgramType(
   paths: string[],
   programType: ProgramTypeEnum
 ) {
-  debug('Generating types..');
+  log('Generating types..inside');
 
   let filepaths = await getABIPaths(paths, config);
   const pluralizedDirName = `${String(programType).toLocaleLowerCase()}s`;
@@ -32,6 +32,8 @@ async function generateTypesForProgramType(
     });
     filepaths = filepaths.concat(loaderFiles);
   }
+
+  log('Generating types..outside');
 
   runTypegen({
     programType,
@@ -64,7 +66,7 @@ export async function generateTypes(config: FuelsConfig) {
       .map(({ programs, type }) => generateTypesForProgramType(config, programs, type))
   );
 
-  const indexFile = await renderIndexTemplate(pluralizedDirNames);
+  const indexFile = renderIndexTemplate(pluralizedDirNames);
 
   writeFileSync(join(config.output, 'index.ts'), indexFile);
 }

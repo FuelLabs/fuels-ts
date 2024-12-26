@@ -1,12 +1,12 @@
 import { spawn } from 'child_process';
 
 import type { FuelsConfig } from '../../types';
-import { debug, loggingConfig } from '../../utils/logger';
+import { debug, loggingConfig, log } from '../../utils/logger';
 
 import { onForcExit, onForcError } from './forcHandlers';
 
 export const buildSwayProgram = async (config: FuelsConfig, path: string) => {
-  debug('Building Sway program', path);
+  log('Building Sway program', path);
 
   return new Promise<void>((resolve, reject) => {
     const args = ['build', '-p', path].concat(config.forcBuildFlags);
@@ -14,6 +14,15 @@ export const buildSwayProgram = async (config: FuelsConfig, path: string) => {
     if (loggingConfig.isLoggingEnabled) {
       // eslint-disable-next-line no-console
       forc.stderr?.on('data', (chunk) => console.log(chunk.toString()));
+
+      forc.stderr?.on('data', (chunk) => {
+        if (chunk.toString().includes('error')) {
+          console.log('onForcError');
+          onForcError(reject);
+        } else {
+          console.log('onForcError NOPE');
+        }
+      });
     }
 
     if (loggingConfig.isDebugEnabled) {

@@ -36,15 +36,37 @@ export type DevState = {
   config: FuelsConfig;
   watchHandlers: FSWatcher[];
   fuelCore?: FuelCoreNode;
+  workspaceFilesUnderProcessing: string[];
 };
 
 export const workspaceFileChanged = (state: DevState) => async (_event: string, path: string) => {
-  log(`\nFile changed: ${path}`);
-  await buildAndDeploy(state.config);
+  if (!state.workspaceFilesUnderProcessing.includes(path)) {
+    log(state.workspaceFilesUnderProcessing);
+    log({
+      state,
+    });
+    log('hii');
+    log(`\nFile changed: ${path}`);
+    state.workspaceFilesUnderProcessing.push(path);
+
+    try {
+      await buildAndDeploy(state.config);
+    } catch (err: unknown) {
+      log('Error building and deploying', err);
+    } finally {
+      const newState = { ...state };
+      newState.workspaceFilesUnderProcessing = [...state.workspaceFilesUnderProcessing].filter(
+        (p) => p !== path
+      );
+      Object.assign(state, newState);
+    }
+  } else {
+    log(`\nFile changed: ${path} (already processing)`);
+  }
 };
 
 export const configFileChanged = (state: DevState) => async (_event: string, path: string) => {
-  log(`\nFile changed: ${path}`);
+  log(`\nFile changed config: ${path}`);
 
   closeAllFileHandlers(state.watchHandlers);
   state.fuelCore?.killChildProcess();
@@ -79,7 +101,7 @@ export const dev = async (config: FuelsConfig) => {
 
     const watchHandlers: FSWatcher[] = [];
     const options = { persistent: true, ignoreInitial: true, ignored: '**/out/**' };
-    const state = { config, watchHandlers, fuelCore };
+    const state: DevState = { config, watchHandlers, fuelCore, workspaceFilesUnderProcessing: [] };
 
     // watch: fuels.config.ts and snapshotDir
     watchHandlers.push(watch(configFilePaths, options).on('all', configFileChanged(state)));

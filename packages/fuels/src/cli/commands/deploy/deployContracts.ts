@@ -34,7 +34,7 @@ export async function deployContract(
   contractPath: string,
   tomlContents: ForcToml
 ) {
-  debug(`Deploying contract for ABI: ${abiPath}`);
+  log(`Deploying contract for ABI: ${abiPath}`);
 
   if (existsSync(storageSlotsPath)) {
     const storageSlots = JSON.parse(readFileSync(storageSlotsPath, 'utf-8'));
@@ -60,8 +60,11 @@ export async function deployContract(
   if (!isProxyEnabled) {
     // a. Deploy the target contract
     const contractFactory = new ContractFactory(targetBytecode, targetAbi, wallet);
+    log(`Deploying ContractFactory: ${contractFactory}`);
     const { waitForResult } = await contractFactory.deploy(deployConfig);
+    log(`Waiting for ContractFactory to be deployed`);
     const { contract } = await waitForResult();
+    log(`Contract deployed: ${contract.id.toB256()}`);
     return contract.id.toB256();
   }
 
@@ -167,7 +170,7 @@ export async function deployContracts(config: FuelsConfig) {
       tomlContents
     );
 
-    debug(`Contract deployed: ${projectName} - ${contractId}`);
+    log(`Contract deployed: ${projectName} - ${contractId}`);
 
     contracts.push({
       name: contractName,
