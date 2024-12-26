@@ -33,8 +33,6 @@ async function generateTypesForProgramType(
     filepaths = filepaths.concat(loaderFiles);
   }
 
-  log('Generating types..');
-
   runTypegen({
     programType,
     cwd: config.basePath,
