@@ -4,7 +4,7 @@ import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
 import { DemoContract, DemoContractFactory } from './contract-types';
 import { DemoPredicate } from './predicate-types';
-import type { DemoPredicateTypes } from './predicate-types';
+import type { DemoPredicateInputs } from './predicate-types/DemoPredicate';
 import { DemoScript } from './script-types';
 
 /**
@@ -19,12 +19,11 @@ describe('ExampleContract', () => {
       wallets: [wallet],
     } = launched;
 
-    const storageSlots = DemoContractFactory.storageSlots;
     // #region typegen-demo-contract-storage-slots
     // #context import { DemoContractFactory } from './sway-programs-api';
 
     const { waitForResult } = await DemoContractFactory.deploy(wallet, {
-      storageSlots,
+      storageSlots: DemoContractFactory.storageSlots,
     });
 
     const { contract } = await waitForResult();
@@ -162,7 +161,7 @@ test('Example predicate', async () => {
 
   const receiver = Wallet.fromAddress(Address.fromRandom(), provider);
 
-  const predicateData: DemoPredicateTypes['inputs'] = [];
+  const predicateData: DemoPredicateInputs = [];
   const predicate = new DemoPredicate({
     provider,
     data: predicateData,

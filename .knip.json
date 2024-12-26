@@ -39,6 +39,5 @@
     "ts-generator",
     "webdriverio",
     "syncpack"
-  ],
-  "ignoreBinaries": ["build:all"]
+  ]
 }

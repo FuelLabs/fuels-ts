@@ -5,7 +5,7 @@
 After generating types via:
 
 ```console
-pnpm fuels typegen -i ./my-contract/out/release -o ./types
+pnpm fuels typegen -i ./abis/*-abi.json -o ./types
 ```
 
 We can use these files like so:
@@ -29,7 +29,7 @@ Typegen tries to resolve, auto-load, and embed the [Storage Slots](../contracts/
 After generating types via:
 
 ```console
-pnpm fuels typegen -i ./my-script/out/release -o ./types
+pnpm fuels typegen -i ./abis/*-abi.json -o ./types
 ```
 
 We can use these files like so:
@@ -41,7 +41,7 @@ We can use these files like so:
 After generating types via:
 
 ```console
-pnpm fuels typegen -i ./my-predicate/out/release -o ./types
+pnpm fuels typegen -i ./abis/*-abi.json -o ./types
 ```
 
 We can use these files like so:

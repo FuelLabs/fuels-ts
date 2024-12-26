@@ -45,7 +45,7 @@ export function runTypegen(options: RunTypegenOptions) {
 
 export function configureTypegenCliOptions(program: Command) {
   return program
-    .description(`Generate Typescript from Sway ABI JSON files`)
+    .description(`Generate Typescript from forc build outputs`)
     .requiredOption('-i, --inputs <path|glob...>', 'Input paths/globals to your ABI JSON files')
     .requiredOption('-o, --output <dir>', 'Directory path for generated files')
     .action(runTypegen);
