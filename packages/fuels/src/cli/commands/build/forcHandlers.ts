@@ -14,7 +14,6 @@ export const onForcExit =
   };
 
 export const onForcError = (onError: OnErrorFn) => (err: Error) => {
-  console.log('onForcError');
   error(err);
   onError(err);
 };

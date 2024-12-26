@@ -15,7 +15,7 @@ async function generateTypesForProgramType(
   paths: string[],
   programType: ProgramTypeEnum
 ) {
-  log('Generating types..inside');
+  debug('Generating types..');
 
   let filepaths = await getABIPaths(paths, config);
   const pluralizedDirName = `${String(programType).toLocaleLowerCase()}s`;
@@ -33,7 +33,7 @@ async function generateTypesForProgramType(
     filepaths = filepaths.concat(loaderFiles);
   }
 
-  log('Generating types..outside');
+  log('Generating types..');
 
   runTypegen({
     programType,

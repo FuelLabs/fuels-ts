@@ -1,7 +1,7 @@
 import { spawn } from 'child_process';
 
 import type { FuelsConfig } from '../../types';
-import { debug, loggingConfig, log } from '../../utils/logger';
+import { loggingConfig, log } from '../../utils/logger';
 
 import { onForcExit, onForcError } from './forcHandlers';
 
@@ -16,11 +16,9 @@ export const buildSwayProgram = async (config: FuelsConfig, path: string) => {
       forc.stderr?.on('data', (chunk) => console.log(chunk.toString()));
 
       forc.stderr?.on('data', (chunk) => {
-        if (chunk.toString().includes('error')) {
-          console.log('onForcError');
+        if (chunk.toString().includes('Aborting')) {
+          // because forc logs out 'Aborting due to 2 compilation errors' etc.
           onForcError(reject);
-        } else {
-          console.log('onForcError NOPE');
         }
       });
     }
