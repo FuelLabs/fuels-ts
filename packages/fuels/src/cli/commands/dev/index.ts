@@ -36,22 +36,20 @@ export type DevState = {
   config: FuelsConfig;
   watchHandlers: FSWatcher[];
   fuelCore?: FuelCoreNode;
-  workspaceFilesUnderProcessing: string[];
+  filesBeingProcsesed: string[];
 };
 
 export const workspaceFileChanged = (state: DevState) => async (_event: string, path: string) => {
-  if (!state.workspaceFilesUnderProcessing.includes(path)) {
+  if (!state.filesBeingProcsesed.includes(path)) {
     log(`\nFile changed: ${path}`);
     try {
-      state.workspaceFilesUnderProcessing.push(path);
+      state.filesBeingProcsesed.push(path);
       await buildAndDeploy(state.config);
     } catch (err: unknown) {
       debug('Error in buildAndDeploy', err);
     } finally {
       const newState = { ...state };
-      newState.workspaceFilesUnderProcessing = [...state.workspaceFilesUnderProcessing].filter(
-        (p) => p !== path
-      );
+      newState.filesBeingProcsesed = [...state.filesBeingProcsesed].filter((p) => p !== path);
       Object.assign(state, newState);
     }
   }
@@ -93,7 +91,7 @@ export const dev = async (config: FuelsConfig) => {
 
     const watchHandlers: FSWatcher[] = [];
     const options = { persistent: true, ignoreInitial: true, ignored: '**/out/**' };
-    const state: DevState = { config, watchHandlers, fuelCore, workspaceFilesUnderProcessing: [] };
+    const state: DevState = { config, watchHandlers, fuelCore, filesBeingProcsesed: [] };
 
     // watch: fuels.config.ts and snapshotDir
     watchHandlers.push(watch(configFilePaths, options).on('all', configFileChanged(state)));
