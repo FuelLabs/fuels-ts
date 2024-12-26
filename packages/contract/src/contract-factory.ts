@@ -122,8 +122,6 @@ export default class ContractFactory<TContract extends Contract = Contract> {
    * @returns The CreateTransactionRequest object for deploying the contract.
    */
   createTransactionRequest(deployOptions?: DeployContractOptions & { bytecode?: BytesLike }) {
-    console.log(`Creating transaction request ${deployOptions}`);
-
     const storageSlots = (deployOptions?.storageSlots ?? [])
       .concat(this.storageSlots)
       .map(({ key, value }) => ({
@@ -149,8 +147,6 @@ export default class ContractFactory<TContract extends Contract = Contract> {
     const bytecode = deployOptions?.bytecode || this.bytecode;
     const stateRoot = options.stateRoot || getContractStorageRoot(options.storageSlots);
     const contractId = getContractId(bytecode, options.salt, stateRoot);
-
-    console.log(`Contract ID: ${contractId}`);
 
     const transactionRequest = new CreateTransactionRequest({
       bytecodeWitnessIndex: 0,
@@ -194,8 +190,6 @@ export default class ContractFactory<TContract extends Contract = Contract> {
 
     await account.fund(request, txCost);
 
-    console.log(`Funded transaction request`);
-
     return request;
   }
 
@@ -237,15 +231,9 @@ export default class ContractFactory<TContract extends Contract = Contract> {
       );
     }
 
-    console.log(`Preparing to deploy contract`);
-
     const { contractId, transactionRequest } = await this.prepareDeploy(deployOptions);
 
-    console.log(`Sending transaction`);
-
     const transactionResponse = await account.sendTransaction(transactionRequest);
-
-    console.log(`Waiting for transaction`);
 
     const waitForResult = async () => {
       const transactionResult = await transactionResponse.waitForResult<TransactionType.Create>();
@@ -447,15 +435,9 @@ export default class ContractFactory<TContract extends Contract = Contract> {
       this.setConfigurableConstants(configurableConstants);
     }
 
-    console.log(`Creating transaction request`);
-
     const { contractId, transactionRequest } = this.createTransactionRequest(deployOptions);
 
-    console.log(`Funding transaction request`);
-
     await this.fundTransactionRequest(transactionRequest, deployOptions);
-
-    console.log(`Transaction request funded`);
 
     return {
       contractId,

@@ -4,7 +4,7 @@ import { globSync } from 'glob';
 
 import { loadConfig } from '../../config/loadConfig';
 import { type FuelsConfig } from '../../types';
-import { error, log } from '../../utils/logger';
+import { debug, error, log } from '../../utils/logger';
 import { build } from '../build';
 import { deploy } from '../deploy';
 import { withConfigErrorHandler } from '../withConfig';
@@ -41,18 +41,12 @@ export type DevState = {
 
 export const workspaceFileChanged = (state: DevState) => async (_event: string, path: string) => {
   if (!state.workspaceFilesUnderProcessing.includes(path)) {
-    log(state.workspaceFilesUnderProcessing);
-    log({
-      state,
-    });
-    log('hii');
     log(`\nFile changed: ${path}`);
-    state.workspaceFilesUnderProcessing.push(path);
-
     try {
+      state.workspaceFilesUnderProcessing.push(path);
       await buildAndDeploy(state.config);
     } catch (err: unknown) {
-      log('Error building and deploying', err);
+      debug('Error in buildAndDeploy', err);
     } finally {
       const newState = { ...state };
       newState.workspaceFilesUnderProcessing = [...state.workspaceFilesUnderProcessing].filter(
@@ -60,8 +54,6 @@ export const workspaceFileChanged = (state: DevState) => async (_event: string, 
       );
       Object.assign(state, newState);
     }
-  } else {
-    log(`\nFile changed: ${path} (already processing)`);
   }
 };
 
