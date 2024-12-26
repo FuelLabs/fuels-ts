@@ -1,5 +1,5 @@
 {{header}}
 
-{{#each paths}}
-export * from './{{this}}';
+{{#each exports}}
+export {{exportedContent}} from './{{path}}';
 {{/each}}

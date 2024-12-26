@@ -7,12 +7,16 @@ import indexTemplate from '../templates/index.hbs';
 import { getParentDirWrapper } from './get-parent-dir-wrapper';
 import { templateRenderer } from './template-renderer';
 
+export type IndexContents = Map<
+  Abi['programType'],
+  { filename: string; exportedContent: string[] }[]
+>;
 /**
  * @returns an array of index files
  * that includes the root index.ts and the index.ts for each provided program type.
  */
 export function renderIndexFiles(
-  indexContents: Map<Abi['programType'], string[]>,
+  indexContents: IndexContents,
   versions: BinaryVersions
 ): AbiGenResult[] {
   const results: AbiGenResult[] = [];
@@ -23,18 +27,21 @@ export function renderIndexFiles(
     // from index.ts to e.g. contracts/index.ts
     const indexFilename = withParentDir('index.ts');
 
-    const pathsToFiles = files.map((file) => {
+    const exports = files.map(({ filename, exportedContent }) => {
       // from e.g. contracts/AbiContract.ts to AbiContract.ts
-      const relativePathToFile = removeParentDir(file);
+      const relativePathToFile = removeParentDir(filename);
       // remove .ts extension
-      return relativePathToFile.split('.')[0];
+      return {
+        path: relativePathToFile.split('.')[0],
+        exportedContent: `{ ${exportedContent.join(', ')} }`,
+      };
     });
 
     const content = templateRenderer({
       versions,
       template: indexTemplate,
       data: {
-        paths: pathsToFiles,
+        exports,
       },
     });
 
@@ -46,7 +53,8 @@ export function renderIndexFiles(
 
   const mainIndexFileImportPaths = [...indexContents.keys()]
     .sort()
-    .map((programType) => getParentDirWrapper(programType).parentDir);
+    .map((programType) => getParentDirWrapper(programType).parentDir)
+    .map((path) => ({ path, exportedContent: '*' }));
 
   const mainIndexFile: AbiGenResult = {
     filename: 'index.ts',
@@ -54,7 +62,7 @@ export function renderIndexFiles(
       versions,
       template: indexTemplate,
       data: {
-        paths: mainIndexFileImportPaths,
+        exports: mainIndexFileImportPaths,
       },
     }),
   };

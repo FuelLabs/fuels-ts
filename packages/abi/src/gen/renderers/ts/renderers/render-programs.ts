@@ -1,8 +1,8 @@
 import type { BinaryVersions } from '@fuel-ts/versions';
 
-import type { Abi } from '../../../..';
 import type { AbiGenResult, ProgramDetails } from '../../../abi-gen-types';
 
+import type { IndexContents } from './render-index-files';
 import { renderIndexFiles } from './render-index-files';
 import { renderProgram } from './render-program';
 
@@ -13,7 +13,7 @@ import { renderProgram } from './render-program';
  */
 export function renderPrograms(details: ProgramDetails[], versions: BinaryVersions) {
   const results: AbiGenResult[] = [];
-  const indexContents = new Map<Abi['programType'], string[]>();
+  const indexContents: IndexContents = new Map();
 
   for (const d of details) {
     const files = renderProgram(d, versions);
@@ -21,12 +21,12 @@ export function renderPrograms(details: ProgramDetails[], versions: BinaryVersio
     results.push(...files);
 
     files.forEach((file) => {
-      if (!file.exportInIndexFile) {
+      if (!file.exportInIndexFile?.length) {
         return;
       }
 
       const contents = indexContents.get(d.abi.programType) ?? [];
-      contents.push(file.filename);
+      contents.push({ filename: file.filename, exportedContent: file.exportInIndexFile });
       indexContents.set(d.abi.programType, contents);
     });
   }

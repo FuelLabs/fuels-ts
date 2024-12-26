@@ -9,5 +9,5 @@
 */
 
 
-export * from './AbiContract';
-export * from './AbiContractFactory';
+export { AbiContract } from './AbiContract';
+export { AbiContractFactory } from './AbiContractFactory';

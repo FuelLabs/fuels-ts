@@ -9,4 +9,4 @@
 */
 
 
-export * from './AbiPredicate';
+export { AbiPredicate } from './AbiPredicate';

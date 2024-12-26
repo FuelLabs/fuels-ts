@@ -9,4 +9,4 @@
 */
 
 
-export * from './AbiScript';
+export { AbiScript } from './AbiScript';

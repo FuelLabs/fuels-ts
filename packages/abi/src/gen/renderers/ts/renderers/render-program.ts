@@ -52,7 +52,7 @@ export function renderProgram(details: ProgramDetails, versions: BinaryVersions)
             versions,
             data: { name },
           }),
-          exportInIndexFile: true,
+          exportInIndexFile: [name],
         },
 
         {
@@ -73,7 +73,7 @@ export function renderProgram(details: ProgramDetails, versions: BinaryVersions)
             versions,
             data: { name },
           }),
-          exportInIndexFile: true,
+          exportInIndexFile: [`${name}Factory`],
         });
       }
       break;
@@ -85,7 +85,7 @@ export function renderProgram(details: ProgramDetails, versions: BinaryVersions)
           versions,
           data: { name },
         }),
-        exportInIndexFile: true,
+        exportInIndexFile: [name],
       });
       break;
     case 'script':
@@ -96,7 +96,7 @@ export function renderProgram(details: ProgramDetails, versions: BinaryVersions)
           versions,
           data: { name },
         }),
-        exportInIndexFile: true,
+        exportInIndexFile: [name],
       });
       break;
     case 'library':
