@@ -1,7 +1,3 @@
-import { warn } from '../utils/logger';
-
-import type { ProgramOptions } from './setupProgram';
-
 export const availablePackageManagers = ['pnpm', 'npm', 'bun'] as const;
 export type PackageManager = (typeof availablePackageManagers)[number];
 
@@ -39,31 +35,8 @@ export function getUserPkgManager(): PackageManager {
   return 'npm';
 }
 
-export const getPackageManager = (opts: ProgramOptions) => {
-  const packageMangerOpts = {
-    pnpm: opts.pnpm,
-    npm: opts.npm,
-    bun: opts.bun,
-  };
-
-  const cliChosenPackageManagerSelected = Object.entries(packageMangerOpts)
-    .filter(([, v]) => v)
-    .map(([k]) => k) as PackageManager[];
-
-  let packageManager: PackageManager | undefined = cliChosenPackageManagerSelected[0];
-  if (cliChosenPackageManagerSelected.length > 1) {
-    warn('More than one package manager was selected.');
-  }
-
-  if (!packageManager) {
-    packageManager = getUserPkgManager();
-  }
-
-  if (!packageManager) {
-    packageManager = 'npm';
-  }
-
-  console.log('packageManager', packageManager);
+export const getPackageManager = () => {
+  const packageManager = getUserPkgManager();
 
   return packageMangers[packageManager];
 };
