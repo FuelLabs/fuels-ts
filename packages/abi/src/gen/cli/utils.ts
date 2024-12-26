@@ -1,10 +1,23 @@
-import { type ProgramDetails, type AbiSpecification, AbiParser } from '@fuel-ts/abi';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { assertUnreachable, compressBytecode, hexlify } from '@fuel-ts/utils';
 import { readFileSync } from 'fs';
 import { globSync } from 'glob';
 
-import { log } from '../../utils/logger';
+import type { AbiSpecification } from '../../parser';
+import { AbiParser } from '../../parser';
+import type { ProgramDetails } from '../abi-gen-types';
+
+export const loggingConfig = {
+  silent: false,
+};
+
+export function log(...args: Parameters<typeof console.log>) {
+  if (!loggingConfig.silent) {
+    // eslint-disable-next-line no-console
+    console.log(...args);
+  }
+}
+
 /**
  * Converts `some.string-value` into `SomeStringValue`.
  *
@@ -50,7 +63,6 @@ function handleMissingBinary(path: string, abi: AbiSpecification) {
       );
     case 'contract':
       log(`No bytecode found for contract at ${path}, will not generate ContractFactory for it.`);
-
       break;
     case 'library':
       // ignore;
@@ -60,11 +72,6 @@ function handleMissingBinary(path: string, abi: AbiSpecification) {
   }
 }
 
-/**
- *
- * @param paths paths to the build outputs. The path can also be to the abi json file.
- * @returns program details for the AbiGen to work with.
- */
 export function getProgramDetails(paths: string[]) {
   const details: ProgramDetails[] = [];
   paths.forEach((path) => {

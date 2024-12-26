@@ -1,8 +1,8 @@
-import { index } from '@internal/tsup';
+import { indexBinAndCliConfig } from '@internal/tsup';
 import type { Options } from 'tsup';
 
 const configs: Options = {
-  ...index,
+  ...indexBinAndCliConfig,
   loader: {
     '.hbs': 'text',
   },

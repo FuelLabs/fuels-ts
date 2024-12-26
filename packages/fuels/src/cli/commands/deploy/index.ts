@@ -1,5 +1,5 @@
 import type { FuelsConfig } from '../../types';
-import { generateTypes } from '../typegen';
+import { generateTypes } from '../generate-types';
 
 import { deployContracts } from './deployContracts';
 import { deployPredicates } from './deployPredicates';

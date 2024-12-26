@@ -2,7 +2,7 @@ import { execSync } from 'child_process';
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
-execSync(`node ../fuels/dist/bin.js typegen -i src/contracts/src14 -o src/types`);
+execSync(`fuels-typegen -i src/contracts/src14 -o src/types`);
 
 const typesPath = join(__dirname, '..', 'src', 'types');
 const supportedRecipes = ['Src14OwnedProxy']

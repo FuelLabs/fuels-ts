@@ -1,3 +1,4 @@
+import { configureTypegenCliOptions } from '@fuel-ts/abi/cli';
 import { versions } from '@fuel-ts/versions';
 import { runVersions } from '@fuel-ts/versions/cli';
 import { Command, Option } from 'commander';
@@ -7,7 +8,6 @@ import { deploy } from './cli/commands/deploy';
 import { dev } from './cli/commands/dev';
 import { init } from './cli/commands/init';
 import { node } from './cli/commands/node';
-import { typegen } from './cli/commands/typegen';
 import { withBinaryPaths } from './cli/commands/withBinaryPaths';
 import { withConfig } from './cli/commands/withConfig';
 import { withProgram } from './cli/commands/withProgram';
@@ -89,12 +89,7 @@ export const configureCli = () => {
   /**
    * Routing external commands from sub-packages' CLIs
    */
-
-  (command = program.command(Commands.typegen))
-    .description(`Generate Typescript from Sway ABI JSON files`)
-    .requiredOption('-i, --inputs <path|glob...>', 'Input paths/globals to your ABI JSON files')
-    .requiredOption('-o, --output <dir>', 'Directory path for generated files')
-    .action(withProgram(command, Commands.typegen, typegen));
+  command = configureTypegenCliOptions(program.command(Commands.typegen));
 
   // Versions
   (command = program.command('versions'))

@@ -4,7 +4,7 @@ import type { FuelsConfig } from '../../types';
 import { log } from '../../utils/logger';
 import { deploy } from '../deploy';
 import { autoStartFuelCore } from '../dev/autoStartFuelCore';
-import { generateTypes } from '../typegen';
+import { generateTypes } from '../generate-types';
 
 import { buildSwayPrograms } from './buildSwayPrograms';
 

@@ -1,6 +1,6 @@
 import { fuelsConfig } from '../../../../test/fixtures/fuels.config';
 import { mockLogger } from '../../../../test/utils/mockLogger';
-import * as generateTypesMod from '../typegen/index';
+import * as generateTypesMod from '../generate-types';
 
 import { build } from '.';
 import * as buildSwayProgramsMod from './buildSwayPrograms';

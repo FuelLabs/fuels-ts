@@ -646,6 +646,12 @@ importers:
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
+      commander:
+        specifier: ^12.1.0
+        version: 12.1.0
+      glob:
+        specifier: ^10.4.5
+        version: 10.4.5
       handlebars:
         specifier: ^4.7.8
         version: 4.7.8
@@ -929,10 +935,16 @@ importers:
 
   packages/fuel-gauge:
     dependencies:
+      commander:
+        specifier: ^12.1.0
+        version: 12.1.0
       fuels:
         specifier: workspace:*
         version: link:../fuels
     devDependencies:
+      '@fuel-ts/abi':
+        specifier: workspace:*
+        version: link:../abi
       '@fuel-ts/account':
         specifier: workspace:*
         version: link:../account
@@ -1154,6 +1166,9 @@ importers:
 
   packages/recipes:
     dependencies:
+      '@fuel-ts/abi':
+        specifier: workspace:*
+        version: link:../abi
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
@@ -14166,6 +14181,7 @@ packages:
 
   sudo-prompt@9.2.1:
     resolution: {integrity: sha512-Mu7R0g4ig9TUuGSxJavny5Rv0egCEtpZRNMrZaYS1vxkiIxGiGUwoezU3LazIQ+KE04hTrTfNPgxU5gzi7F5Pw==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   summary@2.1.0:
     resolution: {integrity: sha512-nMIjMrd5Z2nuB2RZCKJfFMjgS3fygbeyGk9PxPPaJR1RIcyN9yn4A63Isovzm3ZtQuEkLBVgMdPup8UeLH7aQw==}

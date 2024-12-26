@@ -15,6 +15,7 @@
     "fuels": "workspace:*"
   },
   "devDependencies": {
+    "@fuel-ts/abi": "workspace:*",
     "@fuel-ts/account": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/merkle": "workspace:*",

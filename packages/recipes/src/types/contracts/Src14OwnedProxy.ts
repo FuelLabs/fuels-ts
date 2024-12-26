@@ -18,6 +18,7 @@ import { type Account, type Provider } from '@fuel-ts/account';
 import { abi } from './Src14OwnedProxy-abi';
 
 export type Src14OwnedProxyTypes = Types;
+export type Src14OwnedProxyConfigurables = Types['configurables'];
 
 export class Src14OwnedProxyInterface extends Interface {
   declare functions: InterfaceFunctionMapper<Types['functions']>;

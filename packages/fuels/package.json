@@ -42,8 +42,8 @@
       "test-utils": [
         "./dist/test-utils.d.ts"
       ],
-      "cli-utils": [
-        "./dist/cli-utils.d.ts"
+      "./cli-utils": [
+        "/dist/cli-utils.d.ts"
       ]
     }
   },
@@ -55,12 +55,10 @@
     "build:package": "tsup",
     "build:browser": "pnpm vite build",
     "build:minified": "pnpm uglifyjs --compress --mangle --output dist/browser.min.mjs -- dist/browser.mjs",
-    "postbuild": "run-s build:recipes type:declarations",
-    "build:recipes": "cd ../recipes && pnpm build:all && cd ../fuels",
+    "postbuild": "run-s type:declarations",
     "type:declarations": "tsc --emitDeclarationOnly -p tsconfig.dts.json",
     "type:check": "tsc --noEmit",
-    "prepublishOnly": "cp ../../README.md ./README.md",
-    "pretest": "pnpm fuels build --path $PWD/test/fixtures --deploy"
+    "prepublishOnly": "cp ../../README.md ./README.md"
   },
   "license": "Apache-2.0",
   "dependencies": {
