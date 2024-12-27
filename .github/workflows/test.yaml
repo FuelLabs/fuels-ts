@@ -25,7 +25,7 @@ jobs:
             { name: node, version: 22.3.0, display-name: "node@22" },
             { name: browser, display-name: "browser" },
           ]
-    timeout-minutes: 25
+    timeout-minutes: 100
     steps:
       - name: Checkout
         uses: actions/checkout@v4
