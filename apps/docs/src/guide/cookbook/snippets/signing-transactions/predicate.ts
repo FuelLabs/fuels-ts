@@ -9,7 +9,7 @@ import {
 } from '../../../../env';
 import { PredicateSigning } from '../../../../typegend';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 
 const sender = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const signer = Wallet.fromPrivateKey(WALLET_PVT_KEY_2, provider);
@@ -27,7 +27,7 @@ const predicate = new Predicate<[string]>({
 const tx = await sender.transfer(
   predicate.address,
   200_000,
-  provider.getBaseAssetId()
+  await provider.getBaseAssetId()
 );
 await tx.waitForResult();
 
@@ -36,13 +36,13 @@ const request = new ScriptTransactionRequest();
 request.addCoinOutput(
   receiver.address,
   amountToReceiver,
-  provider.getBaseAssetId()
+  await provider.getBaseAssetId()
 );
 
 // Get the predicate resources and add them and predicate data to the request
 const resources = await predicate.getResourcesToSpend([
   {
-    assetId: provider.getBaseAssetId(),
+    assetId: await provider.getBaseAssetId(),
     amount: amountToReceiver,
   },
 ]);

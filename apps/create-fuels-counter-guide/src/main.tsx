@@ -16,7 +16,7 @@ const queryClient = new QueryClient();
 
 const connectors = defaultConnectors({
   devMode: true,
-  burnerWalletConfig: { fuelProvider: Provider.create(providerUrl) },
+  burnerWalletConfig: { fuelProvider: new Provider(providerUrl) },
 });
 
 createRoot(document.getElementById("root")!).render(

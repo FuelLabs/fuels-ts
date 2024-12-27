@@ -93,7 +93,7 @@ export class BaseInvocationScope<TReturn = any> {
     if (!consensusParams) {
       throw new FuelError(
         FuelError.CODES.CHAIN_INFO_CACHE_EMPTY,
-        'Provider chain info cache is empty. Please make sure to initialize the `Provider` properly by running `await Provider.create()``'
+        'Provider chain info cache is empty. Please make sure to initialize the `Provider` properly by running `new Provider()``'
       );
     }
     return this.functionInvocationScopes.map((funcScope) => createContractCall(funcScope));
@@ -102,13 +102,13 @@ export class BaseInvocationScope<TReturn = any> {
   /**
    * Updates the script request with the current contract calls.
    */
-  protected updateScriptRequest() {
+  protected async updateScriptRequest() {
     const provider = this.getProvider();
     const {
       consensusParameters: {
         txParameters: { maxInputs },
       },
-    } = provider.getChain();
+    } = await provider.getChain();
     const contractCallScript = getContractCallScript(this.functionInvocationScopes, maxInputs);
     this.transactionRequest.setScript(contractCallScript, this.calls);
   }
@@ -198,7 +198,7 @@ export class BaseInvocationScope<TReturn = any> {
     await asm.initWasm();
 
     // Update request scripts before call
-    this.updateScriptRequest();
+    await this.updateScriptRequest();
 
     // Update required coins before call
     this.updateRequiredCoins();
@@ -318,11 +318,11 @@ export class BaseInvocationScope<TReturn = any> {
    */
   addTransfer(transferParams: TransferParams) {
     const { amount, destination, assetId } = transferParams;
-    const baseAssetId = this.getProvider().getBaseAssetId();
+    // const baseAssetId = await this.getProvider().getBaseAssetId();
     this.transactionRequest = this.transactionRequest.addCoinOutput(
       Address.fromAddressOrString(destination),
       amount,
-      assetId || baseAssetId
+      assetId
     );
 
     return this;
@@ -335,12 +335,11 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The current instance of the class.
    */
   addBatchTransfer(transferParams: TransferParams[]) {
-    const baseAssetId = this.getProvider().getBaseAssetId();
     transferParams.forEach(({ destination, amount, assetId }) => {
       this.transactionRequest = this.transactionRequest.addCoinOutput(
         Address.fromAddressOrString(destination),
         amount,
-        assetId || baseAssetId
+        assetId
       );
     });
 

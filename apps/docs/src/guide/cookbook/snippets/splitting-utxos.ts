@@ -3,7 +3,7 @@ import { Provider, Wallet } from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../env';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 // This is the wallet that will fund the sending wallet
 const fundingWallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
@@ -16,13 +16,13 @@ const destinationWallet = Wallet.generate({ provider });
 const fundingTx = await fundingWallet.transfer(
   wallet.address,
   1000,
-  provider.getBaseAssetId()
+  await provider.getBaseAssetId()
 );
 await fundingTx.waitForResult();
 
 // We can fetch the coins to see how many UTXOs we have and confirm it is 1
 const { coins: initialCoins } = await wallet.getCoins(
-  provider.getBaseAssetId()
+  await provider.getBaseAssetId()
 );
 console.log('Initial Coins Length', initialCoins.length);
 // 1
@@ -31,7 +31,7 @@ console.log('Initial Coins Length', initialCoins.length);
 // Including the address to send the funds to and the assetId we want to send
 const splitTxns = new Array(5).fill({
   amount: 200,
-  assetId: provider.getBaseAssetId(),
+  assetId: await provider.getBaseAssetId(),
   destination: destinationWallet.address,
 });
 
@@ -40,7 +40,7 @@ const splitTxns = new Array(5).fill({
 const fundTx = await fundingWallet.transfer(
   wallet.address,
   500,
-  provider.getBaseAssetId()
+  await provider.getBaseAssetId()
 );
 await fundTx.waitForResult();
 

@@ -4,7 +4,7 @@ import { safeExec } from 'fuels/test-utils';
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
 import { SimplePredicate } from '../../../../typegend';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const sender = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const receiver = Wallet.generate({ provider });
 
@@ -18,7 +18,7 @@ const amountToPredicate = 10_000_000;
 const tx = await sender.transfer(
   predicate.address,
   amountToPredicate,
-  provider.getBaseAssetId(),
+  await provider.getBaseAssetId(),
   {
     gasLimit: 1_000,
   }
@@ -28,7 +28,11 @@ console.log('Transfer to predicate should be successful', isStatusSuccess);
 
 const amountOfCoins = 100;
 const { error } = await safeExec(async () =>
-  predicate.transfer(receiver.address, amountOfCoins, provider.getBaseAssetId())
+  predicate.transfer(
+    receiver.address,
+    amountOfCoins,
+    await provider.getBaseAssetId()
+  )
 );
 
 // #region send-and-spend-funds-from-predicates-7

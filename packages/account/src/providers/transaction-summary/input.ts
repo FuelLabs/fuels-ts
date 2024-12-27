@@ -47,12 +47,12 @@ function findCoinInput(inputs: Input[], assetId: string): InputCoin | undefined 
 /** @hidden */
 export function aggregateInputsAmountsByAssetAndOwner(
   inputs: Input[],
-  baseAssetID: string
+  baseAssetId: string
 ): Map<string, Map<string, BN>> {
   const aggregated = new Map<string, Map<string, BN>>();
 
   getInputsCoinAndMessage(inputs).forEach((input) => {
-    const assetId = isInputCoin(input) ? input.assetId : baseAssetID;
+    const assetId = isInputCoin(input) ? input.assetId : baseAssetId;
     const owner = isInputCoin(input) ? input.owner : input.recipient;
 
     // Ensure that the map for the assetId exists

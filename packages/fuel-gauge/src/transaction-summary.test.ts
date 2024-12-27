@@ -94,7 +94,7 @@ describe('TransactionSummary', () => {
       wallets: [sender, destination],
     } = launched;
 
-    const tx = await sender.transfer(destination.address, 1000, provider.getBaseAssetId());
+    const tx = await sender.transfer(destination.address, 1000, await provider.getBaseAssetId());
     const submittedTxResult = await tx.waitForResult();
 
     const laterFetchedResult = await getTransactionSummary({
@@ -131,13 +131,17 @@ describe('TransactionSummary', () => {
 
     const amountToTransfer = 100;
 
-    const tx1 = await sender.transfer(sender.address, amountToTransfer, provider.getBaseAssetId());
+    const tx1 = await sender.transfer(
+      sender.address,
+      amountToTransfer,
+      await provider.getBaseAssetId()
+    );
     const txResult1 = await tx1.waitForResult();
 
     const tx2 = await sender.transfer(
       destination.address,
       amountToTransfer * 2,
-      provider.getBaseAssetId()
+      await provider.getBaseAssetId()
     );
     const txResult2 = await tx2.waitForResult();
 
@@ -341,7 +345,7 @@ describe('TransactionSummary', () => {
 
       const amount = 1233;
 
-      const tx1 = await wallet.transfer(recipient.address, amount, provider.getBaseAssetId());
+      const tx1 = await wallet.transfer(recipient.address, amount, await provider.getBaseAssetId());
 
       const { operations } = await tx1.waitForResult();
 
@@ -355,7 +359,7 @@ describe('TransactionSummary', () => {
         recipients: [
           {
             address: recipient.address,
-            quantities: [{ amount, assetId: provider.getBaseAssetId() }],
+            quantities: [{ amount, assetId: await provider.getBaseAssetId() }],
           },
         ],
       });
@@ -379,7 +383,7 @@ describe('TransactionSummary', () => {
         wallets: [majorWallet],
       } = launched;
 
-      const baseAssetId = provider.getBaseAssetId();
+      const baseAssetId = await provider.getBaseAssetId();
       const recipient = Wallet.generate({ provider });
       const minorWallet = Wallet.generate({ provider });
 
@@ -387,7 +391,7 @@ describe('TransactionSummary', () => {
       const submitted = await majorWallet.transfer(
         minorWallet.address,
         minorAmount,
-        provider.getBaseAssetId()
+        await provider.getBaseAssetId()
       );
       await submitted.waitForResult();
 
@@ -401,10 +405,14 @@ describe('TransactionSummary', () => {
       request.addResources([...majorResources, ...minorResources]);
 
       // Add transfer to recipient
-      request.addCoinOutput(recipient.address, transferAmount, provider.getBaseAssetId());
+      request.addCoinOutput(recipient.address, transferAmount, await provider.getBaseAssetId());
 
       // Add transfer to self
-      request.addCoinOutput(majorWallet.address, transferBackAmount, provider.getBaseAssetId());
+      request.addCoinOutput(
+        majorWallet.address,
+        transferBackAmount,
+        await provider.getBaseAssetId()
+      );
 
       // Explicitly setting the Output Change address to the recipient
       const index = request.outputs.findIndex((output) => output.type === OutputType.Change);
@@ -424,11 +432,11 @@ describe('TransactionSummary', () => {
         recipients: [
           {
             address: recipient.address,
-            quantities: [{ amount: transferAmount, assetId: provider.getBaseAssetId() }],
+            quantities: [{ amount: transferAmount, assetId: await provider.getBaseAssetId() }],
           },
           {
             address: majorWallet.address,
-            quantities: [{ amount: transferBackAmount, assetId: provider.getBaseAssetId() }],
+            quantities: [{ amount: transferBackAmount, assetId: await provider.getBaseAssetId() }],
           },
         ],
       });
@@ -544,13 +552,13 @@ describe('TransactionSummary', () => {
           quantities: [
             { amount: 543, assetId: ASSET_A },
             { amount: 40, assetId: ASSET_B },
-            { amount: 123, assetId: provider.getBaseAssetId() },
+            { amount: 123, assetId: await provider.getBaseAssetId() },
           ],
         };
         const transferData2 = {
           address: Wallet.generate({ provider }).address,
           quantities: [
-            { amount: 12, assetId: provider.getBaseAssetId() },
+            { amount: 12, assetId: await provider.getBaseAssetId() },
             { amount: 612, assetId: ASSET_B },
           ],
         };
@@ -682,7 +690,7 @@ describe('TransactionSummary', () => {
         quantities: [
           { amount: 500, assetId: ASSET_A },
           { amount: 700, assetId: ASSET_B },
-          { amount: 100, assetId: provider.getBaseAssetId() },
+          { amount: 100, assetId: await provider.getBaseAssetId() },
         ],
       };
 
@@ -756,7 +764,7 @@ describe('TransactionSummary', () => {
         quantities: [
           { amount: 500, assetId: ASSET_A },
           { amount: 700, assetId: ASSET_B },
-          { amount: 100, assetId: provider.getBaseAssetId() },
+          { amount: 100, assetId: await provider.getBaseAssetId() },
         ],
       };
 
@@ -812,7 +820,8 @@ describe('TransactionSummary', () => {
 
       const amount = 100;
 
-      const tx1 = await wallet.transferToContract(contract.id, amount);
+      const baseAssetId = await provider.getBaseAssetId();
+      const tx1 = await wallet.transferToContract(contract.id, amount, baseAssetId);
 
       const { operations } = await tx1.waitForResult();
 
@@ -824,7 +833,10 @@ describe('TransactionSummary', () => {
         fromType: AddressType.account,
         toType: AddressType.contract,
         recipients: [
-          { address: contract.id, quantities: [{ amount, assetId: provider.getBaseAssetId() }] },
+          {
+            address: contract.id,
+            quantities: [{ amount, assetId: await provider.getBaseAssetId() }],
+          },
         ],
       });
     });
@@ -856,7 +868,7 @@ describe('TransactionSummary', () => {
       expect(operations[0].to?.chain).toEqual(ChainName.ethereum);
       expect(operations[0].assetsSent).toHaveLength(1);
       expect(operations[0].assetsSent?.[0].amount).toEqual(bn(amountToWithdraw));
-      expect(operations[0].assetsSent?.[0].assetId).toEqual(provider.getBaseAssetId());
+      expect(operations[0].assetsSent?.[0].assetId).toEqual(await provider.getBaseAssetId());
     });
 
     it('Should return contract created operations', async () => {

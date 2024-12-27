@@ -7,7 +7,7 @@ export const fundPredicate = async <T extends InputValue[]>(
   amountToPredicate: BigNumberish,
   utxosAmount: number = 1
 ): Promise<BN> => {
-  const baseAssetId = wallet.provider.getBaseAssetId();
+  const baseAssetId = await wallet.provider.getBaseAssetId();
   const request = new ScriptTransactionRequest();
 
   for (let i = 0; i < utxosAmount; i++) {

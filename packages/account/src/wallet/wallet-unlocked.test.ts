@@ -56,7 +56,7 @@ describe('WalletUnlocked', () => {
 
     const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
     const signedTransaction = await wallet.signTransaction(SCRIPT_TX_REQUEST);
-    const chainId = wallet.provider.getChainId();
+    const chainId = await wallet.provider.getChainId();
     const verifiedAddress = Signer.recoverAddress(
       SCRIPT_TX_REQUEST.getTransactionId(chainId),
       signedTransaction

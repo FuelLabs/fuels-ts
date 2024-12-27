@@ -3,7 +3,7 @@ import { Provider, Wallet } from 'fuels';
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../env';
 import { ReturnContextFactory } from '../../../typegend';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 const deploy = await ReturnContextFactory.deploy(wallet);
@@ -13,7 +13,7 @@ const { contract } = await deploy.waitForResult();
 const cost = await contract.functions
   .return_context_amount()
   .callParams({
-    forward: [100, provider.getBaseAssetId()],
+    forward: [100, await provider.getBaseAssetId()],
   })
   .getTransactionCost();
 
@@ -23,10 +23,10 @@ console.log('costs', cost);
 // #region cost-estimation-2
 const scope = contract.multiCall([
   contract.functions.return_context_amount().callParams({
-    forward: [100, provider.getBaseAssetId()],
+    forward: [100, await provider.getBaseAssetId()],
   }),
   contract.functions.return_context_amount().callParams({
-    forward: [300, provider.getBaseAssetId()],
+    forward: [300, await provider.getBaseAssetId()],
   }),
 ]);
 

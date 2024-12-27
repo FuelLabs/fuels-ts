@@ -5,7 +5,7 @@ import { Address, Provider, Contract } from 'fuels';
 import { LOCAL_NETWORK_URL } from '../../../../env';
 import { Counter } from '../../../../typegend/contracts';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 
 const contractAbi = Counter.abi;
 const contractAddress = Address.fromB256(

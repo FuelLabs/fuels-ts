@@ -145,10 +145,11 @@ export class TransactionResponse {
   constructor(
     tx: string | TransactionRequest,
     provider: Provider,
+    chainId: number,
     abis?: JsonAbisFromAllCalls,
     private submitTxSubscription?: AsyncIterable<GqlSubmitAndAwaitStatusSubscription>
   ) {
-    this.id = typeof tx === 'string' ? tx : tx.getTransactionId(provider.getChainId());
+    this.id = typeof tx === 'string' ? tx : tx.getTransactionId(chainId);
 
     this.provider = provider;
     this.abis = abis;
@@ -168,7 +169,8 @@ export class TransactionResponse {
     provider: Provider,
     abis?: JsonAbisFromAllCalls
   ): Promise<TransactionResponse> {
-    const response = new TransactionResponse(id, provider, abis);
+    const chainId = await provider.getChainId();
+    const response = new TransactionResponse(id, provider, chainId, abis);
     await response.fetch();
     return response;
   }
@@ -295,10 +297,11 @@ export class TransactionResponse {
     const { tx: transaction, bytes: transactionBytes } =
       await this.getTransaction<TTransactionType>();
 
-    const { gasPerByte, gasPriceFactor, gasCosts, maxGasPerTx } = this.provider.getGasConfig();
+    const { gasPerByte, gasPriceFactor, gasCosts, maxGasPerTx } =
+      await this.provider.getGasConfig();
     const gasPrice = await this.provider.getLatestGasPrice();
-    const maxInputs = this.provider.getChain().consensusParameters.txParameters.maxInputs;
-    const baseAssetId = this.provider.getBaseAssetId();
+    const maxInputs = (await this.provider.getChain()).consensusParameters.txParameters.maxInputs;
+    const baseAssetId = await this.provider.getBaseAssetId();
 
     const transactionSummary = assembleTransactionSummary<TTransactionType>({
       id: this.id,

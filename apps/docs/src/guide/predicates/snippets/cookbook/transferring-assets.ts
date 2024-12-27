@@ -4,7 +4,7 @@ import { Provider, Wallet } from 'fuels';
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
 import { SimplePredicate } from '../../../../typegend';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const sender = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const receiver = Wallet.generate({ provider });
 
@@ -26,7 +26,7 @@ const amountToPredicate = 10_000_000;
 const fundPredicateTx = await sender.transfer(
   predicate.address,
   amountToPredicate,
-  provider.getBaseAssetId(),
+  await provider.getBaseAssetId(),
   {
     gasLimit: 1000,
   }
@@ -49,7 +49,7 @@ const amountToReceiver = 200;
 const transferFromPredicateTx = await predicate.transfer(
   receiver.address,
   amountToReceiver,
-  provider.getBaseAssetId()
+  await provider.getBaseAssetId()
 );
 
 // Wait for the transaction

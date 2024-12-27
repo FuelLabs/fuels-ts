@@ -3,9 +3,9 @@ import { Provider, ScriptTransactionRequest, Wallet } from 'fuels';
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
 import { ScriptSum } from '../../../../typegend';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
-const baseAssetId = provider.getBaseAssetId();
+const baseAssetId = await provider.getBaseAssetId();
 
 const transactionRequest = new ScriptTransactionRequest({
   script: ScriptSum.bytecode,

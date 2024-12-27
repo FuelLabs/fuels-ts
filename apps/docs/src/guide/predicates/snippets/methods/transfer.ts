@@ -4,7 +4,7 @@ import { Provider, Wallet } from 'fuels';
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
 import { ReturnTruePredicate } from '../../../../typegend';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const funder = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 const predicate = new ReturnTruePredicate({
@@ -14,7 +14,7 @@ const predicate = new ReturnTruePredicate({
 const fundPredicate = await funder.transfer(
   predicate.address,
   100_000_000,
-  provider.getBaseAssetId()
+  await provider.getBaseAssetId()
 );
 await fundPredicate.waitForResult();
 
@@ -24,7 +24,7 @@ const amountToReceiver = 1000;
 const transferPredicateCoins = await predicate.transfer(
   receiver.address,
   amountToReceiver,
-  provider.getBaseAssetId(),
+  await provider.getBaseAssetId(),
   {
     gasLimit: 1000,
   }

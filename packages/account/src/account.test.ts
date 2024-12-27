@@ -119,12 +119,14 @@ describe('Account', () => {
       provider
     );
 
+    const assetId = await provider.getBaseAssetId();
+
     const { coins } = await account.getCoins();
     const assetA = coins.find((c) => c.assetId === ASSET_A);
     expect(assetA?.amount.gt(1)).toBeTruthy();
     const assetB = coins.find((c) => c.assetId === ASSET_B);
     expect(assetB?.amount.gt(1)).toBeTruthy();
-    const assetC = coins.find((c) => c.assetId === provider.getBaseAssetId());
+    const assetC = coins.find((c) => c.assetId === assetId);
     expect(assetC?.amount.gt(1)).toBeTruthy();
   });
 
@@ -227,7 +229,7 @@ describe('Account', () => {
       provider
     );
 
-    const newProviderInstance = await Provider.create(provider.url);
+    const newProviderInstance = new Provider(provider.url);
 
     expect(account.provider).not.toBe(newProviderInstance);
 
@@ -276,13 +278,13 @@ describe('Account', () => {
     expect(addAmountToCoinQuantitiesSpy).toBeCalledTimes(1);
     expect(addAmountToCoinQuantitiesSpy).toHaveBeenCalledWith({
       amount: bn(fee),
-      assetId: provider.getBaseAssetId(),
+      assetId: await provider.getBaseAssetId(),
       coinQuantities: quantities,
     });
 
     const expectedTotalResources = [
       { amount: bn(quantities[0].amount), assetId: quantities[0].assetId },
-      { amount: bn(fee), assetId: provider.getBaseAssetId() },
+      { amount: bn(fee), assetId: await provider.getBaseAssetId() },
     ];
     expect(getResourcesToSpendSpy).toHaveBeenCalled();
     expect(getResourcesToSpendSpy).toBeCalledWith(expectedTotalResources, {
@@ -422,7 +424,11 @@ describe('Account', () => {
     ];
 
     const transferConfig: TransferParams[] = [
-      { amount: amounts[0], destination: receivers[0].address, assetId: provider.getBaseAssetId() },
+      {
+        amount: amounts[0],
+        destination: receivers[0].address,
+        assetId: await provider.getBaseAssetId(),
+      },
       { amount: amounts[1], destination: receivers[1].address, assetId: ASSET_A },
       { amount: amounts[2], destination: receivers[2].address, assetId: ASSET_B },
       { amount: amounts[3], destination: receivers[2].address, assetId: ASSET_A },
@@ -433,7 +439,11 @@ describe('Account', () => {
     expect(isStatusSuccess).toBeTruthy();
 
     const expectedBalances = [
-      { receiver: receivers[0], assetId: provider.getBaseAssetId(), expectedBalance: amounts[0] },
+      {
+        receiver: receivers[0],
+        assetId: await provider.getBaseAssetId(),
+        expectedBalance: amounts[0],
+      },
       { receiver: receivers[1], assetId: ASSET_A, expectedBalance: amounts[1] },
       { receiver: receivers[2], assetId: ASSET_B, expectedBalance: amounts[2] },
       { receiver: receivers[2], assetId: ASSET_A, expectedBalance: amounts[3] },
@@ -493,7 +503,7 @@ describe('Account', () => {
     const request = await sender.createTransfer(
       receiver.address.toB256(),
       1,
-      provider.getBaseAssetId(),
+      await provider.getBaseAssetId(),
       {
         gasLimit: 10_000,
       }
@@ -505,7 +515,7 @@ describe('Account', () => {
     const { balances: receiverBalances } = await receiver.getBalances();
 
     expect(isStatusSuccess).toBeTruthy();
-    expect(receiverBalances).toEqual([{ assetId: provider.getBaseAssetId(), amount: bn(1) }]);
+    expect(receiverBalances).toEqual([{ assetId: await provider.getBaseAssetId(), amount: bn(1) }]);
   });
 
   it('can set "gasLimit" and "maxFee" when transferring amounts', async () => {
@@ -520,7 +530,7 @@ describe('Account', () => {
     const gasLimit = 30_000;
     const maxFee = 60_000;
 
-    const request = await sender.createTransfer(receiver, 1, provider.getBaseAssetId(), {
+    const request = await sender.createTransfer(receiver, 1, await provider.getBaseAssetId(), {
       gasLimit,
       maxFee,
     });
@@ -544,7 +554,7 @@ describe('Account', () => {
 
     const receiver = Wallet.generate({ provider });
 
-    const tx = await sender.transfer(receiver.address, 1, provider.getBaseAssetId(), {
+    const tx = await sender.transfer(receiver.address, 1, await provider.getBaseAssetId(), {
       gasLimit: 1000,
       tip: 10,
       witnessLimit: 10000,
@@ -552,7 +562,7 @@ describe('Account', () => {
 
     const response = await tx.wait();
     const { balances: receiverBalances } = await receiver.getBalances();
-    expect(receiverBalances).toEqual([{ assetId: provider.getBaseAssetId(), amount: bn(1) }]);
+    expect(receiverBalances).toEqual([{ assetId: await provider.getBaseAssetId(), amount: bn(1) }]);
     expect(response.isStatusSuccess).toBeTruthy();
   });
 
@@ -685,7 +695,7 @@ describe('Account', () => {
 
     // Wait for the next block to be minter on out case we are using a local provider
     // so we can create a new tx to generate next block
-    const resp = await sender.transfer(recipient, AMOUNT, provider.getBaseAssetId(), {
+    const resp = await sender.transfer(recipient, AMOUNT, await provider.getBaseAssetId(), {
       gasLimit: 10_000,
     });
     const nextBlock = await resp.waitForResult();
@@ -719,7 +729,7 @@ describe('Account', () => {
     // seed wallet with 3 distinct utxos
     const amount = bn(1_500_000);
     for (let i = 0; i < 3; i++) {
-      request.addCoinOutput(sender.address, amount.div(3), provider.getBaseAssetId());
+      request.addCoinOutput(sender.address, amount.div(3), await provider.getBaseAssetId());
     }
 
     const txCost = await fundingWallet.getTransactionCost(request);
@@ -732,13 +742,15 @@ describe('Account', () => {
     const tx1 = await fundingWallet.sendTransaction(request);
     await tx1.waitForResult();
 
-    const transfer = await sender.transfer(receiver.address, 110, provider.getBaseAssetId(), {
+    const transfer = await sender.transfer(receiver.address, 110, await provider.getBaseAssetId(), {
       gasLimit: 10_000,
     });
     await transfer.wait();
 
     const { balances: receiverBalances } = await receiver.getBalances();
-    expect(receiverBalances).toEqual([{ assetId: provider.getBaseAssetId(), amount: bn(110) }]);
+    expect(receiverBalances).toEqual([
+      { assetId: await provider.getBaseAssetId(), amount: bn(110) },
+    ]);
   });
 
   it('can generate and use fake coins', async () => {
@@ -754,7 +766,7 @@ describe('Account', () => {
     const amountToTransferBaseAsset = bn(1000);
 
     const fakeCoinsConfig: FakeResources[] = [
-      { amount: amount1, assetId: provider.getBaseAssetId() },
+      { amount: amount1, assetId: await provider.getBaseAssetId() },
       { amount: amount2, assetId: ASSET_A },
       { amount: amount3, assetId: ASSET_B },
     ];
@@ -769,7 +781,7 @@ describe('Account', () => {
     request.addCoinOutput(
       Address.fromRandom(),
       amountToTransferBaseAsset,
-      provider.getBaseAssetId()
+      await provider.getBaseAssetId()
     );
     request.addCoinOutput(Address.fromRandom(), amount2, ASSET_A);
     request.addCoinOutput(Address.fromRandom(), amount3, ASSET_B);
@@ -796,7 +808,7 @@ describe('Account', () => {
 
     const fundingAmount = bn(1_500_000);
     for (let i = 0; i < 3; i++) {
-      request.addCoinOutput(sender.address, fundingAmount.div(3), provider.getBaseAssetId());
+      request.addCoinOutput(sender.address, fundingAmount.div(3), await provider.getBaseAssetId());
     }
 
     const txCost = await fundingWallet.getTransactionCost(request);
@@ -857,7 +869,7 @@ describe('Account', () => {
     } = launched;
 
     await expect(async () => {
-      const result = await sender.transfer(receiver.address, 1, provider.getBaseAssetId(), {
+      const result = await sender.transfer(receiver.address, 1, await provider.getBaseAssetId(), {
         gasLimit: 0,
       });
       await result.wait();
@@ -895,14 +907,14 @@ describe('Account', () => {
 
     await expectToThrowFuelError(
       async () => {
-        await sender.transfer(receiver.address, 0, provider.getBaseAssetId());
+        await sender.transfer(receiver.address, 0, await provider.getBaseAssetId());
       },
       new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
     );
 
     await expectToThrowFuelError(
       async () => {
-        await sender.transfer(receiver.address, -1, provider.getBaseAssetId());
+        await sender.transfer(receiver.address, -1, await provider.getBaseAssetId());
       },
       new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
     );
@@ -919,15 +931,19 @@ describe('Account', () => {
     await account.getCoins();
     expect(spy.mock.calls[0]).toStrictEqual([account.address, undefined, undefined]);
 
-    await account.getCoins(provider.getBaseAssetId());
+    await account.getCoins(await provider.getBaseAssetId());
     expect(spy.mock.calls[1]).toStrictEqual([
       account.address,
-      provider.getBaseAssetId(),
+      await provider.getBaseAssetId(),
       undefined,
     ]);
 
-    await account.getCoins(provider.getBaseAssetId(), args);
-    expect(spy.mock.calls[2]).toStrictEqual([account.address, provider.getBaseAssetId(), args]);
+    await account.getCoins(await provider.getBaseAssetId(), args);
+    expect(spy.mock.calls[2]).toStrictEqual([
+      account.address,
+      await provider.getBaseAssetId(),
+      args,
+    ]);
 
     expect(spy).toHaveBeenCalled();
     vi.restoreAllMocks();
@@ -965,7 +981,7 @@ describe('Account', () => {
     } = launched;
 
     const request = new ScriptTransactionRequest();
-    request.addCoinOutput(wallet.address, 30_000, provider.getBaseAssetId());
+    request.addCoinOutput(wallet.address, 30_000, await provider.getBaseAssetId());
 
     const txCost = await wallet.getTransactionCost(request);
 
@@ -994,10 +1010,13 @@ describe('Account', () => {
 
     const { balances } = await wallet.getBalances();
 
+    const baseAssetId = await provider.getBaseAssetId();
+
     expect(balances.length).toBe(3);
+
     balances.forEach((balance) => {
       expect(balance.amount.toNumber()).toBe(fundAmount);
-      expect([provider.getBaseAssetId(), ASSET_A, ASSET_B].includes(balance.assetId)).toBeTruthy();
+      expect([baseAssetId, ASSET_A, ASSET_B].includes(balance.assetId)).toBeTruthy();
     });
   });
 });

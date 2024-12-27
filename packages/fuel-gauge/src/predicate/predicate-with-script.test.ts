@@ -62,7 +62,7 @@ describe('Predicate', () => {
       const tx = await predicate.transfer(
         receiver.address,
         amountToReceiver,
-        provider.getBaseAssetId(),
+        await provider.getBaseAssetId(),
         {
           gasLimit: 1000,
         }
