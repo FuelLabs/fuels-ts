@@ -65,7 +65,7 @@ describe('dev', () => {
     const { log } = mockLogger();
     const { build, deploy } = mockAll();
 
-    await workspaceFileChanged({ config: fuelsConfig, watchHandlers: [], filesBeingProcsesed: [] })(
+    await workspaceFileChanged({ config: fuelsConfig, watchHandlers: [], filesBeingProcessed: [] })(
       'event',
       'some/path'
     );
@@ -130,7 +130,7 @@ describe('dev', () => {
     const close = vi.fn();
     const watchHandlers = [{ close }, { close }] as unknown as FSWatcher[];
 
-    await configFileChanged({ config, fuelCore, watchHandlers, filesBeingProcsesed: [] })(
+    await configFileChanged({ config, fuelCore, watchHandlers, filesBeingProcessed: [] })(
       'event',
       'some/path'
     );
@@ -169,7 +169,7 @@ describe('dev', () => {
     const close = vi.fn();
     const watchHandlers = [{ close }, { close }] as unknown as FSWatcher[];
 
-    await configFileChanged({ config, fuelCore, watchHandlers, filesBeingProcsesed: [] })(
+    await configFileChanged({ config, fuelCore, watchHandlers, filesBeingProcessed: [] })(
       'event',
       'some/path'
     );
