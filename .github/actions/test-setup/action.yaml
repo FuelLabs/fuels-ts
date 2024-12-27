@@ -46,7 +46,7 @@ runs:
     - name: Set forc and fuel-core paths
       shell: bash
       run: |
-        echo "$GITHUB_WORKSPACE/internal/forc/forc-binaries" >> $GITHUB_PATH
-        echo "$GITHUB_WORKSPACE/internal/fuel-core/fuel-core-binaries" >> $GITHUB_PATH
+        echo "$GITHUB_WORKSPACE/internal/forc/forc-binaries/forc" >> $GITHUB_PATH
+        echo "$GITHUB_WORKSPACE/internal/fuel-core/fuel-core-binaries/fuel-core" >> $GITHUB_PATH
         forc --version
         fuel-core --version
