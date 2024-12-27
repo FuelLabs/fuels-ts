@@ -8,5 +8,5 @@
   Forc version: 0.66.5
 */
 
-export * from './Src14OwnedProxy';
-export * from './Src14OwnedProxyFactory';
+export { Src14OwnedProxy } from './Src14OwnedProxy';
+export { Src14OwnedProxyFactory } from './Src14OwnedProxyFactory';

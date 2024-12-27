@@ -77,7 +77,8 @@ export function getProgramDetails(paths: string[]) {
   paths.forEach((path) => {
     const abiPath = path.match(/.+-abi\.json/) ? path : globSync(`${path}/*-abi.json`)[0];
     if (abiPath === undefined) {
-      throw new FuelError(ErrorCode.NO_ABIS_FOUND, `No abi file found in ${path}`);
+      log(`No abi file found in ${path}, skipping this path.`);
+      return;
     }
 
     const dir = abiPath.match(/.*\//)?.[0] as string;

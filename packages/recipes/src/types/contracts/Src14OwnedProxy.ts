@@ -17,7 +17,8 @@ import { type AbstractAddress } from '@fuel-ts/interfaces';
 import { type Account, type Provider } from '@fuel-ts/account';
 import { abi } from './Src14OwnedProxy-abi';
 
-export type Src14OwnedProxyTypes = Types;
+export * from './Src14OwnedProxyTypes';
+
 export type Src14OwnedProxyConfigurables = Types['configurables'];
 
 export class Src14OwnedProxyInterface extends Interface {

@@ -71,20 +71,30 @@ describe('AbiGen', () => {
     });
   });
 
-  test('throws if no abi json file found', async () => {
-    const { buildDir, name } = getAbiForcProject(AbiProjectsEnum.ABI_SCRIPT);
-    using tmpDir = generateTmpDir(buildDir);
-
-    rmSync(join(tmpDir.path, `${name}-abi.json`));
-
-    await expectToThrowFuelError(
-      () =>
-        runTypegen({
-          inputs: [tmpDir.path],
-          output: tmpDir.path,
-        }),
-      new FuelError(FuelError.CODES.NO_ABIS_FOUND, `No abi file found in ${tmpDir.path}`)
+  test('logs if no abi json file found and skips path', () => {
+    const logSpy = vi.spyOn(console, 'log').mockImplementationOnce(() => {});
+    const { buildDir: scriptBuildDir, name: scriptName } = getAbiForcProject(
+      AbiProjectsEnum.ABI_SCRIPT
     );
+    const { buildDir: predicateBuildDir } = getAbiForcProject(AbiProjectsEnum.ABI_PREDICATE);
+    using scriptDir = generateTmpDir(scriptBuildDir);
+
+    rmSync(join(scriptDir.path, `${scriptName}-abi.json`));
+
+    using predicateDir = generateTmpDir(predicateBuildDir);
+
+    runTypegen({
+      inputs: [scriptDir.path, predicateDir.path],
+      output: scriptDir.path,
+    });
+
+    expect(logSpy).toHaveBeenCalledWith(
+      `No abi file found in ${scriptDir.path}, skipping this path.`
+    );
+    const outputDirContents = readdirSync(scriptDir.path);
+
+    expect(outputDirContents).not.toContain('scripts');
+    expect(outputDirContents).toContain('predicates');
   });
 
   test('skips contract factory and bytecode generation when bytecode is missing and logs it', () => {
