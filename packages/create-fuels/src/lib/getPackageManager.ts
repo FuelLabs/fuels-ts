@@ -1,3 +1,5 @@
+import { warn } from '../utils/logger';
+
 export const availablePackageManagers = ['pnpm', 'npm', 'bun'] as const;
 export type PackageManager = (typeof availablePackageManagers)[number];
 
@@ -41,6 +43,12 @@ export function getUserPkgManager(): PackageManager {
   if (userAgent.startsWith(packageMangers.bun.name)) {
     return packageMangers.bun.name;
   }
+
+  if (userAgent.startsWith(packageMangers.npm.name)) {
+    return packageMangers.npm.name;
+  }
+
+  warn(`This package manager is not supported. Using npm instead.`);
 
   return packageMangers.npm.name;
 }
