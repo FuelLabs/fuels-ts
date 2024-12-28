@@ -87,15 +87,6 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns An array of contract calls.
    */
   protected get calls() {
-    const provider = this.getProvider();
-    const consensusParams = provider.getChain();
-    // TODO: Remove this error since it is already handled on Provider class
-    if (!consensusParams) {
-      throw new FuelError(
-        FuelError.CODES.CHAIN_INFO_CACHE_EMPTY,
-        'Provider chain info cache is empty. Please make sure to initialize the `Provider` properly by running `new Provider()``'
-      );
-    }
     return this.functionInvocationScopes.map((funcScope) => createContractCall(funcScope));
   }
 
