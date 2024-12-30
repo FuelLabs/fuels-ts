@@ -41,7 +41,7 @@ describe('BigNumberCoder', () => {
       () => coder.encode(value),
       new FuelError(
         ErrorCode.ENCODE_ERROR,
-        'Invalid u64 type - too large. Number can only safely handle up to 53 bits.'
+        'Invalid u64 type - number value is too large. Number can only safely handle up to 53 bits.'
       )
     );
   });
@@ -64,7 +64,7 @@ describe('BigNumberCoder', () => {
       () => coder.encode(value),
       new FuelError(
         ErrorCode.ENCODE_ERROR,
-        'Invalid u64 type - too large. Number can only safely handle up to 53 bits.'
+        'Invalid u64 type - number value is too large. Number can only safely handle up to 53 bits.'
       )
     );
   });
