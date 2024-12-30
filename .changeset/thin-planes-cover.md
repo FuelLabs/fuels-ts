@@ -1,4 +1,6 @@
 ---
+"@fuel-ts/account": patch
+"fuels": patch
 "create-fuels": patch
 ---
 
