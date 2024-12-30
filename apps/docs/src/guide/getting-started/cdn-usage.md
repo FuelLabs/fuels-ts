@@ -1,6 +1,11 @@
+<script setup>
+  import { data } from '../../versions.data'
+  const { fuels } = data
+</script>
+
 # CDN Usage (browser only)
 
-```html
+```html-vue
 <script type="module">
   import {
     Wallet,
