@@ -41,6 +41,7 @@ export type LaunchNodeOptions = {
    * */
   snapshotConfig?: SnapshotConfigs;
   includeInitialState?: boolean;
+  killProcessOnExit?: boolean;
 };
 
 export type LaunchNodeResult = Promise<{
@@ -143,6 +144,7 @@ export const launchNode = async ({
   basePath,
   snapshotConfig = defaultSnapshotConfigs,
   includeInitialState = false,
+  killProcessOnExit = false,
 }: LaunchNodeOptions = {}): LaunchNodeResult =>
   // eslint-disable-next-line no-async-promise-executor
   new Promise(async (resolve, reject) => {
@@ -248,9 +250,6 @@ export const launchNode = async ({
       }
     };
 
-    child.on('error', removeSideffects);
-    child.on('exit', removeSideffects);
-
     const childState = {
       isDead: false,
     };
@@ -331,5 +330,14 @@ export const launchNode = async ({
     process.on('beforeExit', cleanup);
     process.on('uncaughtException', cleanup);
 
-    child.on('error', reject);
+    child.on('exit', (code: number | null, _signal: NodeJS.Signals | null) => {
+      removeSideffects();
+      if (killProcessOnExit) {
+        process.exit(code);
+      }
+    });
+    child.on('error', (err: Error) => {
+      removeSideffects();
+      reject(err);
+    });
   });

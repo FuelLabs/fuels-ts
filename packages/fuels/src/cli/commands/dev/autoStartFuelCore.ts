@@ -38,6 +38,7 @@ export const autoStartFuelCore = async (config: FuelsConfig) => {
       basePath: config.basePath,
       fuelCorePath: config.fuelCorePath,
       includeInitialState: true,
+      killProcessOnExit: true,
     });
 
     fuelCore = {
