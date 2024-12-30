@@ -243,8 +243,10 @@ export const launchNode = async ({
       });
     }
 
-    const removeSideffects = () => {
+    const removeChildListeners = () => {
       child.stderr.removeAllListeners();
+    };
+    const removeTempDir = () => {
       if (existsSync(tempDir)) {
         rmSync(tempDir, { recursive: true });
       }
@@ -260,7 +262,8 @@ export const launchNode = async ({
       }
       childState.isDead = true;
 
-      removeSideffects();
+      removeChildListeners();
+
       if (child.pid !== undefined) {
         try {
           process.kill(-child.pid);
@@ -283,6 +286,7 @@ export const launchNode = async ({
         // eslint-disable-next-line no-console
         console.error('No PID available for the child process, unable to kill launched node');
       }
+      removeTempDir();
     };
 
     // Look for a specific graphql start point in the output.
@@ -331,13 +335,15 @@ export const launchNode = async ({
     process.on('uncaughtException', cleanup);
 
     child.on('exit', (code: number | null, _signal: NodeJS.Signals | null) => {
-      removeSideffects();
+      removeChildListeners();
+      removeTempDir();
       if (killProcessOnExit) {
         process.exit(code);
       }
     });
     child.on('error', (err: Error) => {
-      removeSideffects();
+      removeChildListeners();
+      removeTempDir();
       reject(err);
     });
   });
