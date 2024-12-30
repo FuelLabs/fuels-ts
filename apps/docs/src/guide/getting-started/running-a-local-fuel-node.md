@@ -10,9 +10,16 @@ Then check the command self documentation:
 fuel-core
 ```
 
-<!-- ```sh-vue [Forc]
+<!--
+  TODO: Uncomment this when `forc node` is available:
+  - https://github.com/FuelLabs/sway/pull/6473
+-->
+
+<!--
+```sh-vue [Forc]
 forc node
-``` -->
+```
+-->
 
 ```sh-vue [TS SDK]
 fuels node
