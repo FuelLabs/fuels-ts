@@ -57,7 +57,7 @@ describe('BigNumberCoder', () => {
     const value: number = 76472027892439376;
 
     expect(() => coder.encode(value)).toThrow(
-      new FuelError(ErrorCode.ENCODE_ERROR, 'Invalid u64 type - number value is too large.')
+      new FuelError(ErrorCode.ENCODE_ERROR, 'Invalid u64 type - too large. Number can only safely handle up to 53 bits').
     );
   });
 
