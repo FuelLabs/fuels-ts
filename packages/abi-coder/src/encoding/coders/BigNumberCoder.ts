@@ -26,7 +26,7 @@ export class BigNumberCoder extends Coder<BNInput, BN> {
     if (typeof value === 'number' && value > Number.MAX_SAFE_INTEGER) {
       throw new FuelError(
         ErrorCode.ENCODE_ERROR,
-        `Invalid ${this.type} type - number value is too large.`
+        `Invalid ${this.type} type - number value is too large. Number can only safely handle up to 53 bits.`
       );
     }
 

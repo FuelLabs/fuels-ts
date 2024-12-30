@@ -33,12 +33,16 @@ describe('BigNumberCoder', () => {
     expect(data).toEqual(expected);
   });
 
-  it('should throw an error when encoding [number more than max safe integer]', () => {
+  it('should throw an error when encoding [number more than max safe integer]', async () => {
     const coder = new BigNumberCoder('u64');
     const value: number = Number.MAX_SAFE_INTEGER + 1;
 
-    expect(() => coder.encode(value)).toThrow(
-      new FuelError(ErrorCode.ENCODE_ERROR, 'Invalid u64 type - number value is too large.')
+    await expectToThrowFuelError(
+      () => coder.encode(value),
+      new FuelError(
+        ErrorCode.ENCODE_ERROR,
+        'Invalid u64 type - too large. Number can only safely handle up to 53 bits.'
+      )
     );
   });
 
@@ -52,12 +56,16 @@ describe('BigNumberCoder', () => {
     expect(data).toEqual(expected);
   });
 
-  it('should throw an error when encoding [number more than max safe integer]', () => {
+  it('should throw an error when encoding [number more than max safe integer]', async () => {
     const coder = new BigNumberCoder('u64');
     const value: number = 76472027892439376;
 
-    expect(() => coder.encode(value)).toThrow(
-      new FuelError(ErrorCode.ENCODE_ERROR, 'Invalid u64 type - too large. Number can only safely handle up to 53 bits').
+    await expectToThrowFuelError(
+      () => coder.encode(value),
+      new FuelError(
+        ErrorCode.ENCODE_ERROR,
+        'Invalid u64 type - too large. Number can only safely handle up to 53 bits.'
+      )
     );
   });
 
