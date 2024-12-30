@@ -2,7 +2,7 @@
 
 Welcome to `fuels` Typescript SDK!
 
-We prepared a couple guides to walk you through your first steps:
+We prepared some guides to walk you through your first steps:
 
 1. [Installation](./installation.md)
 1. [Connecting to the Network](./connecting-to-the-network.md)
