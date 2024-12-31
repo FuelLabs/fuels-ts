@@ -38,14 +38,12 @@ const encodedU256 = u256Coder.encode(255);
 // #region working-with-bytes-2
 const booleanCoder = new BooleanCoder();
 const encodedTrue = booleanCoder.encode(true);
-
 const encodedFalse = booleanCoder.encode(false);
-
 // #endregion working-with-bytes-2
 
 // #region working-with-bytes-3
 const stringCoder = new StringCoder(5);
-const encoded = stringCoder.encode('hello');
+const encodedString = stringCoder.encode('hello');
 // #endregion working-with-bytes-3
 
 // #region working-with-bytes-4

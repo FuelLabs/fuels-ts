@@ -347,6 +347,21 @@ export default defineConfig({
             ],
           },
           {
+            text: 'Optimizing Transactions',
+            link: '/guide/optimizing-transactions/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Optimistic Transactions',
+                link: '/guide/optimizing-transactions/optimistic-transactions',
+              },
+              {
+                text: 'Optimistic Contract Calls',
+                link: '/guide/optimizing-transactions/optimistic-contract-calls',
+              },
+            ],
+          },
+          {
             text: 'Encoding',
             link: '/guide/encoding/',
             collapsed: true,
