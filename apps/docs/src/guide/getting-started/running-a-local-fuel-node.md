@@ -36,13 +36,15 @@ Check also the online docs:
 
 <!-- | Forc | `forc node` | [docs](https://docs.fuel.network/docs/forc/commands/forc_node/) | -->
 
-# Testing Utilities
+# Utilities
 
+
+## Testing
 You can run a Fuel node from within your `.ts` unit tests:
 
 - [Launching a test node](../testing/launching-a-test-node.md)
 
-# Developer Utilities
+## Developing
 
 Configure your project for the `fuels` CLI using a `fuels.config.ts` file:
 
