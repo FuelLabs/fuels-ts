@@ -12,5 +12,7 @@ Depending on how you are performing the transaction, all of the above may have b
 This can be mitigated by optimistically building the transaction before your user submits the transaction. Pre-preparation of the transaction can speed increases for your users of **~2x**.
 
 Check out the following guides on implementing optimistic transaction building:
+
 - [Optimistic Transactions](./optimistic-transactions)
 - [Optimistic Contract Calls](./optimistic-contract-calls)
+- [Optimistic Predicates](./optimistic-predicates)

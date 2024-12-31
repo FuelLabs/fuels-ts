@@ -359,6 +359,10 @@ export default defineConfig({
                 text: 'Optimistic Contract Calls',
                 link: '/guide/optimizing-transactions/optimistic-contract-calls',
               },
+              {
+                text: 'Optimistic Predicates',
+                link: '/guide/optimizing-transactions/optimistic-predicates',
+              },
             ],
           },
           {
