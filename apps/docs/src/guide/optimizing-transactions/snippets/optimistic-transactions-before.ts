@@ -9,6 +9,7 @@ async function onTransferPressed(recipientAddress: string) {
   // Initialize the provider and sender
   const provider = await Provider.create(LOCAL_NETWORK_URL);
   const sender = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
+
   // Calling the transfer function will create the transaction,
   // and then perform multiple network requests to fund, simulate and submit
   const transaction = await sender.transfer(recipientAddress, 1_000_000);

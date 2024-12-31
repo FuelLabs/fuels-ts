@@ -16,8 +16,10 @@ async function onPageLoad() {
   // Initialize the provider and sender
   provider = await Provider.create(LOCAL_NETWORK_URL);
   sender = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
+
   // Create and prepare the transaction request
   request = new ScriptTransactionRequest();
+
   // Estimate and fund the transaction with enough resources to cover
   // both the transfer and the gas
   const txCost = await sender.getTransactionCost(request, {
@@ -28,6 +30,8 @@ async function onPageLoad() {
       },
     ],
   });
+  request.gasLimit = txCost.gasUsed;
+  request.maxFee = txCost.maxFee;
   await sender.fund(request, txCost);
 }
 
@@ -39,6 +43,7 @@ async function onTransferPressed(recipientAddress: string) {
     1_000_000,
     provider.getBaseAssetId()
   );
+
   // And submit the transaction, ensuring that the dependencies are
   // not re-estimated and making redundant calls to the network
   const transaction = await sender.sendTransaction(request, {
