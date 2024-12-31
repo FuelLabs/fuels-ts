@@ -4,25 +4,32 @@ import { FuelProvider } from "@fuels/react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { ToastContainer } from "react-toastify";
-import { Provider } from "fuels";
+import { FuelConnector, Network, Provider } from "fuels";
 
 import App from "./App.tsx";
-import { providerUrl } from "./lib.tsx";
+import { chainId, providerUrl } from "./lib.tsx";
 
 import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
 
 const queryClient = new QueryClient();
 
-const connectors = defaultConnectors({
+const connectors: FuelConnector[] = defaultConnectors({
   devMode: true,
-  burnerWalletConfig: { fuelProvider: Provider.create(providerUrl) },
+  fuelProvider: await Provider.create(providerUrl),
 });
+
+const networks: Network[] = [{ url: providerUrl, chainId }];
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <FuelProvider theme="dark" fuelConfig={{ connectors }}>
+      <FuelProvider
+        theme="dark"
+        fuelConfig={{ connectors }}
+        uiConfig={{ suggestBridge: false }}
+        networks={networks}
+      >
         <App />
         <ToastContainer theme="dark" />
       </FuelProvider>
