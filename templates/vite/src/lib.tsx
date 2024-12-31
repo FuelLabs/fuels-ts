@@ -10,7 +10,6 @@ export const isTestnet = environment === environments.TESTNET;
 export const localProviderUrl = `http://127.0.0.1:${process.env.VITE_FUEL_NODE_PORT || 4000}/v1/graphql`;
 export const testnetProviderUrl = "https://testnet.fuel.network/v1/graphql";
 export const providerUrl = isLocal ? localProviderUrl : testnetProviderUrl;
-export const chainId = 0; // Local and testnet are both on chain 0
 export const playgroundUrl = providerUrl.replace("v1/graphql", "v1/playground");
 
 export const localContractId = contractIds.testContract;
