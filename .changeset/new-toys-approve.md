@@ -2,4 +2,4 @@
 "fuels": patch
 ---
 
-fix: `fuels` init paths and globals handling
+fix: paths and globals in `fuels init`
