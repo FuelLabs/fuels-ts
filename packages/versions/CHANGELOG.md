@@ -1,5 +1,17 @@
 # @fuel-ts/versions
 
+## 0.97.2
+
+### Patch Changes
+
+- 5ec254d: chore: updated forc version to `0.66.5`
+
+## 0.97.1
+
+### Patch Changes
+
+- 165c49c: chore: bump `fuel-core` to `0.40.1`
+
 ## 0.97.0
 
 ### Patch Changes

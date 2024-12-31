@@ -302,7 +302,7 @@ describe('launchTestNode', () => {
         snapshotConfig: {
           chainConfig: {
             consensus_parameters: {
-              V1: {
+              V2: {
                 base_asset_id: baseAssetId,
               },
             },

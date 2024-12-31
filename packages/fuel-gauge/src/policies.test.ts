@@ -362,7 +362,7 @@ describe('Policies', () => {
 
       const receiver = Wallet.generate({ provider });
 
-      const maxFee = 1;
+      const maxFee = 0;
 
       const txParams: CustomTxParams = {
         witnessLimit: 800,
@@ -395,7 +395,7 @@ describe('Policies', () => {
         wallets: [wallet],
       } = launched;
 
-      const maxFee = 1;
+      const maxFee = 0;
 
       const txParams: CustomTxParams = {
         witnessLimit: 800,
@@ -425,7 +425,7 @@ describe('Policies', () => {
         wallets: [wallet],
       } = launched;
 
-      const maxFee = 1;
+      const maxFee = 0;
       const receiver = Wallet.generate({ provider });
 
       const txParams: CustomTxParams = {
@@ -450,7 +450,7 @@ describe('Policies', () => {
         wallets: [wallet],
       } = launched;
 
-      const maxFee = 1;
+      const maxFee = 0;
 
       const factory = new ContractFactory(
         PayableAnnotationFactory.bytecode,
@@ -469,7 +469,7 @@ describe('Policies', () => {
     });
 
     it('on a contract call', async () => {
-      const maxFee = 1;
+      const maxFee = 0;
 
       using launched = await launchTestNode({
         contractsConfigs: [

@@ -1,7 +1,6 @@
 import { defineConfig } from 'vitepress';
 import { codeInContextPlugin } from './plugins/codeInContextPlugin';
 import { snippetPlugin } from './plugins/snippetPlugin';
-import apiLinks from '../.typedoc/api-links.json';
 
 export default defineConfig({
   title: 'Fuels-ts',
@@ -426,6 +425,10 @@ export default defineConfig({
                 text: 'Combining UTXOs',
                 link: '/guide/cookbook/combining-utxos',
               },
+              {
+                text: 'Splitting UTXOs',
+                link: '/guide/cookbook/splitting-utxos',
+              },
             ],
           },
           {
@@ -552,7 +555,6 @@ export default defineConfig({
             collapsed: false,
             items: [],
           },
-          apiLinks,
         ],
       },
     ],

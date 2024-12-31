@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.97.2
+
+## 0.97.1
+
+### Patch Changes
+
+- 27e8808: chore: deprecate bech32 addresses
+
 ## 0.97.0
 
 ## 0.96.1

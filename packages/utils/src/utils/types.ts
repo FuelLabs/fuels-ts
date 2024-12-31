@@ -1,10 +1,12 @@
+import type { BN } from '@fuel-ts/math';
+
 interface Coin {
   tx_id: string;
   output_index: number;
   tx_pointer_block_height: number;
   tx_pointer_tx_idx: number;
   owner: string;
-  amount: number;
+  amount: number | BN;
   asset_id: string;
 }
 
@@ -12,7 +14,7 @@ interface Message {
   sender: string;
   recipient: string;
   nonce: string;
-  amount: number;
+  amount: number | BN;
   data: string;
   da_height: number;
 }
@@ -204,7 +206,7 @@ interface ConsensusParameters {
 interface ChainConfig {
   chain_name: string;
   consensus_parameters: {
-    V1: ConsensusParameters;
+    V2: ConsensusParameters;
   };
   consensus: Consensus;
 }

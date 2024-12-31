@@ -6,8 +6,7 @@
     "/apps/docs/*",
     "/packages/abi-typegen/test/**",
     "templates/**",
-    "/apps/docs-snippets/**",
-    "/apps/docs-snippets2/**/*.test.ts",
+    "/apps/docs/**/*.test.ts",
     "apps/create-fuels-counter-guide/**",
     "apps/docs-api/**"
   ],
@@ -36,9 +35,7 @@
     "lsof",
     "memfs",
     "open",
-    "textlint",
-    "textlint-rule-no-dead-link",
-    "@elasticpath/textlint-rule-no-dead-relative-link",
+    "markdown-link-check",
     "ts-generator",
     "webdriverio",
     "syncpack"
