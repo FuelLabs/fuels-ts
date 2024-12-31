@@ -8,17 +8,15 @@ After [installing](./installation.md) the `fuels` package, it's easy to connect 
 
 These are our official RPC URLs:
 
-| Mainnet                                   | Testnet                                   |
-| ----------------------------------------- | ----------------------------------------- |
-| `https://mainnet.fuel.network/v1/graphql` | `https://testnet.fuel.network/v1/graphql` |
-
-You can also connect to `localhost`:
-
-- [Running a local Fuel node](./running-a-local-fuel-node.md)
+| Network   | URL                                                         |
+| --------- | ----------------------------------------------------------- |
+| Mainnet   | `https://testnet.fuel.network/v1/graphql`                   |
+| Testnet   | `https://mainnet.fuel.network/v1/graphql`                   |
+| Localhost | [Running a local Fuel node](./running-a-local-fuel-node.md) |
 
 # Resources
 
-You can also access all our apps directly:
+Access all our apps directly:
 
 |          | Mainnet                                    | Testnet                                    |
 | -------- | ------------------------------------------ | ------------------------------------------ |
@@ -26,9 +24,3 @@ You can also access all our apps directly:
 | Explorer | https://app.fuel.network                   | https://app-testnet.fuel.network           |
 | Bridge   | https://app.fuel.network/bridge            | https://app-testnet.fuel.network/bridge    |
 | GraphQL  | https://mainnet.fuel.network/v1/playground | https://testnet.fuel.network/v1/playground |
-
-# Next
-
-You can also connect to `localhost`:
-
-- [Running a local Fuel node](./running-a-local-fuel-node.md)
