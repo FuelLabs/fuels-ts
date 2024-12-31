@@ -65,7 +65,7 @@ describe('init', () => {
     expect(fuelsContents).toMatch(relativeFooDir);
   });
 
-  it('should run `init` command with --predicate', async () => {
+  it('should run `init` command with --predicates', async () => {
     await runInit({
       root: paths.root,
       predicates: paths.predicateDir,
