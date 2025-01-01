@@ -67,7 +67,7 @@ Commands:
   help [command]      Display help for command
 ```
 
-# Contributing
+# Contribute
 
 - https://github.com/FuelLabs/fuels-ts/blob/master/CONTRIBUTING.md
 
