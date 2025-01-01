@@ -13,7 +13,7 @@ Typescript SDK for Fuel.
 npm install fuels --save
 ```
 
-# Connecting ([docs](https://docs.fuel.network/docs/fuels-ts/getting-started/connecting-to-the-network))
+# Connecting ([docs](https://docs.fuel.network/docs/fuels-ts/getting-started/connecting-to-the-network/))
 
 | Network   | URL                                                                                                             |
 | --------- | --------------------------------------------------------------------------------------------------------------- |
@@ -48,10 +48,10 @@ $ npm create fuels
 
 # Enjoy the `fuels` CLI ([docs](https://docs.fuel.network/docs/fuels-ts/fuels-cli/))
 
-- [`fuels init`](./commands.md#fuels-init) — Creates a new `fuels.config.ts` file
-- [`fuels build`](./commands.md#fuels-build) — Build `forc` workspace and generate Typescript types for everything
-- [`fuels deploy`](./commands.md#fuels-deploy) — Deploy workspace contracts and save their IDs to JSON file
-- [`fuels dev`](./commands.md#fuels-dev) — Start local Fuel Core _node_ and `build` + `deploy` on every file change
+- [`fuels init`](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands#fuels-init) — Creates a new `fuels.config.ts` file
+- [`fuels build`](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands#fuels-build) — Build `forc` workspace and generate Typescript types for everything
+- [`fuels deploy`](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands#fuels-deploy) — Deploy workspace contracts and save their IDs to JSON file
+- [`fuels dev`](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands#fuels-dev) — Start local Fuel Core _node_ and `build` + `deploy` on every file change
 
 ```console
 $ npm install fuels --save
