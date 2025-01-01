@@ -51,11 +51,6 @@ $ npm create fuels
 
 # Enjoy the `fuels` CLI ([docs](https://docs.fuel.network/docs/fuels-ts/fuels-cli/))
 
-- [`fuels init`](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands#fuels-init) — Creates a new `fuels.config.ts` file
-- [`fuels build`](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands#fuels-build) — Build `forc` workspace and generate Typescript types for everything
-- [`fuels deploy`](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands#fuels-deploy) — Deploy workspace contracts and save their IDs to JSON file
-- [`fuels dev`](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands#fuels-dev) — Start a Fuel node with hot-reload capabilities
-
 ```console
 $ npm install fuels --save
 $ npm fuels --help
@@ -71,28 +66,44 @@ Commands:
   help [command]      Display help for command
 ```
 
-# Contribute
+In-depth docs:
+- [`fuels init`](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands#fuels-init) — Creates a new `fuels.config.ts` file
+- [`fuels build`](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands#fuels-build) — Build `forc` workspace and generate Typescript types for everything
+- [`fuels deploy`](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands#fuels-deploy) — Deploy workspace contracts and save their IDs to JSON file
+- [`fuels dev`](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands#fuels-dev) — Start a Fuel node with hot-reload capabilities
 
-- https://github.com/FuelLabs/fuels-ts/blob/master/CONTRIBUTING.md
-
-# More of the Fuel Stack
-
-- `Sway` — https://docs.fuel.network/docs/sway
-- `Forc` — https://docs.fuel.network/docs/forc
-- `FuelCore` — https://github.com/FuelLabs/fuel-core
-- `FuelVM` — https://docs.fuel.network/docs/specs/fuel-vm
-- `FuelSpecs` — https://docs.fuel.network/docs/specs
-- `Wallet` — https://docs.fuel.network/docs/wallet/install
-- `RustSDK` — https://docs.fuel.network/docs/fuels-rs
-
-# Resources
-
-- `GraphQL Playground` — https://docs.fuel.network/docs/graphql
-- `Forum` — https://forum.fuel.network
 
 # Official Docs
 
-- https://docs.fuel.network/docs/fuels-ts
+- The Fuel Toolchain — https://docs.fuel.network/guides/installation/
+---
+- Forc — https://docs.fuel.network/docs/forc
+- Sway — https://docs.fuel.network/docs/sway
+- Fuel Core — https://github.com/FuelLabs/fuel-core
+- Fuel VM — https://docs.fuel.network/docs/specs/fuel-vm
+- Fuel Specs — https://docs.fuel.network/docs/specs
+- GraphQL Playground — https://docs.fuel.network/docs/graphql
+---
+- Rust SDK — https://docs.fuel.network/docs/fuels-rs
+- Typescript SDK — https://docs.fuel.network/docs/fuels-ts
+- Fuel Wallet SDK — https://docs.fuel.network/docs/wallet
+
+# Apps & Ecosystem
+
+- Block Explorer — https://app.fuel.network
+- Bridge — https://app.fuel.network/bridge
+- Ecosystem — https://app.fuel.network/ecosystem
+
+# Get in Touch
+
+- `Forum` — https://forum.fuel.network
+- `Discord` — https://discord.gg/xfpK4Pe
+
+
+# Contribute
+
+- [./CONTRIBUTING.md](https://github.com/FuelLabs/fuels-ts/blob/master/CONTRIBUTING.md)
+
 
 # License
 
