@@ -65,7 +65,7 @@ describe('Contract', () => {
     expect(contract.provider).toEqual(provider);
   });
 
-  it.only('should executes a contract call just nice', async () => {
+  it('should executes a contract call just fine', async () => {
     using contract = await setupTestContract();
 
     const numberToSend = 1336;
