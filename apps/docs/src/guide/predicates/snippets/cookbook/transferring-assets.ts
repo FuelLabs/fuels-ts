@@ -28,7 +28,7 @@ const amountToPredicate = 10_000_000;
 const fundPredicateTx = await sender.transfer(
   predicate.address,
   amountToPredicate,
-  await baseAssetId,
+  baseAssetId,
   {
     gasLimit: 1000,
   }
