@@ -13,7 +13,7 @@ Typescript SDK for Fuel.
 
 # Install
 
-- https://docs.fuel.network/docs/intro/getting-started/installation
+- https://docs.fuel.network/docs/fuels-ts/getting-started/installation
 
 ```bash
 npm install fuels --save
@@ -21,7 +21,7 @@ npm install fuels --save
 
 # Connecting
 
-- https://docs.fuel.network/docs/intro/getting-started/connecting-to-the-network
+- https://docs.fuel.network/docs/fuels-ts/getting-started/connecting-to-the-network
 
 | Network   | URL                                                                                             |
 | --------- | ----------------------------------------------------------------------------------------------- |
