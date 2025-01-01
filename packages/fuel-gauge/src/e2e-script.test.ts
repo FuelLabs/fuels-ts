@@ -168,7 +168,7 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
     });
   });
 
-  it(`should have correct assets`, () => {
+  it(`should have correct assets`, async () => {
     if (shouldSkip) {
       return;
     }
@@ -224,8 +224,9 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
     ];
 
     const totalAssets = 27;
+    const chainId = await provider.getChainId();
 
-    expect(CHAIN_IDS.fuel[selectedNetwork]).toEqual(provider.getChainId());
+    expect(CHAIN_IDS.fuel[selectedNetwork]).toEqual(chainId);
 
     // Ensure contains base asset
     expect(rawAssets).containSubset(expectedRawBaseAsset);
