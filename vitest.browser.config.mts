@@ -49,7 +49,6 @@ const config: UserConfig = {
     },
     browser: {
       provider: "playwright",
-      isolate: false,
       headless: true,
       enabled: true,
       name: "chromium",
