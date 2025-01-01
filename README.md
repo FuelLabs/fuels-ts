@@ -75,24 +75,24 @@ In-depth docs:
 
 # Official Docs
 
-- The Fuel Toolchain — https://docs.fuel.network/guides/installation/
+- Install The Fuel Toolchain — https://docs.fuel.network/guides/installation/
+---
+- Typescript SDK — https://docs.fuel.network/docs/fuels-ts
+- Fuel Wallet SDK — https://docs.fuel.network/docs/wallet
+- Rust SDK — https://docs.fuel.network/docs/fuels-rs
+- GraphQL Playground — https://docs.fuel.network/docs/graphql
 ---
 - Forc — https://docs.fuel.network/docs/forc
 - Sway — https://docs.fuel.network/docs/sway
 - Fuel Core — https://github.com/FuelLabs/fuel-core
 - Fuel VM — https://docs.fuel.network/docs/specs/fuel-vm
 - Fuel Specs — https://docs.fuel.network/docs/specs
-- GraphQL Playground — https://docs.fuel.network/docs/graphql
----
-- Rust SDK — https://docs.fuel.network/docs/fuels-rs
-- Typescript SDK — https://docs.fuel.network/docs/fuels-ts
-- Fuel Wallet SDK — https://docs.fuel.network/docs/wallet
 
 # Apps & Ecosystem
 
+- Fuel Bridge — https://app.fuel.network/bridge
 - Block Explorer — https://app.fuel.network
-- Bridge — https://app.fuel.network/bridge
-- Ecosystem — https://app.fuel.network/ecosystem
+- Ecosystem Apps — https://app.fuel.network/ecosystem
 
 # Get in Touch
 
