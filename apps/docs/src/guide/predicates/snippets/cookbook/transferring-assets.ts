@@ -51,7 +51,7 @@ const amountToReceiver = 200;
 const transferFromPredicateTx = await predicate.transfer(
   receiver.address,
   amountToReceiver,
-  await baseAssetId
+  baseAssetId
 );
 
 // Wait for the transaction
