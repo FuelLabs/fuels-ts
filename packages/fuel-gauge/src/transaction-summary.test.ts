@@ -849,6 +849,8 @@ describe('TransactionSummary', () => {
         wallets: [sender],
       } = launched;
 
+      const baseAssetId = await provider.getBaseAssetId();
+
       const recipient = Address.fromB256(
         '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263'
       );
