@@ -1140,29 +1140,6 @@ describe('Provider', () => {
     expect(gasConfig.maxGasPerTx).toBeDefined();
   });
 
-  it.skip('should throws when using getChain or getNode and without cached data', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
-
-    Provider.clearChainAndNodeCaches();
-
-    await expectToThrowFuelError(
-      async () => provider.getChain(),
-      new FuelError(
-        ErrorCode.CHAIN_INFO_CACHE_EMPTY,
-        'Chain info cache is empty. Make sure you have called `Provider.create` to initialize the provider.'
-      )
-    );
-
-    await expectToThrowFuelError(
-      () => provider.getNode(),
-      new FuelError(
-        ErrorCode.NODE_INFO_CACHE_EMPTY,
-        'Node info cache is empty. Make sure you have called `Provider.create` to initialize the provider.'
-      )
-    );
-  });
-
   it('warns on difference between major client version and supported major version', async () => {
     const { FUEL_CORE } = versions;
     const [major, minor, patch] = FUEL_CORE.split('.');
