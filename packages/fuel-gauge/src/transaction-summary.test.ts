@@ -835,7 +835,7 @@ describe('TransactionSummary', () => {
         recipients: [
           {
             address: contract.id,
-            quantities: [{ amount, assetId: await provider.getBaseAssetId() }],
+            quantities: [{ amount, assetId: baseAssetId }],
           },
         ],
       });
