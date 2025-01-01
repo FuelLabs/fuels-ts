@@ -868,7 +868,7 @@ describe('TransactionSummary', () => {
       expect(operations[0].to?.chain).toEqual(ChainName.ethereum);
       expect(operations[0].assetsSent).toHaveLength(1);
       expect(operations[0].assetsSent?.[0].amount).toEqual(bn(amountToWithdraw));
-      expect(operations[0].assetsSent?.[0].assetId).toEqual(await provider.getBaseAssetId());
+      expect(operations[0].assetsSent?.[0].assetId).toEqual(baseAssetId);
     });
 
     it('Should return contract created operations', async () => {
