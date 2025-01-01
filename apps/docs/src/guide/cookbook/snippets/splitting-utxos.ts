@@ -4,6 +4,7 @@ import { Provider, Wallet } from 'fuels';
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../env';
 
 const provider = new Provider(LOCAL_NETWORK_URL);
+const baseAssetId = await provider.getBaseAssetId();
 // This is the wallet that will fund the sending wallet
 const fundingWallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
@@ -16,14 +17,12 @@ const destinationWallet = Wallet.generate({ provider });
 const fundingTx = await fundingWallet.transfer(
   wallet.address,
   1000,
-  await provider.getBaseAssetId()
+  baseAssetId
 );
 await fundingTx.waitForResult();
 
 // We can fetch the coins to see how many UTXOs we have and confirm it is 1
-const { coins: initialCoins } = await wallet.getCoins(
-  await provider.getBaseAssetId()
-);
+const { coins: initialCoins } = await wallet.getCoins(baseAssetId);
 console.log('Initial Coins Length', initialCoins.length);
 // 1
 
@@ -31,17 +30,13 @@ console.log('Initial Coins Length', initialCoins.length);
 // Including the address to send the funds to and the assetId we want to send
 const splitTxns = new Array(5).fill({
   amount: 200,
-  assetId: await provider.getBaseAssetId(),
+  assetId: baseAssetId,
   destination: destinationWallet.address,
 });
 
 // We will also need add some funds to the wallet to cover the fee
 // We could have also spent less than 200 for each UTXO, but this is just an example
-const fundTx = await fundingWallet.transfer(
-  wallet.address,
-  500,
-  await provider.getBaseAssetId()
-);
+const fundTx = await fundingWallet.transfer(wallet.address, 500, baseAssetId);
 await fundTx.waitForResult();
 
 console.log('Split UTXOs', splitTxns);

@@ -4,6 +4,7 @@ import { Provider, Wallet } from 'fuels';
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../env';
 
 const provider = new Provider(LOCAL_NETWORK_URL);
+const baseAssetId = await provider.getBaseAssetId();
 const fundingWallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 const wallet = Wallet.generate({ provider });
@@ -14,46 +15,36 @@ for (let i = 0; i < 10; i++) {
   const initTx = await fundingWallet.transfer(
     wallet.address,
     1000,
-    await provider.getBaseAssetId()
+    baseAssetId
   );
   await initTx.waitForResult();
 }
 
 // We can fetch the coins to see how many UTXOs we have, and confirm it is 10.
-const { coins: initialCoins } = await wallet.getCoins(
-  await provider.getBaseAssetId()
-);
+const { coins: initialCoins } = await wallet.getCoins(baseAssetId);
 console.log('Initial Coins Length', initialCoins.length);
 // 10
 
 // But we can also confirm the total balance of the base asset for this account is 10_000.
-const initialBalance = await wallet.getBalance(await provider.getBaseAssetId());
+const initialBalance = await wallet.getBalance(baseAssetId);
 console.log('Initial Balance', initialBalance.toNumber());
 // 10_000
 
 // Now we can combine the UTXOs into a single UTXO by performing a single transfer for the
 // majority of the balance. Of course, we will still need some funds for the transaction fees.
-const combineTx = await wallet.transfer(
-  wallet.address,
-  9500,
-  await provider.getBaseAssetId()
-);
+const combineTx = await wallet.transfer(wallet.address, 9500, baseAssetId);
 await combineTx.wait();
 
 // Now we can perform the same validations and see we have less UTXOs.
 // We have 2 in this instance, as we have performed the transfer in the base asset:
 // a UTXO for our transfer, and another for what is left after paying the fees.
-const { coins: combinedCoins } = await wallet.getCoins(
-  await provider.getBaseAssetId()
-);
+const { coins: combinedCoins } = await wallet.getCoins(baseAssetId);
 console.log('Combined Coins Length', combinedCoins.length);
 // 2
 
 // And we can also confirm the final balance of the base asset for this account is 9_998,
 // so the cost of combining is also minimal.
-const combinedBalance = await wallet.getBalance(
-  await provider.getBaseAssetId()
-);
+const combinedBalance = await wallet.getBalance(baseAssetId);
 console.log('Combined Balance', combinedBalance.toNumber());
 // 9_998
 // #endregion combining-utxos

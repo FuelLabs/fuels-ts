@@ -12,12 +12,12 @@ const sender = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const destination = Wallet.fromPrivateKey(WALLET_PVT_KEY_2, provider);
 
 const amountToTransfer = 200;
-const assetId = await provider.getBaseAssetId();
+const baseAssetId = await provider.getBaseAssetId();
 
 const transactionRequest = await sender.createTransfer(
   destination.address,
   amountToTransfer,
-  assetId
+  baseAssetId
 );
 
 const chainId = await provider.getChainId();

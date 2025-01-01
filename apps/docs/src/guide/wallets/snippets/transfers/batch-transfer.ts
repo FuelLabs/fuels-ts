@@ -5,6 +5,8 @@ import { Provider, Wallet } from 'fuels';
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
 
 const provider = new Provider(LOCAL_NETWORK_URL);
+const baseAssetId = await provider.getBaseAssetId();
+
 const sender = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 const recipient1 = Wallet.generate({ provider });
@@ -15,18 +17,18 @@ const someOtherAssetId =
 const transfersToMake: TransferParams[] = [
   {
     amount: 100,
+    assetId: baseAssetId,
     destination: recipient1.address,
-    assetId: await provider.getBaseAssetId(),
   },
   {
     amount: 200,
+    assetId: baseAssetId,
     destination: recipient2.address,
-    assetId: await provider.getBaseAssetId(),
   },
   {
     amount: 300,
-    destination: recipient2.address,
     assetId: someOtherAssetId,
+    destination: recipient2.address,
   },
 ];
 
