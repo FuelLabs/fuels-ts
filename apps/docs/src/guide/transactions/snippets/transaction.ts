@@ -15,7 +15,7 @@ const receiver = Wallet.fromPrivateKey(WALLET_PVT_KEY_2, provider);
 const tx = await sender.transfer(receiver.address, 100, assetId);
 await tx.waitForResult();
 
-const newBalance = await receiver.getBalance(await provider.getBaseAssetId());
+const newBalance = await receiver.getBalance(assetId);
 // 100
 // #endregion transactions-1
 console.log('balance', newBalance.toNumber());
