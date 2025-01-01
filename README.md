@@ -23,11 +23,11 @@ npm install fuels --save
 
 - https://docs.fuel.network/docs/fuels-ts/getting-started/connecting-to-the-network
 
-| Network   | URL                                                                                             |
-| --------- | ----------------------------------------------------------------------------------------------- |
-| Mainnet   | `https://testnet.fuel.network/v1/graphql`                                                       |
-| Testnet   | `https://mainnet.fuel.network/v1/graphql`                                                       |
-| Localhost | [Running a local Fuel node](https://docs.fuel.network/docs/fuels-ts/running-a-local-fuel-node/) |
+| Network   | URL                                                                                                             |
+| --------- | --------------------------------------------------------------------------------------------------------------- |
+| Mainnet   | `https://testnet.fuel.network/v1/graphql`                                                                       |
+| Testnet   | `https://mainnet.fuel.network/v1/graphql`                                                                       |
+| Localhost | [Running a local Fuel node](https://docs.fuel.network/docs/fuels-ts/getting-started/running-a-local-fuel-node/) |
 
 ```ts
 import { Provider, Wallet } from "fuels";
