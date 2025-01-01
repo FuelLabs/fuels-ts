@@ -30,7 +30,12 @@ const config: UserConfig = {
     }),
   ],
   optimizeDeps: {
-    exclude: ["fsevents", "path-scurry", "@vitest/coverage-istanbul"],
+    exclude: [
+      "fsevents",
+      "path-scurry",
+      "@vitest/coverage-istanbul",
+      "chromium-bidi",
+    ],
     include: ["events", "timers/promises"],
     entries: ["**/*.test.ts"],
   },
@@ -43,10 +48,11 @@ const config: UserConfig = {
       reportsDirectory: "coverage/environments/browser",
     },
     browser: {
-      provider: "webdriverio",
+      provider: "playwright",
+      isolate: false,
       headless: true,
       enabled: true,
-      name: "chrome",
+      name: "chromium",
     },
   },
 };
