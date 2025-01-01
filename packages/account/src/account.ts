@@ -440,7 +440,7 @@ export class Account extends AbstractAccount {
   async transferToContract(
     contractId: string | AbstractAddress,
     amount: BigNumberish,
-    assetId?: BytesLike,
+    assetId: BytesLike,
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
     return this.batchTransferToContracts([{ amount, assetId, contractId }], txParams);
