@@ -309,7 +309,6 @@ export class BaseInvocationScope<TReturn = any> {
    */
   addTransfer(transferParams: TransferParams) {
     const { amount, destination, assetId } = transferParams;
-    // const baseAssetId = await this.getProvider().getBaseAssetId();
     this.transactionRequest = this.transactionRequest.addCoinOutput(
       Address.fromAddressOrString(destination),
       amount,
