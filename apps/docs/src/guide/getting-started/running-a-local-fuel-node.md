@@ -38,8 +38,8 @@ Check also the online docs:
 
 # Utilities
 
-
 ## Testing
+
 You can run a Fuel node from within your `.ts` unit tests:
 
 - [Launching a test node](../testing/launching-a-test-node.md)
