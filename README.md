@@ -15,23 +15,22 @@ npm install fuels --save
 
 # Connecting ([docs](https://docs.fuel.network/docs/fuels-ts/getting-started/connecting-to-the-network/))
 
-| Network   | URL                                                                                                             |
+| Network   | URL                                                                                                              |
 | --------- | --------------------------------------------------------------------------------------------------------------- |
 | Mainnet   | `https://testnet.fuel.network/v1/graphql`                                                                       |
 | Testnet   | `https://mainnet.fuel.network/v1/graphql`                                                                       |
 | Localhost | [Running a local Fuel node](https://docs.fuel.network/docs/fuels-ts/getting-started/running-a-local-fuel-node/) |
 
 ```ts
-import { Provider, Wallet } from "fuels";
+import { Provider } from 'fuels';
 
-const NETWORK = "https://mainnet.fuel.network/v1/graphql";
+const NETWORK_URL = 'https://mainnet.fuel.network/v1/graphql';
 
-const provider = await Provider.create(NETWORK);
-const wallet = Wallet.fromAddress("0x...", provider);
+const provider = await Provider.create(NETWORK_URL);
+const baseAsset = provider.getBaseAssetId();
+const chainId = provider.getChainId();
 
-const { balances } = await wallet.getBalances();
-
-console.log("Balances", balances);
+console.log({ baseAsset, chainId });
 ```
 
 # Create a new dApp ([docs](https://docs.fuel.network/docs/fuels-ts/creating-a-fuel-dapp/))
