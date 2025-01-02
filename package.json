@@ -80,7 +80,7 @@
     "@internal/fuel-core": "workspace:*",
     "@internal/tsup": "workspace:*",
     "@istanbuljs/nyc-config-typescript": "1.0.2",
-    "@playwright/test": "1.47.2",
+    "@playwright/test": "1.49.1",
     "@types/node": "22.5.5",
     "@types/node-fetch": "2.6.11",
     "@types/web": "0.0.174",
@@ -124,8 +124,7 @@
     "vite-plugin-json5": "1.1.2",
     "vite-plugin-node-polyfills": "0.22.0",
     "vite-plugin-plain-text": "1.4.2",
-    "vitest": "2.0.5",
-    "webdriverio": "9.0.9"
+    "vitest": "2.0.5"
   },
   "pnpm": {
     "overrides": {
