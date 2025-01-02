@@ -4,7 +4,7 @@ import { launchTestNode } from 'fuels/test-utils';
 
 import { PredicateAssertNumber, PredicateAssertValue } from '../../test/typegen';
 
-import { fundPredicate } from './utils/predicate';
+import { fundAccount } from './utils/predicate';
 
 /**
  * @group node
@@ -46,7 +46,7 @@ describe('Predicate', () => {
         data: [11],
       });
 
-      await fundPredicate(wallet, predicateAssertNumber, 500_000);
+      await fundAccount(wallet, predicateAssertNumber, 500_000);
 
       let transactionRequest = new ScriptTransactionRequest();
       const receiver = Wallet.generate({ provider });
@@ -101,7 +101,7 @@ describe('Predicate', () => {
         data: [11],
       });
 
-      await fundPredicate(fundingWallet, predicateAssertNumber, 500_000);
+      await fundAccount(fundingWallet, predicateAssertNumber, 500_000);
 
       const resources1 = await wallet1.getResourcesToSpend(quantity);
       const predicateAssertNumberWrongResources = await provider.getResourcesToSpend(
@@ -156,7 +156,7 @@ describe('Predicate', () => {
         data: [11],
       });
 
-      await fundPredicate(fundingWallet, predicateAssertNumber, 500_000, UTXOS_AMOUNT);
+      await fundAccount(fundingWallet, predicateAssertNumber, 500_000, UTXOS_AMOUNT);
 
       const receiver = Wallet.generate({ provider });
 
@@ -234,7 +234,7 @@ describe('Predicate', () => {
         data: [11],
       });
 
-      await fundPredicate(fundingWallet, predicateAssertNumber, 500_000, UTXOS_AMOUNT);
+      await fundAccount(fundingWallet, predicateAssertNumber, 500_000, UTXOS_AMOUNT);
 
       const predicateAssertValue = new Predicate<[boolean]>({
         abi: PredicateAssertValue.abi,
@@ -243,7 +243,7 @@ describe('Predicate', () => {
         data: [true],
       });
 
-      await fundPredicate(fundingWallet, predicateAssertValue, 500_000, UTXOS_AMOUNT);
+      await fundAccount(fundingWallet, predicateAssertValue, 500_000, UTXOS_AMOUNT);
 
       // predicate resources fetched as non predicate resources
       const predicateAssertNumberWrongResources = await provider.getResourcesToSpend(
@@ -325,7 +325,7 @@ describe('Predicate', () => {
         data: [11],
       });
 
-      await fundPredicate(fundingWallet, predicateAssertNumber, 500_000, UTXOS_AMOUNT);
+      await fundAccount(fundingWallet, predicateAssertNumber, 500_000, UTXOS_AMOUNT);
 
       const predicateAssertValue = new Predicate<[boolean]>({
         abi: PredicateAssertValue.abi,
@@ -334,7 +334,7 @@ describe('Predicate', () => {
         data: [true],
       });
 
-      await fundPredicate(fundingWallet, predicateAssertValue, 500_000, UTXOS_AMOUNT);
+      await fundAccount(fundingWallet, predicateAssertValue, 500_000, UTXOS_AMOUNT);
 
       const resources1 = await wallet1.getResourcesToSpend(quantity);
       const resources2 = await wallet2.getResourcesToSpend(quantity);
@@ -411,7 +411,7 @@ describe('Predicate', () => {
         data: [11],
       });
 
-      await fundPredicate(fundingWallet, predicateAssertNumber, 500_000, UTXOS_AMOUNT);
+      await fundAccount(fundingWallet, predicateAssertNumber, 500_000, UTXOS_AMOUNT);
 
       const predicateAssertNumberWrongResources = await provider.getResourcesToSpend(
         predicateAssertNumber.address,
@@ -429,7 +429,7 @@ describe('Predicate', () => {
         data: [true],
       });
 
-      await fundPredicate(fundingWallet, predicateAssertValue, 500_000, UTXOS_AMOUNT);
+      await fundAccount(fundingWallet, predicateAssertValue, 500_000, UTXOS_AMOUNT);
 
       const predicateAssertValueWrongResources = await provider.getResourcesToSpend(
         predicateAssertValue.address,
