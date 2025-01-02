@@ -51,20 +51,24 @@ export default defineConfig({
                 link: '/guide/getting-started/installation',
               },
               {
-                text: 'Usage',
-                link: '/guide/getting-started/usage',
+                text: 'Connecting to the Network',
+                link: '/guide/getting-started/connecting-to-the-network',
               },
               {
-                text: 'Connecting to Testnet',
-                link: '/guide/getting-started/connecting-to-testnet',
+                text: 'Running a local Fuel node',
+                link: '/guide/getting-started/running-a-local-fuel-node',
               },
               {
-                text: 'Connecting to a Local Node',
-                link: '/guide/getting-started/connecting-to-a-local-node',
+                text: 'React Example',
+                link: '/guide/getting-started/react-example',
               },
               {
-                text: 'Further Resources',
-                link: '/guide/getting-started/further-resources',
+                text: 'CDN Usage',
+                link: '/guide/getting-started/cdn-usage',
+              },
+              {
+                text: 'Next Steps',
+                link: '/guide/getting-started/next-steps',
               },
             ],
           },
@@ -482,10 +486,6 @@ export default defineConfig({
               {
                 text: 'Asset Id',
                 link: '/guide/types/asset-id',
-              },
-              {
-                text: 'Bech32',
-                link: '/guide/types/bech32',
               },
               {
                 text: 'Bits256',

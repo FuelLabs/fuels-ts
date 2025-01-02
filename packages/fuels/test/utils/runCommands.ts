@@ -47,7 +47,7 @@ export function bootstrapProject(testFilepath: string) {
   const upgradableChunkedContractPath = join(contractsDir, 'upgradable-chunked');
 
   const scriptsDir = join(workspaceDir, 'scripts');
-  const predicateDir = join(workspaceDir, 'predicate');
+  const predicateDir = join(workspaceDir, 'predicates');
 
   const outputDir = join(root, 'output');
   const outputContractsDir = join(outputDir, 'contracts');
@@ -93,9 +93,9 @@ export type BaseParams = {
 
 export type InitParams = BaseParams & {
   workspace?: string;
-  contracts?: string;
-  scripts?: string;
-  predicates?: string;
+  contracts?: string | string[];
+  scripts?: string | string[];
+  predicates?: string | string[];
   output: string;
   forcPath?: string;
   fuelCorePath?: string;
@@ -122,8 +122,10 @@ export async function runInit(params: InitParams) {
     privateKey,
   } = params;
 
-  const flag = (flags: (string | undefined)[], value?: string | boolean): string[] =>
-    value ? (flags as string[]) : [];
+  const flag = (
+    flags: (string | string[] | undefined)[],
+    value?: string | string[] | boolean
+  ): string[] => (value ? (flags.flat() as string[]) : []);
 
   const flags = [
     flag(['--path', root], root),
