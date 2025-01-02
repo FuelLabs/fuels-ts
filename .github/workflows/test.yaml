@@ -41,6 +41,10 @@ jobs:
       - name: Pretest
         run: pnpm pretest
 
+      - name: Install playwright dependencies
+        if: matrix.env.name == 'browser'
+        run: pnpm exec playwright install --with-deps --only-shell chromium
+
       - name: Run Tests - ${{ matrix.env.name }}
         run: pnpm test:${{ matrix.env.name }}
 
