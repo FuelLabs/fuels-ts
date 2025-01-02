@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "fuels:dev": "fuels dev",
     "test": "vitest",
-    "test:ui": "./test/ui/test-ui.sh"
+    "test:ui": "sh ./test/ui/test-ui.sh"
   },
   "dependencies": {
     "@fuels/connectors": "0.27.1",
