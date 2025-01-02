@@ -1,3 +1,5 @@
+import { mockLogger } from '../../test/utils/mockLogger';
+
 import type { PackageManager } from './getPackageManager';
 import { availablePackageManagers, getPackageManager, packageMangers } from './getPackageManager';
 
@@ -13,6 +15,14 @@ const runScenarios: [PackageManager, string][] = [
   ['npm', 'npm run fuels:dev'],
   ['bun', 'bun run fuels:dev'],
 ];
+
+const mockAllDeps = () => {
+  const { warn } = mockLogger();
+
+  return {
+    warn,
+  };
+};
 
 /**
  * @group node
@@ -64,9 +74,11 @@ describe('getPackageManager', () => {
   it('should default to npm', () => {
     const packageManager = 'npm';
     const expectedPackageManager = packageMangers[packageManager];
+    const { warn } = mockAllDeps();
 
     const result = getPackageManager();
 
     expect(result).toEqual(expectedPackageManager);
+    expect(warn).toHaveBeenCalledWith(`This package manager is not supported. Using npm instead.`);
   });
 });
