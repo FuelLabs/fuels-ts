@@ -1,11 +1,11 @@
 ---
-"@fuel-ts/contract": patch
-"@fuel-ts/account": patch
-"@fuel-ts/program": patch
-"@fuel-ts/recipes": patch
-"@fuel-ts/script": patch
-"fuels": patch
-"create-fuels": patch
+"@fuel-ts/contract": minor
+"@fuel-ts/account": minor
+"@fuel-ts/program": minor
+"@fuel-ts/recipes": minor
+"@fuel-ts/script": minor
+"fuels": minor
+"create-fuels": minor
 ---
 
 feat!: make `provider` initialization `sync` again
