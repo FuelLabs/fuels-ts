@@ -8,4 +8,4 @@
 "create-fuels": minor
 ---
 
-feat!: make `provider` initialization `sync` again
+feat!: making `provider` initialization `sync` again
