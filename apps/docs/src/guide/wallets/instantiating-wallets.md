@@ -40,7 +40,7 @@ It's possible to instantiate a `WalletUnlocked` from a `WalletLocked`:
 
 You can also instantiate [`WalletLocked`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.WalletLocked.html) instances using just the wallet address:
 
-<<< @./snippets/instantiating/from-bech32-address.ts#instantiating-wallets-8{ts:line-numbers}
+<<< @./snippets/instantiating/from-b256-address.ts#instantiating-wallets-8{ts:line-numbers}
 
 ## Connecting to a Provider
 
