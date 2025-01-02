@@ -39,7 +39,7 @@ You can generate types for a Sway program using the command below:
 <!-- gen_types:example:start -->
 
 ```console
-pnpm fuels typegen -i ./my-program/out/release -o ./types
+pnpm fuels typegen -i ./abis/*-abi.json -o ./types
 ```
 
 <!-- gen_types:example:end -->
@@ -47,7 +47,10 @@ pnpm fuels typegen -i ./my-program/out/release -o ./types
 <!-- This section should explain the flags used in the typegen command -->
 <!-- flags:example:start -->
 
-The path after the input flag `-i` should point to the folder where the `forc build` outputs are.
+The path after the input flag `-i` should point to the file ending in `-abi.json` produced when the Sway program was built.
+
+- For scripts and predicates, you'll need the bytecode of the program to be in the same folder for the command to work.
+- For contracts, the command will work without the bytecode but the corresponding `ContractFactory` file won't be generated as factories need the bytecode to operate.
 
 The path after the output flag `-o` will be the output directory for the generated types.
 
