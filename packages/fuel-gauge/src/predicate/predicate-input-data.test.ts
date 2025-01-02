@@ -3,7 +3,7 @@ import { launchTestNode } from 'fuels/test-utils';
 
 import { PredicateInputData } from '../../test/typegen';
 
-import { fundPredicate } from './utils/predicate';
+import { fundAccount } from './utils/predicate';
 
 /**
  * @group node
@@ -24,7 +24,7 @@ describe('Predicate', () => {
 
       const predicate = new PredicateInputData({ provider });
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundAccount(wallet, predicate, amountToPredicate);
 
       const receiver = Wallet.generate({ provider });
 

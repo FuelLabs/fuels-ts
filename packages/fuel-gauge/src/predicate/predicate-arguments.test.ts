@@ -9,7 +9,7 @@ import {
   PredicateU32,
 } from '../../test/typegen';
 
-import { fundPredicate, assertBalances } from './utils/predicate';
+import { fundAccount, assertBalances } from './utils/predicate';
 
 /**
  * @group node
@@ -34,7 +34,7 @@ describe('Predicate', () => {
       });
 
       // transfer funds to predicate
-      await fundPredicate(fundingWallet, predicate, amountToPredicate, 3);
+      await fundAccount(fundingWallet, predicate, amountToPredicate, 3);
 
       const receiver = Wallet.generate({ provider });
       const initialReceiverBalance = await receiver.getBalance();
@@ -67,7 +67,7 @@ describe('Predicate', () => {
       });
 
       // fund predicate
-      await fundPredicate(fundingWallet, predicate, amountToPredicate);
+      await fundAccount(fundingWallet, predicate, amountToPredicate);
 
       const receiver = Wallet.generate({ provider });
 
@@ -93,7 +93,7 @@ describe('Predicate', () => {
       const initialReceiverBalance = await receiver.getBalance();
 
       // fund predicate
-      await fundPredicate(fundingWallet, predicate, amountToPredicate);
+      await fundAccount(fundingWallet, predicate, amountToPredicate);
 
       const tx = await predicate.transfer(
         receiver.address,
@@ -120,7 +120,7 @@ describe('Predicate', () => {
       const predicate = new PredicateU32({ provider, data: [100] });
 
       // fund predicate
-      await fundPredicate(fundingWallet, predicate, 90_000_00, 3);
+      await fundAccount(fundingWallet, predicate, 90_000_00, 3);
 
       const receiver = Wallet.generate({ provider });
       const initialReceiverBalance = await receiver.getBalance();
@@ -193,7 +193,7 @@ describe('Predicate', () => {
       const receiver = Wallet.generate({ provider });
 
       // fund predicate
-      await fundPredicate(fundingWallet, predicate, amountToPredicate);
+      await fundAccount(fundingWallet, predicate, amountToPredicate);
 
       await expect(
         predicate.transfer(receiver.address, 50, await provider.getBaseAssetId(), {
@@ -216,7 +216,7 @@ describe('Predicate', () => {
       const initialReceiverBalance = await receiver.getBalance();
 
       // fund predicate
-      await fundPredicate(fundingWallet, predicate, amountToPredicate);
+      await fundAccount(fundingWallet, predicate, amountToPredicate);
 
       const tx = await predicate.transfer(
         receiver.address,
@@ -246,7 +246,7 @@ describe('Predicate', () => {
       const predicate = new PredicateMultiArgs({ provider, data: [20, 30] });
 
       // fund the predicate
-      await fundPredicate(fundingWallet, predicate, amountToPredicate);
+      await fundAccount(fundingWallet, predicate, amountToPredicate);
 
       const tx = await predicate.transfer(
         receiver.address,
@@ -276,7 +276,7 @@ describe('Predicate', () => {
       const predicate = new PredicateMultiArgs({ provider, data: [20, 30] });
 
       // fund predicate
-      await fundPredicate(fundingWallet, predicate, amountToPredicate);
+      await fundAccount(fundingWallet, predicate, amountToPredicate);
 
       const tx = await predicate.transfer(
         receiver.address,
@@ -303,7 +303,7 @@ describe('Predicate', () => {
       const predicate = new PredicateMultiArgs({ provider, data: [20, 20] });
 
       // fund predicate
-      await fundPredicate(fundingWallet, predicate, amountToPredicate);
+      await fundAccount(fundingWallet, predicate, amountToPredicate);
 
       const receiver = Wallet.generate({ provider });
 

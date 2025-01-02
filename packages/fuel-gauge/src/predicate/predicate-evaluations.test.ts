@@ -3,7 +3,7 @@ import { launchTestNode } from 'fuels/test-utils';
 
 import { PredicateTrue, PredicateFalse } from '../../test/typegen/predicates';
 
-import { assertBalances, fundPredicate } from './utils/predicate';
+import { assertBalances, fundAccount } from './utils/predicate';
 
 /**
  * @group node
@@ -24,7 +24,7 @@ describe('Predicate', () => {
 
       const predicate = new PredicateTrue({ provider });
 
-      await fundPredicate(wallet, predicate, 200_000);
+      await fundAccount(wallet, predicate, 200_000);
 
       const amountToReceiver = 50;
 
@@ -55,7 +55,7 @@ describe('Predicate', () => {
 
       const predicate = new PredicateFalse({ provider });
 
-      await fundPredicate(wallet, predicate, 200_000);
+      await fundAccount(wallet, predicate, 200_000);
 
       await expect(
         predicate.transfer(receiver.address, 50, await provider.getBaseAssetId(), {

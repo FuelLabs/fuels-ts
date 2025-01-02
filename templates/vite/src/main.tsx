@@ -4,7 +4,7 @@ import { FuelProvider } from "@fuels/react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { ToastContainer } from "react-toastify";
-import { Provider } from "fuels";
+import { FuelConnector, Provider } from "fuels";
 
 import App from "./App.tsx";
 import { providerUrl } from "./lib.tsx";
@@ -14,15 +14,19 @@ import "./index.css";
 
 const queryClient = new QueryClient();
 
-const connectors = defaultConnectors({
+const connectors: FuelConnector[] = defaultConnectors({
   devMode: true,
-  burnerWalletConfig: { fuelProvider: new Provider(providerUrl) },
+  fuelProvider: new Provider(providerUrl),
 });
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <FuelProvider theme="dark" fuelConfig={{ connectors }}>
+      <FuelProvider
+        theme="dark"
+        fuelConfig={{ connectors }}
+        uiConfig={{ suggestBridge: false }}
+      >
         <App />
         <ToastContainer theme="dark" />
       </FuelProvider>

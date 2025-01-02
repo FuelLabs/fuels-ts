@@ -4,7 +4,7 @@ import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 import { PredicateMainArgsStruct } from '../../test/typegen';
 import type { Validation } from '../types/predicate';
 
-import { fundPredicate } from './utils/predicate';
+import { fundAccount } from './utils/predicate';
 
 /**
  * @group node
@@ -25,7 +25,7 @@ describe('Predicate', () => {
         provider,
       });
 
-      await fundPredicate(wallet, predicate, 1000);
+      await fundAccount(wallet, predicate, 1000);
 
       const receiver = Wallet.generate({ provider });
 
@@ -59,7 +59,7 @@ describe('Predicate', () => {
         provider,
       });
 
-      await fundPredicate(wallet, predicate, 1000);
+      await fundAccount(wallet, predicate, 1000);
 
       const receiver = Wallet.generate({ provider });
 

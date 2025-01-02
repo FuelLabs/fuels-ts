@@ -3,7 +3,7 @@ import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
 import { PredicateTrue, PredicateWithConfigurable } from '../../test/typegen';
 
-import { fundPredicate, assertBalance } from './utils/predicate';
+import { fundAccount, assertBalance } from './utils/predicate';
 
 /**
  * @group node
@@ -33,7 +33,7 @@ describe('Predicate', () => {
 
       const amountToTransfer = 200;
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundAccount(wallet, predicate, amountToPredicate);
 
       // create destination wallet
       const destination = WalletUnlocked.generate({
@@ -82,7 +82,7 @@ describe('Predicate', () => {
       await assertBalance(destination, 0, await provider.getBaseAssetId());
 
       // transfer funds to predicate
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundAccount(wallet, predicate, amountToPredicate);
 
       // executing predicate transfer
       const tx = await predicate.transfer(
@@ -125,7 +125,7 @@ describe('Predicate', () => {
       await assertBalance(destination, 0, await provider.getBaseAssetId());
 
       // transfer funds to predicate
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundAccount(wallet, predicate, amountToPredicate);
 
       // executing predicate transfer
       const tx = await predicate.transfer(
@@ -171,7 +171,7 @@ describe('Predicate', () => {
 
       await assertBalance(destination, 0, await provider.getBaseAssetId());
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundAccount(wallet, predicate, amountToPredicate);
 
       const tx = await predicate.transfer(
         destination.address,
@@ -213,7 +213,7 @@ describe('Predicate', () => {
 
       await assertBalance(destination, 0, await provider.getBaseAssetId());
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundAccount(wallet, predicate, amountToPredicate);
 
       const tx = await predicate.transfer(
         destination.address,
@@ -245,7 +245,7 @@ describe('Predicate', () => {
         provider: wallet.provider,
       });
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundAccount(wallet, predicate, amountToPredicate);
 
       await expect(
         predicate.transfer(destination.address, 300, await provider.getBaseAssetId(), {
