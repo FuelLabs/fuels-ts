@@ -21,6 +21,6 @@ The process now looks like the following:
 
 Check out the following guides on implementing optimistic transaction building:
 
-- [Optimistic Transactions](./optimistic-transactions)
-- [Optimistic Contract Calls](./optimistic-contract-calls)
-- [Optimistic Predicates](./optimistic-predicates)
+- [Optimistic Transactions](./optimistic-transactions.md)
+- [Optimistic Contract Calls](./optimistic-contract-calls.md)
+- [Optimistic Predicates](./optimistic-predicates.md)
