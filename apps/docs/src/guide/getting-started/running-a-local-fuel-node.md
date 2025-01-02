@@ -33,7 +33,3 @@ It makes development easier with a hot-reload experience:
 
 - [React Example](./react-example.md)
 - [CDN Usage](./cdn-usage.md)
-
-```
-
-```
