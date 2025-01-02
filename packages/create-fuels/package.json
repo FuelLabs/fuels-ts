@@ -25,8 +25,8 @@
     "@fuel-ts/versions": "workspace:*",
     "@iarna/toml": "^2.2.5",
     "chalk": "4",
-    "commander": "12.1.0",
-    "ora": "5.4.1",
+    "commander": "13.0.0",
+    "ora": "8.1.1",
     "prompts": "^2.4.2"
   },
   "devDependencies": {
