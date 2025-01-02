@@ -417,12 +417,11 @@ export class Account extends AbstractAccount {
    * @returns The updated script transaction request.
    */
   addBatchTransfer(request: ScriptTransactionRequest, transferParams: TransferParams[]) {
-    const baseAssetId = this.provider.getBaseAssetId();
     transferParams.forEach(({ destination, amount, assetId }) => {
       this.addTransfer(request, {
         destination,
         amount,
-        assetId: assetId ?? baseAssetId,
+        assetId,
       });
     });
     return request;

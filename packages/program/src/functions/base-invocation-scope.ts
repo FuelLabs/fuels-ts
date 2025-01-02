@@ -337,7 +337,7 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   addSigners(signers: Account | Account[]) {
-    this.addSignersCallback = async (transactionRequest) =>
+    this.addSignersCallback = (transactionRequest) =>
       transactionRequest.addAccountWitnesses(signers);
 
     return this;

@@ -29,7 +29,7 @@ const { isStatusSuccess } = await tx.waitForResult();
 console.log('Transfer to predicate should be successful', isStatusSuccess);
 
 const amountOfCoins = 100;
-const { error } = await safeExec(async () =>
+const { error } = await safeExec(() =>
   predicate.transfer(receiver.address, amountOfCoins, baseAssetId)
 );
 
