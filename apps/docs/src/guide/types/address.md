@@ -18,7 +18,7 @@ Besides conforming to the interface of the [`AbstractAddress`](https://fuels-ts-
 
 Thanks to the utility functions provided by the [`AbstractAddress`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_interfaces.AbstractAddress.html) class, there are several ways to create an [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) instance:
 
-### From a 256-bit Address
+### From a b256 address
 
 To create an [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) from a 256-bit address, use the following code snippet:
 
