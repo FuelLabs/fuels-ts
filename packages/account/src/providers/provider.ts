@@ -609,8 +609,8 @@ export default class Provider {
     let chain = Provider.chainInfoCache[this.urlWithoutAuth];
 
     // if we have cache, return it
-    const cacheIsPresent = !nodeInfo || !chain;
-    if (!ignoreCache && cacheIsPresent) {
+    const cashIsPresent = !nodeInfo || !chain;
+    if (!ignoreCache && cashIsPresent) {
       return { nodeInfo, chain };
     }
 
