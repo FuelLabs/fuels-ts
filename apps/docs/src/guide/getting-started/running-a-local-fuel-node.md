@@ -2,32 +2,7 @@
 
 Remember to first install the [Fuel Toolchain](https://docs.fuel.network/guides/installation/).
 
-Then check the command self documentation:
-
-::: code-group
-
-```sh-vue [Fuel Binary]
-fuel-core
-```
-
-<!--
-  TODO: Uncomment this when `forc node` is available:
-  - https://github.com/FuelLabs/sway/pull/6473
--->
-
-<!--
-```sh-vue [Forc]
-forc node
-```
--->
-
-```sh-vue [TS SDK]
-fuels node
-```
-
-:::
-
-Check also the online docs:
+Check the online docs:
 
 |             | Command      | Documentation                                                                                          |
 | ----------- | ------------ | ------------------------------------------------------------------------------------------------------ |
@@ -58,3 +33,7 @@ It makes development easier with a hot-reload experience:
 
 - [React Example](./react-example.md)
 - [CDN Usage](./cdn-usage.md)
+
+```
+
+```
