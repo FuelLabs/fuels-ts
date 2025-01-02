@@ -8,4 +8,4 @@
 "create-fuels": patch
 ---
 
-feat: make `provider` initialization `sync` again
+feat!: make `provider` initialization `sync` again
