@@ -45,8 +45,8 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2(nyc@17.1.0)
       '@playwright/test':
-        specifier: ^1.47.2
-        version: 1.47.2
+        specifier: ^1.49.1
+        version: 1.49.1
       '@types/node':
         specifier: ^22.5.5
         version: 22.5.5
@@ -64,10 +64,10 @@ importers:
         version: 6.21.0(eslint@8.57.0)(typescript@5.6.3)
       '@vitest/browser':
         specifier: ~2.0.5
-        version: 2.0.5(bufferutil@4.0.8)(playwright@1.47.2)(typescript@5.6.3)(utf-8-validate@6.0.4)(vitest@2.0.5)(webdriverio@9.0.9(bufferutil@4.0.8)(utf-8-validate@6.0.4))
+        version: 2.0.5(bufferutil@4.0.8)(playwright@1.49.1)(typescript@5.6.3)(utf-8-validate@6.0.4)(vitest@2.0.5)(webdriverio@9.0.9(bufferutil@4.0.8)(utf-8-validate@6.0.4))
       '@vitest/coverage-istanbul':
         specifier: ~2.0.5
-        version: 2.0.5(vitest@2.0.5)
+        version: 2.0.5(vitest@2.0.5(@types/node@22.5.5)(@vitest/browser@2.0.5)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.36.0))
       autocannon:
         specifier: ^7.15.0
         version: 7.15.0
@@ -179,9 +179,6 @@ importers:
       vitest:
         specifier: ~2.0.5
         version: 2.0.5(@types/node@22.5.5)(@vitest/browser@2.0.5)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.36.0)
-      webdriverio:
-        specifier: ^9.0.9
-        version: 9.0.9(bufferutil@4.0.8)(utf-8-validate@6.0.4)
 
   apps/create-fuels-counter-guide:
     dependencies:
@@ -223,8 +220,8 @@ importers:
         specifier: ^9.10.0
         version: 9.10.0
       '@playwright/test':
-        specifier: ^1.47.2
-        version: 1.47.2
+        specifier: ^1.49.1
+        version: 1.49.1
       '@types/node':
         specifier: ^22.5.5
         version: 22.5.5
@@ -318,7 +315,7 @@ importers:
         version: link:../../packages/fuels
       next:
         specifier: 14.2.15
-        version: 14.2.15(@babel/core@7.25.8)(@playwright/test@1.47.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 14.2.15(@babel/core@7.25.8)(@playwright/test@1.49.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -456,7 +453,7 @@ importers:
         version: link:../../packages/fuels
       next:
         specifier: 14.2.15
-        version: 14.2.15(@babel/core@7.25.8)(@playwright/test@1.47.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 14.2.15(@babel/core@7.25.8)(@playwright/test@1.49.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -1281,7 +1278,7 @@ importers:
         version: link:../../packages/fuels
       next:
         specifier: 14.2.15
-        version: 14.2.15(@babel/core@7.25.8)(@playwright/test@1.47.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 14.2.15(@babel/core@7.25.8)(@playwright/test@1.49.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -1296,8 +1293,8 @@ importers:
         version: 17.5.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
     devDependencies:
       '@playwright/test':
-        specifier: ^1.47.2
-        version: 1.47.2
+        specifier: ^1.49.1
+        version: 1.49.1
       '@types/node':
         specifier: ^22.5.5
         version: 22.5.5
@@ -1369,8 +1366,8 @@ importers:
         specifier: ^9.10.0
         version: 9.10.0
       '@playwright/test':
-        specifier: ^1.47.2
-        version: 1.47.2
+        specifier: ^1.49.1
+        version: 1.49.1
       '@tanstack/router-plugin':
         specifier: ^1.58.12
         version: 1.58.12(vite@5.4.9(@types/node@22.7.7)(terser@5.36.0))(webpack-sources@3.2.3)
@@ -4561,8 +4558,8 @@ packages:
     resolution: {integrity: sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
 
-  '@playwright/test@1.47.2':
-    resolution: {integrity: sha512-jTXRsoSPONAs8Za9QEQdyjFn+0ZQFjCiIztAIF6bi1HqhBzG9Ma7g1WotyiGqFSBRZjIEqMdT8RUlbk1QVhzCQ==}
+  '@playwright/test@1.49.1':
+    resolution: {integrity: sha512-Ky+BVzPz8pL6PQxHqNRW1k3mIyv933LML7HktS8uik0bUXNCdPhoS/kLihiO1tMf/egaJb4IutXd7UywvXEW+g==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -9190,10 +9187,6 @@ packages:
   fast-stable-stringify@1.0.0:
     resolution: {integrity: sha512-wpYMUmFu5f00Sm0cj2pfivpmawLZ0NKdviQ4w9zJeR8JVtOpOxHmLaJuj0vxvGqMJQWyP/COUkF75/57OKyRag==}
 
-  fast-xml-parser@4.4.1:
-    resolution: {integrity: sha512-xkjOecfnKGkSsOwtZ5Pz7Us/T6mrbPQrq0nh+aCO5V9nk5NLWmasAHumTKjiPJPWANe+kAZ84Jc8ooJkzZ88Sw==}
-    hasBin: true
-
   fast-xml-parser@4.5.0:
     resolution: {integrity: sha512-/PlTQCI96+fZMAOLMZK4CWG1ItCbfZ/0jx7UIJFChPNrx7tcEgerUgWbeieCM9MfHInUDyK8DWYZ+YrywDJuTg==}
     hasBin: true
@@ -12303,13 +12296,13 @@ packages:
     resolution: {integrity: sha512-nDywThFk1i4BQK4twPQ6TA4RT8bDY96yeuCVBWL3ePARCiEKDRSrNGbFIgUJpLp+XeIR65v8ra7WuJOFUBtkMA==}
     engines: {node: '>=8'}
 
-  playwright-core@1.47.2:
-    resolution: {integrity: sha512-3JvMfF+9LJfe16l7AbSmU555PaTl2tPyQsVInqm3id16pdDfvZ8TTZ/pyzmkbDrZTQefyzU7AIHlZqQnxpqHVQ==}
+  playwright-core@1.49.1:
+    resolution: {integrity: sha512-BzmpVcs4kE2CH15rWfzpjzVGhWERJfmnXmniSyKeRZUs9Ws65m+RGIi7mjJK/euCegfn3i7jvqWeWyHe9y3Vgg==}
     engines: {node: '>=18'}
     hasBin: true
 
-  playwright@1.47.2:
-    resolution: {integrity: sha512-nx1cLMmQWqmA3UsnjaaokyoUpdVaaDhJhMoxX2qj3McpjnsqFHs516QAKYhqHAgOP+oCFTEOCOAaD1RgD/RQfA==}
+  playwright@1.49.1:
+    resolution: {integrity: sha512-VYL8zLoNTBxVOrJBbDuRgDWa3i+mfQgDTrL8Ah9QXZ7ax4Dsj0MSq5bYgytRnDVVe+njoKnfsYkH3HzqVj5UZA==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -20832,9 +20825,9 @@ snapshots:
 
   '@pkgr/core@0.1.1': {}
 
-  '@playwright/test@1.47.2':
+  '@playwright/test@1.49.1':
     dependencies:
-      playwright: 1.47.2
+      playwright: 1.49.1
 
   '@pmmmwh/react-refresh-webpack-plugin@0.5.10(react-refresh@0.11.0)(type-fest@3.1.0)(webpack-dev-server@4.15.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack@5.88.0(@swc/core@1.7.14(@swc/helpers@0.5.12))(esbuild@0.17.19)))(webpack@5.88.0(@swc/core@1.7.14(@swc/helpers@0.5.12))(esbuild@0.17.19))':
     dependencies:
@@ -20858,6 +20851,7 @@ snapshots:
   '@promptbook/utils@0.63.0':
     dependencies:
       spacetrim: 0.11.39
+    optional: true
 
   '@puppeteer/browsers@2.4.0':
     dependencies:
@@ -20871,6 +20865,7 @@ snapshots:
       yargs: 17.7.2
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   '@radix-ui/primitive@1.0.1':
     dependencies:
@@ -22276,6 +22271,7 @@ snapshots:
   '@types/node@20.14.15':
     dependencies:
       undici-types: 5.26.5
+    optional: true
 
   '@types/node@22.5.5':
     dependencies:
@@ -22370,7 +22366,8 @@ snapshots:
       '@types/mime': 3.0.1
       '@types/node': 22.7.7
 
-  '@types/sinonjs__fake-timers@8.1.5': {}
+  '@types/sinonjs__fake-timers@8.1.5':
+    optional: true
 
   '@types/sockjs@0.3.33':
     dependencies:
@@ -22398,7 +22395,8 @@ snapshots:
 
   '@types/webgl-ext@0.0.30': {}
 
-  '@types/which@2.0.2': {}
+  '@types/which@2.0.2':
+    optional: true
 
   '@types/wrap-ansi@3.0.0': {}
 
@@ -22790,7 +22788,7 @@ snapshots:
       vite: 5.4.9(@types/node@22.7.7)(terser@5.36.0)
       vue: 3.5.12(typescript@5.6.3)
 
-  '@vitest/browser@2.0.5(bufferutil@4.0.8)(playwright@1.47.2)(typescript@5.6.3)(utf-8-validate@5.0.10)(vitest@2.0.5)(webdriverio@9.0.9(bufferutil@4.0.8)(utf-8-validate@5.0.10))':
+  '@vitest/browser@2.0.5(bufferutil@4.0.8)(playwright@1.49.1)(typescript@5.6.3)(utf-8-validate@5.0.10)(vitest@2.0.5)(webdriverio@9.0.9(bufferutil@4.0.8)(utf-8-validate@5.0.10))':
     dependencies:
       '@testing-library/dom': 10.4.0
       '@testing-library/user-event': 14.5.2(@testing-library/dom@10.4.0)
@@ -22801,7 +22799,7 @@ snapshots:
       vitest: 2.0.5(@types/node@22.5.5)(@vitest/browser@2.0.5)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(terser@5.36.0)
       ws: 8.18.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     optionalDependencies:
-      playwright: 1.47.2
+      playwright: 1.49.1
       webdriverio: 9.0.9(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - bufferutil
@@ -22809,7 +22807,7 @@ snapshots:
       - utf-8-validate
     optional: true
 
-  '@vitest/browser@2.0.5(bufferutil@4.0.8)(playwright@1.47.2)(typescript@5.6.3)(utf-8-validate@6.0.4)(vitest@2.0.5)(webdriverio@9.0.9(bufferutil@4.0.8)(utf-8-validate@6.0.4))':
+  '@vitest/browser@2.0.5(bufferutil@4.0.8)(playwright@1.49.1)(typescript@5.6.3)(utf-8-validate@6.0.4)(vitest@2.0.5)(webdriverio@9.0.9(bufferutil@4.0.8)(utf-8-validate@6.0.4))':
     dependencies:
       '@testing-library/dom': 10.4.0
       '@testing-library/user-event': 14.5.2(@testing-library/dom@10.4.0)
@@ -22820,14 +22818,14 @@ snapshots:
       vitest: 2.0.5(@types/node@22.5.5)(@vitest/browser@2.0.5)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.36.0)
       ws: 8.18.0(bufferutil@4.0.8)(utf-8-validate@6.0.4)
     optionalDependencies:
-      playwright: 1.47.2
+      playwright: 1.49.1
       webdriverio: 9.0.9(bufferutil@4.0.8)(utf-8-validate@6.0.4)
     transitivePeerDependencies:
       - bufferutil
       - typescript
       - utf-8-validate
 
-  '@vitest/coverage-istanbul@2.0.5(vitest@2.0.5)':
+  '@vitest/coverage-istanbul@2.0.5(vitest@2.0.5(@types/node@22.5.5)(@vitest/browser@2.0.5)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.36.0))':
     dependencies:
       '@istanbuljs/schema': 0.1.3
       debug: 4.3.7(supports-color@5.5.0)
@@ -23880,6 +23878,7 @@ snapshots:
       import-meta-resolve: 4.1.0
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   '@wdio/logger@8.38.0':
     dependencies:
@@ -23887,6 +23886,7 @@ snapshots:
       loglevel: 1.9.1
       loglevel-plugin-prefix: 0.8.4
       strip-ansi: 7.1.0
+    optional: true
 
   '@wdio/logger@9.0.8':
     dependencies:
@@ -23894,16 +23894,20 @@ snapshots:
       loglevel: 1.9.1
       loglevel-plugin-prefix: 0.8.4
       strip-ansi: 7.1.0
+    optional: true
 
-  '@wdio/protocols@9.0.8': {}
+  '@wdio/protocols@9.0.8':
+    optional: true
 
   '@wdio/repl@9.0.8':
     dependencies:
       '@types/node': 20.14.15
+    optional: true
 
   '@wdio/types@9.0.8':
     dependencies:
       '@types/node': 20.14.15
+    optional: true
 
   '@wdio/utils@9.0.8':
     dependencies:
@@ -23922,6 +23926,7 @@ snapshots:
       wait-port: 1.1.0
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   '@web3modal/common@5.0.0':
     dependencies:
@@ -24268,7 +24273,8 @@ snapshots:
 
   '@xtuc/long@4.2.2': {}
 
-  '@zip.js/zip.js@2.7.48': {}
+  '@zip.js/zip.js@2.7.48':
+    optional: true
 
   JSONStream@1.3.5:
     dependencies:
@@ -24473,6 +24479,7 @@ snapshots:
       lodash: 4.17.21
       normalize-path: 3.0.0
       readable-stream: 4.5.2
+    optional: true
 
   archiver@7.0.1:
     dependencies:
@@ -24483,6 +24490,7 @@ snapshots:
       readdir-glob: 1.1.3
       tar-stream: 3.1.7
       zip-stream: 6.0.1
+    optional: true
 
   archy@1.0.0: {}
 
@@ -25321,9 +25329,11 @@ snapshots:
       buffer-alloc-unsafe: 1.1.0
       buffer-fill: 1.0.0
 
-  buffer-crc32@0.2.13: {}
+  buffer-crc32@0.2.13:
+    optional: true
 
-  buffer-crc32@1.0.0: {}
+  buffer-crc32@1.0.0:
+    optional: true
 
   buffer-equal@0.0.1: {}
 
@@ -25828,6 +25838,7 @@ snapshots:
       is-stream: 2.0.1
       normalize-path: 3.0.0
       readable-stream: 4.5.2
+    optional: true
 
   compressible@2.0.18:
     dependencies:
@@ -26008,6 +26019,7 @@ snapshots:
     dependencies:
       crc-32: 1.2.2
       readable-stream: 4.5.2
+    optional: true
 
   create-ecdh@4.0.4:
     dependencies:
@@ -26156,7 +26168,8 @@ snapshots:
       domutils: 3.1.0
       nth-check: 2.1.1
 
-  css-shorthand-properties@1.1.1: {}
+  css-shorthand-properties@1.1.1:
+    optional: true
 
   css-tree@1.0.0-alpha.37:
     dependencies:
@@ -26168,7 +26181,8 @@ snapshots:
       mdn-data: 2.0.14
       source-map: 0.6.1
 
-  css-value@0.0.1: {}
+  css-value@0.0.1:
+    optional: true
 
   css-what@3.4.2: {}
 
@@ -26413,7 +26427,8 @@ snapshots:
 
   decamelize@1.2.0: {}
 
-  decamelize@6.0.0: {}
+  decamelize@6.0.0:
+    optional: true
 
   decimal.js@10.4.3: {}
 
@@ -26452,7 +26467,8 @@ snapshots:
 
   deep-is@0.1.4: {}
 
-  deepmerge-ts@7.1.0: {}
+  deepmerge-ts@7.1.0:
+    optional: true
 
   deepmerge@4.3.1: {}
 
@@ -26729,6 +26745,7 @@ snapshots:
     dependencies:
       '@types/which': 2.0.2
       which: 2.0.2
+    optional: true
 
   edgedriver@5.6.1:
     dependencies:
@@ -26736,9 +26753,10 @@ snapshots:
       '@zip.js/zip.js': 2.7.48
       decamelize: 6.0.0
       edge-paths: 3.0.5
-      fast-xml-parser: 4.4.1
+      fast-xml-parser: 4.5.0
       node-fetch: 3.3.2
       which: 4.0.0
+    optional: true
 
   ee-first@1.1.1: {}
 
@@ -27915,6 +27933,7 @@ snapshots:
       '@types/yauzl': 2.10.3
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   extsprintf@1.3.0: {}
 
@@ -27926,13 +27945,15 @@ snapshots:
 
   fast-decode-uri-component@1.0.1: {}
 
-  fast-deep-equal@2.0.1: {}
+  fast-deep-equal@2.0.1:
+    optional: true
 
   fast-deep-equal@3.1.3: {}
 
   fast-diff@1.3.0: {}
 
-  fast-fifo@1.3.2: {}
+  fast-fifo@1.3.2:
+    optional: true
 
   fast-glob@3.3.1:
     dependencies:
@@ -27965,10 +27986,6 @@ snapshots:
   fast-shallow-equal@1.0.0: {}
 
   fast-stable-stringify@1.0.0: {}
-
-  fast-xml-parser@4.4.1:
-    dependencies:
-      strnum: 1.0.5
 
   fast-xml-parser@4.5.0:
     dependencies:
@@ -28005,6 +28022,7 @@ snapshots:
   fd-slicer@1.1.0:
     dependencies:
       pend: 1.2.0
+    optional: true
 
   fetch-blob@3.2.0:
     dependencies:
@@ -28285,6 +28303,7 @@ snapshots:
       which: 4.0.0
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   generate-function@2.3.1:
     dependencies:
@@ -28329,7 +28348,8 @@ snapshots:
 
   get-port-please@3.1.2: {}
 
-  get-port@7.1.0: {}
+  get-port@7.1.0:
+    optional: true
 
   get-stream@4.1.0:
     dependencies:
@@ -28730,7 +28750,8 @@ snapshots:
 
   htmlescape@1.1.1: {}
 
-  htmlfy@0.2.1: {}
+  htmlfy@0.2.1:
+    optional: true
 
   htmlparser2@6.1.0:
     dependencies:
@@ -28894,7 +28915,8 @@ snapshots:
     dependencies:
       queue: 6.0.2
 
-  immediate@3.0.6: {}
+  immediate@3.0.6:
+    optional: true
 
   immer@9.0.21: {}
 
@@ -28919,7 +28941,8 @@ snapshots:
       pkg-dir: 4.2.0
       resolve-cwd: 3.0.0
 
-  import-meta-resolve@4.1.0: {}
+  import-meta-resolve@4.1.0:
+    optional: true
 
   imurmurhash@0.1.4: {}
 
@@ -29182,7 +29205,8 @@ snapshots:
 
   is-plain-obj@3.0.0: {}
 
-  is-plain-obj@4.1.0: {}
+  is-plain-obj@4.1.0:
+    optional: true
 
   is-plain-object@2.0.4:
     dependencies:
@@ -29288,7 +29312,8 @@ snapshots:
 
   isexe@2.0.0: {}
 
-  isexe@3.1.1: {}
+  isexe@3.1.1:
+    optional: true
 
   isobject@3.0.1: {}
 
@@ -30152,6 +30177,7 @@ snapshots:
       pako: 1.0.11
       readable-stream: 2.3.8
       setimmediate: 1.0.5
+    optional: true
 
   keccak@3.0.4:
     dependencies:
@@ -30219,6 +30245,7 @@ snapshots:
   lazystream@1.0.1:
     dependencies:
       readable-stream: 2.3.8
+    optional: true
 
   leven@2.1.0: {}
 
@@ -30237,6 +30264,7 @@ snapshots:
   lie@3.3.0:
     dependencies:
       immediate: 3.0.6
+    optional: true
 
   lighthouse-logger@1.4.2:
     dependencies:
@@ -30361,6 +30389,7 @@ snapshots:
       '@promptbook/utils': 0.63.0
       type-fest: 2.13.0
       userhome: 1.0.0
+    optional: true
 
   locate-path@3.0.0:
     dependencies:
@@ -30403,7 +30432,8 @@ snapshots:
 
   lodash.uniq@4.5.0: {}
 
-  lodash.zip@4.2.0: {}
+  lodash.zip@4.2.0:
+    optional: true
 
   lodash@4.17.21: {}
 
@@ -30430,9 +30460,11 @@ snapshots:
       dayjs: 1.11.13
       yargs: 15.4.1
 
-  loglevel-plugin-prefix@0.8.4: {}
+  loglevel-plugin-prefix@0.8.4:
+    optional: true
 
-  loglevel@1.9.1: {}
+  loglevel@1.9.1:
+    optional: true
 
   long@4.0.0: {}
 
@@ -31130,7 +31162,7 @@ snapshots:
 
   next-tick@1.1.0: {}
 
-  next@14.2.15(@babel/core@7.25.8)(@playwright/test@1.47.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  next@14.2.15(@babel/core@7.25.8)(@playwright/test@1.49.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@next/env': 14.2.15
       '@swc/helpers': 0.5.5
@@ -31151,7 +31183,7 @@ snapshots:
       '@next/swc-win32-arm64-msvc': 14.2.15
       '@next/swc-win32-ia32-msvc': 14.2.15
       '@next/swc-win32-x64-msvc': 14.2.15
-      '@playwright/test': 1.47.2
+      '@playwright/test': 1.49.1
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
@@ -31780,7 +31812,8 @@ snapshots:
       safe-buffer: 5.2.1
       sha.js: 2.4.11
 
-  pend@1.2.0: {}
+  pend@1.2.0:
+    optional: true
 
   perfect-debounce@1.0.0: {}
 
@@ -31853,11 +31886,11 @@ snapshots:
     dependencies:
       find-up: 3.0.0
 
-  playwright-core@1.47.2: {}
+  playwright-core@1.49.1: {}
 
-  playwright@1.47.2:
+  playwright@1.49.1:
     dependencies:
-      playwright-core: 1.47.2
+      playwright-core: 1.49.1
     optionalDependencies:
       fsevents: 2.3.2
 
@@ -32548,7 +32581,8 @@ snapshots:
 
   qs@6.5.3: {}
 
-  query-selector-shadow-dom@1.0.1: {}
+  query-selector-shadow-dom@1.0.1:
+    optional: true
 
   query-string@7.1.3:
     dependencies:
@@ -33002,6 +33036,7 @@ snapshots:
   readdir-glob@1.1.3:
     dependencies:
       minimatch: 5.1.6
+    optional: true
 
   readdirp@3.6.0:
     dependencies:
@@ -33213,6 +33248,7 @@ snapshots:
   resq@1.11.0:
     dependencies:
       fast-deep-equal: 2.0.1
+    optional: true
 
   restore-cursor@2.0.0:
     dependencies:
@@ -33237,7 +33273,8 @@ snapshots:
 
   rfdc@1.4.1: {}
 
-  rgb2hex@0.2.5: {}
+  rgb2hex@0.2.5:
+    optional: true
 
   rimraf@2.6.3:
     dependencies:
@@ -33345,7 +33382,8 @@ snapshots:
     dependencies:
       tslib: 2.8.0
 
-  safaridriver@0.1.2: {}
+  safaridriver@0.1.2:
+    optional: true
 
   safe-array-concat@1.1.2:
     dependencies:
@@ -33521,6 +33559,7 @@ snapshots:
   serialize-error@11.0.3:
     dependencies:
       type-fest: 2.19.0
+    optional: true
 
   serialize-error@2.1.0: {}
 
@@ -33785,7 +33824,8 @@ snapshots:
 
   sourcemap-codec@1.4.8: {}
 
-  spacetrim@0.11.39: {}
+  spacetrim@0.11.39:
+    optional: true
 
   spawn-wrap@2.0.0:
     dependencies:
@@ -33973,6 +34013,7 @@ snapshots:
       text-decoder: 1.1.1
     optionalDependencies:
       bare-events: 2.4.2
+    optional: true
 
   strict-event-emitter@0.5.1: {}
 
@@ -34349,12 +34390,14 @@ snapshots:
     optionalDependencies:
       bare-fs: 2.3.1
       bare-path: 2.1.3
+    optional: true
 
   tar-stream@3.1.7:
     dependencies:
       b4a: 1.6.6
       fast-fifo: 1.3.2
       streamx: 2.18.0
+    optional: true
 
   temp-dir@2.0.0: {}
 
@@ -34431,6 +34474,7 @@ snapshots:
   text-decoder@1.1.1:
     dependencies:
       b4a: 1.6.6
+    optional: true
 
   text-encoding-utf-8@1.0.2: {}
 
@@ -34768,7 +34812,8 @@ snapshots:
 
   type-fest@0.8.1: {}
 
-  type-fest@2.13.0: {}
+  type-fest@2.13.0:
+    optional: true
 
   type-fest@2.19.0: {}
 
@@ -34889,6 +34934,7 @@ snapshots:
     dependencies:
       buffer: 5.7.1
       through: 2.3.8
+    optional: true
 
   unc-path-regex@0.1.2: {}
 
@@ -35081,7 +35127,8 @@ snapshots:
     dependencies:
       react: 18.3.1
 
-  userhome@1.0.0: {}
+  userhome@1.0.0:
+    optional: true
 
   utf-8-validate@5.0.10:
     dependencies:
@@ -35342,7 +35389,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 22.5.5
-      '@vitest/browser': 2.0.5(bufferutil@4.0.8)(playwright@1.47.2)(typescript@5.6.3)(utf-8-validate@5.0.10)(vitest@2.0.5)(webdriverio@9.0.9(bufferutil@4.0.8)(utf-8-validate@5.0.10))
+      '@vitest/browser': 2.0.5(bufferutil@4.0.8)(playwright@1.49.1)(typescript@5.6.3)(utf-8-validate@5.0.10)(vitest@2.0.5)(webdriverio@9.0.9(bufferutil@4.0.8)(utf-8-validate@5.0.10))
       jsdom: 16.7.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - less
@@ -35377,7 +35424,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 22.5.5
-      '@vitest/browser': 2.0.5(bufferutil@4.0.8)(playwright@1.47.2)(typescript@5.6.3)(utf-8-validate@6.0.4)(vitest@2.0.5)(webdriverio@9.0.9(bufferutil@4.0.8)(utf-8-validate@6.0.4))
+      '@vitest/browser': 2.0.5(bufferutil@4.0.8)(playwright@1.49.1)(typescript@5.6.3)(utf-8-validate@6.0.4)(vitest@2.0.5)(webdriverio@9.0.9(bufferutil@4.0.8)(utf-8-validate@6.0.4))
       jsdom: 16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4)
     transitivePeerDependencies:
       - less
@@ -35412,7 +35459,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 22.7.7
-      '@vitest/browser': 2.0.5(bufferutil@4.0.8)(playwright@1.47.2)(typescript@5.6.3)(utf-8-validate@5.0.10)(vitest@2.0.5)(webdriverio@9.0.9(bufferutil@4.0.8)(utf-8-validate@5.0.10))
+      '@vitest/browser': 2.0.5(bufferutil@4.0.8)(playwright@1.49.1)(typescript@5.6.3)(utf-8-validate@5.0.10)(vitest@2.0.5)(webdriverio@9.0.9(bufferutil@4.0.8)(utf-8-validate@5.0.10))
       jsdom: 16.7.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - less
@@ -35457,6 +35504,7 @@ snapshots:
       debug: 4.3.7(supports-color@5.5.0)
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   walker@1.0.8:
     dependencies:
@@ -35516,6 +35564,7 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
+    optional: true
 
   webdriverio@9.0.9(bufferutil@4.0.8)(utf-8-validate@5.0.10):
     dependencies:
@@ -35585,6 +35634,7 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
+    optional: true
 
   webextension-polyfill@0.10.0: {}
 
@@ -35790,6 +35840,7 @@ snapshots:
   which@4.0.0:
     dependencies:
       isexe: 3.1.1
+    optional: true
 
   why-is-node-running@2.3.0:
     dependencies:
@@ -36120,6 +36171,7 @@ snapshots:
     dependencies:
       buffer-crc32: 0.2.13
       fd-slicer: 1.1.0
+    optional: true
 
   yn@3.1.1:
     optional: true
@@ -36140,6 +36192,7 @@ snapshots:
       archiver-utils: 5.0.2
       compress-commons: 6.0.2
       readable-stream: 4.5.2
+    optional: true
 
   zod-validation-error@3.4.0(zod@3.23.8):
     dependencies:
