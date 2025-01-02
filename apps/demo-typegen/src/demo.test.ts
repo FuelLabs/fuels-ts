@@ -4,7 +4,7 @@ import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
 import { DemoContract, DemoContractFactory } from './contract-types';
 import { DemoPredicate } from './predicate-types';
-import type { DemoPredicateInputs } from './predicate-types/DemoPredicate';
+import type { DemoPredicateInputs } from './predicate-types/predicates/DemoPredicate';
 import { DemoScript } from './script-types';
 
 /**
