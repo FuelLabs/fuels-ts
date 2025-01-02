@@ -605,43 +605,36 @@ export default class Provider {
    * @returns A promise that resolves to the Chain and NodeInfo.
    */
   async fetchChainAndNodeInfo(ignoreCache: boolean = false) {
-    let nodeInfo: NodeInfo;
-    let chain: ChainInfo;
+    let nodeInfo = Provider.nodeInfoCache[this.urlWithoutAuth];
+    let chain = Provider.chainInfoCache[this.urlWithoutAuth];
 
-    try {
-      nodeInfo = Provider.nodeInfoCache[this.urlWithoutAuth];
-      chain = Provider.chainInfoCache[this.urlWithoutAuth];
-
-      const noCache = !nodeInfo || !chain;
-
-      if (ignoreCache || noCache) {
-        throw new Error(`Jumps to the catch block and re-fetch`);
-      }
-    } catch (_err) {
-      const data = await this.operations.getChainAndNodeInfo();
-
-      nodeInfo = {
-        maxDepth: bn(data.nodeInfo.maxDepth),
-        maxTx: bn(data.nodeInfo.maxTx),
-        nodeVersion: data.nodeInfo.nodeVersion,
-        utxoValidation: data.nodeInfo.utxoValidation,
-        vmBacktrace: data.nodeInfo.vmBacktrace,
-      };
-
-      Provider.ensureClientVersionIsSupported(nodeInfo);
-
-      chain = processGqlChain(data.chain);
-
-      Provider.chainInfoCache[this.urlWithoutAuth] = chain;
-      Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
-
-      this.consensusParametersTimestamp = Date.now();
+    // if we have cache, return it
+    const cashIsPresent = !nodeInfo || !chain;
+    if (!ignoreCache && cashIsPresent) {
+      return { nodeInfo, chain };
     }
 
-    return {
-      chain,
-      nodeInfo,
+    // otherwise, fetch data, save to cache, and return it
+    const data = await this.operations.getChainAndNodeInfo();
+
+    nodeInfo = {
+      maxDepth: bn(data.nodeInfo.maxDepth),
+      maxTx: bn(data.nodeInfo.maxTx),
+      nodeVersion: data.nodeInfo.nodeVersion,
+      utxoValidation: data.nodeInfo.utxoValidation,
+      vmBacktrace: data.nodeInfo.vmBacktrace,
     };
+
+    chain = processGqlChain(data.chain);
+
+    Provider.chainInfoCache[this.urlWithoutAuth] = chain;
+    Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
+
+    this.consensusParametersTimestamp = Date.now();
+
+    Provider.ensureClientVersionIsSupported(nodeInfo);
+
+    return { chain, nodeInfo };
   }
 
   /**
