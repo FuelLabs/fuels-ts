@@ -1,9 +1,9 @@
 import { launchTestNode } from 'fuels/test-utils';
 
 import { ScriptWithConfigurable } from '../test/typegen';
-import type { ScriptWithConfigurableTypes } from '../test/typegen/scripts/ScriptWithConfigurableTypes';
+import type { ScriptWithConfigurableConfigurables } from '../test/typegen/scripts/ScriptWithConfigurable';
 
-const defaultValues: Required<ScriptWithConfigurableTypes['configurables']> = {
+const defaultValues: Required<ScriptWithConfigurableConfigurables> = {
   FEE: 5,
 };
 
@@ -36,7 +36,7 @@ describe('Script With Configurable', () => {
       wallets: [wallet],
     } = launched;
 
-    const configurableConstants: Required<ScriptWithConfigurableTypes['configurables']> = {
+    const configurableConstants: Required<ScriptWithConfigurableConfigurables> = {
       FEE: 71,
     };
 
@@ -59,7 +59,7 @@ describe('Script With Configurable', () => {
       wallets: [wallet],
     } = launched;
 
-    const configurableConstants: Required<ScriptWithConfigurableTypes['configurables']> = {
+    const configurableConstants: Required<ScriptWithConfigurableConfigurables> = {
       FEE: 35,
     };
 
@@ -80,7 +80,7 @@ describe('Script With Configurable', () => {
       wallets: [wallet],
     } = launched;
 
-    const configurableConstants: ScriptWithConfigurableTypes['configurables'] = { FEE: 10 };
+    const configurableConstants: ScriptWithConfigurableConfigurables = { FEE: 10 };
 
     const input = { FEE: 15 };
 

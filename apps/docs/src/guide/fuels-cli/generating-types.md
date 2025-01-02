@@ -47,7 +47,7 @@ pnpm fuels typegen -i ./my-program/out/release -o ./types
 <!-- This section should explain the flags used in the typegen command -->
 <!-- flags:example:start -->
 
-The path after the input flag `-i` should point to the file folder where the `forc build` results are.
+The path after the input flag `-i` should point to the folder where the `forc build` outputs are.
 
 The path after the output flag `-o` will be the output directory for the generated types.
 

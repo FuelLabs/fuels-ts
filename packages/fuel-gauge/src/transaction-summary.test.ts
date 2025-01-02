@@ -33,10 +33,7 @@ import {
 } from 'fuels/test-utils';
 
 import { MultiTokenContractFactory, TokenContractFactory } from '../test/typegen';
-import type {
-  ContractIdInput,
-  TransferParamsInput,
-} from '../test/typegen/contracts/TokenContractTypes';
+import type { ContractIdInput, TransferParamsInput } from '../test/typegen/contracts/TokenContract';
 
 function convertBnsToHex(value: unknown): unknown {
   if (value instanceof BN) {

@@ -16,7 +16,7 @@ import {
   MultiTokenContract,
   MultiTokenContractFactory,
 } from '../test/typegen/contracts';
-import type { AddressInput } from '../test/typegen/contracts/MultiTokenContractTypes';
+import type { AddressInput } from '../test/typegen/contracts/MultiTokenContract';
 import { PredicateU32 } from '../test/typegen/predicates/PredicateU32';
 
 /**

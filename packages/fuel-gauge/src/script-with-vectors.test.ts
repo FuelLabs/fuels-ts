@@ -7,7 +7,7 @@ import {
   ScriptWithVectorAdvanced,
   ScriptWithVectorMixed,
 } from '../test/typegen';
-import { StateError, UserError } from '../test/typegen/scripts/ScriptWithVectorAdvancedTypes';
+import { StateError, UserError } from '../test/typegen/scripts/ScriptWithVectorAdvanced';
 
 /**
  * @group node

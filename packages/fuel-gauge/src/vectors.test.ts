@@ -2,7 +2,7 @@ import { bn, randomBytes, hexlify } from 'fuels';
 import type { BigNumberish, BN } from 'fuels';
 
 import { VectorsFactory } from '../test/typegen/contracts';
-import { SmallEnum } from '../test/typegen/contracts/CoverageContractTypes';
+import { SmallEnum } from '../test/typegen/contracts/CoverageContract';
 
 import { launchTestContract } from './utils';
 

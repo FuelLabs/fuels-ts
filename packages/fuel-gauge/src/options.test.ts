@@ -2,8 +2,8 @@ import type { BigNumberish } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import type { Option } from '../test/typegen/common';
+import type { DeepStructInput } from '../test/typegen/contracts/Options';
 import { OptionsFactory } from '../test/typegen/contracts/OptionsFactory';
-import type { DeepStructInput } from '../test/typegen/contracts/OptionsTypes';
 
 import { launchTestContract } from './utils';
 

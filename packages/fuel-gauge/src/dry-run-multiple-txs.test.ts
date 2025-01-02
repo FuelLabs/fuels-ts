@@ -14,7 +14,7 @@ import {
   MultiTokenContractFactory,
   RevertErrorFactory,
 } from '../test/typegen/contracts';
-import type { AddressInput } from '../test/typegen/contracts/MultiTokenContractTypes';
+import type { AddressInput } from '../test/typegen/contracts/MultiTokenContract';
 
 /**
  * @group node
