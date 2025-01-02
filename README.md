@@ -32,9 +32,7 @@ const chainId = provider.getChainId();
 const gasConfig = provider.getGasConfig();
 const baseAssetId = provider.getBaseAssetId();
 
-console.log('chainId', chainId);
-console.log('baseAssetId', baseAssetId);
-console.log('gasConfig', gasConfig);
+console.log({ chainId, gasConfig, baseAssetId });
 ```
 
 # Create a new dApp ([docs](https://docs.fuel.network/docs/fuels-ts/creating-a-fuel-dapp/))
