@@ -28,9 +28,9 @@ const NETWORK_URL = 'https://mainnet.fuel.network/v1/graphql';
 
 const provider = await Provider.create(NETWORK_URL);
 
-const baseAssetId = provider.getBaseAssetId();
 const chainId = provider.getChainId();
 const gasConfig = provider.getGasConfig();
+const baseAssetId = provider.getBaseAssetId();
 
 console.log('chainId', chainId);
 console.log('baseAssetId', baseAssetId);
