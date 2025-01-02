@@ -13,8 +13,8 @@
     "test:ui": "sh ./test/ui/test-ui.sh"
   },
   "dependencies": {
-    "@fuels/connectors": "^0.27.1",
-    "@fuels/react": "^0.27.1",
+    "@fuels/connectors": "^0.36.1",
+    "@fuels/react": "^0.36.1",
     "@tanstack/react-query": "^5.55.4",
     "clsx": "2.1.1",
     "@wagmi/connectors": "^5.1.14",
