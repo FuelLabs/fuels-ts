@@ -9,23 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@fuels/connectors": "^0.36.1",
-    "@fuels/react": "^0.36.1",
-    "@tanstack/react-query": "^5.55.4",
+    "@fuels/connectors": "0.36.1",
+    "@fuels/react": "0.36.1",
+    "@tanstack/react-query": "5.55.4",
     "fuels": "workspace:*",
     "next": "14.2.15",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   },
   "devDependencies": {
-    "@types/node": "^22.5.5",
-    "@types/react": "^18.3.11",
-    "@types/react-dom": "^18.3",
-    "eslint": "^8.57.0",
+    "@types/node": "22.5.5",
+    "@types/react": "18.3.11",
+    "@types/react-dom": "18.3",
+    "eslint": "8.57.0",
     "eslint-config-next": "14.2.15",
-    "postcss": "^8.4.49",
-    "postcss-load-config": "^6.0.1",
-    "tailwindcss": "^3.4.14",
-    "typescript": "~5.6.3"
+    "postcss": "8.4.49",
+    "postcss-load-config": "6.0.1",
+    "tailwindcss": "3.4.14",
+    "typescript": "5.6.3"
   }
 }
