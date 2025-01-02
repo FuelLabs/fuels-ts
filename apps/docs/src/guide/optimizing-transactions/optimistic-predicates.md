@@ -24,7 +24,7 @@ Under the hood, the `transfer` call is making multiple calls to the network to b
 
 This process can be optimized by optimistically building the transaction on page load, like so:
 
-<<< @./snippets/optimistic-transactions-after.ts#main{ts:line-numbers}
+<<< @./snippets/optimistic-predicates-after.ts#main{ts:line-numbers}
 
 > [!NOTE]
 > Any change to the underlying transaction will require re-estimation and re-funding of the transaction. Otherwise the transaction could increase in size and therefore cost, causing the transaction to fail.
