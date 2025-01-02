@@ -5,7 +5,7 @@ import { InputOutputTypesFactory } from '../../../../typegend';
 import type {
   IdentityOutput,
   AddressOutput,
-} from '../../../../typegend/contracts/InputOutputTypesTypes';
+} from '../../../../typegend/contracts/InputOutputTypes';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
