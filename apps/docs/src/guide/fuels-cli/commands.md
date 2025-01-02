@@ -143,7 +143,7 @@ The `fuels dev` command does three things:
 npx fuels@{{fuels}} node
 ```
 
-Starts a short-lived `fuel-core` node, and a requires `fuels.config.ts` config file.
+Starts a short-lived `fuel-core` node and requires a `fuels.config.ts` config file.
 
 Generate one with [`fuels init`](#fuels-init):
 
