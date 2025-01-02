@@ -143,7 +143,11 @@ The `fuels dev` command does three things:
 npx fuels@{{fuels}} node
 ```
 
-The `fuels node` command starts a short-lived `fuel-core` node ([docs](./config-file.md#autostartfuelcore)).
+Starts a short-lived `fuel-core` node, and a requires `fuels.config.ts` config file.
+
+Generate one with [`fuels init`](#fuels-init):
+
+<<< @/../../demo-fuels/fuels.config.minimal.ts#config{ts:line-numbers}
 
 ## `fuels typegen`
 
