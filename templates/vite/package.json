@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "fuels:dev": "fuels dev",
     "test": "vitest",
-    "test:ui": "./test/ui/test-ui.sh"
+    "test:ui": "sh ./test/ui/test-ui.sh"
   },
   "dependencies": {
     "@fuels/connectors": "^0.36.1",
@@ -29,7 +29,7 @@
     "@vitejs/plugin-react": "^4.3.3",
     "@eslint/js": "^9.10.0",
     "@tanstack/router-plugin": "^1.58.12",
-    "@playwright/test": "^1.47.2",
+    "@playwright/test": "^1.49.1",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3",
     "autoprefixer": "^10.4.20",
