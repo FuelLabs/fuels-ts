@@ -15,7 +15,7 @@ npx fuels@{{fuels}} help init
 
 ```console
 Options:
-  --path <path>                Path to project root (default: "/home/nedimko/fuel/ts")
+  --path <path>                Path to project root (default: current directory)
   -w, --workspace <path>       Relative dir path to Forc workspace
   -c, --contracts [paths...]   Relative paths to Contracts
   -s, --scripts [paths...]     Relative paths to Scripts
