@@ -2281,4 +2281,72 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     expect(fetchChainAndNodeInfo).toHaveBeenCalledTimes(2);
   });
+
+  it('submits transaction and awaits status [success]', async () => {
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const transactionRequest = await wallet.createTransfer(wallet.address, 100_000);
+    const signedTransaction = await wallet.signTransaction(transactionRequest);
+    transactionRequest.updateWitnessByOwner(wallet.address, signedTransaction);
+    const transactionId = transactionRequest.getTransactionId(provider.getChainId());
+    const response = await provider.sendTransactionAndAwaitStatus(transactionRequest, {
+      estimateTxDependencies: false,
+    });
+    expect(response.status).toBe('SuccessStatus');
+    expect(response.receipts.length).not.toBe(0);
+    expect(response.transactionId).toBe(transactionId);
+  });
+
+  it('submits transaction and awaits status [success with estimation]', async () => {
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const transactionRequest = await wallet.createTransfer(wallet.address, 100_000);
+    const signedTransaction = await wallet.signTransaction(transactionRequest);
+    transactionRequest.updateWitnessByOwner(wallet.address, signedTransaction);
+    const transactionId = transactionRequest.getTransactionId(provider.getChainId());
+    const response = await provider.sendTransactionAndAwaitStatus(transactionRequest);
+    expect(response.status).toBe('SuccessStatus');
+    expect(response.receipts.length).not.toBe(0);
+    expect(response.transactionId).toBe(transactionId);
+  });
+
+  it('submits transaction and awaits status [failure]', async () => {
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const transactionRequest = await wallet.createTransfer(wallet.address, 100_000);
+    transactionRequest.gasLimit = bn(0); // force fail
+    const signedTransaction = await wallet.signTransaction(transactionRequest);
+    transactionRequest.updateWitnessByOwner(wallet.address, signedTransaction);
+    const transactionId = transactionRequest.getTransactionId(provider.getChainId());
+    const response = await provider.sendTransactionAndAwaitStatus(transactionRequest, {
+      estimateTxDependencies: false,
+    });
+    expect(response.status).toBe('FailureStatus');
+    expect(response.receipts.length).not.toBe(0);
+    expect(response.transactionId).toBe(transactionId);
+  });
 });

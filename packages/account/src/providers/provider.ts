@@ -29,6 +29,7 @@ import type {
   GqlRelayedTransactionFailed,
   Requester,
   GqlBlockFragment,
+  GqlSubmitAndAwaitStatusSubscription,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -131,6 +132,12 @@ export type GetTransactionsResponse = {
 export type GetBlocksResponse = {
   blocks: Block[];
   pageInfo: PageInfo;
+};
+
+export type SendAndAwaitStatusResponse = {
+  transactionId: string;
+  status: string;
+  receipts: TransactionResultReceipt[];
 };
 
 /**
@@ -847,6 +854,16 @@ Supported fuel-core version: ${supportedVersion}.`
   /**
    * @hidden
    */
+  #uncacheInputs(transactionId: string): void {
+    if (!this.cache) {
+      return;
+    }
+    this.cache.unset(transactionId);
+  }
+
+  /**
+   * @hidden
+   */
   validateTransaction(tx: TransactionRequest) {
     const {
       consensusParameters: {
@@ -904,6 +921,54 @@ Supported fuel-core version: ${supportedVersion}.`
     );
 
     return new TransactionResponse(transactionRequest, this, abis, subscription);
+  }
+
+  /**
+   * Submits a transaction to the chain and awaits it's status response.
+   *
+   * @param transactionRequestLike - the request to submit.
+   * @param sendTransactionParams - The provider send transaction parameters (optional).
+   * @returns A promise that resolves to a settled transaction.
+   */
+  async sendTransactionAndAwaitStatus(
+    transactionRequestLike: TransactionRequestLike,
+    { estimateTxDependencies = true }: ProviderSendTxParams = {}
+  ): Promise<SendAndAwaitStatusResponse> {
+    const transactionRequest = transactionRequestify(transactionRequestLike);
+    if (estimateTxDependencies) {
+      await this.estimateTxDependencies(transactionRequest);
+    }
+
+    this.validateTransaction(transactionRequest);
+
+    const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
+
+    const transactionId = transactionRequest.getTransactionId(this.getChainId());
+    this.#cacheInputs(transactionRequest.inputs, transactionId);
+
+    const subscription = (await this.operations.submitAndAwaitStatus({
+      encodedTransaction,
+    })) as AsyncIterable<GqlSubmitAndAwaitStatusSubscription>;
+
+    for await (const sub of subscription) {
+      const statusChange = sub.submitAndAwaitStatus;
+      if (statusChange.type === 'SqueezedOutStatus') {
+        this.#uncacheInputs(transactionId);
+        throw new FuelError(
+          ErrorCode.TRANSACTION_SQUEEZED_OUT,
+          `Transaction Squeezed Out with reason: ${statusChange.reason}`
+        );
+      }
+      if (statusChange.type !== 'SubmittedStatus') {
+        return {
+          transactionId,
+          status: statusChange.type,
+          receipts: statusChange.receipts.map(processGqlReceipt),
+        };
+      }
+    }
+
+    return { transactionId, status: 'unknown', receipts: [] };
   }
 
   /**

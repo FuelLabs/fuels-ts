@@ -337,16 +337,20 @@ export default defineConfig({
                 link: '/guide/transactions/transaction-request',
               },
               {
-                text: 'Transaction Response',
-                link: '/guide/transactions/transaction-response',
-              },
-              {
                 text: 'Transaction Parameters',
                 link: '/guide/transactions/transaction-parameters',
               },
               {
                 text: 'Transaction Policies',
                 link: '/guide/transactions/transaction-policies',
+              },
+              {
+                text: 'Transaction Response',
+                link: '/guide/transactions/transaction-response',
+              },
+              {
+                text: 'Transaction Subscriptions',
+                link: '/guide/transactions/transaction-subscriptions',
               },
             ],
           },
