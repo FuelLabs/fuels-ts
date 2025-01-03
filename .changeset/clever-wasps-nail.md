@@ -3,4 +3,4 @@
 "fuels": minor
 ---
 
-chore: removed network URLs
+chore!: removed network URLs
