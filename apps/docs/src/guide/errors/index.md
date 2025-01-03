@@ -28,7 +28,7 @@ It could be caused during the deployments of contracts when an account is requir
 
 When you are trying to send a transaction that will result in an asset burn.
 
-Add relevant coin change outputs to the transaction, or [enable asset burn](#TODO) in the transaction request.
+Add relevant coin change outputs to the transaction, or enable asset burn in the transaction request.
 
 ### `CONFIG_FILE_NOT_FOUND`
 
