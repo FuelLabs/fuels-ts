@@ -2,4 +2,4 @@
 "@fuel-ts/account": patch
 ---
 
-feat: implement sendAndAwaitStatus subscription
+feat: implement `sendAndAwaitStatus` subscription
