@@ -18,6 +18,7 @@ export const generateArgs = ({
     args.push(`--template`);
     args.push(template);
   }
+  args.push(`--${packageManager}`);
   args.push(`--no-install`);
   return args;
 };

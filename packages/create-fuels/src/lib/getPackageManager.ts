@@ -1,5 +1,7 @@
 import { warn } from '../utils/logger';
 
+import type { ProgramOptions } from './setupProgram';
+
 export const availablePackageManagers = ['pnpm', 'npm', 'bun'] as const;
 export type PackageManager = (typeof availablePackageManagers)[number];
 
@@ -8,53 +10,39 @@ const runnableApplicator =
   (command: string = '') =>
     `${commandPrefix} ${command}`;
 
-export const packageMangers: Record<
-  PackageManager,
-  {
-    install: string;
-    run: (command: string) => string;
-    name: PackageManager;
-  }
-> = {
+export const packageMangers = {
   pnpm: {
     install: 'pnpm install',
     run: runnableApplicator('pnpm'),
-    name: 'pnpm',
   },
   npm: {
     install: 'npm install',
     run: runnableApplicator('npm run'),
-    name: 'npm',
   },
   bun: {
     install: 'bun install',
     run: runnableApplicator('bun run'),
-    name: 'bun',
   },
 } as const;
 
-export function getUserPkgManager(): PackageManager {
-  const userAgent = process.env.npm_config_user_agent || '';
+export const getPackageManager = (opts: ProgramOptions) => {
+  const packageMangerOpts = {
+    pnpm: opts.pnpm,
+    npm: opts.npm,
+    bun: opts.bun,
+  };
 
-  if (userAgent.startsWith(packageMangers.pnpm.name)) {
-    return packageMangers.pnpm.name;
+  const cliChosenPackageManagerSelected = Object.entries(packageMangerOpts)
+    .filter(([, v]) => v)
+    .map(([k]) => k) as PackageManager[];
+
+  let packageManager: PackageManager | undefined = cliChosenPackageManagerSelected[0];
+  if (cliChosenPackageManagerSelected.length > 1) {
+    warn('More than one package manager was selected.');
   }
 
-  if (userAgent.startsWith(packageMangers.bun.name)) {
-    return packageMangers.bun.name;
+  if (!packageManager) {
+    packageManager = 'npm'; // default to npm if the user has not specified a package manager (eg. --pnpm, --bun)
   }
-
-  if (userAgent.startsWith(packageMangers.npm.name)) {
-    return packageMangers.npm.name;
-  }
-
-  warn(`This package manager is not supported. Using npm instead.`);
-
-  return packageMangers.npm.name;
-}
-
-export const getPackageManager = () => {
-  const packageManager = getUserPkgManager();
-
   return packageMangers[packageManager];
 };

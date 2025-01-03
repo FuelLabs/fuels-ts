@@ -20,15 +20,15 @@ The first step is to run the command:
 ::: code-group
 
 ```sh-vue [npm]
-npm create fuels@{{fuels}}
+npm create fuels@{{fuels}} -- --npm
 ```
 
 ```sh-vue [pnpm]
-pnpm create fuels@{{fuels}}
+pnpm create fuels@{{fuels}} --pnpm
 ```
 
 ```sh-vue [bun]
-bun create fuels@{{fuels}}
+bunx --bun create-fuels@{{fuels}} --bun
 ```
 
 :::
