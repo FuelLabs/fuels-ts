@@ -1,4 +1,4 @@
 ---
 ---
 
-fix: resolve punycode deprecation notice
+fix: resolve `punycode` deprecation notice
