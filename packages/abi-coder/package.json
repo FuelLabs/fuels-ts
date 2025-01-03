@@ -29,10 +29,10 @@
   "dependencies": {
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
-    "@fuel-ts/hasher": "workspace:^",
+    "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
-    "type-fest": "^4.26.1"
+    "type-fest": "4.26.1"
   }
 }

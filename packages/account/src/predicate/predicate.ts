@@ -48,7 +48,8 @@ export class Predicate<
   bytes: Uint8Array;
   predicateData: TData = [] as unknown as TData;
   interface: Interface;
-
+  initialBytecode: Uint8Array;
+  configurableConstants: TConfigurables | undefined;
   /**
    * Creates an instance of the Predicate class.
    *
@@ -73,8 +74,10 @@ export class Predicate<
     const address = Address.fromB256(getPredicateRoot(predicateBytes));
     super(address, provider);
 
+    this.initialBytecode = arrayify(bytecode);
     this.bytes = predicateBytes;
     this.interface = predicateInterface;
+    this.configurableConstants = configurableConstants;
     if (data !== undefined && data.length > 0) {
       this.predicateData = data;
     }
@@ -145,6 +148,23 @@ export class Predicate<
 
     const mainFn = this.interface?.functions.main;
     return mainFn?.encodeArguments(this.predicateData) || new Uint8Array();
+  }
+
+  /**
+   * Creates a new Predicate instance from an existing Predicate instance.
+   * @param overrides - The data and configurable constants to override.
+   * @returns A new Predicate instance with the same bytecode, ABI and provider but with the ability to set the data and configurable constants.
+   */
+  toNewInstance(
+    overrides: Pick<PredicateParams<TData, TConfigurables>, 'data' | 'configurableConstants'> = {}
+  ) {
+    return new Predicate<TData, TConfigurables>({
+      bytecode: this.initialBytecode,
+      abi: this.interface.jsonAbi,
+      provider: this.provider,
+      data: overrides.data ?? this.predicateData,
+      configurableConstants: overrides.configurableConstants ?? this.configurableConstants,
+    });
   }
 
   /**
