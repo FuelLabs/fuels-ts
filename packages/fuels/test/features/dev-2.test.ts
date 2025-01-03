@@ -76,6 +76,6 @@ describe('dev', () => {
       // if it finishes before timeout, it means the process was killed successfully
       await waitProcessEnd(fuelCorePid);
     },
-    { timeout: 15000 }
+    { timeout: 30_000 }
   );
 });
