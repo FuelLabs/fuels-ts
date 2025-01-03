@@ -42,10 +42,7 @@ customRequest.addResources(predicateResources);
 customRequest.addCoinOutput(receiver.address, amountToReceiver, assetId);
 
 // Estimate the transaction cost and fund accordingly
-const txCost = await predicate.getTransactionCost(customRequest);
-customRequest.gasLimit = txCost.gasUsed;
-customRequest.maxFee = txCost.maxFee;
-await predicate.fund(customRequest, txCost);
+await customRequest.autoCost(predicate);
 
 // Submit the transaction and await it's result
 const predicateTx = await predicate.sendTransaction(customRequest);

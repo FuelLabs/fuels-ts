@@ -235,12 +235,7 @@ describe('TransactionSummary', () => {
       gasLimit: 10000,
     });
 
-    const txCost = await sender.getTransactionCost(request);
-
-    request.gasLimit = txCost.gasUsed;
-    request.maxFee = txCost.maxFee;
-
-    await sender.fund(request, txCost);
+    await request.autoCost(sender);
 
     const transactionRequest = await sender.populateTransactionWitnessesSignature(request);
 
@@ -770,12 +765,7 @@ describe('TransactionSummary', () => {
         });
       });
 
-      const txCost = await wallet.getTransactionCost(request);
-
-      request.gasLimit = txCost.gasUsed;
-      request.maxFee = txCost.maxFee;
-
-      await wallet.fund(request, txCost);
+      await request.autoCost(wallet);
 
       const tx = await wallet.sendTransaction(request);
 

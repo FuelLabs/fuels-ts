@@ -46,23 +46,15 @@ const resources = await predicate.getResourcesToSpend([
     amount: amountToReceiver,
   },
 ]);
-
 request.addResources(resources);
-request.addWitness('0x');
 
-// Add witnesses including the signer
-// Estimate the predicate inputs
-const txCost = await predicate.getTransactionCost(request, {
+// Estimate and fund the request
+request.addWitness('0x');
+await request.autoCost(predicate, {
   signatureCallback: (txRequest) => txRequest.addAccountWitnesses(signer),
 });
 
-request.updatePredicateGasUsed(txCost.estimatedPredicates);
-
-request.gasLimit = txCost.gasUsed;
-request.maxFee = txCost.maxFee;
-
-await predicate.fund(request, txCost);
-
+// Add the signer as a witness
 await request.addAccountWitnesses(signer);
 
 // Send the transaction

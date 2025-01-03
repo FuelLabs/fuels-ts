@@ -145,12 +145,7 @@ describe('Fee', () => {
     request.addCoinOutput(destination2.address, amountToTransfer, ASSET_A);
     request.addCoinOutput(destination3.address, amountToTransfer, ASSET_B);
 
-    const txCost = await wallet.getTransactionCost(request);
-
-    request.gasLimit = txCost.gasUsed;
-    request.maxFee = txCost.maxFee;
-
-    await wallet.fund(request, txCost);
+    await request.autoCost(wallet);
 
     const tx = await wallet.sendTransaction(request);
     const { fee } = await tx.wait();
