@@ -123,9 +123,21 @@ export const runScaffoldCli = async ({
   const packageJsonPath = join(projectPath, 'package.json');
   const packageJsonContents = readFileSync(packageJsonPath, 'utf-8');
   const fuelsVersion = getPackageVersion(args);
-  const newPackageJsonContents = packageJsonContents
+  let newPackageJsonContents = packageJsonContents
     .replace(`pnpm run prebuild`, packageManager.run('prebuild'))
     .replace(`"fuels": "${versions.FUELS}"`, `"fuels": "${fuelsVersion}"`);
+
+  if (packageManager.name === 'pnpm') {
+    let newPackageJsonObject = JSON.parse(newPackageJsonContents);
+    newPackageJsonObject = {
+      ...newPackageJsonObject,
+      overrides: undefined,
+      pnpm: {
+        overrides: newPackageJsonObject.overrides,
+      },
+    };
+    newPackageJsonContents = JSON.stringify(newPackageJsonObject, null, 2);
+  }
 
   writeFileSync(packageJsonPath, newPackageJsonContents);
 

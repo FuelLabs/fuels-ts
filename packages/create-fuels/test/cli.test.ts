@@ -162,4 +162,57 @@ describe('CLI', { timeout: 15_000 }, () => {
       expect(log).toHaveBeenCalledWith(`  - ${template}`);
     }
   });
+
+  test('should have a package.json with overrides', async () => {
+    const args = generateArgv({
+      projectName: paths.projectRoot,
+      template: paths.templateName,
+    });
+
+    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValueOnce(true);
+
+    await runScaffoldCli({
+      program: setupProgram(),
+      args,
+    });
+
+    const packageJson = readFileSync(paths.packageJsonPath, 'utf-8');
+    const packageJsonObject = JSON.parse(packageJson);
+
+    expect(packageJsonObject).toEqual(
+      expect.objectContaining({
+        overrides: expect.any(Object),
+      })
+    );
+  });
+
+  test('should rewrite overrides for pnpm', async () => {
+    process.env.npm_config_user_agent = 'pnpm';
+
+    const args = generateArgv({
+      projectName: paths.projectRoot,
+      template: paths.templateName,
+    });
+
+    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValueOnce(true);
+
+    await runScaffoldCli({
+      program: setupProgram(),
+      args,
+    });
+
+    const packageJson = readFileSync(paths.packageJsonPath, 'utf-8');
+    const packageJsonObject = JSON.parse(packageJson);
+
+    expect(packageJsonObject.overrides).toBeUndefined();
+    expect(packageJsonObject).toEqual(
+      expect.objectContaining({
+        pnpm: {
+          overrides: expect.any(Object),
+        },
+      })
+    );
+
+    delete process.env.npm_config_user_agent;
+  });
 });
