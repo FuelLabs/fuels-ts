@@ -58,7 +58,7 @@ jobs:
   integration:
     runs-on: ubuntu-latest
     timeout-minutes: 25
-    if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
+    # if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
