@@ -5,24 +5,26 @@
 
 # Installation
 
-We expect you to install the [Fuel Toolchain](https://docs.fuel.network/docs/sway/introduction/fuel_toolchain/#the-fuel-toolchain) before using this library. Follow [this guide](https://docs.fuel.network/guides/installation/) to get this installed.
+You must install the [Fuel Toolchain](https://docs.fuel.network/guides/installation/) before using this library.
 
-The next step is to add the `fuels` dependency to your project. You can do this using the following command:
+Then add the `fuels` dependency to your project:
 
 ::: code-group
 
-```sh-vue [npm]
-npm install fuels@{{fuels}} --save
+```sh-vue [bun]
+bun add fuels@{{fuels}}
 ```
 
 ```sh-vue [pnpm]
 pnpm add fuels@{{fuels}}
 ```
 
-```sh-vue [bun]
-bun add fuels@{{fuels}}
+```sh-vue [npm]
+npm install fuels@{{fuels}} --save
 ```
 
 :::
 
-**Note**: Use version `{{fuels}}` to ensure compatibility with `testnet` network—check the [docs](https://docs.fuel.network/guides/installation/#using-the-latest-toolchain).
+Now you are ready to:
+
+- [Connect to the Network](./connecting-to-the-network.md)

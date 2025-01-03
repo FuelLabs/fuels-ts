@@ -68,12 +68,12 @@ export const configureCli = () => {
     .action(withProgram(command, Commands.init, init));
 
   (command = program.command(Commands.dev))
-    .description('Start a Fuel node and run build + deploy on every file change')
+    .description('Start a Fuel node with hot-reload capabilities')
     .addOption(pathOption)
     .action(withConfig(command, Commands.dev, dev));
 
   (command = program.command(Commands.node))
-    .description('Start a Fuel node')
+    .description('Start a Fuel node using project configs')
     .addOption(pathOption)
     .action(withConfig(command, Commands.node, node));
 

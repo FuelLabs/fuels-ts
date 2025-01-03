@@ -5,7 +5,7 @@ import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 import { PredicateMainArgsStruct, ScriptMainArgs } from '../../test/typegen';
 import type { Validation } from '../types/predicate';
 
-import { fundPredicate } from './utils/predicate';
+import { fundAccount } from './utils/predicate';
 
 /**
  * @group node
@@ -56,7 +56,7 @@ describe('Predicate', () => {
         ],
       });
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundAccount(wallet, predicate, amountToPredicate);
 
       // executing predicate to transfer resources to receiver
       const tx = await predicate.transfer(

@@ -51,9 +51,9 @@
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "fflate": "^0.8.2"
+    "fflate": "0.8.2"
   },
   "peerDependencies": {
-    "vitest": "~2.0.5"
+    "vitest": "2.0.5"
   }
 }

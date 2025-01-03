@@ -84,13 +84,13 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
 
       output = value;
     } catch (e) {
-      const address = wallet.address.toAddress();
+      const address = wallet.address.toB256();
 
       console.error((e as Error).message);
       console.warn(`
         not enough coins to fit the target?
         - add assets: ${configuredNetworks[selectedNetwork].faucetUrl}
-        - bech32 address: ${address}
+        - B256 address: ${address}
       `);
     }
 
