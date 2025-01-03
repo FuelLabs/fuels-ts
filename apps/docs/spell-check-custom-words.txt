@@ -345,3 +345,4 @@ WSL
 XOR
 XORs
 YAML
+TransactionRequest
