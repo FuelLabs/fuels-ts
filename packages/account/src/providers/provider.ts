@@ -866,6 +866,13 @@ Supported fuel-core version: ${supportedVersion}.`
         `The transaction exceeds the maximum allowed number of outputs. Tx outputs: ${tx.outputs.length}, max outputs: ${maxOutputs}`
       );
     }
+
+    if (tx.hasBurnableAssets()) {
+      throw new FuelError(
+        ErrorCode.ASSET_BURN_DETECTED,
+        'Asset burn detected.\nAdd relevant coin change outputs to the transaction, or enable asset burn in the transaction request (`request.enableBurn()`).'
+      );
+    }
   }
 
   /**

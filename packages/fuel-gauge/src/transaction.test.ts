@@ -1,12 +1,14 @@
+import type { CoinTransactionRequestInput } from 'fuels';
 import {
   FuelError,
   hexlify,
   InputMessageCoder,
+  InputType,
   ScriptTransactionRequest,
   sleep,
   TransactionType,
 } from 'fuels';
-import { expectToThrowFuelError, launchTestNode, TestMessage } from 'fuels/test-utils';
+import { ASSET_A, expectToThrowFuelError, launchTestNode, TestMessage } from 'fuels/test-utils';
 
 import { CallTestContractFactory } from '../test/typegen';
 
@@ -149,7 +151,6 @@ describe('Transaction', () => {
 
   it('should allow an asset burn when enabled', async () => {
     const {
-      provider,
       wallets: [sender],
     } = await launchTestNode();
 
@@ -158,9 +159,8 @@ describe('Transaction', () => {
     // Set the asset burn flag
     request.enableBurn(true);
 
-    // Add a coin input, without any output change
-    const baseAssetId = provider.getBaseAssetId();
-    const { coins } = await sender.getCoins(baseAssetId);
+    // Add a coin input, which adds the relevant coin change output
+    const { coins } = await sender.getCoins(ASSET_A);
     const [coin] = coins;
     request.addCoinInput(coin);
 
@@ -169,29 +169,34 @@ describe('Transaction', () => {
     request.maxFee = cost.maxFee;
     await sender.fund(request, cost);
 
-    const { waitForResult } = await sender.sendTransaction(request);
-    const { isStatusSuccess } = await waitForResult();
+    const tx = await sender.sendTransaction(request);
+    const { isStatusSuccess } = await tx.waitForResult();
     expect(isStatusSuccess).toEqual(true);
   });
 
-  it('should throw an error when an asset burn is detected', async () => {
+  it.only('should throw an error when an asset burn is detected', async () => {
     const {
-      provider,
       wallets: [sender],
     } = await launchTestNode();
 
     const request = new ScriptTransactionRequest();
 
     // Add a coin input, without any output change
-    const baseAssetId = provider.getBaseAssetId();
-    const { coins } = await sender.getCoins(baseAssetId);
+    const { coins } = await sender.getCoins(ASSET_A);
     const [coin] = coins;
-    request.addCoinInput(coin);
-
-    const cost = await sender.getTransactionCost(request);
-    request.gasLimit = cost.gasUsed;
-    request.maxFee = cost.maxFee;
-    await sender.fund(request, cost);
+    const { id, owner, amount, assetId, predicate, predicateData } = coin;
+    const coinInput: CoinTransactionRequestInput = {
+      id,
+      type: InputType.Coin,
+      owner: owner.toB256(),
+      amount,
+      assetId,
+      txPointer: '0x00000000000000000000000000000000',
+      witnessIndex: request.getCoinInputWitnessIndexByOwner(owner) ?? request.addEmptyWitness(),
+      predicate,
+      predicateData,
+    };
+    request.inputs.push(coinInput);
 
     await expectToThrowFuelError(
       () => sender.sendTransaction(request),

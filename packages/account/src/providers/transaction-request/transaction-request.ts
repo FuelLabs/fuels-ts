@@ -118,6 +118,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   outputs: TransactionRequestOutput[] = [];
   /** List of witnesses */
   witnesses: TransactionRequestWitness[] = [];
+  /** Whether the transaction request should enable asset burn */
+  burnEnabled: boolean = false;
 
   /**
    * Constructor for initializing a base transaction request.
@@ -708,5 +710,31 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
   byteLength(): number {
     return this.toTransactionBytes().byteLength;
+  }
+
+  /**
+   * Enables asset burn for the transaction request.
+   *
+   * @param burnEnabled - Whether the transaction request should enable asset burn.
+   * @returns This transaction request.
+   */
+  enableBurn(burnEnabled: boolean = true): this {
+    this.burnEnabled = burnEnabled;
+    return this;
+  }
+
+  hasBurnableAssets(): boolean {
+    if (this.burnEnabled) {
+      return false;
+    }
+
+    const coinInputs = new Set(this.getCoinInputs().map((input) => input.assetId));
+    const changeOutputs = new Set(
+      this.outputs
+        .filter((output) => output.type === OutputType.Change)
+        .map((output) => output.assetId)
+    );
+    const difference = new Set([...coinInputs].filter((x) => !changeOutputs.has(x)));
+    return difference.size > 0;
   }
 }

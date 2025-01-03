@@ -1,11 +1,11 @@
-import { Address } from '@fuel-ts/address';
+import { Address, getRandomB256 } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes, randomUUID } from '@fuel-ts/crypto';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
-import { InputType, ReceiptType } from '@fuel-ts/transactions';
+import { InputType, OutputType, ReceiptType } from '@fuel-ts/transactions';
 import { DateTime, arrayify, sleep } from '@fuel-ts/utils';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import { versions } from '@fuel-ts/versions';
@@ -34,7 +34,10 @@ import Provider, {
 } from './provider';
 import type { ExcludeResourcesOption } from './resource';
 import { isCoin } from './resource';
-import type { CoinTransactionRequestInput } from './transaction-request';
+import type {
+  ChangeTransactionRequestOutput,
+  CoinTransactionRequestInput,
+} from './transaction-request';
 import { CreateTransactionRequest, ScriptTransactionRequest } from './transaction-request';
 import { TransactionResponse } from './transaction-response';
 import type { SubmittedStatus } from './transaction-summary/types';
@@ -325,17 +328,25 @@ describe('Provider', () => {
   it('can call()', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
+    const owner = getRandomB256();
     const baseAssetId = provider.getBaseAssetId();
 
     const CoinInputs: CoinTransactionRequestInput[] = [
       {
         type: InputType.Coin,
         id: '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
-        owner: baseAssetId,
+        owner,
         assetId: baseAssetId,
         txPointer: '0x00000000000000000000000000000000',
         amount: 500_000,
         witnessIndex: 0,
+      },
+    ];
+    const ChangeOutputs: ChangeTransactionRequestOutput[] = [
+      {
+        type: OutputType.Change,
+        assetId: baseAssetId,
+        to: owner,
       },
     ];
     const transactionRequest = new ScriptTransactionRequest({
@@ -352,6 +363,7 @@ describe('Provider', () => {
         arrayify('0x504000ca504400ba3341100024040000'),
       scriptData: randomBytes(32),
       inputs: CoinInputs,
+      outputs: ChangeOutputs,
       witnesses: ['0x'],
     });
 

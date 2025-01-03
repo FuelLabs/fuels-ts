@@ -6,6 +6,10 @@ import { TransactionType, UpgradePurposeTypeEnum } from '@fuel-ts/transactions';
 import { concat, hexlify } from '@fuel-ts/utils';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 
+import {
+  SCRIPT_TX_COIN_REQUEST_INPUT,
+  SCRIPT_TX_COIN_REQUEST_OUTPUT_CHANGE,
+} from '../../../test/fixtures/transaction-request';
 import { WalletUnlocked } from '../../wallet';
 import type { Coin } from '../coin';
 import type { CoinQuantity } from '../coin-quantity';
@@ -290,5 +294,34 @@ describe('transactionRequestify', () => {
     expect(txRequest.subsection).toEqual(txRequestLike.subsection);
     expect(txRequest.witnessIndex).toEqual(txRequestLike.witnessIndex);
     expect(txRequest.type).toEqual(txRequestLike.type);
+  });
+
+  it('should have burnable assets [single input, no change]', () => {
+    const txRequest = new ScriptTransactionRequest();
+    const hasBurnableAssets = true;
+
+    txRequest.inputs.push(SCRIPT_TX_COIN_REQUEST_INPUT);
+
+    expect(txRequest.hasBurnableAssets()).toEqual(hasBurnableAssets);
+  });
+
+  it('should not have burnable assets [single input, single change]', () => {
+    const txRequest = new ScriptTransactionRequest();
+    const hasBurnableAssets = false;
+
+    txRequest.inputs.push(SCRIPT_TX_COIN_REQUEST_INPUT);
+    txRequest.outputs.push(SCRIPT_TX_COIN_REQUEST_OUTPUT_CHANGE);
+
+    expect(txRequest.hasBurnableAssets()).toEqual(hasBurnableAssets);
+  });
+
+  it('should not have burnable assets [single input, burn asset enabled]', () => {
+    const txRequest = new ScriptTransactionRequest();
+    const hasBurnableAssets = false;
+
+    txRequest.enableBurn(true);
+    txRequest.inputs.push(SCRIPT_TX_COIN_REQUEST_INPUT);
+
+    expect(txRequest.hasBurnableAssets()).toEqual(hasBurnableAssets);
   });
 });
