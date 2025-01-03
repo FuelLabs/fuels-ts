@@ -24,6 +24,12 @@ When an [`Account`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_accoun
 
 It could be caused during the deployments of contracts when an account is required to sign the transaction. This can be resolved by following the deployment guide [here](../contracts/deploying-contracts.md).
 
+### `ASSET_BURN_DETECTED`
+
+When you are trying to send a transaction that will result in an asset burn.
+
+Add relevant coin change outputs to the transaction, or [enable asset burn](#TODO) in the transaction request.
+
 ### `CONFIG_FILE_NOT_FOUND`
 
 When a configuration file is not found. This could either be a `fuels.config.[ts,js,mjs,cjs]` file or a TOML file.

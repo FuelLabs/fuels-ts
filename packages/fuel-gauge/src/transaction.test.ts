@@ -1,5 +1,12 @@
-import { hexlify, InputMessageCoder, sleep, TransactionType } from 'fuels';
-import { launchTestNode, TestMessage } from 'fuels/test-utils';
+import {
+  FuelError,
+  hexlify,
+  InputMessageCoder,
+  ScriptTransactionRequest,
+  sleep,
+  TransactionType,
+} from 'fuels';
+import { expectToThrowFuelError, launchTestNode, TestMessage } from 'fuels/test-utils';
 
 import { CallTestContractFactory } from '../test/typegen';
 
@@ -138,5 +145,60 @@ describe('Transaction', () => {
 
     expect(isStatusSuccess).toBeTruthy();
     expect(status.state).toBe('SPENT');
+  });
+
+  it('should allow an asset burn when enabled', async () => {
+    const {
+      provider,
+      wallets: [sender],
+    } = await launchTestNode();
+
+    const request = new ScriptTransactionRequest();
+
+    // Set the asset burn flag
+    request.enableBurn(true);
+
+    // Add a coin input, without any output change
+    const baseAssetId = provider.getBaseAssetId();
+    const { coins } = await sender.getCoins(baseAssetId);
+    const [coin] = coins;
+    request.addCoinInput(coin);
+
+    const cost = await sender.getTransactionCost(request);
+    request.gasLimit = cost.gasUsed;
+    request.maxFee = cost.maxFee;
+    await sender.fund(request, cost);
+
+    const { waitForResult } = await sender.sendTransaction(request);
+    const { isStatusSuccess } = await waitForResult();
+    expect(isStatusSuccess).toEqual(true);
+  });
+
+  it('should throw an error when an asset burn is detected', async () => {
+    const {
+      provider,
+      wallets: [sender],
+    } = await launchTestNode();
+
+    const request = new ScriptTransactionRequest();
+
+    // Add a coin input, without any output change
+    const baseAssetId = provider.getBaseAssetId();
+    const { coins } = await sender.getCoins(baseAssetId);
+    const [coin] = coins;
+    request.addCoinInput(coin);
+
+    const cost = await sender.getTransactionCost(request);
+    request.gasLimit = cost.gasUsed;
+    request.maxFee = cost.maxFee;
+    await sender.fund(request, cost);
+
+    await expectToThrowFuelError(
+      () => sender.sendTransaction(request),
+      new FuelError(
+        FuelError.CODES.ASSET_BURN_DETECTED,
+        'Asset burn detected.\nAdd relevant coin change outputs to the transaction, or enable asset burn in the transaction request (`request.enableBurn()`).'
+      )
+    );
   });
 });

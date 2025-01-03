@@ -85,6 +85,8 @@ export enum ErrorCode {
   FUNDS_TOO_LOW = 'funds-too-low',
   MAX_OUTPUTS_EXCEEDED = 'max-outputs-exceeded',
   MAX_COINS_REACHED = 'max-coins-reached',
+  ASSET_BURN_DETECTED = 'asset-burn-detected',
+
   // receipt
   INVALID_RECEIPT_TYPE = 'invalid-receipt-type',
 
