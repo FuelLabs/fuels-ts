@@ -1,5 +1,23 @@
 # create-fuels
 
+## 0.97.2
+
+### Patch Changes
+
+- efdf9a1: fix: specify versions in `create fuels` toolchain file
+- Updated dependencies [5ec254d]
+  - @fuel-ts/versions@0.97.2
+  - @fuel-ts/errors@0.97.2
+
+## 0.97.1
+
+### Patch Changes
+
+- Updated dependencies [27e8808]
+- Updated dependencies [165c49c]
+  - @fuel-ts/errors@0.97.1
+  - @fuel-ts/versions@0.97.1
+
 ## 0.97.0
 
 ### Patch Changes

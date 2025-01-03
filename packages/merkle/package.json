@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/merkle",
-  "version": "0.97.0",
+  "version": "0.97.2",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -25,7 +25,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@fuel-ts/hasher": "workspace:^",
+    "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/math": "workspace:*"
   }
 }

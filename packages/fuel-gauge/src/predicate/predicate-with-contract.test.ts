@@ -4,7 +4,7 @@ import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 import { CallTestContractFactory, TokenContractFactory } from '../../test/typegen/contracts';
 import { PredicateMainArgsStruct, PredicateTrue } from '../../test/typegen/predicates';
 
-import { fundPredicate } from './utils/predicate';
+import { fundAccount } from './utils/predicate';
 
 /**
  * @group node
@@ -28,7 +28,7 @@ describe('Predicate', () => {
 
       // Create a instance of the contract with the predicate as the caller Account
       const contractPredicate = new Contract(contract.id, contract.interface, predicate);
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundAccount(wallet, predicate, amountToPredicate);
 
       const { waitForResult } = await contractPredicate.functions
         .return_context_amount()
@@ -81,7 +81,7 @@ describe('Predicate', () => {
         ],
       });
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundAccount(wallet, predicate, amountToPredicate);
 
       // executing predicate to transfer resources to receiver
       const tx = await predicate.transfer(

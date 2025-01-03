@@ -1,5 +1,31 @@
 # @fuel-ts/abi-typegen
 
+## 0.97.2
+
+### Patch Changes
+
+- Updated dependencies [0970bc4]
+- Updated dependencies [5ec254d]
+- Updated dependencies [896bf5b]
+- Updated dependencies [ebe5ecd]
+  - @fuel-ts/utils@0.97.2
+  - @fuel-ts/versions@0.97.2
+  - @fuel-ts/errors@0.97.2
+  - @fuel-ts/interfaces@0.97.2
+
+## 0.97.1
+
+### Patch Changes
+
+- 2cef020: fix: typegen and storage slots integration
+- c904a98: chore: added noImplicitOverride option to config
+- Updated dependencies [27e8808]
+- Updated dependencies [165c49c]
+  - @fuel-ts/interfaces@0.97.1
+  - @fuel-ts/errors@0.97.1
+  - @fuel-ts/versions@0.97.1
+  - @fuel-ts/utils@0.97.1
+
 ## 0.97.0
 
 ### Patch Changes

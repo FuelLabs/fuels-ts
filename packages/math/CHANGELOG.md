@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.97.2
+
+### Patch Changes
+
+- @fuel-ts/errors@0.97.2
+
+## 0.97.1
+
+### Patch Changes
+
+- c904a98: chore: added noImplicitOverride option to config
+- Updated dependencies [27e8808]
+  - @fuel-ts/errors@0.97.1
+
 ## 0.97.0
 
 ### Patch Changes

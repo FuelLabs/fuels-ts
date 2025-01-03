@@ -1,12 +1,12 @@
 # Making Calls with Different Wallets or Providers
 
-This guide demonstrates how to make contract calls using different wallets and providers by passing either an [`Account`](../../api/Account/Account.md) or a [`Provider`](../../api/Account/Provider.md) to the contract on instantiation.
+This guide demonstrates how to make contract calls using different wallets and providers by passing either an [`Account`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.Account.html) or a [`Provider`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.Provider.html) to the contract on instantiation.
 
 ## Changing Wallets
 
 To change the wallet associated with a contract instance, assign a new wallet to the instance's `account` property. This allows you to make contract calls with different wallets in a concise manner:
 
-<<< @/../../docs-snippets2/src/contracts/utilities/using-different-wallet.ts#using-different-wallet{ts:line-numbers}
+<<< @./snippets/utilities/using-different-wallet.ts#using-different-wallet{ts:line-numbers}
 
 ## Changing Providers
 

@@ -1,6 +1,6 @@
 # Assets
 
-We export an array of [`Asset`](https://docs.fuel.network/docs/fuels-ts/account/#asset) objects, that can be useful when creating your dApp. The `Asset` object has useful metadata about the different assets that are available on blockchain networks (Fuel and Ethereum).
+We export an array of [`Asset`](https://fuels-ts-docs-api.vercel.app/types/_fuel_ts_account.Asset.html) objects, that can be useful when creating your dApp. The `Asset` object has useful metadata about the different assets that are available on blockchain networks (Fuel and Ethereum).
 
 Included assets such as:
 
@@ -9,6 +9,6 @@ Included assets such as:
 - USD Coin (USDC)
 - Wrapped ETH (WETH)
 
-The helper functions `getAssetFuel` and `getAssetEth` can be used to get an asset's details relative to each network. These return a combination of the asset, and network information (the return types are [`AssetFuel`](../../api/Account/index.md#assetfuel) and [`AssetEth`](../../api/Account/index.md#asseteth) respectively).
+The helper functions `getAssetFuel` and `getAssetEth` can be used to get an asset's details relative to each network. These return a combination of the asset, and network information (the return types are [`AssetFuel`](https://fuels-ts-docs-api.vercel.app/types/_fuel_ts_account.AssetFuel.html) and [`AssetEth`](https://fuels-ts-docs-api.vercel.app/types/_fuel_ts_account.AssetEth.html) respectively).
 
-<<< @/../../docs-snippets2/src/utilities/using-assets.ts#using-assets-1{ts:line-numbers}
+<<< @./snippets/using-assets.ts#using-assets-1{ts:line-numbers}

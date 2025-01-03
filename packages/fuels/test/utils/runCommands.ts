@@ -40,14 +40,17 @@ export function bootstrapProject(testFilepath: string) {
   cpSync(sampleWorkspaceDir, workspaceDir, { recursive: true });
 
   const contractsDir = join(workspaceDir, 'contracts');
+  const contractsBarDir = join(contractsDir, 'bar');
   const contractsFooDir = join(contractsDir, 'foo');
-  const scriptsDir = join(workspaceDir, 'scripts');
-  const predicateDir = join(workspaceDir, 'predicate');
   const fooContractMainPath = join(contractsDir, 'foo', 'src', 'main.sw');
   const upgradableContractPath = join(contractsDir, 'upgradable');
   const upgradableChunkedContractPath = join(contractsDir, 'upgradable-chunked');
 
+  const scriptsDir = join(workspaceDir, 'scripts');
+  const predicateDir = join(workspaceDir, 'predicates');
+
   const outputDir = join(root, 'output');
+  const outputContractsDir = join(outputDir, 'contracts');
   const contractsJsonPath = join(outputDir, 'contract-ids.json');
   const fooContractFactoryPath = join(outputDir, 'contracts', 'factories', 'FooBarAbi.ts');
 
@@ -58,7 +61,11 @@ export function bootstrapProject(testFilepath: string) {
     root,
     workspaceDir,
     contractsDir,
+    outputContractsDir,
+    contractsBarDir,
     contractsFooDir,
+    upgradableContractPath,
+    upgradableChunkedContractPath,
     scriptsDir,
     predicateDir,
     fooContractMainPath,
@@ -68,8 +75,6 @@ export function bootstrapProject(testFilepath: string) {
     fooContractFactoryPath,
     forcPath,
     fuelCorePath,
-    upgradableContractPath,
-    upgradableChunkedContractPath,
   };
 }
 
@@ -88,9 +93,9 @@ export type BaseParams = {
 
 export type InitParams = BaseParams & {
   workspace?: string;
-  contracts?: string;
-  scripts?: string;
-  predicates?: string;
+  contracts?: string | string[];
+  scripts?: string | string[];
+  predicates?: string | string[];
   output: string;
   forcPath?: string;
   fuelCorePath?: string;
@@ -117,8 +122,10 @@ export async function runInit(params: InitParams) {
     privateKey,
   } = params;
 
-  const flag = (flags: (string | undefined)[], value?: string | boolean): string[] =>
-    value ? (flags as string[]) : [];
+  const flag = (
+    flags: (string | string[] | undefined)[],
+    value?: string | string[] | boolean
+  ): string[] => (value ? (flags.flat() as string[]) : []);
 
   const flags = [
     flag(['--path', root], root),

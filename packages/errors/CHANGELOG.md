@@ -1,5 +1,20 @@
 # @fuel-ts/errors
 
+## 0.97.2
+
+### Patch Changes
+
+- Updated dependencies [5ec254d]
+  - @fuel-ts/versions@0.97.2
+
+## 0.97.1
+
+### Patch Changes
+
+- 27e8808: chore: deprecate bech32 addresses
+- Updated dependencies [165c49c]
+  - @fuel-ts/versions@0.97.1
+
 ## 0.97.0
 
 ### Patch Changes

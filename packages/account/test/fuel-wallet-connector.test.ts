@@ -12,7 +12,7 @@ import type { Network, ProviderOptions, SelectNetworkArguments } from '../src';
 import { Fuel } from '../src/connectors/fuel';
 import { FuelConnectorEventType } from '../src/connectors/types';
 import { Provider, TransactionStatus } from '../src/providers';
-import { setupTestProviderAndWallets } from '../src/test-utils';
+import { setupTestProviderAndWallets, TestMessage } from '../src/test-utils';
 import { Wallet } from '../src/wallet';
 
 import { MockConnector } from './fixtures/mocked-connector';
@@ -364,7 +364,28 @@ describe('Fuel Connector', () => {
   });
 
   it('should ensure getWallet return an wallet', async () => {
-    using launched = await setupTestProviderAndWallets();
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        snapshotConfig: {
+          stateConfig: {
+            messages: [
+              new TestMessage({
+                sender: Address.fromB256(
+                  '0xc43454aa38dd91f88109a4b7aef5efb96ce34e3f24992fe0f81d233ca686f80f'
+                ),
+                recipient: Address.fromB256(
+                  '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba'
+                ),
+                nonce: '0101010101010101010101010101010101010101010101010101010101010101',
+                amount: 100_000,
+                data: '',
+                da_height: 0,
+              }).toChainMessage(),
+            ],
+          },
+        },
+      },
+    });
     const { provider } = launched;
 
     const wallets = [

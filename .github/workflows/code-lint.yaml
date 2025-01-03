@@ -46,5 +46,5 @@ jobs:
       - name: Lint
         run: pnpm lint
 
-      - name: Lint markdown files
+      - name: Check markdown files links
         run: pnpm lint:md-links

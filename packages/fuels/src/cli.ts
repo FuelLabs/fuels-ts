@@ -46,16 +46,21 @@ export const configureCli = () => {
 
   let command: Command;
 
-  const desc = `Relative path/globals to `;
-  const arg = `<path|global>`;
-
   (command = program.command(Commands.init))
     .description('Create a sample `fuel.config.ts` file')
     .addOption(pathOption)
     .option('-w, --workspace <path>', 'Relative dir path to Forc workspace')
-    .addOption(new Option(`-c, --contracts ${arg}`, `${desc} Contracts`).conflicts('workspace'))
-    .addOption(new Option(`-s, --scripts ${arg}`, `${desc} Scripts`).conflicts('workspace'))
-    .addOption(new Option(`-p, --predicates ${arg}`, `${desc} Predicates`).conflicts('workspace'))
+    .addOption(
+      new Option(`-c, --contracts [paths...]`, `Relative paths to Contracts`).conflicts('workspace')
+    )
+    .addOption(
+      new Option(`-s, --scripts [paths...]`, `Relative paths to Scripts`).conflicts('workspace')
+    )
+    .addOption(
+      new Option(`-p, --predicates [paths...]`, `Relative paths to Predicates`).conflicts(
+        'workspace'
+      )
+    )
     .requiredOption('-o, --output <path>', 'Relative dir path for Typescript generation output')
     .option('--forc-path <path>', 'Path to the `forc` binary')
     .option('--fuel-core-path <path>', 'Path to the `fuel-core` binary')
@@ -67,12 +72,12 @@ export const configureCli = () => {
     .action(withProgram(command, Commands.init, init));
 
   (command = program.command(Commands.dev))
-    .description('Start a Fuel node and run build + deploy on every file change')
+    .description('Start a Fuel node with hot-reload capabilities')
     .addOption(pathOption)
     .action(withConfig(command, Commands.dev, dev));
 
   (command = program.command(Commands.node))
-    .description('Start a Fuel node')
+    .description('Start a Fuel node using project configs')
     .addOption(pathOption)
     .action(withConfig(command, Commands.node, node));
 

@@ -1,4 +1,3 @@
-import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { BN } from '@fuel-ts/math';
 import debug from 'debug';
 import type { MockInstance } from 'vitest';
@@ -96,25 +95,6 @@ describe('Logger Tests', () => {
 
   it('should return undefined for null input using formatter b', () => {
     const formatted = debug.formatters.b(null);
-    expect(formatted).toBe('undefined');
-  });
-
-  it('should format AbstractAddress to bech32 string using formatter c', () => {
-    const mockAddress: AbstractAddress = {
-      toJSON: () => '',
-      toString: () => '0x000000000000000000000000000000000000000000000000000000000000002a',
-      toAddress: () => 'fuel1xyzabc123',
-      toB256: () => '',
-      toHexString: () => '',
-      toBytes: () => new Uint8Array(),
-      equals: () => false,
-    };
-    const formatted = debug.formatters.c(mockAddress);
-    expect(formatted).toBe('fuel1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq4qvpkv30');
-  });
-
-  it('should return undefined for null input using formatter c', () => {
-    const formatted = debug.formatters.c(null);
     expect(formatted).toBe('undefined');
   });
 

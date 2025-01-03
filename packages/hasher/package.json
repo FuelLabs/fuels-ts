@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/hasher",
-  "version": "0.97.0",
+  "version": "0.97.2",
   "description": "Sha256 hash utility for Fuel",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -26,8 +26,8 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@fuel-ts/crypto": "workspace:*",
-    "@fuel-ts/interfaces": "workspace:^",
+    "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
-    "@noble/hashes": "^1.5.0"
+    "@noble/hashes": "1.5.0"
   }
 }
