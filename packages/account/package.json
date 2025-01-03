@@ -15,11 +15,6 @@
       "require": "./dist/index.js",
       "import": "./dist/index.mjs"
     },
-    "./configs": {
-      "types": "./dist/configs.d.ts",
-      "require": "./dist/configs.js",
-      "import": "./dist/configs.mjs"
-    },
     "./test-utils": {
       "types": "./dist/test-utils.d.ts",
       "require": "./dist/test-utils.js",
@@ -28,9 +23,6 @@
   },
   "typesVersions": {
     "*": {
-      "configs": [
-        "./dist/configs.d.ts"
-      ],
       "test-utils": [
         "./dist/test-utils.d.ts"
       ]
