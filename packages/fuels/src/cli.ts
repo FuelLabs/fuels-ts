@@ -65,6 +65,10 @@ export const configureCli = () => {
     .option('--forc-path <path>', 'Path to the `forc` binary')
     .option('--fuel-core-path <path>', 'Path to the `fuel-core` binary')
     .option('--auto-start-fuel-core', 'Auto-starts a `fuel-core` node during `dev` command')
+    .option(
+      '--fuel-core-port <port>',
+      'Port to use when starting a local `fuel-core` node for dev mode'
+    )
     .action(withProgram(command, Commands.init, init));
 
   (command = program.command(Commands.dev))
