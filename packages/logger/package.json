@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/logger",
-  "version": "0.97.0",
+  "version": "0.97.2",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "description": "A logger for the Fuel-TS ecosystem",
   "main": "dist/index.js",
@@ -30,13 +30,13 @@
     "dist"
   ],
   "dependencies": {
-    "debug": "^4.3.7",
+    "debug": "4.3.7",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*"
   },
   "devDependencies": {
-    "@types/debug": "^4.1.12"
+    "@types/debug": "4.1.12"
   },
   "license": "Apache-2.0"
 }

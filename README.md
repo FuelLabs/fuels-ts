@@ -1,92 +1,107 @@
-<picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/FuelLabs/fuels-ts/master/apps/docs/src/public/fuels-ts-logo-dark.png">
-    <img alt="Fuels-ts SDK logo" width="400px" src="https://raw.githubusercontent.com/FuelLabs/fuels-ts/master/apps/docs/src/public/fuels-ts-logo-light.png">
-</picture>
+# fuels-ts
 
-**fuels-ts** is a library for interacting with **Fuel v2**.
+Typescript SDK for Fuel.
 
 [![test](https://github.com/FuelLabs/fuels-ts/actions/workflows/test.yaml/badge.svg)](https://github.com/FuelLabs/fuels-ts/actions/workflows/test.yaml)
-[![npm](https://img.shields.io/npm/v/fuels)](https://www.npmjs.com/package/fuels)
 [![docs](https://img.shields.io/badge/docs-fuels.ts-brightgreen.svg?style=flat)](https://docs.fuel.network/docs/fuels-ts/)
+[![npm](https://img.shields.io/npm/v/fuels)](https://www.npmjs.com/package/fuels)
 [![discord](https://img.shields.io/badge/chat%20on-discord-orange?&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/xfpK4Pe)
 
-# Resources
+# Install ([docs](https://docs.fuel.network/docs/fuels-ts/getting-started/installation))
 
-The [documentation](https://docs.fuel.network/docs/fuels-ts/) site is your main stop for resources.
-
-- [Quickstart](https://docs.fuel.network/docs/intro/quickstart-contract/)
-- [Documentation](https://docs.fuel.network/docs/fuels-ts/)
-  - [Wallets](https://docs.fuel.network/docs/fuels-ts/wallets/)
-  - [Contracts](https://docs.fuel.network/docs/fuels-ts/contracts/)
-  - [Scripts](https://docs.fuel.network/docs/fuels-ts/scripts/)
-  - [Predicates](https://docs.fuel.network/docs/fuels-ts/predicates/)
-  - [ABI Typegen](https://docs.fuel.network/docs/fuels-ts/fuels-cli/abi-typegen/)
-- [Contributing](https://github.com/FuelLabs/fuels-ts/blob/master/CONTRIBUTING.md)
-- [The Fuel Forum](https://forum.fuel.network/)
-- [The Fuel Ecosystem](#the-fuel-ecosystem)
-
-# Install
-
-```sh
+```console
 npm install fuels --save
 ```
 
-> If you are a Windows user, you will need to be running Windows Subsystem for Linux (WSL) to install and use the Fuel toolchain, including the TypeScript SDK. We don't support Windows natively at this time.
+# Connect ([docs](https://docs.fuel.network/docs/fuels-ts/getting-started/connecting-to-the-network/))
 
-# Import
-
-Simple example usages.
+| Network   | URL                                                                                                              |
+| --------- | --------------------------------------------------------------------------------------------------------------- |
+| Mainnet   | `https://mainnet.fuel.network/v1/graphql`                                                                       |
+| Testnet   | `https://testnet.fuel.network/v1/graphql`                                                                       |
+| Localhost | [Running a local Fuel node](https://docs.fuel.network/docs/fuels-ts/getting-started/running-a-local-fuel-node/) |
 
 ```ts
-import { Wallet } from "fuels";
+import { Provider } from 'fuels';
 
-// Random Wallet
-console.log(Wallet.generate());
+const NETWORK_URL = 'https://mainnet.fuel.network/v1/graphql';
 
-// Using privateKey Wallet
-console.log(new Wallet("0x0000...0000"));
+const provider = await Provider.create(NETWORK_URL);
+
+const chainId = provider.getChainId();
+const gasConfig = provider.getGasConfig();
+const baseAssetId = provider.getBaseAssetId();
+
+console.log({ chainId, gasConfig, baseAssetId });
 ```
 
-# CLI
-
-Fuels include some utility commands via built-in CLI tool.
-
-Check the [docs](https://docs.fuel.network/docs/fuels-ts/) for more info.
+# Create a new dApp ([docs](https://docs.fuel.network/docs/fuels-ts/creating-a-fuel-dapp/))
 
 ```console
-$ npm add fuels
-$ npx fuels --help
-Usage: fuels [options] [command]
+$ npm create fuels
 
-Options:
-  -D, --debug        Enables verbose logging (default: false)
-  -S, --silent       Omit output messages (default: false)
-  -v, --version      Output the version number
-  -h, --help         Display help
+◇ What is the name of your project? #
+│ my-fuel-project
+└
 
-Commands:
-  init [options]     Create a sample `fuel.config.ts` file
-  node [options]     Start a Fuel node
-  dev [options]      Start a Fuel node and run build + deploy on every file change
-  build [options]    Build Sway programs and generate Typescript for them
-  deploy [options]   Deploy contracts to the Fuel network
-  typegen [options]  Generate Typescript from Sway ABI JSON files
-  versions           Check for version incompatibilities
-  help [command]     Display help for command
+⚡️ Success! Created a fullstack Fuel dapp at: my-fuel-project.
 ```
 
-# The Fuel Ecosystem
+# Enjoy the `fuels` CLI ([docs](https://docs.fuel.network/docs/fuels-ts/fuels-cli/))
 
-Learn more about the Fuel Ecosystem.
+```console
+$ npm install fuels --save
+$ npm fuels --help
 
-- [🌴 Sway](https://docs.fuel.network/docs/sway/) — The new language, empowering everyone to build reliable and efficient smart contracts
-- [🧰 Forc](https://docs.fuel.network/docs/forc/) — The Fuel toolbox: _Build, deploy and manage your sway projects_
-- [⚙️ Fuel Core](https://github.com/FuelLabs/fuel-core) — The new FuelVM, a blazingly fast blockchain VM
-- [🔗 Fuel Specs](https://github.com/FuelLabs/fuel-specs) — The Fuel protocol specifications
-- [💼 Fuels Wallet](https://github.com/FuelLabs/fuels-wallet) — The Official Fuels Wallet
-- [🦀 Rust SDK](https://github.com/FuelLabs/fuels-rs) — A robust SDK in rust
-- [⚡ Fuel Network](https://fuel.network/) — The project
-- [📚 The Fuel Forum](https://forum.fuel.network/) — Ask questions, get updates, and contribute to a modular future
+Commands:
+  init [options]      Create a sample `fuel.config.ts` file
+  build [options]     Build Sway programs and generate Typescript for them
+  deploy [options]    Deploy contracts to the Fuel network
+  dev [options]       Start a Fuel node with hot-reload capabilities
+  node [options]      Start a Fuel node using project configs
+  typegen [options]   Generate Typescript from Sway ABI JSON files
+  versions [options]  Check for version incompatibilities
+  help [command]      Display help for command
+```
+
+In-depth docs:
+- [`fuels init`](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands#fuels-init) — Creates a new `fuels.config.ts` file
+- [`fuels build`](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands#fuels-build) — Build `forc` workspace and generate Typescript types for everything
+- [`fuels deploy`](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands#fuels-deploy) — Deploy workspace contracts and save their IDs to JSON file
+- [`fuels dev`](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands#fuels-dev) — Start a Fuel node with hot-reload capabilities
+
+
+# Official Docs
+
+- Install The Fuel Toolchain — https://docs.fuel.network/guides/installation/
+---
+- Typescript SDK — https://docs.fuel.network/docs/fuels-ts
+- Fuel Wallet SDK — https://docs.fuel.network/docs/wallet
+- Rust SDK — https://docs.fuel.network/docs/fuels-rs
+- GraphQL Playground — https://docs.fuel.network/docs/graphql
+---
+- Forc — https://docs.fuel.network/docs/forc
+- Sway — https://docs.fuel.network/docs/sway
+- Fuel Core — https://github.com/FuelLabs/fuel-core
+- Fuel VM — https://docs.fuel.network/docs/specs/fuel-vm
+- Fuel Specs — https://docs.fuel.network/docs/specs
+
+# Apps & Ecosystem
+
+- Fuel Bridge — https://app.fuel.network/bridge
+- Block Explorer — https://app.fuel.network
+- Ecosystem Apps — https://app.fuel.network/ecosystem
+
+# Get in Touch
+
+- `Forum` — https://forum.fuel.network
+- `Discord` — https://discord.gg/xfpK4Pe
+
+
+# Contribute
+
+- [./CONTRIBUTING.md](https://github.com/FuelLabs/fuels-ts/blob/master/CONTRIBUTING.md)
+
 
 # License
 

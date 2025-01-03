@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/abi-typegen",
-  "version": "0.97.0",
+  "version": "0.97.2",
   "description": "Generates Typescript definitions from Sway ABI Json files",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -53,19 +53,19 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@fuel-ts/errors": "workspace:*",
-    "@fuel-ts/interfaces": "workspace:^",
+    "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
     "commander": "12.1.0",
-    "glob": "^10.4.5",
-    "handlebars": "^4.7.8",
-    "mkdirp": "^3.0.1",
-    "ramda": "^0.30.1",
-    "rimraf": "^5.0.10"
+    "glob": "10.4.5",
+    "handlebars": "4.7.8",
+    "mkdirp": "3.0.1",
+    "ramda": "0.30.1",
+    "rimraf": "5.0.10"
   },
   "devDependencies": {
     "@internal/forc": "workspace:*",
-    "@types/ramda": "^0.30.2",
-    "@types/rimraf": "^3.0.2"
+    "@types/ramda": "0.30.2",
+    "@types/rimraf": "3.0.2"
   }
 }

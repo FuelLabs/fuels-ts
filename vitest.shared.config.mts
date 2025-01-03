@@ -1,4 +1,3 @@
-import codspeedPlugin from "@codspeed/vitest-plugin";
 import { loadEnv } from "vite";
 import json5Plugin from "vite-plugin-json5";
 import plainText from "vite-plugin-plain-text";
@@ -12,11 +11,11 @@ export default defineConfig({
     plainText("**/*.hbs", {
       namedExport: false,
     }),
-    codspeedPlugin(),
   ],
   esbuild: { target: "es2022" },
   test: {
     globalSetup: ["vitest.global-setup.ts"],
+    setupFiles: ["./vitest.setup-files.ts"],
     coverage: {
       enabled: true,
       provider: "istanbul",

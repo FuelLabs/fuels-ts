@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/versions",
-  "version": "0.97.0",
+  "version": "0.97.2",
   "description": "Validates supported versions of the Fuel toolchain",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -42,9 +42,9 @@
   "license": "Apache-2.0",
   "dependencies": {
     "chalk": "4",
-    "cli-table": "^0.3.11"
+    "cli-table": "0.3.11"
   },
   "devDependencies": {
-    "@types/cli-table": "^0.3.4"
+    "@types/cli-table": "0.3.4"
   }
 }

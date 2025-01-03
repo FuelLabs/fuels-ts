@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/transactions",
-  "version": "0.97.0",
+  "version": "0.97.2",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -40,8 +40,8 @@
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
-    "@fuel-ts/hasher": "workspace:^",
-    "@fuel-ts/interfaces": "workspace:^",
+    "@fuel-ts/hasher": "workspace:*",
+    "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/utils": "workspace:*"
   }

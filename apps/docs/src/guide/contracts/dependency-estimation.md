@@ -4,6 +4,6 @@ In [variable outputs](./variable-outputs.md), we mention that a contract call mi
 
 However, by default the SDK always automatically estimates these dependencies and double-checks if everything is in order whenever you invoke a contract function or attempt to send a transaction.
 
-The SDK uses the [Provider.estimateTxDependencies](../../api/Account/Provider.md#estimatetxdependencies) method to set any missing dependencies identified during the estimation process. This requires simulating the transaction a few times in the background.
+The SDK uses the [Provider.estimateTxDependencies](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.Provider.html#estimateTxDependencies) method to set any missing dependencies identified during the estimation process. This requires simulating the transaction a few times in the background.
 
 While relying on the SDK's automatic estimation is a decent default behavior, we recommend manually specifying the dependencies if they are known in advance to avoid the performance impact of the estimation process.

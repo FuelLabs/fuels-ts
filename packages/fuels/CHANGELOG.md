@@ -1,5 +1,66 @@
 # Change Log
 
+## 0.97.2
+
+### Patch Changes
+
+- ebe5ecd: chore: update internally used chain config
+- Updated dependencies [0970bc4]
+- Updated dependencies [5ec254d]
+- Updated dependencies [896bf5b]
+- Updated dependencies [ebe5ecd]
+  - @fuel-ts/utils@0.97.2
+  - @fuel-ts/versions@0.97.2
+  - @fuel-ts/contract@0.97.2
+  - @fuel-ts/account@0.97.2
+  - @fuel-ts/abi-coder@0.97.2
+  - @fuel-ts/abi-typegen@0.97.2
+  - @fuel-ts/address@0.97.2
+  - @fuel-ts/crypto@0.97.2
+  - @fuel-ts/hasher@0.97.2
+  - @fuel-ts/program@0.97.2
+  - @fuel-ts/recipes@0.97.2
+  - @fuel-ts/script@0.97.2
+  - @fuel-ts/transactions@0.97.2
+  - @fuel-ts/errors@0.97.2
+  - @fuel-ts/merkle@0.97.2
+  - @fuel-ts/math@0.97.2
+  - @fuel-ts/interfaces@0.97.2
+
+## 0.97.1
+
+### Patch Changes
+
+- 2cef020: fix: typegen and storage slots integration
+- Updated dependencies [2cef020]
+- Updated dependencies [260274a]
+- Updated dependencies [c904a98]
+- Updated dependencies [27e8808]
+- Updated dependencies [7390114]
+- Updated dependencies [3a178b0]
+- Updated dependencies [165c49c]
+- Updated dependencies [ef94263]
+- Updated dependencies [283a684]
+- Updated dependencies [6ab3e6b]
+- Updated dependencies [4131e74]
+  - @fuel-ts/abi-typegen@0.97.1
+  - @fuel-ts/contract@0.97.1
+  - @fuel-ts/account@0.97.1
+  - @fuel-ts/abi-coder@0.97.1
+  - @fuel-ts/address@0.97.1
+  - @fuel-ts/program@0.97.1
+  - @fuel-ts/script@0.97.1
+  - @fuel-ts/math@0.97.1
+  - @fuel-ts/interfaces@0.97.1
+  - @fuel-ts/errors@0.97.1
+  - @fuel-ts/versions@0.97.1
+  - @fuel-ts/recipes@0.97.1
+  - @fuel-ts/transactions@0.97.1
+  - @fuel-ts/crypto@0.97.1
+  - @fuel-ts/merkle@0.97.1
+  - @fuel-ts/utils@0.97.1
+  - @fuel-ts/hasher@0.97.1
+
 ## 0.97.0
 
 ### Minor Changes

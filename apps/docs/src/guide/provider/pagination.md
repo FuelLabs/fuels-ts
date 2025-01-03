@@ -11,7 +11,7 @@ The pagination arguments object is used to specify the range of data you want to
 - `before`: A cursor pointing to a position before which you want to retrieve items.
 - `last`: The number of items to retrieve before the specified cursor. This is used in conjunction with the `before` argument.
 
-<<< @/../../docs-snippets2/src/provider/pagination.ts#pagination-args{ts:line-numbers}
+<<< @./snippets/pagination.ts#pagination-args{ts:line-numbers}
 
 ## Page Info
 
@@ -22,7 +22,7 @@ The `pageInfo` object is included in the GraphQL response for requests that supp
 - `startCursor`: A cursor representing the first item in the current set of results. It should be used as the `before` argument in subsequent queries to fetch the previous set of items.
 - `hasPreviousPage`: A boolean indicating whether there are more items available before the current set.
 
-<<< @/../../docs-snippets2/src/provider/pagination.ts#pagination-page-info{ts:line-numbers}
+<<< @./snippets/pagination.ts#pagination-page-info{ts:line-numbers}
 
 ## Using Pagination
 
@@ -36,13 +36,13 @@ One of the methods that supports pagination is the `getCoins` method. This metho
 
 Here is how you can use the `getCoins` method with pagination:
 
-<<< @/../../docs-snippets2/src/provider/pagination.ts#pagination-next-page{ts:line-numbers}
+<<< @./snippets/pagination.ts#pagination-next-page{ts:line-numbers}
 
 ### Navigating to the Previous Page
 
 You can also use the `paginationArgs` to navigate to the previous page of results:
 
-<<< @/../../docs-snippets2/src/provider/pagination.ts#pagination-previous-page{ts:line-numbers}
+<<< @./snippets/pagination.ts#pagination-previous-page{ts:line-numbers}
 
 ## Valid Combinations
 
@@ -50,16 +50,16 @@ You can also use the `paginationArgs` to navigate to the previous page of result
 
   Use `after` with `first` to retrieve items following a cursor.
 
-<<< @/../../docs-snippets2/src/provider/pagination.ts#pagination-forward-pagination{ts}
+<<< @./snippets/pagination.ts#pagination-forward-pagination{ts}
 
 - Backward Pagination:
 
   Use `before` with `last` to retrieve items preceding a cursor.
 
-<<< @/../../docs-snippets2/src/provider/pagination.ts#pagination-backward-pagination{ts}
+<<< @./snippets/pagination.ts#pagination-backward-pagination{ts}
 
 ## Default Behavior
 
 If neither `assetId` nor `paginationArgs` are provided, the `getCoins` method will default to the base asset ID and return the first 100 items:
 
-<<< @/../../docs-snippets2/src/provider/pagination.ts#pagination-default-args{ts:line-numbers}
+<<< @./snippets/pagination.ts#pagination-default-args{ts:line-numbers}

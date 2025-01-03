@@ -250,7 +250,7 @@ describe('Provider', () => {
     });
 
     // Spy on console.warn
-    const consoleWarnSpy = vi.spyOn(console, 'warn');
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     // Verify that only one transaction was returned (the known type)
     const transaction = await mockProvider.getTransaction('0x1234567890abcdef');
@@ -298,7 +298,7 @@ describe('Provider', () => {
     });
 
     // Spy on console.warn
-    const consoleWarnSpy = vi.spyOn(console, 'warn');
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     // Verify that only one transaction was returned (the known type)
     const { transactions } = await mockProvider.getTransactions();
@@ -382,7 +382,7 @@ describe('Provider', () => {
       {
         type: ReceiptType.ScriptResult,
         result: bn(0),
-        gasUsed: bn(159),
+        gasUsed: bn(127),
       },
     ];
 
@@ -448,7 +448,7 @@ describe('Provider', () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
-    const { cleanup, url } = await launchNode({ port: '0' });
+    const { cleanup, url } = await launchNode({ port: '0', loggingEnabled: false });
 
     const spyFetchChainAndNodeInfo = vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
 
@@ -835,7 +835,7 @@ describe('Provider', () => {
         snapshotConfig: {
           chainConfig: {
             consensus_parameters: {
-              V1: {
+              V2: {
                 tx_params: {
                   V1: {
                     max_inputs: maxInputs,
@@ -916,7 +916,7 @@ describe('Provider', () => {
         snapshotConfig: {
           chainConfig: {
             consensus_parameters: {
-              V1: {
+              V2: {
                 tx_params: {
                   V1: {
                     max_outputs: maxOutputs,
@@ -1181,7 +1181,7 @@ describe('Provider', () => {
     const spy = vi.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
     spy.mockImplementationOnce(() => mock);
 
-    const consoleWarnSpy = vi.spyOn(console, 'warn');
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
@@ -1216,7 +1216,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     const spy = vi.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
     spy.mockImplementationOnce(() => mock);
 
-    const consoleWarnSpy = vi.spyOn(console, 'warn');
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
@@ -1865,7 +1865,19 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   test('getMessageByNonce', async () => {
-    using launched = await setupTestProviderAndWallets();
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        snapshotConfig: {
+          stateConfig: {
+            messages: [
+              new TestMessage({
+                nonce: '0x381de90750098776c71544527fd253412908dec3d07ce9a7367bd1ba975908a0',
+              }).toChainMessage(),
+            ],
+          },
+        },
+      },
+    });
     const { provider } = launched;
 
     const nonce = '0x381de90750098776c71544527fd253412908dec3d07ce9a7367bd1ba975908a0';

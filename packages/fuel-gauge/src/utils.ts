@@ -1,16 +1,20 @@
 import { calcRoot, constructTree, getProof } from '@fuel-ts/merkle';
 import { arrayify, chunkAndPadBytes, hexlify } from '@fuel-ts/utils';
-import type { DeployContractConfig } from 'fuels/test-utils';
+import type { DeployContractConfig, LaunchTestNodeOptions } from 'fuels/test-utils';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { STATE_TRANSITION_WASM_BYTECODE } from '../test/fixtures/chain-config';
+import { STATE_TRANSITION_BYTECODE } from '../test/fixtures/chain-config/state_transition_bytecode';
 
-export async function launchTestContract<T extends DeployContractConfig>(config: T) {
+export async function launchTestContract<T extends DeployContractConfig>(
+  config: T,
+  { nodeOptions }: Pick<LaunchTestNodeOptions<[T]>, 'nodeOptions'> = {}
+) {
   const {
     contracts: [contract],
     cleanup,
   } = await launchTestNode({
     contractsConfigs: [config],
+    nodeOptions,
   });
   return Object.assign(contract, {
     [Symbol.dispose]: cleanup,
@@ -18,9 +22,9 @@ export async function launchTestContract<T extends DeployContractConfig>(config:
 }
 
 export function subsectionFromBytecode() {
-  const subsectionSize = 192 * 1024;
+  const subsectionSize = 90 * 1024;
   const subsectionsChunk = chunkAndPadBytes(
-    arrayify(STATE_TRANSITION_WASM_BYTECODE),
+    arrayify(STATE_TRANSITION_BYTECODE),
     subsectionSize
   ).map(hexlify);
 

@@ -41,6 +41,10 @@ jobs:
       - name: Pretest
         run: pnpm pretest
 
+      - name: Install playwright dependencies
+        if: matrix.env.name == 'browser'
+        run: pnpm exec playwright install --with-deps --only-shell chromium
+
       - name: Run Tests - ${{ matrix.env.name }}
         run: pnpm test:${{ matrix.env.name }}
 
@@ -151,7 +155,7 @@ jobs:
           path: coverage/report
 
       - name: Download Master Coverage Artifact
-        uses: dawidd6/action-download-artifact@v6
+        uses: dawidd6/action-download-artifact@v7
         if: ${{ steps.findPr.outputs.number }}
         with:
           workflow: test.yaml

@@ -4,7 +4,7 @@ A transaction is a way of interacting with a Fuel blockchain and can include act
 
 Transferring assets is the most common transaction type and can be be executed by calling the `transfer` function from an account to a recipient address:
 
-<<< @/../../docs-snippets2/src/transactions/transaction.ts#transactions-1{ts:line-numbers}
+<<< @./snippets/transaction.ts#transactions-1{ts:line-numbers}
 
 Deploying and interacting with contracts are other common transactions. More information on this can be found in the [contracts guide](../contracts/index.md), either through the [contract deployment guide](../contracts/deploying-contracts.md) or the [contract interaction guide](../contracts/methods.md).
 
