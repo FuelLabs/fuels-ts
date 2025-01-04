@@ -37,12 +37,8 @@ transactionRequest.addCoinOutput(
   provider.getBaseAssetId()
 );
 
-const txCost = await predicate.getTransactionCost(transactionRequest);
-
-transactionRequest.gasLimit = txCost.gasUsed;
-transactionRequest.maxFee = txCost.maxFee;
-
-await predicate.fund(transactionRequest, txCost);
+// Estimate and fund the transaction
+await transactionRequest.autoCost(predicate);
 
 const result = await predicate.simulateTransaction(transactionRequest);
 
