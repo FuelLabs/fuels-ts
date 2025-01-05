@@ -21,8 +21,8 @@ await wallet.fund(txRequest, txCost);
 const txSignature = await wallet.signTransaction(txRequest);
 txRequest.updateWitnessByOwner(wallet.address, txSignature);
 
-// Submit the transaction and subscribe to it's result which includes
-// the processed transaction ID, it's status and receipts
+// Submit the transaction and subscribe to its result which includes
+// the processed transaction ID, its status and receipts
 const { transactionId, status, receipts } =
   await provider.sendTransactionAndAwaitStatus(txRequest);
 // #endregion main
