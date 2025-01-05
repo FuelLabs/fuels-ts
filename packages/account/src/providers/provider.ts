@@ -924,7 +924,7 @@ Supported fuel-core version: ${supportedVersion}.`
   }
 
   /**
-   * Submits a transaction to the chain and awaits it's status response.
+   * Submits a transaction to the chain and awaits its status response.
    *
    * @param transactionRequestLike - the request to submit.
    * @param sendTransactionParams - The provider send transaction parameters (optional).
