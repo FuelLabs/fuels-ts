@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@types/markdown-it": "14.1.2",
-    "@vue/devtools-api": "6.6.3",
+    "@vue/devtools-api": "7.6.8",
     "flexsearch": "0.7.43",
     "glob": "10.4.5",
     "markdown-it": "14.1.0",
