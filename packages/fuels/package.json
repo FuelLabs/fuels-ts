@@ -81,8 +81,8 @@
     "@fuel-ts/recipes": "workspace:*",
     "bundle-require": "5.0.0",
     "chalk": "4",
-    "chokidar": "3.6.0",
-    "commander": "12.1.0",
+    "chokidar": "4.0.3",
+    "commander": "13.0.0",
     "esbuild": "0.24.0",
     "glob": "10.4.5",
     "handlebars": "4.7.8",
@@ -96,7 +96,7 @@
   "devDependencies": {
     "@types/lodash.camelcase": "4.3.9",
     "@types/rimraf": "3.0.2",
-    "vite": "5.4.9"
+    "vite": "6.0.7"
   },
   "keywords": [
     "ethereum",

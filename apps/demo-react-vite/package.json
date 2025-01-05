@@ -13,19 +13,19 @@
   "dependencies": {
     "@fuels/vm-asm": "0.58.2",
     "fuels": "workspace:*",
-    "react-dom": "18.3.1",
-    "react": "18.3.1"
+    "react-dom": "19.0.0",
+    "react": "19.0.0"
   },
   "devDependencies": {
-    "@types/react": "18.3.11",
-    "@types/react-dom": "18.3",
-    "@typescript-eslint/eslint-plugin": "6.9.1",
-    "@typescript-eslint/parser": "6.21.0",
+    "@types/react": "19.0.2",
+    "@types/react-dom": "19.0",
+    "@typescript-eslint/eslint-plugin": "8.19.0",
+    "@typescript-eslint/parser": "8.19.0",
     "@vitejs/plugin-react": "4.3.3",
-    "eslint": "8.57.0",
-    "eslint-plugin-react-hooks": "4.6.2",
+    "eslint": "9.17.0",
+    "eslint-plugin-react-hooks": "5.1.0",
     "eslint-plugin-react-refresh": "0.4.13",
     "typescript": "5.6.3",
-    "vite": "5.4.9"
+    "vite": "6.0.7"
   }
 }
