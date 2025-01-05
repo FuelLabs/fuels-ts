@@ -15,4 +15,4 @@ Or used with a contract call like so:
 > [!NOTE] Note
 > This is a blocking call, which means the rest of your app logic could be blocked for several seconds until the transaction is processed. If this is a problem for your app then we recommend using the previous submission methods mentioned in this guide.
 
-Should you want a more complete transaction summary similar to that provided by a `TransactionResponse`, it can be fetched by it's transaction ID. Check out [this guide](./transaction-response.md) for more information.
+Should you want a more complete transaction summary similar to that provided by a `TransactionResponse`, it can be fetched by its transaction ID. Check out [this guide](./transaction-response.md) for more information.
