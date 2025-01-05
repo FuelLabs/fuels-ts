@@ -1,6 +1,6 @@
 # Transaction Subscriptions
 
-When submitting transactions via the SDK, usually this is done by calling a method in a [script](../scripts/running-scripts.md) or [contract](../contracts/methods.md#call), or sending a transaction via a [predicate](../predicates/methods.md#sendtransaction) or [wallet](../wallets/index.md). These methods submit the transaction and then returns a [TransactionResponse](./transaction-response.md) that allows you to view the result of a transaction at your convenience, leaving the rest of your app processing unblocked.
+When submitting transactions via the SDK, usually this is done by calling a method in a [script](../scripts/running-scripts.md) or [contract](../contracts/methods.md#call), or sending a transaction via a [predicate](../predicates/methods.md#sendtransaction) or [wallet](../wallets/index.md). These methods submit the transaction and then return a [TransactionResponse](./transaction-response.md) that allows you to view the result of a transaction at your convenience, leaving the rest of your app processing unblocked.
 
 However, if you want to send a transaction and continue subscribing to it's result, the SDK also exposes the `sendTransactionAndAwaitStatus` available on a [Provider](../provider/index.md). This method takes a [TransactionRequest](./transaction-request.md) and returns a minimal transaction result that contains the ID, status and receipts.
 
