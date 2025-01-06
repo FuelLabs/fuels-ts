@@ -204,7 +204,7 @@ describe('TransactionResponse', () => {
   );
 
   it(
-    'should throw error for a SqueezedOut status update [waitForResult]',
+    'should throw error for a SqueezedOut status update [submitAndAwaitStatus]',
     { timeout: 10_000, retry: 10 },
     async () => {
       /**
