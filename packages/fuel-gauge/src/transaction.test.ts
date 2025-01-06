@@ -174,7 +174,7 @@ describe('Transaction', () => {
     expect(isStatusSuccess).toEqual(true);
   });
 
-  it.only('should throw an error when an asset burn is detected', async () => {
+  it('should throw an error when an asset burn is detected', async () => {
     const {
       wallets: [sender],
     } = await launchTestNode();
