@@ -1,12 +1,13 @@
 import { useBalance, useWallet } from "@fuels/react";
 import { useEffect, useState } from "react";
-import { bn, Predicate as FuelPredicate, InputValue } from "fuels";
+import { bn } from "fuels";
 
 import { TestPredicate } from "../sway-api/predicates";
 import Button from "./Button";
 import LocalFaucet from "./LocalFaucet";
 import { isLocal, renderFormattedBalance } from "../lib.tsx";
 import { useNotification } from "../hooks/useNotification.tsx";
+import { useBaseAssetId } from "../hooks/useBaseAssetId.tsx";
 
 export default function Predicate() {
   const {
@@ -18,15 +19,18 @@ export default function Predicate() {
   const [predicate, setPredicate] = useState<TestPredicate>();
   const [predicatePin, setPredicatePin] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
+  const { baseAssetId } = useBaseAssetId();
 
   const { wallet } = useWallet();
   const address = wallet?.address.toB256() || "";
   const { balance: walletBalance, refetch: refetchWallet } = useBalance({
     address,
+    assetId: baseAssetId,
   });
   const predicateAddress = predicate?.address?.toB256();
   const { balance: predicateBalance, refetch: refetchPredicate } = useBalance({
     address: predicateAddress,
+    assetId: baseAssetId,
   });
 
   useEffect(() => {
