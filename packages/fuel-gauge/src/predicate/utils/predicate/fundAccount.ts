@@ -14,10 +14,7 @@ export const fundAccount = async (
     request.addCoinOutput(accountToBeFunded.address, new BN(amount).div(utxosAmount), baseAssetId);
   }
 
-  const txCost = await fundedAccount.getTransactionCost(request);
-  request.gasLimit = txCost.gasUsed;
-  request.maxFee = txCost.maxFee;
-  await fundedAccount.fund(request, txCost);
+  await request.autoCost(fundedAccount);
 
   const submit = await fundedAccount.sendTransaction(request);
   await submit.waitForResult();

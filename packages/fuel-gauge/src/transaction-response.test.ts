@@ -239,12 +239,7 @@ describe('TransactionResponse', () => {
 
       request.addCoinOutput(Wallet.generate(), 100, await provider.getBaseAssetId());
 
-      const txCost = await genesisWallet.getTransactionCost(request);
-
-      request.gasLimit = txCost.gasUsed;
-      request.maxFee = txCost.maxFee;
-
-      await genesisWallet.fund(request, txCost);
+      await request.autoCost(genesisWallet);
 
       request.updateWitnessByOwner(
         genesisWallet.address,
@@ -291,14 +286,9 @@ describe('TransactionResponse', () => {
 
       request.addCoinOutput(Wallet.generate(), 100, await provider.getBaseAssetId());
 
-      const txCost = await genesisWallet.getTransactionCost(request, {
+      await request.autoCost(genesisWallet, {
         signatureCallback: (tx) => tx.addAccountWitnesses(genesisWallet),
       });
-
-      request.gasLimit = txCost.gasUsed;
-      request.maxFee = txCost.maxFee;
-
-      await genesisWallet.fund(request, txCost);
 
       request.updateWitnessByOwner(
         genesisWallet.address,

@@ -13,12 +13,7 @@ const request = new ScriptTransactionRequest({
 
 request.addCoinOutput(receiverAddress, 1000, await provider.getBaseAssetId());
 
-const txCost = await sender.getTransactionCost(request);
-
-request.gasLimit = txCost.gasUsed;
-request.maxFee = txCost.maxFee;
-
-await sender.fund(request, txCost);
+await request.autoCost(sender);
 
 const tx = await sender.sendTransaction(request);
 await tx.waitForResult();

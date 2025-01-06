@@ -34,12 +34,8 @@ transactionRequest.addCoinOutput(
   baseAssetId
 );
 
-const txCost = await wallet.getTransactionCost(transactionRequest);
-
-transactionRequest.gasLimit = txCost.gasUsed;
-transactionRequest.maxFee = txCost.maxFee;
-
-await wallet.fund(transactionRequest, txCost);
+// Estimate and fund the transaction
+await transactionRequest.autoCost(wallet);
 
 // Submit the transaction
 const response = await wallet.sendTransaction(transactionRequest);
