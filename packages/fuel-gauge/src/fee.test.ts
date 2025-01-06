@@ -105,7 +105,7 @@ describe('Fee', () => {
     const tx = await wallet.transfer(
       destination.address,
       amountToTransfer,
-      provider.getBaseAssetId(),
+      await provider.getBaseAssetId(),
       {
         gasLimit: 10_000,
       }
@@ -141,7 +141,7 @@ describe('Fee', () => {
       gasLimit: 10000,
     });
 
-    request.addCoinOutput(destination1.address, amountToTransfer, provider.getBaseAssetId());
+    request.addCoinOutput(destination1.address, amountToTransfer, await provider.getBaseAssetId());
     request.addCoinOutput(destination2.address, amountToTransfer, ASSET_A);
     request.addCoinOutput(destination3.address, amountToTransfer, ASSET_B);
 
@@ -321,12 +321,20 @@ describe('Fee', () => {
 
     const predicate = new PredicateU32({ provider, data: [1078] });
 
-    const tx1 = await wallet.transfer(predicate.address, 1_000_000, provider.getBaseAssetId());
+    const tx1 = await wallet.transfer(
+      predicate.address,
+      1_000_000,
+      await provider.getBaseAssetId()
+    );
     await tx1.wait();
 
     const transferAmount = 100;
     const balanceBefore = await predicate.getBalance();
-    const tx2 = await predicate.transfer(wallet.address, transferAmount, provider.getBaseAssetId());
+    const tx2 = await predicate.transfer(
+      wallet.address,
+      transferAmount,
+      await provider.getBaseAssetId()
+    );
 
     const { fee } = await tx2.wait();
 
@@ -372,7 +380,7 @@ describe('Fee', () => {
         wallets: [fundedWallet],
       } = launched;
 
-      const baseAssetId = provider.getBaseAssetId();
+      const baseAssetId = await provider.getBaseAssetId();
 
       const {
         messages: [message1, message2],
@@ -413,7 +421,7 @@ describe('Fee', () => {
         wallets: [fundedWallet],
       } = launched;
 
-      const baseAssetId = provider.getBaseAssetId();
+      const baseAssetId = await provider.getBaseAssetId();
 
       const {
         messages: [message1, message2],
@@ -496,7 +504,7 @@ describe('Fee', () => {
       const tx = await wallet.transfer(
         wallet.address,
         amountPerCoin * 20,
-        provider.getBaseAssetId()
+        await provider.getBaseAssetId()
       );
       const { isStatusSuccess } = await tx.waitForResult();
 

@@ -80,7 +80,7 @@ export class BaseWalletUnlocked extends Account {
    */
   override async signTransaction(transactionRequestLike: TransactionRequestLike): Promise<string> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    const chainId = this.provider.getChainId();
+    const chainId = await this.provider.getChainId();
     const hashedTransaction = transactionRequest.getTransactionId(chainId);
     const signature = await this.signer().sign(hashedTransaction);
     return hexlify(signature);

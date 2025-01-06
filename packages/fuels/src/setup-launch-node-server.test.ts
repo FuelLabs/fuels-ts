@@ -90,7 +90,7 @@ describe(
       const url = await (await fetch(launched.serverUrl)).text();
       // fetches node-related data
       // would fail if fuel-core node is not running on url
-      await Provider.create(url);
+      await new Provider(url).init();
     });
 
     test('the /cleanup endpoint kills the node', async () => {

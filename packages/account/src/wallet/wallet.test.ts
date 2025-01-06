@@ -238,7 +238,7 @@ describe('Wallet', () => {
         wallets: [wallet],
       } = launched;
 
-      const newProviderInstance = await Provider.create(provider.url);
+      const newProviderInstance = new Provider(provider.url);
 
       wallet.connect(newProviderInstance);
 

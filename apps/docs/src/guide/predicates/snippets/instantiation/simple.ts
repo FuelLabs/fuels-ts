@@ -4,7 +4,7 @@ import { Provider } from 'fuels';
 import { LOCAL_NETWORK_URL } from '../../../../env';
 import { ReturnTruePredicate } from '../../../../typegend';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 
 const predicate = new ReturnTruePredicate({
   provider,

@@ -3,7 +3,7 @@ import { Provider, Wallet } from 'fuels';
 
 import { LOCAL_NETWORK_URL } from '../../../env';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 
 const newJsonWallet = await Wallet.generate({
   provider,

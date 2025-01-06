@@ -4,7 +4,9 @@ import { bn, buildFunctionResult, Contract, Provider, Wallet } from 'fuels';
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../env';
 import { CounterFactory } from '../../../typegend';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
+const baseAssetId = await provider.getBaseAssetId();
+
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const deploy = await CounterFactory.deploy(wallet);
 const { contract } = await deploy.waitForResult();
@@ -20,7 +22,7 @@ const scope = contractInstance.functions
   .addTransfer({
     amount: amountToRecipient,
     destination: receiverWallet.address,
-    assetId: provider.getBaseAssetId(),
+    assetId: baseAssetId,
   });
 
 // Build a transaction request from the invocation scope
@@ -29,7 +31,7 @@ const transactionRequest = await scope.getTransactionRequest();
 transactionRequest.addCoinOutput(
   receiverWallet.address,
   amountToRecipient,
-  provider.getBaseAssetId()
+  baseAssetId
 );
 
 // Estimate and fund the transaction
@@ -50,8 +52,6 @@ console.log('value', value);
 // <BN: 0x2710>
 // #endregion custom-transactions-contract-calls
 
-const receiverBalance = await receiverWallet.getBalance(
-  provider.getBaseAssetId()
-);
+const receiverBalance = await receiverWallet.getBalance(baseAssetId);
 
 console.log('balance', receiverBalance.toNumber());

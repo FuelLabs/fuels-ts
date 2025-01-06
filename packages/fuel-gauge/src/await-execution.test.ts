@@ -23,7 +23,7 @@ describe('await-execution', () => {
     const transfer = await genesisWallet.createTransfer(
       destination.address,
       100,
-      provider.getBaseAssetId(),
+      await provider.getBaseAssetId(),
       {
         gasLimit: 10_000,
       }

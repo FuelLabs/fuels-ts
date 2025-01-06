@@ -22,7 +22,7 @@ const { waitForResult: waitForDeploy } =
 await waitForDeploy();
 
 // #region deploying-scripts
-const provider = await Provider.create(providerUrl);
+const provider = new Provider(providerUrl);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 // First, we will need to instantiate the script via it's loader bytecode. This can be imported from the typegen outputs

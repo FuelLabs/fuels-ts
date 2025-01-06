@@ -6,7 +6,7 @@ import { ASSET_A, ASSET_B } from 'fuels/test-utils';
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
 import { EchoValuesFactory } from '../../../../typegend';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const deployer = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 const deployContract = await EchoValuesFactory.deploy(deployer);
@@ -19,7 +19,7 @@ const transferParams: TransferParams[] = [
   {
     destination: recipient1.address,
     amount: 100,
-    assetId: provider.getBaseAssetId(),
+    assetId: await provider.getBaseAssetId(),
   },
   { destination: recipient1.address, amount: 400, assetId: ASSET_A },
   { destination: recipient2.address, amount: 300, assetId: ASSET_B },
@@ -34,7 +34,7 @@ await waitForResult();
 // #endregion add-transfer-2
 
 const recipientBalanceBaseAsset = await recipient1.getBalance(
-  provider.getBaseAssetId()
+  await provider.getBaseAssetId()
 );
 const recipientBalanceAssetA = await recipient1.getBalance(ASSET_A);
 const recipientBalanceAssetB = await recipient2.getBalance(ASSET_B);
