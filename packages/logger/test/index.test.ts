@@ -1,4 +1,3 @@
-import { Address } from '@fuel-ts/address';
 import { BN } from '@fuel-ts/math';
 import debug from 'debug';
 import type { MockInstance } from 'vitest';
