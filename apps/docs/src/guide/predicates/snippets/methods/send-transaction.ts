@@ -33,12 +33,8 @@ const predicateCoins = await predicate.getResourcesToSpend([
 // Add the predicate input and resources.
 transactionRequest.addResources(predicateCoins);
 
-const txCost = await predicate.getTransactionCost(transactionRequest);
-
-transactionRequest.gasLimit = txCost.gasUsed;
-transactionRequest.maxFee = txCost.maxFee;
-
-await predicate.fund(transactionRequest, txCost);
+// Estimate and fund the transaction
+await transactionRequest.autoCost(predicate);
 
 // Send the transaction using the predicate
 const result = await predicate.sendTransaction(transactionRequest);

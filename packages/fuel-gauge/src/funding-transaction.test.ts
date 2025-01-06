@@ -4,6 +4,8 @@ import type { Account, CoinTransactionRequestInput } from 'fuels';
 import { DEFAULT_RESOURCE_CACHE_TTL, ScriptTransactionRequest, Wallet, bn, sleep } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
+import { CallTestContractFactory } from '../test/typegen';
+
 /**
  * @group node
  * @group browser
@@ -514,4 +516,85 @@ describe('Funding Transactions', () => {
       /Transaction input validation failed: Transaction id already exists \(id: .*\)/
     );
   }, 15_000);
+
+  it('funds a script transaction using autoCost', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      provider,
+      wallets: [sender, receiver],
+    } = launched;
+
+    const request = new ScriptTransactionRequest().addCoinOutput(
+      receiver.address,
+      1000,
+      provider.getBaseAssetId()
+    );
+
+    expect(request.inputs.length).toBe(0);
+    expect(request.maxFee.toNumber()).toBe(0);
+    expect(request.gasLimit.toNumber()).toBe(0);
+
+    await request.autoCost(sender);
+
+    expect(request.inputs.length).toBe(1);
+    expect(request.maxFee.toNumber()).toBeGreaterThan(0);
+    expect(request.gasLimit.toNumber()).toBeGreaterThan(0);
+
+    const tx = await sender.sendTransaction(request);
+    const result = await tx.waitForResult();
+
+    expect(result.isStatusSuccess).toBeTruthy();
+  });
+
+  it('funds a script tx from contract call using autoCost', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [{ factory: CallTestContractFactory }],
+    });
+
+    const {
+      wallets: [sender],
+      contracts: [contract],
+    } = launched;
+
+    const request = await contract.functions.no_params().getTransactionRequest();
+
+    expect(request.inputs.length).toBe(1);
+    expect(request.maxFee.toNumber()).toBe(0);
+    expect(request.gasLimit.toNumber()).toBe(0);
+
+    await request.autoCost(sender);
+
+    expect(request.inputs.length).toBe(2);
+    expect(request.maxFee.toNumber()).toBeGreaterThan(0);
+    expect(request.gasLimit.toNumber()).toBeGreaterThan(0);
+
+    const tx = await sender.sendTransaction(request);
+    const result = await tx.waitForResult();
+
+    expect(result.isStatusSuccess).toBeTruthy();
+  });
+
+  it('funds a contract call using autoCost', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [{ factory: CallTestContractFactory }],
+    });
+
+    const {
+      wallets: [sender],
+      contracts: [contract],
+    } = launched;
+
+    const scope = await contract.functions.no_params();
+    const request = await scope.autoCost();
+
+    expect(request.inputs.length).toBe(2);
+    expect(request.maxFee.toNumber()).toBeGreaterThan(0);
+    expect(request.gasLimit.toNumber()).toBeGreaterThan(0);
+
+    const tx = await sender.sendTransaction(request);
+    const result = await tx.waitForResult();
+
+    expect(result.isStatusSuccess).toBeTruthy();
+  });
 });

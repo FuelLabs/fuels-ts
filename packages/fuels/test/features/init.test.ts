@@ -112,6 +112,18 @@ describe('init', () => {
     expect(fuelsContents).toMatch(`fuelCorePath: 'fuels-core',`);
   });
 
+  it('should run `init` command with custom fuel-core-port', async () => {
+    await runInit({
+      root: paths.root,
+      workspace: paths.workspaceDir,
+      output: paths.outputDir,
+      fuelCorePort: '1234',
+    });
+
+    const fuelsContents = readFileSync(paths.fuelsConfigPath, 'utf-8');
+    expect(fuelsContents).toMatch(`fuelCorePort: 1234,`);
+  });
+
   it('should run `init` command and throw for existent config file', async () => {
     const { error } = mockLogger();
 
