@@ -2283,11 +2283,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   it('submits transaction and awaits status [success]', async () => {
-    using launched = await setupTestProviderAndWallets({
-      nodeOptions: {
-        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
-      },
-    });
+    using launched = await setupTestProviderAndWallets();
     const {
       provider,
       wallets: [wallet],
@@ -2306,11 +2302,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   it('submits transaction and awaits status [success with estimation]', async () => {
-    using launched = await setupTestProviderAndWallets({
-      nodeOptions: {
-        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
-      },
-    });
+    using launched = await setupTestProviderAndWallets();
     const {
       provider,
       wallets: [wallet],
@@ -2327,11 +2319,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   it('submits transaction and awaits status [failure]', async () => {
-    using launched = await setupTestProviderAndWallets({
-      nodeOptions: {
-        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
-      },
-    });
+    using launched = await setupTestProviderAndWallets();
     const {
       provider,
       wallets: [wallet],
