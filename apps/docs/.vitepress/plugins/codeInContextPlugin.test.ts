@@ -7,7 +7,7 @@ import {
   CodeSnippetToken,
 } from './codeInContextPlugin';
 import MarkdownIt from 'markdown-it';
-import Token from 'markdown-it/lib/token';
+import { Token } from 'markdown-it';
 
 /**
  * @group node

@@ -59,7 +59,7 @@ describe('User account tests', () => {
       wallets: [wallet],
     } = launch;
 
-    const tx = await wallet.transfer(wallet.address, 100, provider.getBaseAssetId());
+    const tx = await wallet.transfer(wallet.address, 100, await provider.getBaseAssetId());
 
     await tx.wait();
 

@@ -4,7 +4,7 @@ import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 import { PredicateMainArgsStruct } from '../../test/typegen';
 import type { Validation } from '../types/predicate';
 
-import { fundPredicate } from './utils/predicate';
+import { fundAccount } from './utils/predicate';
 
 /**
  * @group node
@@ -25,7 +25,7 @@ describe('Predicate', () => {
         provider,
       });
 
-      await fundPredicate(wallet, predicate, 1000);
+      await fundAccount(wallet, predicate, 1000);
 
       const receiver = Wallet.generate({ provider });
 
@@ -34,7 +34,7 @@ describe('Predicate', () => {
           predicate.transfer(
             receiver.address,
             await predicate.getBalance(),
-            provider.getBaseAssetId(),
+            await provider.getBaseAssetId(),
             {
               gasLimit: 100_000_000,
             }
@@ -59,13 +59,13 @@ describe('Predicate', () => {
         provider,
       });
 
-      await fundPredicate(wallet, predicate, 1000);
+      await fundAccount(wallet, predicate, 1000);
 
       const receiver = Wallet.generate({ provider });
 
       // fuel-client we should change with the proper error message
       await expect(
-        predicate.transfer(receiver.address, 1000, provider.getBaseAssetId(), {
+        predicate.transfer(receiver.address, 1000, await provider.getBaseAssetId(), {
           gasLimit: 0,
         })
       ).rejects.toThrow(/Gas limit '0' is lower than the required:./i);

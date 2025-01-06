@@ -42,7 +42,7 @@ describe('str slice', () => {
       provider,
       data: predicateData,
     });
-    const baseAssetId = provider.getBaseAssetId();
+    const baseAssetId = await provider.getBaseAssetId();
 
     const amountToPredicate = 250_000;
     const amountToReceiver = 50_000;

@@ -4,7 +4,7 @@ import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
 import { ScriptSum } from '../../../../typegend';
 
 // #region transaction-request-10
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const accountA = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const accountB = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
@@ -23,7 +23,7 @@ await transactionRequest.addAccountWitnesses([accountB]);
 
 // #region transaction-request-11
 // Get the chain ID
-const chainId = provider.getChainId();
+const chainId = await provider.getChainId();
 
 // Get the transaction ID using the Chain ID
 const transactionId = transactionRequest.getTransactionId(chainId);

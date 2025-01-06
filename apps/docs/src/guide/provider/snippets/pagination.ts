@@ -24,7 +24,8 @@ const pageInfoExample: PageInfo = {
 console.log('pageInfoExample', pageInfoExample);
 
 // #region pagination-next-page
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
+const baseAssetId = await provider.getBaseAssetId();
 
 let paginationArgs: CursorPaginationArgs = {
   first: 10, // It will return only the first 10 coins
@@ -32,7 +33,7 @@ let paginationArgs: CursorPaginationArgs = {
 
 const { coins, pageInfo } = await provider.getCoins(
   WALLET_ADDRESS,
-  provider.getBaseAssetId(),
+  baseAssetId,
   paginationArgs
 );
 
@@ -42,11 +43,7 @@ if (pageInfo.hasNextPage) {
     first: 10,
   };
   // The coins array will include the next 10 coins after the last one in the previous array
-  await provider.getCoins(
-    WALLET_ADDRESS,
-    provider.getBaseAssetId(),
-    paginationArgs
-  );
+  await provider.getCoins(WALLET_ADDRESS, baseAssetId, paginationArgs);
 }
 // #endregion pagination-next-page
 
@@ -58,11 +55,7 @@ if (pageInfo.hasPreviousPage) {
   };
 
   // It will includes the previous 10 coins before the first one in the previous array
-  await provider.getCoins(
-    WALLET_ADDRESS,
-    provider.getBaseAssetId(),
-    paginationArgs
-  );
+  await provider.getCoins(WALLET_ADDRESS, baseAssetId, paginationArgs);
 }
 // #endregion pagination-previous-page
 

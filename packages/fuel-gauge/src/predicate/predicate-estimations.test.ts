@@ -22,7 +22,7 @@ import {
 } from '../../test/typegen';
 import type { Validation } from '../types/predicate';
 
-import { fundPredicate } from './utils/predicate';
+import { fundAccount } from './utils/predicate';
 
 /**
  * @group node
@@ -48,14 +48,14 @@ describe('Predicate', () => {
         provider,
       });
 
-      await fundPredicate(wallet, predicateStruct, fundingAmount);
+      await fundAccount(wallet, predicateStruct, fundingAmount);
 
       const tx = new ScriptTransactionRequest();
 
       // Get resources from the predicate struct
       const ressources = await predicateStruct.getResourcesToSpend([
         {
-          assetId: provider.getBaseAssetId(),
+          assetId: await provider.getBaseAssetId(),
           amount: bn(10_000),
         },
       ]);
@@ -138,9 +138,11 @@ describe('Predicate', () => {
 
       const predicateTrue = new PredicateTrue({ provider });
 
-      await fundPredicate(wallet, predicateTrue, fundingAmount);
+      await fundAccount(wallet, predicateTrue, fundingAmount);
 
-      const resources = await predicateTrue.getResourcesToSpend([[1, provider.getBaseAssetId()]]);
+      const resources = await predicateTrue.getResourcesToSpend([
+        [1, await provider.getBaseAssetId()],
+      ]);
       tx.addResources(resources);
 
       const spy = vi.spyOn(provider.operations, 'estimatePredicates');
@@ -167,12 +169,12 @@ describe('Predicate', () => {
         provider,
       });
 
-      await fundPredicate(wallet, predicateTrue, fundingAmount);
-      await fundPredicate(wallet, predicateStruct, fundingAmount);
+      await fundAccount(wallet, predicateTrue, fundingAmount);
+      await fundAccount(wallet, predicateStruct, fundingAmount);
 
       const tx = new ScriptTransactionRequest();
       const trueResources = await predicateTrue.getResourcesToSpend([
-        [1, provider.getBaseAssetId()],
+        [1, await provider.getBaseAssetId()],
       ]);
 
       tx.addResources(trueResources);
@@ -181,7 +183,7 @@ describe('Predicate', () => {
       await provider.estimatePredicates(tx);
 
       const structResources = await predicateStruct.getResourcesToSpend([
-        [1, provider.getBaseAssetId()],
+        [1, await provider.getBaseAssetId()],
       ]);
       tx.addResources(structResources);
 
@@ -210,7 +212,7 @@ describe('Predicate', () => {
         data: [bn(amountToPredicate)],
       });
 
-      await fundPredicate(wallet, predicateValidateTransfer, amountToPredicate);
+      await fundAccount(wallet, predicateValidateTransfer, amountToPredicate);
 
       const receiverWallet = WalletUnlocked.generate({
         provider,
@@ -224,7 +226,7 @@ describe('Predicate', () => {
       const response = await predicateValidateTransfer.transfer(
         receiverWallet.address.toB256(),
         1,
-        provider.getBaseAssetId()
+        await provider.getBaseAssetId()
       );
 
       const { isStatusSuccess } = await response.waitForResult();
@@ -252,12 +254,12 @@ describe('Predicate', () => {
           provider,
         });
 
-        await fundPredicate(wallet, predicateStruct, fundingAmount);
+        await fundAccount(wallet, predicateStruct, fundingAmount);
 
         const transactionRequest = new ScriptTransactionRequest();
 
         const resources = await predicateStruct.getResourcesToSpend([
-          [fundingAmount, provider.getBaseAssetId()],
+          [fundingAmount, await provider.getBaseAssetId()],
         ]);
         resources.forEach((resource) => {
           expect(resource.predicateData).toBeDefined();
@@ -286,12 +288,12 @@ describe('Predicate', () => {
           provider,
         });
 
-        await fundPredicate(wallet, predicateStruct, fundingAmount);
+        await fundAccount(wallet, predicateStruct, fundingAmount);
 
         const transactionRequest = new ScriptTransactionRequest();
 
         const resources = await provider.getResourcesToSpend(predicateStruct.address, [
-          [fundingAmount, provider.getBaseAssetId()],
+          [fundingAmount, await provider.getBaseAssetId()],
         ]);
 
         resources.forEach((resource) => {

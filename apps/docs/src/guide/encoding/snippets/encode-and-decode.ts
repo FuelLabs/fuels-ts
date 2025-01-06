@@ -15,7 +15,7 @@ import {
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../env';
 import { ScriptSum } from '../../../typegend';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 // First we need to build out the transaction via the script that we want to encode.
@@ -56,11 +56,8 @@ const encodedArguments = abiInterface.encodeType(argument, [argumentToAdd]);
 // The encoded value can now be set on the transaction via the script data property
 request.scriptData = encodedArguments;
 
-// Now we can build out the rest of the transaction and then fund it
-const txCost = await wallet.getTransactionCost(request);
-request.maxFee = txCost.maxFee;
-request.gasLimit = txCost.gasUsed;
-await wallet.fund(request, txCost);
+// Now we can estimate and fund the transaction
+await request.autoCost(wallet);
 
 // Finally, submit the built transaction
 const response = await wallet.sendTransaction(request);

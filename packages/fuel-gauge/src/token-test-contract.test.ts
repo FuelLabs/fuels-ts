@@ -193,7 +193,7 @@ describe('TokenTestContract', () => {
     const addressParameter = {
       bits: userWallet.address,
     };
-    const assetId: AssetId = { bits: provider.getBaseAssetId() };
+    const assetId: AssetId = { bits: await provider.getBaseAssetId() };
 
     await expectToThrowFuelError(
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment

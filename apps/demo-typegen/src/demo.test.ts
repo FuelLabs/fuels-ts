@@ -169,11 +169,11 @@ test('Example predicate', async () => {
     data: predicateData,
   });
 
-  const tx = await wallet.transfer(predicate.address, 200_000, provider.getBaseAssetId());
+  const tx = await wallet.transfer(predicate.address, 200_000, await provider.getBaseAssetId());
   const { isStatusSuccess } = await tx.wait();
 
   // Then we are transferring some coins from the predicate to a random address (receiver)
-  const tx2 = await predicate.transfer(receiver.address, 50_000, provider.getBaseAssetId());
+  const tx2 = await predicate.transfer(receiver.address, 50_000, await provider.getBaseAssetId());
   await tx2.wait();
 
   expect((await receiver.getBalance()).toNumber()).toEqual(50_000);

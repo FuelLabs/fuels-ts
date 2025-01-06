@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/utils",
-  "version": "0.97.1",
+  "version": "0.97.2",
   "description": "Utilities (and test utilities) collection",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -51,6 +51,9 @@
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "fflate": "^0.8.2"
+    "fflate": "0.8.2"
+  },
+  "peerDependencies": {
+    "vitest": "2.0.5"
   }
 }

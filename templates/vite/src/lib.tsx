@@ -25,7 +25,7 @@ export const renderTransactionId = (transactionId: string) => {
 
   return (
     <a
-      href={`https://app.fuel.network/tx/${transactionId}/simple`}
+      href={`https://app-testnet.fuel.network/tx/${transactionId}/simple`}
       target="_blank"
       rel="noreferrer"
       className="underline"

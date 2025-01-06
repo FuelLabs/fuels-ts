@@ -4,7 +4,7 @@ import { Provider, Wallet } from 'fuels';
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
 import { EchoValuesFactory, ReturnContextFactory } from '../../../../typegend';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const deployer = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 const echoContractTx = await EchoValuesFactory.deploy(deployer);
@@ -17,7 +17,7 @@ const { waitForResult } = await echoContract
   .multiCall([
     echoContract.functions.echo_u8(10),
     returnContextContract.functions.return_context_amount().callParams({
-      forward: [100, provider.getBaseAssetId()],
+      forward: [100, await provider.getBaseAssetId()],
     }),
   ])
   .call();
