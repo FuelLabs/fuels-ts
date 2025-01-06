@@ -127,6 +127,8 @@ export const runScaffoldCli = async ({
     .replace(`pnpm run prebuild`, packageManager.run('prebuild'))
     .replace(`"fuels": "${versions.FUELS}"`, `"fuels": "${fuelsVersion}"`);
 
+  // TODO: remove once upgraded to `graphql-request@v7`
+  // https://github.com/FuelLabs/fuels-ts/issues/3546
   if (packageManager.name === 'pnpm') {
     let newPackageJsonObject = JSON.parse(newPackageJsonContents);
     newPackageJsonObject = {
