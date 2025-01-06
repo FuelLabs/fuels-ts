@@ -6,6 +6,7 @@
     "fuels",
     "bun",
     "@types/rimraf",
+    "@fuel-ts/abi-typegen",
     "@internal/fuel-core",
     "get-graphql-schema",
     "events",
