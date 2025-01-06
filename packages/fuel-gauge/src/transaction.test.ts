@@ -73,12 +73,7 @@ describe('Transaction', () => {
     const request = await contract.functions.foo(10).getTransactionRequest();
     request.addMessageInput(message);
 
-    const cost = await fundedWallet.getTransactionCost(request);
-
-    request.gasLimit = cost.gasUsed;
-    request.maxFee = cost.maxFee;
-
-    await fundedWallet.fund(request, cost);
+    await request.autoCost(fundedWallet);
 
     const tx = await fundedWallet.sendTransaction(request);
 
@@ -129,12 +124,7 @@ describe('Transaction', () => {
     const request = await contract.functions.foo(10).getTransactionRequest();
     request.addMessageInput(message);
 
-    const cost = await fundedWallet.getTransactionCost(request);
-
-    request.gasLimit = cost.gasUsed;
-    request.maxFee = cost.maxFee;
-
-    await fundedWallet.fund(request, cost);
+    await request.autoCost(fundedWallet);
 
     const tx = await fundedWallet.sendTransaction(request);
 
