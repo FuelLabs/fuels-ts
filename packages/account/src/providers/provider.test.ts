@@ -1415,7 +1415,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
       const responseObject = {
         data: {
-          submitAndAwait: {
+          submitAndAwaitStatus: {
             type: 'SuccessStatus',
             time: 'data: 4611686020137152060',
           },
@@ -1436,11 +1436,11 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       );
     });
 
-    for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
+    for await (const { submitAndAwaitStatus } of await provider.operations.submitAndAwaitStatus({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
-      expect(submitAndAwait.type).toEqual('SuccessStatus');
-      expect((<SubmittedStatus>submitAndAwait).time).toEqual('data: 4611686020137152060');
+      expect(submitAndAwaitStatus.type).toEqual('SuccessStatus');
+      expect((<SubmittedStatus>submitAndAwaitStatus).time).toEqual('data: 4611686020137152060');
     }
   });
 
@@ -1455,11 +1455,11 @@ Supported fuel-core version: ${mock.supportedVersion}.`
         const encoder = new TextEncoder();
 
         controller.enqueue(
-          encoder.encode(`data:${JSON.stringify({ data: { submitAndAwait: { a: 0 } } })}\n\n`)
+          encoder.encode(`data:${JSON.stringify({ data: { submitAndAwaitStatus: { a: 0 } } })}\n\n`)
         );
         controller.enqueue(encoder.encode(':keep-alive-text\n\n'));
         controller.enqueue(
-          encoder.encode(`data:${JSON.stringify({ data: { submitAndAwait: { a: 1 } } })}\n\n`)
+          encoder.encode(`data:${JSON.stringify({ data: { submitAndAwaitStatus: { a: 1 } } })}\n\n`)
         );
         controller.close();
       },
@@ -1468,7 +1468,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     let numberOfEvents = 0;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
+    for await (const { submitAndAwaitStatus } of await provider.operations.submitAndAwaitStatus({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
       numberOfEvents += 1;
@@ -1484,14 +1484,14 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
       const event1 = {
         data: {
-          submitAndAwait: {
+          submitAndAwaitStatus: {
             type: 'SubmittedStatus',
           },
         },
       };
       const event2 = {
         data: {
-          submitAndAwait: {
+          submitAndAwaitStatus: {
             type: 'SuccessStatus',
           },
         },
@@ -1515,16 +1515,16 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     let numberOfEvents = 0;
 
-    for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
+    for await (const { submitAndAwaitStatus } of await provider.operations.submitAndAwaitStatus({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
       numberOfEvents += 1;
 
       if (numberOfEvents === 1) {
-        expect(submitAndAwait.type).toEqual('SubmittedStatus');
+        expect(submitAndAwaitStatus.type).toEqual('SubmittedStatus');
       }
       if (numberOfEvents === 2) {
-        expect(submitAndAwait.type).toEqual('SuccessStatus');
+        expect(submitAndAwaitStatus.type).toEqual('SuccessStatus');
       }
     }
 
@@ -1537,7 +1537,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
       const responseObject = JSON.stringify({
         data: {
-          submitAndAwait: {
+          submitAndAwaitStatus: {
             type: 'SuccessStatus',
           },
         },
@@ -1563,10 +1563,10 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       );
     });
 
-    for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
+    for await (const { submitAndAwaitStatus } of await provider.operations.submitAndAwaitStatus({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
-      expect(submitAndAwait.type).toEqual('SuccessStatus');
+      expect(submitAndAwaitStatus.type).toEqual('SuccessStatus');
     }
   });
 
@@ -1577,14 +1577,14 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
       const event1 = {
         data: {
-          submitAndAwait: {
+          submitAndAwaitStatus: {
             type: 'SubmittedStatus',
           },
         },
       };
       const event2 = JSON.stringify({
         data: {
-          submitAndAwait: {
+          submitAndAwaitStatus: {
             type: 'SuccessStatus',
           },
         },
@@ -1611,16 +1611,16 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     let numberOfEvents = 0;
 
-    for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
+    for await (const { submitAndAwaitStatus } of await provider.operations.submitAndAwaitStatus({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
       numberOfEvents += 1;
 
       if (numberOfEvents === 1) {
-        expect(submitAndAwait.type).toEqual('SubmittedStatus');
+        expect(submitAndAwaitStatus.type).toEqual('SubmittedStatus');
       }
       if (numberOfEvents === 2) {
-        expect(submitAndAwait.type).toEqual('SuccessStatus');
+        expect(submitAndAwaitStatus.type).toEqual('SuccessStatus');
       }
     }
 
@@ -1634,14 +1634,14 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
       const event1 = JSON.stringify({
         data: {
-          submitAndAwait: {
+          submitAndAwaitStatus: {
             type: 'SubmittedStatus',
           },
         },
       });
       const event2 = JSON.stringify({
         data: {
-          submitAndAwait: {
+          submitAndAwaitStatus: {
             type: 'SuccessStatus',
           },
         },
@@ -1670,16 +1670,16 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     let numberOfEvents = 0;
 
-    for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
+    for await (const { submitAndAwaitStatus } of await provider.operations.submitAndAwaitStatus({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
       numberOfEvents += 1;
 
       if (numberOfEvents === 1) {
-        expect(submitAndAwait.type).toEqual('SubmittedStatus');
+        expect(submitAndAwaitStatus.type).toEqual('SubmittedStatus');
       }
       if (numberOfEvents === 2) {
-        expect(submitAndAwait.type).toEqual('SuccessStatus');
+        expect(submitAndAwaitStatus.type).toEqual('SuccessStatus');
       }
     }
 
@@ -1708,9 +1708,11 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     await expectToThrowFuelError(
       async () => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
-          encodedTransaction: "it's mocked so doesn't matter",
-        })) {
+        for await (const { submitAndAwaitStatus } of await provider.operations.submitAndAwaitStatus(
+          {
+            encodedTransaction: "it's mocked so doesn't matter",
+          }
+        )) {
           // shouldn't be reached!
           expect(true).toBeFalsy();
         }
