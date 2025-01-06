@@ -361,10 +361,6 @@ describe('Provider', () => {
       {
         type: ReceiptType.Log,
         id: ZeroBytes32,
-        val0: bn(202),
-        val1: bn(186),
-        val2: bn(0),
-        val3: bn(0),
         ra: bn(202),
         rb: bn(186),
         rc: bn(0),
