@@ -534,7 +534,7 @@ describe('Funding Transactions', () => {
     const request = new ScriptTransactionRequest().addCoinOutput(
       receiver.address,
       1000,
-      provider.getBaseAssetId()
+      await provider.getBaseAssetId()
     );
 
     expect(request.inputs.length).toBe(0);
