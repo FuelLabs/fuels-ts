@@ -174,7 +174,7 @@ describe('Vector Types Validation', () => {
     const setupTx = await wallet.transfer(
       predicate.address,
       amountToPredicate,
-      provider.getBaseAssetId(),
+      await provider.getBaseAssetId(),
       {
         gasLimit: 10_000,
       }
@@ -186,7 +186,7 @@ describe('Vector Types Validation', () => {
     const tx = await predicate.transfer(
       receiver.address,
       amountToReceiver,
-      provider.getBaseAssetId(),
+      await provider.getBaseAssetId(),
       {
         gasLimit: 10_000,
       }

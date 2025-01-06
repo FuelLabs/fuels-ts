@@ -5,7 +5,7 @@ import { TestAssetId } from 'fuels/test-utils';
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
 import { ScriptSum } from '../../../../typegend';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 // #region transaction-request-5
@@ -14,7 +14,7 @@ const transactionRequest = new ScriptTransactionRequest({
   script: ScriptSum.bytecode,
 });
 
-const baseAssetId = provider.getBaseAssetId();
+const baseAssetId = await provider.getBaseAssetId();
 const assetA = TestAssetId.A.value;
 
 // Define the quantities to fetch

@@ -20,7 +20,7 @@ describe('Predicate', () => {
     const amountToTransferBaseAsset = bn(1000);
 
     const fakeCoinsConfig: FakeResources[] = [
-      { amount: amount1, assetId: provider.getBaseAssetId() },
+      { amount: amount1, assetId: await provider.getBaseAssetId() },
       { amount: amount2, assetId: ASSET_A },
       { amount: amount3, assetId: ASSET_B },
     ];
@@ -51,7 +51,7 @@ describe('Predicate', () => {
     request.addCoinOutput(
       Address.fromRandom(),
       amountToTransferBaseAsset,
-      provider.getBaseAssetId()
+      await provider.getBaseAssetId()
     );
     request.addCoinOutput(Address.fromRandom(), amount2, ASSET_A);
     request.addCoinOutput(Address.fromRandom(), amount3, ASSET_B);

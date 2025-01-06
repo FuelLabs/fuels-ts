@@ -9,7 +9,7 @@ import {
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const sender = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const receiverAddress = Address.fromRandom();
 
@@ -17,12 +17,12 @@ const request = new ScriptTransactionRequest({
   gasLimit: 10000,
 });
 
-request.addCoinOutput(receiverAddress, 1000, provider.getBaseAssetId());
+request.addCoinOutput(receiverAddress, 1000, await provider.getBaseAssetId());
 
 await request.autoCost(sender);
 
 const signedTransaction = await sender.signTransaction(request);
-const transactionId = request.getTransactionId(provider.getChainId());
+const transactionId = request.getTransactionId(await provider.getChainId());
 
 const recoveredAddress = Signer.recoverAddress(
   transactionId,

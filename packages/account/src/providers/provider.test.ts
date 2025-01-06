@@ -91,7 +91,7 @@ describe('Provider', () => {
     } = launched;
 
     const { urlWithAuth, expectedHeaders } = createBasicAuth(url);
-    const provider = await Provider.create(urlWithAuth);
+    const provider = new Provider(urlWithAuth);
 
     const fetchSpy = vi.spyOn(global, 'fetch');
 
@@ -107,7 +107,7 @@ describe('Provider', () => {
     const {
       provider: { url },
     } = launched;
-    const provider = await Provider.create(url);
+    const provider = new Provider(url);
 
     const fetchSpy = vi.spyOn(global, 'fetch');
 
@@ -125,7 +125,7 @@ describe('Provider', () => {
     } = launched;
 
     const { urlWithAuth, expectedHeaders } = createBasicAuth(url);
-    const provider = await Provider.create(urlWithAuth);
+    const provider = new Provider(urlWithAuth);
 
     const fetchSpy = vi.spyOn(global, 'fetch');
 
@@ -136,7 +136,7 @@ describe('Provider', () => {
     expect(requestA?.headers).toMatchObject(expectedHeaders);
 
     // Reuse the provider URL to connect to an authenticated endpoint
-    const newProvider = await Provider.create(provider.url);
+    const newProvider = new Provider(provider.url);
 
     fetchSpy.mockClear();
 
@@ -156,9 +156,9 @@ describe('Provider', () => {
 
     const requestMiddleware = vi.fn().mockImplementation((options) => options);
 
-    await Provider.create(urlWithAuth, {
-      requestMiddleware,
-    });
+    const temp = new Provider(urlWithAuth, { requestMiddleware });
+
+    await temp.init();
 
     expect(requestMiddleware).toHaveBeenCalled();
   });
@@ -175,7 +175,7 @@ describe('Provider', () => {
 
     // Should enable connection via `create` method
     const basicAuthA = createBasicAuth(urlA);
-    const provider = await Provider.create(basicAuthA.urlWithAuth);
+    const provider = new Provider(basicAuthA.urlWithAuth);
 
     const fetchSpy = vi.spyOn(global, 'fetch');
 
@@ -216,7 +216,7 @@ describe('Provider', () => {
       'X-Custom-Header': 'custom-value',
     };
 
-    const provider = await Provider.create(url, {
+    const provider = new Provider(url, {
       headers: customHeaders,
     });
 
@@ -231,7 +231,7 @@ describe('Provider', () => {
     const url = 'immanotavalidurl';
 
     await expectToThrowFuelError(
-      async () => Provider.create(url),
+      () => new Provider(url),
       new FuelError(ErrorCode.INVALID_URL, 'Invalid URL provided.')
     );
   });
@@ -240,7 +240,7 @@ describe('Provider', () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
-    const mockProvider = await Provider.create(provider.url, {
+    const mockProvider = new Provider(provider.url, {
       fetch: getCustomFetch('getTransaction', {
         transaction: {
           id: '0x1234567890abcdef',
@@ -270,7 +270,7 @@ describe('Provider', () => {
     const { provider: nodeProvider } = launched;
 
     // Create a mock provider with custom getTransactions operation
-    const mockProvider = await Provider.create(nodeProvider.url, {
+    const mockProvider = new Provider(nodeProvider.url, {
       fetch: getCustomFetch('getTransactions', {
         transactions: {
           edges: [
@@ -325,7 +325,7 @@ describe('Provider', () => {
   it('can call()', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
-    const baseAssetId = provider.getBaseAssetId();
+    const baseAssetId = await provider.getBaseAssetId();
 
     const CoinInputs: CoinTransactionRequestInput[] = [
       {
@@ -391,9 +391,10 @@ describe('Provider', () => {
 
   it('can get all chain info', async () => {
     using launched = await setupTestProviderAndWallets();
+
     const { provider } = launched;
 
-    const { consensusParameters } = provider.getChain();
+    const { consensusParameters } = await provider.getChain();
 
     expect(consensusParameters.version).toBeDefined();
     expect(consensusParameters.chainId).toBeDefined();
@@ -430,7 +431,7 @@ describe('Provider', () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
-    const chainId = provider.getChainId();
+    const chainId = await provider.getChainId();
 
     expect(chainId).toBe(0);
   });
@@ -439,7 +440,7 @@ describe('Provider', () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
-    const baseAssetId = provider.getBaseAssetId();
+    const baseAssetId = await provider.getBaseAssetId();
 
     expect(baseAssetId).toBeDefined();
   });
@@ -465,7 +466,7 @@ describe('Provider', () => {
 
     const providerUrl = providerForUrl.url;
 
-    const provider = await Provider.create(providerUrl, {
+    const provider = new Provider(providerUrl, {
       fetch: getCustomFetch('getVersion', { nodeInfo: { nodeVersion: '0.30.0' } }),
     });
 
@@ -489,11 +490,13 @@ describe('Provider', () => {
         nodeInfo: {} as NodeInfo,
       });
 
-    const provider = await Provider.create(providerUrl, {
+    const provider = new Provider(providerUrl, {
       fetch: () => {
         throw new Error('This should never happen');
       },
     });
+
+    await provider.init();
 
     expect(fetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
 
@@ -634,7 +637,7 @@ describe('Provider', () => {
       wallets: [wallet, receiver],
     } = launched;
 
-    const baseAssetId = provider.getBaseAssetId();
+    const baseAssetId = await provider.getBaseAssetId();
     const { coins } = await wallet.getCoins(baseAssetId);
 
     expect(coins.length).toBe(utxosAmount);
@@ -670,7 +673,7 @@ describe('Provider', () => {
       wallets: [wallet, receiver],
     } = launched;
 
-    const baseAssetId = provider.getBaseAssetId();
+    const baseAssetId = await provider.getBaseAssetId();
     const maxFee = 100_000;
     const transferAmount = 10_000;
 
@@ -717,7 +720,7 @@ describe('Provider', () => {
       wallets: [wallet, receiver],
     } = launched;
 
-    const baseAssetId = provider.getBaseAssetId();
+    const baseAssetId = await provider.getBaseAssetId();
     const maxFee = 100_000;
     const transferAmount = 10_000;
 
@@ -774,7 +777,7 @@ describe('Provider', () => {
       provider,
       wallets: [wallet, receiver],
     } = launched;
-    const baseAssetId = provider.getBaseAssetId();
+    const baseAssetId = await provider.getBaseAssetId();
     const transferAmount = 10_000;
 
     const {
@@ -864,11 +867,11 @@ describe('Provider', () => {
     const quantities = [
       coinQuantityfy([1000, ASSET_A]),
       coinQuantityfy([500, ASSET_B]),
-      coinQuantityfy([5000, provider.getBaseAssetId()]),
+      coinQuantityfy([5000, await provider.getBaseAssetId()]),
     ];
 
     const resources = await sender.getResourcesToSpend(quantities);
-    request.addCoinOutput(receiver.address, 500, provider.getBaseAssetId());
+    request.addCoinOutput(receiver.address, 500, await provider.getBaseAssetId());
     request.addResources(resources);
 
     // We need to add more resources manually here as a single `getResourcesToSpend` call
@@ -899,9 +902,9 @@ describe('Provider', () => {
     } = launched;
 
     const request = new ScriptTransactionRequest();
-    request.addCoinOutput(wallet.address, 40_000, provider.getBaseAssetId());
+    request.addCoinOutput(wallet.address, 40_000, await provider.getBaseAssetId());
 
-    const { coins } = await wallet.getCoins(provider.getBaseAssetId());
+    const { coins } = await wallet.getCoins(await provider.getBaseAssetId());
     request.addResources(coins);
 
     await expectToThrowFuelError(() => wallet.getTransactionCost(request), {
@@ -937,7 +940,7 @@ describe('Provider', () => {
       provider,
     } = launched;
 
-    const baseAssetId = provider.getBaseAssetId();
+    const baseAssetId = await provider.getBaseAssetId();
 
     const request = new ScriptTransactionRequest();
     const resources = await sender.getResourcesToSpend([[1000, baseAssetId]]);
@@ -1039,7 +1042,7 @@ describe('Provider', () => {
     using launched = await setupTestProviderAndWallets();
     const { provider: nodeProvider } = launched;
 
-    const provider = await Provider.create(nodeProvider.url, {
+    const provider = new Provider(nodeProvider.url, {
       fetch: async (url, options) =>
         getCustomFetch('getMessageProof', { messageProof: MESSAGE_PROOF_RAW_RESPONSE })(
           url,
@@ -1062,7 +1065,7 @@ describe('Provider', () => {
     using launched = await setupTestProviderAndWallets();
     const { provider: nodeProvider } = launched;
 
-    const provider = await Provider.create(nodeProvider.url, {
+    const provider = new Provider(nodeProvider.url, {
       fetch: async (url, options) =>
         getCustomFetch('getMessageStatus', { messageStatus: messageStatusResponse })(url, options),
     });
@@ -1079,17 +1082,17 @@ describe('Provider', () => {
 
     // check if the provider was initialized properly
     expect(provider).toBeInstanceOf(Provider);
-    expect(provider.getChain()).toBeDefined();
-    expect(provider.getNode()).toBeDefined();
+    expect(await provider.getChain()).toBeDefined();
+    expect(await provider.getNode()).toBeDefined();
   });
 
   it('should ensure getChain and getNode uses the cache and does not fetch new data', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
-    const { error } = await safeExec(() => {
-      provider.getChain();
-      provider.getNode();
+    const { error } = await safeExec(async () => {
+      await provider.getChain();
+      await provider.getNode();
     });
 
     expect(error).toBeUndefined();
@@ -1104,9 +1107,7 @@ describe('Provider', () => {
 
     const INSTANCES_NUM = 5;
 
-    const promises = Array.from({ length: INSTANCES_NUM }, async () =>
-      Provider.create(provider.url)
-    );
+    const promises = Array.from({ length: INSTANCES_NUM }, () => new Provider(provider.url).init());
     await Promise.all(promises);
 
     expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(INSTANCES_NUM);
@@ -1131,35 +1132,12 @@ describe('Provider', () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
-    const gasConfig = provider.getGasConfig();
+    const gasConfig = await provider.getGasConfig();
 
     expect(gasConfig.gasPerByte).toBeDefined();
     expect(gasConfig.gasPriceFactor).toBeDefined();
     expect(gasConfig.maxGasPerPredicate).toBeDefined();
     expect(gasConfig.maxGasPerTx).toBeDefined();
-  });
-
-  it('should throws when using getChain or getNode and without cached data', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
-
-    Provider.clearChainAndNodeCaches();
-
-    await expectToThrowFuelError(
-      () => provider.getChain(),
-      new FuelError(
-        ErrorCode.CHAIN_INFO_CACHE_EMPTY,
-        'Chain info cache is empty. Make sure you have called `Provider.create` to initialize the provider.'
-      )
-    );
-
-    await expectToThrowFuelError(
-      () => provider.getNode(),
-      new FuelError(
-        ErrorCode.NODE_INFO_CACHE_EMPTY,
-        'Node info cache is empty. Make sure you have called `Provider.create` to initialize the provider.'
-      )
-    );
   });
 
   it('warns on difference between major client version and supported major version', async () => {
@@ -1186,7 +1164,7 @@ describe('Provider', () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
-    await Provider.create(provider.url);
+    await new Provider(provider.url).init();
 
     expect(consoleWarnSpy).toHaveBeenCalledOnce();
     expect(consoleWarnSpy).toHaveBeenCalledWith(
@@ -1221,7 +1199,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
-    await Provider.create(provider.url);
+    await new Provider(provider.url).init();
 
     expect(consoleWarnSpy).toHaveBeenCalledOnce();
     expect(consoleWarnSpy).toHaveBeenCalledWith(
@@ -1249,7 +1227,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       { code: FuelError.CODES.INVALID_REQUEST }
     );
 
-    const response = new TransactionResponse('invalid transaction id', provider);
+    const chainId = await provider.getChainId();
+    const response = new TransactionResponse('invalid transaction id', provider, chainId);
 
     await expectToThrowFuelError(() => response.waitForResult(), {
       code: FuelError.CODES.INVALID_REQUEST,
@@ -1311,7 +1290,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   it('should ensure calculateMaxgas considers gasLimit for ScriptTransactionRequest', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
-    const { gasPerByte, maxGasPerTx } = provider.getGasConfig();
+    const { gasPerByte, maxGasPerTx } = await provider.getGasConfig();
 
     const gasLimit = bn(1000);
     const transactionRequest = new ScriptTransactionRequest({
@@ -1320,7 +1299,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     const maxGasSpy = vi.spyOn(gasMod, 'getMaxGas');
 
-    const chainInfo = provider.getChain();
+    const chainInfo = await provider.getChain();
     const minGas = bn(200);
 
     const witnessesLength = transactionRequest
@@ -1341,7 +1320,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   it('should ensure calculateMaxgas does NOT considers gasLimit for CreateTransactionRequest', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
-    const { gasPerByte, maxGasPerTx } = provider.getGasConfig();
+    const { gasPerByte, maxGasPerTx } = await provider.getGasConfig();
 
     const transactionRequest = new CreateTransactionRequest({
       witnesses: [ZeroBytes32],
@@ -1351,7 +1330,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     const maxGasSpy = vi.spyOn(gasMod, 'getMaxGas');
 
-    const chainInfo = provider.getChain();
+    const chainInfo = await provider.getChain();
     const minGas = bn(700);
 
     const witnessesLength = transactionRequest
@@ -1394,7 +1373,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     } = launched;
 
     const request = new ScriptTransactionRequest();
-    request.addCoinOutput(wallet.address, 1000, provider.getBaseAssetId());
+    request.addCoinOutput(wallet.address, 1000, await provider.getBaseAssetId());
 
     const spyGetGasUsedFromReceipts = vi.spyOn(gasMod, 'getGasUsedFromReceipts');
     const cost = await wallet.getTransactionCost(request);
@@ -1410,7 +1389,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
-    const baseAssetId = provider.getBaseAssetId();
+    const baseAssetId = await provider.getBaseAssetId();
     const b256Str = Address.fromRandom().toB256();
 
     const methodCalls = [
@@ -1436,7 +1415,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
       const responseObject = {
         data: {
-          submitAndAwait: {
+          submitAndAwaitStatus: {
             type: 'SuccessStatus',
             time: 'data: 4611686020137152060',
           },
@@ -1457,11 +1436,11 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       );
     });
 
-    for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
+    for await (const { submitAndAwaitStatus } of await provider.operations.submitAndAwaitStatus({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
-      expect(submitAndAwait.type).toEqual('SuccessStatus');
-      expect((<SubmittedStatus>submitAndAwait).time).toEqual('data: 4611686020137152060');
+      expect(submitAndAwaitStatus.type).toEqual('SuccessStatus');
+      expect((<SubmittedStatus>submitAndAwaitStatus).time).toEqual('data: 4611686020137152060');
     }
   });
 
@@ -1476,11 +1455,11 @@ Supported fuel-core version: ${mock.supportedVersion}.`
         const encoder = new TextEncoder();
 
         controller.enqueue(
-          encoder.encode(`data:${JSON.stringify({ data: { submitAndAwait: { a: 0 } } })}\n\n`)
+          encoder.encode(`data:${JSON.stringify({ data: { submitAndAwaitStatus: { a: 0 } } })}\n\n`)
         );
         controller.enqueue(encoder.encode(':keep-alive-text\n\n'));
         controller.enqueue(
-          encoder.encode(`data:${JSON.stringify({ data: { submitAndAwait: { a: 1 } } })}\n\n`)
+          encoder.encode(`data:${JSON.stringify({ data: { submitAndAwaitStatus: { a: 1 } } })}\n\n`)
         );
         controller.close();
       },
@@ -1489,7 +1468,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     let numberOfEvents = 0;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
+    for await (const { submitAndAwaitStatus } of await provider.operations.submitAndAwaitStatus({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
       numberOfEvents += 1;
@@ -1505,14 +1484,14 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
       const event1 = {
         data: {
-          submitAndAwait: {
+          submitAndAwaitStatus: {
             type: 'SubmittedStatus',
           },
         },
       };
       const event2 = {
         data: {
-          submitAndAwait: {
+          submitAndAwaitStatus: {
             type: 'SuccessStatus',
           },
         },
@@ -1536,16 +1515,16 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     let numberOfEvents = 0;
 
-    for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
+    for await (const { submitAndAwaitStatus } of await provider.operations.submitAndAwaitStatus({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
       numberOfEvents += 1;
 
       if (numberOfEvents === 1) {
-        expect(submitAndAwait.type).toEqual('SubmittedStatus');
+        expect(submitAndAwaitStatus.type).toEqual('SubmittedStatus');
       }
       if (numberOfEvents === 2) {
-        expect(submitAndAwait.type).toEqual('SuccessStatus');
+        expect(submitAndAwaitStatus.type).toEqual('SuccessStatus');
       }
     }
 
@@ -1558,7 +1537,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
       const responseObject = JSON.stringify({
         data: {
-          submitAndAwait: {
+          submitAndAwaitStatus: {
             type: 'SuccessStatus',
           },
         },
@@ -1584,10 +1563,10 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       );
     });
 
-    for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
+    for await (const { submitAndAwaitStatus } of await provider.operations.submitAndAwaitStatus({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
-      expect(submitAndAwait.type).toEqual('SuccessStatus');
+      expect(submitAndAwaitStatus.type).toEqual('SuccessStatus');
     }
   });
 
@@ -1598,14 +1577,14 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
       const event1 = {
         data: {
-          submitAndAwait: {
+          submitAndAwaitStatus: {
             type: 'SubmittedStatus',
           },
         },
       };
       const event2 = JSON.stringify({
         data: {
-          submitAndAwait: {
+          submitAndAwaitStatus: {
             type: 'SuccessStatus',
           },
         },
@@ -1632,16 +1611,16 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     let numberOfEvents = 0;
 
-    for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
+    for await (const { submitAndAwaitStatus } of await provider.operations.submitAndAwaitStatus({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
       numberOfEvents += 1;
 
       if (numberOfEvents === 1) {
-        expect(submitAndAwait.type).toEqual('SubmittedStatus');
+        expect(submitAndAwaitStatus.type).toEqual('SubmittedStatus');
       }
       if (numberOfEvents === 2) {
-        expect(submitAndAwait.type).toEqual('SuccessStatus');
+        expect(submitAndAwaitStatus.type).toEqual('SuccessStatus');
       }
     }
 
@@ -1655,14 +1634,14 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
       const event1 = JSON.stringify({
         data: {
-          submitAndAwait: {
+          submitAndAwaitStatus: {
             type: 'SubmittedStatus',
           },
         },
       });
       const event2 = JSON.stringify({
         data: {
-          submitAndAwait: {
+          submitAndAwaitStatus: {
             type: 'SuccessStatus',
           },
         },
@@ -1691,16 +1670,16 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     let numberOfEvents = 0;
 
-    for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
+    for await (const { submitAndAwaitStatus } of await provider.operations.submitAndAwaitStatus({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
       numberOfEvents += 1;
 
       if (numberOfEvents === 1) {
-        expect(submitAndAwait.type).toEqual('SubmittedStatus');
+        expect(submitAndAwaitStatus.type).toEqual('SubmittedStatus');
       }
       if (numberOfEvents === 2) {
-        expect(submitAndAwait.type).toEqual('SuccessStatus');
+        expect(submitAndAwaitStatus.type).toEqual('SuccessStatus');
       }
     }
 
@@ -1729,9 +1708,11 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     await expectToThrowFuelError(
       async () => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
-          encodedTransaction: "it's mocked so doesn't matter",
-        })) {
+        for await (const { submitAndAwaitStatus } of await provider.operations.submitAndAwaitStatus(
+          {
+            encodedTransaction: "it's mocked so doesn't matter",
+          }
+        )) {
           // shouldn't be reached!
           expect(true).toBeFalsy();
         }
@@ -1748,13 +1729,14 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     Provider.clearChainAndNodeCaches();
 
     const fetchSpy = vi.spyOn(global, 'fetch');
-    await Provider.create(provider.url, {
+
+    await new Provider(provider.url, {
       requestMiddleware: (request) => {
         request.headers ??= {};
         (request.headers as Record<string, string>)['x-custom-header'] = 'custom-value';
         return request;
       },
-    });
+    }).init();
 
     const requestObject = fetchSpy.mock.calls[0][1];
 
@@ -1769,13 +1751,14 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     Provider.clearChainAndNodeCaches();
 
     const fetchSpy = vi.spyOn(global, 'fetch');
-    await Provider.create(provider.url, {
+
+    await new Provider(provider.url, {
       requestMiddleware: (request) => {
         request.headers ??= {};
         (request.headers as Record<string, string>)['x-custom-header'] = 'custom-value';
         return Promise.resolve(request);
       },
-    });
+    }).init();
 
     const requestObject = fetchSpy.mock.calls[0][1];
 
@@ -1789,7 +1772,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     const { provider: nodeProvider } = launched;
 
     const fetchSpy = vi.spyOn(global, 'fetch');
-    const provider = await Provider.create(nodeProvider.url, {
+    const provider = new Provider(nodeProvider.url, {
       requestMiddleware: (request) => {
         request.headers ??= {};
         (request.headers as Record<string, string>)['x-custom-header'] = 'custom-value';
@@ -1821,7 +1804,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     Provider.clearChainAndNodeCaches();
 
     let requestHeaders: HeadersInit | undefined;
-    await Provider.create(provider.url, {
+
+    await new Provider(provider.url, {
       fetch: async (url, requestInit) => {
         requestHeaders = requestInit?.headers;
         return fetch(url, requestInit);
@@ -1831,7 +1815,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
         (request.headers as Record<string, string>)['x-custom-header'] = 'custom-value';
         return request;
       },
-    });
+    }).init();
 
     expect(requestHeaders).toMatchObject({
       'x-custom-header': 'custom-value',
@@ -1843,7 +1827,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     const { provider: nodeProvider } = launched;
 
     const timeout = 500;
-    const provider = await Provider.create(nodeProvider.url, {
+    const provider = new Provider(nodeProvider.url, {
       fetch: async (url, requestInit) => fetch(url, requestInit),
       timeout,
     });
@@ -1952,7 +1936,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
         wallets: [wallet],
       } = launched;
 
-      const baseAssetId = provider.getBaseAssetId();
+      const baseAssetId = await provider.getBaseAssetId();
 
       // can fetch 1000 coins
       let { coins, pageInfo } = await provider.getCoins(wallet.address, baseAssetId, {
@@ -2146,7 +2130,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
         },
       });
       const { provider } = launched;
-      const baseAssetId = provider.getBaseAssetId();
+      const baseAssetId = await provider.getBaseAssetId();
       const address = Address.fromRandom();
       const exceededLimit = RESOURCES_PAGE_SIZE_LIMIT + 1;
       const safeLimit = BLOCKS_PAGE_SIZE_LIMIT;
@@ -2243,7 +2227,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       wallets: [wallet],
     } = launched;
 
-    const baseAssetId = provider.getBaseAssetId();
+    const baseAssetId = await provider.getBaseAssetId();
 
     const { balances } = await provider.getBalances(wallet.address);
 
@@ -2258,7 +2242,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   test('should not refetch consensus params in less than 1min', async () => {
     using launched = await setupTestProviderAndWallets();
 
-    const provider = await Provider.create(launched.provider.url);
+    const provider = new Provider(launched.provider.url);
     const fetchChainAndNodeInfo = vi.spyOn(provider, 'fetchChainAndNodeInfo');
 
     // calling twice
@@ -2271,12 +2255,13 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   test('should refetch consensus params if >1 min has passed', async () => {
     using launched = await setupTestProviderAndWallets();
 
-    const provider = await Provider.create(launched.provider.url);
+    const provider = new Provider(launched.provider.url);
     const fetchChainAndNodeInfo = vi.spyOn(provider, 'fetchChainAndNodeInfo');
 
     // calling twice
     await provider.autoRefetchConfigs();
     provider.consensusParametersTimestamp = 0;
+
     await provider.autoRefetchConfigs();
 
     expect(fetchChainAndNodeInfo).toHaveBeenCalledTimes(2);

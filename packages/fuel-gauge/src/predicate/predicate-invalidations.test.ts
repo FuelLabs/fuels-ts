@@ -34,7 +34,7 @@ describe('Predicate', () => {
           predicate.transfer(
             receiver.address,
             await predicate.getBalance(),
-            provider.getBaseAssetId(),
+            await provider.getBaseAssetId(),
             {
               gasLimit: 100_000_000,
             }
@@ -65,7 +65,7 @@ describe('Predicate', () => {
 
       // fuel-client we should change with the proper error message
       await expect(
-        predicate.transfer(receiver.address, 1000, provider.getBaseAssetId(), {
+        predicate.transfer(receiver.address, 1000, await provider.getBaseAssetId(), {
           gasLimit: 0,
         })
       ).rejects.toThrow(/Gas limit '0' is lower than the required:./i);

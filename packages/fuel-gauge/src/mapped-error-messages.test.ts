@@ -35,7 +35,7 @@ describe('mapped error messages', () => {
     } = launched;
 
     const request = new ScriptTransactionRequest();
-    request.addCoinOutput(wallet.address, 256, wallet.provider.getBaseAssetId());
+    request.addCoinOutput(wallet.address, 256, await wallet.provider.getBaseAssetId());
     const txCost = await wallet.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
