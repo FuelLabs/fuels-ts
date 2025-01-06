@@ -202,7 +202,7 @@ describe('Transaction', () => {
       () => sender.sendTransaction(request),
       new FuelError(
         FuelError.CODES.ASSET_BURN_DETECTED,
-        'Asset burn detected.\nAdd relevant coin change outputs to the transaction, or enable asset burn in the transaction request (`request.enableBurn()`).'
+        'Asset burn detected.\nAdd the relevant change outputs to the transaction, or enable asset burn in the transaction request (`request.enableBurn()`).'
       )
     );
   });

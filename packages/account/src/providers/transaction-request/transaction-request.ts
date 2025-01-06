@@ -713,6 +713,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }
 
   /**
+   * WARNING: Do not enable without fully understanding the implications.
+   *
    * Enables asset burn for the transaction request.
    *
    * @param burnEnabled - Whether the transaction request should enable asset burn.
@@ -723,6 +725,13 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     return this;
   }
 
+  /**
+   * @hidden
+   *
+   * Checks if the transaction request has burnable assets.
+   *
+   * @returns a boolean indicating whether the transaction request has burnable assets.
+   */
   hasBurnableAssets(): boolean {
     if (this.burnEnabled) {
       return false;
