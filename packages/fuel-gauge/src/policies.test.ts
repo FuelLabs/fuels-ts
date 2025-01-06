@@ -127,12 +127,7 @@ describe('Policies', () => {
 
     txRequest.addCoinOutput(receiver.address, 500, provider.getBaseAssetId());
 
-    const txCost = await wallet.getTransactionCost(txRequest);
-
-    txRequest.gasLimit = txCost.gasUsed;
-    txRequest.maxFee = txCost.maxFee;
-
-    await wallet.fund(txRequest, txCost);
+    await txRequest.autoCost(wallet);
 
     const tx = await wallet.sendTransaction(txRequest);
 

@@ -211,12 +211,7 @@ describe('Revert Error Testing', () => {
       ])
       .getTransactionRequest();
 
-    const txCost = await wallet.getTransactionCost(request);
-
-    request.gasLimit = txCost.gasUsed;
-    request.maxFee = txCost.maxFee;
-
-    await wallet.fund(request, txCost);
+    await request.autoCost(wallet);
 
     const tx = await wallet.sendTransaction(request, {
       estimateTxDependencies: false,

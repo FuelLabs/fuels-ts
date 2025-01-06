@@ -553,7 +553,7 @@ describe('Contract', () => {
     const struct = { a: true, b: 1337 };
     const invocationScopes = [contract.functions.foo(num), contract.functions.boo(struct)];
     const multiCallScope = contract.multiCall(invocationScopes);
-    const transactionRequest = await multiCallScope.fundWithRequiredCoins();
+    const transactionRequest = await multiCallScope.autoCost();
 
     const txRequest = JSON.stringify(transactionRequest);
     const txRequestParsed = JSON.parse(txRequest);

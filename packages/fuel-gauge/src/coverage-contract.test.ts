@@ -665,12 +665,7 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
 
     request.addCoinOutput(recipient.address, 10, provider.getBaseAssetId());
 
-    const txCost = await sender.getTransactionCost(request);
-
-    request.gasLimit = txCost.gasUsed;
-    request.maxFee = txCost.maxFee;
-
-    await sender.fund(request, txCost);
+    await request.autoCost(sender);
 
     const response = await sender.sendTransaction(request);
     const result = await response.waitForResult();
