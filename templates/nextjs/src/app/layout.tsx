@@ -16,7 +16,7 @@ const queryClient = new QueryClient();
 
 const connectors: FuelConnector[] = defaultConnectors({
   devMode: true,
-  fuelProvider: Provider.create(providerUrl),
+  fuelProvider: new Provider(providerUrl),
 });
 
 interface RootLayoutProps {

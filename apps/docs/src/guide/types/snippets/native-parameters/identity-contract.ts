@@ -7,7 +7,7 @@ import type {
   IdentityOutput,
 } from '../../../../typegend/contracts/InputOutputTypes';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const deploy = await InputOutputTypesFactory.deploy(wallet);
 const { contract } = await deploy.waitForResult();
