@@ -12,10 +12,7 @@ const txRequest = new ScriptTransactionRequest();
 txRequest.addCoinOutput(recipient.address, 1_000, provider.getBaseAssetId());
 
 // Fund the transaction
-const txCost = await wallet.getTransactionCost(txRequest);
-txRequest.maxFee = txCost.maxFee;
-txRequest.gasLimit = txCost.gasUsed;
-await wallet.fund(txRequest, txCost);
+await txRequest.autoCost(wallet);
 
 // Sign the transaction
 const txSignature = await wallet.signTransaction(txRequest);
@@ -23,10 +20,10 @@ txRequest.updateWitnessByOwner(wallet.address, txSignature);
 
 // Submit the transaction and subscribe to its result which includes
 // the processed transaction ID, its status and receipts
-const { transactionId, status, receipts } =
+const { id, status, receipts } =
   await provider.sendTransactionAndAwaitStatus(txRequest);
 // #endregion main
 
-console.log('transactionId', transactionId);
+console.log('transactionId', id);
 console.log('status', status);
 console.log('receipts', receipts);
