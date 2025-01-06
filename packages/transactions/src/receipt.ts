@@ -6,7 +6,7 @@ import type { AssetId } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { arrayify, concat } from '@fuel-ts/utils';
 
-import { ByteArrayCoder } from './byte-array';
+import { ByteArrayCoder } from './coders/byte-array';
 
 export enum ReceiptType /* u8 */ {
   Call = 0,
