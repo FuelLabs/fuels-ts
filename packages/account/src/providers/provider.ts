@@ -29,7 +29,6 @@ import type {
   GqlRelayedTransactionFailed,
   Requester,
   GqlBlockFragment,
-  GqlSubmitAndAwaitStatusSubscription,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -51,7 +50,7 @@ import {
   isTransactionTypeScript,
   transactionRequestify,
 } from './transaction-request';
-import type { TransactionResultReceipt } from './transaction-response';
+import type { TransactionResult, TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse, getDecodedLogs } from './transaction-response';
 import { processGqlReceipt } from './transaction-summary/receipt';
 import {
@@ -132,12 +131,6 @@ export type GetTransactionsResponse = {
 export type GetBlocksResponse = {
   blocks: Block[];
   pageInfo: PageInfo;
-};
-
-export type SendAndAwaitStatusResponse = {
-  transactionId: string;
-  status: string;
-  receipts: TransactionResultReceipt[];
 };
 
 /**
@@ -932,43 +925,11 @@ Supported fuel-core version: ${supportedVersion}.`
    */
   async sendTransactionAndAwaitStatus(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true }: ProviderSendTxParams = {}
-  ): Promise<SendAndAwaitStatusResponse> {
-    const transactionRequest = transactionRequestify(transactionRequestLike);
-    if (estimateTxDependencies) {
-      await this.estimateTxDependencies(transactionRequest);
-    }
-
-    this.validateTransaction(transactionRequest);
-
-    const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
-
-    const transactionId = transactionRequest.getTransactionId(this.getChainId());
-    this.#cacheInputs(transactionRequest.inputs, transactionId);
-
-    const subscription = (await this.operations.submitAndAwaitStatus({
-      encodedTransaction,
-    })) as AsyncIterable<GqlSubmitAndAwaitStatusSubscription>;
-
-    for await (const sub of subscription) {
-      const statusChange = sub.submitAndAwaitStatus;
-      if (statusChange.type === 'SqueezedOutStatus') {
-        this.#uncacheInputs(transactionId);
-        throw new FuelError(
-          ErrorCode.TRANSACTION_SQUEEZED_OUT,
-          `Transaction Squeezed Out with reason: ${statusChange.reason}`
-        );
-      }
-      if (statusChange.type !== 'SubmittedStatus') {
-        return {
-          transactionId,
-          status: statusChange.type,
-          receipts: statusChange.receipts.map(processGqlReceipt),
-        };
-      }
-    }
-
-    return { transactionId, status: 'unknown', receipts: [] };
+    providerSendTxParams: ProviderSendTxParams = {}
+  ): Promise<TransactionResult<void>> {
+    const response = await this.sendTransaction(transactionRequestLike, providerSendTxParams);
+    const result = await response.waitForResult();
+    return result;
   }
 
   /**

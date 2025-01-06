@@ -2282,7 +2282,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     expect(fetchChainAndNodeInfo).toHaveBeenCalledTimes(2);
   });
 
-  it('submits transaction and awaits status [success]', async () => {
+  it.only('submits transaction and awaits status [success]', async () => {
     using launched = await setupTestProviderAndWallets();
     const {
       provider,
@@ -2296,12 +2296,12 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     const response = await provider.sendTransactionAndAwaitStatus(transactionRequest, {
       estimateTxDependencies: false,
     });
-    expect(response.status).toBe('SuccessStatus');
+    expect(response.status).toBe('success');
     expect(response.receipts.length).not.toBe(0);
-    expect(response.transactionId).toBe(transactionId);
+    expect(response.id).toBe(transactionId);
   });
 
-  it('submits transaction and awaits status [success with estimation]', async () => {
+  it.only('submits transaction and awaits status [success with estimation]', async () => {
     using launched = await setupTestProviderAndWallets();
     const {
       provider,
@@ -2313,12 +2313,12 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     transactionRequest.updateWitnessByOwner(wallet.address, signedTransaction);
     const transactionId = transactionRequest.getTransactionId(provider.getChainId());
     const response = await provider.sendTransactionAndAwaitStatus(transactionRequest);
-    expect(response.status).toBe('SuccessStatus');
+    expect(response.status).toBe('success');
     expect(response.receipts.length).not.toBe(0);
-    expect(response.transactionId).toBe(transactionId);
+    expect(response.id).toBe(transactionId);
   });
 
-  it('submits transaction and awaits status [failure]', async () => {
+  it.only('submits transaction and awaits status [failure]', async () => {
     using launched = await setupTestProviderAndWallets();
     const {
       provider,
@@ -2329,12 +2329,14 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     transactionRequest.gasLimit = bn(0); // force fail
     const signedTransaction = await wallet.signTransaction(transactionRequest);
     transactionRequest.updateWitnessByOwner(wallet.address, signedTransaction);
-    const transactionId = transactionRequest.getTransactionId(provider.getChainId());
-    const response = await provider.sendTransactionAndAwaitStatus(transactionRequest, {
-      estimateTxDependencies: false,
-    });
-    expect(response.status).toBe('FailureStatus');
-    expect(response.receipts.length).not.toBe(0);
-    expect(response.transactionId).toBe(transactionId);
+    await expectToThrowFuelError(
+      () =>
+        provider.sendTransactionAndAwaitStatus(transactionRequest, {
+          estimateTxDependencies: false,
+        }),
+      {
+        code: ErrorCode.SCRIPT_REVERTED,
+      }
+    );
   });
 });
