@@ -99,17 +99,6 @@ describe('Logger Tests', () => {
     expect(formatted).toBe('undefined');
   });
 
-  it('should format Address to bech32 string using formatter c', () => {
-    const address = new Address('fuel1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq4qvpkv30');
-    const formatted = debug.formatters.c(address);
-    expect(formatted).toBe('fuel1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq4qvpkv30');
-  });
-
-  it('should return undefined for null input using formatter c', () => {
-    const formatted = debug.formatters.c(null);
-    expect(formatted).toBe('undefined');
-  });
-
   it('should format BN to hex string using formatter h', () => {
     const bnValue = new BN('255');
     const formatted = debug.formatters.h(bnValue);

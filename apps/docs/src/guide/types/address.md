@@ -4,7 +4,7 @@ In Sway, the [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_a
 
 ## Address Class
 
-The [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class also provides a set of utility functions for easy manipulation and conversion between address formats along with one property; `bech32Address`, which is of the [`Bech32`](./bech32.md) type.
+The [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class also provides a set of utility functions for easy manipulation and conversion between address formats along with one property; `b256Address`, which is of the [`B256`](./bits256.md) type.
 
 <<< @/../../../packages/address/src/address.ts#address-2{ts:line-numbers}
 
@@ -12,14 +12,11 @@ The [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Ad
 
 There are several ways to create an [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) instance:
 
-### From a `Bech32` Address
+### From a b256 address
 
-To create an [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) from a `Bech32` address, use the following code snippet:
+To create an [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) from a 256-bit address, use the following code snippet:
 
-<<< @./snippets/address/creating-an-address.ts#full{ts:line-numbers}
-
-> [!NOTE] Note
-> `Bech32` addresses like `fuel1..` are now deprecated. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
+<<< @./snippets/address/from-a-b256.ts#full{ts:line-numbers}
 
 ### From a Public Key
 
@@ -27,17 +24,11 @@ To create an [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_a
 
 <<< @./snippets/address/from-a-public-key.ts#full{ts:line-numbers}
 
-### From a 256-bit Address
-
-To create an [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) from a 256-bit address, use the following code snippet:
-
-<<< @./snippets/address/from-a-b256.ts#full{ts:line-numbers}
-
 ## Utility Functions
 
 The [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class also provides some practical utility functions:
 
-1. `fromString`: Create a new [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) from an ambiguous source that may be a `Bech32` or `B256` address:
+1. `fromString`: Create a new [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) from an ambiguous source that may be a `B256` address:
 
 <<< @./snippets/address/utilities-function-1.ts#full{ts:line-numbers}
 

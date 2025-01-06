@@ -8,7 +8,8 @@ import {
 } from '../../../../env';
 import { WhitelistedAddressPredicate } from '../../../../typegend/predicates/WhitelistedAddressPredicate';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
+const baseAssetId = await provider.getBaseAssetId();
 
 const whitelisted = Wallet.fromAddress(WALLET_ADDRESS, provider);
 const sender = Wallet.fromPrivateKey(WALLET_PVT_KEY_2, provider);
@@ -24,14 +25,9 @@ const predicate = new WhitelistedAddressPredicate({
 });
 
 // Transferring funds to the predicate
-const tx1 = await sender.transfer(
-  predicate.address,
-  200_000,
-  provider.getBaseAssetId(),
-  {
-    gasLimit: 1000,
-  }
-);
+const tx1 = await sender.transfer(predicate.address, 200_000, baseAssetId, {
+  gasLimit: 1000,
+});
 
 await tx1.waitForResult();
 
@@ -41,7 +37,7 @@ const amountToTransfer = 100;
 const tx2 = await predicate.transfer(
   recipient.address,
   amountToTransfer,
-  provider.getBaseAssetId(),
+  baseAssetId,
   {
     gasLimit: 1000,
   }
@@ -50,9 +46,7 @@ const tx2 = await predicate.transfer(
 await tx2.waitForResult();
 // #endregion full
 
-const destinationBalance = await recipient.getBalance(
-  provider.getBaseAssetId()
-);
+const destinationBalance = await recipient.getBalance(baseAssetId);
 
 console.log(
   'Destination balance should equal amount to transfer',

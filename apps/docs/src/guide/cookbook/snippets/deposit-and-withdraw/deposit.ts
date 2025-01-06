@@ -4,12 +4,12 @@ import { getMintedAssetId, Provider, Wallet, ZeroBytes32 } from 'fuels';
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
 import { LiquidityPoolFactory } from '../../../../typegend';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 const deploy = await LiquidityPoolFactory.deploy(wallet, {
   configurableConstants: {
-    TOKEN: { bits: provider.getBaseAssetId() },
+    TOKEN: { bits: await provider.getBaseAssetId() },
   },
 });
 
@@ -26,7 +26,7 @@ const assetId = getMintedAssetId(contractId, subId);
 
 const { waitForResult } = await contract.functions
   .deposit({ bits: liquidityOwner.address.toB256() })
-  .callParams({ forward: [depositAmount, provider.getBaseAssetId()] })
+  .callParams({ forward: [depositAmount, await provider.getBaseAssetId()] })
   .txParams({ variableOutputs: 1 })
   .call();
 

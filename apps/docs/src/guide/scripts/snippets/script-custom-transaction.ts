@@ -47,13 +47,8 @@ const quantities = [
   coinQuantityfy([500, ASSET_B]),
 ];
 
-// 5. Calculate the transaction fee
-const txCost = await wallet.getTransactionCost(request, { quantities });
-
-request.gasLimit = txCost.gasUsed;
-request.maxFee = txCost.maxFee;
-
-await wallet.fund(request, txCost);
+// 5. Estimate and fund the transaction
+await request.autoCost(wallet, { quantities });
 
 // 6. Send the transaction
 const tx = await wallet.sendTransaction(request);

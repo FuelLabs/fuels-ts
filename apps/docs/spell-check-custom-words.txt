@@ -20,7 +20,6 @@ backends
 backoff
 backtrace
 backtraces
-Bech
 BigNumber
 Bitfield
 bitmask

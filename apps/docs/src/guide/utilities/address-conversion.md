@@ -2,12 +2,9 @@
 
 Addresses and varying address formats are commonplace when interacting with decentralized applications. Furthermore, different networks may enforce different address formats.
 
-The Fuel Network uses the [`Bech32`](../types/bech32.md) address format for its interactions, an example of which can be seen below:
+The Fuel Network uses the [`Bits256`](../types/bits256.md) address format for its interactions, an example of which can be seen below:
 
-<<< @/../../docs/src/guide/types/snippets/bech32.ts#addresses-1{ts:line-numbers}
-
-> [!NOTE] Note
-> `Bech32` addresses like `fuel1..` are now deprecated. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
+<<< @/../../docs/src/guide/types/snippets/b256.ts#addresses-1{ts:line-numbers}
 
 However, a hexlified [Bits256](../types/bits256.md) (hex) is another common address format; an example can be seen below:
 
@@ -25,26 +22,6 @@ The following [conversion guide](./address-conversion.md#address-conversion) wil
 ## Address Conversion
 
 This guide demonstrates how to convert between address formats and Sway Standard Types using helper functions. Native types are wrappers for bytes, and you can perform conversions between them by leveraging these functions and classes.
-
-## From `Bech32` to `b256`
-
-By instantiating an [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html), we can validate a `Bech32` address and easily convert it to a `b256`:
-
-<<< @./snippets/address-conversion/bech32-to-b256.ts#conversion-5{ts:line-numbers}
-
-Or, if you'd prefer to use utility functions directly for validation and conversion, you can use `isBech32` and `toB256`:
-
-<<< @./snippets/address-conversion/bech32-to-b256-utilities.ts#conversion-6{ts:line-numbers}
-
-## From `b256` to `Bech32`
-
-In a similar fashion, we have both class functions on the [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) and utilities available for `b256` validation and conversion:
-
-<<< @./snippets/address-conversion/b256-to-bech32.ts#conversion-7{ts:line-numbers}
-
-And by using the `isB256` and `toBech32` utilities:
-
-<<< @./snippets/address-conversion/b256-to-bech32-utilities.ts#conversion-8{ts:line-numbers}
 
 ## Converting a Contract ID
 

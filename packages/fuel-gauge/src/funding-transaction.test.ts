@@ -4,6 +4,8 @@ import type { Account, CoinTransactionRequestInput } from 'fuels';
 import { DEFAULT_RESOURCE_CACHE_TTL, ScriptTransactionRequest, Wallet, bn, sleep } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
+import { CallTestContractFactory } from '../test/typegen';
+
 /**
  * @group node
  * @group browser
@@ -63,7 +65,7 @@ describe('Funding Transactions', () => {
       account: sender,
       totalAmount: 400_000,
       splitIn: 5,
-      baseAssetId: provider.getBaseAssetId(),
+      baseAssetId: await provider.getBaseAssetId(),
       mainWallet: sender,
     });
 
@@ -73,7 +75,7 @@ describe('Funding Transactions', () => {
 
     const amountToTransfer = 300;
 
-    request.addCoinOutput(receiver.address, amountToTransfer, provider.getBaseAssetId());
+    request.addCoinOutput(receiver.address, amountToTransfer, await provider.getBaseAssetId());
 
     const txCost = await sender.getTransactionCost(request);
 
@@ -91,7 +93,7 @@ describe('Funding Transactions', () => {
     // fund method should have been called to fetch the remaining UTXOs
     expect(getResourcesToSpendSpy).toHaveBeenCalled();
 
-    const receiverBalance = await receiver.getBalance(provider.getBaseAssetId());
+    const receiverBalance = await receiver.getBalance(await provider.getBaseAssetId());
 
     expect(receiverBalance.toNumber()).toBe(amountToTransfer + initialAmount);
   });
@@ -112,12 +114,14 @@ describe('Funding Transactions', () => {
       account: sender,
       totalAmount: 400_000,
       splitIn: 2,
-      baseAssetId: provider.getBaseAssetId(),
+      baseAssetId: await provider.getBaseAssetId(),
       mainWallet,
     });
 
     // sender has 2 UTXOs for 200_000 each, so it has enough resources to spend 1000 of baseAssetId
-    const enoughtResources = await sender.getResourcesToSpend([[100, provider.getBaseAssetId()]]);
+    const enoughtResources = await sender.getResourcesToSpend([
+      [100, await provider.getBaseAssetId()],
+    ]);
 
     // confirm we only fetched 1 UTXO from the expected amount
     expect(enoughtResources.length).toBe(1);
@@ -129,7 +133,7 @@ describe('Funding Transactions', () => {
 
     const amountToTransfer = 100;
 
-    request.addCoinOutput(receiver.address, amountToTransfer, provider.getBaseAssetId());
+    request.addCoinOutput(receiver.address, amountToTransfer, await provider.getBaseAssetId());
     request.addResources(enoughtResources);
 
     const txCost = await sender.getTransactionCost(request);
@@ -153,7 +157,7 @@ describe('Funding Transactions', () => {
     // fund should not have been called since the TX request was already funded
     expect(getResourcesToSpendSpy).toHaveBeenCalledTimes(0);
 
-    const receiverBalance = await receiver.getBalance(provider.getBaseAssetId());
+    const receiverBalance = await receiver.getBalance(await provider.getBaseAssetId());
 
     expect(receiverBalance.toNumber()).toBe(amountToTransfer);
   });
@@ -175,7 +179,7 @@ describe('Funding Transactions', () => {
       account: sender,
       totalAmount: 200_000,
       splitIn: 1,
-      baseAssetId: provider.getBaseAssetId(),
+      baseAssetId: await provider.getBaseAssetId(),
       mainWallet: sender,
     });
 
@@ -184,7 +188,7 @@ describe('Funding Transactions', () => {
     });
 
     const amountToTransfer = 1000;
-    request.addCoinOutput(receiver.address, amountToTransfer, provider.getBaseAssetId());
+    request.addCoinOutput(receiver.address, amountToTransfer, await provider.getBaseAssetId());
 
     const txCost = await sender.getTransactionCost(request);
 
@@ -205,7 +209,7 @@ describe('Funding Transactions', () => {
     // fund method should have been called to fetch UTXOs
     expect(getResourcesToSpendSpy).toHaveBeenCalledTimes(1);
 
-    const receiverBalance = await receiver.getBalance(provider.getBaseAssetId());
+    const receiverBalance = await receiver.getBalance(await provider.getBaseAssetId());
 
     expect(receiverBalance.toNumber()).toBe(amountToTransfer + initialAmount);
   });
@@ -235,14 +239,14 @@ describe('Funding Transactions', () => {
       account: sender,
       totalAmount: 1524,
       splitIn,
-      baseAssetId: provider.getBaseAssetId(),
+      baseAssetId: await provider.getBaseAssetId(),
       mainWallet: funded,
     });
 
     const request = new ScriptTransactionRequest();
 
     const amountToTransfer = 1522;
-    request.addCoinOutput(receiver.address, amountToTransfer, provider.getBaseAssetId());
+    request.addCoinOutput(receiver.address, amountToTransfer, await provider.getBaseAssetId());
 
     const txCost = await sender.getTransactionCost(request);
 
@@ -287,6 +291,8 @@ describe('Funding Transactions', () => {
       wallets: [wallet],
     } = launched;
 
+    const baseAssetId = await provider.getBaseAssetId();
+
     const receiver = Wallet.generate({ provider });
     const wallet1 = Wallet.generate({ provider });
     const wallet2 = Wallet.generate({ provider });
@@ -303,7 +309,7 @@ describe('Funding Transactions', () => {
     const submitted1 = await wallet.transfer(
       wallet1.address,
       totalInBaseAsset,
-      provider.getBaseAssetId()
+      await provider.getBaseAssetId()
     );
     await submitted1.waitForResult();
 
@@ -335,12 +341,10 @@ describe('Funding Transactions', () => {
     // Manually fetching resources from wallet1 to be added to transactionRequest
     const partiallyResources = await wallet1.getResourcesToSpend([
       [partiallyInAssetA, assetA],
-      [totalInBaseAsset, provider.getBaseAssetId()],
+      [totalInBaseAsset, baseAssetId],
     ]);
 
-    const baseAssetResource = partiallyResources.find(
-      (r) => r.assetId === provider.getBaseAssetId()
-    );
+    const baseAssetResource = partiallyResources.find((r) => r.assetId === baseAssetId);
     const assetAResource = partiallyResources.find((r) => r.assetId === assetA);
 
     // Expect to have the correct amount of resources, not enough to cover the required amount in Asset A
@@ -384,7 +388,7 @@ describe('Funding Transactions', () => {
      * Adding CoinOutputs for the receiver address. All required amounts can be
      * covered by the fundedWallet.
      */
-    transactionRequest.addCoinOutput(receiver.address, 1500, provider.getBaseAssetId());
+    transactionRequest.addCoinOutput(receiver.address, 1500, await provider.getBaseAssetId());
     transactionRequest.addCoinOutput(receiver.address, 3000, assetA);
     transactionRequest.addCoinOutput(receiver.address, 4500, assetB);
 
@@ -445,14 +449,14 @@ describe('Funding Transactions', () => {
     const submission1 = await fundedWallet.transfer(
       receiver.address,
       transferAmount,
-      provider.getBaseAssetId()
+      await provider.getBaseAssetId()
     );
 
     // Submitting TX 2 before TX 1 finished to process.
     const submission2 = await fundedWallet.transfer(
       receiver.address,
       transferAmount,
-      provider.getBaseAssetId()
+      await provider.getBaseAssetId()
     );
 
     const result1 = await submission1.waitForResult();
@@ -492,20 +496,24 @@ describe('Funding Transactions', () => {
     const transferAmount = 100_000;
 
     // Submitting TX 1
-    await fundedWallet.transfer(receiver.address, transferAmount, provider.getBaseAssetId());
+    await fundedWallet.transfer(receiver.address, transferAmount, await provider.getBaseAssetId());
 
     // ensure cache is cleared
     await sleep(100);
 
     // Submitting TX 2 before TX 1 finished to process.
-    await expect(() =>
-      fundedWallet.transfer(receiver.address, transferAmount, provider.getBaseAssetId())
+    await expect(async () =>
+      fundedWallet.transfer(receiver.address, transferAmount, await provider.getBaseAssetId())
     ).rejects.toThrowError(
       /Transaction input validation failed: Transaction id already exists \(id: .*\)/
     );
 
     const { error: e } = await safeExec(async () => {
-      await fundedWallet.transfer(receiver.address, transferAmount, provider.getBaseAssetId());
+      await fundedWallet.transfer(
+        receiver.address,
+        transferAmount,
+        await provider.getBaseAssetId()
+      );
     });
 
     const error = <FuelError>e;
@@ -514,4 +522,85 @@ describe('Funding Transactions', () => {
       /Transaction input validation failed: Transaction id already exists \(id: .*\)/
     );
   }, 15_000);
+
+  it('funds a script transaction using autoCost', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      provider,
+      wallets: [sender, receiver],
+    } = launched;
+
+    const request = new ScriptTransactionRequest().addCoinOutput(
+      receiver.address,
+      1000,
+      await provider.getBaseAssetId()
+    );
+
+    expect(request.inputs.length).toBe(0);
+    expect(request.maxFee.toNumber()).toBe(0);
+    expect(request.gasLimit.toNumber()).toBe(0);
+
+    await request.autoCost(sender);
+
+    expect(request.inputs.length).toBe(1);
+    expect(request.maxFee.toNumber()).toBeGreaterThan(0);
+    expect(request.gasLimit.toNumber()).toBeGreaterThan(0);
+
+    const tx = await sender.sendTransaction(request);
+    const result = await tx.waitForResult();
+
+    expect(result.isStatusSuccess).toBeTruthy();
+  });
+
+  it('funds a script tx from contract call using autoCost', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [{ factory: CallTestContractFactory }],
+    });
+
+    const {
+      wallets: [sender],
+      contracts: [contract],
+    } = launched;
+
+    const request = await contract.functions.no_params().getTransactionRequest();
+
+    expect(request.inputs.length).toBe(1);
+    expect(request.maxFee.toNumber()).toBe(0);
+    expect(request.gasLimit.toNumber()).toBe(0);
+
+    await request.autoCost(sender);
+
+    expect(request.inputs.length).toBe(2);
+    expect(request.maxFee.toNumber()).toBeGreaterThan(0);
+    expect(request.gasLimit.toNumber()).toBeGreaterThan(0);
+
+    const tx = await sender.sendTransaction(request);
+    const result = await tx.waitForResult();
+
+    expect(result.isStatusSuccess).toBeTruthy();
+  });
+
+  it('funds a contract call using autoCost', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [{ factory: CallTestContractFactory }],
+    });
+
+    const {
+      wallets: [sender],
+      contracts: [contract],
+    } = launched;
+
+    const scope = await contract.functions.no_params();
+    const request = await scope.autoCost();
+
+    expect(request.inputs.length).toBe(2);
+    expect(request.maxFee.toNumber()).toBeGreaterThan(0);
+    expect(request.gasLimit.toNumber()).toBeGreaterThan(0);
+
+    const tx = await sender.sendTransaction(request);
+    const result = await tx.waitForResult();
+
+    expect(result.isStatusSuccess).toBeTruthy();
+  });
 });

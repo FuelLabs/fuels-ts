@@ -20,7 +20,6 @@
  *
  * log('with this walletAddress: %w', address)
  * log('and this B256: %b', address)
- * log('and this bech32 address : %n', address)
  * ```
  *
  * ```console
@@ -31,7 +30,6 @@
  * ```
  */
 
-import { toBech32 } from '@fuel-ts/address';
 import type { Address } from '@fuel-ts/address';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
@@ -106,9 +104,6 @@ debug.formatters.a = (v?: BN): string => {
 
 // Add a formatter for converting to a b256 string
 debug.formatters.b = (v?: Address): string => (v == null ? 'undefined' : v.toB256());
-
-// Add a formatter for outputting a bech32 address
-debug.formatters.c = (v?: Address): string => (v == null ? 'undefined' : toBech32(v.toString()));
 
 // Add a formatter for outputting a BN hex string
 debug.formatters.h = (v?: BN): string => (v == null ? 'undefined' : v.toHex());

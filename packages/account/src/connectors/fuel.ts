@@ -444,11 +444,11 @@ export class Fuel extends FuelConnector implements FuelSdk {
       provider = providerOrNetwork;
       // If the provided param is a valid network use it
     } else if (providerOrNetwork && 'chainId' in providerOrNetwork && 'url' in providerOrNetwork) {
-      provider = await Provider.create(providerOrNetwork.url);
+      provider = new Provider(providerOrNetwork.url);
       // If nor provider or network is provided use the current network
     } else if (!providerOrNetwork) {
       const currentNetwork = await this.currentNetwork();
-      provider = await Provider.create(currentNetwork.url);
+      provider = new Provider(currentNetwork.url);
       // If a provider or network was informed but is not valid
       // throw an error
     } else {

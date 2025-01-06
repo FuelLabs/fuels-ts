@@ -33,7 +33,7 @@ describe('setupTestProviderAndWallets', () => {
     await waitUntilUnreachable(url);
 
     const { error } = await safeExec(async () => {
-      const p = await Provider.create(url);
+      const p = new Provider(url);
       return p.getBlockNumber();
     });
 

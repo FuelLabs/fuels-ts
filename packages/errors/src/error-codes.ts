@@ -25,12 +25,6 @@ export enum ErrorCode {
   WORKSPACE_NOT_DETECTED = 'workspace-not-detected',
 
   // address
-  /**
-   * @deprecated
-   * Type `Bech32Address` is now deprecated, as is this constant. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
-   */
-  INVALID_BECH32_ADDRESS = 'invalid-bech32-address',
-
   INVALID_ADDRESS = 'invalid-address',
   INVALID_EVM_ADDRESS = 'invalid-evm-address',
   INVALID_B256_ADDRESS = 'invalid-b256-address',

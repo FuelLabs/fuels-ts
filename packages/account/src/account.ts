@@ -57,13 +57,13 @@ export type TxParamsType = Pick<
 export type TransferParams = {
   destination: string | Address;
   amount: BigNumberish;
-  assetId?: BytesLike;
+  assetId: BytesLike;
 };
 
 export type ContractTransferParams = {
   contractId: string | Address;
   amount: BigNumberish;
-  assetId?: BytesLike;
+  assetId: BytesLike;
 };
 
 export type EstimatedTxParams = Pick<
@@ -185,7 +185,7 @@ export class Account extends AbstractAccount implements WithAddress {
    * @returns A promise that resolves to the balance amount.
    */
   async getBalance(assetId?: BytesLike): Promise<BN> {
-    const assetIdToFetch = assetId ?? this.provider.getBaseAssetId();
+    const assetIdToFetch = assetId ?? (await this.provider.getBaseAssetId());
     const amount = await this.provider.getBalance(this.address, assetIdToFetch);
     return amount;
   }
@@ -212,7 +212,7 @@ export class Account extends AbstractAccount implements WithAddress {
       params;
 
     const fee = request.maxFee;
-    const baseAssetId = this.provider.getBaseAssetId();
+    const baseAssetId = await this.provider.getBaseAssetId();
     const requiredInBaseAsset =
       requiredQuantities.find((quantity) => quantity.assetId === baseAssetId)?.amount || bn(0);
 
@@ -309,7 +309,7 @@ export class Account extends AbstractAccount implements WithAddress {
       );
     }
 
-    this.provider.validateTransaction(request);
+    await this.provider.validateTransaction(request);
 
     request.updatePredicateGasUsed(estimatedPredicates);
 
@@ -348,8 +348,15 @@ export class Account extends AbstractAccount implements WithAddress {
     txParams: TxParamsType = {}
   ): Promise<ScriptTransactionRequest> {
     let request = new ScriptTransactionRequest(txParams);
-    request = this.addTransfer(request, { destination, amount, assetId });
+
+    request = this.addTransfer(request, {
+      destination,
+      amount,
+      assetId: assetId || (await this.provider.getBaseAssetId()),
+    });
+
     request = await this.estimateAndFundTransaction(request, txParams);
+
     return request;
   }
 
@@ -399,11 +406,7 @@ export class Account extends AbstractAccount implements WithAddress {
   addTransfer(request: ScriptTransactionRequest, transferParams: TransferParams) {
     const { destination, amount, assetId } = transferParams;
     this.validateTransferAmount(amount);
-    request.addCoinOutput(
-      Address.fromAddressOrString(destination),
-      amount,
-      assetId ?? this.provider.getBaseAssetId()
-    );
+    request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetId);
     return request;
   }
 
@@ -415,12 +418,11 @@ export class Account extends AbstractAccount implements WithAddress {
    * @returns The updated script transaction request.
    */
   addBatchTransfer(request: ScriptTransactionRequest, transferParams: TransferParams[]) {
-    const baseAssetId = this.provider.getBaseAssetId();
     transferParams.forEach(({ destination, amount, assetId }) => {
       this.addTransfer(request, {
         destination,
         amount,
-        assetId: assetId ?? baseAssetId,
+        assetId,
       });
     });
     return request;
@@ -438,7 +440,7 @@ export class Account extends AbstractAccount implements WithAddress {
   async transferToContract(
     contractId: string | Address,
     amount: BigNumberish,
-    assetId?: BytesLike,
+    assetId: BytesLike,
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
     return this.batchTransferToContracts([{ amount, assetId, contractId }], txParams);
@@ -454,13 +456,13 @@ export class Account extends AbstractAccount implements WithAddress {
 
     const quantities: CoinQuantity[] = [];
 
+    const defaultAssetId = await this.provider.getBaseAssetId();
+
     const transferParams = contractTransferParams.map((transferParam) => {
       const amount = bn(transferParam.amount);
       const contractAddress = Address.fromAddressOrString(transferParam.contractId);
 
-      const assetId = transferParam.assetId
-        ? hexlify(transferParam.assetId)
-        : this.provider.getBaseAssetId();
+      const assetId = transferParam.assetId ? hexlify(transferParam.assetId) : defaultAssetId;
 
       if (amount.lte(0)) {
         throw new FuelError(
@@ -518,7 +520,7 @@ export class Account extends AbstractAccount implements WithAddress {
 
     const params: ScriptTransactionRequestLike = { script, ...txParams };
 
-    const baseAssetId = this.provider.getBaseAssetId();
+    const baseAssetId = await this.provider.getBaseAssetId();
     let request = new ScriptTransactionRequest(params);
     const quantities = [{ amount: bn(amount), assetId: baseAssetId }];
 
@@ -551,7 +553,7 @@ export class Account extends AbstractAccount implements WithAddress {
     { signatureCallback, quantities = [] }: TransactionCostParams = {}
   ): Promise<TransactionCost> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
-    const baseAssetId = this.provider.getBaseAssetId();
+    const baseAssetId = await this.provider.getBaseAssetId();
 
     // Fund with fake UTXOs to avoid not enough funds error
     // Getting coin quantities from amounts being transferred

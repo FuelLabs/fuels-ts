@@ -6,16 +6,13 @@ To interact with a deployed contract using the SDK without redeploying it, you o
 
 The `contractId` property from the [`Contract`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_program.Contract.html) class is an instance of the [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class.
 
-The [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class has a few helper methods and adds a single property: `bech32Address`. This property is a string encoded in [`Bech32`](../types/bech32.md) format, recognizable by the human-readable prefix `fuel` followed by the separator `1`.
-
-> [!NOTE] Note
-> `Bech32` addresses like `fuel1..` are now deprecated; please switch to B256 format, for more details see [here](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256).
+The [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class wraps all methods from the [`AbstractAddress`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_interfaces.AbstractAddress.html) class and adds a single property: `b256Address`. This property is a string encoded in [`B256`](../types/bits256.md) format.
 
 When you log the `contractId` property of an instantiated Contract using `console.log`, the output appears as follows:
 
 ```console
   Address {
-    bech32Address: 'fuel1e5tdjlzufcvwut5dvs5yglweepmrevpnvuvt2djj6pyl3mygkwaq8m7f20'
+    b256Address: '0xcd16d97c5c4e18ee2e8d6428447dd9c8763cb0336718b53652d049f8ec88b3ba'
   }
 ```
 

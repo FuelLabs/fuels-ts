@@ -8,7 +8,7 @@ import {
   WALLET_PVT_KEY,
 } from '../../../../env';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 
 // Generate a locked wallet
 const lockedWallet: WalletLocked = Wallet.fromAddress(WALLET_ADDRESS, provider);

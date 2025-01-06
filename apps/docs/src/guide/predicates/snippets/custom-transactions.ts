@@ -6,10 +6,10 @@ import { ConfigurablePin } from '../../../typegend';
 import type { ConfigurablePinInputs } from '../../../typegend/predicates/ConfigurablePin';
 
 // Setup
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const sender = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const receiver = Wallet.generate({ provider });
-const assetId = provider.getBaseAssetId();
+const assetId = await provider.getBaseAssetId();
 const amountToFundPredicate = 300_000;
 const amountToReceiver = 100_000;
 
@@ -42,10 +42,7 @@ customRequest.addResources(predicateResources);
 customRequest.addCoinOutput(receiver.address, amountToReceiver, assetId);
 
 // Estimate the transaction cost and fund accordingly
-const txCost = await predicate.getTransactionCost(customRequest);
-customRequest.gasLimit = txCost.gasUsed;
-customRequest.maxFee = txCost.maxFee;
-await predicate.fund(customRequest, txCost);
+await customRequest.autoCost(predicate);
 
 // Submit the transaction and await it's result
 const predicateTx = await predicate.sendTransaction(customRequest);

@@ -465,7 +465,7 @@ export default class Provider {
    * @param options - Additional options for the provider
    * @hidden
    */
-  protected constructor(url: string, options: ProviderOptions = {}) {
+  constructor(url: string, options: ProviderOptions = {}) {
     const { url: rawUrl, urlWithoutAuth, headers: authHeaders } = Provider.extractBasicAuth(url);
 
     this.url = rawUrl;
@@ -522,62 +522,55 @@ export default class Provider {
 
   /**
    * Creates a new instance of the Provider class. This is the recommended way to initialize a Provider.
+   * @deprecated Use `new Provider(...)` instead.
    *
    * @param url - GraphQL endpoint of the Fuel node
    * @param options - Additional options for the provider
-   *
    * @returns A promise that resolves to a Provider instance.
    */
   static async create(url: string, options: ProviderOptions = {}): Promise<Provider> {
-    const provider = new Provider(url, options);
-
-    await provider.fetchChainAndNodeInfo();
-
-    return provider;
+    return new Provider(url, options).init();
   }
 
   /**
-   * Returns the cached chainInfo for the current URL.
+   * Initialize Provider async stuff
+   */
+  async init(): Promise<Provider> {
+    await this.fetchChainAndNodeInfo();
+    return this;
+  }
+
+  /**
+   * Returns the `chainInfo` for the current network.
    *
    * @returns the chain information configuration.
    */
-  getChain(): ChainInfo {
-    const chain = Provider.chainInfoCache[this.urlWithoutAuth];
-    if (!chain) {
-      throw new FuelError(
-        ErrorCode.CHAIN_INFO_CACHE_EMPTY,
-        'Chain info cache is empty. Make sure you have called `Provider.create` to initialize the provider.'
-      );
-    }
-    return chain;
+  async getChain(): Promise<ChainInfo> {
+    await this.init();
+    return Provider.chainInfoCache[this.urlWithoutAuth];
   }
 
   /**
-   * Returns the cached nodeInfo for the current URL.
+   * Returns the `nodeInfo` for the current network.
    *
    * @returns the node information configuration.
    */
-  getNode(): NodeInfo {
-    const node = Provider.nodeInfoCache[this.urlWithoutAuth];
-    if (!node) {
-      throw new FuelError(
-        ErrorCode.NODE_INFO_CACHE_EMPTY,
-        'Node info cache is empty. Make sure you have called `Provider.create` to initialize the provider.'
-      );
-    }
-    return node;
+  async getNode(): Promise<NodeInfo> {
+    await this.init();
+    return Provider.nodeInfoCache[this.urlWithoutAuth];
   }
 
   /**
    * Returns some helpful parameters related to gas fees.
    */
-  getGasConfig() {
+  async getGasConfig() {
     const {
       txParameters: { maxGasPerTx },
       predicateParameters: { maxGasPerPredicate },
       feeParameters: { gasPriceFactor, gasPerByte },
       gasCosts,
-    } = this.getChain().consensusParameters;
+    } = (await this.getChain()).consensusParameters;
+
     return {
       maxGasPerTx,
       maxGasPerPredicate,
@@ -602,7 +595,8 @@ export default class Provider {
     this.options = { ...this.options, headers: { ...this.options.headers, ...headers } };
 
     this.operations = this.createOperations();
-    await this.fetchChainAndNodeInfo();
+
+    await this.init();
   }
 
   /**
@@ -615,11 +609,14 @@ export default class Provider {
     let chain: ChainInfo;
 
     try {
-      if (ignoreCache) {
-        throw new Error(`Jumps to the catch block andre-fetch`);
+      nodeInfo = Provider.nodeInfoCache[this.urlWithoutAuth];
+      chain = Provider.chainInfoCache[this.urlWithoutAuth];
+
+      const noCache = !nodeInfo || !chain;
+
+      if (ignoreCache || noCache) {
+        throw new Error(`Jumps to the catch block and re-fetch`);
       }
-      nodeInfo = this.getNode();
-      chain = this.getChain();
     } catch (_err) {
       const data = await this.operations.getChainAndNodeInfo();
 
@@ -802,10 +799,10 @@ Supported fuel-core version: ${supportedVersion}.`
    *
    * @returns A promise that resolves to the chain ID number.
    */
-  getChainId() {
+  async getChainId() {
     const {
       consensusParameters: { chainId },
-    } = this.getChain();
+    } = await this.getChain();
     return chainId.toNumber();
   }
 
@@ -814,10 +811,11 @@ Supported fuel-core version: ${supportedVersion}.`
    *
    * @returns the base asset ID.
    */
-  getBaseAssetId() {
+  async getBaseAssetId() {
+    const all = await this.getChain();
     const {
       consensusParameters: { baseAssetId },
-    } = this.getChain();
+    } = all;
     return baseAssetId;
   }
 
@@ -847,12 +845,12 @@ Supported fuel-core version: ${supportedVersion}.`
   /**
    * @hidden
    */
-  validateTransaction(tx: TransactionRequest) {
+  async validateTransaction(tx: TransactionRequest) {
     const {
       consensusParameters: {
         txParameters: { maxInputs, maxOutputs },
       },
-    } = this.getChain();
+    } = await this.getChain();
     if (bn(tx.inputs.length).gt(maxInputs)) {
       throw new FuelError(
         ErrorCode.MAX_INPUTS_EXCEEDED,
@@ -887,7 +885,7 @@ Supported fuel-core version: ${supportedVersion}.`
       await this.estimateTxDependencies(transactionRequest);
     }
 
-    this.validateTransaction(transactionRequest);
+    await this.validateTransaction(transactionRequest);
 
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
 
@@ -900,10 +898,11 @@ Supported fuel-core version: ${supportedVersion}.`
 
     this.#cacheInputs(
       transactionRequest.inputs,
-      transactionRequest.getTransactionId(this.getChainId())
+      transactionRequest.getTransactionId(await this.getChainId())
     );
 
-    return new TransactionResponse(transactionRequest, this, abis, subscription);
+    const chainId = await this.getChainId();
+    return new TransactionResponse(transactionRequest, this, chainId, abis, subscription);
   }
 
   /**
@@ -1003,7 +1002,7 @@ Supported fuel-core version: ${supportedVersion}.`
     let outputVariables = 0;
     let dryRunStatus: DryRunStatus | undefined;
 
-    this.validateTransaction(transactionRequest);
+    await this.validateTransaction(transactionRequest);
 
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
       const {
@@ -1171,7 +1170,13 @@ Supported fuel-core version: ${supportedVersion}.`
       return;
     }
 
-    const chainInfo = this.getChain();
+    // no cache? refetch.
+    if (!Provider.chainInfoCache?.[this.urlWithoutAuth]) {
+      await this.fetchChainAndNodeInfo(true);
+      return;
+    }
+
+    const chainInfo = Provider.chainInfoCache[this.urlWithoutAuth];
 
     const {
       consensusParameters: { version: previous },
@@ -1185,6 +1190,7 @@ Supported fuel-core version: ${supportedVersion}.`
       },
     } = await this.operations.getConsensusParametersVersion();
 
+    // old cache? refetch.
     if (previous !== current) {
       // calling with true to skip cache
       await this.fetchChainAndNodeInfo(true);
@@ -1202,8 +1208,8 @@ Supported fuel-core version: ${supportedVersion}.`
 
     await this.autoRefetchConfigs();
 
-    const chainInfo = this.getChain();
-    const { gasPriceFactor, maxGasPerTx } = this.getGasConfig();
+    const chainInfo = await this.getChain();
+    const { gasPriceFactor, maxGasPerTx } = await this.getGasConfig();
 
     const minGas = transactionRequest.calculateMinGas(chainInfo);
     if (!isDefined(gasPrice)) {
@@ -1364,7 +1370,7 @@ Supported fuel-core version: ${supportedVersion}.`
         throw this.extractDryRunError(txRequestClone, receipts, dryRunStatus);
       }
 
-      const { maxGasPerTx } = this.getGasConfig();
+      const { maxGasPerTx } = await this.getGasConfig();
 
       const pristineGasUsed = getGasUsedFromReceipts(receipts);
       gasUsed = bn(pristineGasUsed.muln(GAS_USED_MODIFIER)).max(maxGasPerTx.sub(minGas));
@@ -2050,9 +2056,10 @@ Supported fuel-core version: ${supportedVersion}.`
    * @param transactionId - The transaction ID to get the response for.
    * @returns A promise that resolves to the transaction response.
    */
-  // eslint-disable-next-line @typescript-eslint/require-await
+
   async getTransactionResponse(transactionId: string): Promise<TransactionResponse> {
-    return new TransactionResponse(transactionId, this);
+    const chainId = await this.getChainId();
+    return new TransactionResponse(transactionId, this, chainId);
   }
 
   /**

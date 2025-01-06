@@ -4,7 +4,7 @@ import { Provider, Wallet, getMintedAssetId, getRandomB256 } from 'fuels';
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
 import { TokenFactory } from '../../../../typegend';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const deployer = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 const deployContract = await TokenFactory.deploy(deployer);
