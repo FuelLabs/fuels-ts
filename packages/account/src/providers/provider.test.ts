@@ -2282,7 +2282,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     expect(fetchChainAndNodeInfo).toHaveBeenCalledTimes(2);
   });
 
-  it.only('submits transaction and awaits status [success]', async () => {
+  it('submits transaction and awaits status [success]', async () => {
     using launched = await setupTestProviderAndWallets();
     const {
       provider,
@@ -2301,7 +2301,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     expect(response.id).toBe(transactionId);
   });
 
-  it.only('submits transaction and awaits status [success with estimation]', async () => {
+  it('submits transaction and awaits status [success with estimation]', async () => {
     using launched = await setupTestProviderAndWallets();
     const {
       provider,
@@ -2318,7 +2318,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     expect(response.id).toBe(transactionId);
   });
 
-  it.only('submits transaction and awaits status [failure]', async () => {
+  it('submits transaction and awaits status [failure]', async () => {
     using launched = await setupTestProviderAndWallets();
     const {
       provider,
