@@ -79,8 +79,7 @@ describe('CLI', { timeout: 15_000 }, () => {
       args,
     });
 
-    const fuelToolchainPath = join(paths.projectRoot, 'fuel-toolchain.toml');
-    const fuelToolchain = readFileSync(fuelToolchainPath, 'utf-8');
+    const fuelToolchain = readFileSync(paths.fuelToolchainPath, 'utf-8');
     const parsedFuelToolchain = toml.parse(fuelToolchain);
 
     const { toolchain, components } = parsedFuelToolchain;
@@ -107,8 +106,7 @@ describe('CLI', { timeout: 15_000 }, () => {
       args,
     });
 
-    const packageJsonPath = join(paths.projectRoot, 'package.json');
-    const packageJson = readFileSync(packageJsonPath, 'utf-8');
+    const packageJson = readFileSync(paths.packageJsonPath, 'utf-8');
     expect(packageJson).toContain('bun run prebuild');
 
     const readmePath = join(paths.projectRoot, 'README.md');
@@ -163,5 +161,58 @@ describe('CLI', { timeout: 15_000 }, () => {
     for (const template of templates) {
       expect(log).toHaveBeenCalledWith(`  - ${template}`);
     }
+  });
+
+  test('should have a package.json with overrides', async () => {
+    const args = generateArgv({
+      projectName: paths.projectRoot,
+      template: paths.templateName,
+    });
+
+    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValueOnce(true);
+
+    await runScaffoldCli({
+      program: setupProgram(),
+      args,
+    });
+
+    const packageJson = readFileSync(paths.packageJsonPath, 'utf-8');
+    const packageJsonObject = JSON.parse(packageJson);
+
+    expect(packageJsonObject).toEqual(
+      expect.objectContaining({
+        overrides: expect.any(Object),
+      })
+    );
+  });
+
+  test('should rewrite overrides for pnpm', async () => {
+    process.env.npm_config_user_agent = 'pnpm';
+
+    const args = generateArgv({
+      projectName: paths.projectRoot,
+      template: paths.templateName,
+    });
+
+    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValueOnce(true);
+
+    await runScaffoldCli({
+      program: setupProgram(),
+      args,
+    });
+
+    const packageJson = readFileSync(paths.packageJsonPath, 'utf-8');
+    const packageJsonObject = JSON.parse(packageJson);
+
+    expect(packageJsonObject.overrides).toBeUndefined();
+    expect(packageJsonObject).toEqual(
+      expect.objectContaining({
+        pnpm: {
+          overrides: expect.any(Object),
+        },
+      })
+    );
+
+    delete process.env.npm_config_user_agent;
   });
 });
