@@ -8,6 +8,10 @@ import { arrayify, concat } from '@fuel-ts/utils';
 import { ByteArrayCoder } from './coders/byte-array';
 import { getMintedAssetId, createAssetId, getMessageId } from './receipt';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('getMintedAssetId', () => {
   it('should returns expected hashed asset ID', () => {
     const contractId = getRandomB256();
