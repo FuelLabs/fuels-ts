@@ -24,10 +24,6 @@ export enum ReceiptType /* u8 */ {
 
 export type ReceiptCall = {
   type: ReceiptType.Call;
-  /**
-   * @deprecated This property is deprecated and it will be removed soon. Use property `id` instead.
-   */
-  from: string;
   /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
   /** Contract ID of called contract (b256) */
@@ -108,28 +104,12 @@ export type ReceiptLog = {
   type: ReceiptType.Log;
   /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
-  /**
-   * @deprecated This property is deprecated and it will be removed soon. Use property `ra` instead.
-   */
-  val0: BN;
   /** Value of register $rA (u64) */
   ra: BN;
-  /**
-   * @deprecated This property is deprecated and it will be removed soon. Use property `rb` instead.
-   */
-  val1: BN;
   /** Value of register $rB (u64) */
   rb: BN;
-  /**
-   * @deprecated This property is deprecated and it will be removed soon. Use property `rc` instead.
-   */
-  val2: BN;
   /** Value of register $rC (u64) */
   rc: BN;
-  /**
-   * @deprecated This property is deprecated and it will be removed soon. Use property `rd` instead.
-   */
-  val3: BN;
   /** Value of register $rD (u64) */
   rd: BN;
   /** Value of register $pc (u64) */
@@ -144,16 +124,8 @@ export type ReceiptLogData = {
   id: string;
   /** Value of register $rA (u64) */
   ra: BN;
-  /**
-   * @deprecated This property is deprecated and it will be removed soon. Use property `ra` instead.
-   */
-  val0: BN;
   /** Value of register $rB (u64) */
   rb: BN;
-  /**
-   * @deprecated This property is deprecated and it will be removed soon. Use property `rb` instead.
-   */
-  val1: BN;
   /** Value of register $rC (u64) */
   ptr: BN;
   /** Value of register $rD (u64) */
@@ -170,10 +142,6 @@ export type ReceiptLogData = {
 
 export type ReceiptTransfer = {
   type: ReceiptType.Transfer;
-  /**
-   * @deprecated This property is deprecated and it will be removed soon. Use property `id` instead.
-   */
-  from: string;
   /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
   /** Contract ID of contract to transfer coins to (b256) */
@@ -190,10 +158,6 @@ export type ReceiptTransfer = {
 
 export type ReceiptTransferOut = {
   type: ReceiptType.TransferOut;
-  /**
-   * @deprecated This property is deprecated and it will be removed soon. Use property `id` instead.
-   */
-  from: string;
   /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
   /** Address to transfer coins to (b256) */
