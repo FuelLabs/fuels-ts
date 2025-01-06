@@ -847,16 +847,6 @@ Supported fuel-core version: ${supportedVersion}.`
   /**
    * @hidden
    */
-  #uncacheInputs(transactionId: string): void {
-    if (!this.cache) {
-      return;
-    }
-    this.cache.unset(transactionId);
-  }
-
-  /**
-   * @hidden
-   */
   validateTransaction(tx: TransactionRequest) {
     const {
       consensusParameters: {
