@@ -42,7 +42,7 @@ export function normalizeB256(address: B256Address): B256Address {
  * @hidden
  */
 export function isAddress(address: object): address is Address {
-  return 'bech32Address' in address;
+  return 'b256Address' in address;
 }
 
 /**
@@ -63,7 +63,6 @@ export const addressify = (addressLike: AddressLike | ContractIdLike): Address =
     return addressLike.id;
   }
 
-  // TODO: add error code
   throw new FuelError(FuelError.CODES.INVALID_ADDRESS, 'Invalid address');
 };
 
