@@ -347,3 +347,4 @@ XORs
 YAML
 TransactionRequest
 TransactionResponse
+frictionless
