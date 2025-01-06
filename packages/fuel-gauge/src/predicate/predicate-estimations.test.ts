@@ -55,7 +55,7 @@ describe('Predicate', () => {
       // Get resources from the predicate struct
       const ressources = await predicateStruct.getResourcesToSpend([
         {
-          assetId: provider.getBaseAssetId(),
+          assetId: await provider.getBaseAssetId(),
           amount: bn(10_000),
         },
       ]);
@@ -140,7 +140,9 @@ describe('Predicate', () => {
 
       await fundAccount(wallet, predicateTrue, fundingAmount);
 
-      const resources = await predicateTrue.getResourcesToSpend([[1, provider.getBaseAssetId()]]);
+      const resources = await predicateTrue.getResourcesToSpend([
+        [1, await provider.getBaseAssetId()],
+      ]);
       tx.addResources(resources);
 
       const spy = vi.spyOn(provider.operations, 'estimatePredicates');
@@ -172,7 +174,7 @@ describe('Predicate', () => {
 
       const tx = new ScriptTransactionRequest();
       const trueResources = await predicateTrue.getResourcesToSpend([
-        [1, provider.getBaseAssetId()],
+        [1, await provider.getBaseAssetId()],
       ]);
 
       tx.addResources(trueResources);
@@ -181,7 +183,7 @@ describe('Predicate', () => {
       await provider.estimatePredicates(tx);
 
       const structResources = await predicateStruct.getResourcesToSpend([
-        [1, provider.getBaseAssetId()],
+        [1, await provider.getBaseAssetId()],
       ]);
       tx.addResources(structResources);
 
@@ -224,7 +226,7 @@ describe('Predicate', () => {
       const response = await predicateValidateTransfer.transfer(
         receiverWallet.address.toB256(),
         1,
-        provider.getBaseAssetId()
+        await provider.getBaseAssetId()
       );
 
       const { isStatusSuccess } = await response.waitForResult();
@@ -257,7 +259,7 @@ describe('Predicate', () => {
         const transactionRequest = new ScriptTransactionRequest();
 
         const resources = await predicateStruct.getResourcesToSpend([
-          [fundingAmount, provider.getBaseAssetId()],
+          [fundingAmount, await provider.getBaseAssetId()],
         ]);
         resources.forEach((resource) => {
           expect(resource.predicateData).toBeDefined();
@@ -291,7 +293,7 @@ describe('Predicate', () => {
         const transactionRequest = new ScriptTransactionRequest();
 
         const resources = await provider.getResourcesToSpend(predicateStruct.address, [
-          [fundingAmount, provider.getBaseAssetId()],
+          [fundingAmount, await provider.getBaseAssetId()],
         ]);
 
         resources.forEach((resource) => {

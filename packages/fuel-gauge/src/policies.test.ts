@@ -125,7 +125,7 @@ describe('Policies', () => {
 
     const txRequest = new ScriptTransactionRequest(txParams);
 
-    txRequest.addCoinOutput(receiver.address, 500, provider.getBaseAssetId());
+    txRequest.addCoinOutput(receiver.address, 500, await provider.getBaseAssetId());
 
     await txRequest.autoCost(wallet);
 
@@ -267,7 +267,7 @@ describe('Policies', () => {
     const pendingTx = await wallet.transfer(
       receiver.address,
       500,
-      provider.getBaseAssetId(),
+      await provider.getBaseAssetId(),
       txParams
     );
 
@@ -304,7 +304,7 @@ describe('Policies', () => {
     const pendingTx = await wallet.transferToContract(
       contract.id,
       500,
-      provider.getBaseAssetId(),
+      await provider.getBaseAssetId(),
       txParams
     );
 
@@ -334,7 +334,7 @@ describe('Policies', () => {
       const pendingTx = await wallet.transfer(
         receiver.address,
         500,
-        provider.getBaseAssetId(),
+        await provider.getBaseAssetId(),
         txParams
       );
 
@@ -368,7 +368,7 @@ describe('Policies', () => {
         const pendingTx = await wallet.transfer(
           receiver.address,
           500,
-          provider.getBaseAssetId(),
+          await provider.getBaseAssetId(),
           txParams
         );
         await pendingTx.waitForResult();
@@ -401,7 +401,7 @@ describe('Policies', () => {
         const pendingTx = await wallet.transferToContract(
           contract.id,
           500,
-          provider.getBaseAssetId(),
+          await provider.getBaseAssetId(),
           txParams
         );
         await pendingTx.waitForResult();

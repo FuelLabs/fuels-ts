@@ -7,12 +7,13 @@ import {
   WALLET_PVT_KEY_2,
 } from '../../../../env';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
+const baseAssetId = await provider.getBaseAssetId();
+
 const sender = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const destination = Wallet.fromPrivateKey(WALLET_PVT_KEY_2, provider);
 
 const amountToTransfer = 500;
-const baseAssetId = sender.provider.getBaseAssetId();
 
 const response = await sender.transfer(
   destination.address,

@@ -86,7 +86,7 @@ describe('TransactionResponse', () => {
     const { id: transactionId } = await adminWallet.transfer(
       destination.address,
       100,
-      provider.getBaseAssetId(),
+      await provider.getBaseAssetId(),
       { gasLimit: 10_000 }
     );
 
@@ -123,7 +123,7 @@ describe('TransactionResponse', () => {
     const { id: transactionId } = await adminWallet.transfer(
       destination.address,
       100,
-      provider.getBaseAssetId()
+      await provider.getBaseAssetId()
     );
 
     const response = await TransactionResponse.create(transactionId, provider);
@@ -186,7 +186,7 @@ describe('TransactionResponse', () => {
       const { id: transactionId } = await genesisWallet.transfer(
         destination.address,
         100,
-        provider.getBaseAssetId(),
+        await provider.getBaseAssetId(),
         { gasLimit: 10_000 }
       );
       const response = await TransactionResponse.create(transactionId, provider);
@@ -237,7 +237,7 @@ describe('TransactionResponse', () => {
 
       const request = new ScriptTransactionRequest();
 
-      request.addCoinOutput(Wallet.generate(), 100, provider.getBaseAssetId());
+      request.addCoinOutput(Wallet.generate(), 100, await provider.getBaseAssetId());
 
       await request.autoCost(genesisWallet);
 
@@ -284,7 +284,7 @@ describe('TransactionResponse', () => {
 
       const request = new ScriptTransactionRequest();
 
-      request.addCoinOutput(Wallet.generate(), 100, provider.getBaseAssetId());
+      request.addCoinOutput(Wallet.generate(), 100, await provider.getBaseAssetId());
 
       await request.autoCost(genesisWallet, {
         signatureCallback: (tx) => tx.addAccountWitnesses(genesisWallet),
