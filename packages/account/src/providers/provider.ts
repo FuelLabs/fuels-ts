@@ -377,20 +377,7 @@ type NodeInfoCache = Record<string, NodeInfo>;
 
 type Operations = ReturnType<typeof getOperationsSdk>;
 
-type SdkOperations = Omit<
-  Operations,
-  'submitAndAwait' | 'statusChange' | 'submitAndAwaitStatus'
-> & {
-  /**
-   * This method is DEPRECATED and will be REMOVED in v1.
-   *
-   * This method will hang until the transaction is fully processed, as described in https://github.com/FuelLabs/fuel-core/issues/2108.
-   *
-   * Please use the `submitAndAwaitStatus` method instead.
-   */
-  submitAndAwait: (
-    ...args: Parameters<Operations['submitAndAwait']>
-  ) => Promise<ReturnType<Operations['submitAndAwait']>>;
+type SdkOperations = Omit<Operations, 'statusChange' | 'submitAndAwaitStatus'> & {
   statusChange: (
     ...args: Parameters<Operations['statusChange']>
   ) => Promise<ReturnType<Operations['statusChange']>>;
