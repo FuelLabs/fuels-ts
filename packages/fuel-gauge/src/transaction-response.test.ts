@@ -296,7 +296,7 @@ describe('TransactionResponse', () => {
       );
       const submit = await provider.sendTransaction(request);
 
-      const txResponse = new TransactionResponse(submit.id, provider);
+      const txResponse = new TransactionResponse(submit.id, provider, await provider.getChainId());
 
       await expectToThrowFuelError(
         async () => {
