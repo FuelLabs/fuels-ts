@@ -1,5 +1,5 @@
 {
-  "entry": ["apps/docs/src/versions.data.ts"],
+  "entry": ["apps/docs/src/versions.data.ts", "apps/docs/src/guide/*"],
   "ignore": [".github/**"],
   "ignoreDependencies": [
     "bun",
