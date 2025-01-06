@@ -228,14 +228,6 @@ pnpm bench:node
 pnpm bench:node packages/my-desired-package
 ```
 
-# Profiling
-
-We currently use [`clinic`](https://clinicjs.org/) to profile and debug our tooling. For instance you can run clinic's flame command to create a flamegraph for a specific package:
-
-```sh
-# creates a flamegraph for a specific package
-npm_config_package_name=account pnpm clinic:flame  // runs flame against the account package
-```
 
 ### CI Test
 

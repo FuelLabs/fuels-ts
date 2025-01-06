@@ -4,7 +4,6 @@
   "ignoreDependencies": [
     "bun",
     "fuels",
-    "autocannon",
     "bun",
     "@types/rimraf",
     "@internal/fuel-core",
