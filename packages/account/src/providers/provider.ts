@@ -918,8 +918,7 @@ Supported fuel-core version: ${supportedVersion}.`
     providerSendTxParams: ProviderSendTxParams = {}
   ): Promise<TransactionResult<void>> {
     const response = await this.sendTransaction(transactionRequestLike, providerSendTxParams);
-    const result = await response.waitForResult();
-    return result;
+    return await response.waitForResult();
   }
 
   /**
