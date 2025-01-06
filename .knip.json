@@ -1,5 +1,8 @@
 {
-  "entry": ["apps/docs/src/versions.data.ts", "apps/docs/src/guide/*"],
+  "entry": [
+    "apps/docs/src/versions.data.ts",
+    "apps/docs/src/guide/types/snippets/numbers/for-u8-u16-and-u32-2.ts"
+  ],
   "ignore": [".github/**"],
   "ignoreDependencies": [
     "bun",
