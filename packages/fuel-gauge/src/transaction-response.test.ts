@@ -258,7 +258,7 @@ describe('TransactionResponse', () => {
   );
 
   it(
-    'should throw error for a SqueezedOut status update [submitAndAwait]',
+    'should throw error for a SqueezedOut status update [statusChange]',
     { retry: 10 },
     async () => {
       using launched = await launchTestNode({
@@ -294,11 +294,13 @@ describe('TransactionResponse', () => {
         genesisWallet.address,
         await genesisWallet.signTransaction(request)
       );
+      const submit = await provider.sendTransaction(request);
+
+      const txResponse = new TransactionResponse(submit.id, provider);
 
       await expectToThrowFuelError(
         async () => {
-          const submit = await provider.sendTransaction(request);
-          await submit.waitForResult();
+          await txResponse.waitForResult();
         },
         { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
       );
