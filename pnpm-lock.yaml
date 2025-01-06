@@ -476,16 +476,16 @@ importers:
         version: link:../../packages/fuels
     devDependencies:
       '@types/markdown-it':
-        specifier: ^14.1.2
+        specifier: 14.1.2
         version: 14.1.2
       glob:
-        specifier: ^10.4.5
+        specifier: 10.4.5
         version: 10.4.5
       markdown-it:
-        specifier: ^14.1.0
+        specifier: 14.1.0
         version: 14.1.0
       nodemon:
-        specifier: ^3.1.7
+        specifier: 3.1.7
         version: 3.1.7
       vitepress:
         specifier: 1.3.4
