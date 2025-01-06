@@ -98,25 +98,6 @@ export enum OperationName {
   transfer = 'Transfer asset',
   contractCall = 'Contract call',
   receive = 'Receive asset',
-  /**
-   * @deprecated This value was added by mistake and has never been used.
-   * It will be removed in future versions.
-   */
-  mint = 'Mint asset',
-  /**
-   * @deprecated This value was added by mistake and has never been used.
-   * It will be removed in future versions.
-   */
-  predicatecall = 'Predicate call',
-  /**
-   * @deprecated This value was added by mistake and has never been used.
-   * It will be removed in future versions.
-   */
-  script = 'Script',
-  /**
-   * @deprecated This value was added by mistake and has never been used.
-   * It will be removed in future versions.
-   */
   sent = 'Sent asset',
   withdrawFromFuel = 'Withdraw from Fuel',
 }
