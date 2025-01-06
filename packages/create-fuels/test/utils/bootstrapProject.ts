@@ -6,7 +6,8 @@ import { rewriteTemplateFiles } from '../../src/lib/rewriteTemplateFiles';
 export type ProjectPaths = {
   // Project paths
   projectRoot: string;
-  projectPackageJson: string;
+  packageJsonPath: string;
+  fuelToolchainPath: string;
 
   // Template paths
   templateName: string;
@@ -28,7 +29,8 @@ export const bootstrapProject = (testFilepath: string, template: string = 'vite'
   // Project paths
   const projectName = `__temp__project_${testFilename}_${new Date().getTime()}`;
   const projectRoot = join(testDir, projectName);
-  const projectPackageJson = join(projectRoot, 'package.json');
+  const packageJsonPath = join(projectRoot, 'package.json');
+  const fuelToolchainPath = join(projectRoot, 'fuel-toolchain.toml');
 
   // Template paths
   const templateName = `__temp__template_${template}_${testFilename}_${new Date().getTime()}`;
@@ -38,7 +40,8 @@ export const bootstrapProject = (testFilepath: string, template: string = 'vite'
   return {
     // Project paths
     projectRoot,
-    projectPackageJson,
+    packageJsonPath,
+    fuelToolchainPath,
 
     // Template paths
     templateName,

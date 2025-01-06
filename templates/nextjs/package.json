@@ -39,5 +39,8 @@
     "tailwindcss": "3.4.14",
     "typescript": "5.6.3",
     "vitest": "2.0.5"
+  },
+  "overrides": {
+    "whatwg-url": "14.1.0"
   }
 }
