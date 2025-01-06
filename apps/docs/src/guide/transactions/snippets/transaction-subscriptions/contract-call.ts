@@ -22,12 +22,10 @@ await txRequest.autoCost(wallet);
 const txSignature = await wallet.signTransaction(txRequest);
 txRequest.updateWitnessByOwner(wallet.address, txSignature);
 
-// Submit the transaction and subscribe to its result which includes
-// the processed transaction ID, its status and receipts
-const { id, status, receipts } =
-  await provider.sendTransactionAndAwaitStatus(txRequest);
+// Send the transaction and await it's result via the opened subscription
+const result = await provider.sendTransactionAndAwaitStatus(txRequest);
 // #endregion main
 
-console.log('transactionId', id);
-console.log('status', status);
-console.log('receipts', receipts);
+console.log('transactionId', result.id);
+console.log('status', result.status);
+console.log('receipts', result.receipts);
