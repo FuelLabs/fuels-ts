@@ -7,13 +7,6 @@
  * TODO: Consider re-distritubing interfaces near their original packages
  */
 
-// #region bech32-1
-/**
- * @deprecated
- * Type `Bech32Address` is now deprecated. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
- */
-export type Bech32Address = `fuel${string}`;
-// #endregion bech32-1
 export type B256Address = string;
 
 export type ChecksumAddress = string;
@@ -55,7 +48,7 @@ export abstract class AbstractScriptRequest<T> {
 export abstract class AbstractAddress {
   abstract toJSON(): string;
   abstract toString(): string;
-  abstract toAddress(): Bech32Address;
+  abstract toAddress(): B256Address;
   abstract toB256(): B256Address;
   abstract toHexString(): string;
   abstract toBytes(): Uint8Array;

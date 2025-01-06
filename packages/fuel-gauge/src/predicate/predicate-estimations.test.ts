@@ -22,7 +22,7 @@ import {
 } from '../../test/typegen';
 import type { Validation } from '../types/predicate';
 
-import { fundPredicate } from './utils/predicate';
+import { fundAccount } from './utils/predicate';
 
 /**
  * @group node
@@ -48,7 +48,7 @@ describe('Predicate', () => {
         provider,
       });
 
-      await fundPredicate(wallet, predicateStruct, fundingAmount);
+      await fundAccount(wallet, predicateStruct, fundingAmount);
 
       const tx = new ScriptTransactionRequest();
 
@@ -138,7 +138,7 @@ describe('Predicate', () => {
 
       const predicateTrue = new PredicateTrue({ provider });
 
-      await fundPredicate(wallet, predicateTrue, fundingAmount);
+      await fundAccount(wallet, predicateTrue, fundingAmount);
 
       const resources = await predicateTrue.getResourcesToSpend([[1, provider.getBaseAssetId()]]);
       tx.addResources(resources);
@@ -167,8 +167,8 @@ describe('Predicate', () => {
         provider,
       });
 
-      await fundPredicate(wallet, predicateTrue, fundingAmount);
-      await fundPredicate(wallet, predicateStruct, fundingAmount);
+      await fundAccount(wallet, predicateTrue, fundingAmount);
+      await fundAccount(wallet, predicateStruct, fundingAmount);
 
       const tx = new ScriptTransactionRequest();
       const trueResources = await predicateTrue.getResourcesToSpend([
@@ -210,7 +210,7 @@ describe('Predicate', () => {
         data: [bn(amountToPredicate)],
       });
 
-      await fundPredicate(wallet, predicateValidateTransfer, amountToPredicate);
+      await fundAccount(wallet, predicateValidateTransfer, amountToPredicate);
 
       const receiverWallet = WalletUnlocked.generate({
         provider,
@@ -252,7 +252,7 @@ describe('Predicate', () => {
           provider,
         });
 
-        await fundPredicate(wallet, predicateStruct, fundingAmount);
+        await fundAccount(wallet, predicateStruct, fundingAmount);
 
         const transactionRequest = new ScriptTransactionRequest();
 
@@ -286,7 +286,7 @@ describe('Predicate', () => {
           provider,
         });
 
-        await fundPredicate(wallet, predicateStruct, fundingAmount);
+        await fundAccount(wallet, predicateStruct, fundingAmount);
 
         const transactionRequest = new ScriptTransactionRequest();
 

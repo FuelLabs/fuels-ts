@@ -16,7 +16,7 @@ export default function Predicate() {
     successNotification,
   } = useNotification();
   useNotification();
-  const [predicate, setPredicate] = useState<FuelPredicate<InputValue[]>>();
+  const [predicate, setPredicate] = useState<TestPredicate>();
   const [predicatePin, setPredicatePin] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
 

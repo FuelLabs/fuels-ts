@@ -610,12 +610,7 @@ describe('Account', () => {
       [amount, assetIdB],
     ]);
 
-    const txCost = await sender.getTransactionCost(request);
-
-    request.gasLimit = txCost.gasUsed;
-    request.maxFee = txCost.maxFee;
-
-    await sender.fund(request, txCost);
+    await request.autoCost(sender);
 
     const response = await sender.sendTransaction(request);
 
@@ -722,12 +717,7 @@ describe('Account', () => {
       request.addCoinOutput(sender.address, amount.div(3), provider.getBaseAssetId());
     }
 
-    const txCost = await fundingWallet.getTransactionCost(request);
-
-    request.gasLimit = txCost.gasUsed;
-    request.maxFee = txCost.maxFee;
-
-    await fundingWallet.fund(request, txCost);
+    await request.autoCost(fundingWallet);
 
     const tx1 = await fundingWallet.sendTransaction(request);
     await tx1.waitForResult();
@@ -799,12 +789,7 @@ describe('Account', () => {
       request.addCoinOutput(sender.address, fundingAmount.div(3), provider.getBaseAssetId());
     }
 
-    const txCost = await fundingWallet.getTransactionCost(request);
-
-    request.gasLimit = txCost.gasUsed;
-    request.maxFee = txCost.maxFee;
-
-    await fundingWallet.fund(request, txCost);
+    await request.autoCost(fundingWallet);
 
     const tx1 = await fundingWallet.sendTransaction(request);
     await tx1.waitForResult();
@@ -967,12 +952,7 @@ describe('Account', () => {
     const request = new ScriptTransactionRequest();
     request.addCoinOutput(wallet.address, 30_000, provider.getBaseAssetId());
 
-    const txCost = await wallet.getTransactionCost(request);
-
-    request.gasLimit = txCost.gasUsed;
-    request.maxFee = txCost.maxFee;
-
-    await expectToThrowFuelError(() => wallet.fund(request, txCost), {
+    await expectToThrowFuelError(() => request.autoCost(wallet), {
       code: ErrorCode.MAX_COINS_REACHED,
       message:
         'The account retrieving coins has exceeded the maximum number of coins per asset. Please consider combining your coins into a single UTXO.',

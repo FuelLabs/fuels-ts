@@ -88,14 +88,15 @@ describe('CLI', { timeout: 15_000 }, () => {
     expect(toolchain).toEqual({ channel: 'testnet' });
     expect(components).toEqual({
       forc: '0.66.5',
-      'fuel-core': '0.40.1',
+      'fuel-core': '0.40.2',
     });
   });
 
   test('should rewrite for the appropriate package manager', async () => {
+    process.env.npm_config_user_agent = 'bun';
+
     const args = generateArgv({
       projectName: paths.projectRoot,
-      packageManager: 'bun',
       template: paths.templateName,
     });
 
@@ -114,6 +115,8 @@ describe('CLI', { timeout: 15_000 }, () => {
     const readme = readFileSync(readmePath, 'utf-8');
     expect(readme).toContain('bun run fuels:dev');
     expect(readme).toContain('bun run dev');
+
+    delete process.env.npm_config_user_agent;
   });
 
   test('create-fuels reports an error if the project directory already exists', async () => {
