@@ -26,13 +26,13 @@ transactionRequest.inputs.push({
     transactionRequest.addEmptyWitness(),
 });
 
-// Enable asset burn
-transactionRequest.enableBurn();
-
 // Fund the transaction
 await transactionRequest.autoCost(sender);
 
-const tx = await sender.sendTransaction(transactionRequest);
+// Send the transaction with asset burn enabled
+const tx = await sender.sendTransaction(transactionRequest, {
+  enableAssetBurn: true,
+});
 // #endregion asset-burn
 
 const { isStatusSuccess } = await tx.waitForResult();

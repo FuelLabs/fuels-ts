@@ -1,3 +1,4 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { bn } from '@fuel-ts/math';
 import { InputType, OutputType } from '@fuel-ts/transactions';
@@ -10,6 +11,7 @@ import type {
   MessageTransactionRequestInput,
 } from './input';
 import type { TransactionRequestOutput } from './output';
+import type { TransactionRequest } from './types';
 
 export const isRequestInputCoin = (
   input: TransactionRequestInput
@@ -106,4 +108,26 @@ export const getBurnableAssetCount = (opts: {
   );
   const difference = new Set([...coinInputs].filter((x) => !changeOutputs.has(x)));
   return difference.size;
+};
+
+export const validateTransactionForAssetBurn = (
+  tx: TransactionRequest,
+  enableAssetBurn: boolean = false
+) => {
+  // Asset burn is enabled
+  if (enableAssetBurn) {
+    return;
+  }
+
+  // No burnable assets detected
+  if (getBurnableAssetCount(tx) <= 0) {
+    return;
+  }
+
+  const message = [
+    'Asset burn detected.',
+    'Add the relevant change outputs to the transaction to avoid burning assets.',
+    'Or enable asset burn, upon sending the transaction.',
+  ].join('\n');
+  throw new FuelError(ErrorCode.ASSET_BURN_DETECTED, message);
 };

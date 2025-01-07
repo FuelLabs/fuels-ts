@@ -46,10 +46,10 @@ import type {
   ScriptTransactionRequest,
 } from './transaction-request';
 import {
-  getBurnableAssetCount,
   isTransactionTypeCreate,
   isTransactionTypeScript,
   transactionRequestify,
+  validateTransactionForAssetBurn,
 } from './transaction-request';
 import type { TransactionResult, TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse, getDecodedLogs } from './transaction-response';
@@ -364,7 +364,12 @@ export type ProviderCallParams = UTXOValidationParams & EstimateTransactionParam
 /**
  * Provider Send transaction params
  */
-export type ProviderSendTxParams = EstimateTransactionParams;
+export type ProviderSendTxParams = EstimateTransactionParams & {
+  /**
+   * Whether to enable asset burn for the transaction.
+   */
+  enableAssetBurn?: boolean;
+};
 
 /**
  * URL - Consensus Params mapping.
@@ -840,13 +845,6 @@ Supported fuel-core version: ${supportedVersion}.`
         `The transaction exceeds the maximum allowed number of outputs. Tx outputs: ${tx.outputs.length}, max outputs: ${maxOutputs}`
       );
     }
-
-    if (!tx.burnEnabled && getBurnableAssetCount(tx) > 0) {
-      throw new FuelError(
-        ErrorCode.ASSET_BURN_DETECTED,
-        'Asset burn detected.\nAdd the relevant change outputs to the transaction, or enable asset burn in the transaction request (`request.enableBurn()`).'
-      );
-    }
   }
 
   /**
@@ -861,9 +859,11 @@ Supported fuel-core version: ${supportedVersion}.`
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true }: ProviderSendTxParams = {}
+    { estimateTxDependencies = true, enableAssetBurn = false }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    validateTransactionForAssetBurn(transactionRequest, enableAssetBurn);
+
     if (estimateTxDependencies) {
       await this.estimateTxDependencies(transactionRequest);
     }

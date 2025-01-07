@@ -112,7 +112,7 @@ export class BaseWalletUnlocked extends Account {
    */
   override async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = false }: ProviderSendTxParams = {}
+    { estimateTxDependencies = false, enableAssetBurn = false }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     if (estimateTxDependencies) {
@@ -120,7 +120,7 @@ export class BaseWalletUnlocked extends Account {
     }
     return this.provider.sendTransaction(
       await this.populateTransactionWitnessesSignature(transactionRequest),
-      { estimateTxDependencies: false }
+      { estimateTxDependencies: false, enableAssetBurn }
     );
   }
 

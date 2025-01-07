@@ -146,9 +146,6 @@ describe('Transaction', () => {
 
     const request = new ScriptTransactionRequest();
 
-    // Set the asset burn flag
-    request.enableBurn(true);
-
     // Add a coin input, which adds the relevant coin change output
     const { coins } = await sender.getCoins(ASSET_A);
     const [coin] = coins;
@@ -156,7 +153,9 @@ describe('Transaction', () => {
 
     await request.autoCost(sender);
 
-    const tx = await sender.sendTransaction(request);
+    const tx = await sender.sendTransaction(request, {
+      enableAssetBurn: true,
+    });
     const { isStatusSuccess } = await tx.waitForResult();
     expect(isStatusSuccess).toEqual(true);
   });
@@ -185,12 +184,14 @@ describe('Transaction', () => {
     };
     request.inputs.push(coinInput);
 
+    const expectedErrorMessage = [
+      'Asset burn detected.',
+      'Add the relevant change outputs to the transaction to avoid burning assets.',
+      'Or enable asset burn, upon sending the transaction.',
+    ].join('\n');
     await expectToThrowFuelError(
       () => sender.sendTransaction(request),
-      new FuelError(
-        FuelError.CODES.ASSET_BURN_DETECTED,
-        'Asset burn detected.\nAdd the relevant change outputs to the transaction, or enable asset burn in the transaction request (`request.enableBurn()`).'
-      )
+      new FuelError(FuelError.CODES.ASSET_BURN_DETECTED, expectedErrorMessage)
     );
   });
 });
