@@ -3,7 +3,6 @@ import { bn } from '@fuel-ts/math';
 import { TransactionCoder } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
 
-import { processGraphqlStatus } from '../..';
 import type {
   GqlGetTransactionsByOwnerQueryVariables,
   GqlReceiptFragment,
@@ -16,8 +15,8 @@ import { validatePaginationArgs } from '../utils/validate-pagination-args';
 
 import { assembleTransactionSummary } from './assemble-transaction-summary';
 import { processGqlReceipt } from './receipt';
+import { getTotalFeeFromStatus } from './status';
 import type { AbiMap, TransactionSummary } from './types';
-
 /** @hidden */
 export interface GetTransactionSummaryParams {
   id: string;
@@ -63,7 +62,7 @@ export async function getTransactionSummary<TTransactionType = void>(
   } = await provider.getChain();
 
   // If we have the total fee, we do not need to refetch the gas price
-  const { totalFee } = processGraphqlStatus(gqlTransaction.status);
+  const totalFee = getTotalFeeFromStatus(gqlTransaction.status);
   const gasPrice = totalFee ? bn(0) : await provider.getLatestGasPrice();
 
   const baseAssetId = await provider.getBaseAssetId();

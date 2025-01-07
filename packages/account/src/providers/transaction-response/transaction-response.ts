@@ -36,7 +36,7 @@ import type Provider from '../provider';
 import type { JsonAbisFromAllCalls, TransactionRequest } from '../transaction-request';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
 import { processGqlReceipt } from '../transaction-summary/receipt';
-import { processGraphqlStatus } from '../transaction-summary/status';
+import { getTotalFeeFromStatus } from '../transaction-summary/status';
 import type { TransactionSummary, GqlTransaction, AbiMap } from '../transaction-summary/types';
 import { extractTxError } from '../utils';
 
@@ -302,7 +302,7 @@ export class TransactionResponse {
       await this.provider.getGasConfig();
 
     // If we have the total fee, we do not need to refetch the gas price
-    const { totalFee } = processGraphqlStatus(this.status ?? this.gqlTransaction?.status);
+    const totalFee = getTotalFeeFromStatus(this.status ?? this.gqlTransaction?.status);
     const gasPrice = totalFee ? bn(0) : await this.provider.getLatestGasPrice();
 
     const maxInputs = (await this.provider.getChain()).consensusParameters.txParameters.maxInputs;
