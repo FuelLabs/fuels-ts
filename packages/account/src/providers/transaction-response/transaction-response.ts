@@ -303,7 +303,7 @@ export class TransactionResponse {
 
     // If we have the total fee, we do not need to refetch the gas price
     const totalFee = getTotalFeeFromStatus(this.status ?? this.gqlTransaction?.status);
-    const gasPrice = totalFee ?? (await this.provider.getLatestGasPrice());
+    const gasPrice = totalFee ? bn(0) : await this.provider.getLatestGasPrice();
 
     const maxInputs = (await this.provider.getChain()).consensusParameters.txParameters.maxInputs;
     const baseAssetId = await this.provider.getBaseAssetId();
