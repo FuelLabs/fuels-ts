@@ -35,6 +35,7 @@ export interface AssembleTransactionSummaryParams {
   maxGasPerTx: BN;
   gasPrice: BN;
   baseAssetId: string;
+  totalFee?: BN;
 }
 
 /** @hidden */
@@ -55,6 +56,7 @@ export function assembleTransactionSummary<TTransactionType = void>(
     maxGasPerTx,
     gasPrice,
     baseAssetId,
+    totalFee,
   } = params;
 
   const gasUsed = getGasUsedFromReceipts(receipts);
@@ -76,23 +78,32 @@ export function assembleTransactionSummary<TTransactionType = void>(
 
   const tip = bn(transaction.policies?.find((policy) => policy.type === PolicyType.Tip)?.data);
 
-  const { isStatusFailure, isStatusPending, isStatusSuccess, blockId, status, time, totalFee } =
-    processGraphqlStatus(gqlTransactionStatus);
+  const {
+    isStatusFailure,
+    isStatusPending,
+    isStatusSuccess,
+    blockId,
+    status,
+    time,
+    totalFee: totalFeeFromStatus,
+  } = processGraphqlStatus(gqlTransactionStatus);
 
-  const fee = calculateTXFeeForSummary({
-    totalFee,
-    gasPrice,
-    rawPayload,
-    tip,
-    consensusParameters: {
-      gasCosts,
-      maxGasPerTx,
-      feeParams: {
-        gasPerByte,
-        gasPriceFactor,
+  const fee =
+    totalFee ??
+    totalFeeFromStatus ??
+    calculateTXFeeForSummary({
+      gasPrice,
+      rawPayload,
+      tip,
+      consensusParameters: {
+        gasCosts,
+        maxGasPerTx,
+        feeParams: {
+          gasPerByte,
+          gasPriceFactor,
+        },
       },
-    },
-  });
+    });
 
   const mintedAssets = extractMintedAssetsFromReceipts(receipts);
   const burnedAssets = extractBurnedAssetsFromReceipts(receipts);
