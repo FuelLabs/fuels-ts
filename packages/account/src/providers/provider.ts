@@ -61,7 +61,7 @@ import {
 } from './utils';
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
-import { handleGqlErrorMessage } from './utils/handle-gql-error-message';
+import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
 const MAX_RETRIES = 10;
@@ -651,12 +651,7 @@ Supported fuel-core version: ${supportedVersion}.`
       responseMiddleware: (response: GraphQLClientResponse<unknown> | Error) => {
         if ('response' in response) {
           const graphQlResponse = response.response as GraphQLResponse;
-
-          if (Array.isArray(graphQlResponse?.errors)) {
-            for (const error of graphQlResponse.errors) {
-              handleGqlErrorMessage(error.message, error);
-            }
-          }
+          assertGqlResponseHasNoErrors(graphQlResponse.errors);
         }
       },
     });
