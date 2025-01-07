@@ -97,3 +97,11 @@ The transaction ID is a SHA-256 hash of the entire transaction request. This can
 <<< @./snippets/transaction-request/add-witness.ts#transaction-request-11{ts:line-numbers}
 
 > **Note**: Any changes made to a transaction request will alter the transaction ID. Therefore, you should only get the transaction ID after all modifications have been made.
+
+### Burning assets
+
+Assets can be burn't as part of a transaction that has inputs without associated output change. The SDK validates against this behaviour so we need to implicitly enable this with the `enableBurn` method on the transaction request.
+
+<<< @./snippets/transaction-request/asset-burn.ts#asset-burn{ts:line-numbers}
+
+> **Note**: Burning assets is permanent and all assets burn't will be lost. Therefore, be mindful of the usage of this functionality.
