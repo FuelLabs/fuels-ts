@@ -37,7 +37,7 @@ describe('assembleReceiptByType', () => {
 
     expect(receipt.type).toBe(ReceiptType.Call);
     expect(receipt.assetId).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT.assetId);
-    expect(receipt.from).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT.contractId);
+    expect(receipt.id).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT.contractId);
     expect(receipt.to).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT.to);
     expect(receipt.amount).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.amount));
     expect(receipt.gas).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.gas));
@@ -113,10 +113,10 @@ describe('assembleReceiptByType', () => {
     expect(receipt.id).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT.contractId);
     expect(receipt.is).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.is));
     expect(receipt.pc).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.pc));
-    expect(receipt.val0).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.ra));
-    expect(receipt.val1).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.rb));
-    expect(receipt.val2).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.rc));
-    expect(receipt.val3).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.rd));
+    expect(receipt.ra).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.ra));
+    expect(receipt.rb).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.rb));
+    expect(receipt.rc).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.rc));
+    expect(receipt.rd).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.rd));
   });
 
   it('should return a ReceiptLogData receipt when GqlReceiptType.LogData is provided', () => {
@@ -132,8 +132,8 @@ describe('assembleReceiptByType', () => {
     expect(receipt.pc).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.pc));
     expect(receipt.ptr).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.ptr));
     expect(receipt.len).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.len));
-    expect(receipt.val0).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.ra));
-    expect(receipt.val1).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.rb));
+    expect(receipt.ra).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.ra));
+    expect(receipt.rb).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.rb));
     expect(receipt.data).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT.data);
   });
 
@@ -144,7 +144,7 @@ describe('assembleReceiptByType', () => {
     }) as ReceiptTransfer;
 
     expect(receipt.type).toBe(ReceiptType.Transfer);
-    expect(receipt.from).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT.contractId);
+    expect(receipt.id).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT.contractId);
     expect(receipt.to).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT.to);
     expect(receipt.assetId).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT.assetId);
     expect(receipt.is).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.is));
@@ -159,7 +159,7 @@ describe('assembleReceiptByType', () => {
     }) as ReceiptTransferOut;
 
     expect(receipt.type).toBe(ReceiptType.TransferOut);
-    expect(receipt.from).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS.contractId);
+    expect(receipt.id).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS.contractId);
     expect(receipt.to).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS.toAddress);
     expect(receipt.assetId).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS.assetId);
     expect(receipt.is).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS.is));
@@ -174,7 +174,7 @@ describe('assembleReceiptByType', () => {
     }) as ReceiptTransferOut;
 
     expect(receipt.type).toBe(ReceiptType.TransferOut);
-    expect(receipt.from).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT.contractId);
+    expect(receipt.id).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT.contractId);
     expect(receipt.to).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT.to);
     expect(receipt.assetId).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT.assetId);
     expect(receipt.is).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.is));
@@ -189,7 +189,7 @@ describe('assembleReceiptByType', () => {
     }) as ReceiptTransferOut;
 
     expect(receipt.type).toBe(ReceiptType.TransferOut);
-    expect(receipt.from).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS.contractId);
+    expect(receipt.id).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS.contractId);
     expect(receipt.to).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS.toAddress);
     expect(receipt.assetId).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS.assetId);
     expect(receipt.is).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS.is));

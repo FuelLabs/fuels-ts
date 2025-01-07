@@ -70,7 +70,6 @@ export function assembleReceiptByType(receipt: GqlReceiptFragment) {
       const callReceipt: ReceiptCall = {
         type: ReceiptType.Call,
         id,
-        from: id,
         to: hexOrZero(receipt?.to),
         amount: bn(receipt.amount),
         assetId: hexOrZero(receipt.assetId),
@@ -148,10 +147,6 @@ export function assembleReceiptByType(receipt: GqlReceiptFragment) {
         rb,
         rc,
         rd,
-        val0: ra,
-        val1: rb,
-        val2: rc,
-        val3: rd,
         pc: bn(receipt.pc),
         is: bn(receipt.is),
       };
@@ -167,8 +162,6 @@ export function assembleReceiptByType(receipt: GqlReceiptFragment) {
         id: hexOrZero(receipt.id || receipt.contractId),
         ra,
         rb,
-        val0: ra,
-        val1: rb,
         ptr: bn(receipt.ptr),
         len: bn(receipt.len),
         digest: hexOrZero(receipt.digest),
@@ -184,7 +177,6 @@ export function assembleReceiptByType(receipt: GqlReceiptFragment) {
       const transferReceipt: ReceiptTransfer = {
         type: ReceiptType.Transfer,
         id,
-        from: id,
         to: hexOrZero(receipt.toAddress || receipt?.to),
         amount: bn(receipt.amount),
         assetId: hexOrZero(receipt.assetId),
@@ -200,7 +192,6 @@ export function assembleReceiptByType(receipt: GqlReceiptFragment) {
       const transferOutReceipt: ReceiptTransferOut = {
         type: ReceiptType.TransferOut,
         id,
-        from: id,
         to: hexOrZero(receipt.toAddress || receipt.to),
         amount: bn(receipt.amount),
         assetId: hexOrZero(receipt.assetId),
