@@ -108,7 +108,8 @@ describe('launchNode', () => {
     const spawnSpy = vi.spyOn(childProcessMod, 'spawn');
     process.env.FUEL_CORE_PATH = 'fuels-core';
     const { cleanup, url } = await launchNode({ loggingEnabled: false });
-    await Provider.create(url);
+
+    await new Provider(url).init();
 
     const command = spawnSpy.mock.calls[0][0];
     expect(command).toEqual('fuels-core');

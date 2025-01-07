@@ -414,10 +414,15 @@ describe('Fuel Connector', () => {
     const wallet = await fuel.getWallet(account);
     expect(wallet.provider.url).toEqual(network.url);
     const receiver = Wallet.fromAddress(Address.fromRandom(), provider);
-    const response = await wallet.transfer(receiver.address, bn(1000), provider.getBaseAssetId(), {
-      tip: bn(1),
-      gasLimit: bn(100_000),
-    });
+    const response = await wallet.transfer(
+      receiver.address,
+      bn(1000),
+      await provider.getBaseAssetId(),
+      {
+        tip: bn(1),
+        gasLimit: bn(100_000),
+      }
+    );
     const { status } = await response.waitForResult();
     expect(status).toEqual(TransactionStatus.success);
     expect((await receiver.getBalance()).toString()).toEqual('1000');
@@ -584,10 +589,8 @@ describe('Fuel Connector', () => {
     }).init();
 
     class CustomProvider extends Provider {
-      static override async create(_url: string, opts?: ProviderOptions) {
-        const provider = new CustomProvider(nodeProvider.url, opts);
-        await provider.fetchChainAndNodeInfo();
-        return provider;
+      constructor(_url: string, opts?: ProviderOptions) {
+        super(nodeProvider.url, opts);
       }
 
       // eslint-disable-next-line @typescript-eslint/require-await
@@ -604,7 +607,7 @@ describe('Fuel Connector', () => {
       throw new Error('Account not found');
     }
 
-    const provider = await CustomProvider.create(nodeProvider.url);
+    const provider = new CustomProvider(nodeProvider.url);
     const wallet = await fuel.getWallet(currentAccount, provider);
     expect(wallet.provider).toBeInstanceOf(CustomProvider);
     expect(await wallet.getBalance()).toEqual(bn(1234));

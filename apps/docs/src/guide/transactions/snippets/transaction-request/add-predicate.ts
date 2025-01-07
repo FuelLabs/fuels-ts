@@ -10,7 +10,7 @@ import {
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
 import { ScriptSum, SimplePredicate } from '../../../../typegend';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 // #region transaction-request-9
@@ -37,7 +37,7 @@ const tx = await wallet.transfer(predicate.address, bn(100_000));
 await tx.waitForResult();
 
 const predicateCoins = await predicate.getResourcesToSpend([
-  { amount: 2000, assetId: provider.getBaseAssetId() },
+  { amount: 2000, assetId: await provider.getBaseAssetId() },
 ]);
 
 // Add the predicate input and resources

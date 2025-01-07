@@ -3,7 +3,7 @@ import { hashMessage, Provider, Signer, WalletUnlocked } from 'fuels';
 
 import { LOCAL_NETWORK_URL } from '../../../../env';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 
 const wallet = WalletUnlocked.generate({ provider });
 

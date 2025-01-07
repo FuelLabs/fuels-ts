@@ -4,7 +4,7 @@ import { Address, Provider, Wallet } from 'fuels';
 
 import { LOCAL_NETWORK_URL } from '../../../../env';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 
 const address = Address.fromB256(
   '0x6d309766c0f1c6f103d147b287fabecaedd31beb180d45cf1bf7d88397aecc6f'

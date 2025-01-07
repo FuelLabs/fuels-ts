@@ -10,7 +10,8 @@ import { InputType, OutputType, TransactionType } from '@fuel-ts/transactions';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
-import type { ChainInfo, GasCosts } from '../provider';
+import type { Account } from '../../account';
+import type { ChainInfo, GasCosts, TransactionCostParams } from '../provider';
 import { calculateMetadataGasForTxScript, getMaxGas } from '../utils/gas';
 
 import { hashTransaction } from './hash-transaction';
@@ -65,6 +66,27 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     this.script = arrayify(script ?? returnZeroScript.bytes);
     this.scriptData = arrayify(scriptData ?? returnZeroScript.encodeScriptData());
     this.abis = rest.abis;
+  }
+
+  /**
+   * Helper function to fund the transaction request with a specified account.
+   *
+   * @param account - The account to fund the transaction.
+   * @param params - The parameters for the transaction cost.
+   * @returns The current instance of the `ScriptTransactionRequest` funded.
+   */
+  async autoCost(
+    account: Account,
+    { signatureCallback, quantities = [] }: TransactionCostParams = {}
+  ): Promise<ScriptTransactionRequest> {
+    const txCost = await account.getTransactionCost(this, { signatureCallback, quantities });
+
+    this.maxFee = txCost.maxFee;
+    this.gasLimit = txCost.gasUsed;
+
+    await account.fund(this, txCost);
+
+    return this;
   }
 
   /**

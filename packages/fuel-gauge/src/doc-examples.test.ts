@@ -140,7 +140,7 @@ describe('Doc Examples', () => {
     unlockedWallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
 
     const newlyLockedWallet = unlockedWallet.lock();
-    const balance: BigNumberish = await myWallet.getBalance(provider.getBaseAssetId());
+    const balance: BigNumberish = await myWallet.getBalance(await provider.getBaseAssetId());
     const { balances } = await myWallet.getBalances();
 
     expect(newlyLockedWallet.address).toEqual(someWallet.address);
@@ -186,7 +186,7 @@ describe('Doc Examples', () => {
       wallets: [fundingWallet],
     } = launched;
 
-    const baseAssetId = provider.getBaseAssetId();
+    const baseAssetId = await provider.getBaseAssetId();
 
     const walletA = Wallet.generate({ provider });
     const walletB = Wallet.generate({ provider });
@@ -209,11 +209,13 @@ describe('Doc Examples', () => {
     const { balances: walletCBalances } = await walletC.getBalances();
 
     // validate balances
-    expect(walletABalances).toEqual([{ assetId: provider.getBaseAssetId(), amount: bn(100) }]);
+    expect(walletABalances).toEqual([
+      { assetId: await provider.getBaseAssetId(), amount: bn(100) },
+    ]);
     expect(walletBBalances).toEqual([
       { assetId: TestAssetId.A.value, amount: bn(100) },
       { assetId: TestAssetId.B.value, amount: bn(100) },
-      { assetId: provider.getBaseAssetId(), amount: bn(100) },
+      { assetId: await provider.getBaseAssetId(), amount: bn(100) },
     ]);
     expect(walletCBalances).toEqual([]);
   });
@@ -269,18 +271,23 @@ describe('Doc Examples', () => {
     const wallet2: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_2, provider);
     const wallet3: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_3, provider);
 
+    const assetId = await provider.getBaseAssetId();
+
     const submitted = await fundingWallet.batchTransfer([
       {
         amount: 1_000_000,
         destination: wallet1.address,
+        assetId,
       },
       {
         amount: 2_000_000,
         destination: wallet2.address,
+        assetId,
       },
       {
         amount: 300_000,
         destination: wallet3.address,
+        assetId,
       },
     ]);
 
@@ -303,7 +310,7 @@ describe('Doc Examples', () => {
     const response = await wallet1.transfer(
       predicate.address,
       amountToPredicate,
-      provider.getBaseAssetId(),
+      await provider.getBaseAssetId(),
       {
         gasLimit: 10_000,
       }
@@ -314,7 +321,7 @@ describe('Doc Examples', () => {
     const depositOnPredicate = await wallet1.transfer(
       predicate.address,
       1000,
-      provider.getBaseAssetId(),
+      await provider.getBaseAssetId(),
       {
         gasLimit: 10_000,
       }
@@ -325,7 +332,7 @@ describe('Doc Examples', () => {
     const tx = await predicate.transfer(
       receiver.address,
       amountToReceiver,
-      provider.getBaseAssetId(),
+      await provider.getBaseAssetId(),
       {
         gasLimit: 10_000,
       }

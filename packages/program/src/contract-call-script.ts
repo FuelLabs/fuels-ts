@@ -103,8 +103,8 @@ const getMainCallReceipt = (
   contractId: string
 ): TransactionResultCallReceipt | undefined =>
   receipts.find(
-    ({ type, from, to }) =>
-      type === ReceiptType.Call && from === SCRIPT_WRAPPER_CONTRACT_ID && to === contractId
+    ({ type, id, to }) =>
+      type === ReceiptType.Call && id === SCRIPT_WRAPPER_CONTRACT_ID && to === contractId
   );
 
 const scriptResultDecoder = (contractId: AbstractAddress) => (result: ScriptResult) => {
