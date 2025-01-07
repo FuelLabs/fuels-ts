@@ -11,9 +11,7 @@ function App() {
 
   useEffect(() => {
     const main = async () => {
-      const provider = await Provider.create(
-        "https://mainnet.fuel.network/v1/graphql",
-      );
+      const provider = new Provider("https://mainnet.fuel.network/v1/graphql");
 
       const wallet = Wallet.fromAddress("0x...", provider);
       const { balances } = await wallet.getBalances();
