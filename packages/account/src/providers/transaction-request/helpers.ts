@@ -1,6 +1,6 @@
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { bn } from '@fuel-ts/math';
-import { InputType } from '@fuel-ts/transactions';
+import { InputType, OutputType } from '@fuel-ts/transactions';
 
 import type { ExcludeResourcesOption } from '../resource';
 
@@ -9,6 +9,7 @@ import type {
   CoinTransactionRequestInput,
   MessageTransactionRequestInput,
 } from './input';
+import type { TransactionRequestOutput } from './output';
 
 export const isRequestInputCoin = (
   input: TransactionRequestInput
@@ -93,3 +94,16 @@ export const cacheRequestInputsResourcesFromOwner = (
       messages: [],
     } as Required<ExcludeResourcesOption>
   );
+
+export const getBurnableAssetCount = (opts: {
+  inputs: TransactionRequestInput[];
+  outputs: TransactionRequestOutput[];
+}) => {
+  const { inputs, outputs } = opts;
+  const coinInputs = new Set(inputs.filter(isRequestInputCoin).map((input) => input.assetId));
+  const changeOutputs = new Set(
+    outputs.filter((output) => output.type === OutputType.Change).map((output) => output.assetId)
+  );
+  const difference = new Set([...coinInputs].filter((x) => !changeOutputs.has(x)));
+  return difference.size;
+};

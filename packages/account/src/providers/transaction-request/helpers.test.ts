@@ -1,7 +1,7 @@
 import { getRandomB256, Address } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { bn } from '@fuel-ts/math';
-import { InputType } from '@fuel-ts/transactions';
+import { InputType, OutputType } from '@fuel-ts/transactions';
 
 import { generateFakeCoin, generateFakeMessageCoin } from '../../test-utils/resources';
 import {
@@ -20,7 +20,10 @@ import {
   getAssetAmountInRequestInputs,
   cacheRequestInputsResources,
   cacheRequestInputsResourcesFromOwner,
+  getBurnableAssetCount,
 } from './helpers';
+import type { TransactionRequestInput } from './input';
+import type { TransactionRequestOutput } from './output';
 import { ScriptTransactionRequest } from './script-transaction-request';
 
 /**
@@ -194,6 +197,52 @@ describe('helpers', () => {
         const cached = cacheRequestInputsResources(tx.inputs);
         expect(cached.utxos).toStrictEqual([input2.id, input1.id]);
         expect(cached.messages).toStrictEqual([input3.nonce]);
+      });
+    });
+
+    describe('getBurnableAssetCount', () => {
+      it('should get the number of burnable assets [0]', () => {
+        const inputs: TransactionRequestInput[] = [
+          generateFakeRequestInputCoin({ assetId: ASSET_A, owner: owner.toB256() }),
+          generateFakeRequestInputCoin({ assetId: ASSET_B, owner: owner.toB256() }),
+        ];
+        const outputs: TransactionRequestOutput[] = [
+          { type: OutputType.Change, assetId: ASSET_A, to: owner.toB256() },
+          { type: OutputType.Change, assetId: ASSET_B, to: owner.toB256() },
+        ];
+        const expectedBurnableAssets = 0;
+
+        const burnableAssets = getBurnableAssetCount({ inputs, outputs });
+
+        expect(burnableAssets).toBe(expectedBurnableAssets);
+      });
+
+      it('should get the number of burnable assets [1]', () => {
+        const inputs: TransactionRequestInput[] = [
+          generateFakeRequestInputCoin({ assetId: ASSET_A, owner: owner.toB256() }),
+          generateFakeRequestInputCoin({ assetId: ASSET_B, owner: owner.toB256() }),
+        ];
+        const outputs: TransactionRequestOutput[] = [
+          { type: OutputType.Change, assetId: ASSET_A, to: owner.toB256() },
+        ];
+        const expectedBurnableAssets = 1;
+
+        const burnableAssets = getBurnableAssetCount({ inputs, outputs });
+
+        expect(burnableAssets).toBe(expectedBurnableAssets);
+      });
+
+      it('should get the number of burnable assets [2]', () => {
+        const inputs: TransactionRequestInput[] = [
+          generateFakeRequestInputCoin({ assetId: ASSET_A, owner: owner.toB256() }),
+          generateFakeRequestInputCoin({ assetId: ASSET_B, owner: owner.toB256() }),
+        ];
+        const outputs: TransactionRequestOutput[] = [];
+        const expectedBurnableAssets = 2;
+
+        const burnableAssets = getBurnableAssetCount({ inputs, outputs });
+
+        expect(burnableAssets).toBe(expectedBurnableAssets);
       });
     });
   });

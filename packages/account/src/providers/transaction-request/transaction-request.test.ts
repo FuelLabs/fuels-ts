@@ -290,33 +290,4 @@ describe('transactionRequestify', () => {
     expect(txRequest.witnessIndex).toEqual(txRequestLike.witnessIndex);
     expect(txRequest.type).toEqual(txRequestLike.type);
   });
-
-  it('should have burnable assets [single input, no change]', () => {
-    const txRequest = new ScriptTransactionRequest();
-    const hasBurnableAssets = true;
-
-    txRequest.inputs.push(SCRIPT_TX_COIN_REQUEST_INPUT);
-
-    expect(txRequest.hasBurnableAssets()).toEqual(hasBurnableAssets);
-  });
-
-  it('should not have burnable assets [single input, single change]', () => {
-    const txRequest = new ScriptTransactionRequest();
-    const hasBurnableAssets = false;
-
-    txRequest.inputs.push(SCRIPT_TX_COIN_REQUEST_INPUT);
-    txRequest.outputs.push(SCRIPT_TX_COIN_REQUEST_OUTPUT_CHANGE);
-
-    expect(txRequest.hasBurnableAssets()).toEqual(hasBurnableAssets);
-  });
-
-  it('should not have burnable assets [single input, burn asset enabled]', () => {
-    const txRequest = new ScriptTransactionRequest();
-    const hasBurnableAssets = false;
-
-    txRequest.enableBurn(true);
-    txRequest.inputs.push(SCRIPT_TX_COIN_REQUEST_INPUT);
-
-    expect(txRequest.hasBurnableAssets()).toEqual(hasBurnableAssets);
-  });
 });

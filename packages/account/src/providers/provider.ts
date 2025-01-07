@@ -46,6 +46,7 @@ import type {
   ScriptTransactionRequest,
 } from './transaction-request';
 import {
+  getBurnableAssetCount,
   isTransactionTypeCreate,
   isTransactionTypeScript,
   transactionRequestify,
@@ -852,7 +853,7 @@ Supported fuel-core version: ${supportedVersion}.`
       );
     }
 
-    if (tx.hasBurnableAssets()) {
+    if (!tx.burnEnabled && getBurnableAssetCount(tx) > 0) {
       throw new FuelError(
         ErrorCode.ASSET_BURN_DETECTED,
         'Asset burn detected.\nAdd the relevant change outputs to the transaction, or enable asset burn in the transaction request (`request.enableBurn()`).'

@@ -724,26 +724,4 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     this.burnEnabled = burnEnabled;
     return this;
   }
-
-  /**
-   * @hidden
-   *
-   * Checks if the transaction request has burnable assets.
-   *
-   * @returns a boolean indicating whether the transaction request has burnable assets.
-   */
-  hasBurnableAssets(): boolean {
-    if (this.burnEnabled) {
-      return false;
-    }
-
-    const coinInputs = new Set(this.getCoinInputs().map((input) => input.assetId));
-    const changeOutputs = new Set(
-      this.outputs
-        .filter((output) => output.type === OutputType.Change)
-        .map((output) => output.assetId)
-    );
-    const difference = new Set([...coinInputs].filter((x) => !changeOutputs.has(x)));
-    return difference.size > 0;
-  }
 }

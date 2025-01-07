@@ -2274,4 +2274,70 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     expect(fetchChainAndNodeInfo).toHaveBeenCalledTimes(2);
   });
+
+  it('should throw error if asset burn is detected', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      wallets: [sender],
+    } = launched;
+
+    const {
+      coins: [coin],
+    } = await sender.getCoins(ASSET_A);
+
+    const request = new ScriptTransactionRequest();
+
+    // Add the coin as an input, without a change output
+    request.inputs.push({
+      id: coin.id,
+      type: InputType.Coin,
+      owner: coin.owner.toB256(),
+      amount: coin.amount,
+      assetId: coin.assetId,
+      txPointer: '0x00000000000000000000000000000000',
+      witnessIndex:
+        request.getCoinInputWitnessIndexByOwner(coin.owner) ?? request.addEmptyWitness(),
+    });
+
+    await expectToThrowFuelError(
+      () => sender.sendTransaction(request),
+      new FuelError(
+        ErrorCode.ASSET_BURN_DETECTED,
+        'Asset burn detected.\nAdd the relevant change outputs to the transaction, or enable asset burn in the transaction request (`request.enableBurn()`).'
+      )
+    );
+  });
+
+  it('should allow asset burn if enabled', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      wallets: [sender],
+    } = launched;
+    const {
+      coins: [coin],
+    } = await sender.getCoins(ASSET_A);
+
+    const request = new ScriptTransactionRequest();
+
+    // Enable asset burn
+    request.enableBurn();
+
+    // Add the coin as an input, without a change output
+    request.inputs.push({
+      id: coin.id,
+      type: InputType.Coin,
+      owner: coin.owner.toB256(),
+      amount: coin.amount,
+      assetId: coin.assetId,
+      txPointer: '0x00000000000000000000000000000000',
+      witnessIndex: request.getCoinInputWitnessIndexByOwner(sender) ?? request.addEmptyWitness(),
+    });
+
+    // Fund the transaction
+    await request.autoCost(sender);
+
+    const response = await sender.sendTransaction(request);
+    const { isStatusSuccess } = await response.waitForResult();
+    expect(isStatusSuccess).toBe(true);
+  });
 });
