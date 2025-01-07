@@ -154,10 +154,7 @@ describe('Transaction', () => {
     const [coin] = coins;
     request.addCoinInput(coin);
 
-    const cost = await sender.getTransactionCost(request);
-    request.gasLimit = cost.gasUsed;
-    request.maxFee = cost.maxFee;
-    await sender.fund(request, cost);
+    await request.autoCost(sender);
 
     const tx = await sender.sendTransaction(request);
     const { isStatusSuccess } = await tx.waitForResult();
