@@ -2277,7 +2277,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     const transactionRequest = await wallet.createTransfer(wallet.address, 100_000);
     const signedTransaction = await wallet.signTransaction(transactionRequest);
     transactionRequest.updateWitnessByOwner(wallet.address, signedTransaction);
-    const transactionId = transactionRequest.getTransactionId(provider.getChainId());
+    const transactionId = transactionRequest.getTransactionId(await provider.getChainId());
     const response = await provider.sendTransactionAndAwaitStatus(transactionRequest, {
       estimateTxDependencies: false,
     });
@@ -2296,7 +2296,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     const transactionRequest = await wallet.createTransfer(wallet.address, 100_000);
     const signedTransaction = await wallet.signTransaction(transactionRequest);
     transactionRequest.updateWitnessByOwner(wallet.address, signedTransaction);
-    const transactionId = transactionRequest.getTransactionId(provider.getChainId());
+    const transactionId = transactionRequest.getTransactionId(await provider.getChainId());
     const response = await provider.sendTransactionAndAwaitStatus(transactionRequest);
     expect(response.status).toBe('success');
     expect(response.receipts.length).not.toBe(0);
