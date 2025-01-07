@@ -389,7 +389,7 @@ function extractTransferOperationFromReceipt(
   changeOutputs: OutputChange[]
 ) {
   const { to: toAddress, assetId, amount } = receipt;
-  let { from: fromAddress } = receipt;
+  let { id: fromAddress } = receipt;
 
   const toType = contractInputs.some((input) => input.contractID === toAddress)
     ? AddressType.contract

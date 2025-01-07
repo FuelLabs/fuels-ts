@@ -187,6 +187,8 @@ describe('Predicate.fromInstance', () => {
       wallets: [wallet],
     } = launched;
 
+    const baseAssetId = await provider.getBaseAssetId();
+
     const basePredicate = new PredicateWithConfigurable({
       provider: wallet.provider,
       data: [defaultValues.FEE, defaultValues.ADDRESS],
@@ -203,20 +205,15 @@ describe('Predicate.fromInstance', () => {
       provider: wallet.provider,
     });
 
-    await assertBalance(destination, 0, provider.getBaseAssetId());
+    await assertBalance(destination, 0, baseAssetId);
 
-    const tx = await predicate.transfer(
-      destination.address,
-      amountToTransfer,
-      provider.getBaseAssetId(),
-      {
-        gasLimit: 1000,
-      }
-    );
+    const tx = await predicate.transfer(destination.address, amountToTransfer, baseAssetId, {
+      gasLimit: 1000,
+    });
 
     await tx.waitForResult();
 
-    await assertBalance(destination, amountToTransfer, provider.getBaseAssetId());
+    await assertBalance(destination, amountToTransfer, baseAssetId);
   });
 
   it('can transfer funds using duplicated predicate with different data and same configurable constants', async () => {
@@ -226,6 +223,8 @@ describe('Predicate.fromInstance', () => {
       provider,
       wallets: [wallet],
     } = launched;
+
+    const baseAssetId = await provider.getBaseAssetId();
 
     const basePredicate = new PredicateWithConfigurable({
       provider: wallet.provider,
@@ -245,20 +244,15 @@ describe('Predicate.fromInstance', () => {
       provider: wallet.provider,
     });
 
-    await assertBalance(destination, 0, provider.getBaseAssetId());
+    await assertBalance(destination, 0, baseAssetId);
 
-    const tx = await predicate.transfer(
-      destination.address,
-      amountToTransfer,
-      provider.getBaseAssetId(),
-      {
-        gasLimit: 1000,
-      }
-    );
+    const tx = await predicate.transfer(destination.address, amountToTransfer, baseAssetId, {
+      gasLimit: 1000,
+    });
 
     await tx.waitForResult();
 
-    await assertBalance(destination, amountToTransfer, provider.getBaseAssetId());
+    await assertBalance(destination, amountToTransfer, baseAssetId);
   });
 
   it('can transfer funds using duplicated predicate with same data and different configurable constants', async () => {
@@ -268,6 +262,8 @@ describe('Predicate.fromInstance', () => {
       provider,
       wallets: [wallet],
     } = launched;
+
+    const baseAssetId = await provider.getBaseAssetId();
 
     const basePredicate = new PredicateWithConfigurable({
       provider: wallet.provider,
@@ -288,20 +284,15 @@ describe('Predicate.fromInstance', () => {
       provider: wallet.provider,
     });
 
-    await assertBalance(destination, 0, provider.getBaseAssetId());
+    await assertBalance(destination, 0, baseAssetId);
 
-    const tx = await predicate.transfer(
-      destination.address,
-      amountToTransfer,
-      provider.getBaseAssetId(),
-      {
-        gasLimit: 1000,
-      }
-    );
+    const tx = await predicate.transfer(destination.address, amountToTransfer, baseAssetId, {
+      gasLimit: 1000,
+    });
 
     await tx.waitForResult();
 
-    await assertBalance(destination, amountToTransfer, provider.getBaseAssetId());
+    await assertBalance(destination, amountToTransfer, baseAssetId);
   });
 
   it('can transfer funds using duplicated predicate with different data and configurable constants', async () => {
@@ -311,6 +302,8 @@ describe('Predicate.fromInstance', () => {
       provider,
       wallets: [wallet],
     } = launched;
+
+    const baseAssetId = await provider.getBaseAssetId();
 
     const basePredicate = new PredicateWithConfigurable({
       provider: wallet.provider,
@@ -334,19 +327,14 @@ describe('Predicate.fromInstance', () => {
       provider: wallet.provider,
     });
 
-    await assertBalance(destination, 0, provider.getBaseAssetId());
+    await assertBalance(destination, 0, baseAssetId);
 
-    const tx = await predicate.transfer(
-      destination.address,
-      amountToTransfer,
-      provider.getBaseAssetId(),
-      {
-        gasLimit: 1000,
-      }
-    );
+    const tx = await predicate.transfer(destination.address, amountToTransfer, baseAssetId, {
+      gasLimit: 1000,
+    });
 
     await tx.waitForResult();
 
-    await assertBalance(destination, amountToTransfer, provider.getBaseAssetId());
+    await assertBalance(destination, amountToTransfer, baseAssetId);
   });
 });

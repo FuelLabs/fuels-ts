@@ -64,7 +64,7 @@ describe('Transaction', () => {
       wallets: [fundedWallet],
     } = launched;
 
-    const baseAssetId = provider.getBaseAssetId();
+    const baseAssetId = await provider.getBaseAssetId();
 
     const {
       messages: [message],

@@ -68,7 +68,7 @@ describe('`create fuels` package integrity', () => {
       expect(createFuelsError).toBeUndefined();
       const actualTemplateFiles = await getAllFiles(paths.projectRoot);
       expect(actualTemplateFiles.sort()).toEqual(expectedTemplateFiles.sort());
-      const packageJson = readFileSync(paths.projectPackageJson, 'utf-8');
+      const packageJson = readFileSync(paths.packageJsonPath, 'utf-8');
       expect(packageJson).toEqual(expect.stringMatching(expectedPackageJsonInstall));
     },
     { timeout: 30000 }

@@ -32,10 +32,10 @@ export function getDecodedLogs<T = unknown>(
 
       const data =
         receipt.type === ReceiptType.Log
-          ? new BigNumberCoder('u64').encode(receipt.val0)
+          ? new BigNumberCoder('u64').encode(receipt.ra)
           : receipt.data;
 
-      const [decodedLog] = interfaceToUse.decodeLog(data, receipt.val1.toString());
+      const [decodedLog] = interfaceToUse.decodeLog(data, receipt.rb.toString());
       logs.push(decodedLog);
     }
 

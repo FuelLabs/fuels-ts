@@ -398,7 +398,7 @@ describe('Contract Factory', () => {
       provider,
     } = launched;
 
-    const { consensusParameters } = provider.getChain();
+    const { consensusParameters } = await provider.getChain();
     const maxContractSize = consensusParameters.contractParameters.contractMaxSize.toNumber();
     expect(ConfigurableContractFactory.bytecode.length).toBeLessThan(maxContractSize);
 
@@ -422,7 +422,7 @@ describe('Contract Factory', () => {
       provider,
     } = launched;
 
-    const { consensusParameters } = provider.getChain();
+    const { consensusParameters } = await provider.getChain();
     const maxContractSize = consensusParameters.contractParameters.contractMaxSize.toNumber();
     expect(LargeContractFactory.bytecode.length).toBeGreaterThan(maxContractSize);
 
