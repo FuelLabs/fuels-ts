@@ -15,7 +15,7 @@ Similarly, you can assign a custom provider to a contract instance by modifying 
 <!-- TODO: Replace with a proper snippet. We lost this snippet because this test had to be removed/changed -->
 
 ```ts
-const newProvider = await Provider.create(NEW_URL);
+const newProvider = new Provider(NEW_URL);
 deployedContract.provider = newProvider;
 ```
 
