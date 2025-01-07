@@ -50,7 +50,7 @@ import {
   isTransactionTypeScript,
   transactionRequestify,
 } from './transaction-request';
-import type { TransactionResultReceipt } from './transaction-response';
+import type { TransactionResult, TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse, getDecodedLogs } from './transaction-response';
 import { processGqlReceipt } from './transaction-summary/receipt';
 import {
@@ -878,6 +878,22 @@ Supported fuel-core version: ${supportedVersion}.`
 
     const chainId = await this.getChainId();
     return new TransactionResponse(transactionRequest, this, chainId, abis, subscription);
+  }
+
+  /**
+   * Submits a transaction to the chain and awaits its status response.
+   *
+   * @param transactionRequestLike - the request to submit.
+   * @param sendTransactionParams - The provider send transaction parameters (optional).
+   * @returns A promise that resolves to a settled transaction.
+   */
+  async sendTransactionAndAwaitStatus(
+    transactionRequestLike: TransactionRequestLike,
+    providerSendTxParams: ProviderSendTxParams = {}
+  ): Promise<TransactionResult<void>> {
+    const response = await this.sendTransaction(transactionRequestLike, providerSendTxParams);
+    const result = await response.waitForResult();
+    return result;
   }
 
   /**
