@@ -64,7 +64,7 @@ export async function generateTypes(config: FuelsConfig) {
       .map(({ programs, type }) => generateTypesForProgramType(config, programs, type))
   );
 
-  const indexFile = renderIndexTemplate(pluralizedDirNames);
+  const indexFile = await renderIndexTemplate(pluralizedDirNames);
 
   writeFileSync(join(config.output, 'index.ts'), indexFile);
 }

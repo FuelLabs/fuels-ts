@@ -17,7 +17,7 @@ import {
   type ForcToml,
 } from '../../config/forcUtils';
 import type { FuelsConfig, DeployedContract } from '../../types';
-import { debug } from '../../utils/logger';
+import { debug, log } from '../../utils/logger';
 
 import { createWallet } from './createWallet';
 import { getDeployConfig } from './getDeployConfig';
@@ -137,6 +137,8 @@ export async function deployContracts(config: FuelsConfig) {
   const contracts: DeployedContract[] = [];
 
   const wallet = await createWallet(config.providerUrl, config.privateKey);
+
+  log(`Deploying contracts to: ${wallet.provider.url}`);
 
   const contractsLen = config.contracts.length;
 

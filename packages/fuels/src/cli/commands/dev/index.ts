@@ -4,7 +4,7 @@ import { globSync } from 'glob';
 
 import { loadConfig } from '../../config/loadConfig';
 import { type FuelsConfig } from '../../types';
-import { debug, error, log } from '../../utils/logger';
+import { error, log } from '../../utils/logger';
 import { build } from '../build';
 import { deploy } from '../deploy';
 import { withConfigErrorHandler } from '../withConfig';
@@ -36,27 +36,15 @@ export type DevState = {
   config: FuelsConfig;
   watchHandlers: FSWatcher[];
   fuelCore?: FuelCoreNode;
-  filesBeingProcessed: string[];
 };
 
 export const workspaceFileChanged = (state: DevState) => async (_event: string, path: string) => {
-  if (!state.filesBeingProcessed.includes(path)) {
-    log(`\nFile changed: ${path}`);
-    try {
-      state.filesBeingProcessed.push(path);
-      await buildAndDeploy(state.config);
-    } catch (err: unknown) {
-      debug('Error in buildAndDeploy', err);
-    } finally {
-      const newState = { ...state };
-      newState.filesBeingProcessed = [...state.filesBeingProcessed].filter((p) => p !== path);
-      Object.assign(state, newState);
-    }
-  }
+  log(`\nFile changed: ${path}`);
+  await buildAndDeploy(state.config);
 };
 
 export const configFileChanged = (state: DevState) => async (_event: string, path: string) => {
-  log(`\nFile changed config: ${path}`);
+  log(`\nFile changed: ${path}`);
 
   closeAllFileHandlers(state.watchHandlers);
   state.fuelCore?.killChildProcess();
@@ -65,7 +53,7 @@ export const configFileChanged = (state: DevState) => async (_event: string, pat
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     await dev(await loadConfig(state.config.basePath));
   } catch (err: unknown) {
-    await withConfigErrorHandler(<Error>err, state.config);
+    withConfigErrorHandler(<Error>err, state.config);
   }
 };
 
@@ -91,7 +79,7 @@ export const dev = async (config: FuelsConfig) => {
 
     const watchHandlers: FSWatcher[] = [];
     const options = { persistent: true, ignoreInitial: true, ignored: '**/out/**' };
-    const state: DevState = { config, watchHandlers, fuelCore, filesBeingProcessed: [] };
+    const state = { config, watchHandlers, fuelCore };
 
     // watch: fuels.config.ts and snapshotDir
     watchHandlers.push(watch(configFilePaths, options).on('all', configFileChanged(state)));

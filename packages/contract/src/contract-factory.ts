@@ -147,7 +147,6 @@ export default class ContractFactory<TContract extends Contract = Contract> {
     const bytecode = deployOptions?.bytecode || this.bytecode;
     const stateRoot = options.stateRoot || getContractStorageRoot(options.storageSlots);
     const contractId = getContractId(bytecode, options.salt, stateRoot);
-
     const transactionRequest = new CreateTransactionRequest({
       bytecodeWitnessIndex: 0,
       witnesses: [bytecode],
@@ -203,7 +202,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
     deployOptions: DeployContractOptions = {}
   ): Promise<DeployContractResult<T>> {
     const account = this.getAccount();
-    const { consensusParameters } = await account.provider.getChain();
+    const { consensusParameters } = account.provider.getChain();
     const maxContractSize = consensusParameters.contractParameters.contractMaxSize.toNumber();
 
     return this.bytecode.length > maxContractSize
@@ -221,7 +220,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
     deployOptions: DeployContractOptions = {}
   ): Promise<DeployContractResult<T>> {
     const account = this.getAccount();
-    const { consensusParameters } = await account.provider.getChain();
+    const { consensusParameters } = account.provider.getChain();
     const maxContractSize = consensusParameters.contractParameters.contractMaxSize.toNumber();
 
     if (this.bytecode.length > maxContractSize) {
@@ -267,7 +266,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
     }
 
     // Generate the chunks based on the maximum chunk size and create blob txs
-    const chunkSize = await this.getMaxChunkSize(deployOptions, chunkSizeMultiplier);
+    const chunkSize = this.getMaxChunkSize(deployOptions, chunkSizeMultiplier);
     const chunks = getContractChunks(arrayify(this.bytecode), chunkSize).map((c) => {
       const transactionRequest = this.blobTransactionRequest({
         ...deployOptions,
@@ -295,7 +294,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
 
     // Check the account can afford to deploy all chunks and loader
     let totalCost = bn(0);
-    const chainInfo = await account.provider.getChain();
+    const chainInfo = account.provider.getChain();
     const gasPrice = await account.provider.estimateGasPrice(10);
     const priceFactor = chainInfo.consensusParameters.feeParameters.gasPriceFactor;
 
@@ -366,7 +365,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
       }
 
       await this.fundTransactionRequest(createRequest, deployOptions);
-      txIdResolver(createRequest.getTransactionId(await account.provider.getChainId()));
+      txIdResolver(createRequest.getTransactionId(account.provider.getChainId()));
       const transactionResponse = await account.sendTransaction(createRequest);
       const transactionResult = await transactionResponse.waitForResult<TransactionType.Create>();
       const contract = new Contract(contractId, this.interface, account) as T;
@@ -464,7 +463,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
   /**
    * Get the maximum chunk size for deploying a contract by chunks.
    */
-  private async getMaxChunkSize(
+  private getMaxChunkSize(
     deployOptions: DeployContractOptions,
     chunkSizeMultiplier: number = CHUNK_SIZE_MULTIPLIER
   ) {
@@ -476,7 +475,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
     }
 
     const account = this.getAccount();
-    const { consensusParameters } = await account.provider.getChain();
+    const { consensusParameters } = account.provider.getChain();
     const contractSizeLimit = consensusParameters.contractParameters.contractMaxSize.toNumber();
     const transactionSizeLimit = consensusParameters.txParameters.maxSize.toNumber();
     const maxLimit = 64000;
@@ -490,9 +489,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
       ...deployOptions,
       bytecode: randomBytes(32),
     }).addResources(
-      account.generateFakeResources([
-        { assetId: await account.provider.getBaseAssetId(), amount: bn(1) },
-      ])
+      account.generateFakeResources([{ assetId: account.provider.getBaseAssetId(), amount: bn(1) }])
     );
     // Given above, calculate the maximum chunk size
     const maxChunkSize = (sizeLimit - blobTx.byteLength() - WORD_SIZE) * chunkSizeMultiplier;

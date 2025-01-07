@@ -3,13 +3,11 @@ import type { Command } from 'commander';
 
 import { loadConfig } from '../config/loadConfig';
 import type { Commands, FuelsConfig, CommandEvent } from '../types';
-import { error, log } from '../utils/logger';
+import { log } from '../utils/logger';
 
-export const withConfigErrorHandler = async (err: Error, config?: FuelsConfig) => {
-  error(err.message);
-  if (config) {
-    await config.onFailure?.(config, <Error>err);
-  }
+export const withConfigErrorHandler = (err: Error, config?: FuelsConfig) => {
+  config?.onFailure?.(config, <Error>err);
+  throw err;
 };
 
 export function withConfig<CType extends Commands>(
@@ -28,7 +26,7 @@ export function withConfig<CType extends Commands>(
     try {
       config = await loadConfig(options.path);
     } catch (err) {
-      await withConfigErrorHandler(<Error>err);
+      withConfigErrorHandler(<Error>err);
       return;
     }
 
@@ -36,7 +34,7 @@ export function withConfig<CType extends Commands>(
       await fn(config, program);
       log(`🎉  ${capitalizeString(command)} completed successfully!`);
     } catch (err: unknown) {
-      await withConfigErrorHandler(<Error>err, config);
+      withConfigErrorHandler(<Error>err, config);
     }
   };
 }

@@ -16,8 +16,7 @@ export async function createWallet(providerUrl: string, privateKey?: string) {
   }
 
   try {
-    const provider = new Provider(providerUrl);
-    await provider.init(); // can probably be removed
+    const provider = await Provider.create(providerUrl);
 
     return Wallet.fromPrivateKey(pvtKey, provider);
   } catch (e) {
