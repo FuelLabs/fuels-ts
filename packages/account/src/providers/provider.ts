@@ -508,18 +508,6 @@ export default class Provider {
   }
 
   /**
-   * Creates a new instance of the Provider class. This is the recommended way to initialize a Provider.
-   * @deprecated Use `new Provider(...)` instead.
-   *
-   * @param url - GraphQL endpoint of the Fuel node
-   * @param options - Additional options for the provider
-   * @returns A promise that resolves to a Provider instance.
-   */
-  static async create(url: string, options: ProviderOptions = {}): Promise<Provider> {
-    return new Provider(url, options).init();
-  }
-
-  /**
    * Initialize Provider async stuff
    */
   async init(): Promise<Provider> {
