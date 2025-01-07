@@ -881,7 +881,6 @@ describe('operations', () => {
       const expected: TransactionResultTransferOutReceipt = {
         amount: bn('0x5f5e100'),
         assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        from: '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1',
         id: '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1',
         is: bn('0x4370'),
         pc: bn('0x57dc'),
