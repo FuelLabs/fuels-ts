@@ -2,7 +2,7 @@
 
 When submitting transactions via the SDK, usually this is done by calling a method in a [script](../scripts/running-scripts.md) or [contract](../contracts/methods.md#call), or sending a transaction via a [predicate](../predicates/methods.md#sendtransaction) or [wallet](../wallets/index.md). These methods submit the transaction and then return a [TransactionResponse](./transaction-response.md) that allows you to view the result of a transaction at your convenience, leaving the rest of your app processing unblocked.
 
-However, if you want to send a transaction and wait until it's processed, for convenience the SDK also exposes the `sendTransactionAndAwaitStatus` available on a [Provider](../provider/index.md) which behaves the same as `sendTransaction` but waits until the transaction is processed by the node and then returns the transaction result. 
+However, if you want to send a transaction and wait until it's processed, for convenience the SDK also exposes the `sendTransactionAndAwaitStatus` available on a [Provider](../provider/index.md) which behaves the same as `sendTransaction` but waits until the transaction is processed by the node and then returns the transaction result.
 
 This functionality can be used like so:
 
