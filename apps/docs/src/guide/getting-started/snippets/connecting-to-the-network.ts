@@ -3,7 +3,7 @@ import { Provider } from 'fuels';
 
 const NETWORK_URL = 'https://mainnet.fuel.network/v1/graphql';
 
-const provider = await Provider.create(NETWORK_URL);
+const provider = new Provider(NETWORK_URL);
 
 const baseAssetId = provider.getBaseAssetId();
 const chainId = provider.getChainId();
