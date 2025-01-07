@@ -3,9 +3,10 @@ import type { Command } from 'commander';
 
 import { loadConfig } from '../config/loadConfig';
 import type { Commands, FuelsConfig, CommandEvent } from '../types';
-import { log } from '../utils/logger';
+import { error, log } from '../utils/logger';
 
 export const withConfigErrorHandler = (err: Error, config?: FuelsConfig) => {
+  error(err.message);
   config?.onFailure?.(config, <Error>err);
   throw err;
 };

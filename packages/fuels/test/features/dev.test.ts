@@ -1,8 +1,7 @@
-import { sleep } from '@fuel-ts/utils';
 import * as chokidar from 'chokidar';
 import { execFileSync, execSync, spawn } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 
@@ -38,8 +37,7 @@ function runInit2() {
     rootDir,
     contractDir,
     [Symbol.dispose]: () => {
-      console.log(rootDir);
-      // rmSync(rootDir, { recursive: true });
+      rmSync(rootDir, { recursive: true });
     },
   };
 }
@@ -117,7 +115,8 @@ describe('dev', () => {
   it('exits when build fails', { timeout: 50000 }, async () => {
     using res = runInit2();
     const mainSw = readFileSync(`${res.contractDir}/src/main.sw`).toString();
-    writeFileSync(`${res.contractDir}/src/main.sw`, `${mainSw}\nabi `);
+    const invalidSwayCode = `${mainSw}\nabi `;
+    writeFileSync(`${res.contractDir}/src/main.sw`, invalidSwayCode);
 
     const devProcess = spawn('pnpm fuels dev', {
       cwd: res.rootDir,

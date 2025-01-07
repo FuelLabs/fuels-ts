@@ -65,10 +65,7 @@ describe('dev', () => {
     const { log } = mockLogger();
     const { build, deploy } = mockAll();
 
-    await workspaceFileChanged({ config: fuelsConfig, watchHandlers: [], filesBeingProcessed: [] })(
-      'event',
-      'some/path'
-    );
+    await workspaceFileChanged({ config: fuelsConfig, watchHandlers: [] })('event', 'some/path');
 
     expect(log).toHaveBeenCalledTimes(1);
     expect(build).toHaveBeenCalledTimes(1);
@@ -130,10 +127,7 @@ describe('dev', () => {
     const close = vi.fn();
     const watchHandlers = [{ close }, { close }] as unknown as FSWatcher[];
 
-    await configFileChanged({ config, fuelCore, watchHandlers, filesBeingProcessed: [] })(
-      'event',
-      'some/path'
-    );
+    await configFileChanged({ config, fuelCore, watchHandlers })('event', 'some/path');
 
     // configFileChanged() internals
     expect(log).toHaveBeenCalledTimes(1);
@@ -169,10 +163,7 @@ describe('dev', () => {
     const close = vi.fn();
     const watchHandlers = [{ close }, { close }] as unknown as FSWatcher[];
 
-    await configFileChanged({ config, fuelCore, watchHandlers, filesBeingProcessed: [] })(
-      'event',
-      'some/path'
-    );
+    await configFileChanged({ config, fuelCore, watchHandlers })('event', 'some/path');
 
     // configFileChanged() internals
     expect(log).toHaveBeenCalledTimes(1);

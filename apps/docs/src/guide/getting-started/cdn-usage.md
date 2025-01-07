@@ -16,7 +16,7 @@
     const provider = new Provider(
       "https://mainnet.fuel.network/v1/graphql",
     );
-    const { name } = provider.getChain();
+    const { name } = await provider.getChain();
     console.log(name);
   };
 
