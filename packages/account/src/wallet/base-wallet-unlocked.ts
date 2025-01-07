@@ -1,5 +1,5 @@
 import { hashMessage } from '@fuel-ts/hasher';
-import type { BytesLike } from '@fuel-ts/interfaces';
+import type { BytesLike } from '@fuel-ts/utils';
 import { hexlify } from '@fuel-ts/utils';
 
 import { Account } from '../account';
