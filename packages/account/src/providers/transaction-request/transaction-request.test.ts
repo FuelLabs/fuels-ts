@@ -6,10 +6,6 @@ import { TransactionType, UpgradePurposeTypeEnum } from '@fuel-ts/transactions';
 import { concat, hexlify } from '@fuel-ts/utils';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 
-import {
-  SCRIPT_TX_COIN_REQUEST_INPUT,
-  SCRIPT_TX_COIN_REQUEST_OUTPUT_CHANGE,
-} from '../../../test/fixtures/transaction-request';
 import { WalletUnlocked } from '../../wallet';
 import type { Coin } from '../coin';
 import type { CoinQuantity } from '../coin-quantity';
