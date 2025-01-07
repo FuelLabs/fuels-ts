@@ -63,7 +63,7 @@ export async function getTransactionSummary<TTransactionType = void>(
 
   // If we have the total fee, we do not need to refetch the gas price
   const totalFee = getTotalFeeFromStatus(gqlTransaction.status);
-  const gasPrice = totalFee ? bn(0) : await provider.getLatestGasPrice();
+  const gasPrice = totalFee ?? (await provider.getLatestGasPrice());
 
   const baseAssetId = await provider.getBaseAssetId();
 
