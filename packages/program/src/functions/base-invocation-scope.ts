@@ -254,7 +254,7 @@ export class BaseInvocationScope<TReturn = any> {
     transactionRequest = clone(transactionRequest);
 
     const txCost = await this.getTransactionCost();
-    const { gasUsed, missingContractIds, outputVariables, maxFee } = txCost;
+    const { gasUsed, missingContractIds, maxFee } = txCost;
     this.setDefaultTxParams(transactionRequest, gasUsed, maxFee);
     // Clean coin inputs before add new coins to the request
     transactionRequest.inputs = transactionRequest.inputs.filter((i) => i.type !== InputType.Coin);
@@ -263,9 +263,6 @@ export class BaseInvocationScope<TReturn = any> {
     missingContractIds.forEach((contractId) => {
       transactionRequest.addContractInputAndOutput(Address.fromString(contractId));
     });
-
-    // Adding required number of OutputVariables
-    transactionRequest.addVariableOutputs(outputVariables);
 
     await this.program.account?.fund(transactionRequest, txCost);
 

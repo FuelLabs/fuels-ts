@@ -83,7 +83,6 @@ export type CallResult = {
 };
 
 export type EstimateTxDependenciesReturns = CallResult & {
-  outputVariables: number;
   missingContractIds: string[];
 };
 
@@ -202,7 +201,6 @@ export type TransactionCost = {
   maxFee: BN;
   maxGas: BN;
   receipts: TransactionResultReceipt[];
-  outputVariables: number;
   missingContractIds: string[];
   estimatedPredicates: TransactionRequestInput[];
   requiredQuantities: CoinQuantity[];
@@ -990,7 +988,6 @@ Supported fuel-core version: ${supportedVersion}.`
     if (isTransactionTypeCreate(transactionRequest)) {
       return {
         receipts: [],
-        outputVariables: 0,
         missingContractIds: [],
       };
     }
@@ -1051,7 +1048,6 @@ Supported fuel-core version: ${supportedVersion}.`
     return {
       receipts,
       missingContractIds,
-      outputVariables: 0,
       dryRunStatus,
     };
   }
@@ -1071,7 +1067,6 @@ Supported fuel-core version: ${supportedVersion}.`
   ): Promise<EstimateTxDependenciesReturns[]> {
     const results: EstimateTxDependenciesReturns[] = transactionRequests.map(() => ({
       receipts: [],
-      outputVariables: 0,
       missingContractIds: [],
       dryRunStatus: undefined,
     }));
@@ -1380,7 +1375,6 @@ Supported fuel-core version: ${supportedVersion}.`
     let receipts: TransactionResultReceipt[] = [];
     let dryRunStatus: DryRunStatus | undefined;
     let missingContractIds: string[] = [];
-    let outputVariables = 0;
     let gasUsed = bn(0);
 
     txRequestClone.maxFee = maxFee;
@@ -1390,7 +1384,7 @@ Supported fuel-core version: ${supportedVersion}.`
         await signatureCallback(txRequestClone);
       }
 
-      ({ receipts, missingContractIds, outputVariables, dryRunStatus } =
+      ({ receipts, missingContractIds, dryRunStatus } =
         await this.estimateTxDependencies(txRequestClone));
 
       if (dryRunStatus && 'reason' in dryRunStatus) {
@@ -1417,7 +1411,6 @@ Supported fuel-core version: ${supportedVersion}.`
       maxGas,
       minFee,
       maxFee,
-      outputVariables,
       missingContractIds,
       addedSignatures,
       estimatedPredicates: txRequestClone.inputs,

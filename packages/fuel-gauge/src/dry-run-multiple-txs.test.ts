@@ -226,7 +226,6 @@ describe('dry-run-multiple-txs', () => {
     expect(estimatedRequests[0]).toStrictEqual<EstimateTxDependenciesReturns>({
       receipts: [],
       missingContractIds: [],
-      outputVariables: 0,
       dryRunStatus: undefined,
     });
 
@@ -234,7 +233,6 @@ describe('dry-run-multiple-txs', () => {
     expect(estimatedRequests[1]).toStrictEqual<EstimateTxDependenciesReturns>({
       receipts: expect.any(Array<TransactionResultReceipt>),
       missingContractIds: [],
-      outputVariables: 0,
       dryRunStatus: {
         type: 'DryRunSuccessStatus',
         totalFee: expect.any(String),
@@ -247,7 +245,6 @@ describe('dry-run-multiple-txs', () => {
     expect(estimatedRequests[2]).toStrictEqual<EstimateTxDependenciesReturns>({
       receipts: expect.any(Array<TransactionResultReceipt>),
       missingContractIds: [],
-      outputVariables: 2,
       dryRunStatus: {
         type: 'DryRunSuccessStatus',
         programState: expect.any(Object),
@@ -260,7 +257,6 @@ describe('dry-run-multiple-txs', () => {
     expect(estimatedRequests[3]).toStrictEqual<EstimateTxDependenciesReturns>({
       receipts: expect.any(Array<TransactionResultReceipt>),
       missingContractIds: [],
-      outputVariables: 0,
       dryRunStatus: {
         type: 'DryRunFailureStatus',
         reason: 'TransferZeroCoins',
@@ -274,7 +270,6 @@ describe('dry-run-multiple-txs', () => {
     expect(estimatedRequests[4]).toStrictEqual<EstimateTxDependenciesReturns>({
       receipts: expect.any(Array<TransactionResultReceipt>),
       missingContractIds: [logOtherContract.id.toB256()],
-      outputVariables: 0,
       dryRunStatus: {
         type: 'DryRunSuccessStatus',
         programState: expect.any(Object),
