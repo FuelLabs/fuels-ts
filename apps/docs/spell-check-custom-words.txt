@@ -2,7 +2,6 @@ ABI
 ABI's
 abigen
 ABIs
-AbstractAddress
 ALU
 ANDs
 API's
@@ -21,7 +20,6 @@ backends
 backoff
 backtrace
 backtraces
-Bech
 BigNumber
 Bitfield
 bitmask
@@ -347,3 +345,6 @@ XOR
 XORs
 YAML
 matcher
+TransactionRequest
+TransactionResponse
+frictionless

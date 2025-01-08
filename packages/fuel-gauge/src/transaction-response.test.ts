@@ -86,7 +86,7 @@ describe('TransactionResponse', () => {
     const { id: transactionId } = await adminWallet.transfer(
       destination.address,
       100,
-      provider.getBaseAssetId(),
+      await provider.getBaseAssetId(),
       { gasLimit: 10_000 }
     );
 
@@ -123,7 +123,7 @@ describe('TransactionResponse', () => {
     const { id: transactionId } = await adminWallet.transfer(
       destination.address,
       100,
-      provider.getBaseAssetId()
+      await provider.getBaseAssetId()
     );
 
     const response = await TransactionResponse.create(transactionId, provider);
@@ -186,7 +186,7 @@ describe('TransactionResponse', () => {
       const { id: transactionId } = await genesisWallet.transfer(
         destination.address,
         100,
-        provider.getBaseAssetId(),
+        await provider.getBaseAssetId(),
         { gasLimit: 10_000 }
       );
       const response = await TransactionResponse.create(transactionId, provider);
@@ -204,7 +204,7 @@ describe('TransactionResponse', () => {
   );
 
   it(
-    'should throw error for a SqueezedOut status update [waitForResult]',
+    'should throw error for a SqueezedOut status update [submitAndAwaitStatus]',
     { timeout: 10_000, retry: 10 },
     async () => {
       /**
@@ -237,14 +237,9 @@ describe('TransactionResponse', () => {
 
       const request = new ScriptTransactionRequest();
 
-      request.addCoinOutput(Wallet.generate(), 100, provider.getBaseAssetId());
+      request.addCoinOutput(Wallet.generate(), 100, await provider.getBaseAssetId());
 
-      const txCost = await genesisWallet.getTransactionCost(request);
-
-      request.gasLimit = txCost.gasUsed;
-      request.maxFee = txCost.maxFee;
-
-      await genesisWallet.fund(request, txCost);
+      await request.autoCost(genesisWallet);
 
       request.updateWitnessByOwner(
         genesisWallet.address,
@@ -263,7 +258,7 @@ describe('TransactionResponse', () => {
   );
 
   it(
-    'should throw error for a SqueezedOut status update [submitAndAwait]',
+    'should throw error for a SqueezedOut status update [statusChange]',
     { retry: 10 },
     async () => {
       using launched = await launchTestNode({
@@ -289,26 +284,23 @@ describe('TransactionResponse', () => {
 
       const request = new ScriptTransactionRequest();
 
-      request.addCoinOutput(Wallet.generate(), 100, provider.getBaseAssetId());
+      request.addCoinOutput(Wallet.generate(), 100, await provider.getBaseAssetId());
 
-      const txCost = await genesisWallet.getTransactionCost(request, {
+      await request.autoCost(genesisWallet, {
         signatureCallback: (tx) => tx.addAccountWitnesses(genesisWallet),
       });
-
-      request.gasLimit = txCost.gasUsed;
-      request.maxFee = txCost.maxFee;
-
-      await genesisWallet.fund(request, txCost);
 
       request.updateWitnessByOwner(
         genesisWallet.address,
         await genesisWallet.signTransaction(request)
       );
+      const submit = await provider.sendTransaction(request);
+
+      const txResponse = new TransactionResponse(submit.id, provider, await provider.getChainId());
 
       await expectToThrowFuelError(
         async () => {
-          const submit = await provider.sendTransaction(request);
-          await submit.waitForResult();
+          await txResponse.waitForResult();
         },
         { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
       );

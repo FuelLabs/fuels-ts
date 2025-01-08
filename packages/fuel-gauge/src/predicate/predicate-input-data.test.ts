@@ -3,7 +3,7 @@ import { launchTestNode } from 'fuels/test-utils';
 
 import { PredicateInputData } from '../../test/typegen';
 
-import { fundPredicate } from './utils/predicate';
+import { fundAccount } from './utils/predicate';
 
 /**
  * @group node
@@ -24,12 +24,12 @@ describe('Predicate', () => {
 
       const predicate = new PredicateInputData({ provider });
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundAccount(wallet, predicate, amountToPredicate);
 
       const receiver = Wallet.generate({ provider });
 
       await expect(
-        predicate.transfer(receiver.address, amountToReceiver, provider.getBaseAssetId(), {
+        predicate.transfer(receiver.address, amountToReceiver, await provider.getBaseAssetId(), {
           gasLimit: 1000,
         })
       ).rejects.toThrow(/PredicateVerificationFailed/i);

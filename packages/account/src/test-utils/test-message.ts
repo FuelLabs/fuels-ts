@@ -1,13 +1,12 @@
 import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
-import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { bn, type BN } from '@fuel-ts/math';
 import type { SnapshotConfigs } from '@fuel-ts/utils';
 import { hexlify } from '@fuel-ts/utils';
 
 interface TestMessageSpecs {
-  sender: AbstractAddress;
-  recipient: AbstractAddress;
+  sender: Address;
+  recipient: Address;
   nonce: string;
   amount: number;
   data: string;
@@ -17,8 +16,8 @@ interface TestMessageSpecs {
 export type ChainMessage = SnapshotConfigs['stateConfig']['messages'][0];
 
 export class TestMessage {
-  public readonly sender: AbstractAddress;
-  public readonly recipient: AbstractAddress;
+  public readonly sender: Address;
+  public readonly recipient: Address;
   public readonly nonce: string;
   public readonly amount: number | BN;
   public readonly data: string;
@@ -46,7 +45,7 @@ export class TestMessage {
     this.da_height = da_height;
   }
 
-  toChainMessage(recipient?: AbstractAddress): ChainMessage {
+  toChainMessage(recipient?: Address): ChainMessage {
     // Fuel-core throwns error for message data prefixed with 0x within the stateConfig.json file
     const data = /^0x/.test(this.data) ? this.data.replace(/^0x/, '') : this.data;
     return {

@@ -1,6 +1,5 @@
 import { FuelError } from '@fuel-ts/errors';
 import { hash } from '@fuel-ts/hasher';
-import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import {
   TransactionType,
@@ -8,6 +7,7 @@ import {
   type UpgradePurpose,
   UpgradePurposeTypeEnum,
 } from '@fuel-ts/transactions';
+import type { BytesLike } from '@fuel-ts/utils';
 import { hexlify } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 

@@ -4,7 +4,7 @@ import { launchTestNode } from 'fuels/test-utils';
 
 import { PredicateAssertNumber, PredicateAssertValue } from '../../test/typegen';
 
-import { fundPredicate } from './utils/predicate';
+import { fundAccount } from './utils/predicate';
 
 /**
  * @group node
@@ -37,7 +37,7 @@ describe('Predicate', () => {
         wallets: [wallet],
       } = launched;
 
-      const quantity: CoinQuantityLike[] = [[500, provider.getBaseAssetId()]];
+      const quantity: CoinQuantityLike[] = [[500, await provider.getBaseAssetId()]];
 
       const predicateAssertNumber = new Predicate<[number]>({
         abi: PredicateAssertNumber.abi,
@@ -46,11 +46,11 @@ describe('Predicate', () => {
         data: [11],
       });
 
-      await fundPredicate(wallet, predicateAssertNumber, 500_000);
+      await fundAccount(wallet, predicateAssertNumber, 500_000);
 
       let transactionRequest = new ScriptTransactionRequest();
       const receiver = Wallet.generate({ provider });
-      transactionRequest.addCoinOutput(receiver.address, 100, provider.getBaseAssetId());
+      transactionRequest.addCoinOutput(receiver.address, 100, await provider.getBaseAssetId());
 
       const predicateAssertNumberWrongResources = await provider.getResourcesToSpend(
         predicateAssertNumber.address,
@@ -87,12 +87,12 @@ describe('Predicate', () => {
         wallets: [fundingWallet, wallet1],
       } = launched;
 
-      const quantity: CoinQuantityLike[] = [[500, provider.getBaseAssetId()]];
+      const quantity: CoinQuantityLike[] = [[500, await provider.getBaseAssetId()]];
 
       const receiver = Wallet.generate({ provider });
 
       let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000, maxFee: bn(0) });
-      transactionRequest.addCoinOutput(receiver.address, 100, provider.getBaseAssetId());
+      transactionRequest.addCoinOutput(receiver.address, 100, await provider.getBaseAssetId());
 
       const predicateAssertNumber = new Predicate<[number]>({
         abi: PredicateAssertNumber.abi,
@@ -101,7 +101,7 @@ describe('Predicate', () => {
         data: [11],
       });
 
-      await fundPredicate(fundingWallet, predicateAssertNumber, 500_000);
+      await fundAccount(fundingWallet, predicateAssertNumber, 500_000);
 
       const resources1 = await wallet1.getResourcesToSpend(quantity);
       const predicateAssertNumberWrongResources = await provider.getResourcesToSpend(
@@ -147,7 +147,7 @@ describe('Predicate', () => {
         wallets: [fundingWallet, wallet1, wallet2],
       } = launched;
 
-      const quantity: CoinQuantityLike[] = [[500, provider.getBaseAssetId()]];
+      const quantity: CoinQuantityLike[] = [[500, await provider.getBaseAssetId()]];
 
       const predicateAssertNumber = new Predicate<[number]>({
         abi: PredicateAssertNumber.abi,
@@ -156,12 +156,12 @@ describe('Predicate', () => {
         data: [11],
       });
 
-      await fundPredicate(fundingWallet, predicateAssertNumber, 500_000, UTXOS_AMOUNT);
+      await fundAccount(fundingWallet, predicateAssertNumber, 500_000, UTXOS_AMOUNT);
 
       const receiver = Wallet.generate({ provider });
 
       let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000, maxFee: bn(0) });
-      transactionRequest.addCoinOutput(receiver.address, 100, provider.getBaseAssetId());
+      transactionRequest.addCoinOutput(receiver.address, 100, await provider.getBaseAssetId());
 
       const resources1 = await wallet1.getResourcesToSpend(quantity);
       const resources2 = await wallet2.getResourcesToSpend(quantity);
@@ -219,7 +219,7 @@ describe('Predicate', () => {
         wallets: [fundingWallet, wallet1, wallet2, wallet3],
       } = launched;
 
-      const quantity: CoinQuantityLike[] = [[500, provider.getBaseAssetId()]];
+      const quantity: CoinQuantityLike[] = [[500, await provider.getBaseAssetId()]];
 
       let transactionRequest = new ScriptTransactionRequest({ gasLimit: 3000, maxFee: bn(0) });
 
@@ -234,7 +234,7 @@ describe('Predicate', () => {
         data: [11],
       });
 
-      await fundPredicate(fundingWallet, predicateAssertNumber, 500_000, UTXOS_AMOUNT);
+      await fundAccount(fundingWallet, predicateAssertNumber, 500_000, UTXOS_AMOUNT);
 
       const predicateAssertValue = new Predicate<[boolean]>({
         abi: PredicateAssertValue.abi,
@@ -243,7 +243,7 @@ describe('Predicate', () => {
         data: [true],
       });
 
-      await fundPredicate(fundingWallet, predicateAssertValue, 500_000, UTXOS_AMOUNT);
+      await fundAccount(fundingWallet, predicateAssertValue, 500_000, UTXOS_AMOUNT);
 
       // predicate resources fetched as non predicate resources
       const predicateAssertNumberWrongResources = await provider.getResourcesToSpend(
@@ -265,7 +265,7 @@ describe('Predicate', () => {
 
       const receiver = Wallet.generate({ provider });
 
-      transactionRequest.addCoinOutput(receiver.address, 100, provider.getBaseAssetId());
+      transactionRequest.addCoinOutput(receiver.address, 100, await provider.getBaseAssetId());
 
       transactionRequest.addResources([
         ...predicateAssertNumberWrongResources, // witnessIndex 0 but will generate a placeholder witness
@@ -314,7 +314,7 @@ describe('Predicate', () => {
         wallets: [fundingWallet, wallet1, wallet2],
       } = launched;
 
-      const quantity: CoinQuantityLike[] = [[500, provider.getBaseAssetId()]];
+      const quantity: CoinQuantityLike[] = [[500, await provider.getBaseAssetId()]];
 
       let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000, maxFee: bn(0) });
 
@@ -325,7 +325,7 @@ describe('Predicate', () => {
         data: [11],
       });
 
-      await fundPredicate(fundingWallet, predicateAssertNumber, 500_000, UTXOS_AMOUNT);
+      await fundAccount(fundingWallet, predicateAssertNumber, 500_000, UTXOS_AMOUNT);
 
       const predicateAssertValue = new Predicate<[boolean]>({
         abi: PredicateAssertValue.abi,
@@ -334,7 +334,7 @@ describe('Predicate', () => {
         data: [true],
       });
 
-      await fundPredicate(fundingWallet, predicateAssertValue, 500_000, UTXOS_AMOUNT);
+      await fundAccount(fundingWallet, predicateAssertValue, 500_000, UTXOS_AMOUNT);
 
       const resources1 = await wallet1.getResourcesToSpend(quantity);
       const resources2 = await wallet2.getResourcesToSpend(quantity);
@@ -350,7 +350,7 @@ describe('Predicate', () => {
 
       const receiver = Wallet.generate({ provider });
 
-      transactionRequest.addCoinOutput(receiver.address, 100, provider.getBaseAssetId());
+      transactionRequest.addCoinOutput(receiver.address, 100, await provider.getBaseAssetId());
 
       transactionRequest.addResources([
         ...resources1, // witnessIndex 0
@@ -396,7 +396,7 @@ describe('Predicate', () => {
         wallets: [fundingWallet, wallet1, wallet2, wallet3],
       } = launched;
 
-      const quantity: CoinQuantityLike[] = [[500, provider.getBaseAssetId()]];
+      const quantity: CoinQuantityLike[] = [[500, await provider.getBaseAssetId()]];
 
       let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000, maxFee: bn(0) });
 
@@ -411,7 +411,7 @@ describe('Predicate', () => {
         data: [11],
       });
 
-      await fundPredicate(fundingWallet, predicateAssertNumber, 500_000, UTXOS_AMOUNT);
+      await fundAccount(fundingWallet, predicateAssertNumber, 500_000, UTXOS_AMOUNT);
 
       const predicateAssertNumberWrongResources = await provider.getResourcesToSpend(
         predicateAssertNumber.address,
@@ -429,7 +429,7 @@ describe('Predicate', () => {
         data: [true],
       });
 
-      await fundPredicate(fundingWallet, predicateAssertValue, 500_000, UTXOS_AMOUNT);
+      await fundAccount(fundingWallet, predicateAssertValue, 500_000, UTXOS_AMOUNT);
 
       const predicateAssertValueWrongResources = await provider.getResourcesToSpend(
         predicateAssertValue.address,
@@ -438,7 +438,7 @@ describe('Predicate', () => {
 
       const receiver = Wallet.generate({ provider });
 
-      transactionRequest.addCoinOutput(receiver.address, 100, provider.getBaseAssetId());
+      transactionRequest.addCoinOutput(receiver.address, 100, await provider.getBaseAssetId());
 
       transactionRequest.addResources([
         ...resources1, // witnessIndex 0
