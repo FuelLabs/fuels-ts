@@ -181,9 +181,9 @@ export class Predicate<
     configurableConstants?: { [name: string]: unknown }
   ) {
     let predicateBytes = arrayify(bytes);
-    const abiInterface: AbiCoder = AbiCoder.fromAbi(jsonAbi);
+    const abiCoder: AbiCoder = AbiCoder.fromAbi(jsonAbi);
 
-    if (abiInterface.functions.main === undefined) {
+    if (abiCoder.functions.main === undefined) {
       throw new FuelError(
         ErrorCode.ABI_MAIN_METHOD_MISSING,
         'Cannot use ABI without "main" function.'
@@ -194,13 +194,13 @@ export class Predicate<
       predicateBytes = Predicate.setConfigurableConstants(
         predicateBytes,
         configurableConstants,
-        abiInterface
+        abiCoder
       );
     }
 
     return {
       predicateBytes,
-      predicateInterface: abiInterface,
+      predicateInterface: abiCoder,
     };
   }
 
@@ -246,18 +246,18 @@ export class Predicate<
    *
    * @param bytes - The bytes of the predicate.
    * @param configurableConstants - Configurable constants to be set.
-   * @param abiInterface - The ABI interface of the predicate.
+   * @param abiCoder - The ABI interface of the predicate.
    * @returns The mutated bytes with the configurable constants set.
    */
   private static setConfigurableConstants(
     bytes: Uint8Array,
     configurableConstants: { [name: string]: unknown },
-    abiInterface: AbiCoder
+    abiCoder: AbiCoder
   ) {
     const mutatedBytes = bytes;
 
     try {
-      if (Object.keys(abiInterface.configurables).length === 0) {
+      if (Object.keys(abiCoder.configurables).length === 0) {
         throw new FuelError(
           ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
           'Predicate has no configurable constants to be set'
@@ -265,16 +265,16 @@ export class Predicate<
       }
 
       Object.entries(configurableConstants).forEach(([key, value]) => {
-        if (!abiInterface?.configurables[key]) {
+        if (!abiCoder?.configurables[key]) {
           throw new FuelError(
             ErrorCode.CONFIGURABLE_NOT_FOUND,
             `No configurable constant named '${key}' found in the Predicate`
           );
         }
 
-        const { offset } = abiInterface.configurables[key];
+        const { offset } = abiCoder.configurables[key];
 
-        const encoded = abiInterface.getConfigurable(key).encode(value as InputValue);
+        const encoded = abiCoder.getConfigurable(key).encode(value as InputValue);
 
         mutatedBytes.set(encoded, offset);
       });

@@ -28,12 +28,12 @@ export function getDecodedLogs<T = unknown>(
    */
   return receipts.reduce((logs: T[], receipt) => {
     if (receipt.type === ReceiptType.LogData || receipt.type === ReceiptType.Log) {
-      const interfaceToUse = AbiCoder.fromAbi(externalAbis[receipt.id] || mainAbi);
+      const abiCoderToUse = AbiCoder.fromAbi(externalAbis[receipt.id] || mainAbi);
 
       const data =
         receipt.type === ReceiptType.Log ? encoding.v1.u64.encode(receipt.ra) : receipt.data;
 
-      const log = interfaceToUse.getLog(receipt.rb.toString());
+      const log = abiCoderToUse.getLog(receipt.rb.toString());
       const decodedLog = log.decode(data) as T;
       logs.push(decodedLog);
     }

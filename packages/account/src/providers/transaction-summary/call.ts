@@ -19,9 +19,9 @@ export interface FunctionCall {
 }
 
 export const getFunctionCall = ({ abi, receipt }: GetFunctionCallProps): FunctionCall => {
-  const abiInterface = AbiCoder.fromAbi(abi);
+  const abiCoder = AbiCoder.fromAbi(abi);
   const callFunctionSelector = receipt.param1.toHex(8);
-  const functionFragment = abiInterface.getFunction(callFunctionSelector);
+  const functionFragment = abiCoder.getFunction(callFunctionSelector);
   const inputs = functionFragment.inputs;
 
   const encodedArgs = receipt.param2.toHex();
