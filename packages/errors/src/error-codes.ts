@@ -25,6 +25,7 @@ export enum ErrorCode {
   WORKSPACE_NOT_DETECTED = 'workspace-not-detected',
 
   // address
+  INVALID_ADDRESS = 'invalid-address',
   INVALID_EVM_ADDRESS = 'invalid-evm-address',
   INVALID_B256_ADDRESS = 'invalid-b256-address',
 

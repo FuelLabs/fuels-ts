@@ -85,7 +85,7 @@ describe('Logger Tests', () => {
     expect(formatted).toBe('undefined');
   });
 
-  it('should format AbstractAddress to b256 string using formatter b', () => {
+  it('should format Address to b256 string using formatter b', () => {
     const mockAddress = {
       toB256: () => '0xabcdef1234567890',
     };

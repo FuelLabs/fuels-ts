@@ -3,7 +3,7 @@
 // it's not possible to split the two classes in different files
 //
 /* eslint-disable max-classes-per-file */
-import type { BytesLike } from '@fuel-ts/interfaces';
+import type { BytesLike } from '@fuel-ts/utils';
 
 import { Account } from '../account';
 import { HDWallet } from '../hdwallet';
