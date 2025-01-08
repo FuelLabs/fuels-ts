@@ -15,8 +15,8 @@ import { validatePaginationArgs } from '../utils/validate-pagination-args';
 
 import { assembleTransactionSummary } from './assemble-transaction-summary';
 import { processGqlReceipt } from './receipt';
+import { getTotalFeeFromStatus } from './status';
 import type { AbiMap, TransactionSummary } from './types';
-
 /** @hidden */
 export interface GetTransactionSummaryParams {
   id: string;
@@ -61,7 +61,10 @@ export async function getTransactionSummary<TTransactionType = void>(
     },
   } = await provider.getChain();
 
-  const gasPrice = await provider.getLatestGasPrice();
+  // If we have the total fee, we do not need to refetch the gas price
+  const totalFee = getTotalFeeFromStatus(gqlTransaction.status);
+  const gasPrice = totalFee ? bn(0) : await provider.getLatestGasPrice();
+
   const baseAssetId = await provider.getBaseAssetId();
 
   const transactionInfo = assembleTransactionSummary<TTransactionType>({
