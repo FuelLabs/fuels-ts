@@ -331,7 +331,16 @@ describe('TransactionResponse', () => {
   });
 
   it('builds response and assembles result [fetches gas price then uses fee]', async () => {
-    using launched = await launchTestNode();
+    using launched = await launchTestNode({
+      nodeOptions: {
+        args: [
+          '--poa-instant',
+          'false',
+          '--poa-interval-period',
+          '2sec',
+        ],
+      },
+    });
 
     const {
       provider,
