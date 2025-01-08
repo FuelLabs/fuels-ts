@@ -11,6 +11,7 @@
     "apps/docs-api/**"
   ],
   "ignoreDependencies": [
+    "fuels",
     "autocannon",
     "bun",
     "@/sway-api/*",
