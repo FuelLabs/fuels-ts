@@ -1,4 +1,3 @@
-import { TESTNET_NETWORK_URL } from '@internal/utils';
 import type { BaseWalletUnlocked, ContractTransferParams, ReceiptTransfer } from 'fuels';
 import { Provider, ReceiptType, Wallet } from 'fuels';
 
@@ -25,12 +24,12 @@ describe('testnet-txs', () => {
   let baseAssetId: string;
 
   beforeAll(async () => {
-    if (!process.env.TESTNET_WALLET_PVT_KEY) {
-      throw new Error('Please provide TESTNET_WALLET_PVT_KEY in the .env file');
+    if (!process.env.NETWORK_TEST_URL || !process.env.NETWORK_TEST_PVT_KEY) {
+      throw new Error('Please provide NETWORK_TEST_URL and NETWORK_TEST_PVT_KEY in the .env file');
     }
 
-    provider = new Provider(TESTNET_NETWORK_URL);
-    wallet = Wallet.fromPrivateKey(process.env.TESTNET_WALLET_PVT_KEY, provider);
+    provider = new Provider(process.env.NETWORK_TEST_URL);
+    wallet = Wallet.fromPrivateKey(process.env.NETWORK_TEST_PVT_KEY, provider);
     baseAssetId = await provider.getBaseAssetId();
   });
 
