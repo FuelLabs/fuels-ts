@@ -40,7 +40,6 @@ export default defineConfig({
       "/apps/demo-nextjs",
       "/apps/demo-react-cra",
       "/apps/demo-react-vite",
-      "internal/network-tests",
     ],
     globals: true,
     env: loadEnv(mode, process.cwd(), ""),
