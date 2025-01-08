@@ -10,7 +10,7 @@
 
 
 import { Contract, Interface } from "fuels";
-import type { AbstractAddress, Account, Provider } from 'fuels';
+import type { Address, Account, Provider } from 'fuels';
 import type { AbiContractTypes as Types } from './AbiContractTypes';
 import type { InterfaceFunctionMapper, ProgramFunctionMapper } from '../common';
 import { abi } from './AbiContract-abi';
@@ -34,7 +34,7 @@ export class AbiContract extends Contract {
     public static readonly abi = abi;
 
     constructor(
-        id: string | AbstractAddress,
+        id: string | Address,
         accountOrProvider: Account | Provider,
     ) {
         super(id, abi, accountOrProvider);

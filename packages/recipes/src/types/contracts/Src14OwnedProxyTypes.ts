@@ -8,7 +8,7 @@
   Forc version: 0.66.5
 */
 
-import { type StrSlice } from '@fuel-ts/interfaces';
+import { type StrSlice } from '@fuel-ts/abi-coder';
 import type { Enum, Option } from '../common';
 
 export enum AccessError {

@@ -13,7 +13,7 @@ import type { InterfaceFunctionMapper, ProgramFunctionMapper } from '../common';
 
 import { Contract } from '@fuel-ts/program';
 import { Interface } from '@fuel-ts/abi-coder';
-import { type AbstractAddress } from '@fuel-ts/interfaces';
+import { type Address } from '@fuel-ts/address';
 import { type Account, type Provider } from '@fuel-ts/account';
 import { abi } from './Src14OwnedProxy-abi';
 
@@ -35,7 +35,7 @@ export class Src14OwnedProxy extends Contract {
 
   public static readonly abi = abi;
 
-  constructor(id: string | AbstractAddress, accountOrProvider: Account | Provider) {
+  constructor(id: string | Address, accountOrProvider: Account | Provider) {
     super(id, abi, accountOrProvider);
   }
 }

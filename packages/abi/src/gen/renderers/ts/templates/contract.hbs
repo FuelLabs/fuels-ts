@@ -1,7 +1,7 @@
 {{header}}
 
 import { Contract, Interface } from "fuels";
-import type { AbstractAddress, Account, Provider } from 'fuels';
+import type { Address, Account, Provider } from 'fuels';
 import type { {{name}}Types as Types } from './{{name}}Types';
 import type { InterfaceFunctionMapper, ProgramFunctionMapper } from '../common';
 import { abi } from './{{name}}-abi';
@@ -25,7 +25,7 @@ export class {{name}} extends Contract {
     public static readonly abi = abi;
 
     constructor(
-        id: string | AbstractAddress,
+        id: string | Address,
         accountOrProvider: Account | Provider,
     ) {
         super(id, abi, accountOrProvider);
