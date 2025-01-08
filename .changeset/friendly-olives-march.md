@@ -3,4 +3,4 @@
 "@fuel-ts/errors": patch
 ---
 
-chore!: optimize estimation of variable outputs
+chore!: removed `outputVariables` from the transaction cost estimation
