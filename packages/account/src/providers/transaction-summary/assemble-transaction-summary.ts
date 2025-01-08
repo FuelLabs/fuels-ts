@@ -35,7 +35,6 @@ export interface AssembleTransactionSummaryParams {
   maxGasPerTx: BN;
   gasPrice: BN;
   baseAssetId: string;
-  totalFee?: BN;
 }
 
 /** @hidden */
@@ -56,7 +55,6 @@ export function assembleTransactionSummary<TTransactionType = void>(
     maxGasPerTx,
     gasPrice,
     baseAssetId,
-    totalFee,
   } = params;
 
   const gasUsed = getGasUsedFromReceipts(receipts);
@@ -78,19 +76,11 @@ export function assembleTransactionSummary<TTransactionType = void>(
 
   const tip = bn(transaction.policies?.find((policy) => policy.type === PolicyType.Tip)?.data);
 
-  const {
-    isStatusFailure,
-    isStatusPending,
-    isStatusSuccess,
-    blockId,
-    status,
-    time,
-    totalFee: totalFeeFromStatus,
-  } = processGraphqlStatus(gqlTransactionStatus);
+  const { isStatusFailure, isStatusPending, isStatusSuccess, blockId, status, time, totalFee } =
+    processGraphqlStatus(gqlTransactionStatus);
 
   const fee =
     totalFee ??
-    totalFeeFromStatus ??
     calculateTXFeeForSummary({
       gasPrice,
       rawPayload,

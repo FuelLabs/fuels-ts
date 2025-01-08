@@ -322,7 +322,6 @@ export class TransactionResponse {
       maxGasPerTx,
       gasPrice,
       baseAssetId,
-      totalFee,
     });
 
     return transactionSummary;
