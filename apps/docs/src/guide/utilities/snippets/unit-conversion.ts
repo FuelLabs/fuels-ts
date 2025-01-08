@@ -22,7 +22,7 @@ const resultTwo = bn('100000000').toString();
 // #region contract-calls-1
 
 // Let's deploy a contract that has a function that takes a u64 as input
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 
 const wallet = await Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 

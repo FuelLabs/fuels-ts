@@ -9,11 +9,11 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@fuel-ts/account": "workspace:^",
-    "@fuel-ts/errors": "workspace:^",
+    "@fuel-ts/account": "workspace:*",
+    "@fuel-ts/errors": "workspace:*",
     "fuels": "workspace:*"
   },
   "devDependencies": {
-    "bun": "^1.1.31"
+    "bun": "1.1.31"
   }
 }

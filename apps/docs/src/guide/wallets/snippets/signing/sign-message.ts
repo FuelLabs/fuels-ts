@@ -3,7 +3,7 @@ import { hashMessage, Provider, Signer, WalletUnlocked } from 'fuels';
 
 import { LOCAL_NETWORK_URL } from '../../../../env';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 
 const wallet = WalletUnlocked.generate({ provider });
 
@@ -16,7 +16,7 @@ const hashedMessage = hashMessage(message);
 
 const recoveredAddress = Signer.recoverAddress(hashedMessage, signedMessage);
 // Example output: Address {
-//   bech32Address: 'fuel1za0wl90u09c6v88faqkvczu9r927kewvvr0asejv5xmdwtm98w0st7m2s3'
+//   b256Address: '0x6d309766c0f1c6f103d147b287fabecaedd31beb180d45cf1bf7d88397aecc6f'
 // }
 // #endregion signing-1
 

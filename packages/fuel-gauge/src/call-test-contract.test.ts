@@ -152,7 +152,7 @@ describe('CallTestContract', () => {
 
   it('Forward amount value on contract call', async () => {
     using contract = await setupContract();
-    const baseAssetId = contract.provider.getBaseAssetId();
+    const baseAssetId = await contract.provider.getBaseAssetId();
     const { waitForResult } = await contract.functions
       .return_context_amount()
       .callParams({

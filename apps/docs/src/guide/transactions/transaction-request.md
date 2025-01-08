@@ -38,11 +38,17 @@ Including `OutputCoin`s in the transaction request specifies the UTXOs that will
 
 ### Estimating and Funding the Transaction Request
 
-Before submitting a transaction, it is essential to ensure it is properly funded to meet its requirements and cover the associated fee:
+Before submitting a transaction, it is essential to ensure it is properly funded to meet its requirements and cover the associated fee. The SDK offers two approaches for this, one is to use the `autoCost` helper:
+
+<<< @./snippets/transaction-request/auto-cost.ts#auto-cost{ts:line-numbers}
+
+This approach provides a simple one-liner for estimating and funding the transaction request. Ensuring that the `gasLimit` and `maxFee` are accurately calculated and that the required amounts for `OutputCoin`s are fulfilled, as well as fetching and adding any missing resources from the calling account.
+
+The other more manual approach is as so:
 
 <<< @./snippets/transaction-request/estimate-and-fund.ts#transaction-request-4{ts:line-numbers}
 
-This is the recommended approach for manually estimating and funding a transaction before submission. It ensures that the `gasLimit` and `maxFee` are accurately calculated and that the required amounts for `OutputCoin`s are fulfilled. The `fund` method automatically fetches any missing resource amounts from the calling account and adds them to the transaction request.
+This approach provides the same behaviour as the `autoCost` helper, but gives more granular control over the transaction request. The `getTransactionCost` method also returns various information about the simulated request that you may want to use to further modify the transaction request, more on that can be found in the [API reference](https://fuels-ts-docs-api.vercel.app/types/_fuel_ts_account.TransactionCost.html).
 
 ### Manually Fetching Resources
 

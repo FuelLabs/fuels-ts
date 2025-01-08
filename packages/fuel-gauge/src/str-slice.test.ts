@@ -38,7 +38,7 @@ describe('str slice', () => {
       provider,
       data: ['predicate-input'],
     });
-    const baseAssetId = provider.getBaseAssetId();
+    const baseAssetId = await provider.getBaseAssetId();
 
     const amountToPredicate = 250_000;
     const amountToReceiver = 50_000;

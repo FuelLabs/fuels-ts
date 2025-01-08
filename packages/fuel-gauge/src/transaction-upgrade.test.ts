@@ -47,7 +47,7 @@ const setupTestNode = async () => {
       snapshotConfig,
     },
   });
-  privileged.provider = await Provider.create(provider.url);
+  privileged.provider = new Provider(provider.url);
 
   return { provider, privileged, wallets, cleanup, [Symbol.dispose]: cleanup };
 };
@@ -101,7 +101,7 @@ describe('Transaction upgrade consensus', () => {
     using launched = await setupTestNode();
     const { privileged, provider } = launched;
 
-    const mainProvider = await Provider.create(provider.url);
+    const mainProvider = new Provider(provider.url);
 
     const {
       chain: { consensusParameters: consensusBeforeUpgrade },

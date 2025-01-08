@@ -121,17 +121,12 @@ describe('TransactionRequest', () => {
 
   it('adds account based witnesses', async () => {
     class ProviderCustom extends Provider {
-      // eslint-disable-next-line @typescript-eslint/require-await
-      static override async create(url: string) {
-        return new ProviderCustom(url, {});
-      }
-
-      override getChainId(): number {
-        return 1;
+      override async getChainId(): Promise<number> {
+        return Promise.resolve(1);
       }
     }
 
-    const provider = await ProviderCustom.create('http://example.com');
+    const provider = new ProviderCustom('http://example.com');
     const signer = WalletUnlocked.generate({ provider });
     const txRequest = new ScriptTransactionRequest();
 

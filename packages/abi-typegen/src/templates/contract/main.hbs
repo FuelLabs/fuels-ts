@@ -6,7 +6,7 @@ import type {
   Provider,
   Account,
   StorageSlot,
-  AbstractAddress,
+  Address,
 {{#each imports}}
   {{this}},
 {{/each}}
@@ -81,7 +81,7 @@ export class {{capitalizedName}} extends Contract {
   };
 
   constructor(
-    id: string | AbstractAddress,
+    id: string | Address,
     accountOrProvider: Account | Provider,
   ) {
     super(id, abi, accountOrProvider);
