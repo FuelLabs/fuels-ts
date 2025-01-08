@@ -8,7 +8,7 @@ import {
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
 import { ScriptSum } from '../../../../typegend';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 // #region transaction-response-2
@@ -25,12 +25,7 @@ const scriptMainFunctionArguments = [1];
 transactionRequest.setData(ScriptSum.abi, scriptMainFunctionArguments);
 
 // Fund the transaction
-const txCost = await wallet.getTransactionCost(transactionRequest);
-
-transactionRequest.maxFee = txCost.maxFee;
-transactionRequest.gasLimit = txCost.gasUsed;
-
-await wallet.fund(transactionRequest, txCost);
+await transactionRequest.autoCost(wallet);
 
 // Submit the transaction
 const response = await wallet.sendTransaction(transactionRequest);

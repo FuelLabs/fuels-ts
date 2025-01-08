@@ -102,6 +102,7 @@ export type InitParams = BaseParams & {
   autoStartFuelCore?: boolean;
   build?: boolean;
   privateKey?: string;
+  fuelCorePort?: string;
 };
 
 export type BuildParams = BaseParams & {
@@ -120,6 +121,7 @@ export async function runInit(params: InitParams) {
     fuelCorePath,
     workspace,
     privateKey,
+    fuelCorePort,
   } = params;
 
   const flag = (
@@ -137,6 +139,7 @@ export async function runInit(params: InitParams) {
     flag(['--forc-path', forcPath], forcPath),
     flag(['--fuel-core-path', fuelCorePath], fuelCorePath),
     flag(['--auto-start-fuel-core'], autoStartFuelCore),
+    flag(['--fuel-core-port', fuelCorePort], fuelCorePort),
   ].flat();
 
   const command = await runCommand(Commands.init, flags);

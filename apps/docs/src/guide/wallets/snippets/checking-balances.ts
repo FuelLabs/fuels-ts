@@ -4,12 +4,12 @@ import { Provider, Wallet } from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../env';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 
 const myWallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 // The returned amount is a BigNumber
-const balance: BN = await myWallet.getBalance(provider.getBaseAssetId());
+const balance: BN = await myWallet.getBalance(await provider.getBaseAssetId());
 
 // #endregion checking-balances-1
 console.log('balance', balance);
