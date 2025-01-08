@@ -50,9 +50,9 @@ const argument = abi.functions
 // We will use its `getType` method to get the coder for the argument and then call its `encode` method to
 // create the encoding required for a u32 which takes 4 bytes up of property space.
 
-const abiInterface = AbiCoder.fromAbi(abi);
+const abiCoder = AbiCoder.fromAbi(abi);
 const argumentToAdd = 10;
-const encodedArguments = abiInterface.getType(argument).encode([argumentToAdd]);
+const encodedArguments = abiCoder.getType(argument).encode([argumentToAdd]);
 // Therefore the value of 10 will be encoded to:
 // Uint8Array([0, 0, 0, 10]
 
@@ -95,7 +95,7 @@ const returnData = arrayify(returnDataReceipt.data);
 
 // And now we can decode the returned bytes in a similar fashion to how they were
 // encoded, via the `AbiCoder`
-const decodedReturnData = abiInterface.getType(argument).decode(returnData);
+const decodedReturnData = abiCoder.getType(argument).decode(returnData);
 // 20
 
 const totalValue = argumentToAdd + initialValue;
