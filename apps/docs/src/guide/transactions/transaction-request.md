@@ -100,7 +100,7 @@ The transaction ID is a SHA-256 hash of the entire transaction request. This can
 
 ### Burning assets
 
-Assets can be burnt as part of a transaction that has inputs without associated output change. The SDK validates against this behavior, so we need to implicitly enable this by sending the transaction with the `enableAssetBurn` option set to `true`.
+Assets can be burnt as part of a transaction that has inputs without associated output change. The SDK validates against this behavior, so we need to explicitly enable this by sending the transaction with the `enableAssetBurn` option set to `true`.
 
 <<< @./snippets/transaction-request/asset-burn.ts#asset-burn{ts:line-numbers}
 
