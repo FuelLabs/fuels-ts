@@ -1,6 +1,8 @@
 import { FuelError } from '@fuel-ts/errors';
 import { assertUnreachable } from '@fuel-ts/utils';
 
+import type { Matcher } from '../../matchers/sway-type-matchers';
+
 import type {
   AbiEncoding,
   Coder,
@@ -9,33 +11,35 @@ import type {
   SupportedCoder,
   SupportedCoders,
 } from './encoding-types';
-import { createCoderMatcher } from './matching';
-import { v1 } from './v1';
+import * as v1 from './v1';
 
-const currentEncoding = v1;
-const supportedEncodings: Record<string, SupportedCoders> = {
-  '1': v1,
+interface SupportedEncoding {
+  coders: SupportedCoders;
+  matcher: Matcher<SupportedCoder | undefined>;
+}
+
+const currentEncoding = v1.coders;
+const supportedEncodings: Record<string, SupportedEncoding> = {
+  '1': { coders: v1.coders, matcher: v1.matcher },
 };
 
 export const encoding: Encoding = {
   ...currentEncoding,
-  v1,
+  v1: v1.coders,
   fromVersion: (version: string): AbiEncoding => {
-    const coders = supportedEncodings[version as keyof typeof supportedEncodings];
-    if (!coders) {
+    const supportedEncoding = supportedEncodings[version as keyof typeof supportedEncodings];
+    if (!supportedEncoding) {
       throw new FuelError(
         FuelError.CODES.UNSUPPORTED_ENCODING_VERSION,
         `Unsupported encoding version "${version}"`
       );
     }
 
-    const matcher = createCoderMatcher(coders);
-
     const getCoder = (opts: CoderFactoryParameters) => {
       const { type, name } = opts;
       let coder: SupportedCoder | undefined;
       try {
-        coder = matcher(type);
+        coder = supportedEncoding.matcher(type);
       } catch (error) {
         throw new FuelError(
           FuelError.CODES.CODER_NOT_FOUND,
@@ -63,7 +67,7 @@ export const encoding: Encoding = {
     };
 
     return {
-      coders,
+      coders: supportedEncoding.coders,
       getCoder,
     };
   },

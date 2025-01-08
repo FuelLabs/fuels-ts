@@ -3,7 +3,7 @@ import type { BytesLike } from '@fuel-ts/utils';
 
 import type { AbiConcreteType, AbiTypeComponent } from '../../parser';
 
-import type { v1 } from './v1';
+import type { coders as v1 } from './v1';
 
 export type SupportedCodersV1 = typeof v1;
 

@@ -3,7 +3,7 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 
 import type { CoderFactoryParameters } from '../../src/coder/encoding';
 import { encoding } from '../../src/coder/encoding';
-import { v1 } from '../../src/coder/encoding/v1';
+import { coders as v1 } from '../../src/coder/encoding/v1';
 
 /**
  * @group node
