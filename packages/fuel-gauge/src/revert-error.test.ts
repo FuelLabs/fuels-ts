@@ -93,7 +93,8 @@ describe('Revert Error Testing', () => {
     using contractInstance = await launchContract();
 
     await expectToThrowFuelError(
-      () => contractInstance.functions.failed_transfer_revert().call(),
+      () =>
+        contractInstance.functions.failed_transfer_revert().txParams({ variableOutputs: 1 }).call(),
       new FuelError(
         ErrorCode.SCRIPT_REVERTED,
         'The transaction reverted with reason: "TransferZeroCoins".\n\nYou can read more about this error at:\n\nhttps://docs.rs/fuel-asm/latest/fuel_asm/enum.PanicReason.html#variant.TransferZeroCoins',
@@ -134,7 +135,7 @@ describe('Revert Error Testing', () => {
     using contractInstance = await launchContract();
 
     await expectToThrowFuelError(
-      () => contractInstance.functions.failed_transfer().call(),
+      () => contractInstance.functions.failed_transfer().txParams({ variableOutputs: 1 }).call(),
       new FuelError(
         ErrorCode.SCRIPT_REVERTED,
         'The transaction reverted with reason: "NotEnoughBalance".\n\nYou can read more about this error at:\n\nhttps://docs.rs/fuel-asm/latest/fuel_asm/enum.PanicReason.html#variant.NotEnoughBalance',
@@ -211,23 +212,13 @@ describe('Revert Error Testing', () => {
       ])
       .getTransactionRequest();
 
-    await request.autoCost(wallet);
-
-    const tx = await wallet.sendTransaction(request, {
-      estimateTxDependencies: false,
-    });
-
     await expectToThrowFuelError(
-      () => tx.wait(),
+      () => request.autoCost(wallet),
       new FuelError(
-        ErrorCode.SCRIPT_REVERTED,
-        `The transaction reverted because it's missing an "OutputChange".`,
+        ErrorCode.MISSING_OUTPUT_VARIABLES,
+        `The transaction reverted due to missing output variables`,
         {
-          logs: [],
           receipts: expect.any(Array<TransactionResultReceipt>),
-          panic: false,
-          revert: true,
-          reason: 'MissingOutputChange',
         }
       )
     );

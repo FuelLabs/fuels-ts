@@ -52,6 +52,7 @@ describe('TokenTestContract', () => {
     // Transfer some coins
     const { waitForResult } = await token.functions
       .transfer_to_address(addressId, assetId, 50)
+      .txParams({ variableOutputs: 1 })
       .call();
 
     await waitForResult();
@@ -83,7 +84,9 @@ describe('TokenTestContract', () => {
       bits: wallet.address.toB256(),
     })) as [AddressInput, AddressInput, AddressInput];
 
-    const functionCallOne = token.functions.mint_to_addresses(addresses, 10);
+    const functionCallOne = token.functions
+      .mint_to_addresses(addresses, 10)
+      .txParams({ variableOutputs: 3 });
     await functionCallOne.dryRun();
     const call1 = await functionCallOne.call();
     const { transactionResult } = await call1.waitForResult();
@@ -103,7 +106,9 @@ describe('TokenTestContract', () => {
     tokenBalance = balances.find((b) => b.assetId === assetId);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(10));
 
-    const functionCallTwo = token.functions.mint_to_addresses(addresses, 10);
+    const functionCallTwo = token.functions
+      .mint_to_addresses(addresses, 10)
+      .txParams({ variableOutputs: 3 });
     await functionCallTwo.simulate();
     const call2 = await functionCallTwo.call();
     await call2.waitForResult();
@@ -120,7 +125,10 @@ describe('TokenTestContract', () => {
     tokenBalance = balances.find((b) => b.assetId === assetId);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(20));
 
-    const call3 = await token.functions.mint_to_addresses(addresses, 10).call();
+    const call3 = await token.functions
+      .mint_to_addresses(addresses, 10)
+      .txParams({ variableOutputs: 3 })
+      .call();
     await call3.waitForResult();
 
     ({ balances } = await wallet1.getBalances());
@@ -168,6 +176,7 @@ describe('TokenTestContract', () => {
     // transfer 50 coins to user wallet
     const { waitForResult: waitForResult2 } = await token.functions
       .transfer_to_address(addressId, assetId, 50)
+      .txParams({ variableOutputs: 1 })
       .call();
     await waitForResult2();
 

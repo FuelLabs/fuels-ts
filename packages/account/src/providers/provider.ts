@@ -981,9 +981,6 @@ Supported fuel-core version: ${supportedVersion}.`
   /**
    * Will dryRun a transaction and check for missing dependencies.
    *
-   * If there are missing variable outputs,
-   * `addVariableOutputs` is called on the transaction.
-   *
    * @param transactionRequest - The transaction request object.
    * @returns A promise that resolves to the estimate transaction dependencies.
    */
@@ -999,9 +996,9 @@ Supported fuel-core version: ${supportedVersion}.`
     }
 
     let receipts: TransactionResultReceipt[] = [];
-    const missingContractIds: string[] = [];
-    let outputVariables = 0;
     let dryRunStatus: DryRunStatus | undefined;
+
+    const missingContractIds: string[] = [];
 
     this.validateTransaction(transactionRequest);
 
@@ -1020,12 +1017,20 @@ Supported fuel-core version: ${supportedVersion}.`
       const { missingOutputVariables, missingOutputContractIds } =
         getReceiptsWithMissingData(receipts);
 
-      const hasMissingOutputs =
-        missingOutputVariables.length !== 0 || missingOutputContractIds.length !== 0;
+      const hasMissingOutputVariables = missingOutputVariables.length !== 0;
+      const hasMissingOutputContractIds = missingOutputContractIds.length !== 0;
+      const hasMissingOutputs = hasMissingOutputVariables || hasMissingOutputContractIds;
 
       if (hasMissingOutputs && isTransactionTypeScript(transactionRequest)) {
-        outputVariables += missingOutputVariables.length;
-        transactionRequest.addVariableOutputs(missingOutputVariables.length);
+        if (hasMissingOutputVariables) {
+          throw new FuelError(
+            ErrorCode.MISSING_OUTPUT_VARIABLES,
+            'The transaction reverted due to missing output variables',
+            { receipts }
+          );
+        }
+
+        // Otherwise, we add the missing contract ids to the transaction request.
         missingOutputContractIds.forEach(({ contractId }) => {
           transactionRequest.addContractInputAndOutput(Address.fromString(contractId));
           missingContractIds.push(contractId);
@@ -1045,8 +1050,8 @@ Supported fuel-core version: ${supportedVersion}.`
 
     return {
       receipts,
-      outputVariables,
       missingContractIds,
+      outputVariables: 0,
       dryRunStatus,
     };
   }

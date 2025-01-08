@@ -25,6 +25,9 @@ const asset: AssetId = {
 
 const { waitForResult } = await contract.functions
   .transfer(amountToTransfer, asset, recipient.address.toB256())
+  .txParams({
+    variableOutputs: 1,
+  })
   .callParams({
     forward: [amountToForward, baseAssetId],
   })

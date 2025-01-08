@@ -484,6 +484,7 @@ describe('TransactionSummary', () => {
 
       const call2 = await contract.functions
         .transfer_to_address({ bits: recipient.address.toB256() }, { bits: assetId }, amount)
+        .txParams({ variableOutputs: 1 })
         .call();
 
       const {
@@ -571,6 +572,7 @@ describe('TransactionSummary', () => {
             TransferParamsInput<ContractIdInput>,
             TransferParamsInput<ContractIdInput>,
           ])
+          .txParams({ variableOutputs: 5 })
           .call();
 
         const {

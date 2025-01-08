@@ -55,6 +55,9 @@ describe('MultiTokenContract', () => {
           multiTokenContract.functions.mint_coins(subId, helperDict[subId].amount)
         )
       )
+      .txParams({
+        variableOutputs: 3,
+      })
       .call();
     const { transactionResult } = await call1.waitForResult();
 
@@ -92,6 +95,9 @@ describe('MultiTokenContract', () => {
           )
         )
       )
+      .txParams({
+        variableOutputs: 3,
+      })
       .call();
 
     await call2.waitForResult();
