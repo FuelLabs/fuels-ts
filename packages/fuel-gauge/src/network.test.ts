@@ -11,7 +11,6 @@ import {
 } from '../test/typegen';
 
 /**
- * @group node
  * @group network
  */
 describe('testnet-txs', () => {
