@@ -81,7 +81,6 @@ export async function getTransactionSummary<TTransactionType = void>(
     maxGasPerTx,
     gasPrice,
     baseAssetId,
-    totalFee,
   });
 
   return {
