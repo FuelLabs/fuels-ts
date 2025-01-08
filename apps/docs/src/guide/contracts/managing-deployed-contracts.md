@@ -6,7 +6,7 @@ To interact with a deployed contract using the SDK without redeploying it, you o
 
 The `contractId` property from the [`Contract`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_program.Contract.html) class is an instance of the [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class.
 
-The [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class wraps all methods from the [`AbstractAddress`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_interfaces.AbstractAddress.html) class and adds a single property: `b256Address`. This property is a string encoded in [`B256`](../types/bits256.md) format.
+The [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class also provides a set of utility functions for easy manipulation and conversion between address formats along with one property; `b256Address`, which is a string encoded in [`B256`](../types/bits256.md) format.
 
 When you log the `contractId` property of an instantiated Contract using `console.log`, the output appears as follows:
 
