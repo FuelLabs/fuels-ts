@@ -1,5 +1,6 @@
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+import { bn } from '@fuel-ts/math';
 
 import { encoding } from '../../../src';
 
@@ -27,6 +28,52 @@ describe('u64', () => {
       const actual = coder.encode(value);
 
       expect(actual).toStrictEqual(expected);
+    });
+
+    it('should encode a u64 [max safe integer]', () => {
+      const coder = encoding.v1.u64;
+      const value: number = Number.MAX_SAFE_INTEGER;
+      const expected = new Uint8Array([0, 31, 255, 255, 255, 255, 255, 255]);
+
+      const data = coder.encode(value);
+
+      expect(data).toEqual(expected);
+    });
+
+    it('should throw an error when encoding [number more than max safe integer]', async () => {
+      const coder = encoding.v1.u64;
+      const value: number = Number.MAX_SAFE_INTEGER + 1;
+
+      await expectToThrowFuelError(
+        () => coder.encode(value),
+        new FuelError(
+          FuelError.CODES.ENCODE_ERROR,
+          'Invalid u64 type - number value is too large. Number can only safely handle up to 53 bits.'
+        )
+      );
+    });
+
+    it('should encode a u64 [very big number - as string]', () => {
+      const coder = encoding.v1.u64;
+      const value: string = '76472027892439376';
+      const expected = new Uint8Array([1, 15, 174, 231, 121, 200, 89, 80]);
+
+      const data = coder.encode(value);
+
+      expect(data).toEqual(expected);
+    });
+
+    it('should throw an error when encoding [number more than max safe integer]', async () => {
+      const coder = encoding.v1.u64;
+      const value: number = 76472027892439376;
+
+      await expectToThrowFuelError(
+        () => coder.encode(value),
+        new FuelError(
+          FuelError.CODES.ENCODE_ERROR,
+          'Invalid u64 type - number value is too large. Number can only safely handle up to 53 bits.'
+        )
+      );
     });
 
     it('should fail to encode value [boolean]', async () => {
@@ -106,6 +153,17 @@ describe('u64', () => {
 
       expect(actual).toStrictEqual(expected);
       expect(offset).toStrictEqual(8);
+    });
+
+    it('should decode a u64 [very big number]', () => {
+      const coder = encoding.v1.u64;
+      const data = new Uint8Array([1, 15, 174, 231, 121, 200, 89, 80]);
+      const expectedValue = bn('76472027892439376');
+
+      const [actualValue, actualLength] = coder.decode(data, 0);
+
+      expect(actualValue).toEqualBn(expectedValue);
+      expect(actualLength).toEqual(8);
     });
 
     it('should throw when decoding invalid u64 data [empty]', async () => {

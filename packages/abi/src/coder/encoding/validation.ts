@@ -103,6 +103,21 @@ export const assertValueIsArray = (value: unknown, type: string) => {
 };
 
 /**
+ * Asserts that a number value is less than the max safe integer.
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER#description
+ *
+ * @throws {@link FuelError} - with a ENCODE_ERROR code if the value is more than the max safe integer
+ */
+export const assertSafeNumberValue = (value: unknown, type: string) => {
+  if (typeof value === 'number' && value > Number.MAX_SAFE_INTEGER) {
+    throw new FuelError(
+      FuelError.CODES.ENCODE_ERROR,
+      `Invalid ${type} type - number value is too large. Number can only safely handle up to 53 bits.`
+    );
+  }
+};
+
+/**
  * Asserts that a BN value is non-negative.
  *
  * @throws {@link FuelError} - with a ENCODE_ERROR code if the value is less than zero

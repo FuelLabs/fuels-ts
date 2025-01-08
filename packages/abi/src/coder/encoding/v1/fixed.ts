@@ -21,6 +21,7 @@ import {
   assertDataLengthMoreThanExpected,
   assertEncode,
   assertEncodedLengthEquals,
+  assertSafeNumberValue,
   errors,
 } from '../validation';
 
@@ -68,6 +69,7 @@ const createBigNumberCoder = (encodedLength: number, type: string): Coder<BNInpu
    * @returns The encoded big number value.
    */
   encode: (value: BN | BNInput): Uint8Array => {
+    assertSafeNumberValue(value, type);
     const bnValue = assertEncode(bn, value, errors.invalidBnValue(type, value));
     assertBnValueNonNegative(bnValue, type);
     assertBnValueByteLengthLessThan(bnValue, encodedLength, type);
