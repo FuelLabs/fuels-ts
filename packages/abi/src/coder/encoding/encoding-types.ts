@@ -1,5 +1,5 @@
-import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
+import type { BytesLike } from '@fuel-ts/utils';
 
 import type { AbiConcreteType, AbiTypeComponent } from '../../parser';
 
@@ -22,6 +22,11 @@ export type Primitive = string | number | boolean;
  * An option type value
  */
 export type Option<T> = T | undefined;
+
+export type Bytes = Uint8Array | number[];
+export type RawSlice = Uint8Array | number[];
+export type StdString = string;
+export type StrSlice = string;
 
 /**
  * The type of value you can provide to `Coder.encode`

@@ -1,9 +1,8 @@
 import { getDecodedLogs } from '@fuel-ts/account';
 import type { TransactionResultReceipt, JsonAbisFromAllCalls } from '@fuel-ts/account';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractContract } from '@fuel-ts/interfaces';
 
-import type { CallConfig, InvocationScopeLike } from './types';
+import type { AbstractContract, CallConfig, InvocationScopeLike } from './types';
 
 /**
  * @hidden

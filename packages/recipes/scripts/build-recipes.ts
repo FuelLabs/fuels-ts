@@ -9,15 +9,15 @@ const importReplacementMap = {
   AbiCoder: '@fuel-ts/abi',
   AbiCoderFunction: '@fuel-ts/abi',
   AbiSpecification: '@fuel-ts/abi',
+  StrSlice: '@fuel-ts/abi',
   Contract: '@fuel-ts/program',
   ContractFactory: '@fuel-ts/contract',
   DeployContractOptions: '@fuel-ts/contract',
   Provider: '@fuel-ts/account',
   Account: '@fuel-ts/account',
   StorageSlot: '@fuel-ts/transactions',
-  AbstractAddress: '@fuel-ts/interfaces',
+  Address: '@fuel-ts/address',
   InvokeFunction: '@fuel-ts/program',
-  StrSlice: '@fuel-ts/interfaces',
   decompressBytecode: '@fuel-ts/utils',
 };
 

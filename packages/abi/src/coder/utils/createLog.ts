@@ -1,4 +1,4 @@
-import type { BytesLike } from '@fuel-ts/interfaces';
+import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify } from '@fuel-ts/utils';
 
 import type { AbiLoggedType } from '../../parser';

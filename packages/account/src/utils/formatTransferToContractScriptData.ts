@@ -1,8 +1,8 @@
 import { encoding, ASSET_ID_LEN, CONTRACT_ID_LEN, WORD_SIZE } from '@fuel-ts/abi';
 import { Address } from '@fuel-ts/address';
-import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { arrayify, concat } from '@fuel-ts/utils';
+import type { BytesLike } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
 
 interface AssembleTransferToContractParams {

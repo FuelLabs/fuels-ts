@@ -35,7 +35,11 @@ describe('PredicateConditionalInputs', () => {
     await tx1.waitForResult();
 
     // transfer base asset to Alice so she can pay the fees
-    const tx2 = await adminWallet.transfer(aliceWallet.address, 200_000, provider.getBaseAssetId());
+    const tx2 = await adminWallet.transfer(
+      aliceWallet.address,
+      200_000,
+      await provider.getBaseAssetId()
+    );
 
     await tx2.waitForResult();
 
@@ -43,7 +47,9 @@ describe('PredicateConditionalInputs', () => {
 
     // fetch predicate resources to spend
     const predicateResoruces = await predicate.getResourcesToSpend([[amountToTransfer, ASSET_A]]);
-    const aliceResources = await aliceWallet.getResourcesToSpend([[1, provider.getBaseAssetId()]]);
+    const aliceResources = await aliceWallet.getResourcesToSpend([
+      [1, await provider.getBaseAssetId()],
+    ]);
 
     request
       .addResources(aliceResources)
@@ -110,7 +116,11 @@ describe('PredicateConditionalInputs', () => {
     await tx1.waitForResult();
 
     // transfer base asset to predicate so it can pay the fees
-    const tx2 = await adminWallet.transfer(predicate.address, 200_000, provider.getBaseAssetId());
+    const tx2 = await adminWallet.transfer(
+      predicate.address,
+      200_000,
+      await provider.getBaseAssetId()
+    );
 
     await tx2.waitForResult();
 

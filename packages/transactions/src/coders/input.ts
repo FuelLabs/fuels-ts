@@ -2,8 +2,8 @@
 import { Coder, BYTES_32 } from '@fuel-ts/abi';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { sha256 } from '@fuel-ts/hasher';
-import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
+import type { BytesLike } from '@fuel-ts/utils';
 import { concat, arrayify } from '@fuel-ts/utils';
 
 import { byteArray } from './byte-array';

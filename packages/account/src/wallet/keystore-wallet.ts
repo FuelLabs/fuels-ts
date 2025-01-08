@@ -10,7 +10,6 @@ import {
   randomUUID,
 } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { hexlify } from '@fuel-ts/utils';
 
 export type KeystoreWallet = {
@@ -58,7 +57,7 @@ export const removeHexPrefix = (hexString: string) => {
 
 export async function encryptKeystoreWallet(
   privateKey: string,
-  address: string | AbstractAddress,
+  address: string | Address,
   password: string
 ): Promise<string> {
   // Convert the hexlified private key string to a Buffer.

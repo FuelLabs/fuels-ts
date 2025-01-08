@@ -3,7 +3,7 @@ import type { WalletLocked, WalletUnlocked } from 'fuels';
 import { Wallet } from 'fuels';
 
 const address =
-  'fuel1fjett54ahnydhklerngqhclzmmkmp6s0xnykns8dwsdpjfg3r2rsfazpw5';
+  '0x4cb2b5d2bdbcc8dbdbf91cd00be3e2deedb0ea0f34c969c0ed741a1925111a87';
 const privateKey =
   '0x9deba03f08676716e3a4247797672d8008a5198d183048be65415ef89447b890';
 

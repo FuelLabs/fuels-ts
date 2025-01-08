@@ -4,10 +4,10 @@ import { Provider, WalletUnlocked } from 'fuels';
 import { LOCAL_NETWORK_URL } from '../../../env';
 
 // Create the provider
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 
 // Querying the blockchain
-const { consensusParameters } = provider.getChain();
+const { consensusParameters } = await provider.getChain();
 
 // Create a new wallet
 const wallet = WalletUnlocked.generate({ provider });

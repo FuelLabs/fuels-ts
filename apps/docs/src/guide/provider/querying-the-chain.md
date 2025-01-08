@@ -2,10 +2,7 @@
 
 Once you have set up a provider, you're ready to interact with the Fuel blockchain.
 
-We can connect to either a _*local*_ or an _*external*_ node:
-
-> 1. _Running a [local node](../getting-started/connecting-to-a-local-node.md)_
-> 1. _Connecting to an [external node](../getting-started/connecting-to-testnet.md)_
+- [Connecting to the Network](../getting-started/connecting-to-the-network.md)
 
 Let's look at a few examples below.
 

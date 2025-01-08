@@ -1,5 +1,5 @@
 import type { Coder } from '@fuel-ts/abi';
-import type { BytesLike } from '@fuel-ts/interfaces';
+import type { BytesLike } from '@fuel-ts/utils';
 import { concat, hexlify, arrayify } from '@fuel-ts/utils';
 
 export const byteArray = (length: number): Coder<BytesLike, string> => {

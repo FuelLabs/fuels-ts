@@ -39,3 +39,11 @@ export type JsonAbisFromAllCalls = {
   main: AbiSpecification;
   otherContractsAbis: Record<string, AbiSpecification>;
 };
+
+/**
+ * @hidden
+ */
+export abstract class AbstractScriptRequest<T> {
+  abstract bytes: Uint8Array;
+  abstract encodeScriptData: (data: T) => Uint8Array;
+}

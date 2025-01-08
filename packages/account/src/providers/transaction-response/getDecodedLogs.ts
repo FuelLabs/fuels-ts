@@ -31,9 +31,9 @@ export function getDecodedLogs<T = unknown>(
       const interfaceToUse = AbiCoder.fromAbi(externalAbis[receipt.id] || mainAbi);
 
       const data =
-        receipt.type === ReceiptType.Log ? encoding.v1.u64.encode(receipt.val0) : receipt.data;
+        receipt.type === ReceiptType.Log ? encoding.v1.u64.encode(receipt.ra) : receipt.data;
 
-      const log = interfaceToUse.getLog(receipt.val1.toString());
+      const log = interfaceToUse.getLog(receipt.rb.toString());
       const decodedLog = log.decode(data) as T;
       logs.push(decodedLog);
     }
