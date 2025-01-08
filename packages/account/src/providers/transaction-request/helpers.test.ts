@@ -261,12 +261,9 @@ describe('helpers', () => {
         ];
         const enableAssetBurn = false;
 
-        const burnableAssets = validateTransactionForAssetBurn(
-          { inputs, outputs },
-          enableAssetBurn
-        );
-
-        expect(burnableAssets).toBeUndefined();
+        expect(() =>
+          validateTransactionForAssetBurn({ inputs, outputs }, enableAssetBurn)
+        ).not.toThrow();
       });
 
       it('should throw an error if transaction has burnable assets [enableAssetBurn=false]', async () => {
@@ -300,12 +297,9 @@ describe('helpers', () => {
         const outputs: TransactionRequestOutput[] = [];
         const enableAssetBurn = true;
 
-        const burnableAssets = validateTransactionForAssetBurn(
-          { inputs, outputs },
-          enableAssetBurn
-        );
-
-        expect(burnableAssets).toBeUndefined();
+        expect(() =>
+          validateTransactionForAssetBurn({ inputs, outputs }, enableAssetBurn)
+        ).not.toThrow();
       });
 
       it('should validate asset burn by default [enableAssetBurn=undefined]', async () => {
