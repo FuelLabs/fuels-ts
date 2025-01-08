@@ -1,0 +1,6 @@
+[workspace]
+members = [
+  "contract-with-storage",
+  "predicate-with-configurable",
+  "script-transfer",
+]
