@@ -30,7 +30,7 @@
     "test:validate": "./scripts/tests-validate.sh",
     "test:browser:filter": "vitest --run --coverage false --config vitest.browser.config.mts",
     "test:e2e": "vitest --run --config vitest.node.config.mts $(scripts/tests-find.sh --e2e)",
-    "test:network": "vitest --run --bail 1 --config vitest.node.config.mts $(scripts/tests-find.sh --network)",
+    "test:network": "vitest --run --config vitest.node.config.mts $(scripts/tests-find.sh --network)",
     "clinic:flame": "clinic flame --autocannon [ / ] -- node packages/${npm_config_package_name}/dist/profile.js",
     "clinic:bubble": "clinic bubbleprof --autocannon [ -c 5 -a 500 / ] -- node packages/${npm_config_package_name}/dist/profile.js",
     "clinic:doctor": "clinic doctor --autocannon [ / ] -- node packages/${npm_config_package_name}/dist/profile.js",
