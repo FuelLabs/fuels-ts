@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "name": "@internal/network-tests",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "type": "module",
+  "scripts": {
+    "pretest": "run-s build:forc",
+    "build:forc": "pnpm fuels build",
+    "test": "pnpm vitest --run --testTimeout 180000 --bail 1 ./src/network.test.ts"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "dotenv": "16.4.5",
+    "fuels": "workspace:*"
+  },
+  "peerDependencies": {
+    "vitest": "2.0.5"
+  }
+}
