@@ -7,7 +7,7 @@ export const fundAccount = async (
   amount: BigNumberish,
   utxosAmount: number = 1
 ): Promise<BN> => {
-  const baseAssetId = fundedAccount.provider.getBaseAssetId();
+  const baseAssetId = await fundedAccount.provider.getBaseAssetId();
   const request = new ScriptTransactionRequest();
 
   for (let i = 0; i < utxosAmount; i++) {

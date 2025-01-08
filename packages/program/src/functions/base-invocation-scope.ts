@@ -9,11 +9,11 @@ import type {
   TransferParams,
   TransactionResponse,
   TransactionCost,
+  AbstractAccount,
 } from '@fuel-ts/account';
 import { ScriptTransactionRequest, Wallet } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAccount, AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { InputType, TransactionType } from '@fuel-ts/transactions';
@@ -29,6 +29,8 @@ import type {
   TxParams,
   FunctionResult,
   DryRunResult,
+  AbstractContract,
+  AbstractProgram,
 } from '../types';
 import { assert, getAbisFromAllCalls } from '../utils';
 
@@ -87,28 +89,19 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns An array of contract calls.
    */
   protected get calls() {
-    const provider = this.getProvider();
-    const consensusParams = provider.getChain();
-    // TODO: Remove this error since it is already handled on Provider class
-    if (!consensusParams) {
-      throw new FuelError(
-        FuelError.CODES.CHAIN_INFO_CACHE_EMPTY,
-        'Provider chain info cache is empty. Please make sure to initialize the `Provider` properly by running `await Provider.create()``'
-      );
-    }
     return this.functionInvocationScopes.map((funcScope) => createContractCall(funcScope));
   }
 
   /**
    * Updates the script request with the current contract calls.
    */
-  protected updateScriptRequest() {
+  protected async updateScriptRequest() {
     const provider = this.getProvider();
     const {
       consensusParameters: {
         txParameters: { maxInputs },
       },
-    } = provider.getChain();
+    } = await provider.getChain();
     const contractCallScript = getContractCallScript(this.functionInvocationScopes, maxInputs);
     this.transactionRequest.setScript(contractCallScript, this.calls);
   }
@@ -198,7 +191,7 @@ export class BaseInvocationScope<TReturn = any> {
     await asm.initWasm();
 
     // Update request scripts before call
-    this.updateScriptRequest();
+    await this.updateScriptRequest();
 
     // Update required coins before call
     this.updateRequiredCoins();
@@ -315,11 +308,10 @@ export class BaseInvocationScope<TReturn = any> {
    */
   addTransfer(transferParams: TransferParams) {
     const { amount, destination, assetId } = transferParams;
-    const baseAssetId = this.getProvider().getBaseAssetId();
     this.transactionRequest = this.transactionRequest.addCoinOutput(
       Address.fromAddressOrString(destination),
       amount,
-      assetId || baseAssetId
+      assetId
     );
 
     return this;
@@ -332,12 +324,11 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The current instance of the class.
    */
   addBatchTransfer(transferParams: TransferParams[]) {
-    const baseAssetId = this.getProvider().getBaseAssetId();
     transferParams.forEach(({ destination, amount, assetId }) => {
       this.transactionRequest = this.transactionRequest.addCoinOutput(
         Address.fromAddressOrString(destination),
         amount,
-        assetId || baseAssetId
+        assetId
       );
     });
 
@@ -345,7 +336,7 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   addSigners(signers: Account | Account[]) {
-    this.addSignersCallback = async (transactionRequest) =>
+    this.addSignersCallback = (transactionRequest) =>
       transactionRequest.addAccountWitnesses(signers);
 
     return this;

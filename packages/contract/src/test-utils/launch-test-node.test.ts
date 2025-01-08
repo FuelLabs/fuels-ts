@@ -76,7 +76,7 @@ describe('launchTestNode', () => {
     await waitUntilUnreachable(url);
 
     const { error } = await safeExec(async () => {
-      const p = await Provider.create(url);
+      const p = new Provider(url);
       await p.getBlockNumber();
     });
 
@@ -269,7 +269,7 @@ describe('launchTestNode', () => {
 
     const { provider } = launched;
 
-    expect(provider.getNode().maxDepth.toNumber()).toEqual(20);
+    expect((await provider.getNode()).maxDepth.toNumber()).toEqual(20);
     process.env.DEFAULT_FUEL_CORE_ARGS = '';
   });
 

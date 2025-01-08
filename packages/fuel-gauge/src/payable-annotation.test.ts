@@ -16,7 +16,7 @@ function launchPayableContract() {
  */
 test('allow sending coins to payable functions', async () => {
   using contract = await launchPayableContract();
-  const baseAssetId = contract.provider.getBaseAssetId();
+  const baseAssetId = await contract.provider.getBaseAssetId();
 
   // This should not fail because the function is payable
   await expect(
@@ -34,7 +34,7 @@ test('allow sending coins to payable functions', async () => {
 
 test("don't allow sending coins to non-payable functions", async () => {
   using contract = await launchPayableContract();
-  const baseAssetId = contract.provider.getBaseAssetId();
+  const baseAssetId = await contract.provider.getBaseAssetId();
 
   // This should fail because the function is not payable
   await expect(async () => {

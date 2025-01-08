@@ -6,10 +6,10 @@ import { ConfigurablePin } from '../../../typegend';
 import type { ConfigurablePinInputs } from '../../../typegend/predicates/ConfigurablePin';
 
 // Setup
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const sender = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const receiver = Wallet.generate({ provider });
-const assetId = provider.getBaseAssetId();
+const assetId = await provider.getBaseAssetId();
 const amountToFundPredicate = 300_000;
 const amountToReceiver = 100_000;
 

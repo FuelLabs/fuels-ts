@@ -15,7 +15,7 @@ const boolArray: boolean[] = [true, false, true];
 console.log('numberArray', numberArray);
 console.log('boolArray', boolArray);
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const deploy = await EchoValuesFactory.deploy(wallet);
 const { contract } = await deploy.waitForResult();

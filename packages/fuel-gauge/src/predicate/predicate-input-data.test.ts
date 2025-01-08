@@ -29,7 +29,7 @@ describe('Predicate', () => {
       const receiver = Wallet.generate({ provider });
 
       await expect(
-        predicate.transfer(receiver.address, amountToReceiver, provider.getBaseAssetId(), {
+        predicate.transfer(receiver.address, amountToReceiver, await provider.getBaseAssetId(), {
           gasLimit: 1000,
         })
       ).rejects.toThrow(/PredicateVerificationFailed/i);

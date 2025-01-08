@@ -10,7 +10,9 @@ import {
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
 import { ReturnTruePredicate } from '../../../../typegend';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
+const baseAssetId = await provider.getBaseAssetId();
+
 const funder = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const receiver = Wallet.generate({ provider });
 
@@ -21,7 +23,7 @@ const predicate = new ReturnTruePredicate({
 const fundPredicate = await funder.transfer(
   predicate.address,
   100_000_000,
-  provider.getBaseAssetId()
+  baseAssetId
 );
 await fundPredicate.waitForResult();
 
@@ -31,11 +33,7 @@ const transactionRequest = new ScriptTransactionRequest({
   maxFee: bn(0),
 });
 
-transactionRequest.addCoinOutput(
-  receiver.address,
-  1000000,
-  provider.getBaseAssetId()
-);
+transactionRequest.addCoinOutput(receiver.address, 1000000, baseAssetId);
 
 // Estimate and fund the transaction
 await transactionRequest.autoCost(predicate);

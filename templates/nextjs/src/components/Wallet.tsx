@@ -4,12 +4,15 @@ import { useEffect } from "react";
 import Button from "./Button";
 import LocalFaucet from "./LocalFaucet";
 import { isLocal, renderFormattedBalance } from "../lib";
+import { useBaseAssetId } from "@/hooks/useBaseAssetId";
 
 export default function Wallet() {
   const { disconnect } = useDisconnect();
   const { wallet } = useWallet();
+  const { baseAssetId } = useBaseAssetId();
+
   const address = wallet?.address.toB256() || "";
-  const { balance, refetch } = useBalance({ address });
+  const { balance, refetch } = useBalance({ address, assetId: baseAssetId });
 
   useEffect(() => {
     refetch();

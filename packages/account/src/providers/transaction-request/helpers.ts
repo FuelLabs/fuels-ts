@@ -1,4 +1,4 @@
-import type { AbstractAddress } from '@fuel-ts/interfaces';
+import type { Address } from '@fuel-ts/address';
 import { bn } from '@fuel-ts/math';
 import { InputType } from '@fuel-ts/transactions';
 
@@ -39,7 +39,7 @@ export const getRequestInputResourceOwner = (
 
 export const isRequestInputResourceFromOwner = (
   input: CoinTransactionRequestInput | MessageTransactionRequestInput,
-  owner: AbstractAddress
+  owner: Address
 ) => getRequestInputResourceOwner(input) === owner.toB256();
 
 export const getAssetAmountInRequestInputs = (
@@ -77,7 +77,7 @@ export const cacheRequestInputsResources = (inputs: TransactionRequestInput[]) =
 
 export const cacheRequestInputsResourcesFromOwner = (
   inputs: TransactionRequestInput[],
-  owner: AbstractAddress
+  owner: Address
 ): ExcludeResourcesOption =>
   inputs.reduce(
     (acc, input) => {

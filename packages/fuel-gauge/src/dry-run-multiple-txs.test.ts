@@ -36,7 +36,9 @@ describe('dry-run-multiple-txs', () => {
       wallets: [wallet],
     } = launched;
 
-    const resources = await wallet.getResourcesToSpend([[500_000, provider.getBaseAssetId()]]);
+    const resources = await wallet.getResourcesToSpend([
+      [500_000, await provider.getBaseAssetId()],
+    ]);
 
     const request1 = await revertContract.functions
       .validate_inputs(10, 0)
@@ -144,7 +146,9 @@ describe('dry-run-multiple-txs', () => {
 
     // subId defined on multi-token contract
     const subId = '0x4a778acfad1abc155a009dc976d2cf0db6197d3d360194d74b1fb92b96986b00';
-    const resources = await wallet.getResourcesToSpend([[500_000, provider.getBaseAssetId()]]);
+    const resources = await wallet.getResourcesToSpend([
+      [500_000, await provider.getBaseAssetId()],
+    ]);
 
     // creating receives to be used by the request 2 and 3
     const addresses: [AddressInput, AddressInput, AddressInput] = [

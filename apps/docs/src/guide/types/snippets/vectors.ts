@@ -8,7 +8,7 @@ import {
 } from '../../../typegend';
 import type { EmployeeDataInput } from '../../../typegend/contracts/EchoEmployeeDataVector';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const deploy = await EchoEmployeeDataVectorFactory.deploy(wallet);
 const { contract } = await deploy.waitForResult();

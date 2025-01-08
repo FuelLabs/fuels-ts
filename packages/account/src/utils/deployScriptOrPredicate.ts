@@ -15,7 +15,7 @@ import {
 async function fundBlobTx(deployer: Account, blobTxRequest: BlobTransactionRequest) {
   // Check the account can afford to deploy all chunks and loader
   let totalCost = bn(0);
-  const chainInfo = deployer.provider.getChain();
+  const chainInfo = await deployer.provider.getChain();
   const gasPrice = await deployer.provider.estimateGasPrice(10);
   const priceFactor = chainInfo.consensusParameters.feeParameters.gasPriceFactor;
 

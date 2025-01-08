@@ -97,7 +97,8 @@ export async function setupTestProviderAndWallets({
   let provider: Provider;
 
   try {
-    provider = await Provider.create(url, providerOptions);
+    provider = new Provider(url, providerOptions);
+    await provider.init();
   } catch (err) {
     cleanup();
     throw err;
