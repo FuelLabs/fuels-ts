@@ -306,4 +306,58 @@ describe('TransactionResponse', () => {
       );
     }
   );
+
+  it('builds response and awaits result [uses fee from status]', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      provider,
+      wallets: [genesisWallet],
+    } = launched;
+
+    const getLatestGasPriceSpy = vi.spyOn(provider, 'getLatestGasPrice');
+
+    const request = new ScriptTransactionRequest();
+    request.addCoinOutput(Wallet.generate(), 100, await provider.getBaseAssetId());
+    await request.autoCost(genesisWallet);
+
+    const tx = await genesisWallet.sendTransaction(request);
+    const result = await tx.waitForResult();
+
+    // fee is used from the success status, latest gas price not needed
+    expect(getLatestGasPriceSpy).toHaveBeenCalledTimes(0);
+    expect(result.fee.toNumber()).toBeGreaterThan(0);
+    expect(result.id).toBe(tx.id);
+  });
+
+  it('builds response and assembles result [fetches gas price then uses fee]', async () => {
+    using launched = await launchTestNode({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '2sec'],
+      },
+    });
+
+    const {
+      provider,
+      wallets: [genesisWallet],
+    } = launched;
+
+    const getLatestGasPriceSpy = vi.spyOn(provider, 'getLatestGasPrice');
+
+    const request = new ScriptTransactionRequest();
+    request.addCoinOutput(Wallet.generate(), 100, await provider.getBaseAssetId());
+    await request.autoCost(genesisWallet);
+
+    const tx = await genesisWallet.sendTransaction(request);
+    const result = await tx.assembleResult();
+
+    // tx has not settled so response will fetch the gas price
+    expect(getLatestGasPriceSpy).toHaveBeenCalledTimes(1);
+    expect(result.id).toBe(tx.id);
+
+    const finalisedResult = await tx.waitForResult();
+    expect(finalisedResult.fee.toNumber()).toBeGreaterThan(0);
+    expect(getLatestGasPriceSpy).toHaveBeenCalledTimes(1);
+    expect(finalisedResult.id).toBe(tx.id);
+  });
 });

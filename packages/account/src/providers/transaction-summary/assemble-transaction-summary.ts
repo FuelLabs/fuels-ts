@@ -79,20 +79,21 @@ export function assembleTransactionSummary<TTransactionType = void>(
   const { isStatusFailure, isStatusPending, isStatusSuccess, blockId, status, time, totalFee } =
     processGraphqlStatus(gqlTransactionStatus);
 
-  const fee = calculateTXFeeForSummary({
-    totalFee,
-    gasPrice,
-    rawPayload,
-    tip,
-    consensusParameters: {
-      gasCosts,
-      maxGasPerTx,
-      feeParams: {
-        gasPerByte,
-        gasPriceFactor,
+  const fee =
+    totalFee ??
+    calculateTXFeeForSummary({
+      gasPrice,
+      rawPayload,
+      tip,
+      consensusParameters: {
+        gasCosts,
+        maxGasPerTx,
+        feeParams: {
+          gasPerByte,
+          gasPriceFactor,
+        },
       },
-    },
-  });
+    });
 
   const mintedAssets = extractMintedAssetsFromReceipts(receipts);
   const burnedAssets = extractBurnedAssetsFromReceipts(receipts);
