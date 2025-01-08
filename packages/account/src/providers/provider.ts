@@ -1075,6 +1075,7 @@ Supported fuel-core version: ${supportedVersion}.`
       missingContractIds: [],
       dryRunStatus: undefined,
     }));
+    const errors: (FuelError | undefined)[] = transactionRequests.map(() => undefined);
 
     const allRequests = clone(transactionRequests);
 
@@ -1109,15 +1110,26 @@ Supported fuel-core version: ${supportedVersion}.`
         const result = results[requestIdx];
         result.receipts = rawReceipts.map(processGqlReceipt);
         result.dryRunStatus = status;
+
         const { missingOutputVariables, missingOutputContractIds } = getReceiptsWithMissingData(
           result.receipts
         );
-        const hasMissingOutputs =
-          missingOutputVariables.length > 0 || missingOutputContractIds.length > 0;
+        const hasMissingOutputVariables = missingOutputVariables.length !== 0;
+        const hasMissingOutputContractIds = missingOutputContractIds.length !== 0;
+        const hasMissingOutputs = hasMissingOutputVariables || hasMissingOutputContractIds;
+
         const request = allRequests[requestIdx];
+
         if (hasMissingOutputs && isTransactionTypeScript(request)) {
-          result.outputVariables += missingOutputVariables.length;
-          request.addVariableOutputs(missingOutputVariables.length);
+          if (hasMissingOutputVariables) {
+            errors[requestIdx] = new FuelError(
+              ErrorCode.MISSING_OUTPUT_VARIABLES,
+              'The transaction reverted due to missing output variables',
+              { receipts: result.receipts }
+            );
+            continue;
+          }
+
           missingOutputContractIds.forEach(({ contractId }) => {
             request.addContractInputAndOutput(Address.fromString(contractId));
             result.missingContractIds.push(contractId);
@@ -1126,6 +1138,7 @@ Supported fuel-core version: ${supportedVersion}.`
             transactionRequest: request,
           });
           request.maxFee = maxFee;
+
           // Prepare for the next round of dry run
           serializedTransactionsMap.set(requestIdx, hexlify(request.toTransactionBytes()));
           nextRoundTransactions.push(requestIdx);
@@ -1134,6 +1147,21 @@ Supported fuel-core version: ${supportedVersion}.`
 
       transactionsToProcess = nextRoundTransactions;
       attempt += 1;
+    }
+
+    if (errors.some(isDefined)) {
+      const message = [
+        'The transaction/s reverted due to missing output variables',
+        ...errors.reduce((acc, error, index) => {
+          if (isDefined(error)) {
+            acc.push(`Transaction ${index + 1}: ${error.message}`);
+          }
+          return acc;
+        }, [] as string[]),
+      ].join('\n');
+      throw new FuelError(ErrorCode.MISSING_OUTPUT_VARIABLES, message, {
+        errors,
+      });
     }
 
     return results;

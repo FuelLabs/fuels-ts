@@ -4,8 +4,8 @@ import type {
   EstimateTxDependenciesReturns,
   TransactionResultReceipt,
 } from 'fuels';
-import { ContractFactory, Wallet } from 'fuels';
-import { launchTestNode } from 'fuels/test-utils';
+import { ContractFactory, ErrorCode, Wallet } from 'fuels';
+import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
 import {
   AdvancedLoggingFactory,
@@ -169,7 +169,7 @@ describe('dry-run-multiple-txs', () => {
       .txParams({
         gasLimit: 500_000,
         maxFee: 520_000,
-        variableOutputs: 0,
+        variableOutputs: 3,
       })
       .getTransactionRequest();
 
@@ -179,7 +179,7 @@ describe('dry-run-multiple-txs', () => {
       .txParams({
         gasLimit: 500_000,
         maxFee: 520_000,
-        variableOutputs: 1,
+        variableOutputs: 3,
       })
       .getTransactionRequest();
 
@@ -219,7 +219,7 @@ describe('dry-run-multiple-txs', () => {
       { estimateTxDependencies: true }
     );
 
-    expect(dryRunSpy).toHaveBeenCalledTimes(4);
+    expect(dryRunSpy).toHaveBeenCalledTimes(2);
     expect(estimatedRequests.length).toBe(5);
 
     // request 1 for create transaction request, we do not dry run
@@ -230,11 +230,11 @@ describe('dry-run-multiple-txs', () => {
       dryRunStatus: undefined,
     });
 
-    // request 2 we dry run it 4 times to add the 3 output variables
+    // request 2 we dry run it 1 time
     expect(estimatedRequests[1]).toStrictEqual<EstimateTxDependenciesReturns>({
       receipts: expect.any(Array<TransactionResultReceipt>),
       missingContractIds: [],
-      outputVariables: 3,
+      outputVariables: 0,
       dryRunStatus: {
         type: 'DryRunSuccessStatus',
         totalFee: expect.any(String),
@@ -243,7 +243,7 @@ describe('dry-run-multiple-txs', () => {
       },
     });
 
-    // request 3 we dry run it 3 times to add the 2 output variables (1 was already present)
+    // request 3 we dry run it 1 times
     expect(estimatedRequests[2]).toStrictEqual<EstimateTxDependenciesReturns>({
       receipts: expect.any(Array<TransactionResultReceipt>),
       missingContractIds: [],
@@ -256,7 +256,7 @@ describe('dry-run-multiple-txs', () => {
       },
     });
 
-    // request 4 we dry run it 1 time because it has reveted
+    // request 4 we dry run it 1 time because it has reverted
     expect(estimatedRequests[3]).toStrictEqual<EstimateTxDependenciesReturns>({
       receipts: expect.any(Array<TransactionResultReceipt>),
       missingContractIds: [],
@@ -282,5 +282,100 @@ describe('dry-run-multiple-txs', () => {
         totalGas: expect.any(String),
       },
     });
+  });
+
+  it('should throw error when estimating multiple TXs requests with missing output variables', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: MultiTokenContractFactory,
+        },
+        {
+          factory: RevertErrorFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [multiTokenContract, revertContract],
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const resources = await wallet.getResourcesToSpend([[500_000, provider.getBaseAssetId()]]);
+
+    const subId = '0x4a778acfad1abc155a009dc976d2cf0db6197d3d360194d74b1fb92b96986b00';
+    const addresses: [AddressInput, AddressInput, AddressInput] = [
+      { bits: Wallet.generate({ provider }).address.toB256() },
+      { bits: Wallet.generate({ provider }).address.toB256() },
+      { bits: Wallet.generate({ provider }).address.toB256() },
+    ];
+
+    // request 1
+    const request1 = await multiTokenContract.functions
+      .mint_to_addresses(addresses, subId, 1000)
+      .txParams({
+        gasLimit: 500_000,
+        maxFee: 520_000,
+        // Expected
+        // variableOutputs: 3,
+      })
+      .getTransactionRequest();
+
+    // request 2
+    const request2 = await multiTokenContract.functions
+      .mint_to_addresses(addresses, subId, 2000)
+      .txParams({
+        gasLimit: 500_000,
+        maxFee: 520_000,
+        variableOutputs: 3,
+      })
+      .getTransactionRequest();
+
+    // request 3
+    const request3 = await revertContract.functions
+      .failed_transfer_revert()
+      .txParams({
+        gasLimit: 500_000,
+        maxFee: 520_000,
+        // Expected
+        // variableOutputs: 1,
+      })
+      .getTransactionRequest();
+
+    request1.addResources(resources);
+    request2.addResources(resources);
+    request3.addResources(resources);
+
+    await expectToThrowFuelError(
+      () => provider.estimateMultipleTxDependencies([request1, request2, request3]),
+      {
+        code: ErrorCode.MISSING_OUTPUT_VARIABLES,
+        message: [
+          'The transaction/s reverted due to missing output variables',
+          'Transaction 1: The transaction reverted due to missing output variables',
+          'Transaction 3: The transaction reverted due to missing output variables',
+        ].join('\n'),
+        metadata: {
+          errors: [
+            expect.objectContaining({
+              code: ErrorCode.MISSING_OUTPUT_VARIABLES,
+              message: 'The transaction reverted due to missing output variables',
+              metadata: {
+                receipts: expect.any(Array<TransactionResultReceipt>),
+              },
+            }),
+            undefined,
+            expect.objectContaining({
+              code: ErrorCode.MISSING_OUTPUT_VARIABLES,
+              message: 'The transaction reverted due to missing output variables',
+              metadata: {
+                receipts: expect.any(Array<TransactionResultReceipt>),
+              },
+            }),
+          ],
+        },
+      }
+    );
   });
 });
