@@ -1,5 +1,7 @@
 import { getRandomB256, Address } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
 import { InputType, OutputType } from '@fuel-ts/transactions';
 
@@ -21,6 +23,7 @@ import {
   cacheRequestInputsResources,
   cacheRequestInputsResourcesFromOwner,
   getBurnableAssetCount,
+  validateTransactionForAssetBurn,
 } from './helpers';
 import type { TransactionRequestInput } from './input';
 import type { TransactionRequestOutput } from './output';
@@ -243,6 +246,86 @@ describe('helpers', () => {
         const burnableAssets = getBurnableAssetCount({ inputs, outputs });
 
         expect(burnableAssets).toBe(expectedBurnableAssets);
+      });
+    });
+
+    describe('validateTransactionForAssetBurn', () => {
+      it('should successfully validate transactions without burnable assets [enableAssetBurn=false]', () => {
+        const inputs: TransactionRequestInput[] = [
+          generateFakeRequestInputCoin({ assetId: ASSET_A, owner: owner.toB256() }),
+          generateFakeRequestInputCoin({ assetId: ASSET_B, owner: owner.toB256() }),
+        ];
+        const outputs: TransactionRequestOutput[] = [
+          { type: OutputType.Change, assetId: ASSET_A, to: owner.toB256() },
+          { type: OutputType.Change, assetId: ASSET_B, to: owner.toB256() },
+        ];
+        const enableAssetBurn = false;
+
+        const burnableAssets = validateTransactionForAssetBurn(
+          { inputs, outputs },
+          enableAssetBurn
+        );
+
+        expect(burnableAssets).toBeUndefined();
+      });
+
+      it('should throw an error if transaction has burnable assets [enableAssetBurn=false]', async () => {
+        const inputs: TransactionRequestInput[] = [
+          generateFakeRequestInputCoin({ assetId: ASSET_A, owner: owner.toB256() }),
+          generateFakeRequestInputCoin({ assetId: ASSET_B, owner: owner.toB256() }),
+        ];
+        const outputs: TransactionRequestOutput[] = [
+          { type: OutputType.Change, assetId: ASSET_A, to: owner.toB256() },
+        ];
+        const enableAssetBurn = false;
+
+        await expectToThrowFuelError(
+          () => validateTransactionForAssetBurn({ inputs, outputs }, enableAssetBurn),
+          new FuelError(
+            ErrorCode.ASSET_BURN_DETECTED,
+            [
+              `Asset burn detected.`,
+              `Add the relevant change outputs to the transaction to avoid burning assets.`,
+              `Or enable asset burn, upon sending the transaction.`,
+            ].join('\n')
+          )
+        );
+      });
+
+      it('should successfully validate transactions with burnable assets [enableAssetBurn=true]', () => {
+        const inputs: TransactionRequestInput[] = [
+          generateFakeRequestInputCoin({ assetId: ASSET_A, owner: owner.toB256() }),
+          generateFakeRequestInputCoin({ assetId: ASSET_B, owner: owner.toB256() }),
+        ];
+        const outputs: TransactionRequestOutput[] = [];
+        const enableAssetBurn = true;
+
+        const burnableAssets = validateTransactionForAssetBurn(
+          { inputs, outputs },
+          enableAssetBurn
+        );
+
+        expect(burnableAssets).toBeUndefined();
+      });
+
+      it('should validate asset burn by default [enableAssetBurn=undefined]', async () => {
+        const inputs: TransactionRequestInput[] = [
+          generateFakeRequestInputCoin({ assetId: ASSET_A, owner: owner.toB256() }),
+          generateFakeRequestInputCoin({ assetId: ASSET_B, owner: owner.toB256() }),
+        ];
+        const outputs: TransactionRequestOutput[] = [];
+
+        await expectToThrowFuelError(
+          () => validateTransactionForAssetBurn({ inputs, outputs }),
+          new FuelError(
+            ErrorCode.ASSET_BURN_DETECTED,
+            [
+              `Asset burn detected.`,
+              `Add the relevant change outputs to the transaction to avoid burning assets.`,
+              `Or enable asset burn, upon sending the transaction.`,
+            ].join('\n')
+          )
+        );
       });
     });
   });

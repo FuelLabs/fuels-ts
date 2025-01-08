@@ -3,7 +3,7 @@ import type { BytesLike } from '@fuel-ts/interfaces';
 import { hexlify } from '@fuel-ts/utils';
 
 import { Account } from '../account';
-import { transactionRequestify } from '../providers';
+import { transactionRequestify, validateTransactionForAssetBurn } from '../providers';
 import type {
   TransactionRequestLike,
   CallResult,
@@ -112,9 +112,10 @@ export class BaseWalletUnlocked extends Account {
    */
   override async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = false, enableAssetBurn = false }: ProviderSendTxParams = {}
+    { estimateTxDependencies = false, enableAssetBurn }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    validateTransactionForAssetBurn(transactionRequest, enableAssetBurn);
     if (estimateTxDependencies) {
       await this.provider.estimateTxDependencies(transactionRequest);
     }

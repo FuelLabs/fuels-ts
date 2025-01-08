@@ -859,7 +859,7 @@ Supported fuel-core version: ${supportedVersion}.`
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true, enableAssetBurn = false }: ProviderSendTxParams = {}
+    { estimateTxDependencies = true, enableAssetBurn }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     validateTransactionForAssetBurn(transactionRequest, enableAssetBurn);

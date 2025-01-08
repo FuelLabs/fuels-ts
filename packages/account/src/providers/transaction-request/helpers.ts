@@ -10,7 +10,6 @@ import type {
   CoinTransactionRequestInput,
   MessageTransactionRequestInput,
 } from './input';
-import type { TransactionRequestOutput } from './output';
 import type { TransactionRequest } from './types';
 
 export const isRequestInputCoin = (
@@ -97,10 +96,15 @@ export const cacheRequestInputsResourcesFromOwner = (
     } as Required<ExcludeResourcesOption>
   );
 
-export const getBurnableAssetCount = (opts: {
-  inputs: TransactionRequestInput[];
-  outputs: TransactionRequestOutput[];
-}) => {
+/**
+ * @hidden
+ *
+ * Get the number of burnable assets in the transaction request.
+ *
+ * @param opts - The transaction request to get the burnable asset count from.
+ * @returns The number of burnable assets in the transaction request.
+ */
+export const getBurnableAssetCount = (opts: Pick<TransactionRequest, 'inputs' | 'outputs'>) => {
   const { inputs, outputs } = opts;
   const coinInputs = new Set(inputs.filter(isRequestInputCoin).map((input) => input.assetId));
   const changeOutputs = new Set(
@@ -110,17 +114,27 @@ export const getBurnableAssetCount = (opts: {
   return difference.size;
 };
 
+/**
+ * @hidden
+ *
+ * Validates the transaction request for asset burn.
+ *
+ * @param transactionRequest - The transaction request to validate.
+ * @param enableAssetBurn - Whether asset burn is enabled (default: false).
+ *
+ * @throws `FuelError` when an asset burn is detected and not enabled.
+ */
 export const validateTransactionForAssetBurn = (
-  tx: TransactionRequest,
+  transactionRequest: Pick<TransactionRequest, 'inputs' | 'outputs'>,
   enableAssetBurn: boolean = false
 ) => {
   // Asset burn is enabled
-  if (enableAssetBurn) {
+  if (enableAssetBurn === true) {
     return;
   }
 
   // No burnable assets detected
-  if (getBurnableAssetCount(tx) <= 0) {
+  if (getBurnableAssetCount(transactionRequest) <= 0) {
     return;
   }
 

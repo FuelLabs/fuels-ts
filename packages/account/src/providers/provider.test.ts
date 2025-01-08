@@ -2278,6 +2278,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   it('should throw error if asset burn is detected', async () => {
     using launched = await setupTestProviderAndWallets();
     const {
+      provider,
       wallets: [sender],
     } = launched;
 
@@ -2305,7 +2306,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       'Or enable asset burn, upon sending the transaction.',
     ].join('\n');
     await expectToThrowFuelError(
-      () => sender.sendTransaction(request),
+      () => provider.sendTransaction(request),
       new FuelError(ErrorCode.ASSET_BURN_DETECTED, expectedErrorMessage)
     );
   });
@@ -2313,6 +2314,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   it('should allow asset burn if enabled', async () => {
     using launched = await setupTestProviderAndWallets();
     const {
+      provider,
       wallets: [sender],
     } = launched;
     const {
@@ -2335,7 +2337,10 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     // Fund the transaction
     await request.autoCost(sender);
 
-    const response = await sender.sendTransaction(request, {
+    const signedTransaction = await sender.signTransaction(request);
+    request.updateWitnessByOwner(sender.address, signedTransaction);
+
+    const response = await provider.sendTransaction(request, {
       enableAssetBurn: true,
     });
     const { isStatusSuccess } = await response.waitForResult();
