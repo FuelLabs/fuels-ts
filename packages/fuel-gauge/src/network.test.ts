@@ -13,7 +13,7 @@ import {
 /**
  * @group network
  */
-describe('testnet-txs', () => {
+describe('network', () => {
   const timeout = 1000 * 50; // 50 seconds
 
   let contractId1: string;
