@@ -3,7 +3,7 @@ import { launchTestNode } from 'fuels/test-utils';
 
 import { PredicateTrue, PredicateFalse } from '../../test/typegen/predicates';
 
-import { assertBalances, fundPredicate } from './utils/predicate';
+import { assertBalances, fundAccount } from './utils/predicate';
 
 /**
  * @group node
@@ -24,14 +24,14 @@ describe('Predicate', () => {
 
       const predicate = new PredicateTrue({ provider });
 
-      await fundPredicate(wallet, predicate, 200_000);
+      await fundAccount(wallet, predicate, 200_000);
 
       const amountToReceiver = 50;
 
       const tx = await predicate.transfer(
         receiver.address,
         amountToReceiver,
-        provider.getBaseAssetId(),
+        await provider.getBaseAssetId(),
         {
           gasLimit: 1000,
         }
@@ -55,10 +55,10 @@ describe('Predicate', () => {
 
       const predicate = new PredicateFalse({ provider });
 
-      await fundPredicate(wallet, predicate, 200_000);
+      await fundAccount(wallet, predicate, 200_000);
 
       await expect(
-        predicate.transfer(receiver.address, 50, provider.getBaseAssetId(), {
+        predicate.transfer(receiver.address, 50, await provider.getBaseAssetId(), {
           gasLimit: 1000,
         })
       ).rejects.toThrow('PredicateVerificationFailed');

@@ -71,6 +71,107 @@ function getSubscriptionStreamFromFetch(streamHolder: { stream: ReadableStream<U
  * @group browser
  */
 describe('TransactionResponse', () => {
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
+  it('builds tx response from active sendAndAwaitStatus subscription', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      provider,
+      wallets: [adminWallet],
+    } = launched;
+
+    const submitAndAwaitStatusSpy = vi.spyOn(provider.operations, 'submitAndAwaitStatus');
+    const statusChangeSpy = vi.spyOn(provider.operations, 'statusChange');
+    const getTransactionWithReceiptsSpy = vi.spyOn(
+      provider.operations,
+      'getTransactionWithReceipts'
+    );
+
+    const transferTx = await adminWallet.transfer(
+      Wallet.generate().address,
+      100,
+      await provider.getBaseAssetId()
+    );
+    const result = await transferTx.waitForResult();
+
+    expect(transferTx.id).toEqual(result.id);
+    expect(result.receipts.length).toBe(2);
+
+    expect(submitAndAwaitStatusSpy).toHaveBeenCalledTimes(1); // sends tx and gets result
+    expect(statusChangeSpy).toHaveBeenCalledTimes(0); // we already have the status
+    expect(getTransactionWithReceiptsSpy).toHaveBeenCalledTimes(0); // we already have the raw tx
+  });
+
+  it('builds tx response from transaction ID', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      provider,
+      wallets: [adminWallet],
+    } = launched;
+
+    const submitAndAwaitStatusSpy = vi.spyOn(provider.operations, 'submitAndAwaitStatus');
+    const statusChangeSpy = vi.spyOn(provider.operations, 'statusChange');
+    const getTransactionWithReceiptsSpy = vi.spyOn(
+      provider.operations,
+      'getTransactionWithReceipts'
+    );
+
+    const transferTx = await adminWallet.transfer(
+      Wallet.generate().address,
+      100,
+      await provider.getBaseAssetId()
+    );
+    const response = new TransactionResponse(transferTx.id, provider, await provider.getChainId());
+    const result = await response.waitForResult();
+
+    expect(transferTx.id).toEqual(result.id);
+    expect(result.receipts.length).toBe(2);
+
+    expect(submitAndAwaitStatusSpy).toHaveBeenCalledTimes(1); // sends tx
+    expect(statusChangeSpy).toHaveBeenCalledTimes(1); // awaits result (can get receipts)
+    expect(getTransactionWithReceiptsSpy).toHaveBeenCalledTimes(1); // gets raw transaction and receipts
+  });
+
+  it('builds tx response from transaction request instance', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      provider,
+      wallets: [adminWallet],
+    } = launched;
+
+    const submitAndAwaitStatusSpy = vi.spyOn(provider.operations, 'submitAndAwaitStatus');
+    const statusChangeSpy = vi.spyOn(provider.operations, 'statusChange');
+    const getTransactionWithReceiptsSpy = vi.spyOn(
+      provider.operations,
+      'getTransactionWithReceipts'
+    );
+
+    const transferTxRequest = await adminWallet.createTransfer(
+      Wallet.generate().address,
+      100,
+      await provider.getBaseAssetId()
+    );
+    const transferTx = await adminWallet.sendTransaction(transferTxRequest);
+    const response = new TransactionResponse(
+      transferTxRequest,
+      provider,
+      await provider.getChainId()
+    );
+    const result = await response.waitForResult();
+
+    expect(transferTx.id).toEqual(result.id);
+    expect(result.receipts.length).toBe(2);
+
+    expect(submitAndAwaitStatusSpy).toHaveBeenCalledTimes(1); // sends tx
+    expect(statusChangeSpy).toHaveBeenCalledTimes(1); // awaits result and gets receipts
+    expect(getTransactionWithReceiptsSpy).toHaveBeenCalledTimes(0); // we already have raw tx
+  });
+
   it('should ensure create method waits till a transaction response is given', async () => {
     using launched = await launchTestNode();
 
@@ -86,7 +187,7 @@ describe('TransactionResponse', () => {
     const { id: transactionId } = await adminWallet.transfer(
       destination.address,
       100,
-      provider.getBaseAssetId(),
+      await provider.getBaseAssetId(),
       { gasLimit: 10_000 }
     );
 
@@ -123,7 +224,7 @@ describe('TransactionResponse', () => {
     const { id: transactionId } = await adminWallet.transfer(
       destination.address,
       100,
-      provider.getBaseAssetId()
+      await provider.getBaseAssetId()
     );
 
     const response = await TransactionResponse.create(transactionId, provider);
@@ -186,7 +287,7 @@ describe('TransactionResponse', () => {
       const { id: transactionId } = await genesisWallet.transfer(
         destination.address,
         100,
-        provider.getBaseAssetId(),
+        await provider.getBaseAssetId(),
         { gasLimit: 10_000 }
       );
       const response = await TransactionResponse.create(transactionId, provider);
@@ -204,7 +305,7 @@ describe('TransactionResponse', () => {
   );
 
   it(
-    'should throw error for a SqueezedOut status update [waitForResult]',
+    'should throw error for a SqueezedOut status update [submitAndAwaitStatus]',
     { timeout: 10_000, retry: 10 },
     async () => {
       /**
@@ -237,14 +338,9 @@ describe('TransactionResponse', () => {
 
       const request = new ScriptTransactionRequest();
 
-      request.addCoinOutput(Wallet.generate(), 100, provider.getBaseAssetId());
+      request.addCoinOutput(Wallet.generate(), 100, await provider.getBaseAssetId());
 
-      const txCost = await genesisWallet.getTransactionCost(request);
-
-      request.gasLimit = txCost.gasUsed;
-      request.maxFee = txCost.maxFee;
-
-      await genesisWallet.fund(request, txCost);
+      await request.autoCost(genesisWallet);
 
       request.updateWitnessByOwner(
         genesisWallet.address,
@@ -263,7 +359,7 @@ describe('TransactionResponse', () => {
   );
 
   it(
-    'should throw error for a SqueezedOut status update [submitAndAwait]',
+    'should throw error for a SqueezedOut status update [statusChange]',
     { retry: 10 },
     async () => {
       using launched = await launchTestNode({
@@ -289,29 +385,80 @@ describe('TransactionResponse', () => {
 
       const request = new ScriptTransactionRequest();
 
-      request.addCoinOutput(Wallet.generate(), 100, provider.getBaseAssetId());
+      request.addCoinOutput(Wallet.generate(), 100, await provider.getBaseAssetId());
 
-      const txCost = await genesisWallet.getTransactionCost(request, {
+      await request.autoCost(genesisWallet, {
         signatureCallback: (tx) => tx.addAccountWitnesses(genesisWallet),
       });
-
-      request.gasLimit = txCost.gasUsed;
-      request.maxFee = txCost.maxFee;
-
-      await genesisWallet.fund(request, txCost);
 
       request.updateWitnessByOwner(
         genesisWallet.address,
         await genesisWallet.signTransaction(request)
       );
+      const submit = await provider.sendTransaction(request);
+
+      const txResponse = new TransactionResponse(submit.id, provider, await provider.getChainId());
 
       await expectToThrowFuelError(
         async () => {
-          const submit = await provider.sendTransaction(request);
-          await submit.waitForResult();
+          await txResponse.waitForResult();
         },
         { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
       );
     }
   );
+
+  it('builds response and awaits result [uses fee from status]', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      provider,
+      wallets: [genesisWallet],
+    } = launched;
+
+    const getLatestGasPriceSpy = vi.spyOn(provider, 'getLatestGasPrice');
+
+    const request = new ScriptTransactionRequest();
+    request.addCoinOutput(Wallet.generate(), 100, await provider.getBaseAssetId());
+    await request.autoCost(genesisWallet);
+
+    const tx = await genesisWallet.sendTransaction(request);
+    const result = await tx.waitForResult();
+
+    // fee is used from the success status, latest gas price not needed
+    expect(getLatestGasPriceSpy).toHaveBeenCalledTimes(0);
+    expect(result.fee.toNumber()).toBeGreaterThan(0);
+    expect(result.id).toBe(tx.id);
+  });
+
+  it('builds response and assembles result [fetches gas price then uses fee]', async () => {
+    using launched = await launchTestNode({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '2sec'],
+      },
+    });
+
+    const {
+      provider,
+      wallets: [genesisWallet],
+    } = launched;
+
+    const getLatestGasPriceSpy = vi.spyOn(provider, 'getLatestGasPrice');
+
+    const request = new ScriptTransactionRequest();
+    request.addCoinOutput(Wallet.generate(), 100, await provider.getBaseAssetId());
+    await request.autoCost(genesisWallet);
+
+    const tx = await genesisWallet.sendTransaction(request);
+    const result = await tx.assembleResult();
+
+    // tx has not settled so response will fetch the gas price
+    expect(getLatestGasPriceSpy).toHaveBeenCalledTimes(1);
+    expect(result.id).toBe(tx.id);
+
+    const finalisedResult = await tx.waitForResult();
+    expect(finalisedResult.fee.toNumber()).toBeGreaterThan(0);
+    expect(getLatestGasPriceSpy).toHaveBeenCalledTimes(1);
+    expect(finalisedResult.id).toBe(tx.id);
+  });
 });

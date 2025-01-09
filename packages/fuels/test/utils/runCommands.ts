@@ -47,7 +47,7 @@ export function bootstrapProject(testFilepath: string) {
   const upgradableChunkedContractPath = join(contractsDir, 'upgradable-chunked');
 
   const scriptsDir = join(workspaceDir, 'scripts');
-  const predicateDir = join(workspaceDir, 'predicate');
+  const predicateDir = join(workspaceDir, 'predicates');
 
   const outputDir = join(root, 'output');
   const outputContractsDir = join(outputDir, 'contracts');
@@ -93,15 +93,16 @@ export type BaseParams = {
 
 export type InitParams = BaseParams & {
   workspace?: string;
-  contracts?: string;
-  scripts?: string;
-  predicates?: string;
+  contracts?: string | string[];
+  scripts?: string | string[];
+  predicates?: string | string[];
   output: string;
   forcPath?: string;
   fuelCorePath?: string;
   autoStartFuelCore?: boolean;
   build?: boolean;
   privateKey?: string;
+  fuelCorePort?: string;
 };
 
 export type BuildParams = BaseParams & {
@@ -120,10 +121,13 @@ export async function runInit(params: InitParams) {
     fuelCorePath,
     workspace,
     privateKey,
+    fuelCorePort,
   } = params;
 
-  const flag = (flags: (string | undefined)[], value?: string | boolean): string[] =>
-    value ? (flags as string[]) : [];
+  const flag = (
+    flags: (string | string[] | undefined)[],
+    value?: string | string[] | boolean
+  ): string[] => (value ? (flags.flat() as string[]) : []);
 
   const flags = [
     flag(['--path', root], root),
@@ -135,6 +139,7 @@ export async function runInit(params: InitParams) {
     flag(['--forc-path', forcPath], forcPath),
     flag(['--fuel-core-path', fuelCorePath], fuelCorePath),
     flag(['--auto-start-fuel-core'], autoStartFuelCore),
+    flag(['--fuel-core-port', fuelCorePort], fuelCorePort),
   ].flat();
 
   const command = await runCommand(Commands.init, flags);

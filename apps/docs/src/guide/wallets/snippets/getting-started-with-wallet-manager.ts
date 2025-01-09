@@ -18,7 +18,7 @@ await walletManager.unlock(password);
 
 // #region getting-started-with-wallet-manager-3
 // Initialize a Provider
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const myWallet = Wallet.generate({
   provider,
 });

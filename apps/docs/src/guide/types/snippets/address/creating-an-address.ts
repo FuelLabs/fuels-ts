@@ -1,10 +1,10 @@
 // #region full
 import { Address } from 'fuels';
 
-const ADDRESS_BECH32 =
-  'fuel1elnmzsav56dqnp95sx4e2pckq36cvae9ser44m5zlvgtwxw49fmqd7e42e';
+const ADDRESS_B256 =
+  '0xcfe7b143aca69a0984b481ab950716047586772586475aee82fb10b719d52a76';
 
-const address = new Address(ADDRESS_BECH32);
+const address = new Address(ADDRESS_B256);
 // #endregion full
 
 console.log('address', address);
