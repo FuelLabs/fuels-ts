@@ -62,7 +62,6 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
     predicates: [],
     deployConfig: {},
     autoStartFuelCore: true,
-    fuelCorePort: 4000,
     providerUrl: process.env.FUEL_NETWORK_URL ?? 'http://127.0.0.1:4000/v1/graphql',
     privateKey: defaultConsensusKey,
     ...userConfig,
