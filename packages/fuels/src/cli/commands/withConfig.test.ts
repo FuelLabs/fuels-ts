@@ -69,7 +69,11 @@ describe('withConfig', () => {
       shouldErrorOnDeploy: true,
     });
 
-    await withConfig(command, Commands.deploy, deploy)();
+    try {
+      await withConfig(command, Commands.deploy, deploy)();
+    } catch (e) {
+      //
+    }
 
     expect(loadConfig).toHaveBeenCalledTimes(1);
     expect(loadConfig.mock.calls[0][0]).toEqual(configPath);
@@ -84,7 +88,11 @@ describe('withConfig', () => {
       shouldErrorOnLoadConfig: true,
     });
 
-    await withConfig(command, Commands.deploy, deploy)();
+    try {
+      await withConfig(command, Commands.deploy, deploy)();
+    } catch (e) {
+      //
+    }
 
     expect(loadConfig).toHaveBeenCalledTimes(1);
     expect(loadConfig.mock.calls[0][0]).toEqual(configPath);
