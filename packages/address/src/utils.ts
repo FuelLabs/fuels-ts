@@ -1,14 +1,9 @@
 import { randomBytes } from '@fuel-ts/crypto';
 import { FuelError } from '@fuel-ts/errors';
-import { AbstractContract, AbstractAccount } from '@fuel-ts/interfaces';
-import type {
-  B256Address,
-  AddressLike,
-  ContractIdLike,
-  AbstractAddress,
-  B256AddressEvm,
-} from '@fuel-ts/interfaces';
 import { arrayify, concat, hexlify } from '@fuel-ts/utils';
+
+import type { Address } from './address';
+import type { AddressLike, ContractIdLike, B256Address, B256AddressEvm } from './types';
 
 /**
  * Determines if a given string is B256 format
@@ -42,20 +37,33 @@ export function normalizeB256(address: B256Address): B256Address {
 }
 
 /**
+ * A simple type guard to check if an object is an Address
+ *
+ * @hidden
+ */
+export function isAddress(address: object): address is Address {
+  return 'b256Address' in address;
+}
+
+/**
  * Takes an indeterminate address type and returns an address
  *
  * @hidden
  */
-export const addressify = (addressLike: AddressLike | ContractIdLike): AbstractAddress => {
-  if (addressLike instanceof AbstractAccount) {
+export const addressify = (addressLike: AddressLike | ContractIdLike): Address => {
+  if (isAddress(addressLike)) {
+    return addressLike;
+  }
+
+  if ('address' in addressLike && isAddress(addressLike.address)) {
     return addressLike.address;
   }
 
-  if (addressLike instanceof AbstractContract) {
+  if ('id' in addressLike && isAddress(addressLike.id)) {
     return addressLike.id;
   }
 
-  return addressLike;
+  throw new FuelError(FuelError.CODES.INVALID_ADDRESS, 'Invalid address');
 };
 
 /**

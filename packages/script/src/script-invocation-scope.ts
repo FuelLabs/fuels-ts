@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Provider } from '@fuel-ts/account';
 import { FuelError } from '@fuel-ts/errors';
-import type { AbstractScript } from '@fuel-ts/interfaces';
 import { ScriptRequest, FunctionInvocationScope } from '@fuel-ts/program';
+
+import type { AbstractScript } from './types';
 
 export class ScriptInvocationScope<
   TArgs extends Array<any> = Array<any>,

@@ -1,6 +1,8 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { bn, type BN } from '@fuel-ts/math';
+import type { BN } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 
+import { TransactionStatus } from './types';
 import type {
   BlockId,
   GqlTransactionStatusesNames,
@@ -8,7 +10,6 @@ import type {
   Time,
   TransactionSummary,
 } from './types';
-import { TransactionStatus } from './types';
 
 /** @hidden */
 export const getTransactionStatusName = (gqlStatus: GqlTransactionStatusesNames) => {
@@ -87,3 +88,12 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
 
   return processedGraphqlStatus;
 };
+
+/**
+ * Returns the total fee from the transaction status.
+ *
+ * @param status - The transaction status.
+ * @returns The total fee from the transaction status or undefined.
+ */
+export const getTotalFeeFromStatus = (status?: GraphqlTransactionStatus): BN | undefined =>
+  status && 'totalFee' in status ? bn(status.totalFee) : undefined;

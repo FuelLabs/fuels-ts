@@ -1,9 +1,9 @@
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import { BN, bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import { InputType, InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
+import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility, versions } from '@fuel-ts/versions';
 import { equalBytes } from '@noble/curves/abstract/utils';
@@ -50,7 +50,7 @@ import {
   isTransactionTypeScript,
   transactionRequestify,
 } from './transaction-request';
-import type { TransactionResultReceipt } from './transaction-response';
+import type { TransactionResult, TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse, getDecodedLogs } from './transaction-response';
 import { processGqlReceipt } from './transaction-summary/receipt';
 import {
@@ -508,18 +508,6 @@ export default class Provider {
   }
 
   /**
-   * Creates a new instance of the Provider class. This is the recommended way to initialize a Provider.
-   * @deprecated Use `new Provider(...)` instead.
-   *
-   * @param url - GraphQL endpoint of the Fuel node
-   * @param options - Additional options for the provider
-   * @returns A promise that resolves to a Provider instance.
-   */
-  static async create(url: string, options: ProviderOptions = {}): Promise<Provider> {
-    return new Provider(url, options).init();
-  }
-
-  /**
    * Initialize Provider async stuff
    */
   async init(): Promise<Provider> {
@@ -890,6 +878,22 @@ Supported fuel-core version: ${supportedVersion}.`
 
     const chainId = await this.getChainId();
     return new TransactionResponse(transactionRequest, this, chainId, abis, subscription);
+  }
+
+  /**
+   * Submits a transaction to the chain and awaits its status response.
+   *
+   * @param transactionRequestLike - the request to submit.
+   * @param sendTransactionParams - The provider send transaction parameters (optional).
+   * @returns A promise that resolves to a settled transaction.
+   */
+  async sendTransactionAndAwaitStatus(
+    transactionRequestLike: TransactionRequestLike,
+    providerSendTxParams: ProviderSendTxParams = {}
+  ): Promise<TransactionResult<void>> {
+    const response = await this.sendTransaction(transactionRequestLike, providerSendTxParams);
+    const result = await response.waitForResult();
+    return result;
   }
 
   /**
@@ -1396,7 +1400,7 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns A promise that resolves to the coins.
    */
   async getCoins(
-    owner: string | AbstractAddress,
+    owner: string | Address,
     assetId?: BytesLike,
     paginationArgs?: CursorPaginationArgs
   ): Promise<GetCoinsResponse> {
@@ -1435,7 +1439,7 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns A promise that resolves to the resources.
    */
   async getResourcesToSpend(
-    owner: string | AbstractAddress,
+    owner: string | Address,
     quantities: CoinQuantityLike[],
     excludedIds?: ExcludeResourcesOption
   ): Promise<Resource[]> {
@@ -1731,7 +1735,7 @@ Supported fuel-core version: ${supportedVersion}.`
    */
   async getContractBalance(
     /** The contract ID to get the balance for */
-    contractId: string | AbstractAddress,
+    contractId: string | Address,
     /** The asset ID of coins to get */
     assetId: BytesLike
   ): Promise<BN> {
@@ -1751,7 +1755,7 @@ Supported fuel-core version: ${supportedVersion}.`
    */
   async getBalance(
     /** The address to get coins for */
-    owner: string | AbstractAddress,
+    owner: string | Address,
     /** The asset ID of coins to get */
     assetId: BytesLike
   ): Promise<BN> {
@@ -1769,7 +1773,7 @@ Supported fuel-core version: ${supportedVersion}.`
    * @param paginationArgs - Pagination arguments (optional).
    * @returns A promise that resolves to the balances.
    */
-  async getBalances(owner: string | AbstractAddress): Promise<GetBalancesResponse> {
+  async getBalances(owner: string | Address): Promise<GetBalancesResponse> {
     const {
       balances: { edges },
     } = await this.operations.getBalances({
@@ -1797,7 +1801,7 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns A promise that resolves to the messages.
    */
   async getMessages(
-    address: string | AbstractAddress,
+    address: string | Address,
     paginationArgs?: CursorPaginationArgs
   ): Promise<GetMessagesResponse> {
     const {

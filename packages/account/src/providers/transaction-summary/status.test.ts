@@ -1,3 +1,5 @@
+import { bn } from '@fuel-ts/math';
+
 import {
   MOCK_FAILURE_STATUS,
   MOCK_SQUEEZEDOUT_STATUS,
@@ -5,7 +7,7 @@ import {
   MOCK_SUCCESS_STATUS,
 } from '../../../test/fixtures/transaction-summary';
 
-import { getTransactionStatusName, processGraphqlStatus } from './status';
+import { getTotalFeeFromStatus, getTransactionStatusName, processGraphqlStatus } from './status';
 import type { GqlTransactionStatusesNames, GraphqlTransactionStatus } from './types';
 import { TransactionStatus } from './types';
 
@@ -46,6 +48,8 @@ describe('status', () => {
         blockIdType: 'string',
         status: TransactionStatus.success,
         timeType: 'string',
+        totalFee: bn(1000),
+        totalGas: bn(1000),
       },
     },
     {
@@ -58,6 +62,8 @@ describe('status', () => {
         blockIdType: 'string',
         status: TransactionStatus.failure,
         timeType: 'string',
+        totalFee: bn(1000),
+        totalGas: bn(1000),
       },
     },
     {
@@ -95,6 +101,8 @@ describe('status', () => {
         blockId,
         status: resultStatus,
         time,
+        totalFee,
+        totalGas,
       } = processGraphqlStatus(status);
 
       expect(isStatusFailure).toBe(expected.isStatusFailure);
@@ -103,6 +111,15 @@ describe('status', () => {
       expect(typeof blockId).toBe(expected.blockIdType);
       expect(resultStatus).toBe(expected.status);
       expect(typeof time).toBe(expected.timeType);
+      expect(totalFee).toStrictEqual(expected.totalFee);
+      expect(totalGas).toStrictEqual(expected.totalGas);
+    });
+  });
+
+  statuses.forEach(({ name, status, expected }) => {
+    it(`should ensure getTotalFeeFromStatus works fine for ${name}`, () => {
+      const totalFee = getTotalFeeFromStatus(status);
+      expect(totalFee).toStrictEqual(expected.totalFee);
     });
   });
 });

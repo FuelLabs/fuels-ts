@@ -3,13 +3,13 @@ import { Interface } from '@fuel-ts/abi-coder';
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
 import { deployScriptOrPredicate, type Account, type Provider } from '@fuel-ts/account';
 import { FuelError } from '@fuel-ts/errors';
-import { AbstractScript } from '@fuel-ts/interfaces';
-import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import type { ScriptRequest } from '@fuel-ts/program';
+import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify } from '@fuel-ts/utils';
 
 import { ScriptInvocationScope } from './script-invocation-scope';
+import { AbstractScript } from './types';
 
 /**
  * Represents the result of a script execution.
