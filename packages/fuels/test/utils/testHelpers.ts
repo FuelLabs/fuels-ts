@@ -1,6 +1,6 @@
 import { execSync } from 'child_process';
 import { randomUUID } from 'crypto';
-import { mkdirSync, rmSync } from 'fs';
+import { mkdirSync, rmdirSync } from 'fs';
 import { tmpdir } from 'os';
 import path from 'path';
 
@@ -28,7 +28,7 @@ export function runInitTemp() {
     rootDir,
     contractDir,
     [Symbol.dispose]: () => {
-      rmSync(rootDir, { recursive: true });
+      rmdirSync(rootDir, { recursive: true });
     },
   };
 }
