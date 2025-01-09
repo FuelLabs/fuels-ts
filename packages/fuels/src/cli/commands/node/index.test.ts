@@ -25,7 +25,7 @@ describe('node', () => {
 
     const withConfigErrorHandler = vi
       .spyOn(withConfigMod, 'withConfigErrorHandler')
-      .mockReturnValue(undefined as never);
+      .mockReturnValue(Promise.resolve());
 
     const loadConfig = vi
       .spyOn(loadConfigMod, 'loadConfig')
