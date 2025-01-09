@@ -633,10 +633,10 @@ importers:
         specifier: 12.1.0
         version: 12.1.0
       glob:
-        specifier: ^10.4.5
+        specifier: 10.4.5
         version: 10.4.5
       handlebars:
-        specifier: ^4.7.8
+        specifier: 4.7.8
         version: 4.7.8
 
   packages/abi-coder:
