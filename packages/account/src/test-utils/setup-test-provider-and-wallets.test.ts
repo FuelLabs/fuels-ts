@@ -1,7 +1,7 @@
+import type { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
-import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { bn, toNumber } from '@fuel-ts/math';
 import { arrayify, defaultSnapshotConfigs, hexlify } from '@fuel-ts/utils';
 import { waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
@@ -82,7 +82,7 @@ describe('setupTestProviderAndWallets', () => {
 
     const {
       coins: [sutCoin],
-    } = await provider.getCoins({ toB256: () => coin.owner } as AbstractAddress, coin.asset_id);
+    } = await provider.getCoins({ toB256: () => coin.owner } as Address, coin.asset_id);
 
     expect(sutCoin.amount.toNumber()).toEqual(coin.amount);
     expect(sutCoin.owner.toB256()).toEqual(coin.owner);

@@ -571,9 +571,6 @@ importers:
       '@fuel-ts/hasher':
         specifier: workspace:*
         version: link:../../packages/hasher
-      '@fuel-ts/interfaces':
-        specifier: workspace:*
-        version: link:../../packages/interfaces
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../../packages/math
@@ -630,11 +627,8 @@ importers:
         specifier: workspace:*
         version: link:../errors
       '@fuel-ts/hasher':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../hasher
-      '@fuel-ts/interfaces':
-        specifier: workspace:*
-        version: link:../interfaces
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -650,9 +644,6 @@ importers:
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
-      '@fuel-ts/interfaces':
-        specifier: workspace:*
-        version: link:../interfaces
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
@@ -705,9 +696,6 @@ importers:
       '@fuel-ts/hasher':
         specifier: workspace:*
         version: link:../hasher
-      '@fuel-ts/interfaces':
-        specifier: workspace:*
-        version: link:../interfaces
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -778,9 +766,6 @@ importers:
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
-      '@fuel-ts/interfaces':
-        specifier: workspace:*
-        version: link:../interfaces
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
@@ -805,11 +790,8 @@ importers:
       '@fuel-ts/hasher':
         specifier: workspace:*
         version: link:../hasher
-      '@fuel-ts/interfaces':
-        specifier: workspace:*
-        version: link:../interfaces
       '@fuel-ts/math':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../math
       '@fuel-ts/merkle':
         specifier: workspace:*
@@ -876,9 +858,6 @@ importers:
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
-      '@fuel-ts/interfaces':
-        specifier: workspace:*
-        version: link:../interfaces
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -946,9 +925,6 @@ importers:
       '@fuel-ts/hasher':
         specifier: workspace:*
         version: link:../hasher
-      '@fuel-ts/interfaces':
-        specifier: workspace:*
-        version: link:../interfaces
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -1028,9 +1004,6 @@ importers:
       '@fuel-ts/crypto':
         specifier: workspace:*
         version: link:../crypto
-      '@fuel-ts/interfaces':
-        specifier: workspace:*
-        version: link:../interfaces
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
@@ -1038,16 +1011,11 @@ importers:
         specifier: 1.5.0
         version: 1.5.0
 
-  packages/interfaces: {}
-
   packages/logger:
     dependencies:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
-      '@fuel-ts/interfaces':
-        specifier: workspace:*
-        version: link:../interfaces
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -1094,9 +1062,6 @@ importers:
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
-      '@fuel-ts/interfaces':
-        specifier: workspace:*
-        version: link:../interfaces
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -1128,12 +1093,12 @@ importers:
       '@fuel-ts/account':
         specifier: workspace:*
         version: link:../account
+      '@fuel-ts/address':
+        specifier: workspace:*
+        version: link:../address
       '@fuel-ts/contract':
         specifier: workspace:*
         version: link:../contract
-      '@fuel-ts/interfaces':
-        specifier: workspace:*
-        version: link:../interfaces
       '@fuel-ts/program':
         specifier: workspace:*
         version: link:../program
@@ -1158,9 +1123,6 @@ importers:
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
-      '@fuel-ts/interfaces':
-        specifier: workspace:*
-        version: link:../interfaces
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -1190,11 +1152,8 @@ importers:
         specifier: workspace:*
         version: link:../errors
       '@fuel-ts/hasher':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../hasher
-      '@fuel-ts/interfaces':
-        specifier: workspace:*
-        version: link:../interfaces
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -1207,9 +1166,6 @@ importers:
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
-      '@fuel-ts/interfaces':
-        specifier: workspace:*
-        version: link:../interfaces
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
