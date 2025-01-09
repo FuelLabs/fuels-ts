@@ -10,7 +10,7 @@ import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, isDefined } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
-import type { FuelConnector } from './connectors';
+import type { AccountSendTxParams, FuelConnector } from './connectors';
 import type {
   TransactionRequest,
   CoinQuantityLike,
@@ -23,7 +23,6 @@ import type {
   EstimateTransactionParams,
   CursorPaginationArgs,
   TransactionRequestLike,
-  ProviderSendTxParams,
   CallResult,
   GetCoinsResponse,
   GetMessagesResponse,
@@ -649,11 +648,7 @@ export class Account extends AbstractAccount implements WithAddress {
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    {
-      estimateTxDependencies = true,
-      onBeforeSend,
-      skipCustomFee = false
-    }: ProviderSendTxParams = {}
+    { estimateTxDependencies = true, onBeforeSend, skipCustomFee = false }: AccountSendTxParams = {}
   ): Promise<TransactionResponse> {
     if (this._connector) {
       return this.provider.getTransactionResponse(
