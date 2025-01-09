@@ -115,7 +115,11 @@ export class BaseWalletUnlocked extends Account {
     { estimateTxDependencies = false, enableAssetBurn }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    validateTransactionForAssetBurn(transactionRequest, enableAssetBurn);
+    validateTransactionForAssetBurn(
+      await this.provider.getBaseAssetId(),
+      transactionRequest,
+      enableAssetBurn
+    );
     if (estimateTxDependencies) {
       await this.provider.estimateTxDependencies(transactionRequest);
     }

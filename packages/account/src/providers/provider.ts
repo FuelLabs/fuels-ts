@@ -862,7 +862,11 @@ Supported fuel-core version: ${supportedVersion}.`
     { estimateTxDependencies = true, enableAssetBurn }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    validateTransactionForAssetBurn(transactionRequest, enableAssetBurn);
+    validateTransactionForAssetBurn(
+      await this.getBaseAssetId(),
+      transactionRequest,
+      enableAssetBurn
+    );
 
     if (estimateTxDependencies) {
       await this.estimateTxDependencies(transactionRequest);

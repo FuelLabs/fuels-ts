@@ -1,9 +1,10 @@
-import type { CoinTransactionRequestInput } from 'fuels';
+import type { CoinTransactionRequestInput, MessageTransactionRequestInput } from 'fuels';
 import {
   FuelError,
   hexlify,
   InputMessageCoder,
   InputType,
+  isMessage,
   ScriptTransactionRequest,
   sleep,
   TransactionType,
@@ -139,7 +140,7 @@ describe('Transaction', () => {
     expect(status.state).toBe('SPENT');
   });
 
-  it('should allow an asset burn when enabled', async () => {
+  it('should allow an asset burn when enabled (Coin)', async () => {
     const {
       wallets: [sender],
     } = await launchTestNode();
@@ -149,7 +150,19 @@ describe('Transaction', () => {
     // Add a coin input, which adds the relevant coin change output
     const { coins } = await sender.getCoins(ASSET_A);
     const [coin] = coins;
-    request.addCoinInput(coin);
+    const { id, owner, amount, assetId, predicate, predicateData } = coin;
+    const coinInput: CoinTransactionRequestInput = {
+      id,
+      type: InputType.Coin,
+      owner: owner.toB256(),
+      amount,
+      assetId,
+      txPointer: '0x00000000000000000000000000000000',
+      witnessIndex: request.getCoinInputWitnessIndexByOwner(owner) ?? request.addEmptyWitness(),
+      predicate,
+      predicateData,
+    };
+    request.inputs.push(coinInput);
 
     await request.autoCost(sender);
 
@@ -158,9 +171,14 @@ describe('Transaction', () => {
     });
     const { isStatusSuccess } = await tx.waitForResult();
     expect(isStatusSuccess).toEqual(true);
+    expect(request.outputs).to.not.contain(
+      expect.objectContaining({
+        assetId: coinInput.assetId,
+      })
+    );
   });
 
-  it('should throw an error when an asset burn is detected', async () => {
+  it('should throw an error when an asset burn is detected (Coin)', async () => {
     const {
       wallets: [sender],
     } = await launchTestNode();
@@ -192,6 +210,111 @@ describe('Transaction', () => {
     await expectToThrowFuelError(
       () => sender.sendTransaction(request),
       new FuelError(FuelError.CODES.ASSET_BURN_DETECTED, expectedErrorMessage)
+    );
+    expect(request.outputs).to.not.contain(
+      expect.objectContaining({
+        assetId: coinInput.assetId,
+      })
+    );
+  });
+
+  it('should allow an asset burn when enabled (MessageCoin)', async () => {
+    const testMessage = new TestMessage({
+      amount: 100_000,
+    });
+
+    const {
+      provider,
+      wallets: [owner],
+    } = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 0,
+        messages: [testMessage],
+      },
+    });
+
+    const request = new ScriptTransactionRequest();
+
+    const resources = await owner.getResourcesToSpend([
+      { assetId: await provider.getBaseAssetId(), amount: 100 },
+    ]);
+    const [message] = resources.filter((r) => isMessage(r));
+
+    // Add a message coin input, which adds the relevant coin change output
+    const { sender, recipient, amount, nonce } = message;
+    const coinInput: MessageTransactionRequestInput = {
+      type: InputType.Message,
+      sender: sender.toB256(),
+      recipient: recipient.toB256(),
+      amount,
+      nonce,
+      witnessIndex: request.getCoinInputWitnessIndexByOwner(owner) ?? request.addEmptyWitness(),
+    };
+    request.inputs.push(coinInput);
+
+    await request.autoCost(owner);
+
+    const tx = await owner.sendTransaction(request, {
+      enableAssetBurn: true,
+    });
+    const { isStatusSuccess } = await tx.waitForResult();
+    expect(isStatusSuccess).toEqual(true);
+    expect(request.outputs).to.not.contain(
+      expect.objectContaining({
+        assetId: await provider.getBaseAssetId(),
+      })
+    );
+  });
+
+  it('should throw an error when an asset burn is detected (MessageCoin)', async () => {
+    const testMessage = new TestMessage({
+      amount: 100_000,
+    });
+
+    const {
+      provider,
+      wallets: [owner],
+    } = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 0,
+        messages: [testMessage],
+      },
+    });
+
+    const request = new ScriptTransactionRequest();
+
+    const resources = await owner.getResourcesToSpend([
+      { assetId: await provider.getBaseAssetId(), amount: 100 },
+    ]);
+    const [message] = resources.filter((r) => isMessage(r));
+
+    // Add a message coin input, without any output change
+    const { sender, recipient, amount, nonce } = message;
+    const coinInput: MessageTransactionRequestInput = {
+      type: InputType.Message,
+      sender: sender.toB256(),
+      recipient: recipient.toB256(),
+      amount,
+      nonce,
+      witnessIndex: request.getCoinInputWitnessIndexByOwner(owner) ?? request.addEmptyWitness(),
+    };
+    request.inputs.push(coinInput);
+
+    await request.autoCost(owner);
+
+    const expectedErrorMessage = [
+      'Asset burn detected.',
+      'Add the relevant change outputs to the transaction to avoid burning assets.',
+      'Or enable asset burn, upon sending the transaction.',
+    ].join('\n');
+    await expectToThrowFuelError(
+      () => owner.sendTransaction(request),
+      new FuelError(FuelError.CODES.ASSET_BURN_DETECTED, expectedErrorMessage)
+    );
+    expect(request.outputs).to.not.contain(
+      expect.objectContaining({
+        assetId: await provider.getBaseAssetId(),
+      })
     );
   });
 });

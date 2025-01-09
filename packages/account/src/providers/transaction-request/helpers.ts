@@ -104,9 +104,16 @@ export const cacheRequestInputsResourcesFromOwner = (
  * @param opts - The transaction request to get the burnable asset count from.
  * @returns The number of burnable assets in the transaction request.
  */
-export const getBurnableAssetCount = (opts: Pick<TransactionRequest, 'inputs' | 'outputs'>) => {
+export const getBurnableAssetCount = (
+  baseAssetId: string,
+  opts: Pick<TransactionRequest, 'inputs' | 'outputs'>
+) => {
   const { inputs, outputs } = opts;
   const coinInputs = new Set(inputs.filter(isRequestInputCoin).map((input) => input.assetId));
+  // If there is a message input without data, we need to add the base asset to the set
+  if (inputs.some(isRequestInputMessageWithoutData)) {
+    coinInputs.add(baseAssetId);
+  }
   const changeOutputs = new Set(
     outputs.filter((output) => output.type === OutputType.Change).map((output) => output.assetId)
   );
@@ -125,6 +132,7 @@ export const getBurnableAssetCount = (opts: Pick<TransactionRequest, 'inputs' | 
  * @throws `FuelError` when an asset burn is detected and not enabled.
  */
 export const validateTransactionForAssetBurn = (
+  baseAssetId: string,
   transactionRequest: Pick<TransactionRequest, 'inputs' | 'outputs'>,
   enableAssetBurn: boolean = false
 ) => {
@@ -134,7 +142,7 @@ export const validateTransactionForAssetBurn = (
   }
 
   // No burnable assets detected
-  if (getBurnableAssetCount(transactionRequest) <= 0) {
+  if (getBurnableAssetCount(baseAssetId, transactionRequest) <= 0) {
     return;
   }
 
