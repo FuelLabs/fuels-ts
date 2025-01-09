@@ -25,8 +25,6 @@ import {
   getBurnableAssetCount,
   validateTransactionForAssetBurn,
 } from './helpers';
-import type { TransactionRequestInput } from './input';
-import type { TransactionRequestOutput } from './output';
 import { ScriptTransactionRequest } from './script-transaction-request';
 
 /**
@@ -205,35 +203,35 @@ describe('helpers', () => {
 
     describe('getBurnableAssetCount', () => {
       it('should get the number of burnable assets [0]', () => {
-        const inputs: TransactionRequestInput[] = [
+        const request = new ScriptTransactionRequest();
+        request.inputs = [
           generateFakeRequestInputMessage(), // Will be a `baseAssetId`
           generateFakeRequestInputCoin({ assetId: ASSET_A, owner: owner.toB256() }),
           generateFakeRequestInputCoin({ assetId: ASSET_B, owner: owner.toB256() }),
         ];
-        const outputs: TransactionRequestOutput[] = [
+        request.outputs = [
           { type: OutputType.Change, assetId: baseAssetId, to: owner.toB256() },
           { type: OutputType.Change, assetId: ASSET_A, to: owner.toB256() },
           { type: OutputType.Change, assetId: ASSET_B, to: owner.toB256() },
         ];
         const expectedBurnableAssets = 0;
 
-        const burnableAssets = getBurnableAssetCount(baseAssetId, { inputs, outputs });
+        const burnableAssets = getBurnableAssetCount(baseAssetId, request);
 
         expect(burnableAssets).toBe(expectedBurnableAssets);
       });
 
       it('should get the number of burnable coins [2]', () => {
-        const inputs: TransactionRequestInput[] = [
+        const request = new ScriptTransactionRequest();
+        request.inputs = [
           generateFakeRequestInputMessage(), // Burnable asset - will be a `baseAssetId`
           generateFakeRequestInputCoin({ assetId: ASSET_A, owner: owner.toB256() }),
           generateFakeRequestInputCoin({ assetId: ASSET_B, owner: owner.toB256() }), // Burnable asset
         ];
-        const outputs: TransactionRequestOutput[] = [
-          { type: OutputType.Change, assetId: ASSET_A, to: owner.toB256() },
-        ];
+        request.outputs = [{ type: OutputType.Change, assetId: ASSET_A, to: owner.toB256() }];
         const expectedBurnableAssets = 2;
 
-        const burnableAssets = getBurnableAssetCount(baseAssetId, { inputs, outputs });
+        const burnableAssets = getBurnableAssetCount(baseAssetId, request);
 
         expect(burnableAssets).toBe(expectedBurnableAssets);
       });
@@ -241,12 +239,13 @@ describe('helpers', () => {
 
     describe('validateTransactionForAssetBurn', () => {
       it('should successfully validate transactions without burnable assets [enableAssetBurn=false]', () => {
-        const inputs: TransactionRequestInput[] = [
+        const request = new ScriptTransactionRequest();
+        request.inputs = [
           generateFakeRequestInputMessage(),
           generateFakeRequestInputCoin({ assetId: ASSET_A, owner: owner.toB256() }),
           generateFakeRequestInputCoin({ assetId: ASSET_B, owner: owner.toB256() }),
         ];
-        const outputs: TransactionRequestOutput[] = [
+        request.outputs = [
           { type: OutputType.Change, assetId: baseAssetId, to: owner.toB256() },
           { type: OutputType.Change, assetId: ASSET_A, to: owner.toB256() },
           { type: OutputType.Change, assetId: ASSET_B, to: owner.toB256() },
@@ -254,23 +253,22 @@ describe('helpers', () => {
         const enableAssetBurn = false;
 
         expect(() =>
-          validateTransactionForAssetBurn(baseAssetId, { inputs, outputs }, enableAssetBurn)
+          validateTransactionForAssetBurn(baseAssetId, request, enableAssetBurn)
         ).not.toThrow();
       });
 
       it('should throw an error if transaction has burnable assets [enableAssetBurn=false]', async () => {
-        const inputs: TransactionRequestInput[] = [
+        const request = new ScriptTransactionRequest();
+        request.inputs = [
           generateFakeRequestInputMessage(),
           generateFakeRequestInputCoin({ assetId: ASSET_A, owner: owner.toB256() }),
           generateFakeRequestInputCoin({ assetId: ASSET_B, owner: owner.toB256() }),
         ];
-        const outputs: TransactionRequestOutput[] = [
-          { type: OutputType.Change, assetId: ASSET_A, to: owner.toB256() },
-        ];
+        request.outputs = [{ type: OutputType.Change, assetId: ASSET_A, to: owner.toB256() }];
         const enableAssetBurn = false;
 
         await expectToThrowFuelError(
-          () => validateTransactionForAssetBurn(baseAssetId, { inputs, outputs }, enableAssetBurn),
+          () => validateTransactionForAssetBurn(baseAssetId, request, enableAssetBurn),
           new FuelError(
             ErrorCode.ASSET_BURN_DETECTED,
             [
@@ -283,29 +281,31 @@ describe('helpers', () => {
       });
 
       it('should successfully validate transactions with burnable assets [enableAssetBurn=true]', () => {
-        const inputs: TransactionRequestInput[] = [
+        const request = new ScriptTransactionRequest();
+        request.inputs = [
           generateFakeRequestInputMessage(),
           generateFakeRequestInputCoin({ assetId: ASSET_A, owner: owner.toB256() }),
           generateFakeRequestInputCoin({ assetId: ASSET_B, owner: owner.toB256() }),
         ];
-        const outputs: TransactionRequestOutput[] = [];
+        request.outputs = [];
         const enableAssetBurn = true;
 
         expect(() =>
-          validateTransactionForAssetBurn(baseAssetId, { inputs, outputs }, enableAssetBurn)
+          validateTransactionForAssetBurn(baseAssetId, request, enableAssetBurn)
         ).not.toThrow();
       });
 
       it('should validate asset burn by default [enableAssetBurn=undefined]', async () => {
-        const inputs: TransactionRequestInput[] = [
+        const request = new ScriptTransactionRequest();
+        request.inputs = [
           generateFakeRequestInputMessage(),
           generateFakeRequestInputCoin({ assetId: ASSET_A, owner: owner.toB256() }),
           generateFakeRequestInputCoin({ assetId: ASSET_B, owner: owner.toB256() }),
         ];
-        const outputs: TransactionRequestOutput[] = [];
+        request.outputs = [];
 
         await expectToThrowFuelError(
-          () => validateTransactionForAssetBurn(baseAssetId, { inputs, outputs }),
+          () => validateTransactionForAssetBurn(baseAssetId, request),
           new FuelError(
             ErrorCode.ASSET_BURN_DETECTED,
             [
