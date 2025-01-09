@@ -111,7 +111,7 @@ export const getBurnableAssetCount = (
   const { inputs, outputs } = opts;
   const coinInputs = new Set(inputs.filter(isRequestInputCoin).map((input) => input.assetId));
   // If there is a message input without data, we need to add the base asset to the set
-  if (inputs.some(isRequestInputMessageWithoutData)) {
+  if (inputs.some((i) => isRequestInputMessage(i) && bn(i.amount).gt(0))) {
     coinInputs.add(baseAssetId);
   }
   const changeOutputs = new Set(
