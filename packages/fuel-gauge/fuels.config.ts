@@ -6,5 +6,4 @@ export default createConfig({
   forcBuildFlags: ['--release'],
   forcPath: 'fuels-forc',
   fuelCorePath: 'fuels-core',
-  fuelCorePort: 0,
 });

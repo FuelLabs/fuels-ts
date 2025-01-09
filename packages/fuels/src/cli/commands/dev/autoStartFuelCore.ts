@@ -1,5 +1,4 @@
 import { defaultConsensusKey } from '@fuel-ts/utils';
-import { getPortPromise } from 'portfinder';
 
 import { launchNode } from '../../../test-utils';
 import type { FuelsConfig } from '../../types';
@@ -23,9 +22,13 @@ export const autoStartFuelCore = async (config: FuelsConfig) => {
     const bindIp = '0.0.0.0';
     const accessIp = '127.0.0.1';
 
-    const port = config.fuelCorePort ?? (await getPortPromise({ port: 4000 }));
+    const port = config.fuelCorePort ?? 0;
 
-    const { cleanup, url, snapshotDir } = await launchNode({
+    const {
+      cleanup,
+      url: providerUrl,
+      snapshotDir,
+    } = await launchNode({
       args: [
         ['--snapshot', config.snapshotDir],
         ['--db-type', 'in-memory'],
@@ -43,7 +46,7 @@ export const autoStartFuelCore = async (config: FuelsConfig) => {
       bindIp,
       accessIp,
       port,
-      providerUrl: url,
+      providerUrl,
       snapshotDir,
       killChildProcess: cleanup,
     };

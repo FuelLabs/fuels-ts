@@ -118,7 +118,7 @@ export type UserFuelsConfig = {
 
   /**
    * Port to use when starting a `fuel-core` node
-   * Default: first free port, starting from 4000
+   * Default: random port assigned by the OS
    */
   fuelCorePort?: number;
 
