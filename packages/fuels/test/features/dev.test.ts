@@ -1,9 +1,6 @@
 import * as chokidar from 'chokidar';
-import { execFileSync, execSync, spawn } from 'node:child_process';
-import { randomUUID } from 'node:crypto';
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import path from 'node:path';
+import { spawn } from 'node:child_process';
+import { readFileSync, writeFileSync } from 'node:fs';
 
 import * as buildMod from '../../src/cli/commands/build/index';
 import * as deployMod from '../../src/cli/commands/deploy/index';
@@ -12,35 +9,7 @@ import { mockCheckForUpdates } from '../utils/mockCheckForUpdates';
 import { mockLogger } from '../utils/mockLogger';
 import { resetDiskAndMocks } from '../utils/resetDiskAndMocks';
 import { runInit, runDev, bootstrapProject, resetConfigAndMocks } from '../utils/runCommands';
-
-function runInit2() {
-  const fuelsPath = path.join(process.cwd(), 'packages/fuels');
-
-  const rootDir = path.join(tmpdir(), '.fuels', 'tests', randomUUID());
-
-  mkdirSync(rootDir, { recursive: true });
-
-  execFileSync('pnpm', ['init'], { cwd: rootDir });
-  execFileSync('pnpm', ['link', fuelsPath], { cwd: rootDir });
-
-  const contractDir = path.join(rootDir, 'contract');
-  const outputDir = path.join(rootDir, 'output');
-  mkdirSync(contractDir);
-  mkdirSync(outputDir);
-
-  execSync(`${process.env.FORC_PATH} init`, { cwd: contractDir });
-  execSync(`pnpm fuels init -o ${outputDir} -c ${contractDir} --fuel-core-port 0`, {
-    cwd: rootDir,
-  });
-
-  return {
-    rootDir,
-    contractDir,
-    [Symbol.dispose]: () => {
-      rmSync(rootDir, { recursive: true });
-    },
-  };
-}
+import { runInitTemp } from '../utils/testHelpers';
 
 vi.mock('chokidar', async () => {
   const mod = await vi.importActual('chokidar');
@@ -112,14 +81,14 @@ describe('dev', () => {
     expect(on).toHaveBeenCalledTimes(2);
   });
 
-  it('exits when build fails', { timeout: 50000 }, async () => {
-    using res = runInit2();
-    const mainSw = readFileSync(`${res.contractDir}/src/main.sw`).toString();
+  it('exits when build fails', { timeout: 30_000 }, async () => {
+    using temp = runInitTemp();
+    const mainSw = readFileSync(`${temp.contractDir}/src/main.sw`).toString();
     const invalidSwayCode = `${mainSw}\nabi `;
-    writeFileSync(`${res.contractDir}/src/main.sw`, invalidSwayCode);
+    writeFileSync(`${temp.contractDir}/src/main.sw`, invalidSwayCode);
 
     const devProcess = spawn('pnpm fuels dev', {
-      cwd: res.rootDir,
+      cwd: temp.rootDir,
       detached: true,
       shell: 'bash',
     });
