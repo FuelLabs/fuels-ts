@@ -1,4 +1,4 @@
-import { execFileSync, execSync } from 'child_process';
+import { execSync } from 'child_process';
 import { randomUUID } from 'crypto';
 import { mkdirSync, rmSync } from 'fs';
 import { tmpdir } from 'os';
@@ -11,8 +11,8 @@ export function runInitTemp() {
 
   mkdirSync(rootDir, { recursive: true });
 
-  execFileSync('pnpm', ['init'], { cwd: rootDir });
-  execFileSync('pnpm', ['link', fuelsPath], { cwd: rootDir });
+  execSync('pnpm init', { cwd: rootDir });
+  execSync(`pnpm link ${fuelsPath}`, { cwd: rootDir });
 
   const contractDir = path.join(rootDir, 'contract');
   const outputDir = path.join(rootDir, 'output');
