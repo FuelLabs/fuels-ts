@@ -2,4 +2,4 @@
 "fuels": patch
 ---
 
-fix: usage of `providerUrl` in `fuels dev` command
+fix: enable usage of `0` port for the `fuelCorePort` field

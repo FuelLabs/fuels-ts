@@ -87,6 +87,7 @@ describe('dev', () => {
       output: paths.outputDir,
       forcPath: paths.forcPath,
       fuelCorePath: paths.fuelCorePath,
+      fuelCorePort: '0',
     });
 
     const devProcess = spawn(`pnpm fuels dev --path ${paths.root}`, {
