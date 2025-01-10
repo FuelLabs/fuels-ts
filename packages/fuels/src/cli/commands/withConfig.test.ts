@@ -88,11 +88,7 @@ describe('withConfig', () => {
       shouldErrorOnLoadConfig: true,
     });
 
-    try {
-      await withConfig(command, Commands.deploy, deploy)();
-    } catch (e) {
-      //
-    }
+    await expect(withConfig(command, Commands.deploy, deploy)).rejects.toThrow();
 
     expect(loadConfig).toHaveBeenCalledTimes(1);
     expect(loadConfig.mock.calls[0][0]).toEqual(configPath);
