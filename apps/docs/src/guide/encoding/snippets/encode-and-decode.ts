@@ -57,7 +57,7 @@ const encodedArguments = abiInterface.encodeType(argument, [argumentToAdd]);
 request.scriptData = encodedArguments;
 
 // Now we can estimate and fund the transaction
-await request.autoCost(wallet);
+await request.estimateAndFund(wallet);
 
 // Finally, submit the built transaction
 const response = await wallet.sendTransaction(request);

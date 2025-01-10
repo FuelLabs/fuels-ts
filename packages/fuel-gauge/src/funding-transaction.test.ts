@@ -523,7 +523,7 @@ describe('Funding Transactions', () => {
     );
   }, 15_000);
 
-  it('funds a script transaction using autoCost', async () => {
+  it('funds a script transaction using estimateAndFund', async () => {
     using launched = await launchTestNode();
 
     const {
@@ -541,7 +541,7 @@ describe('Funding Transactions', () => {
     expect(request.maxFee.toNumber()).toBe(0);
     expect(request.gasLimit.toNumber()).toBe(0);
 
-    await request.autoCost(sender);
+    await request.estimateAndFund(sender);
 
     expect(request.inputs.length).toBe(1);
     expect(request.maxFee.toNumber()).toBeGreaterThan(0);
@@ -553,7 +553,7 @@ describe('Funding Transactions', () => {
     expect(result.isStatusSuccess).toBeTruthy();
   });
 
-  it('funds a script tx from contract call using autoCost', async () => {
+  it('funds a script tx from contract call using estimateAndFund', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [{ factory: CallTestContractFactory }],
     });
@@ -569,7 +569,7 @@ describe('Funding Transactions', () => {
     expect(request.maxFee.toNumber()).toBe(0);
     expect(request.gasLimit.toNumber()).toBe(0);
 
-    await request.autoCost(sender);
+    await request.estimateAndFund(sender);
 
     expect(request.inputs.length).toBe(2);
     expect(request.maxFee.toNumber()).toBeGreaterThan(0);

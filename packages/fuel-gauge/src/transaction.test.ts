@@ -64,7 +64,7 @@ describe('Transaction', () => {
     const request = await contract.functions.foo(10).getTransactionRequest();
     request.addMessageInput(message);
 
-    await request.autoCost(fundedWallet);
+    await request.estimateAndFund(fundedWallet);
 
     const tx = await fundedWallet.sendTransaction(request);
 
@@ -115,7 +115,7 @@ describe('Transaction', () => {
     const request = await contract.functions.foo(10).getTransactionRequest();
     request.addMessageInput(message);
 
-    await request.autoCost(fundedWallet);
+    await request.estimateAndFund(fundedWallet);
 
     const tx = await fundedWallet.sendTransaction(request);
 

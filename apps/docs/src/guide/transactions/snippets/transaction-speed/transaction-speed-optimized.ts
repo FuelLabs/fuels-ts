@@ -20,7 +20,7 @@ async function onPageLoad() {
   request = await contract.functions.increment_count(1).getTransactionRequest();
 
   // Then we will estimate and fund the transaction so it is fully prepared for submission
-  await request.autoCost(wallet);
+  await request.estimateAndFund(wallet);
 }
 
 async function handleSubmit() {
