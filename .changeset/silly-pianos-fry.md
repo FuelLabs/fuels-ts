@@ -1,5 +1,4 @@
 ---
-"@fuel-ts/contract": patch
 "fuels": patch
 ---
 
