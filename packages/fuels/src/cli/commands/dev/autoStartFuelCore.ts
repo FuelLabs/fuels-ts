@@ -25,7 +25,7 @@ export const autoStartFuelCore = async (config: FuelsConfig) => {
 
     const port = config.fuelCorePort ?? (await getPortPromise({ port: 4000 }));
 
-    const { cleanup, snapshotDir, url } = await launchNode({
+    const { cleanup, url, snapshotDir } = await launchNode({
       args: [
         ['--snapshot', config.snapshotDir],
         ['--db-type', 'in-memory'],

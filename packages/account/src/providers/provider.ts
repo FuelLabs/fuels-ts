@@ -49,6 +49,7 @@ import {
   isTransactionTypeCreate,
   isTransactionTypeScript,
   transactionRequestify,
+  validateTransactionForAssetBurn,
 } from './transaction-request';
 import type { TransactionResult, TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse, getDecodedLogs } from './transaction-response';
@@ -363,7 +364,12 @@ export type ProviderCallParams = UTXOValidationParams & EstimateTransactionParam
 /**
  * Provider Send transaction params
  */
-export type ProviderSendTxParams = EstimateTransactionParams;
+export type ProviderSendTxParams = EstimateTransactionParams & {
+  /**
+   * Whether to enable asset burn for the transaction.
+   */
+  enableAssetBurn?: boolean;
+};
 
 /**
  * URL - Consensus Params mapping.
@@ -853,9 +859,15 @@ Supported fuel-core version: ${supportedVersion}.`
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true }: ProviderSendTxParams = {}
+    { estimateTxDependencies = true, enableAssetBurn }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    validateTransactionForAssetBurn(
+      await this.getBaseAssetId(),
+      transactionRequest,
+      enableAssetBurn
+    );
+
     if (estimateTxDependencies) {
       await this.estimateTxDependencies(transactionRequest);
     }
