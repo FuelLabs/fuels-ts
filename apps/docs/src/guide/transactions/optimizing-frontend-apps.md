@@ -4,7 +4,7 @@ Your application must perform a series of operations to estimate, submit and rec
 
 In a frontend application, imagine we have a button that executes a contract call:
 
-> **Note:** This is a generic and framework agnostic example, for a React snippet check out the [React Advanced Example](/guide/getting-started/react-example#advanced-example).
+> **Note:** This is a generic and framework agnostic example, for a React snippet check out the [React Advanced Example](/guide/getting-started/react-example.md#advanced-example).
 
 ```tsx
 <Button onClick={handleSubmit}>Submit</Button>
