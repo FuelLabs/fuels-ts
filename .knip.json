@@ -5,7 +5,6 @@
   ],
   "ignore": [".github/**"],
   "ignoreDependencies": [
-    "bun",
     "fuels",
     "bun",
     "@types/rimraf",
