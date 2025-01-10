@@ -48,7 +48,6 @@ The other more manual approach is as so:
 
 <<< @./snippets/transaction-request/get-transaction-cost.ts#transaction-request-4{ts:line-numbers}
 
-// For a more manual implementation....
 
 This approach provides the same behaviour as the `estimateAndFund` helper, but gives more granular control over the transaction request. The `getTransactionCost` method also returns various information about the simulated request that you may want to use to further modify the transaction request, more on that can be found in the [API reference](https://fuels-ts-docs-api.vercel.app/types/_fuel_ts_account.TransactionCost.html).
 
@@ -99,3 +98,11 @@ The transaction ID is a SHA-256 hash of the entire transaction request. This can
 <<< @./snippets/transaction-request/add-witness.ts#transaction-request-11{ts:line-numbers}
 
 > **Note**: Any changes made to a transaction request will alter the transaction ID. Therefore, you should only get the transaction ID after all modifications have been made.
+
+### Burning assets
+
+Assets can be burnt as part of a transaction that has inputs without associated output change. The SDK validates against this behavior, so we need to explicitly enable this by sending the transaction with the `enableAssetBurn` option set to `true`.
+
+<<< @./snippets/transaction-request/asset-burn.ts#asset-burn{ts:line-numbers}
+
+> **Note**: Burning assets is permanent and all assets burnt will be lost. Therefore, be mindful of the usage of this functionality.

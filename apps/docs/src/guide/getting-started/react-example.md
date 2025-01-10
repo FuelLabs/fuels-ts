@@ -40,22 +40,22 @@ function App() {
 
   const NETWORK_URL = "https://mainnet.fuel.network/v1/graphql";
   const provider = new Provider(NETWORK_URL);
-  const wallet = Wallet.generate({ provider });
+  const wallet = Wallet.fromAddress("0x...", provider);
+
+  const prePrepareTransaction = async () => {
+    const recipient = Wallet.generate({ provider });
+    const newRequest = new ScriptTransactionRequest();
+    newRequest.addCoinOutput(
+      recipient.address,
+      1_000,
+      await provider.getBaseAssetId(),
+    );
+    await newRequest.estimateAndFund(wallet);
+    setRequest(newRequest);
+  };
 
   useEffect(() => {
-    const onPageLoad = async () => {
-      const recipient = Wallet.generate({ provider });
-      const newRequest = new ScriptTransactionRequest();
-      newRequest.addCoinOutput(
-        recipient.address,
-        1_000,
-        await provider.getBaseAssetId(),
-      );
-      await newRequest.estimateAndFund(wallet);
-      setRequest(newRequest);
-    };
-
-    onPageLoad();
+    prePrepareTransaction();
   }, []);
 
   const handleSubmit = async () => {
@@ -74,6 +74,8 @@ function App() {
 
     const result = await response.waitForResult();
     setStatus(`Settled - ${result.id}`);
+    
+    prePrepareTransaction();
   };
 
   return (
