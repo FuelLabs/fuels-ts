@@ -30,5 +30,5 @@ export default App;
 
 # See Also
 
-- [Optimized React Example](/guide/cookbook/optimized-react-example.md)
+- [Optimized React Example](../cookbook/optimized-react-example.md)
 - [CDN Usage](./cdn-usage.md)

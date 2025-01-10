@@ -1,6 +1,6 @@
 # Optimized React Example
 
-This example implements the strategies outlined in [Optimizing Frontend Apps](/guide/transactions/optimizing-frontend-apps.md) and demonstrates how to improve the perceived speed of transactions in a React application.
+This example implements the strategies outlined in [Optimizing Frontend Apps](../transactions/optimizing-frontend-apps.md) and demonstrates how to improve the perceived speed of transactions in a React application.
 
 ```tsx
 import { Provider, Wallet, ScriptTransactionRequest } from "fuels";

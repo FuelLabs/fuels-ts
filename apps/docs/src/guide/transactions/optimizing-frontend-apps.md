@@ -36,4 +36,4 @@ Just remember:
 
 # See Also
 
-- Check a full example at [React Optimized Example](/guide/cookbook/optimized-react-example.md)
+- Check a full example at [Optimized React Example](../cookbook/optimized-react-example.md)
