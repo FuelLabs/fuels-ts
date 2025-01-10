@@ -1,6 +1,8 @@
 import { deferPromise } from '@fuel-ts/account';
 import { spawn } from 'child_process';
 import * as chokidar from 'chokidar';
+import { join } from 'path';
+import { cwd } from 'process';
 
 import * as buildMod from '../../src/cli/commands/build/index';
 import * as deployMod from '../../src/cli/commands/deploy/index';
@@ -92,6 +94,12 @@ describe('dev', () => {
 
     const devProcess = spawn(`pnpm fuels dev --path ${paths.root}`, {
       shell: 'bash',
+      /**
+       * pnpm fuels dev fails because the test is run in the root directory
+       * and there is no `fuels` dependency in `package.json` there,
+       * so we have to give the spawn a cwd which has `fuels` as a dependency.
+       */
+      cwd: join(cwd(), 'packages/fuel-gauge'),
     });
 
     const nodeLaunched = deferPromise<string>();

@@ -118,8 +118,7 @@
     "vite-plugin-json5": "1.1.2",
     "vite-plugin-node-polyfills": "0.22.0",
     "vite-plugin-plain-text": "1.4.2",
-    "vitest": "2.0.5",
-    "fuels": "workspace:*"
+    "vitest": "2.0.5"
   },
   "pnpm": {
     "overrides": {
