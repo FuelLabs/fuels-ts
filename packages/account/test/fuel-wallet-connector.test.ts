@@ -690,7 +690,7 @@ describe('Fuel Connector', () => {
       { assetId: await provider.getBaseAssetId(), amount: 1000 },
     ]);
     request.addResources(resources);
-    await request.autoCost(connectorWallet);
+    await request.estimateAndFund(connectorWallet);
 
     const params: AccountSendTxParams = {
       onBeforeSend: vi.fn(),

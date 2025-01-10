@@ -340,7 +340,7 @@ describe('TransactionResponse', () => {
 
       request.addCoinOutput(Wallet.generate(), 100, await provider.getBaseAssetId());
 
-      await request.autoCost(genesisWallet);
+      await request.estimateAndFund(genesisWallet);
 
       request.updateWitnessByOwner(
         genesisWallet.address,
@@ -387,7 +387,7 @@ describe('TransactionResponse', () => {
 
       request.addCoinOutput(Wallet.generate(), 100, await provider.getBaseAssetId());
 
-      await request.autoCost(genesisWallet, {
+      await request.estimateAndFund(genesisWallet, {
         signatureCallback: (tx) => tx.addAccountWitnesses(genesisWallet),
       });
 
@@ -420,7 +420,7 @@ describe('TransactionResponse', () => {
 
     const request = new ScriptTransactionRequest();
     request.addCoinOutput(Wallet.generate(), 100, await provider.getBaseAssetId());
-    await request.autoCost(genesisWallet);
+    await request.estimateAndFund(genesisWallet);
 
     const tx = await genesisWallet.sendTransaction(request);
     const result = await tx.waitForResult();
@@ -447,7 +447,7 @@ describe('TransactionResponse', () => {
 
     const request = new ScriptTransactionRequest();
     request.addCoinOutput(Wallet.generate(), 100, await provider.getBaseAssetId());
-    await request.autoCost(genesisWallet);
+    await request.estimateAndFund(genesisWallet);
 
     const tx = await genesisWallet.sendTransaction(request);
     const result = await tx.assembleResult();

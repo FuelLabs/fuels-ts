@@ -44,7 +44,7 @@ request.addResources(resources);
 
 // Estimate and fund the request
 request.addWitness('0x');
-await request.autoCost(predicate, {
+await request.estimateAndFund(predicate, {
   signatureCallback: (txRequest) => txRequest.addAccountWitnesses(signer),
 });
 

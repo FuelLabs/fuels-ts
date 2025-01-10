@@ -344,6 +344,3 @@ WSL
 XOR
 XORs
 YAML
-TransactionRequest
-TransactionResponse
-frictionless

@@ -37,7 +37,7 @@ const predicateCoins = await predicate.getResourcesToSpend([
 transactionRequest.addResources(predicateCoins);
 
 // Estimate and fund the transaction
-await transactionRequest.autoCost(predicate);
+await transactionRequest.estimateAndFund(predicate);
 
 // Send the transaction using the predicate
 const result = await predicate.sendTransaction(transactionRequest);

@@ -242,7 +242,7 @@ export class BaseInvocationScope<TReturn = any> {
    *
    * @returns The invocation scope as a funded transaction request.
    */
-  async autoCost(): Promise<ScriptTransactionRequest> {
+  async fundWithRequiredCoins(): Promise<ScriptTransactionRequest> {
     let transactionRequest = await this.getTransactionRequest();
     transactionRequest = clone(transactionRequest);
 
@@ -371,7 +371,7 @@ export class BaseInvocationScope<TReturn = any> {
   }> {
     assert(this.program.account, 'Wallet is required!');
 
-    const transactionRequest = await this.autoCost();
+    const transactionRequest = await this.fundWithRequiredCoins();
 
     const response = (await this.program.account.sendTransaction(transactionRequest, {
       estimateTxDependencies: false,
@@ -405,7 +405,7 @@ export class BaseInvocationScope<TReturn = any> {
         'An unlocked wallet is required to simulate a contract call.'
       );
     }
-    const transactionRequest = await this.autoCost();
+    const transactionRequest = await this.fundWithRequiredCoins();
 
     const callResult = await this.program.account.simulateTransaction(transactionRequest, {
       estimateTxDependencies: false,
