@@ -1,5 +1,46 @@
 # Change Log
 
+## 0.98.0
+
+### Minor Changes
+
+- 13977df: docs!: optimizing frontend apps
+- 68821a9: chore!: remove unused operations
+- 458b7cf: feat!: making `provider` initialization `sync` again
+- 254bf53: chore!: remove receipts deprecated properties
+- 8d8452e: feat!: `autoCost` for transaction estimation and funding
+- d404734: chore!: remove deprecated `submitAndAwait` operation
+- f2407dc: feat!: remove redundant gas price call for tx summary
+- 08a31d8: feat!: prevent implicit asset burn
+
+### Patch Changes
+
+- 12e801e: chore: dependency pinning and auditing
+- d5a696c: feat: added method to duplicate predicate
+- 0f138cd: feat: added `onBeforeSend` hook to the connector interface
+- 75fae34: chore: removing obsolete `Provider.create` method
+- a278e71: fix: unable to kill `fuels dev` with `pnpm`
+- 0b4c3ab: chore!: redistributed the `@fuel-ts/interfaces` package
+- Updated dependencies [12e801e]
+- Updated dependencies [04ca73e]
+- Updated dependencies [a7eb9b6]
+- Updated dependencies [254bf53]
+- Updated dependencies [f132203]
+- Updated dependencies [4ccc628]
+- Updated dependencies [08a31d8]
+- Updated dependencies [0b4c3ab]
+- Updated dependencies [68ef74d]
+  - @fuel-ts/transactions@0.98.0
+  - @fuel-ts/abi-coder@0.98.0
+  - @fuel-ts/versions@0.98.0
+  - @fuel-ts/address@0.98.0
+  - @fuel-ts/crypto@0.98.0
+  - @fuel-ts/hasher@0.98.0
+  - @fuel-ts/merkle@0.98.0
+  - @fuel-ts/utils@0.98.0
+  - @fuel-ts/math@0.98.0
+  - @fuel-ts/errors@0.98.0
+
 ## 0.97.2
 
 ### Patch Changes
