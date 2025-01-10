@@ -14,7 +14,7 @@ import type {
   FuelEventArg,
   Version,
   SelectNetworkArguments,
-  AccountSendTxParams,
+  FuelConnectorSendTxParams,
 } from './types';
 
 interface Connector {
@@ -46,7 +46,7 @@ interface Connector {
   sendTransaction(
     address: string,
     transaction: TransactionRequestLike,
-    params?: AccountSendTxParams
+    params?: FuelConnectorSendTxParams
   ): Promise<string>;
   // #endregion fuel-connector-method-sendTransaction
   // #region fuel-connector-method-currentAccount
@@ -204,7 +204,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
   async sendTransaction(
     _address: string,
     _transaction: TransactionRequestLike,
-    _params?: AccountSendTxParams
+    _params?: FuelConnectorSendTxParams
   ): Promise<string> {
     throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }

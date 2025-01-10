@@ -10,7 +10,7 @@ import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, isDefined } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
-import type { AccountSendTxParams, FuelConnector } from './connectors';
+import type { FuelConnector, FuelConnectorSendTxParams } from './connectors';
 import type {
   TransactionRequest,
   CoinQuantityLike,
@@ -30,6 +30,7 @@ import type {
   Coin,
   TransactionCostParams,
   TransactionResponse,
+  ProviderSendTxParams,
 } from './providers';
 import {
   withdrawScript,
@@ -64,6 +65,8 @@ export type ContractTransferParams = {
   amount: BigNumberish;
   assetId: BytesLike;
 };
+
+export type AccountSendTxParams = ProviderSendTxParams & FuelConnectorSendTxParams;
 
 export type EstimatedTxParams = Pick<
   TransactionCost,

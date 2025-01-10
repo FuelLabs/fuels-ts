@@ -1,7 +1,7 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import type { RequireAtLeastOne } from 'type-fest';
 
-import type { ProviderSendTxParams, TransactionRequest } from '../../providers';
+import type { TransactionRequest } from '../../providers';
 
 /**
  * @name Version
@@ -46,9 +46,9 @@ export type SelectNetworkArguments = RequireAtLeastOne<Network, 'chainId' | 'url
 export type FuelABI = JsonAbi;
 
 /**
- * Additional params for the sendTransaction method (for connectors).
+ * Params for the sendTransaction method (for connectors).
  */
-export type AccountSendTxParams = ProviderSendTxParams & {
+export type FuelConnectorSendTxParams = {
   skipCustomFee?: boolean;
   onBeforeSend?: (txRequest: TransactionRequest) => Promise<TransactionRequest>;
 };
