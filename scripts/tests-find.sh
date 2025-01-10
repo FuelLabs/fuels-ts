@@ -14,4 +14,6 @@ elif [[ $* == *--e2e* ]]; then
   grep -lE "\*\s+@group\s+e2e" $FILES
 elif [[ $* == *--integration* ]]; then
   grep -lE "\*\s+@group\s+integration" $FILES
+elif [[ $* == *--network* ]]; then
+  grep -lE "\*\s+@group\s+network" $FILES
 fi

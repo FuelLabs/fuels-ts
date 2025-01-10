@@ -10,7 +10,7 @@ import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, isDefined } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
-import type { FuelConnector } from './connectors';
+import type { FuelConnector, FuelConnectorSendTxParams } from './connectors';
 import type {
   TransactionRequest,
   CoinQuantityLike,
@@ -23,7 +23,6 @@ import type {
   EstimateTransactionParams,
   CursorPaginationArgs,
   TransactionRequestLike,
-  ProviderSendTxParams,
   CallResult,
   GetCoinsResponse,
   GetMessagesResponse,
@@ -31,6 +30,7 @@ import type {
   Coin,
   TransactionCostParams,
   TransactionResponse,
+  ProviderSendTxParams,
 } from './providers';
 import {
   withdrawScript,
@@ -65,6 +65,8 @@ export type ContractTransferParams = {
   amount: BigNumberish;
   assetId: BytesLike;
 };
+
+export type AccountSendTxParams = ProviderSendTxParams & FuelConnectorSendTxParams;
 
 export type EstimatedTxParams = Pick<
   TransactionCost,
@@ -649,11 +651,14 @@ export class Account extends AbstractAccount implements WithAddress {
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true }: ProviderSendTxParams = {}
+    { estimateTxDependencies = true, onBeforeSend, skipCustomFee = false }: AccountSendTxParams = {}
   ): Promise<TransactionResponse> {
     if (this._connector) {
       return this.provider.getTransactionResponse(
-        await this._connector.sendTransaction(this.address.toString(), transactionRequestLike)
+        await this._connector.sendTransaction(this.address.toString(), transactionRequestLike, {
+          onBeforeSend,
+          skipCustomFee,
+        })
       );
     }
     const transactionRequest = transactionRequestify(transactionRequestLike);
