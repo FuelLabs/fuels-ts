@@ -2396,14 +2396,11 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     transactionRequest.gasLimit = bn(0); // force fail
     const signedTransaction = await wallet.signTransaction(transactionRequest);
     transactionRequest.updateWitnessByOwner(wallet.address, signedTransaction);
-    await expectToThrowFuelError(
-      () =>
-        provider.sendTransaction(transactionRequest, {
-          estimateTxDependencies: false,
-        }),
-      {
-        code: ErrorCode.SCRIPT_REVERTED,
-      }
-    );
+    const response = await provider.sendTransaction(transactionRequest, {
+      estimateTxDependencies: false,
+    });
+    await expectToThrowFuelError(() => response.waitForResult(), {
+      code: ErrorCode.SCRIPT_REVERTED,
+    });
   });
 });
