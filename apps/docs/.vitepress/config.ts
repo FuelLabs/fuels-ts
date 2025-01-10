@@ -349,10 +349,6 @@ export default defineConfig({
                 link: '/guide/transactions/getting-the-response',
               },
               {
-                text: 'Transaction Subscriptions',
-                link: '/guide/transactions/transaction-subscriptions',
-              },
-              {
                 text: 'Optimizing Frontend Apps',
                 link: '/guide/transactions/optimizing-frontend-apps',
               },
