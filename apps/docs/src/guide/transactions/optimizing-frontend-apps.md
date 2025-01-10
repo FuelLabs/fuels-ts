@@ -17,3 +17,5 @@ The handler would be implemented as follows:
 Once the user presses the button, the contract call is executed and the transaction is estimated, funded, submitted and multiple calls are made to the network. With optimizations, the flow can be organized as follows:
 
 <<< @./snippets/transaction-speed/transaction-speed-optimized.ts#main{ts:line-numbers}
+
+Now, we have moved all the transaction preparation to happen on page load. So when the user presses the button, they only need to sign and submit the transaction. This vastly improves the perceived speed of the transaction.
