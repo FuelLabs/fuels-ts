@@ -20,7 +20,7 @@ let request: ScriptTransactionRequest;
 /**
  * Here we'll prepare our transaction upfront on page load, so that
  * by the time the user interacts with your app (i.e., clicking a btn),
- * the transaction be ready to be signed and submitted.
+ * the transaction is ready to be signed and submitted.
  */
 async function onPageLoad() {
   // 1. Create the transaction request for the contract call
