@@ -20,7 +20,7 @@ async function handleSubmit() {
   info(`Transaction ID Submitted: ${transaction.transactionId}`);
 
   // 2. Calling `waitForResult` will wait for the transaction to
-  // settle and will, assemble and return it
+  // settle, then assemble and return it
   const result = await transaction.waitForResult();
   info(`Transaction ID Successful: ${result.transactionId}`);
 }
