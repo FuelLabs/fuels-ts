@@ -9,30 +9,41 @@ const { info } = console;
 // Initialize the provider, sender and the contract
 const provider = new Provider(LOCAL_NETWORK_URL);
 const chainId = await provider.getChainId();
+
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const deployTx = await CounterFactory.deploy(wallet);
+
 const { contract } = await deployTx.waitForResult();
 
 let request: ScriptTransactionRequest;
 // #region main
+/**
+ * Here we'll prepare our transaction upfront on page load, so that
+ * by the time the user interacts with your app (i.e., clicking a btn),
+ * the transaction is ready to be signed and submitted.
+ */
 async function onPageLoad() {
-  // On page load, we will create a transaction request for the contract call
+  // 1. Create the transaction request for the contract call
   request = await contract.functions.increment_count(1).getTransactionRequest();
 
-  // Then we will estimate and fund the transaction so it is fully prepared for submission
+  // 2. Estimate and fund the transaction so it is ready for submission
   await request.estimateAndFund(wallet);
 }
 
+/**
+ * By the time user user clicks the submit button, they can just
+ * sign the finalized transaction and submit it.
+ */
 async function handleSubmit() {
-  // When the user presses the submit button, the user can now sign the finalized transaction
+  // 1. Sign the transaction with the wallet
   const signature = await wallet.signTransaction(request);
   request.updateWitnessByOwner(wallet.address, signature);
 
-  // And we can solely submit the transaction to the network
+  // 2. Submit the transaction to the network
   info(`Transaction ID Submitted: ${await request.getTransactionId(chainId)}`);
   const response = await provider.sendTransaction(request);
 
-  // We can then wait for the transaction to settle and get the result
+  // 3. Wait for the transaction to settle and get the result
   const result = await response.waitForResult();
   info(`Transaction ID Successful: ${result.id}`);
 }

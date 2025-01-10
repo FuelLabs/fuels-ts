@@ -1,10 +1,10 @@
 # Optimizing Frontend Apps
 
-Your application must perform a series of operations to estimate, submit and receive the result of a transaction. However, the flow in which it performs these actions can be organized or performed optimistically in order to optimize the perceived speed of transactions for your users.
+Your application must perform a series of operations to estimate, submit and receive the result of a transaction. However, the flow in which it performs these actions can be organized or performed optimistically, increasing it's perceived speed.
+
+## Use Case
 
 In a frontend application, imagine we have a button that executes a contract call:
-
-> **Note:** This is a generic and framework agnostic example, for a React snippet check out the [React Advanced Example](/guide/getting-started/react-example.md#advanced-example).
 
 ```tsx
 <Button onClick={handleSubmit}>Submit</Button>
@@ -14,10 +14,26 @@ The handler would be implemented as follows:
 
 <<< @./snippets/transaction-speed/transaction-speed-init.ts#main{ts:line-numbers}
 
-Once the user presses the button, the contract call is executed and the transaction is estimated, funded, submitted and multiple calls are made to the network. With optimizations, the flow can be organized as follows:
+Once the user clicks the button, multiple sequential calls are made to the network, which can take long, because the transaction must be:
+
+1. Estimated
+1. Funded
+1. Submitted
+
+## Optimization Strategy
+
+With a few optimizations, the flow can be organized as follows:
 
 <<< @./snippets/transaction-speed/transaction-speed-optimized.ts#main{ts:line-numbers}
 
-Now, we have moved all the transaction preparation to happen on page load. So when the user presses the button, they only need to sign and submit the transaction. This vastly improves the perceived speed of the transaction.
+## Conclusion
 
-> **Note:** Any changes or additions made to the transaction request after preparation, will mean that the transaction will need to be re-estimated and re-funded before it can be submitted.
+Then, when users click the button, they only need to sign and submit the transaction, which vastly improves the perceived speed of the transaction because many of the necessary requests were done upfront, under the hood.
+
+Just remember:
+
+- _After preparation, any changes made to the transaction request will require it to be re-estimated and re-funded before it can be signed and submitted._
+
+# See Also
+
+- Check a full example at [React Advanced Example](/guide/getting-started/react-example#advanced-example)
