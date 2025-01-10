@@ -581,7 +581,7 @@ describe('Funding Transactions', () => {
     expect(result.isStatusSuccess).toBeTruthy();
   });
 
-  it('funds a contract call using autoCost', async () => {
+  it('funds a contract call using fundWithRequiredCoins', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [{ factory: CallTestContractFactory }],
     });
@@ -592,7 +592,7 @@ describe('Funding Transactions', () => {
     } = launched;
 
     const scope = await contract.functions.no_params();
-    const request = await scope.autoCost();
+    const request = await scope.fundWithRequiredCoins();
 
     expect(request.inputs.length).toBe(2);
     expect(request.maxFee.toNumber()).toBeGreaterThan(0);
