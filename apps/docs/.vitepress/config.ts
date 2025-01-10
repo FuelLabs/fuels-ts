@@ -437,6 +437,10 @@ export default defineConfig({
                 text: 'Splitting UTXOs',
                 link: '/guide/cookbook/splitting-utxos',
               },
+              {
+                text: 'Optimized React Example',
+                link: '/guide/cookbook/optimized-react-example',
+              },
             ],
           },
           {

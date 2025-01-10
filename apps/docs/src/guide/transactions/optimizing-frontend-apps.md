@@ -14,7 +14,7 @@ The handler would be implemented as follows:
 
 <<< @./snippets/transaction-speed/transaction-speed-init.ts#main{ts:line-numbers}
 
-Once the user clicks the button, multiple sequential calls are made to the network, which can take long, because the transaction must be:
+Once the user clicks the button, multiple sequential calls are made to the network, which can take a while because the transaction must be:
 
 1. Estimated
 1. Funded
@@ -28,7 +28,7 @@ With a few optimizations, the flow can be organized as follows:
 
 ## Conclusion
 
-Then, when users click the button, they only need to sign and submit the transaction, which vastly improves the perceived speed of the transaction because many of the necessary requests were done upfront, under the hood.
+Finally, when users click the button, they only need to submit the transaction, which vastly improves the perceived speed of the transaction because many of the necessary requests were done upfront, under the hood.
 
 Just remember:
 
@@ -36,4 +36,4 @@ Just remember:
 
 # See Also
 
-- Check a full example at [React Advanced Example](/guide/getting-started/react-example#advanced-example)
+- Check a full example at [React Optimized Example](/guide/cookbook/optimized-react-example)
