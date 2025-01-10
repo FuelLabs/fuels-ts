@@ -1,4 +1,4 @@
-import type { Account, Contract, ScriptTransactionRequest } from 'fuels';
+import type { ScriptTransactionRequest } from 'fuels';
 import { Provider, Wallet } from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
