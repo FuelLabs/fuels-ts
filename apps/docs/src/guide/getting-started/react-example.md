@@ -28,6 +28,65 @@ function App() {
 export default App;
 ```
 
-# More
+## Advanced Example
+
+```tsx
+import { Provider, Wallet, ScriptTransactionRequest } from "fuels";
+import { useEffect, useState } from "react";
+
+function App() {
+  const [request, setRequest] = useState<ScriptTransactionRequest | null>(null);
+  const [status, setStatus] = useState<string>("n/a");
+
+  const NETWORK_URL = "https://mainnet.fuel.network/v1/graphql";
+  const provider = new Provider(NETWORK_URL);
+  const wallet = Wallet.generate({ provider });
+
+  useEffect(() => {
+    const onPageLoad = async () => {
+      const recipient = Wallet.generate({ provider });
+      const newRequest = new ScriptTransactionRequest();
+      newRequest.addCoinOutput(
+        recipient.address,
+        1_000,
+        await provider.getBaseAssetId(),
+      );
+      await newRequest.estimateAndFund(wallet);
+      setRequest(newRequest);
+    };
+
+    onPageLoad();
+  }, []);
+
+  const handleSubmit = async () => {
+    if (!request) return;
+
+    const signature = await wallet.signTransaction(request);
+    request.updateWitnessByOwner(wallet.address, signature);
+
+    const chainId = await provider.getChainId();
+    const txId = await request.getTransactionId(chainId);
+
+    setStatus(`Submitted - ${txId}`);
+    const response = await provider.sendTransaction(request, {
+      estimateTxDependencies: false,
+    });
+
+    const result = await response.waitForResult();
+    setStatus(`Settled - ${result.id}`);
+  };
+
+  return (
+    <div>
+      <button onClick={handleSubmit}>Submit</button>
+      <p>
+        <strong>Transaction Status:</strong> <code>{status}</code>
+      </p>
+    </div>
+  );
+}
+
+export default App;
+```
 
 - [CDN Usage](./cdn-usage.md)
