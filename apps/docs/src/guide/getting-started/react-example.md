@@ -74,7 +74,7 @@ function App() {
 
     const result = await response.waitForResult();
     setStatus(`Settled - ${result.id}`);
-    
+
     prePrepareTransaction();
   };
 

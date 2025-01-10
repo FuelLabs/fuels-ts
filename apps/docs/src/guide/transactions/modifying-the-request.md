@@ -48,7 +48,6 @@ The other more manual approach is as so:
 
 <<< @./snippets/transaction-request/get-transaction-cost.ts#transaction-request-4{ts:line-numbers}
 
-
 This approach provides the same behaviour as the `estimateAndFund` helper, but gives more granular control over the transaction request. The `getTransactionCost` method also returns various information about the simulated request that you may want to use to further modify the transaction request, more on that can be found in the [API reference](https://fuels-ts-docs-api.vercel.app/types/_fuel_ts_account.TransactionCost.html).
 
 ### Manually Fetching Resources
