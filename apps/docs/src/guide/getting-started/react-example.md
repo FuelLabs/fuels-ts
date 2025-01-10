@@ -40,7 +40,7 @@ function App() {
 
   const NETWORK_URL = "https://mainnet.fuel.network/v1/graphql";
   const provider = new Provider(NETWORK_URL);
-  const wallet = Wallet.generate({ provider });
+  const wallet = Wallet.fromAddress("0x...", provider);
 
   useEffect(() => {
     const onPageLoad = async () => {
