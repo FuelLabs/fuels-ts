@@ -111,9 +111,6 @@ importers:
       eslint-plugin-tsdoc:
         specifier: 0.3.0
         version: 0.3.0
-      fuels:
-        specifier: workspace:*
-        version: link:packages/fuels
       glob:
         specifier: 10.4.5
         version: 10.4.5
