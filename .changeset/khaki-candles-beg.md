@@ -4,4 +4,4 @@
 "@fuel-ts/script": patch
 ---
 
-docs: optimizing frontend apps
+docs!: optimizing frontend apps
