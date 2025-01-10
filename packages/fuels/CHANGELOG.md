@@ -1,5 +1,56 @@
 # Change Log
 
+## 0.98.0
+
+### Minor Changes
+
+- 458b7cf: feat!: making `provider` initialization `sync` again
+- 0b4c3ab: chore!: redistributed the `@fuel-ts/interfaces` package
+
+### Patch Changes
+
+- 981b992: docs: improving getting started docs for `mainnet`
+- 12e801e: chore: dependency pinning and auditing
+- 11fcd7b: fix: paths and globals in `fuels init`
+- 0fb6fa8: feat: add support for `--fuel-core-port` flag in `fuels init`
+- f293646: fix: usage of `providerUrl` in `fuels dev` command
+- a278e71: fix: unable to kill `fuels dev` with `pnpm`
+- 68ef74d: chore: remove unused deps + update knip config
+- Updated dependencies [12e801e]
+- Updated dependencies [d5a696c]
+- Updated dependencies [13977df]
+- Updated dependencies [04ca73e]
+- Updated dependencies [68821a9]
+- Updated dependencies [458b7cf]
+- Updated dependencies [a7eb9b6]
+- Updated dependencies [254bf53]
+- Updated dependencies [f132203]
+- Updated dependencies [8d8452e]
+- Updated dependencies [0f138cd]
+- Updated dependencies [d404734]
+- Updated dependencies [f2407dc]
+- Updated dependencies [4ccc628]
+- Updated dependencies [75fae34]
+- Updated dependencies [a278e71]
+- Updated dependencies [08a31d8]
+- Updated dependencies [0b4c3ab]
+- Updated dependencies [68ef74d]
+  - @fuel-ts/transactions@0.98.0
+  - @fuel-ts/abi-typegen@0.98.0
+  - @fuel-ts/abi-coder@0.98.0
+  - @fuel-ts/contract@0.98.0
+  - @fuel-ts/versions@0.98.0
+  - @fuel-ts/account@0.98.0
+  - @fuel-ts/address@0.98.0
+  - @fuel-ts/program@0.98.0
+  - @fuel-ts/crypto@0.98.0
+  - @fuel-ts/hasher@0.98.0
+  - @fuel-ts/utils@0.98.0
+  - @fuel-ts/math@0.98.0
+  - @fuel-ts/script@0.98.0
+  - @fuel-ts/recipes@0.98.0
+  - @fuel-ts/errors@0.98.0
+
 ## 0.97.2
 
 ### Patch Changes

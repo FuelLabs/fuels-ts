@@ -1,5 +1,12 @@
 # @fuel-ts/versions
 
+## 0.98.0
+
+### Patch Changes
+
+- 12e801e: chore: dependency pinning and auditing
+- 04ca73e: chore: upgrade `fuel-core` to `0.40.2`
+
 ## 0.97.2
 
 ### Patch Changes
