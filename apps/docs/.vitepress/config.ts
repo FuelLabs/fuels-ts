@@ -333,24 +333,28 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Transaction Request',
-                link: '/guide/transactions/transaction-request',
+                text: 'Modifying the Request',
+                link: '/guide/transactions/modifying-the-request',
               },
               {
-                text: 'Transaction Parameters',
-                link: '/guide/transactions/transaction-parameters',
+                text: 'Adding Parameters',
+                link: '/guide/transactions/adding-parameters',
               },
               {
-                text: 'Transaction Policies',
-                link: '/guide/transactions/transaction-policies',
+                text: 'Adding Policies',
+                link: '/guide/transactions/adding-policies',
               },
               {
-                text: 'Transaction Response',
-                link: '/guide/transactions/transaction-response',
+                text: 'Getting the Response',
+                link: '/guide/transactions/getting-the-response',
               },
               {
                 text: 'Transaction Subscriptions',
                 link: '/guide/transactions/transaction-subscriptions',
+              },
+              {
+                text: 'Optimizing Frontend Apps',
+                link: '/guide/transactions/optimizing-frontend-apps',
               },
             ],
           },
