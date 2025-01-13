@@ -12,6 +12,7 @@ type FuelGraphQLSubscriberOptions = {
 };
 
 export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
+  public static incompatibleNodeVersionMessage: string | false = false;
   private static textDecoder = new TextDecoder();
 
   private constructor(private stream: ReadableStreamDefaultReader<Uint8Array>) {}
@@ -52,7 +53,7 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
       if (this.events.length > 0) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const { data, errors } = this.events.shift()!;
-        assertGqlResponseHasNoErrors(errors);
+        assertGqlResponseHasNoErrors(errors, FuelGraphqlSubscriber.incompatibleNodeVersionMessage);
         return { value: data, done: false };
       }
       const { value, done } = await this.stream.read();

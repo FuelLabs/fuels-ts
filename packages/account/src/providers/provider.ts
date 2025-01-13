@@ -634,6 +634,8 @@ export default class Provider {
         `The TS SDK currently supports fuel-core version ${supportedVersion}.`,
         `Things may not work as expected.`,
       ].join('\n');
+      FuelGraphqlSubscriber.incompatibleNodeVersionMessage =
+        Provider.incompatibleNodeVersionMessage;
     }
   }
 
