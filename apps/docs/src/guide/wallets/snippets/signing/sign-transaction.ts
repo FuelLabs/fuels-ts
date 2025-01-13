@@ -19,7 +19,7 @@ const request = new ScriptTransactionRequest({
 
 request.addCoinOutput(receiverAddress, 1000, await provider.getBaseAssetId());
 
-await request.autoCost(sender);
+await request.estimateAndFund(sender);
 
 const signedTransaction = await sender.signTransaction(request);
 const transactionId = request.getTransactionId(await provider.getChainId());

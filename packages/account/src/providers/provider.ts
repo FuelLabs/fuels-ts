@@ -49,8 +49,9 @@ import {
   isTransactionTypeCreate,
   isTransactionTypeScript,
   transactionRequestify,
+  validateTransactionForAssetBurn,
 } from './transaction-request';
-import type { TransactionResult, TransactionResultReceipt } from './transaction-response';
+import type { TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse, getDecodedLogs } from './transaction-response';
 import { processGqlReceipt } from './transaction-summary/receipt';
 import {
@@ -363,7 +364,12 @@ export type ProviderCallParams = UTXOValidationParams & EstimateTransactionParam
 /**
  * Provider Send transaction params
  */
-export type ProviderSendTxParams = EstimateTransactionParams;
+export type ProviderSendTxParams = EstimateTransactionParams & {
+  /**
+   * Whether to enable asset burn for the transaction.
+   */
+  enableAssetBurn?: boolean;
+};
 
 /**
  * URL - Consensus Params mapping.
@@ -853,9 +859,15 @@ Supported fuel-core version: ${supportedVersion}.`
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true }: ProviderSendTxParams = {}
+    { estimateTxDependencies = true, enableAssetBurn }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    validateTransactionForAssetBurn(
+      await this.getBaseAssetId(),
+      transactionRequest,
+      enableAssetBurn
+    );
+
     if (estimateTxDependencies) {
       await this.estimateTxDependencies(transactionRequest);
     }
@@ -878,22 +890,6 @@ Supported fuel-core version: ${supportedVersion}.`
 
     const chainId = await this.getChainId();
     return new TransactionResponse(transactionRequest, this, chainId, abis, subscription);
-  }
-
-  /**
-   * Submits a transaction to the chain and awaits its status response.
-   *
-   * @param transactionRequestLike - the request to submit.
-   * @param sendTransactionParams - The provider send transaction parameters (optional).
-   * @returns A promise that resolves to a settled transaction.
-   */
-  async sendTransactionAndAwaitStatus(
-    transactionRequestLike: TransactionRequestLike,
-    providerSendTxParams: ProviderSendTxParams = {}
-  ): Promise<TransactionResult<void>> {
-    const response = await this.sendTransaction(transactionRequestLike, providerSendTxParams);
-    const result = await response.waitForResult();
-    return result;
   }
 
   /**

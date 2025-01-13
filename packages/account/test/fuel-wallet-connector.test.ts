@@ -8,10 +8,10 @@ import type { BytesLike } from '@fuel-ts/utils';
 import { TESTNET_NETWORK_URL } from '@internal/utils';
 import { EventEmitter } from 'events';
 
-import type { Network, ProviderOptions, SelectNetworkArguments } from '../src';
+import type { AccountSendTxParams, Network, ProviderOptions, SelectNetworkArguments } from '../src';
 import { Fuel } from '../src/connectors/fuel';
 import { FuelConnectorEventType } from '../src/connectors/types';
-import { Provider, TransactionStatus } from '../src/providers';
+import { Provider, ScriptTransactionRequest, TransactionStatus } from '../src/providers';
 import { setupTestProviderAndWallets, TestMessage } from '../src/test-utils';
 import { Wallet } from '../src/wallet';
 
@@ -668,5 +668,40 @@ describe('Fuel Connector', () => {
       () => fuel.getProvider([] as unknown as Provider),
       new FuelError(ErrorCode.INVALID_PROVIDER, 'Provider is not valid.')
     );
+  });
+
+  it('should ensure sendTransaction works just fine', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider,
+      wallets: [connectorWallet],
+    } = launched;
+    const connector = new MockConnector({
+      wallets: [connectorWallet],
+    });
+    const fuel = await new Fuel({
+      connectors: [connector],
+    });
+
+    const sendTransactionSpy = vi.spyOn(connectorWallet, 'sendTransaction');
+
+    const request = new ScriptTransactionRequest();
+    const resources = await connectorWallet.getResourcesToSpend([
+      { assetId: await provider.getBaseAssetId(), amount: 1000 },
+    ]);
+    request.addResources(resources);
+    await request.estimateAndFund(connectorWallet);
+
+    const params: AccountSendTxParams = {
+      onBeforeSend: vi.fn(),
+      skipCustomFee: true,
+    };
+    const response = await fuel.sendTransaction(
+      connectorWallet.address.toString(),
+      request,
+      params
+    );
+    expect(response).toBeDefined();
+    expect(sendTransactionSpy).toHaveBeenCalledWith(request, params);
   });
 });
