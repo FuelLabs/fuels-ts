@@ -6,17 +6,12 @@ import { ScriptSum } from '../../../../typegend';
 const provider = new Provider(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
-// #region transaction-request-4
+// #region estimate-and-fund
 const transactionRequest = new ScriptTransactionRequest({
   script: ScriptSum.bytecode,
 });
 
-const cost = await wallet.getTransactionCost(transactionRequest);
-
-transactionRequest.gasLimit = cost.gasUsed;
-transactionRequest.maxFee = cost.maxFee;
-
-await wallet.fund(transactionRequest, cost);
+await transactionRequest.estimateAndFund(wallet);
 
 await wallet.sendTransaction(transactionRequest);
-// #endregion transaction-request-4
+// #endregion estimate-and-fund

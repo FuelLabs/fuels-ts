@@ -70,13 +70,13 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
   }
 
   /**
-   * Helper function to fund the transaction request with a specified account.
+   * Helper function to estimate and fund the transaction request with a specified account.
    *
    * @param account - The account to fund the transaction.
    * @param params - The parameters for the transaction cost.
    * @returns The current instance of the `ScriptTransactionRequest` funded.
    */
-  async autoCost(
+  async estimateAndFund(
     account: Account,
     { signatureCallback, quantities = [] }: TransactionCostParams = {}
   ): Promise<ScriptTransactionRequest> {

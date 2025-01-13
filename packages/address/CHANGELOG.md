@@ -1,5 +1,24 @@
 # Change Log
 
+## 0.98.0
+
+### Minor Changes
+
+- 4ccc628: chore!: remove Bech32 address
+
+### Patch Changes
+
+- 12e801e: chore: dependency pinning and auditing
+- 0b4c3ab: chore!: redistributed the `@fuel-ts/interfaces` package
+- Updated dependencies [12e801e]
+- Updated dependencies [4ccc628]
+- Updated dependencies [08a31d8]
+- Updated dependencies [0b4c3ab]
+- Updated dependencies [68ef74d]
+  - @fuel-ts/crypto@0.98.0
+  - @fuel-ts/utils@0.98.0
+  - @fuel-ts/errors@0.98.0
+
 ## 0.97.2
 
 ### Patch Changes

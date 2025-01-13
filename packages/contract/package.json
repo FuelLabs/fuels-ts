@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/contract",
-  "version": "0.97.2",
+  "version": "0.98.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -49,7 +49,6 @@
     "@fuel-ts/program": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
-    "@fuel-ts/versions": "workspace:*",
     "@fuels/vm-asm": "0.58.2",
     "ramda": "0.30.1"
   },

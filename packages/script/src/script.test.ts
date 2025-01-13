@@ -36,7 +36,7 @@ const callScript = async <TData, TResult>(
 
   // Keep a list of coins we need to input to this transaction
 
-  await request.autoCost(account);
+  await request.estimateAndFund(account);
   const response = await account.sendTransaction(request);
   const transactionResult = await response.waitForResult();
   const result = script.decodeCallResult(transactionResult);

@@ -48,7 +48,7 @@ const quantities = [
 ];
 
 // 5. Estimate and fund the transaction
-await request.autoCost(wallet, { quantities });
+await request.estimateAndFund(wallet, { quantities });
 
 // 6. Send the transaction
 const tx = await wallet.sendTransaction(request);

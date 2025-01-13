@@ -1,6 +1,8 @@
 import type { AbiSpecification } from '@fuel-ts/abi';
 import type { RequireAtLeastOne } from 'type-fest';
 
+import type { TransactionRequest } from '../../providers';
+
 /**
  * @name Version
  */
@@ -42,3 +44,11 @@ export type SelectNetworkArguments = RequireAtLeastOne<Network, 'chainId' | 'url
  * Read more at: https://docs.fuel.network/docs/specs/abi/json-abi-format/
  */
 export type FuelABI = AbiSpecification;
+
+/**
+ * Params for the sendTransaction method (for connectors).
+ */
+export type FuelConnectorSendTxParams = {
+  skipCustomFee?: boolean;
+  onBeforeSend?: (txRequest: TransactionRequest) => Promise<TransactionRequest>;
+};
