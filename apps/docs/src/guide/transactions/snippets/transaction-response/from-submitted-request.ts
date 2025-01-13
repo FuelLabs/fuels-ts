@@ -25,7 +25,7 @@ const scriptMainFunctionArguments = [1];
 transactionRequest.setData(ScriptSum.abi, scriptMainFunctionArguments);
 
 // Fund the transaction
-await transactionRequest.autoCost(wallet);
+await transactionRequest.estimateAndFund(wallet);
 
 // Submit the transaction
 const response = await wallet.sendTransaction(transactionRequest);

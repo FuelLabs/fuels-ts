@@ -9,11 +9,11 @@ import type {
   TransferParams,
   TransactionResponse,
   TransactionCost,
+  AbstractAccount,
 } from '@fuel-ts/account';
 import { ScriptTransactionRequest, Wallet } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAccount, AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { InputType, TransactionType } from '@fuel-ts/transactions';
@@ -29,6 +29,8 @@ import type {
   TxParams,
   FunctionResult,
   DryRunResult,
+  AbstractContract,
+  AbstractProgram,
 } from '../types';
 import { assert, getAbisFromAllCalls } from '../utils';
 
@@ -240,7 +242,7 @@ export class BaseInvocationScope<TReturn = any> {
    *
    * @returns The invocation scope as a funded transaction request.
    */
-  async autoCost(): Promise<ScriptTransactionRequest> {
+  async fundWithRequiredCoins(): Promise<ScriptTransactionRequest> {
     let transactionRequest = await this.getTransactionRequest();
     transactionRequest = clone(transactionRequest);
 
@@ -369,7 +371,7 @@ export class BaseInvocationScope<TReturn = any> {
   }> {
     assert(this.program.account, 'Wallet is required!');
 
-    const transactionRequest = await this.autoCost();
+    const transactionRequest = await this.fundWithRequiredCoins();
 
     const response = (await this.program.account.sendTransaction(transactionRequest, {
       estimateTxDependencies: false,
@@ -403,7 +405,7 @@ export class BaseInvocationScope<TReturn = any> {
         'An unlocked wallet is required to simulate a contract call.'
       );
     }
-    const transactionRequest = await this.autoCost();
+    const transactionRequest = await this.fundWithRequiredCoins();
 
     const callResult = await this.program.account.simulateTransaction(transactionRequest, {
       estimateTxDependencies: false,

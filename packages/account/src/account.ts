@@ -1,16 +1,16 @@
 import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
+import type { WithAddress } from '@fuel-ts/address';
 import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { AbstractAccount } from '@fuel-ts/interfaces';
-import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { InputType } from '@fuel-ts/transactions';
+import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, isDefined } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
-import type { FuelConnector } from './connectors';
+import type { FuelConnector, FuelConnectorSendTxParams } from './connectors';
 import type {
   TransactionRequest,
   CoinQuantityLike,
@@ -23,7 +23,6 @@ import type {
   EstimateTransactionParams,
   CursorPaginationArgs,
   TransactionRequestLike,
-  ProviderSendTxParams,
   CallResult,
   GetCoinsResponse,
   GetMessagesResponse,
@@ -31,6 +30,7 @@ import type {
   Coin,
   TransactionCostParams,
   TransactionResponse,
+  ProviderSendTxParams,
 } from './providers';
 import {
   withdrawScript,
@@ -46,6 +46,7 @@ import {
   isRequestInputResource,
 } from './providers/transaction-request/helpers';
 import { mergeQuantities } from './providers/utils/merge-quantities';
+import { AbstractAccount } from './types';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
 
 export type TxParamsType = Pick<
@@ -54,16 +55,18 @@ export type TxParamsType = Pick<
 >;
 
 export type TransferParams = {
-  destination: string | AbstractAddress;
+  destination: string | Address;
   amount: BigNumberish;
   assetId: BytesLike;
 };
 
 export type ContractTransferParams = {
-  contractId: string | AbstractAddress;
+  contractId: string | Address;
   amount: BigNumberish;
   assetId: BytesLike;
 };
+
+export type AccountSendTxParams = ProviderSendTxParams & FuelConnectorSendTxParams;
 
 export type EstimatedTxParams = Pick<
   TransactionCost,
@@ -76,11 +79,11 @@ export type FakeResources = Partial<Coin> & Required<Pick<Coin, 'amount' | 'asse
 /**
  * `Account` provides an abstraction for interacting with accounts or wallets on the network.
  */
-export class Account extends AbstractAccount {
+export class Account extends AbstractAccount implements WithAddress {
   /**
    * The address associated with the account.
    */
-  readonly address: AbstractAddress;
+  readonly address: Address;
 
   /**
    * The provider used to interact with the network.
@@ -99,7 +102,7 @@ export class Account extends AbstractAccount {
    * @param provider - A Provider instance  (optional).
    * @param connector - A FuelConnector instance (optional).
    */
-  constructor(address: string | AbstractAddress, provider?: Provider, connector?: FuelConnector) {
+  constructor(address: string | Address, provider?: Provider, connector?: FuelConnector) {
     super();
     this._provider = provider;
     this._connector = connector;
@@ -341,7 +344,7 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves to the prepared transaction request.
    */
   async createTransfer(
-    destination: string | AbstractAddress,
+    destination: string | Address,
     amount: BigNumberish,
     assetId?: BytesLike,
     txParams: TxParamsType = {}
@@ -369,7 +372,7 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves to the transaction response.
    */
   async transfer(
-    destination: string | AbstractAddress,
+    destination: string | Address,
     amount: BigNumberish,
     assetId?: BytesLike,
     txParams: TxParamsType = {}
@@ -437,7 +440,7 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves to the transaction response.
    */
   async transferToContract(
-    contractId: string | AbstractAddress,
+    contractId: string | Address,
     amount: BigNumberish,
     assetId: BytesLike,
     txParams: TxParamsType = {}
@@ -499,7 +502,7 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves to the transaction response.
    */
   async withdrawToBaseLayer(
-    recipient: string | AbstractAddress,
+    recipient: string | Address,
     amount: BigNumberish,
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
@@ -648,11 +651,14 @@ export class Account extends AbstractAccount {
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true }: ProviderSendTxParams = {}
+    { estimateTxDependencies = true, onBeforeSend, skipCustomFee = false }: AccountSendTxParams = {}
   ): Promise<TransactionResponse> {
     if (this._connector) {
       return this.provider.getTransactionResponse(
-        await this._connector.sendTransaction(this.address.toString(), transactionRequestLike)
+        await this._connector.sendTransaction(this.address.toString(), transactionRequestLike, {
+          onBeforeSend,
+          skipCustomFee,
+        })
       );
     }
     const transactionRequest = transactionRequestify(transactionRequestLike);

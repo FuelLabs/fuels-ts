@@ -3,10 +3,10 @@ import type {
   Operation,
   TransactionSummary,
   TransactionResult,
-  AbstractAddress,
   OutputChange,
 } from 'fuels';
 import {
+  Address,
   BN,
   getTransactionsSummaries,
   getTransactionSummary,
@@ -16,7 +16,6 @@ import {
   Wallet,
   AddressType,
   OperationName,
-  Address,
   ChainName,
   bn,
   OutputType,
@@ -239,7 +238,7 @@ describe('TransactionSummary', () => {
       gasLimit: 10000,
     });
 
-    await request.autoCost(sender);
+    await request.estimateAndFund(sender);
 
     const transactionRequest = await sender.populateTransactionWitnessesSignature(request);
 
@@ -306,8 +305,8 @@ describe('TransactionSummary', () => {
   describe('Transfer Operations', () => {
     const validateTransferOperation = (params: {
       operations: Operation[];
-      sender: AbstractAddress;
-      recipients: { address: AbstractAddress; quantities: { amount: number; assetId: string }[] }[];
+      sender: Address;
+      recipients: { address: Address; quantities: { amount: number; assetId: string }[] }[];
       fromType: AddressType;
       toType: AddressType;
     }) => {
@@ -773,7 +772,7 @@ describe('TransactionSummary', () => {
         });
       });
 
-      await request.autoCost(wallet);
+      await request.estimateAndFund(wallet);
 
       const tx = await wallet.sendTransaction(request);
 

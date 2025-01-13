@@ -2,7 +2,6 @@ ABI
 ABI's
 abigen
 ABIs
-AbstractAddress
 ALU
 ANDs
 API's
@@ -345,6 +344,3 @@ WSL
 XOR
 XORs
 YAML
-TransactionRequest
-TransactionResponse
-frictionless

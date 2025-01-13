@@ -13,7 +13,7 @@ const request = new ScriptTransactionRequest({
 
 request.addCoinOutput(receiverAddress, 1000, await provider.getBaseAssetId());
 
-await request.autoCost(sender);
+await request.estimateAndFund(sender);
 
 const tx = await sender.sendTransaction(request);
 await tx.waitForResult();

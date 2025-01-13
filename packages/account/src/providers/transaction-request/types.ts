@@ -39,3 +39,11 @@ export type JsonAbisFromAllCalls = {
   main: JsonAbi;
   otherContractsAbis: Record<string, JsonAbi>;
 };
+
+/**
+ * @hidden
+ */
+export abstract class AbstractScriptRequest<T> {
+  abstract bytes: Uint8Array;
+  abstract encodeScriptData: (data: T) => Uint8Array;
+}
