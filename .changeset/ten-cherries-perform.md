@@ -2,4 +2,4 @@
 "create-fuels": patch
 ---
 
-chore: tailwind config from JS to TS
+chore: changed Tailwind config from JS to TS
