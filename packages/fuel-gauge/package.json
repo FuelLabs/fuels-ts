@@ -5,9 +5,8 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
-    "pretest": "run-s build:forc build:process-predicates",
-    "build:forc": "pnpm fuels build",
-    "build:process-predicates": "tsx ./scripts/process-predicates.ts",
+    "pretest": "pnpm build:forc",
+    "build:forc": "pnpm fuels build --deploy",
     "type:check": "tsc --noEmit"
   },
   "license": "Apache-2.0",
@@ -20,7 +19,6 @@
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
-    "@internal/forc": "workspace:*",
     "@internal/utils": "workspace:*"
   }
 }

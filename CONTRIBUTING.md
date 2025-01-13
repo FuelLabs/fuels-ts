@@ -228,14 +228,6 @@ pnpm bench:node
 pnpm bench:node packages/my-desired-package
 ```
 
-# Profiling
-
-We currently use [`clinic`](https://clinicjs.org/) to profile and debug our tooling. For instance you can run clinic's flame command to create a flamegraph for a specific package:
-
-```sh
-# creates a flamegraph for a specific package
-npm_config_package_name=account pnpm clinic:flame  // runs flame against the account package
-```
 
 ### CI Test
 
@@ -368,6 +360,40 @@ We'd follow the same approach as explained in the [Patching old releases](#patch
 - The automatically-created PR **must** be merged as soon as possible in order to
   - have the versions of packages on `master` match the `latest` released package versions,
   - have the released functionality on `master` as well
+
+# Network Testing
+
+The network test suite is designed to run locally against a specified network for validation purposes.
+
+You can find the test suite at: `packages/fuel-gauge/src/network.test.ts`.
+
+### Setup Instructions
+
+Before running the tests, you need to configure the `.env` file:
+
+1. Copy the `.env.example` file:
+
+```sh
+cp .env.example .env
+```
+
+2. Set the values for the following environment variables in the `.env` file:
+
+```env
+NETWORK_TEST_URL=https://testnet.fuel.network/v1/graphql
+NETWORK_TEST_PVT_KEY=0x...
+```
+
+- `NETWORK_TEST_URL`: The URL of which network the test should run (e.g., Fuel Testnet endpoint).
+- `NETWORK_TEST_PVT_KEY`: Your private key for the network.
+
+### Running the Test Suite
+
+Once the environment is set up, run the network tests using the following command:
+
+```sh
+pnpm test:network
+```
 
 # FAQ
 

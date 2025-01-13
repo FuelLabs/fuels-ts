@@ -345,6 +345,3 @@ XOR
 XORs
 YAML
 matcher
-TransactionRequest
-TransactionResponse
-frictionless
