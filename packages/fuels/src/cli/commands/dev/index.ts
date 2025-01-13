@@ -53,7 +53,7 @@ export const configFileChanged = (state: DevState) => async (_event: string, pat
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     await dev(await loadConfig(state.config.basePath));
   } catch (err: unknown) {
-    withConfigErrorHandler(<Error>err, state.config);
+    await withConfigErrorHandler(<Error>err, state.config);
   }
 };
 
