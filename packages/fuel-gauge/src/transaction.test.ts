@@ -74,7 +74,7 @@ describe('Transaction', () => {
     const request = await contract.functions.foo(10).getTransactionRequest();
     request.addMessageInput(message);
 
-    await request.autoCost(fundedWallet);
+    await request.estimateAndFund(fundedWallet);
 
     const tx = await fundedWallet.sendTransaction(request);
 
@@ -125,7 +125,7 @@ describe('Transaction', () => {
     const request = await contract.functions.foo(10).getTransactionRequest();
     request.addMessageInput(message);
 
-    await request.autoCost(fundedWallet);
+    await request.estimateAndFund(fundedWallet);
 
     const tx = await fundedWallet.sendTransaction(request);
 
@@ -164,7 +164,7 @@ describe('Transaction', () => {
     };
     request.inputs.push(coinInput);
 
-    await request.autoCost(sender);
+    await request.estimateAndFund(sender);
 
     const tx = await sender.sendTransaction(request, {
       enableAssetBurn: true,
@@ -252,7 +252,7 @@ describe('Transaction', () => {
     };
     request.inputs.push(coinInput);
 
-    await request.autoCost(owner);
+    await request.estimateAndFund(owner);
 
     const tx = await owner.sendTransaction(request, {
       enableAssetBurn: true,
@@ -300,7 +300,7 @@ describe('Transaction', () => {
     };
     request.inputs.push(coinInput);
 
-    await request.autoCost(owner);
+    await request.estimateAndFund(owner);
 
     const expectedErrorMessage = [
       'Asset burn detected.',

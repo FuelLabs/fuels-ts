@@ -238,7 +238,7 @@ describe('TransactionSummary', () => {
       gasLimit: 10000,
     });
 
-    await request.autoCost(sender);
+    await request.estimateAndFund(sender);
 
     const transactionRequest = await sender.populateTransactionWitnessesSignature(request);
 
@@ -772,7 +772,7 @@ describe('TransactionSummary', () => {
         });
       });
 
-      await request.autoCost(wallet);
+      await request.estimateAndFund(wallet);
 
       const tx = await wallet.sendTransaction(request);
 

@@ -2335,7 +2335,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     });
 
     // Fund the transaction
-    await request.autoCost(sender);
+    await request.estimateAndFund(sender);
 
     const signedTransaction = await sender.signTransaction(request);
     request.updateWitnessByOwner(sender.address, signedTransaction);
@@ -2358,12 +2358,13 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     const signedTransaction = await wallet.signTransaction(transactionRequest);
     transactionRequest.updateWitnessByOwner(wallet.address, signedTransaction);
     const transactionId = transactionRequest.getTransactionId(await provider.getChainId());
-    const response = await provider.sendTransactionAndAwaitStatus(transactionRequest, {
+    const response = await provider.sendTransaction(transactionRequest, {
       estimateTxDependencies: false,
     });
-    expect(response.status).toBe('success');
-    expect(response.receipts.length).not.toBe(0);
-    expect(response.id).toBe(transactionId);
+    const result = await response.waitForResult();
+    expect(result.status).toBe('success');
+    expect(result.receipts.length).not.toBe(0);
+    expect(result.id).toBe(transactionId);
   });
 
   it('submits transaction and awaits status [success with estimation]', async () => {
@@ -2377,10 +2378,11 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     const signedTransaction = await wallet.signTransaction(transactionRequest);
     transactionRequest.updateWitnessByOwner(wallet.address, signedTransaction);
     const transactionId = transactionRequest.getTransactionId(await provider.getChainId());
-    const response = await provider.sendTransactionAndAwaitStatus(transactionRequest);
-    expect(response.status).toBe('success');
-    expect(response.receipts.length).not.toBe(0);
-    expect(response.id).toBe(transactionId);
+    const response = await provider.sendTransaction(transactionRequest);
+    const result = await response.waitForResult();
+    expect(result.status).toBe('success');
+    expect(result.receipts.length).not.toBe(0);
+    expect(result.id).toBe(transactionId);
   });
 
   it('submits transaction and awaits status [failure]', async () => {
@@ -2394,14 +2396,11 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     transactionRequest.gasLimit = bn(0); // force fail
     const signedTransaction = await wallet.signTransaction(transactionRequest);
     transactionRequest.updateWitnessByOwner(wallet.address, signedTransaction);
-    await expectToThrowFuelError(
-      () =>
-        provider.sendTransactionAndAwaitStatus(transactionRequest, {
-          estimateTxDependencies: false,
-        }),
-      {
-        code: ErrorCode.SCRIPT_REVERTED,
-      }
-    );
+    const response = await provider.sendTransaction(transactionRequest, {
+      estimateTxDependencies: false,
+    });
+    await expectToThrowFuelError(() => response.waitForResult(), {
+      code: ErrorCode.SCRIPT_REVERTED,
+    });
   });
 });

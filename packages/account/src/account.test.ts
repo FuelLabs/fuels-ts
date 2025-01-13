@@ -620,7 +620,7 @@ describe('Account', () => {
       [amount, assetIdB],
     ]);
 
-    await request.autoCost(sender);
+    await request.estimateAndFund(sender);
 
     const response = await sender.sendTransaction(request);
 
@@ -727,7 +727,7 @@ describe('Account', () => {
       request.addCoinOutput(sender.address, amount.div(3), await provider.getBaseAssetId());
     }
 
-    await request.autoCost(fundingWallet);
+    await request.estimateAndFund(fundingWallet);
 
     const tx1 = await fundingWallet.sendTransaction(request);
     await tx1.waitForResult();
@@ -801,7 +801,7 @@ describe('Account', () => {
       request.addCoinOutput(sender.address, fundingAmount.div(3), await provider.getBaseAssetId());
     }
 
-    await request.autoCost(fundingWallet);
+    await request.estimateAndFund(fundingWallet);
 
     const tx1 = await fundingWallet.sendTransaction(request);
     await tx1.waitForResult();
@@ -968,7 +968,7 @@ describe('Account', () => {
     const request = new ScriptTransactionRequest();
     request.addCoinOutput(wallet.address, 30_000, await provider.getBaseAssetId());
 
-    await expectToThrowFuelError(() => request.autoCost(wallet), {
+    await expectToThrowFuelError(() => request.estimateAndFund(wallet), {
       code: ErrorCode.MAX_COINS_REACHED,
       message:
         'The account retrieving coins has exceeded the maximum number of coins per asset. Please consider combining your coins into a single UTXO.',

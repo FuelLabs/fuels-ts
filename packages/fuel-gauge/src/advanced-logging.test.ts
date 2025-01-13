@@ -233,7 +233,7 @@ describe('Advanced Logging', () => {
         ])
         .getTransactionRequest();
 
-      await request.autoCost(wallet);
+      await request.estimateAndFund(wallet);
 
       const tx = await wallet.sendTransaction(request, { estimateTxDependencies: false });
 
@@ -307,7 +307,7 @@ describe('Advanced Logging', () => {
         .addContracts([advancedLogContract, otherAdvancedLogContract])
         .getTransactionRequest();
 
-      await request.autoCost(wallet);
+      await request.estimateAndFund(wallet);
 
       const tx = await wallet.sendTransaction(request);
 

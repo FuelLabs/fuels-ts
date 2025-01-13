@@ -27,7 +27,7 @@ transactionRequest.inputs.push({
 });
 
 // Fund the transaction
-await transactionRequest.autoCost(sender);
+await transactionRequest.estimateAndFund(sender);
 
 // Send the transaction with asset burn enabled
 const tx = await sender.sendTransaction(transactionRequest, {

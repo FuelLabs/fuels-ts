@@ -1,6 +1,6 @@
-# Transaction Policies
+# Adding Policies
 
-Transaction policies are rules that can govern how a transaction is processed, introduced by the [transaction parameters](./transaction-parameters.md) that you pass to a transaction request. The available policies are as follows:
+Transaction policies are rules that can govern how a transaction is processed, introduced by the [transaction parameters](./adding-parameters.md) that you pass to a transaction request. The available policies are as follows:
 
 ### Tip
 

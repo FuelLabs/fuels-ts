@@ -665,7 +665,7 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
 
     request.addCoinOutput(recipient.address, 10, await provider.getBaseAssetId());
 
-    await request.autoCost(sender);
+    await request.estimateAndFund(sender);
 
     const response = await sender.sendTransaction(request);
     const result = await response.waitForResult();
