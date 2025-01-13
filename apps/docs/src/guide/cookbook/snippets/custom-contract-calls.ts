@@ -35,7 +35,7 @@ transactionRequest.addCoinOutput(
 );
 
 // Estimate and fund the transaction
-await transactionRequest.autoCost(wallet);
+await transactionRequest.estimateAndFund(wallet);
 
 // Submit the transaction
 const response = await wallet.sendTransaction(transactionRequest);

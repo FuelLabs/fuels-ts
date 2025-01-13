@@ -343,8 +343,4 @@ Workspaces
 WSL
 XOR
 XORs
-YAML
 matcher
-TransactionRequest
-TransactionResponse
-frictionless

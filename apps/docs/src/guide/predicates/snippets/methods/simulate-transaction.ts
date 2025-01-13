@@ -36,7 +36,7 @@ const transactionRequest = new ScriptTransactionRequest({
 transactionRequest.addCoinOutput(receiver.address, 1000000, baseAssetId);
 
 // Estimate and fund the transaction
-await transactionRequest.autoCost(predicate);
+await transactionRequest.estimateAndFund(predicate);
 
 const result = await predicate.simulateTransaction(transactionRequest);
 

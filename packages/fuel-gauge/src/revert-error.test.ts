@@ -211,7 +211,7 @@ describe('Revert Error Testing', () => {
       ])
       .getTransactionRequest();
 
-    await request.autoCost(wallet);
+    await request.estimateAndFund(wallet);
 
     const tx = await wallet.sendTransaction(request, {
       estimateTxDependencies: false,
