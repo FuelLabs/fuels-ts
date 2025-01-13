@@ -11,6 +11,7 @@ import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import { versions } from '@fuel-ts/versions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
 
+import { Wallet } from '..';
 import {
   messageStatusResponse,
   MESSAGE_PROOF_RAW_RESPONSE,
@@ -1155,20 +1156,25 @@ describe('Provider', () => {
     const spy = vi.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
     spy.mockImplementationOnce(() => mock);
 
-    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-
     using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    const {
+      provider: { url },
+    } = launched;
 
-    await new Provider(provider.url).init();
+    const provider = await new Provider(url).init();
+    const sender = Wallet.generate({ provider });
+    const receiver = Wallet.generate({ provider });
 
-    expect(consoleWarnSpy).toHaveBeenCalledOnce();
-    expect(consoleWarnSpy).toHaveBeenCalledWith(
-      `The Fuel Node that you are trying to connect to is using fuel-core version ${FUEL_CORE},
-which is not supported by the version of the TS SDK that you are using.
-Things may not work as expected.
-Supported fuel-core version: ${mock.supportedVersion}.`
-    );
+    await expectToThrowFuelError(() => sender.transfer(receiver.address, 1), {
+      code: ErrorCode.NOT_ENOUGH_FUNDS,
+      message: [
+        `The account(s) sending the transaction don't have enough funds to cover the transaction.`,
+        ``,
+        `The Fuel Node that you are trying to connect to is using fuel-core version ${FUEL_CORE}.`,
+        `The TS SDK currently supports fuel-core version ${mock.supportedVersion}.`,
+        `Things may not work as expected.`,
+      ].join('\n'),
+    });
   });
 
   it('warns on difference between minor client version and supported minor version', async () => {
@@ -1190,20 +1196,25 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     const spy = vi.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
     spy.mockImplementationOnce(() => mock);
 
-    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-
     using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    const {
+      provider: { url },
+    } = launched;
 
-    await new Provider(provider.url).init();
+    const provider = await new Provider(url).init();
+    const sender = Wallet.generate({ provider });
+    const receiver = Wallet.generate({ provider });
 
-    expect(consoleWarnSpy).toHaveBeenCalledOnce();
-    expect(consoleWarnSpy).toHaveBeenCalledWith(
-      `The Fuel Node that you are trying to connect to is using fuel-core version ${FUEL_CORE},
-which is not supported by the version of the TS SDK that you are using.
-Things may not work as expected.
-Supported fuel-core version: ${mock.supportedVersion}.`
-    );
+    await expectToThrowFuelError(() => sender.transfer(receiver.address, 1), {
+      code: ErrorCode.NOT_ENOUGH_FUNDS,
+      message: [
+        `The account(s) sending the transaction don't have enough funds to cover the transaction.`,
+        ``,
+        `The Fuel Node that you are trying to connect to is using fuel-core version ${FUEL_CORE}.`,
+        `The TS SDK currently supports fuel-core version ${mock.supportedVersion}.`,
+        `Things may not work as expected.`,
+      ].join('\n'),
+    });
   });
 
   it('An invalid subscription request throws a FuelError and does not hold the test runner (closes all handles)', async () => {

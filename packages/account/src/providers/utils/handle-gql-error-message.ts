@@ -29,16 +29,38 @@ const mapGqlErrorMessage = (error: GqlError): FuelError => {
   }
 };
 
-export const assertGqlResponseHasNoErrors = (errors: GqlError[] | undefined) => {
+const mapGqlErrorWithIncompatibleNodeVersion = (
+  error: FuelError,
+  incompatibleNodeVersionMessage: string | false
+) => {
+  if (!incompatibleNodeVersionMessage) {
+    return error;
+  }
+
+  return new FuelError(
+    error.code,
+    `${error.message}\n\n${incompatibleNodeVersionMessage}`,
+    error.metadata,
+    error.rawError
+  );
+};
+
+export const assertGqlResponseHasNoErrors = (
+  errors: GqlError[] | undefined,
+  incompatibleNodeVersionMessage: string | false = false
+) => {
   if (!Array.isArray(errors)) {
     return;
   }
 
   const mappedErrors = errors.map(mapGqlErrorMessage);
   if (mappedErrors.length === 1) {
-    throw mappedErrors[0];
+    throw mapGqlErrorWithIncompatibleNodeVersion(mappedErrors[0], incompatibleNodeVersionMessage);
   }
 
   const errorMessage = mappedErrors.map((err) => err.message).join('\n');
-  throw new FuelError(ErrorCode.INVALID_REQUEST, errorMessage, {}, mappedErrors);
+  throw mapGqlErrorWithIncompatibleNodeVersion(
+    new FuelError(ErrorCode.INVALID_REQUEST, errorMessage, {}, mappedErrors),
+    incompatibleNodeVersionMessage
+  );
 };
