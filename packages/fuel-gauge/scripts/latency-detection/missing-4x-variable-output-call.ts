@@ -1,8 +1,10 @@
 import { measure } from './helpers';
-import type { BaseParams, PerformanceResult } from './types';
+import type { PerformanceOperationParams, PerformanceResult } from './types';
 import { TagEnum } from './types';
 
-export async function missing4xOutputVariableCall(params: BaseParams): Promise<PerformanceResult> {
+export async function missing4xOutputVariableCall(
+  params: PerformanceOperationParams
+): Promise<PerformanceResult> {
   const { account, baseAssetId, contract } = params;
 
   const callParams = [

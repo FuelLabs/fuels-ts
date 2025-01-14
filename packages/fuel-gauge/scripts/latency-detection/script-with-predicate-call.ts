@@ -1,8 +1,10 @@
 import { measure } from './helpers';
-import type { BaseParams, PerformanceResult } from './types';
+import type { PerformanceOperationParams, PerformanceResult } from './types';
 import { TagEnum } from './types';
 
-export async function scriptWithPredicateCall(params: BaseParams): Promise<PerformanceResult> {
+export async function scriptWithPredicateCall(
+  params: PerformanceOperationParams
+): Promise<PerformanceResult> {
   const { baseAssetId, contract, callParams, predicate } = params;
 
   const { duration } = await measure(async () => {

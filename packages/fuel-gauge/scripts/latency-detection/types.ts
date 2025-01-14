@@ -17,7 +17,7 @@ export enum TagEnum {
   Missing4xOutputVariable = 'missing-4x-output-variable',
 }
 
-export type BaseParams = {
+export type PerformanceOperationParams = {
   account: Account;
   baseAssetId: string;
   provider: Provider;
