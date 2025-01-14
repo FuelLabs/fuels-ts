@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import fs from 'fs';
 import { Provider, Wallet } from 'fuels';
+import ora from 'ora';
 
 import { TransferContractFactory } from '../../test/typegen/contracts';
 import { PredicateWithConfigurable } from '../../test/typegen/predicates';
@@ -11,6 +12,8 @@ import { missingOutputVariableCall } from './missing-variable-output-call';
 import { scriptCall } from './script-call';
 import { scriptWithPredicateCall } from './script-with-predicate-call';
 import type { PerformanceOperationParams, PerformanceResult } from './types';
+
+const { log, error } = console;
 
 const preparatorySteps = async () => {
   // Preparatory steps
@@ -112,8 +115,10 @@ const main = async () => {
 
   const csvString = toCsv(['tag', 'time'], results);
   const date = new Date();
+  const filename = `${date.toISOString().slice(0, 10)}.csv`;
   fs.mkdirSync('snapshots', { recursive: true });
-  fs.writeFileSync(`snapshots/${date.toISOString().slice(0, 10)}.csv`, csvString);
+  fs.writeFileSync(filename, csvString);
+  log(`Snapshots saved into "snapshots/${filename}"`);
 };
 
-main().catch(console.error);
+main().catch(error);
