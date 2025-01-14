@@ -10,14 +10,7 @@ import { missing4xOutputVariableCall } from './missing-4x-variable-output-call';
 import { missingOutputVariableCall } from './missing-variable-output-call';
 import { scriptCall } from './script-call';
 import { scriptWithPredicateCall } from './script-with-predicate-call';
-import type { PerformanceResult } from './types';
-
-const operations = [
-  scriptCall,
-  missingOutputVariableCall,
-  missing4xOutputVariableCall,
-  scriptWithPredicateCall,
-];
+import type { PerformanceOperationParams, PerformanceResult } from './types';
 
 const preparatorySteps = async () => {
   // Preparatory steps
@@ -64,27 +57,33 @@ const preparatorySteps = async () => {
   return { account, baseAssetId, provider, contract, callParams, predicate };
 };
 
-const main = async () => {
-  const { account, baseAssetId, callParams, contract, predicate, provider } =
-    await preparatorySteps();
+const runOperations = async (params: PerformanceOperationParams) => {
   const results: PerformanceResult[] = [];
+
+  const operations = [
+    scriptCall,
+    missingOutputVariableCall,
+    missing4xOutputVariableCall,
+    scriptWithPredicateCall,
+  ];
 
   // Performing measure operations
   for (const operation of operations) {
     // Clear chain info cache
     Provider.clearChainAndNodeCaches();
 
-    const result = await operation({
-      account,
-      baseAssetId,
-      provider,
-      contract,
-      callParams,
-      predicate,
-    });
+    const result = await operation(params);
 
     results.push(result);
   }
+
+  return results;
+};
+
+const main = async () => {
+  const operationsParams = await preparatorySteps();
+
+  const results = await runOperations(operationsParams);
 
   const csvString = toCsv(['tag', 'time'], results);
   const date = new Date();
