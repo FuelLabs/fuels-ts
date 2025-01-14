@@ -23,38 +23,51 @@ const preparatorySteps = async () => {
     );
   }
 
-  const provider = new Provider(providerUrl);
-  const account = Wallet.fromPrivateKey(privateKey, provider);
-  const baseAssetId = await provider.getBaseAssetId();
-  const amount = 100;
-  const callParams = [
-    {
-      recipient: { Address: { bits: account.address.toB256() } },
-      asset_id: { bits: baseAssetId },
-      amount,
-    },
-  ];
+  const logger = ora({
+    text: 'Running preparatory steps..',
+    color: 'green',
+  }).start();
 
-  // Deploying contract that will be executed
-  const factory = new TransferContractFactory(account);
-  const deploy = await factory.deploy();
-  const { contract } = await deploy.waitForResult();
+  try {
+    const provider = new Provider(providerUrl);
+    const account = Wallet.fromPrivateKey(privateKey, provider);
+    const baseAssetId = await provider.getBaseAssetId();
+    const amount = 100;
+    const callParams = [
+      {
+        recipient: { Address: { bits: account.address.toB256() } },
+        asset_id: { bits: baseAssetId },
+        amount,
+      },
+    ];
 
-  // Instantiating predicate
-  const predicate = new PredicateWithConfigurable({
-    provider: contract.provider,
-    data: [10, account.address.toString()],
-    configurableConstants: {
-      ADDRESS: account.address.toString(),
-      FEE: 10,
-    },
-  });
+    // Deploying contract that will be executed
+    const factory = new TransferContractFactory(account);
+    const deploy = await factory.deploy();
+    const { contract } = await deploy.waitForResult();
 
-  // Funding predicate
-  const res = await account.transfer(predicate.address, 3000, baseAssetId);
-  await res.waitForResult();
+    // Instantiating predicate
+    const predicate = new PredicateWithConfigurable({
+      provider: contract.provider,
+      data: [10, account.address.toString()],
+      configurableConstants: {
+        ADDRESS: account.address.toString(),
+        FEE: 10,
+      },
+    });
 
-  return { account, baseAssetId, provider, contract, callParams, predicate };
+    // Funding predicate
+    const res = await account.transfer(predicate.address, 3000, baseAssetId);
+    await res.waitForResult();
+
+    logger.text = 'Preparatory steps done';
+    logger.succeed();
+
+    return { account, baseAssetId, provider, contract, callParams, predicate };
+  } catch (e) {
+    logger.fail('Failed to run preparatory steps');
+    throw e;
+  }
 };
 
 const runOperations = async (params: PerformanceOperationParams) => {
@@ -69,12 +82,24 @@ const runOperations = async (params: PerformanceOperationParams) => {
 
   // Performing measure operations
   for (const operation of operations) {
-    // Clear chain info cache
-    Provider.clearChainAndNodeCaches();
+    const logger = ora({
+      text: `Performing operation: ${operation.name}`,
+      color: 'green',
+    }).start();
+    try {
+      // Clear chain info cache
+      Provider.clearChainAndNodeCaches();
 
-    const result = await operation(params);
+      const result = await operation(params);
 
-    results.push(result);
+      logger.text = `Operation: ${operation.name} completed`;
+      logger.succeed();
+
+      results.push(result);
+    } catch (e) {
+      logger.fail(`Operation: ${operation.name} failed`);
+      throw e;
+    }
   }
 
   return results;
