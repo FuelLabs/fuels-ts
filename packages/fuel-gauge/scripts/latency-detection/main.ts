@@ -48,7 +48,7 @@ const preparatorySteps = async () => {
   const { contract } = await deploy.waitForResult();
 
   // Instantiating predicate
-  const predicateWithConfigurables = new PredicateWithConfigurable({
+  const predicate = new PredicateWithConfigurable({
     provider: contract.provider,
     data: [10, account.address.toString()],
     configurableConstants: {
@@ -58,14 +58,14 @@ const preparatorySteps = async () => {
   });
 
   // Funding predicate
-  const res = await account.transfer(predicateWithConfigurables.address, 3000, baseAssetId);
+  const res = await account.transfer(predicate.address, 3000, baseAssetId);
   await res.waitForResult();
 
-  return { account, baseAssetId, provider, contract, callParams, predicateWithConfigurables };
+  return { account, baseAssetId, provider, contract, callParams, predicate };
 };
 
 const main = async () => {
-  const { account, baseAssetId, callParams, contract, predicateWithConfigurables, provider } =
+  const { account, baseAssetId, callParams, contract, predicate, provider } =
     await preparatorySteps();
   const results: PerformanceResult[] = [];
 
@@ -81,7 +81,7 @@ const main = async () => {
       provider,
       contract,
       callParams,
-      predicate: predicateWithConfigurables,
+      predicate,
     });
 
     results.push(result);
