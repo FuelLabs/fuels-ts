@@ -20,7 +20,6 @@ export enum TagEnum {
 export type BaseParams = {
   account: Account;
   baseAssetId: string;
-  providerUrl: string;
   provider: Provider;
   contract: TransferContract;
   callParams: Vec<TransferParamsInputInput>;

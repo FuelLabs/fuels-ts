@@ -77,7 +77,6 @@ const main = async () => {
     const result = await operation({
       account,
       baseAssetId,
-      providerUrl: provider.url,
       provider,
       contract,
       callParams,
