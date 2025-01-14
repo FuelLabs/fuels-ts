@@ -117,8 +117,15 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
       return this.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
 
-    // Adjust precision and minPrecision
-    // TODO: This really should throw an error because you can't have a precision less than the minPrecision but this would be a breaking change
+    // Warn if precision is less than minPrecision
+    if (initialPrecision < initialMinPrecision) {
+      console.warn(
+        `Warning: precision (${initialPrecision}) is less than minPrecision (${initialMinPrecision}). ` +
+        'This may lead to unexpected behavior. Consider setting precision >= minPrecision.'
+      );
+    }
+
+    // Adjust precision and minPrecision to maintain backward compatibility
     const minPrecision =
       initialMinPrecision > initialPrecision ? initialPrecision : initialMinPrecision;
     const precision =
