@@ -21,11 +21,17 @@ const operations = [
 
 const main = async () => {
   // Preparatory steps
-  const provider = new Provider(process.env.PERFORMANCE_ANALYSIS_TEST_URL as string);
-  const account = Wallet.fromPrivateKey(
-    process.env.PERFORMANCE_ANALYSIS_PVT_KEY as string,
-    provider
-  );
+  const providerUrl = process.env.PERFORMANCE_ANALYSIS_TEST_URL;
+  const privateKey = process.env.PERFORMANCE_ANALYSIS_PVT_KEY;
+
+  if (!providerUrl || !privateKey) {
+    throw new Error(
+      'Please provide PERFORMANCE_ANALYSIS_TEST_URL and PERFORMANCE_ANALYSIS_PVT_KEY in the .env file'
+    );
+  }
+
+  const provider = new Provider(providerUrl);
+  const account = Wallet.fromPrivateKey(providerUrl, provider);
   const baseAssetId = await provider.getBaseAssetId();
   const amount = 100;
   const callParams = [
