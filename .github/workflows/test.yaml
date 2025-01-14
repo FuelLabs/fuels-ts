@@ -91,6 +91,22 @@ jobs:
         env:
           PUBLISHED_NPM_TAG: next
 
+  forc:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Test Setup
+        uses: ./.github/actions/test-setup
+
+      - name: Run Tests
+        run: pnpm test:forc
+        env:
+          FUEL_CORE_PATH: "fuels-core"
+          FORC_PATH: "fuels-forc"
+
   e2e:
     runs-on: ubuntu-latest
     timeout-minutes: 25
