@@ -5,7 +5,7 @@ import { Provider, Wallet } from 'fuels';
 import { TransferContractFactory } from '../../test/typegen/contracts';
 import { PredicateWithConfigurable } from '../../test/typegen/predicates';
 
-import { parseToCsv } from './helpers';
+import { toCsv } from './helpers';
 import { missing4xOutputVariableCall } from './missing-4x-variable-output-call';
 import { missingOutputVariableCall } from './missing-variable-output-call';
 import { scriptCall } from './script-call';
@@ -81,7 +81,7 @@ const main = async () => {
     results.push(result);
   }
 
-  const csvString = parseToCsv(['tag', 'time'], results);
+  const csvString = toCsv(['tag', 'time'], results);
   const date = new Date();
   fs.mkdirSync('snapshots', { recursive: true });
   fs.writeFileSync(`snapshots/${date.toISOString().slice(0, 10)}.csv`, csvString);

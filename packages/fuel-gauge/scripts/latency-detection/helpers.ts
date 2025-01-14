@@ -37,7 +37,7 @@ export async function measure<T>(operation: () => Promise<T>): Promise<MeasureRe
  * @param data - An array of objects where each object represents a row of data.
  * @returns A string representing the CSV formatted data.
  */
-export const parseToCsv = (headers: [string, string], data: Record<string, unknown>[]) => {
+export const toCsv = (headers: [string, string], data: Record<string, unknown>[]) => {
   let valuesAsStrings = data.map((r) => Object.values(r).map((value) => String(value)));
   valuesAsStrings = [headers, ...valuesAsStrings];
   return valuesAsStrings.map((row) => row.join(',')).join('\n');
