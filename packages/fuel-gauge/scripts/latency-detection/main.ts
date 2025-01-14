@@ -1,0 +1,84 @@
+import 'dotenv/config';
+import fs from 'fs';
+import { Provider, Wallet } from 'fuels';
+
+import { TransferContractFactory } from '../../test/typegen/contracts';
+import { PredicateWithConfigurable } from '../../test/typegen/predicates';
+
+import { parseToCsv } from './helpers';
+import { missing4xOutputVariableCall } from './missing-4x-variable-output-call';
+import { missingOutputVariableCall } from './missing-variable-output-call';
+import { scriptCall } from './script-call';
+import { scriptWithPredicateCall } from './script-with-predicate-call';
+import type { PerformanceResult } from './types';
+
+const operations = [
+  scriptCall,
+  missingOutputVariableCall,
+  missing4xOutputVariableCall,
+  scriptWithPredicateCall,
+];
+
+const main = async () => {
+  // Preparatory steps
+  const provider = new Provider(process.env.PERFORMANCE_ANALYSIS_TEST_URL as string);
+  const account = Wallet.fromPrivateKey(
+    process.env.PERFORMANCE_ANALYSIS_PVT_KEY as string,
+    provider
+  );
+  const baseAssetId = await provider.getBaseAssetId();
+  const amount = 100;
+  const callParams = [
+    {
+      recipient: { Address: { bits: account.address.toB256() } },
+      asset_id: { bits: baseAssetId },
+      amount,
+    },
+  ];
+
+  // Deploying contract that will be executed
+  const factory = new TransferContractFactory(account);
+  const deploy = await factory.deploy();
+  const { contract } = await deploy.waitForResult();
+
+  // Instantiating predicate
+  const predicateWithConfigurables = new PredicateWithConfigurable({
+    provider: contract.provider,
+    data: [10, account.address.toString()],
+    configurableConstants: {
+      ADDRESS: account.address.toString(),
+      FEE: 10,
+    },
+  });
+
+  // Funding predicate
+  const res = await account.transfer(predicateWithConfigurables.address, 3000, baseAssetId);
+  await res.waitForResult();
+
+  const results: PerformanceResult[] = [];
+
+  // Performing measure operations
+  for (const operation of operations) {
+    // Clear chain info cache
+    Provider.clearChainAndNodeCaches();
+
+    const result = await operation({
+      account,
+      baseAssetId,
+      providerUrl: provider.url,
+      provider,
+      contract,
+      callParams,
+      predicate: predicateWithConfigurables,
+    });
+
+    results.push(result);
+  }
+
+  const csvString = parseToCsv(['tag', 'time'], results);
+  const date = new Date();
+  fs.mkdirSync('snapshots', { recursive: true });
+  fs.writeFileSync(`snapshots/${date.toISOString().slice(0, 10)}.csv`, csvString);
+};
+
+main().catch(console.error);
