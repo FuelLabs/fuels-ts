@@ -19,7 +19,7 @@ const operations = [
   scriptWithPredicateCall,
 ];
 
-const main = async () => {
+const preparatorySteps = async () => {
   // Preparatory steps
   const providerUrl = process.env.PERFORMANCE_ANALYSIS_TEST_URL;
   const privateKey = process.env.PERFORMANCE_ANALYSIS_PVT_KEY;
@@ -61,6 +61,12 @@ const main = async () => {
   const res = await account.transfer(predicateWithConfigurables.address, 3000, baseAssetId);
   await res.waitForResult();
 
+  return { account, baseAssetId, provider, contract, callParams, predicateWithConfigurables };
+};
+
+const main = async () => {
+  const { account, baseAssetId, callParams, contract, predicateWithConfigurables, provider } =
+    await preparatorySteps();
   const results: PerformanceResult[] = [];
 
   // Performing measure operations
