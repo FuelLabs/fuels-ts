@@ -31,7 +31,7 @@ const main = async () => {
   }
 
   const provider = new Provider(providerUrl);
-  const account = Wallet.fromPrivateKey(providerUrl, provider);
+  const account = Wallet.fromPrivateKey(privateKey, provider);
   const baseAssetId = await provider.getBaseAssetId();
   const amount = 100;
   const callParams = [
