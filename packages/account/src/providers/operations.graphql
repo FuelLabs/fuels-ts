@@ -774,6 +774,12 @@ query getAssetDetails($assetId: AssetId!) {
   }
 }
 
+query daCompressedBlock($height: U32!) {
+  daCompressedBlock(height: $height) {
+    bytes
+  }
+}
+
 mutation dryRun(
   $encodedTransactions: [HexString!]!
   $utxoValidation: Boolean

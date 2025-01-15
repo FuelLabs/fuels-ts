@@ -1702,6 +1702,18 @@ Supported fuel-core version: ${supportedVersion}.`
     }
   }
 
+  async daCompressedBlock(height: string) {
+    const { daCompressedBlock } = await this.operations.daCompressedBlock({
+      height,
+    });
+
+    if (!daCompressedBlock) {
+      return null;
+    }
+
+    return daCompressedBlock;
+  }
+
   /**
    * Retrieves transactions based on the provided pagination arguments.
    * @param paginationArgs - The pagination arguments for retrieving transactions.
