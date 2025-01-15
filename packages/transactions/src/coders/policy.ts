@@ -126,9 +126,12 @@ export class PoliciesCoder extends Coder<Policy[], Policy[]> {
     }
 
     if (policyTypes & PolicyType.Expiration) {
-      const [maxFee, nextOffset] = new NumberCoder('u32', { padToWordSize: true }).decode(data, o);
+      const [expiration, nextOffset] = new NumberCoder('u32', { padToWordSize: true }).decode(
+        data,
+        o
+      );
       o = nextOffset;
-      policies.push({ type: PolicyType.Expiration, data: maxFee });
+      policies.push({ type: PolicyType.Expiration, data: expiration });
     }
 
     return [policies, o];
