@@ -663,7 +663,7 @@ query getContractBalance($contract: ContractId!, $asset: AssetId!) {
 
 query getBalance($owner: Address!, $assetId: AssetId!) {
   balance(owner: $owner, assetId: $assetId) {
-    amount
+    amountU128
   }
 }
 
@@ -699,7 +699,7 @@ query getBalances(
     edges {
       node {
         assetId
-        amount
+        amountU128
       }
     }
   }

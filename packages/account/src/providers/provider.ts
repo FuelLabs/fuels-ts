@@ -1761,7 +1761,7 @@ Supported fuel-core version: ${supportedVersion}.`
       owner: Address.fromAddressOrString(owner).toB256(),
       assetId: hexlify(assetId),
     });
-    return bn(balance.amount, 10);
+    return bn(balance.amountU128, 10);
   }
 
   /**
@@ -1787,7 +1787,7 @@ Supported fuel-core version: ${supportedVersion}.`
 
     const balances = edges.map(({ node }) => ({
       assetId: node.assetId,
-      amount: bn(node.amount),
+      amount: bn(node.amountU128),
     }));
 
     return { balances, pageInfo };
