@@ -541,4 +541,27 @@ describe('Math - BN', () => {
   it('should return significant figures even if it exceeds the precision', () => {
     expect(bn('4000000').format({ precision: 1 })).toEqual('0.004');
   });
+
+  it('should warn when precision is less than minPrecision', () => {
+    const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+
+    // Test case where precision < minPrecision
+    bn(123).format({ precision: 2, minPrecision: 4 });
+
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      'Warning: precision (2) is less than minPrecision (4). ' +
+      'This may lead to unexpected behavior. Consider setting precision >= minPrecision.'
+    );
+
+    // Test case where precision = minPrecision (should not warn)
+    consoleWarnSpy.mockClear();
+    bn(123).format({ precision: 4, minPrecision: 4 });
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
+
+    // Test case where precision > minPrecision (should not warn)
+    bn(123).format({ precision: 6, minPrecision: 4 });
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
+
+    consoleWarnSpy.mockRestore();
+  });
 });
