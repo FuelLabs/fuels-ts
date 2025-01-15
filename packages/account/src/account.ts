@@ -51,7 +51,7 @@ import { assembleTransferToContractScript } from './utils/formatTransferToContra
 
 export type TxParamsType = Pick<
   ScriptTransactionRequestLike,
-  'gasLimit' | 'tip' | 'maturity' | 'maxFee' | 'witnessLimit'
+  'gasLimit' | 'tip' | 'maturity' | 'maxFee' | 'witnessLimit' | 'expiration'
 >;
 
 export type TransferParams = {

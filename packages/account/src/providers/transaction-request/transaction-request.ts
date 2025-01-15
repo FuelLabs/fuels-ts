@@ -75,6 +75,8 @@ export interface BaseTransactionRequestLike {
   tip?: BigNumberish;
   /** Block until which tx cannot be included */
   maturity?: number;
+  /** TODO: describe me please */
+  expiration?: number;
   /** The maximum fee payable by this transaction using BASE_ASSET. */
   maxFee?: BigNumberish;
   /** The maximum amount of witness data allowed for the transaction */
@@ -109,6 +111,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   tip?: BN;
   /** Block until which tx cannot be included */
   maturity?: number;
+  /** TODO: describe me please */
+  expiration?: number;
   /** The maximum fee payable by this transaction using BASE_ASSET. */
   maxFee: BN;
   /** The maximum amount of witness data allowed for the transaction */
@@ -128,6 +132,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   constructor({
     tip,
     maturity,
+    expiration,
     maxFee,
     witnessLimit,
     inputs,
@@ -136,6 +141,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }: BaseTransactionRequestLike = {}) {
     this.tip = tip ? bn(tip) : undefined;
     this.maturity = maturity && maturity > 0 ? maturity : undefined;
+    this.expiration = expiration && expiration > 0 ? expiration : undefined;
     this.witnessLimit = isDefined(witnessLimit) ? bn(witnessLimit) : undefined;
     this.maxFee = bn(maxFee);
     this.inputs = inputs ?? [];
@@ -147,7 +153,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     let policyTypes = 0;
     const policies: Policy[] = [];
 
-    const { tip, witnessLimit, maturity } = req;
+    const { tip, witnessLimit, maturity, expiration } = req;
 
     if (bn(tip).gt(0)) {
       policyTypes += PolicyType.Tip;
@@ -160,6 +166,11 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     if (maturity && maturity > 0) {
       policyTypes += PolicyType.Maturity;
       policies.push({ data: maturity, type: PolicyType.Maturity });
+    }
+
+    if (expiration && expiration > 0) {
+      policyTypes += PolicyType.Expiration;
+      policies.push({ data: expiration, type: PolicyType.Expiration });
     }
 
     policyTypes += PolicyType.MaxFee;
