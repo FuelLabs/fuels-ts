@@ -448,8 +448,14 @@ query getVersion {
 fragment nodeInfoFragment on NodeInfo {
   utxoValidation
   vmBacktrace
+  maxGas
   maxTx
   maxDepth
+  txPoolStats {
+    txCount
+    totalGas
+    totalSize
+  }
   nodeVersion
 }
 
