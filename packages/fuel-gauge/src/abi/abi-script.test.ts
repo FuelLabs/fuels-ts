@@ -10,6 +10,10 @@ import {
 } from '../../test/typegen/scripts/ScriptWithComplexArgs';
 import type { Vec } from '../../test/typegen/scripts/common';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('abi-script', () => {
   describe('decodeArguments', () => {
     it('should decode arguments with a simple script', async () => {
