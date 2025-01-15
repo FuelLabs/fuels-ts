@@ -2173,6 +2173,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       expect(pageInfo.endCursor).toBeDefined();
     });
 
+    it.todo('can get balances amount greater than u64', () => {});
+
     describe('pagination arguments', async () => {
       using launched = await setupTestProviderAndWallets({
         walletsConfig: {
