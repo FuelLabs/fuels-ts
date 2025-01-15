@@ -1850,7 +1850,7 @@ Supported fuel-core version: ${supportedVersion}.`
     nonce: string,
     commitBlockId?: string,
     commitBlockHeight?: BN
-  ): Promise<MessageProof | null> {
+  ): Promise<MessageProof> {
     let inputObject: {
       /** The transaction to get message from */
       transactionId: string;
@@ -1887,10 +1887,6 @@ Supported fuel-core version: ${supportedVersion}.`
     }
 
     const result = await this.operations.getMessageProof(inputObject);
-
-    if (!result.messageProof) {
-      return null;
-    }
 
     const {
       messageProof,
