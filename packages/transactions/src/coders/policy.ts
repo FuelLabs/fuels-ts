@@ -9,9 +9,15 @@ export enum PolicyType {
   WitnessLimit = 2,
   Maturity = 4,
   MaxFee = 8,
+  Expiration = 16,
 }
 
-export type Policy = PolicyTip | PolicyWitnessLimit | PolicyMaturity | PolicyMaxFee;
+export type Policy =
+  | PolicyTip
+  | PolicyWitnessLimit
+  | PolicyMaturity
+  | PolicyMaxFee
+  | PolicyExpiration;
 
 export type PolicyTip = {
   type: PolicyType.Tip;
@@ -25,6 +31,11 @@ export type PolicyWitnessLimit = {
 
 export type PolicyMaturity = {
   type: PolicyType.Maturity;
+  data: number;
+};
+
+export type PolicyExpiration = {
+  type: PolicyType.Expiration;
   data: number;
 };
 
@@ -70,6 +81,7 @@ export class PoliciesCoder extends Coder<Policy[], Policy[]> {
           break;
 
         case PolicyType.Maturity:
+        case PolicyType.Expiration:
           parts.push(new NumberCoder('u32', { padToWordSize: true }).encode(data));
           break;
 
@@ -111,6 +123,12 @@ export class PoliciesCoder extends Coder<Policy[], Policy[]> {
       const [maxFee, nextOffset] = new BigNumberCoder('u64').decode(data, o);
       o = nextOffset;
       policies.push({ type: PolicyType.MaxFee, data: maxFee });
+    }
+
+    if (policyTypes & PolicyType.Expiration) {
+      const [maxFee, nextOffset] = new NumberCoder('u32', { padToWordSize: true }).decode(data, o);
+      o = nextOffset;
+      policies.push({ type: PolicyType.Expiration, data: maxFee });
     }
 
     return [policies, o];
