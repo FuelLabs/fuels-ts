@@ -168,13 +168,13 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       policies.push({ data: maturity, type: PolicyType.Maturity });
     }
 
+    policyTypes += PolicyType.MaxFee;
+    policies.push({ data: req.maxFee, type: PolicyType.MaxFee });
+
     if (expiration && expiration > 0) {
       policyTypes += PolicyType.Expiration;
       policies.push({ data: expiration, type: PolicyType.Expiration });
     }
-
-    policyTypes += PolicyType.MaxFee;
-    policies.push({ data: req.maxFee, type: PolicyType.MaxFee });
 
     return {
       policyTypes,
