@@ -755,6 +755,7 @@ Supported fuel-core version: ${supportedVersion}.`
       nodeVersion: nodeInfo.nodeVersion,
       utxoValidation: nodeInfo.utxoValidation,
       vmBacktrace: nodeInfo.vmBacktrace,
+      // TODO: should we add `maxGas` and `txPoolStats` to the NodeInfo type?
     };
 
     Provider.nodeInfoCache[this.urlWithoutAuth] = processedNodeInfo;
