@@ -200,7 +200,7 @@ describe('PoliciesCoder', () => {
       });
     });
 
-    it('should decode garPrice and witnessLimit', () => {
+    it('should decode tip and witnessLimit', () => {
       const tipByteArr = [0, 0, 0, 0, 0, 0, 0, 100];
       const witLimitByteArr = [0, 0, 0, 0, 0, 0, 11, 184];
 
