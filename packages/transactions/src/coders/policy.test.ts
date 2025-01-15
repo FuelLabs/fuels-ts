@@ -39,6 +39,13 @@ describe('PoliciesCoder', () => {
       expect(encoded).toStrictEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 76]));
     });
 
+    it('should encode policy correctly (Expiration)', () => {
+      const policies: Policy[] = [{ type: PolicyType.Expiration, data: 12000 }];
+      const encoded = new PoliciesCoder().encode(policies);
+
+      expect(encoded).toStrictEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 46, 224]));
+    });
+
     it('should encode policy correctly (Tip + MaxFee)', () => {
       const policies: Policy[] = [
         { type: PolicyType.Tip, data: bn(19) },
@@ -60,6 +67,18 @@ describe('PoliciesCoder', () => {
 
       expect(encoded).toStrictEqual(
         Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 87, 0, 0, 0, 0, 0, 0, 0, 26])
+      );
+    });
+
+    it('should encode policy correctly (WitnessLimit + Expiration)', () => {
+      const policies: Policy[] = [
+        { type: PolicyType.WitnessLimit, data: bn(87) },
+        { type: PolicyType.Expiration, data: 3000000 },
+      ];
+      const encoded = new PoliciesCoder().encode(policies);
+
+      expect(encoded).toStrictEqual(
+        Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 87, 0, 0, 0, 0, 0, 45, 198, 192])
       );
     });
 
@@ -91,6 +110,24 @@ describe('PoliciesCoder', () => {
         Uint8Array.from([
           0, 0, 0, 0, 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 87, 0, 0, 0, 0, 0, 0, 0, 26, 0, 0, 0, 0, 0,
           0, 0, 199,
+        ])
+      );
+    });
+
+    it('should encode policy correctly (Tip + WitnessLimit + Maturity + MaxFee + Expiration)', () => {
+      const policies: Policy[] = [
+        { type: PolicyType.Tip, data: bn(28) },
+        { type: PolicyType.WitnessLimit, data: bn(87) },
+        { type: PolicyType.Maturity, data: 26 },
+        { type: PolicyType.MaxFee, data: bn(199) },
+        { type: PolicyType.Expiration, data: 2000000 },
+      ];
+      const encoded = new PoliciesCoder().encode(policies);
+
+      expect(encoded).toStrictEqual(
+        Uint8Array.from([
+          0, 0, 0, 0, 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 87, 0, 0, 0, 0, 0, 0, 0, 26, 0, 0, 0, 0, 0,
+          0, 0, 199, 0, 0, 0, 0, 0, 30, 132, 128,
         ])
       );
     });
@@ -200,6 +237,23 @@ describe('PoliciesCoder', () => {
       });
     });
 
+    it('should decode expiration', () => {
+      // maxFee is 3000000
+      const byteArr = [0, 0, 0, 0, 0, 45, 198, 192];
+      const data = Uint8Array.from(byteArr);
+
+      // bitfield is 8 representing maxFee
+      const policyTypes = PolicyType.Expiration;
+
+      const [policies] = new PoliciesCoder().decode(data, 0, policyTypes);
+
+      expect(policies).toHaveLength(1);
+      expect(policies[0]).toStrictEqual({
+        type: PolicyType.Expiration,
+        data: bn(byteArr).toNumber(),
+      });
+    });
+
     it('should decode tip and witnessLimit', () => {
       const tipByteArr = [0, 0, 0, 0, 0, 0, 0, 100];
       const witLimitByteArr = [0, 0, 0, 0, 0, 0, 11, 184];
@@ -269,27 +323,62 @@ describe('PoliciesCoder', () => {
       });
     });
 
+    it('should decode tip, maxFee, and expiration', () => {
+      const witLimitByteArr = [0, 0, 0, 0, 0, 0, 11, 184];
+      const maxFeeByteArr = [0, 0, 0, 0, 0, 0, 1, 244];
+      const expirationByteArr = [0, 0, 0, 0, 0, 0, 90, 244];
+
+      const data = Uint8Array.from([...witLimitByteArr, ...maxFeeByteArr, ...expirationByteArr]);
+
+      // bitfield is 10 representing witnessLimit + maxFee
+      const policyTypes = PolicyType.WitnessLimit + PolicyType.MaxFee + PolicyType.Expiration;
+      expect(policyTypes).toBe(26);
+
+      const [policies] = new PoliciesCoder().decode(data, 0, policyTypes);
+
+      expect(policies).toHaveLength(3);
+      expect(policies[0]).toStrictEqual({
+        type: PolicyType.WitnessLimit,
+        data: bn(witLimitByteArr),
+      });
+      expect(policies[1]).toStrictEqual({
+        type: PolicyType.MaxFee,
+        data: bn(maxFeeByteArr),
+      });
+      expect(policies[2]).toStrictEqual({
+        type: PolicyType.Expiration,
+        data: bn(expirationByteArr).toNumber(),
+      });
+    });
+
     it('should decode when all policy types are present', () => {
       const tipByteArr = [0, 0, 0, 0, 0, 0, 0, 100];
       const witLimitByteArr = [0, 0, 0, 0, 0, 0, 11, 184];
       const maturityByteArr = [0, 0, 0, 0, 0, 0, 0, 25];
       const maxFeeByteArr = [0, 0, 0, 0, 0, 0, 1, 244];
+      const expirationByteArr = [0, 0, 0, 0, 0, 0, 100, 244];
 
       const data = Uint8Array.from([
         ...tipByteArr,
         ...witLimitByteArr,
         ...maturityByteArr,
         ...maxFeeByteArr,
+        ...expirationByteArr,
       ]);
 
       // bitfield is 15 representing witnessLimit + maxFee
       const policyTypes =
-        PolicyType.Tip + PolicyType.WitnessLimit + PolicyType.Maturity + PolicyType.MaxFee;
-      expect(policyTypes).toBe(15);
+        PolicyType.Tip +
+        PolicyType.WitnessLimit +
+        PolicyType.Maturity +
+        PolicyType.MaxFee +
+        PolicyType.Expiration;
+
+      expect(policyTypes).toBe(31);
 
       const [policies] = new PoliciesCoder().decode(data, 0, policyTypes);
 
-      expect(policies).toHaveLength(4);
+      expect(policies).toHaveLength(5);
       expect(policies).toStrictEqual([
         {
           type: PolicyType.Tip,
@@ -306,6 +395,10 @@ describe('PoliciesCoder', () => {
         {
           type: PolicyType.MaxFee,
           data: bn(maxFeeByteArr),
+        },
+        {
+          type: PolicyType.Expiration,
+          data: bn(expirationByteArr).toNumber(),
         },
       ]);
     });
