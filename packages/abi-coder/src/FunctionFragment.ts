@@ -105,11 +105,11 @@ export class FunctionFragment {
     const result = this.jsonFnOld.inputs.reduce(
       (obj: { decoded: unknown[]; offset: number }, input) => {
         const coder = AbiCoder.getCoder(this.jsonAbiOld, input, { encoding: this.encoding });
-        const [decodedValue, decodedValueByteSize] = coder.decode(bytes, obj.offset);
+        const [decodedValue, decodedOffset] = coder.decode(bytes, obj.offset);
 
         return {
           decoded: [...obj.decoded, decodedValue],
-          offset: decodedValueByteSize,
+          offset: decodedOffset,
         };
       },
       { decoded: [], offset: 0 }
