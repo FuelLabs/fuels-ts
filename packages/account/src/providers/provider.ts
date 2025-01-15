@@ -131,6 +131,12 @@ export type GetTransactionsResponse = {
   pageInfo: PageInfo;
 };
 
+export type GetAssetDetailsResponse = {
+  subId: string;
+  contractId: string;
+  totalSupply: BN;
+};
+
 export type GetBlocksResponse = {
   blocks: Block[];
   pageInfo: PageInfo;
@@ -801,6 +807,25 @@ Supported fuel-core version: ${supportedVersion}.`
       consensusParameters: { baseAssetId },
     } = all;
     return baseAssetId;
+  }
+
+  async getAssetDetails(assetId: string): Promise<GetAssetDetailsResponse> {
+    try {
+      const { assetDetails } = await this.operations.getAssetDetails({ assetId });
+
+      const { contractId, subId, totalSupply } = assetDetails;
+
+      return {
+        subId,
+        contractId,
+        totalSupply: bn(totalSupply),
+      };
+    } catch (e) {
+      throw new FuelError(
+        ErrorCode.ASSET_NOT_FOUND,
+        `Asset not found for given asset id: ${assetId}`
+      );
+    }
   }
 
   /**

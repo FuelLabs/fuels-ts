@@ -103,6 +103,9 @@ export enum ErrorCode {
   ACCOUNT_REQUIRED = 'account-required',
   UNLOCKED_WALLET_REQUIRED = 'unlocked-wallet-required',
 
+  // asset
+  ASSET_NOT_FOUND = 'asset-not-found',
+
   // chain
   ERROR_BUILDING_BLOCK_EXPLORER_URL = 'error-building-block-explorer-url',
 
