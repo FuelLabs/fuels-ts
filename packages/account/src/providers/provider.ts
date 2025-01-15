@@ -69,6 +69,7 @@ const MAX_RETRIES = 10;
 
 export const RESOURCES_PAGE_SIZE_LIMIT = 512;
 export const TRANSACTIONS_PAGE_SIZE_LIMIT = 60;
+export const BALANCES_PAGE_SIZE_LIMIT = 100;
 export const BLOCKS_PAGE_SIZE_LIMIT = 5;
 export const DEFAULT_RESOURCE_CACHE_TTL = 20_000; // 20 seconds
 export const GAS_USED_MODIFIER = 1.2;
@@ -122,6 +123,7 @@ export type GetMessagesResponse = {
 
 export type GetBalancesResponse = {
   balances: CoinQuantity[];
+  pageInfo: PageInfo;
 };
 
 export type GetTransactionsResponse = {
@@ -1769,15 +1771,17 @@ Supported fuel-core version: ${supportedVersion}.`
    * @param paginationArgs - Pagination arguments (optional).
    * @returns A promise that resolves to the balances.
    */
-  async getBalances(owner: string | Address): Promise<GetBalancesResponse> {
+  async getBalances(
+    owner: string | Address,
+    paginationArgs?: CursorPaginationArgs
+  ): Promise<GetBalancesResponse> {
     const {
-      balances: { edges },
+      balances: { edges, pageInfo },
     } = await this.operations.getBalances({
-      /**
-       * The query parameters for this method were designed to support pagination,
-       * but the current Fuel-Core implementation does not support pagination yet.
-       */
-      first: 10000,
+      ...validatePaginationArgs({
+        paginationLimit: BALANCES_PAGE_SIZE_LIMIT,
+        inputArgs: paginationArgs,
+      }),
       filter: { owner: Address.fromAddressOrString(owner).toB256() },
     });
 
@@ -1786,7 +1790,7 @@ Supported fuel-core version: ${supportedVersion}.`
       amount: bn(node.amount),
     }));
 
-    return { balances };
+    return { balances, pageInfo };
   }
 
   /**

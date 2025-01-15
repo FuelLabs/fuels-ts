@@ -20,13 +20,14 @@ import {
   MOCK_TX_UNKNOWN_RAW_PAYLOAD,
   MOCK_TX_SCRIPT_RAW_PAYLOAD,
 } from '../../test/fixtures/transaction-summary';
-import { setupTestProviderAndWallets, launchNode, TestMessage } from '../test-utils';
+import { setupTestProviderAndWallets, launchNode, TestMessage, TestAssetId } from '../test-utils';
 
 import type { Coin } from './coin';
 import { coinQuantityfy } from './coin-quantity';
 import type { Message } from './message';
 import type { ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
 import Provider, {
+  BALANCES_PAGE_SIZE_LIMIT,
   BLOCKS_PAGE_SIZE_LIMIT,
   DEFAULT_RESOURCE_CACHE_TTL,
   GAS_USED_MODIFIER,
@@ -2131,6 +2132,47 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       expect(pageInfo.endCursor).toBeDefined();
     });
 
+    it('can get balances', async () => {
+      using launched = await setupTestProviderAndWallets({
+        walletsConfig: {
+          assets: 110,
+        },
+      });
+      const {
+        provider,
+        wallets: [wallet],
+      } = launched;
+
+      let { balances, pageInfo } = await provider.getBalances(wallet.address, { first: 10 });
+
+      expect(balances.length).toBe(10);
+      expect(pageInfo.hasNextPage).toBeTruthy();
+      expect(pageInfo.hasPreviousPage).toBeFalsy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+
+      ({ balances, pageInfo } = await provider.getBalances(wallet.address, {
+        after: pageInfo.endCursor,
+      }));
+
+      expect(balances.length).toBe(100);
+      expect(pageInfo.hasNextPage).toBeFalsy();
+      expect(pageInfo.hasPreviousPage).toBeTruthy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+
+      ({ balances, pageInfo } = await provider.getBalances(wallet.address, {
+        before: pageInfo.startCursor,
+        last: 10,
+      }));
+
+      expect(balances.length).toBe(10);
+      expect(pageInfo.hasNextPage).toBeFalsy();
+      expect(pageInfo.hasPreviousPage).toBeTruthy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+    });
+
     describe('pagination arguments', async () => {
       using launched = await setupTestProviderAndWallets({
         walletsConfig: {
@@ -2159,6 +2201,11 @@ Supported fuel-core version: ${mock.supportedVersion}.`
             name: 'getBlocks',
             invocation: () => provider.getBlocks(args),
             limit: BLOCKS_PAGE_SIZE_LIMIT,
+          },
+          {
+            name: 'getBalances',
+            invocation: () => provider.getBalances(address, args),
+            limit: BALANCES_PAGE_SIZE_LIMIT,
           },
         ];
       }
