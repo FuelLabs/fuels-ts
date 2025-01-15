@@ -766,6 +766,14 @@ query getRelayedTransactionStatus(
   }
 }
 
+query getAssetDetails($assetId: AssetId!) {
+  assetDetails(id: $assetId) {
+    subId
+    contractId
+    totalSupply
+  }
+}
+
 mutation dryRun(
   $encodedTransactions: [HexString!]!
   $utxoValidation: Boolean
