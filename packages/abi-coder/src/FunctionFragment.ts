@@ -109,7 +109,7 @@ export class FunctionFragment {
 
         return {
           decoded: [...obj.decoded, decodedValue],
-          offset: obj.offset + decodedValueByteSize,
+          offset: decodedValueByteSize,
         };
       },
       { decoded: [], offset: 0 }
