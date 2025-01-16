@@ -714,7 +714,7 @@ describe('Contract', () => {
     const initialBalance = new BN(
       await contract.getBalance(await provider.getBaseAssetId())
     ).toNumber();
-    const amountToContract = bn(2).pow(62); // Very big number
+    const amountToContract = bn(2).pow(61); // Very big number
 
     const tx = await wallet.transferToContract(
       contract.id,
@@ -1111,7 +1111,7 @@ describe('Contract', () => {
           .simulate(),
       new FuelError(
         ErrorCode.NOT_ENOUGH_FUNDS,
-        `Insufficient funds or too many low value coins. Consider combining UTXOs.`
+        `Insufficient funds or too many small value coins. Consider combining UTXOs.`
       )
     );
   });
