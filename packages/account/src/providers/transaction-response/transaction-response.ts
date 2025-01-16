@@ -392,7 +392,6 @@ export class TransactionResponse {
 
     const status = this.status ?? this.gqlTransaction?.status;
     if (status?.type === 'FailureStatus') {
-      this.unsetResourceCache();
       const { reason } = status;
       throw extractTxError({
         receipts,
@@ -413,6 +412,7 @@ export class TransactionResponse {
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
     await this.waitForStatusChange();
+    this.unsetResourceCache();
     return this.assembleResult<TTransactionType>(contractsAbiMap);
   }
 
