@@ -1,5 +1,6 @@
 import { randomBytes } from '@fuel-ts/crypto';
 import { FuelError } from '@fuel-ts/errors';
+import { bn, type BigNumberish } from '@fuel-ts/math';
 import { defaultSnapshotConfigs, hexlify, type SnapshotConfigs } from '@fuel-ts/utils';
 import type { PartialDeep } from 'type-fest';
 
@@ -29,7 +30,7 @@ export interface WalletsConfigOptions {
   /**
    * For each coin, the amount it'll contain.
    */
-  amountPerCoin: number;
+  amountPerCoin: BigNumberish;
 
   /**
    * Messages that are supposed to be on the wallet.
@@ -105,7 +106,7 @@ export class WalletsConfig {
     baseAssetId: string,
     assets: number | TestAssetId[],
     coinsPerAsset: number,
-    amountPerCoin: number
+    amountPerCoin: BigNumberish
   ) {
     const coins: SnapshotConfigs['stateConfig']['coins'] = [];
 
@@ -122,7 +123,7 @@ export class WalletsConfig {
         assetIds.forEach((assetId) => {
           for (let index = 0; index < coinsPerAsset; index++) {
             coins.push({
-              amount: amountPerCoin,
+              amount: bn(amountPerCoin),
               asset_id: assetId,
               owner: walletAddress,
               tx_pointer_block_height: 0,
@@ -167,7 +168,7 @@ export class WalletsConfig {
         'Number of coins per asset must be greater than zero.'
       );
     }
-    if (amountPerCoin < 0) {
+    if (bn(amountPerCoin).lt(0)) {
       throw new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Amount per coin must be greater than or equal to zero.'
