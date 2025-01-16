@@ -2,5 +2,4 @@
 "@fuel-ts/math": patch
 ---
 
-Added warning when precision is less than minPrecision in BN.format method.
-This maintains backward compatibility while alerting users to potential issues.
+feat: add warning for invalid precision in `BN` format method
