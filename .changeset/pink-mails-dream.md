@@ -1,4 +1,4 @@
 ---
 ---
 
-test: update `amountPerCoin` prop in `WalletConfig` to accept BN
+chore: update `amountPerCoin` prop in `WalletConfig` to accept BN
