@@ -1368,7 +1368,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     const { minFee, maxFee, gasPrice } = await wallet.getTransactionCost(request);
 
-    expect(gasPrice.eq(0)).toBeTruthy();
+    expect(gasPrice.eq(0)).not.toBeTruthy();
     expect(maxFee.eq(0)).not.toBeTruthy();
     expect(minFee.eq(0)).not.toBeTruthy();
   });
