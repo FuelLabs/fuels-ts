@@ -700,6 +700,11 @@ describe('Provider', () => {
     request.addCoinOutput(receiver.address, transferAmount, baseAssetId);
     request.addResources(resources);
 
+    // Forcing TX submission to fail at submission state
+    vi.spyOn(wallet.provider, 'sendTransaction').mockImplementationOnce(() =>
+      Promise.reject(new FuelError(ErrorCode.INVALID_REQUEST, 'Tx failed'))
+    );
+
     await expectToThrowFuelError(
       () => wallet.sendTransaction(request, { estimateTxDependencies: false }),
       { code: ErrorCode.INVALID_REQUEST }
@@ -709,6 +714,8 @@ describe('Provider', () => {
     [...utxos, ...messages].forEach((key) => {
       expect(provider.cache?.isCached(key)).toBeFalsy();
     });
+
+    vi.restoreAllMocks();
   });
 
   it('should unset cached resources when TX execution fails', async () => {
