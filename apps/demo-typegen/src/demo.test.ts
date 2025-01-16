@@ -109,7 +109,7 @@ it('should throw when simulating via contract factory with wallet with no resour
     () => contractInstance.functions.return_input(1337).simulate(),
     new FuelError(
       ErrorCode.NOT_ENOUGH_FUNDS,
-      `Insufficient funds or too many low value coins. Consider combining UTXOs.`
+      `Insufficient funds or too many small value coins. Consider combining UTXOs.`
     )
   );
 });

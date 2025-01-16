@@ -64,7 +64,7 @@ describe('Predicate', () => {
         () => contract.functions.mint_coins(200).call(),
         new FuelError(
           ErrorCode.NOT_ENOUGH_FUNDS,
-          `Insufficient funds or too many low value coins. Consider combining UTXOs.`
+          `Insufficient funds or too many small value coins. Consider combining UTXOs.`
         )
       );
 
