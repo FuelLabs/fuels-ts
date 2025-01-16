@@ -9,7 +9,7 @@ import {
   PredicateU32,
 } from '../../test/typegen';
 
-import { fundPredicate, assertBalances } from './utils/predicate';
+import { fundAccount, assertBalances } from './utils/predicate';
 
 /**
  * @group node
@@ -34,7 +34,7 @@ describe('Predicate', () => {
       });
 
       // transfer funds to predicate
-      await fundPredicate(fundingWallet, predicate, amountToPredicate, 3);
+      await fundAccount(fundingWallet, predicate, amountToPredicate, 3);
 
       const receiver = Wallet.generate({ provider });
       const initialReceiverBalance = await receiver.getBalance();
@@ -42,7 +42,7 @@ describe('Predicate', () => {
       const tx = await predicate.transfer(
         receiver.address,
         amountToReceiver,
-        provider.getBaseAssetId(),
+        await provider.getBaseAssetId(),
         {
           gasLimit: 1000,
         }
@@ -67,12 +67,14 @@ describe('Predicate', () => {
       });
 
       // fund predicate
-      await fundPredicate(fundingWallet, predicate, amountToPredicate);
+      await fundAccount(fundingWallet, predicate, amountToPredicate);
 
       const receiver = Wallet.generate({ provider });
 
       await expect(
-        predicate.transfer(receiver.address, 50, provider.getBaseAssetId(), { gasLimit: 1000 })
+        predicate.transfer(receiver.address, 50, await provider.getBaseAssetId(), {
+          gasLimit: 1000,
+        })
       ).rejects.toThrow(/Invalid b256/);
     });
 
@@ -91,12 +93,12 @@ describe('Predicate', () => {
       const initialReceiverBalance = await receiver.getBalance();
 
       // fund predicate
-      await fundPredicate(fundingWallet, predicate, amountToPredicate);
+      await fundAccount(fundingWallet, predicate, amountToPredicate);
 
       const tx = await predicate.transfer(
         receiver.address,
         amountToReceiver,
-        provider.getBaseAssetId(),
+        await provider.getBaseAssetId(),
         {
           gasLimit: 1000,
         }
@@ -118,7 +120,7 @@ describe('Predicate', () => {
       const predicate = new PredicateU32({ provider, data: [100] });
 
       // fund predicate
-      await fundPredicate(fundingWallet, predicate, 90_000_00, 3);
+      await fundAccount(fundingWallet, predicate, 90_000_00, 3);
 
       const receiver = Wallet.generate({ provider });
       const initialReceiverBalance = await receiver.getBalance();
@@ -126,7 +128,7 @@ describe('Predicate', () => {
       expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
       await expect(
-        predicate.transfer(receiver.address, amountToPredicate, provider.getBaseAssetId(), {
+        predicate.transfer(receiver.address, amountToPredicate, await provider.getBaseAssetId(), {
           gasLimit: 1000,
         })
       ).rejects.toThrow(/PredicateVerificationFailed/);
@@ -152,7 +154,7 @@ describe('Predicate', () => {
       const fundTx = await fundingWallet.transfer(
         predicateInstanceForBalance.address,
         100_000_000,
-        provider.getBaseAssetId()
+        await provider.getBaseAssetId()
       );
       await fundTx.waitForResult();
 
@@ -164,7 +166,7 @@ describe('Predicate', () => {
       const tx = await predicate.transfer(
         receiver.address,
         amountToReceiver,
-        provider.getBaseAssetId(),
+        await provider.getBaseAssetId(),
         {
           gasLimit: 1000,
         }
@@ -191,10 +193,12 @@ describe('Predicate', () => {
       const receiver = Wallet.generate({ provider });
 
       // fund predicate
-      await fundPredicate(fundingWallet, predicate, amountToPredicate);
+      await fundAccount(fundingWallet, predicate, amountToPredicate);
 
       await expect(
-        predicate.transfer(receiver.address, 50, provider.getBaseAssetId(), { gasLimit: 1000 })
+        predicate.transfer(receiver.address, 50, await provider.getBaseAssetId(), {
+          gasLimit: 1000,
+        })
       ).rejects.toThrow(/PredicateVerificationFailed/);
     });
 
@@ -212,12 +216,12 @@ describe('Predicate', () => {
       const initialReceiverBalance = await receiver.getBalance();
 
       // fund predicate
-      await fundPredicate(fundingWallet, predicate, amountToPredicate);
+      await fundAccount(fundingWallet, predicate, amountToPredicate);
 
       const tx = await predicate.transfer(
         receiver.address,
         amountToReceiver,
-        provider.getBaseAssetId(),
+        await provider.getBaseAssetId(),
         {
           gasLimit: 1000,
         }
@@ -242,12 +246,12 @@ describe('Predicate', () => {
       const predicate = new PredicateMultiArgs({ provider, data: [20, 30] });
 
       // fund the predicate
-      await fundPredicate(fundingWallet, predicate, amountToPredicate);
+      await fundAccount(fundingWallet, predicate, amountToPredicate);
 
       const tx = await predicate.transfer(
         receiver.address,
         amountToReceiver,
-        provider.getBaseAssetId(),
+        await provider.getBaseAssetId(),
         {
           gasLimit: 1000,
         }
@@ -272,12 +276,12 @@ describe('Predicate', () => {
       const predicate = new PredicateMultiArgs({ provider, data: [20, 30] });
 
       // fund predicate
-      await fundPredicate(fundingWallet, predicate, amountToPredicate);
+      await fundAccount(fundingWallet, predicate, amountToPredicate);
 
       const tx = await predicate.transfer(
         receiver.address,
         amountToReceiver,
-        provider.getBaseAssetId(),
+        await provider.getBaseAssetId(),
         {
           gasLimit: 1000,
         }
@@ -299,12 +303,14 @@ describe('Predicate', () => {
       const predicate = new PredicateMultiArgs({ provider, data: [20, 20] });
 
       // fund predicate
-      await fundPredicate(fundingWallet, predicate, amountToPredicate);
+      await fundAccount(fundingWallet, predicate, amountToPredicate);
 
       const receiver = Wallet.generate({ provider });
 
       await expect(
-        predicate.transfer(receiver.address, 50, provider.getBaseAssetId(), { gasLimit: 1000 })
+        predicate.transfer(receiver.address, 50, await provider.getBaseAssetId(), {
+          gasLimit: 1000,
+        })
       ).rejects.toThrow(/PredicateVerificationFailed/);
     });
   });

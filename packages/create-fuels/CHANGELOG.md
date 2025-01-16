@@ -1,5 +1,37 @@
 # create-fuels
 
+## 0.98.0
+
+### Minor Changes
+
+- 458b7cf: feat!: making `provider` initialization `sync` again
+
+### Patch Changes
+
+- c6895b6: chore: bumped `@fuels/*` deps to `0.36.1`
+- 4c5da1d: fix: test ui script in package's json
+- 12e801e: chore: dependency pinning and auditing
+- e8a8c71: feat: auto-detect package manager in `create fuels`
+- 10612b2: fix: resolve `punycode` deprecation notice
+- 9b52153: chore: added `useBaseAssetId` hook to templates
+- 68ef74d: chore: remove unused deps + update knip config
+- Updated dependencies [12e801e]
+- Updated dependencies [04ca73e]
+- Updated dependencies [4ccc628]
+- Updated dependencies [08a31d8]
+- Updated dependencies [0b4c3ab]
+  - @fuel-ts/versions@0.98.0
+  - @fuel-ts/errors@0.98.0
+
+## 0.97.2
+
+### Patch Changes
+
+- efdf9a1: fix: specify versions in `create fuels` toolchain file
+- Updated dependencies [5ec254d]
+  - @fuel-ts/versions@0.97.2
+  - @fuel-ts/errors@0.97.2
+
 ## 0.97.1
 
 ### Patch Changes

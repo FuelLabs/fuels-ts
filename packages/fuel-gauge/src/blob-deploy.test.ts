@@ -241,9 +241,9 @@ describe('deploying blobs', () => {
       configurableConstants: configurable,
     });
 
-    await wallet.transfer(predicate.address, 10_000, provider.getBaseAssetId());
+    await wallet.transfer(predicate.address, 10_000, await provider.getBaseAssetId());
 
-    const tx = await predicate.transfer(receiver.address, 1000, provider.getBaseAssetId());
+    const tx = await predicate.transfer(receiver.address, 1000, await provider.getBaseAssetId());
     const response = await tx.waitForResult();
     expect(response.isStatusSuccess).toBe(true);
   });

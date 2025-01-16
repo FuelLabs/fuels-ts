@@ -14,7 +14,7 @@ const NETWORK_URL = LOCAL_NETWORK_URL;
 
 // #region requestMiddleware
 // synchronous request middleware
-await Provider.create(NETWORK_URL, {
+new Provider(NETWORK_URL, {
   requestMiddleware: (request: RequestInit) => {
     request.credentials = 'omit';
 
@@ -23,7 +23,7 @@ await Provider.create(NETWORK_URL, {
 });
 
 // asynchronous request middleware
-await Provider.create(NETWORK_URL, {
+new Provider(NETWORK_URL, {
   requestMiddleware: async (request: RequestInit) => {
     const credentials = await fetchSomeExternalCredentials();
     request.headers ??= {};
@@ -35,13 +35,13 @@ await Provider.create(NETWORK_URL, {
 // #endregion requestMiddleware
 
 // #region timeout
-await Provider.create(NETWORK_URL, {
+new Provider(NETWORK_URL, {
   timeout: 3000, // will abort if request takes 30 seconds to complete
 });
 // #endregion timeout
 
 // #region retryOptions
-await Provider.create(NETWORK_URL, {
+new Provider(NETWORK_URL, {
   retryOptions: {
     maxRetries: 5,
     baseDelay: 100,
@@ -51,7 +51,7 @@ await Provider.create(NETWORK_URL, {
 // #endregion retryOptions
 
 // #region fetch
-await Provider.create(NETWORK_URL, {
+new Provider(NETWORK_URL, {
   fetch: async (url: string, requestInit: RequestInit | undefined) => {
     // native fetch
     const response = await fetch(url, requestInit);
@@ -64,7 +64,7 @@ await Provider.create(NETWORK_URL, {
 // #endregion fetch
 
 // #region cache-utxo
-await Provider.create(NETWORK_URL, {
+new Provider(NETWORK_URL, {
   // Cache resources (Coin's and Message's) for 5 seconds
   resourceCacheTTL: 5000,
 });

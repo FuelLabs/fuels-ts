@@ -79,19 +79,23 @@ describe('CLI', { timeout: 15_000 }, () => {
       args,
     });
 
-    const fuelToolchainPath = join(paths.projectRoot, 'fuel-toolchain.toml');
-    const fuelToolchain = readFileSync(fuelToolchainPath, 'utf-8');
+    const fuelToolchain = readFileSync(paths.fuelToolchainPath, 'utf-8');
     const parsedFuelToolchain = toml.parse(fuelToolchain);
 
-    const { toolchain } = parsedFuelToolchain;
+    const { toolchain, components } = parsedFuelToolchain;
 
     expect(toolchain).toEqual({ channel: 'testnet' });
+    expect(components).toEqual({
+      forc: '0.66.5',
+      'fuel-core': '0.40.2',
+    });
   });
 
   test('should rewrite for the appropriate package manager', async () => {
+    process.env.npm_config_user_agent = 'bun';
+
     const args = generateArgv({
       projectName: paths.projectRoot,
-      packageManager: 'bun',
       template: paths.templateName,
     });
 
@@ -102,14 +106,15 @@ describe('CLI', { timeout: 15_000 }, () => {
       args,
     });
 
-    const packageJsonPath = join(paths.projectRoot, 'package.json');
-    const packageJson = readFileSync(packageJsonPath, 'utf-8');
+    const packageJson = readFileSync(paths.packageJsonPath, 'utf-8');
     expect(packageJson).toContain('bun run prebuild');
 
     const readmePath = join(paths.projectRoot, 'README.md');
     const readme = readFileSync(readmePath, 'utf-8');
     expect(readme).toContain('bun run fuels:dev');
     expect(readme).toContain('bun run dev');
+
+    delete process.env.npm_config_user_agent;
   });
 
   test('create-fuels reports an error if the project directory already exists', async () => {
@@ -156,5 +161,58 @@ describe('CLI', { timeout: 15_000 }, () => {
     for (const template of templates) {
       expect(log).toHaveBeenCalledWith(`  - ${template}`);
     }
+  });
+
+  test('should have a package.json with overrides', async () => {
+    const args = generateArgv({
+      projectName: paths.projectRoot,
+      template: paths.templateName,
+    });
+
+    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValueOnce(true);
+
+    await runScaffoldCli({
+      program: setupProgram(),
+      args,
+    });
+
+    const packageJson = readFileSync(paths.packageJsonPath, 'utf-8');
+    const packageJsonObject = JSON.parse(packageJson);
+
+    expect(packageJsonObject).toEqual(
+      expect.objectContaining({
+        overrides: expect.any(Object),
+      })
+    );
+  });
+
+  test('should rewrite overrides for pnpm', async () => {
+    process.env.npm_config_user_agent = 'pnpm';
+
+    const args = generateArgv({
+      projectName: paths.projectRoot,
+      template: paths.templateName,
+    });
+
+    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValueOnce(true);
+
+    await runScaffoldCli({
+      program: setupProgram(),
+      args,
+    });
+
+    const packageJson = readFileSync(paths.packageJsonPath, 'utf-8');
+    const packageJsonObject = JSON.parse(packageJson);
+
+    expect(packageJsonObject.overrides).toBeUndefined();
+    expect(packageJsonObject).toEqual(
+      expect.objectContaining({
+        pnpm: {
+          overrides: expect.any(Object),
+        },
+      })
+    );
+
+    delete process.env.npm_config_user_agent;
   });
 });

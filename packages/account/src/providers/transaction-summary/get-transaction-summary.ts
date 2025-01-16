@@ -15,8 +15,8 @@ import { validatePaginationArgs } from '../utils/validate-pagination-args';
 
 import { assembleTransactionSummary } from './assemble-transaction-summary';
 import { processGqlReceipt } from './receipt';
+import { getTotalFeeFromStatus } from './status';
 import type { AbiMap, TransactionSummary } from './types';
-
 /** @hidden */
 export interface GetTransactionSummaryParams {
   id: string;
@@ -59,10 +59,13 @@ export async function getTransactionSummary<TTransactionType = void>(
       txParameters: { maxInputs, maxGasPerTx },
       gasCosts,
     },
-  } = provider.getChain();
+  } = await provider.getChain();
 
-  const gasPrice = await provider.getLatestGasPrice();
-  const baseAssetId = provider.getBaseAssetId();
+  // If we have the total fee, we do not need to refetch the gas price
+  const totalFee = getTotalFeeFromStatus(gqlTransaction.status);
+  const gasPrice = totalFee ? bn(0) : await provider.getLatestGasPrice();
+
+  const baseAssetId = await provider.getBaseAssetId();
 
   const transactionInfo = assembleTransactionSummary<TTransactionType>({
     id: gqlTransaction.id,
@@ -99,17 +102,17 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
 
   const { receipts } = await provider.dryRun(transactionRequest);
 
-  const { gasPerByte, gasPriceFactor, gasCosts, maxGasPerTx } = provider.getGasConfig();
-  const maxInputs = provider.getChain().consensusParameters.txParameters.maxInputs;
+  const { gasPerByte, gasPriceFactor, gasCosts, maxGasPerTx } = await provider.getGasConfig();
+  const maxInputs = (await provider.getChain()).consensusParameters.txParameters.maxInputs;
 
   const transaction = transactionRequest.toTransaction();
   const transactionBytes = transactionRequest.toTransactionBytes();
 
   const gasPrice = await provider.getLatestGasPrice();
-  const baseAssetId = provider.getBaseAssetId();
+  const baseAssetId = await provider.getBaseAssetId();
 
   const transactionSummary = assembleTransactionSummary<TTransactionType>({
-    id: transactionRequest.getTransactionId(provider.getChainId()),
+    id: transactionRequest.getTransactionId(await provider.getChainId()),
     receipts,
     transaction,
     transactionBytes,
@@ -168,10 +171,10 @@ export async function getTransactionsSummaries(
       txParameters: { maxInputs, maxGasPerTx },
       gasCosts,
     },
-  } = provider.getChain();
+  } = await provider.getChain();
 
   const gasPrice = await provider.getLatestGasPrice();
-  const baseAssetId = provider.getBaseAssetId();
+  const baseAssetId = await provider.getBaseAssetId();
 
   const transactions = edges.map((edge) => {
     const { node: gqlTransaction } = edge;

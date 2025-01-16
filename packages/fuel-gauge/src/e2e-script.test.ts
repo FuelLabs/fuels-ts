@@ -56,15 +56,16 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
   let wallet: WalletUnlocked;
   let shouldSkip: boolean;
 
-  beforeAll(async () => {
+  beforeAll(() => {
     const { networkUrl, privateKey } = configuredNetworks[selectedNetwork];
+
     if (!privateKey) {
       console.log(`Skipping live Fuel Node test - ${networkUrl}`);
       shouldSkip = true;
       return;
     }
 
-    provider = await Provider.create(networkUrl);
+    provider = new Provider(networkUrl);
     wallet = new WalletUnlocked(privateKey, provider);
   });
 
@@ -84,13 +85,13 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
 
       output = value;
     } catch (e) {
-      const address = wallet.address.toAddress();
+      const address = wallet.address.toB256();
 
       console.error((e as Error).message);
       console.warn(`
         not enough coins to fit the target?
         - add assets: ${configuredNetworks[selectedNetwork].faucetUrl}
-        - bech32 address: ${address}
+        - B256 address: ${address}
       `);
     }
 
@@ -126,7 +127,7 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
         return;
       }
 
-      const balance = await provider.getBalance(wallet.address, provider.getBaseAssetId());
+      const balance = await provider.getBalance(wallet.address, await provider.getBaseAssetId());
       expect(bn(balance).gt(0));
     });
 
@@ -167,7 +168,7 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
     });
   });
 
-  it(`should have correct assets`, () => {
+  it(`should have correct assets`, async () => {
     if (shouldSkip) {
       return;
     }
@@ -223,8 +224,9 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
     ];
 
     const totalAssets = 27;
+    const chainId = await provider.getChainId();
 
-    expect(CHAIN_IDS.fuel[selectedNetwork]).toEqual(provider.getChainId());
+    expect(CHAIN_IDS.fuel[selectedNetwork]).toEqual(chainId);
 
     // Ensure contains base asset
     expect(rawAssets).containSubset(expectedRawBaseAsset);

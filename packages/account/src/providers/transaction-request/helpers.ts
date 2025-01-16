@@ -1,6 +1,7 @@
-import type { AbstractAddress } from '@fuel-ts/interfaces';
+import type { Address } from '@fuel-ts/address';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
-import { InputType } from '@fuel-ts/transactions';
+import { InputType, OutputType } from '@fuel-ts/transactions';
 
 import type { ExcludeResourcesOption } from '../resource';
 
@@ -9,6 +10,7 @@ import type {
   CoinTransactionRequestInput,
   MessageTransactionRequestInput,
 } from './input';
+import type { TransactionRequest } from './types';
 
 export const isRequestInputCoin = (
   input: TransactionRequestInput
@@ -39,7 +41,7 @@ export const getRequestInputResourceOwner = (
 
 export const isRequestInputResourceFromOwner = (
   input: CoinTransactionRequestInput | MessageTransactionRequestInput,
-  owner: AbstractAddress
+  owner: Address
 ) => getRequestInputResourceOwner(input) === owner.toB256();
 
 export const getAssetAmountInRequestInputs = (
@@ -77,7 +79,7 @@ export const cacheRequestInputsResources = (inputs: TransactionRequestInput[]) =
 
 export const cacheRequestInputsResourcesFromOwner = (
   inputs: TransactionRequestInput[],
-  owner: AbstractAddress
+  owner: Address
 ): ExcludeResourcesOption =>
   inputs.reduce(
     (acc, input) => {
@@ -93,3 +95,62 @@ export const cacheRequestInputsResourcesFromOwner = (
       messages: [],
     } as Required<ExcludeResourcesOption>
   );
+
+/**
+ * @hidden
+ *
+ * Get the number of burnable assets in the transaction request.
+ *
+ * @param baseAssetId - The base asset ID.
+ * @param transactionRequest - The transaction request to get the burnable asset count from.
+ * @returns The number of burnable assets in the transaction request.
+ */
+export const getBurnableAssetCount = (
+  baseAssetId: string,
+  transactionRequest: TransactionRequest
+) => {
+  const { inputs, outputs } = transactionRequest;
+  const coinInputs = new Set(inputs.filter(isRequestInputCoin).map((input) => input.assetId));
+  // If there is a message input without data, we need to add the base asset to the set
+  if (inputs.some((i) => isRequestInputMessage(i) && bn(i.amount).gt(0))) {
+    coinInputs.add(baseAssetId);
+  }
+  const changeOutputs = new Set(
+    outputs.filter((output) => output.type === OutputType.Change).map((output) => output.assetId)
+  );
+  const difference = new Set([...coinInputs].filter((x) => !changeOutputs.has(x)));
+  return difference.size;
+};
+
+/**
+ * @hidden
+ *
+ * Validates the transaction request for asset burn.
+ *
+ * @param transactionRequest - The transaction request to validate.
+ * @param enableAssetBurn - Whether asset burn is enabled (default: false).
+ *
+ * @throws `FuelError` when an asset burn is detected and not enabled.
+ */
+export const validateTransactionForAssetBurn = (
+  baseAssetId: string,
+  transactionRequest: TransactionRequest,
+  enableAssetBurn: boolean = false
+) => {
+  // Asset burn is enabled
+  if (enableAssetBurn === true) {
+    return;
+  }
+
+  // No burnable assets detected
+  if (getBurnableAssetCount(baseAssetId, transactionRequest) <= 0) {
+    return;
+  }
+
+  const message = [
+    'Asset burn detected.',
+    'Add the relevant change outputs to the transaction to avoid burning assets.',
+    'Or enable asset burn, upon sending the transaction.',
+  ].join('\n');
+  throw new FuelError(ErrorCode.ASSET_BURN_DETECTED, message);
+};

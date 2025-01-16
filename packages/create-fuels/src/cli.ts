@@ -63,7 +63,7 @@ export const runScaffoldCli = async ({
   let projectPath = program.args[0] ?? (await promptForProjectPath());
 
   const verboseEnabled = opts.verbose ?? false;
-  const packageManager = getPackageManager(opts);
+  const packageManager = getPackageManager();
 
   if (!process.env.VITEST) {
     await tryInstallFuelUp(verboseEnabled);
@@ -123,9 +123,23 @@ export const runScaffoldCli = async ({
   const packageJsonPath = join(projectPath, 'package.json');
   const packageJsonContents = readFileSync(packageJsonPath, 'utf-8');
   const fuelsVersion = getPackageVersion(args);
-  const newPackageJsonContents = packageJsonContents
+  let newPackageJsonContents = packageJsonContents
     .replace(`pnpm run prebuild`, packageManager.run('prebuild'))
     .replace(`"fuels": "${versions.FUELS}"`, `"fuels": "${fuelsVersion}"`);
+
+  // TODO: remove once upgraded to `graphql-request@v7`
+  // https://github.com/FuelLabs/fuels-ts/issues/3546
+  if (packageManager.name === 'pnpm') {
+    let newPackageJsonObject = JSON.parse(newPackageJsonContents);
+    newPackageJsonObject = {
+      ...newPackageJsonObject,
+      overrides: undefined,
+      pnpm: {
+        overrides: newPackageJsonObject.overrides,
+      },
+    };
+    newPackageJsonContents = JSON.stringify(newPackageJsonObject, null, 2);
+  }
 
   writeFileSync(packageJsonPath, newPackageJsonContents);
 

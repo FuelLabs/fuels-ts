@@ -1,16 +1,18 @@
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { addressify } from '@fuel-ts/address';
+import type { ContractIdLike } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
-import type { AbstractScriptRequest, ContractIdLike, BytesLike } from '@fuel-ts/interfaces';
 import { bn } from '@fuel-ts/math';
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import type { TransactionScript } from '@fuel-ts/transactions';
 import { InputType, OutputType, TransactionType } from '@fuel-ts/transactions';
+import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
-import type { ChainInfo, GasCosts } from '../provider';
+import type { Account } from '../../account';
+import type { ChainInfo, GasCosts, TransactionCostParams } from '../provider';
 import { calculateMetadataGasForTxScript, getMaxGas } from '../utils/gas';
 
 import { hashTransaction } from './hash-transaction';
@@ -19,7 +21,7 @@ import type { ContractTransactionRequestOutput, VariableTransactionRequestOutput
 import { returnZeroScript } from './scripts';
 import type { BaseTransactionRequestLike } from './transaction-request';
 import { BaseTransactionRequest } from './transaction-request';
-import type { JsonAbisFromAllCalls } from './types';
+import type { AbstractScriptRequest, JsonAbisFromAllCalls } from './types';
 
 /**
  * @hidden
@@ -65,6 +67,27 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     this.script = arrayify(script ?? returnZeroScript.bytes);
     this.scriptData = arrayify(scriptData ?? returnZeroScript.encodeScriptData());
     this.abis = rest.abis;
+  }
+
+  /**
+   * Helper function to estimate and fund the transaction request with a specified account.
+   *
+   * @param account - The account to fund the transaction.
+   * @param params - The parameters for the transaction cost.
+   * @returns The current instance of the `ScriptTransactionRequest` funded.
+   */
+  async estimateAndFund(
+    account: Account,
+    { signatureCallback, quantities = [] }: TransactionCostParams = {}
+  ): Promise<ScriptTransactionRequest> {
+    const txCost = await account.getTransactionCost(this, { signatureCallback, quantities });
+
+    this.maxFee = txCost.maxFee;
+    this.gasLimit = txCost.gasUsed;
+
+    await account.fund(this, txCost);
+
+    return this;
   }
 
   /**

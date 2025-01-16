@@ -1,5 +1,6 @@
 import { bn } from '@fuel-ts/math';
 import type { BN, BNInput } from '@fuel-ts/math';
+import type { ExpectStatic as GlobalExpectStatic } from 'vitest';
 
 interface Matchers<R = BN> {
   toEqualBn: (expected: BNInput) => R;
@@ -12,7 +13,7 @@ declare module 'vitest' {
   }
 }
 
-export const setupTestMatchers = () => {
+export const setupTestMatchers = (expect: GlobalExpectStatic) => {
   expect.extend({
     toEqualBn(received: BNInput, expected: BNInput) {
       const actualBn = bn(received);

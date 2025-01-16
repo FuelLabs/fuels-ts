@@ -7,11 +7,11 @@ import {
   ConfigurablePinLoader,
 } from '../../../typegend/predicates';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const receiver = Wallet.generate({ provider });
-const baseAssetId = provider.getBaseAssetId();
+const baseAssetId = await provider.getBaseAssetId();
 
 // We can deploy dynamically or via `fuels deploy`
 const originalPredicate = new ConfigurablePin({

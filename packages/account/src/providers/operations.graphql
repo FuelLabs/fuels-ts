@@ -822,12 +822,6 @@ query getConsensusParametersVersion {
   }
 }
 
-subscription submitAndAwait($encodedTransaction: HexString!) {
-  submitAndAwait(tx: $encodedTransaction) {
-    ...transactionStatusSubscriptionFragment
-  }
-}
-
 subscription submitAndAwaitStatus($encodedTransaction: HexString!) {
   submitAndAwaitStatus(tx: $encodedTransaction) {
     ...transactionStatusSubscriptionFragment

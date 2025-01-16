@@ -1,7 +1,7 @@
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
-import type { BytesLike } from '@fuel-ts/interfaces';
 
 import { arrayify } from './arrayify';
+import type { BytesLike } from './arrayify';
 
 /**
  * @group node

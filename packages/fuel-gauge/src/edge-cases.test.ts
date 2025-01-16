@@ -30,7 +30,7 @@ describe('Edge Cases', () => {
       wallets: [adminWallet],
     } = launched;
 
-    const baseAssetId = provider.getBaseAssetId();
+    const baseAssetId = await provider.getBaseAssetId();
 
     const destination = Wallet.generate({
       provider,
@@ -43,7 +43,8 @@ describe('Edge Cases', () => {
       { gasLimit: 10_000 }
     );
 
-    const response = new TransactionResponse(transactionId, provider);
+    const chainId = await provider.getChainId();
+    const response = new TransactionResponse(transactionId, provider, chainId);
 
     await response.waitForResult();
 

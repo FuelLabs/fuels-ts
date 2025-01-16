@@ -1,60 +1,39 @@
 import { FuelError } from '@fuel-ts/errors';
-import { AbstractAddress } from '@fuel-ts/interfaces';
-import type {
-  Bech32Address,
-  B256Address,
-  EvmAddress,
-  AssetId,
-  ChecksumAddress,
-} from '@fuel-ts/interfaces';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 import { sha256 } from '@noble/hashes/sha256';
 
+import type { B256Address, EvmAddress, AssetId, ChecksumAddress } from './types';
 import {
-  normalizeBech32,
-  isBech32,
-  toB256,
-  getBytesFromBech32,
-  toBech32,
   getRandomB256,
   isPublicKey,
   isB256,
-  clearFirst12BytesFromB256,
   isEvmAddress,
   padFirst12BytesOfEvmAddress,
+  toB256AddressEvm,
+  normalizeB256,
 } from './utils';
 
 /**
  * `Address` provides a type safe wrapper for converting between different address formats
  * ands comparing them for equality.
  */
-export default class Address extends AbstractAddress {
+export class Address {
   // #region address-2
-  /**
-   * @deprecated
-   * Type `Bech32Address` is now deprecated, as is this property. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
-   */
-  readonly bech32Address: Bech32Address;
+  readonly b256Address: B256Address;
   // #endregion address-2
 
   /**
-   * @param address - A Bech32 address or B256 address
+   * @param address - A B256 address
    */
-  constructor(address: Bech32Address | B256Address) {
-    super();
-
-    if (isB256(address)) {
-      this.bech32Address = toBech32(address);
-    } else {
-      this.bech32Address = normalizeBech32(address as Bech32Address);
-
-      if (!isBech32(this.bech32Address)) {
-        throw new FuelError(
-          FuelError.CODES.INVALID_BECH32_ADDRESS,
-          `Invalid Bech32 Address: ${this.bech32Address}.`
-        );
-      }
+  constructor(address: B256Address) {
+    if (!isB256(address)) {
+      throw new FuelError(
+        FuelError.CODES.INVALID_B256_ADDRESS,
+        `Invalid B256 Address: ${address}.`
+      );
     }
+
+    this.b256Address = normalizeB256(address);
   }
 
   /**
@@ -64,38 +43,38 @@ export default class Address extends AbstractAddress {
    * @returns A new `ChecksumAddress` instance
    */
   toChecksum(): ChecksumAddress {
-    return Address.toChecksum(this.toB256());
+    return Address.toChecksum(this.b256Address);
   }
 
   /**
-   * Returns the `bech32Address` property
-   * @deprecated
-   * Type `Bech32Address` is now deprecated, as is this method. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
-   * @returns The `bech32Address` property
+   * Returns the `b256Address` property
    */
-  toAddress(): Bech32Address {
-    return this.bech32Address;
+  toAddress(): B256Address {
+    return this.b256Address;
   }
 
   /**
-   * Converts and returns the `bech32Address` property to a 256 bit hash string
-   * @returns The `bech32Address` property as a 256 bit hash string
+   * Returns the B256 hash address as a string
+   *
+   * @returns The B256 address
    */
   toB256(): B256Address {
-    return toB256(this.bech32Address);
+    return this.b256Address;
   }
 
   /**
-   * Converts and returns the `bech32Address` property to a byte array
-   * @returns The `bech32Address` property as a byte array
+   * Returns the B256 hash address as a Uint8Array
+   *
+   * @returns The B256 address as a Uint8Array
    */
   toBytes(): Uint8Array {
-    return getBytesFromBech32(this.bech32Address);
+    return arrayify(this.b256Address);
   }
 
   /**
-   * Converts the `bech32Address` property to a 256 bit hash string
-   * @returns The `bech32Address` property as a 256 bit hash string
+   * Returns the B256 hash address as a string
+   *
+   * @returns The B256 address
    */
   toHexString(): B256Address {
     return this.toB256();
@@ -104,29 +83,28 @@ export default class Address extends AbstractAddress {
   /**
    * returns the address `checksum` as a string
    *
-   * @returns The `bech32Address` property as a string
+   * @returns The `b256Address` property as a string
    */
   toString(): string {
     return this.toChecksum();
   }
 
   /**
-   * Converts and returns the `bech32Address` property as a string
-   * @returns The `bech32Address` property as a JSON string
+   * Converts and returns the `b256Address` property as a string
+   * @returns The `b256Address` property as a JSON string
    */
   toJSON(): string {
-    return this.bech32Address;
+    return this.b256Address;
   }
 
   /**
-   * Clears the first 12 bytes of the `bech32Address` property and returns it as a `EvmAddress`
-   * @returns The `bech32Address` property as an {@link EvmAddress | `EvmAddress`}
+   * Converts to an EVM address
+   *
+   * @returns an {@link EvmAddress | `EvmAddress`} representation of the address
    */
   toEvmAddress(): EvmAddress {
-    const b256Address = toB256(this.bech32Address);
-
     return {
-      bits: clearFirst12BytesFromB256(b256Address),
+      bits: toB256AddressEvm(this.b256Address),
     } as EvmAddress;
   }
 
@@ -136,7 +114,7 @@ export default class Address extends AbstractAddress {
    */
   toAssetId(): AssetId {
     return {
-      bits: this.toB256(),
+      bits: this.b256Address,
     } as AssetId;
   }
 
@@ -144,17 +122,17 @@ export default class Address extends AbstractAddress {
    * Wraps the B256 address `checksum` and returns it as a string
    * @returns The B256 address `checksum` as a string
    */
-  override valueOf(): string {
+  valueOf(): string {
     return this.toChecksum();
   }
 
   /**
-   * Compares this the `bech32Address` property to another for direct equality
+   * Compares this the `b256Address` property to another for direct equality
    * @param other - Another address to compare against
    * @returns The equality of the comparison
    */
   equals(other: Address): boolean {
-    return this.bech32Address === other.bech32Address;
+    return this.toChecksum() === other.toChecksum();
   }
 
   /**
@@ -169,7 +147,7 @@ export default class Address extends AbstractAddress {
     }
 
     const b256Address = hexlify(sha256(arrayify(publicKey)));
-    return new Address(toBech32(b256Address));
+    return new Address(b256Address);
   }
 
   /**
@@ -186,11 +164,11 @@ export default class Address extends AbstractAddress {
       );
     }
 
-    return new Address(toBech32(b256Address));
+    return new Address(b256Address);
   }
 
   /**
-   * Creates an `Address` with a randomized `bech32Address` property
+   * Creates an `Address` with a randomized `b256Address` property
    *
    * @returns A new `Address` instance
    */
@@ -205,7 +183,7 @@ export default class Address extends AbstractAddress {
    * @returns A new `Address` instance
    */
   static fromString(address: string): Address {
-    return isBech32(address) ? new Address(address as Bech32Address) : this.fromB256(address);
+    return this.fromB256(address);
   }
 
   /**
@@ -213,19 +191,19 @@ export default class Address extends AbstractAddress {
    *
    * @returns a new `Address` instance
    */
-  static fromAddressOrString(address: string | AbstractAddress): AbstractAddress {
+  static fromAddressOrString(address: string | Address): Address {
     return typeof address === 'string' ? this.fromString(address) : address;
   }
 
   /**
-   * Takes a dynamic string or `AbstractAddress` and creates an `Address`
+   * Takes a dynamic string or `Address` and creates an `Address`
    *
-   * @param addressId - A string containing Bech32, B256, or Public Key
+   * @param addressId - A string containing B256, or Public Key
    * @throws Error - Unknown address if the format is not recognised
    * @returns A new `Address` instance
    */
-  static fromDynamicInput(address: string | AbstractAddress): Address {
-    // If address is a object than we assume it's a AbstractAddress
+  static fromDynamicInput(address: string | Address): Address {
+    // If address is a object than we assume it's a Address
     // we don't check by instanceof because it's possible to
     // the host app to have a different reference to this same class type
     if (typeof address !== 'string' && 'toB256' in address) {
@@ -233,10 +211,6 @@ export default class Address extends AbstractAddress {
     }
     if (isPublicKey(address)) {
       return Address.fromPublicKey(address);
-    }
-
-    if (isBech32(address)) {
-      return new Address(address as Bech32Address);
     }
 
     if (isB256(address)) {
@@ -249,7 +223,7 @@ export default class Address extends AbstractAddress {
 
     throw new FuelError(
       FuelError.CODES.PARSE_FAILED,
-      `Unknown address format: only 'Bech32', 'B256', or 'Public Key (512)' are supported.`
+      `Unknown address format: only 'B256', or 'Public Key (512)' are supported.`
     );
   }
 
@@ -267,8 +241,7 @@ export default class Address extends AbstractAddress {
     }
 
     const paddedAddress = padFirst12BytesOfEvmAddress(evmAddress);
-
-    return new Address(toBech32(paddedAddress));
+    return new Address(paddedAddress);
   }
 
   /**

@@ -65,7 +65,7 @@ describe('Contract', () => {
     expect(contract.provider).toEqual(provider);
   });
 
-  it('should executes a contract call just nice', async () => {
+  it('should executes a contract call just fine', async () => {
     using contract = await setupTestContract();
 
     const numberToSend = 1336;
@@ -311,7 +311,7 @@ describe('Contract', () => {
     const { waitForResult } = await contract
       .multiCall([
         contract.functions.return_context_amount().callParams({
-          forward: [100, contract.provider.getBaseAssetId()],
+          forward: [100, await contract.provider.getBaseAssetId()],
         }),
         contract.functions.return_context_amount().callParams({
           forward: [200, AltToken],
@@ -337,7 +337,7 @@ describe('Contract', () => {
       contract
         .multiCall([
           contract.functions.return_context_amount().callParams({
-            forward: [100, contract.provider.getBaseAssetId()],
+            forward: [100, await contract.provider.getBaseAssetId()],
             gasLimit: 100,
           }),
           contract.functions.return_context_amount().callParams({
@@ -388,7 +388,7 @@ describe('Contract', () => {
 
     const invocationScope = contract.multiCall([
       contract.functions.return_context_amount().callParams({
-        forward: [100, contract.provider.getBaseAssetId()],
+        forward: [100, await contract.provider.getBaseAssetId()],
       }),
       contract.functions.return_context_amount().callParams({
         forward: [200, AltToken],
@@ -413,7 +413,7 @@ describe('Contract', () => {
     using contract = await setupTestContract();
 
     const invocationScope = contract.functions.return_context_amount().callParams({
-      forward: [100, contract.provider.getBaseAssetId()],
+      forward: [100, await contract.provider.getBaseAssetId()],
     });
     const { gasUsed } = await invocationScope.getTransactionCost();
 
@@ -535,7 +535,7 @@ describe('Contract', () => {
     const { value } = await contract
       .multiCall([
         contract.functions.return_context_amount().callParams({
-          forward: [100, contract.provider.getBaseAssetId()],
+          forward: [100, await contract.provider.getBaseAssetId()],
         }),
         contract.functions.return_context_amount().callParams({
           forward: [200, AltToken],
@@ -651,7 +651,9 @@ describe('Contract', () => {
       contracts: [contract],
     } = launched;
 
-    const initialBalance = new BN(await contract.getBalance(provider.getBaseAssetId())).toNumber();
+    const initialBalance = new BN(
+      await contract.getBalance(await provider.getBaseAssetId())
+    ).toNumber();
 
     const u64Amount = bn(10_000);
     const amountToContract = u64Amount;
@@ -659,12 +661,14 @@ describe('Contract', () => {
     const tx = await wallet.transferToContract(
       contract.id,
       amountToContract,
-      provider.getBaseAssetId()
+      await provider.getBaseAssetId()
     );
 
     await tx.waitForResult();
 
-    const finalBalance = new BN(await contract.getBalance(provider.getBaseAssetId())).toNumber();
+    const finalBalance = new BN(
+      await contract.getBalance(await provider.getBaseAssetId())
+    ).toNumber();
 
     expect(finalBalance).toBe(initialBalance + amountToContract.toNumber());
   });
@@ -679,7 +683,9 @@ describe('Contract', () => {
       contracts: [contract],
     } = launched;
 
-    const initialBalance = new BN(await contract.getBalance(provider.getBaseAssetId())).toNumber();
+    const initialBalance = new BN(
+      await contract.getBalance(await provider.getBaseAssetId())
+    ).toNumber();
     const amountToContract = bn(10_000);
     const assetId = TestAssetId.A.value;
 
@@ -704,18 +710,22 @@ describe('Contract', () => {
       contracts: [contract],
     } = launched;
 
-    const initialBalance = new BN(await contract.getBalance(provider.getBaseAssetId())).toNumber();
+    const initialBalance = new BN(
+      await contract.getBalance(await provider.getBaseAssetId())
+    ).toNumber();
     const amountToContract = bn(2).pow(62); // Very big number
 
     const tx = await wallet.transferToContract(
       contract.id,
       amountToContract,
-      provider.getBaseAssetId()
+      await provider.getBaseAssetId()
     );
 
     await tx.waitForResult();
 
-    const finalBalance = new BN(await contract.getBalance(provider.getBaseAssetId())).toString();
+    const finalBalance = new BN(
+      await contract.getBalance(await provider.getBaseAssetId())
+    ).toString();
     expect(finalBalance).toBe(amountToContract.add(initialBalance).toString());
   });
 
@@ -732,7 +742,7 @@ describe('Contract', () => {
       contracts: [contract],
     } = launched;
 
-    const baseAssetId = provider.getBaseAssetId();
+    const baseAssetId = await provider.getBaseAssetId();
     const contractTransferParams: ContractTransferParams[] = [
       {
         contractId: contract.id,
@@ -782,7 +792,7 @@ describe('Contract', () => {
       contracts: [storageContract, voidContract, smoContract],
     } = launched;
 
-    const baseAssetId = provider.getBaseAssetId();
+    const baseAssetId = await provider.getBaseAssetId();
     const assetA = TestAssetId.A.value;
     const assetB = TestAssetId.B.value;
 
@@ -794,6 +804,7 @@ describe('Contract', () => {
       {
         contractId: storageId,
         amount: 999,
+        assetId: baseAssetId,
       },
       {
         contractId: storageId,
@@ -864,7 +875,7 @@ describe('Contract', () => {
     const tx = await wallet.transferToContract(
       contract.id,
       amountToContract,
-      provider.getBaseAssetId(),
+      await provider.getBaseAssetId(),
       {
         gasLimit,
         maxFee,
@@ -895,7 +906,7 @@ describe('Contract', () => {
       const result = await wallet.transferToContract(
         contract.id.toB256(),
         amountToContract,
-        contract.provider.getBaseAssetId(),
+        await contract.provider.getBaseAssetId(),
         {
           gasLimit: 1,
         }
@@ -939,7 +950,7 @@ describe('Contract', () => {
     } = launched;
 
     const initialBalance = new BN(
-      await contract.getBalance(contract.provider.getBaseAssetId())
+      await contract.getBalance(await contract.provider.getBaseAssetId())
     ).toNumber();
 
     const amountToContract = 200;
@@ -950,7 +961,7 @@ describe('Contract', () => {
     const tx1 = await wallet.transfer(
       predicate.address,
       amountToPredicate,
-      provider.getBaseAssetId()
+      await provider.getBaseAssetId()
     );
 
     await tx1.waitForResult();
@@ -958,12 +969,14 @@ describe('Contract', () => {
     const tx2 = await predicate.transferToContract(
       contract.id,
       amountToContract,
-      provider.getBaseAssetId()
+      await provider.getBaseAssetId()
     );
 
     await tx2.waitForResult();
 
-    const finalBalance = new BN(await contract.getBalance(provider.getBaseAssetId())).toNumber();
+    const finalBalance = new BN(
+      await contract.getBalance(await provider.getBaseAssetId())
+    ).toNumber();
 
     expect(finalBalance).toBe(initialBalance + amountToContract);
   });
@@ -993,7 +1006,7 @@ describe('Contract', () => {
       .addTransfer({
         destination: receiver.address,
         amount: amountToTransfer,
-        assetId: provider.getBaseAssetId(),
+        assetId: await provider.getBaseAssetId(),
       })
       .call();
 
@@ -1032,7 +1045,7 @@ describe('Contract', () => {
       {
         destination: receiver1.address,
         amount: amountToTransfer1,
-        assetId: provider.getBaseAssetId(),
+        assetId: await provider.getBaseAssetId(),
       },
       { destination: receiver2.address, amount: amountToTransfer2, assetId: ASSET_A },
       { destination: receiver3.address, amount: amountToTransfer3, assetId: ASSET_B },
@@ -1041,7 +1054,7 @@ describe('Contract', () => {
     const call = await contract.functions.sum(40, 50).addBatchTransfer(transferParams).call();
     await call.waitForResult();
 
-    const finalBalance1 = await receiver1.getBalance(provider.getBaseAssetId());
+    const finalBalance1 = await receiver1.getBalance(await provider.getBaseAssetId());
     const finalBalance2 = await receiver2.getBalance(ASSET_A);
     const finalBalance3 = await receiver3.getBalance(ASSET_B);
 
@@ -1069,14 +1082,14 @@ describe('Contract', () => {
 
     await expectToThrowFuelError(
       async () => {
-        await wallet.transferToContract(contract.id, 0, provider.getBaseAssetId());
+        await wallet.transferToContract(contract.id, 0, await provider.getBaseAssetId());
       },
       new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
     );
 
     await expectToThrowFuelError(
       async () => {
-        await wallet.transferToContract(contract.id, -1, provider.getBaseAssetId());
+        await wallet.transferToContract(contract.id, -1, await provider.getBaseAssetId());
       },
       new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
     );
@@ -1088,11 +1101,11 @@ describe('Contract', () => {
     contract.account = Wallet.generate({ provider: contract.provider });
 
     await expectToThrowFuelError(
-      () =>
+      async () =>
         contract.functions
           .return_context_amount()
           .callParams({
-            forward: [100, contract.provider.getBaseAssetId()],
+            forward: [100, await contract.provider.getBaseAssetId()],
           })
           .simulate(),
       new FuelError(
@@ -1110,7 +1123,7 @@ describe('Contract', () => {
       contract.functions
         .return_context_amount()
         .callParams({
-          forward: [100, contract.provider.getBaseAssetId()],
+          forward: [100, await contract.provider.getBaseAssetId()],
         })
         .simulate()
     ).rejects.toThrowError('Wallet is required!');
@@ -1125,7 +1138,7 @@ describe('Contract', () => {
       contract.functions
         .return_context_amount()
         .callParams({
-          forward: [100, contract.provider.getBaseAssetId()],
+          forward: [100, await contract.provider.getBaseAssetId()],
         })
         .simulate()
     ).rejects.toThrowError('An unlocked wallet is required to simulate a contract call.');
@@ -1140,7 +1153,7 @@ describe('Contract', () => {
       contract.functions
         .return_context_amount()
         .callParams({
-          forward: [100, contract.provider.getBaseAssetId()],
+          forward: [100, await contract.provider.getBaseAssetId()],
         })
         .dryRun()
     ).resolves.not.toThrow();
@@ -1306,7 +1319,7 @@ describe('Contract', () => {
     } = launched;
 
     const data = [1, 2, 3, 4, 5, 6, 7, 8];
-    const baseAssetId = provider.getBaseAssetId();
+    const baseAssetId = await provider.getBaseAssetId();
 
     const { waitForResult } = await contract
       .multiCall([

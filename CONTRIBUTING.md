@@ -228,14 +228,6 @@ pnpm bench:node
 pnpm bench:node packages/my-desired-package
 ```
 
-# Profiling
-
-We currently use [`clinic`](https://clinicjs.org/) to profile and debug our tooling. For instance you can run clinic's flame command to create a flamegraph for a specific package:
-
-```sh
-# creates a flamegraph for a specific package
-npm_config_package_name=account pnpm clinic:flame  // runs flame against the account package
-```
 
 ### CI Test
 
@@ -244,10 +236,7 @@ During the CI process an automated end-to-end (e2e) test is executed. This test 
 The e2e test can be found at:
 `packages/fuel-gauge/src/e2e-script.test.ts`
 
-The Bech32 address of this wallet is `fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg`. This address can be funded via the [faucet](https://faucet-testnet.fuel.network/).
-
-> [!NOTE] Note
-> `Bech32` addresses like `fuel1..` are now deprecated. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
+The B256 address of this wallet is `0x3463d9064f9128153b00072b4cc543f504372737d5dc04b29c9ebcf1b2a17ee7`. This address can be funded via the [faucet](https://faucet-testnet.fuel.network/).
 
 If you want to run an e2e test locally, you can provide your own wallet address and private key. For obvious security reasons, the private key should not be shared.
 
@@ -269,8 +258,6 @@ This will enable you to run the e2e test locally against the live network:
 ```sh
 pnpm test:filter e2e-script
 ```
-
-<!-- TODO: add/fix block explorer URL after testnet support- Checking Wallet Balance: https://fuellabs.github.io/block-explorer-v2/beta-5/?#/address/fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg -->
 
 # Commit Convention
 
@@ -373,6 +360,40 @@ We'd follow the same approach as explained in the [Patching old releases](#patch
 - The automatically-created PR **must** be merged as soon as possible in order to
   - have the versions of packages on `master` match the `latest` released package versions,
   - have the released functionality on `master` as well
+
+# Network Testing
+
+The network test suite is designed to run locally against a specified network for validation purposes.
+
+You can find the test suite at: `packages/fuel-gauge/src/network.test.ts`.
+
+### Setup Instructions
+
+Before running the tests, you need to configure the `.env` file:
+
+1. Copy the `.env.example` file:
+
+```sh
+cp .env.example .env
+```
+
+2. Set the values for the following environment variables in the `.env` file:
+
+```env
+NETWORK_TEST_URL=https://testnet.fuel.network/v1/graphql
+NETWORK_TEST_PVT_KEY=0x...
+```
+
+- `NETWORK_TEST_URL`: The URL of which network the test should run (e.g., Fuel Testnet endpoint).
+- `NETWORK_TEST_PVT_KEY`: Your private key for the network.
+
+### Running the Test Suite
+
+Once the environment is set up, run the network tests using the following command:
+
+```sh
+pnpm test:network
+```
 
 # FAQ
 
