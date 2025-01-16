@@ -265,18 +265,7 @@ describe('Funding Transactions', () => {
       () => sender.fund(request, txCost),
       new FuelError(
         FuelError.CODES.NOT_ENOUGH_FUNDS,
-        `The account(s) sending the transaction don't have enough funds to cover the transaction.`,
-        {},
-        {
-          locations: [
-            {
-              column: 3,
-              line: 2,
-            },
-          ],
-          message: 'not enough coins to fit the target',
-          path: ['coinsToSpend'],
-        }
+        `Insufficient funds or too many small value coins. Consider combining UTXOs.`
       )
     );
 
