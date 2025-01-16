@@ -19,7 +19,7 @@ describe('mapped error messages', () => {
 
     await expectToThrowFuelError(() => emptyWalletContract.functions.return_void().call(), {
       code: ErrorCode.NOT_ENOUGH_FUNDS,
-      message: `The account(s) sending the transaction don't have enough funds to cover the transaction.`,
+      message: `Insufficient funds or too many low value coins. Consider combining UTXOs.`,
     });
   });
 
@@ -42,9 +42,8 @@ describe('mapped error messages', () => {
     request.maxFee = txCost.maxFee;
 
     await expectToThrowFuelError(() => wallet.fund(request, txCost), {
-      code: ErrorCode.MAX_COINS_REACHED,
-      message:
-        'The account retrieving coins has exceeded the maximum number of coins per asset. Please consider combining your coins into a single UTXO.',
+      code: ErrorCode.NOT_ENOUGH_FUNDS,
+      message: 'Insufficient funds or too many low value coins. Consider combining UTXOs.',
     });
   });
 });

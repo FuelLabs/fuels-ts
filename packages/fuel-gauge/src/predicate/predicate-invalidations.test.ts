@@ -41,7 +41,7 @@ describe('Predicate', () => {
           ),
         new FuelError(
           ErrorCode.NOT_ENOUGH_FUNDS,
-          `The account(s) sending the transaction don't have enough funds to cover the transaction.`
+          `Insufficient funds or too many low value coins. Consider combining UTXOs.`
         )
       );
     });
