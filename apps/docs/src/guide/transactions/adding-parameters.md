@@ -4,7 +4,7 @@ Transaction parameters allow you to configure various aspects of your blockchain
 
 All available parameters are shown below:
 
-<<< @./snippets/transaction-parameters.ts#transaction-parameters-6{ts:line-numbers}
+<<< @./snippets/transaction-parameters.ts#transaction-parameters-7{ts:line-numbers}
 
 ## Gas Limit
 
@@ -38,6 +38,12 @@ The maximum byte length allowed for the transaction witnesses array. For instanc
 
 <<< @./snippets/transaction-parameters.ts#transaction-parameters-5{ts:line-numbers}
 
+## Expiration
+
+The block number after which the transaction can no longer be included in the blockchain. For example, if you set the expiration block for your transaction to 200, and the transaction remains in the queue waiting to be processed when block 200 is created, the transaction will be rejected.
+
+<<< @./snippets/transaction-parameters.ts#transaction-parameters-6{ts:line-numbers}
+
 ## Variable Outputs
 
 The number of variable outputs that should be added to the transaction request. You can read more about it on this [guide](../contracts/variable-outputs.md)
@@ -48,11 +54,11 @@ The number of variable outputs that should be added to the transaction request. 
 
 To set the transaction parameters, you have access to the `txParams` method on a transaction request.
 
-<<< @./snippets/transaction-parameters.ts#transaction-parameters-7{ts:line-numbers}
+<<< @./snippets/transaction-parameters.ts#transaction-parameters-8{ts:line-numbers}
 
 The same method is also accessible within a function invocation scope, so it can also be used when calling contract functions.
 
-<<< @./snippets/transaction-parameters.ts#transaction-parameters-8{ts:line-numbers}
+<<< @./snippets/transaction-parameters.ts#transaction-parameters-9{ts:line-numbers}
 
 > **Note:** When performing an action that results in a transaction (e.g. contract deployment, contract call with `.call()`, asset transfer), the SDK will automatically estimate the fee based on the gas limit and the transaction's byte size. This estimation is used when building the transaction. As a side effect, your wallet must own at least one coin of the base asset, regardless of the amount.
 
