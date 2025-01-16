@@ -866,7 +866,7 @@ describe('Provider', () => {
         },
       },
       walletsConfig: {
-        amountPerCoin: 500_000,
+        coinsPerAsset: 5,
       },
     });
 
@@ -880,21 +880,12 @@ describe('Provider', () => {
       maxFee: 1000,
     });
 
-    const quantities = [
-      coinQuantityfy([1000, ASSET_A]),
-      coinQuantityfy([500, ASSET_B]),
-      coinQuantityfy([5000, await provider.getBaseAssetId()]),
-    ];
+    const { coins } = await sender.getCoins(await provider.getBaseAssetId(), {
+      first: 4,
+    });
 
-    const resources = await sender.getResourcesToSpend(quantities);
     request.addCoinOutput(receiver.address, 500, await provider.getBaseAssetId());
-    request.addResources(resources);
-
-    // We need to add more resources manually here as a single `getResourcesToSpend` call
-    // will always truncate to `maxInputs`. So we need to add more resources manually
-    // to test our validation logic.
-    const moreResources = await sender.getResourcesToSpend(quantities);
-    request.addResources(moreResources);
+    request.addResources(coins);
 
     await expectToThrowFuelError(
       () => sender.sendTransaction(request),
