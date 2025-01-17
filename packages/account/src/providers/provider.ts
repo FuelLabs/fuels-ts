@@ -62,7 +62,7 @@ import {
 } from './utils';
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
-import { handleGqlErrorMessage } from './utils/handle-gql-error-message';
+import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
 const MAX_RETRIES = 10;
@@ -421,6 +421,8 @@ export default class Provider {
   private static chainInfoCache: ChainInfoCache = {};
   /** @hidden */
   private static nodeInfoCache: NodeInfoCache = {};
+  /** @hidden */
+  private static incompatibleNodeVersionMessage: string = '';
 
   /** @hidden */
   public consensusParametersTimestamp?: number;
@@ -616,7 +618,7 @@ export default class Provider {
         vmBacktrace: data.nodeInfo.vmBacktrace,
       };
 
-      Provider.ensureClientVersionIsSupported(nodeInfo);
+      Provider.setIncompatibleNodeVersionMessage(nodeInfo);
 
       chain = processGqlChain(data.chain);
 
@@ -635,18 +637,18 @@ export default class Provider {
   /**
    * @hidden
    */
-  private static ensureClientVersionIsSupported(nodeInfo: NodeInfo) {
+  private static setIncompatibleNodeVersionMessage(nodeInfo: NodeInfo) {
     const { isMajorSupported, isMinorSupported, supportedVersion } =
       checkFuelCoreVersionCompatibility(nodeInfo.nodeVersion);
 
     if (!isMajorSupported || !isMinorSupported) {
-      // eslint-disable-next-line no-console
-      console.warn(
-        `The Fuel Node that you are trying to connect to is using fuel-core version ${nodeInfo.nodeVersion},
-which is not supported by the version of the TS SDK that you are using.
-Things may not work as expected.
-Supported fuel-core version: ${supportedVersion}.`
-      );
+      Provider.incompatibleNodeVersionMessage = [
+        `The Fuel Node that you are trying to connect to is using fuel-core version ${nodeInfo.nodeVersion}.`,
+        `The TS SDK currently supports fuel-core version ${supportedVersion}.`,
+        `Things may not work as expected.`,
+      ].join('\n');
+      FuelGraphqlSubscriber.incompatibleNodeVersionMessage =
+        Provider.incompatibleNodeVersionMessage;
     }
   }
 
@@ -664,12 +666,10 @@ Supported fuel-core version: ${supportedVersion}.`
       responseMiddleware: (response: GraphQLClientResponse<unknown> | Error) => {
         if ('response' in response) {
           const graphQlResponse = response.response as GraphQLResponse;
-
-          if (Array.isArray(graphQlResponse?.errors)) {
-            for (const error of graphQlResponse.errors) {
-              handleGqlErrorMessage(error.message, error);
-            }
-          }
+          assertGqlResponseHasNoErrors(
+            graphQlResponse.errors,
+            Provider.incompatibleNodeVersionMessage
+          );
         }
       },
     });
