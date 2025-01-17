@@ -542,26 +542,34 @@ describe('Math - BN', () => {
     expect(bn('4000000').format({ precision: 1 })).toEqual('0.004');
   });
 
-  it('should warn when precision is less than minPrecision', () => {
-    const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+  describe('precision validation', () => {
+    let consoleWarnSpy: jest.SpyInstance;
 
-    // Test case where precision < minPrecision
-    bn(123).format({ precision: 2, minPrecision: 4 });
+    beforeEach(() => {
+      consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+    });
 
-    expect(consoleWarnSpy).toHaveBeenCalledWith(
-      'Warning: precision (2) is less than minPrecision (4). ' +
-      'This may lead to unexpected behavior. Consider setting precision >= minPrecision.'
-    );
+    afterEach(() => {
+      consoleWarnSpy.mockRestore();
+    });
 
-    // Test case where precision = minPrecision (should not warn)
-    consoleWarnSpy.mockClear();
-    bn(123).format({ precision: 4, minPrecision: 4 });
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
+    it('should warn when precision is less than minPrecision', () => {
+      bn(123).format({ precision: 2, minPrecision: 4 });
 
-    // Test case where precision > minPrecision (should not warn)
-    bn(123).format({ precision: 6, minPrecision: 4 });
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        'Warning: precision (2) is less than minPrecision (4). ' +
+        'This may lead to unexpected behavior. Consider setting precision >= minPrecision.'
+      );
+    });
 
-    consoleWarnSpy.mockRestore();
+    it('should not warn when precision equals minPrecision', () => {
+      bn(123).format({ precision: 4, minPrecision: 4 });
+      expect(consoleWarnSpy).not.toHaveBeenCalled();
+    });
+
+    it('should not warn when precision is greater than minPrecision', () => {
+      bn(123).format({ precision: 6, minPrecision: 4 });
+      expect(consoleWarnSpy).not.toHaveBeenCalled();
+    });
   });
 });
