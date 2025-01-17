@@ -121,7 +121,7 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
     if (initialPrecision < initialMinPrecision) {
       console.warn(
         `Warning: precision (${initialPrecision}) is less than minPrecision (${initialMinPrecision}). ` +
-        'This may lead to unexpected behavior. Consider setting precision >= minPrecision.'
+        'This may lead to unexpected behavior. Consider setting precision greater than or equal to minPrecision.'
       );
     }
 
