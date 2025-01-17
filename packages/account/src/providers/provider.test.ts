@@ -20,14 +20,12 @@ import {
   MOCK_TX_UNKNOWN_RAW_PAYLOAD,
   MOCK_TX_SCRIPT_RAW_PAYLOAD,
 } from '../../test/fixtures/transaction-summary';
-import { setupTestProviderAndWallets, launchNode, TestMessage, TestAssetId } from '../test-utils';
+import { setupTestProviderAndWallets, launchNode, TestMessage } from '../test-utils';
 
 import type { Coin } from './coin';
-import { coinQuantityfy } from './coin-quantity';
 import type { Message } from './message';
 import type { ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
 import Provider, {
-  BALANCES_PAGE_SIZE_LIMIT,
   BLOCKS_PAGE_SIZE_LIMIT,
   DEFAULT_RESOURCE_CACHE_TTL,
   GAS_USED_MODIFIER,
