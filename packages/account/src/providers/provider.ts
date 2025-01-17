@@ -123,7 +123,6 @@ export type GetMessagesResponse = {
 
 export type GetBalancesResponse = {
   balances: CoinQuantity[];
-  pageInfo: PageInfo;
 };
 
 export type GetTransactionsResponse = {
@@ -1799,7 +1798,7 @@ Supported fuel-core version: ${supportedVersion}.`
       owner: Address.fromAddressOrString(owner).toB256(),
       assetId: hexlify(assetId),
     });
-    return bn(balance.amountU128, 10);
+    return bn(balance.amount, 10);
   }
 
   /**
@@ -1809,26 +1808,24 @@ Supported fuel-core version: ${supportedVersion}.`
    * @param paginationArgs - Pagination arguments (optional).
    * @returns A promise that resolves to the balances.
    */
-  async getBalances(
-    owner: string | Address,
-    paginationArgs?: CursorPaginationArgs
-  ): Promise<GetBalancesResponse> {
+  async getBalances(owner: string | Address): Promise<GetBalancesResponse> {
     const {
-      balances: { edges, pageInfo },
+      balances: { edges },
     } = await this.operations.getBalances({
-      ...validatePaginationArgs({
-        paginationLimit: BALANCES_PAGE_SIZE_LIMIT,
-        inputArgs: paginationArgs,
-      }),
+      /**
+       * The query parameters for this method were designed to support pagination,
+       * but the current Fuel-Core implementation does not support pagination yet.
+       */
+      first: 10000,
       filter: { owner: Address.fromAddressOrString(owner).toB256() },
     });
 
     const balances = edges.map(({ node }) => ({
       assetId: node.assetId,
-      amount: bn(node.amountU128),
+      amount: bn(node.amount),
     }));
 
-    return { balances, pageInfo };
+    return { balances };
   }
 
   /**

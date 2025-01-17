@@ -448,14 +448,8 @@ query getVersion {
 fragment nodeInfoFragment on NodeInfo {
   utxoValidation
   vmBacktrace
-  maxGas
   maxTx
   maxDepth
-  txPoolStats {
-    txCount
-    totalGas
-    totalSize
-  }
   nodeVersion
 }
 
@@ -669,7 +663,7 @@ query getContractBalance($contract: ContractId!, $asset: AssetId!) {
 
 query getBalance($owner: Address!, $assetId: AssetId!) {
   balance(owner: $owner, assetId: $assetId) {
-    amountU128
+    amount
   }
 }
 
@@ -705,7 +699,7 @@ query getBalances(
     edges {
       node {
         assetId
-        amountU128
+        amount
       }
     }
   }
