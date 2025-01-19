@@ -1,4 +1,4 @@
-import { defineConfig, loadEnv } from 'vitepress';
+import { defineConfig } from 'vitepress';
 import { codeInContextPlugin } from './plugins/codeInContextPlugin';
 import { snippetPlugin } from './plugins/snippetPlugin';
 
@@ -17,12 +17,21 @@ export default ({ mode }) =>
         md.use(codeInContextPlugin);
         md.block.ruler.disable('snippet');
         md.core.ruler.before('normalize', 'replace-magic-string', (state) => {
-          const env = loadEnv(mode, process.cwd());
-          // Replace the magic string in the Markdown content
-          state.src = state.src.replace(/DOCS_API_URL/g, env.VITE_DOCS_API_URL);
+          const apiUrl = mode === 'development' ? 'http://localhost:5174' : '/api';
+          state.src = state.src.replace(/DOCS_API_URL/g, apiUrl);
         });
       },
     },
+    transformHtml: (code) => {
+      // make the API links open in a new tab
+      // because opening in the same tab doesn't work in the preview
+      return code.replace(
+        /(<a\s+[^>]*href="\/api\/[^"]*")/g,
+        '$1 target="_blank" rel="noreferrer"'
+      );
+    },
+    // finds dead DOCS_API_URL links
+    // which get replaced later in the markdown transformer
     ignoreDeadLinks: true,
     head: [
       ['link', { rel: 'icon', href: '/fuels-ts/favicon.ico', type: 'image/png' }],
