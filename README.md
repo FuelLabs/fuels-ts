@@ -1,5 +1,6 @@
 # fuels-ts
 
+
 Typescript SDK for Fuel.
 
 [![test](https://github.com/FuelLabs/fuels-ts/actions/workflows/test.yaml/badge.svg)](https://github.com/FuelLabs/fuels-ts/actions/workflows/test.yaml)
