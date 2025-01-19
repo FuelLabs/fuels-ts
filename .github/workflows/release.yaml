@@ -131,6 +131,15 @@ jobs:
           repo: FuelLabs/docs-hub
           token: ${{ secrets.REPO_TOKEN }}
 
+      - name: Update Docs API (stable)
+        if: github.ref_name == 'master' && env.SHOULD_DEPLOY_DOCS == 'true'
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_TS_DOCS_PROJECT_ID }}
+        run: |
+          pnpm install --global vercel@latest
+          vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
+
       - name: Create PR to apply latest release to master
         if: steps.changesets.outputs.published == 'true' && startsWith(github.ref_name, 'release/') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
         run: |
