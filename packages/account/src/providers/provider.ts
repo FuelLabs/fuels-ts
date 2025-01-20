@@ -77,6 +77,8 @@ export const GAS_USED_MODIFIER = 1.2;
 export type Features = {
   balancePagination: boolean;
   amount128: boolean;
+  daCompressedBlock: boolean;
+  getAssetDetails: boolean;
 };
 
 export type DryRunFailureStatusFragment = GqlDryRunFailureStatusFragment;
@@ -427,6 +429,8 @@ export default class Provider {
   private features: Features = {
     balancePagination: false,
     amount128: false,
+    daCompressedBlock: false,
+    getAssetDetails: false,
   };
 
   /** @hidden */
@@ -740,6 +744,8 @@ export default class Provider {
     if (gte(nodeVersion, '0.41.0')) {
       this.features.balancePagination = true;
       this.features.amount128 = true;
+      this.features.daCompressedBlock = true;
+      this.features.getAssetDetails = true;
     }
   }
 
