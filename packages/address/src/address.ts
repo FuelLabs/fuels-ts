@@ -23,7 +23,7 @@ export class Address {
   // #endregion address-2
 
   /**
-   * @param address - A B256 address, public key, evm address, or Address instance
+   * @param address - A B256 address, public key, EVM address, or Address instance
    */
   constructor(address: string | B256Address | Address) {
     const b256Address = fromDynamicInputToB256(address);
