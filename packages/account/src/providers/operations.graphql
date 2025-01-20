@@ -667,6 +667,12 @@ query getBalance($owner: Address!, $assetId: AssetId!) {
   }
 }
 
+query getBalanceV2($owner: Address!, $assetId: AssetId!) {
+  balance(owner: $owner, assetId: $assetId) {
+    amountU128
+  }
+}
+
 query getLatestGasPrice {
   latestGasPrice {
     gasPrice
