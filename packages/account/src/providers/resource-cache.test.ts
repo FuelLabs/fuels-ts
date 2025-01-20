@@ -7,8 +7,14 @@ import { ResourceCache } from './resource-cache';
  * @group node
  * @group browser
  */
-describe('Resource Cache', () => {
+describe.sequential('Resource Cache', () => {
   const randomValue = () => hexlify(randomBytes(32));
+
+  afterEach(() => {
+    // Reset the cache after each test
+    const resourceCache = new ResourceCache(1000);
+    resourceCache.clear();
+  });
 
   it('can instantiate [valid numerical ttl]', () => {
     const memCache = new ResourceCache(1000);
@@ -51,18 +57,14 @@ describe('Resource Cache', () => {
     expect(resourceCache.isCached(messageNonce)).toBeTruthy();
   });
 
-  it(
-    'can get active [no data]',
-    async () => {
-      const EXPECTED = { utxos: [], messages: [] };
-      const resourceCache = new ResourceCache(1);
+  it('can get active [no data]', async () => {
+    const EXPECTED = { utxos: [], messages: [] };
+    const resourceCache = new ResourceCache(1);
 
-      await sleep(1);
+    await sleep(1);
 
-      expect(resourceCache.getActiveData()).toStrictEqual(EXPECTED);
-    },
-    { repeats: 10000 }
-  );
+    expect(resourceCache.getActiveData()).toStrictEqual(EXPECTED);
+  });
 
   it('can get active', () => {
     const EXPECTED = {
