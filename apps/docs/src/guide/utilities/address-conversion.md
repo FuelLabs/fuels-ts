@@ -37,6 +37,6 @@ Similarly, the Wallet `address` property is also of type [`Address`](https://fue
 
 ## Converting an Asset ID
 
-[Asset IDs](../types/asset-id.md) are a wrapped [b256](../types/b256.md) value. The following example shows how to create an [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) from a `b256` type:
+[Asset IDs](../types/asset-id.md) are a wrapped [`B256`](../types/b256.md) value. The following example shows how to create an [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) from a `B256` type:
 
 <<< @./snippets/address-conversion/asset-id.ts#conversion-4{ts:line-numbers}

@@ -1,6 +1,6 @@
 # Address
 
-In Sway, the [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) type serves as a type-safe wrapper around the primitive `b256` type. The SDK takes a different approach and has its own abstraction for the [Address](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) type.
+In Sway, the [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) type serves as a type-safe wrapper around the primitive `B256` type. The SDK takes a different approach and has its own abstraction for the [Address](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) type.
 
 ## Address Class
 
