@@ -838,6 +838,14 @@ export default class Provider {
   }
 
   async getAssetDetails(assetId: string): Promise<GetAssetDetailsResponse> {
+    if (!this.features.getAssetDetails) {
+      const { nodeVersion } = await this.getNode();
+      throw new FuelError(
+        ErrorCode.NOT_SUPPORTED,
+        `The query "getAssetDetails" is not supported by node version: ${nodeVersion}`
+      );
+    }
+
     try {
       const { assetDetails } = await this.operations.getAssetDetails({ assetId });
 
