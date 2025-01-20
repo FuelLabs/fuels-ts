@@ -1986,6 +1986,58 @@ describe('Provider', () => {
     expect(block?.transactions?.[0]).toStrictEqual(expectedData);
   });
 
+  it('ensures "daCompressedBlock" is supported by the node', async () => {
+    const nodeVersion = '0.40.0';
+
+    vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo').mockResolvedValue({
+      chain: {} as ChainInfo,
+      nodeInfo: { nodeVersion } as NodeInfo,
+    });
+
+    vi.spyOn(Provider.prototype, 'getNode').mockResolvedValue({
+      nodeVersion,
+    } as NodeInfo);
+
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    await expectToThrowFuelError(
+      () => provider.daCompressedBlock('100'),
+      new FuelError(
+        ErrorCode.NOT_SUPPORTED,
+        `The query "daCompressedBlock" is not supported by node version: ${nodeVersion}`
+      )
+    );
+
+    vi.restoreAllMocks();
+  });
+
+  it('ensures "getAssetDetails" is supported by the node', async () => {
+    const nodeVersion = '0.40.0';
+
+    vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo').mockResolvedValue({
+      chain: {} as ChainInfo,
+      nodeInfo: { nodeVersion } as NodeInfo,
+    });
+
+    vi.spyOn(Provider.prototype, 'getNode').mockResolvedValue({
+      nodeVersion,
+    } as NodeInfo);
+
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    await expectToThrowFuelError(
+      () => provider.getAssetDetails(getRandomB256()),
+      new FuelError(
+        ErrorCode.NOT_SUPPORTED,
+        `The query "getAssetDetails" is not supported by node version: ${nodeVersion}`
+      )
+    );
+
+    vi.restoreAllMocks();
+  });
+
   describe('paginated methods', () => {
     test('can properly use getCoins', async () => {
       const totalCoins = RESOURCES_PAGE_SIZE_LIMIT + 1;
