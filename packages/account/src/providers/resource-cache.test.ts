@@ -51,14 +51,18 @@ describe('Resource Cache', () => {
     expect(resourceCache.isCached(messageNonce)).toBeTruthy();
   });
 
-  it('can get active [no data]', async () => {
-    const EXPECTED = { utxos: [], messages: [] };
-    const resourceCache = new ResourceCache(1);
+  it.only(
+    'can get active [no data]',
+    async () => {
+      const EXPECTED = { utxos: [], messages: [] };
+      const resourceCache = new ResourceCache(1);
 
-    await sleep(1);
+      await sleep(1);
 
-    expect(resourceCache.getActiveData()).toStrictEqual(EXPECTED);
-  });
+      expect(resourceCache.getActiveData()).toStrictEqual(EXPECTED);
+    },
+    { repeats: 10000 }
+  );
 
   it('can get active', () => {
     const EXPECTED = {
