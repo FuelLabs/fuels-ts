@@ -1739,6 +1739,14 @@ export default class Provider {
   }
 
   async daCompressedBlock(height: string) {
+    if (!this.features.daCompressedBlock) {
+      const { nodeVersion } = await this.getNode();
+      throw new FuelError(
+        ErrorCode.NOT_SUPPORTED,
+        `The query "daCompressedBlock" is not supported by node version: ${nodeVersion}`
+      );
+    }
+
     const { daCompressedBlock } = await this.operations.daCompressedBlock({
       height,
     });
