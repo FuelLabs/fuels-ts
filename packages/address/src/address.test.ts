@@ -147,6 +147,81 @@ describe('Address', () => {
         expectedError
       );
     });
+
+    test('fromEvmAddressToB256 (evm Address to b256)', () => {
+      const result = utils.fromEvmAddressToB256(ADDRESS_EVM);
+
+      expect(result).toEqual(ADDRESS_B256_EVM_PADDED);
+    });
+
+    test('fromEvmAddressToB256 (invalid EVM Address)', async () => {
+      const invalidEvmAddress = '0x123';
+      const expectedError = new FuelError(
+        FuelError.CODES.INVALID_EVM_ADDRESS,
+        'Invalid EVM address format.'
+      );
+      await expectToThrowFuelError(
+        () => utils.fromEvmAddressToB256(invalidEvmAddress),
+        expectedError
+      );
+    });
+
+    test('fromPublicKeyToB256 (public key to b256)', () => {
+      const result = utils.fromPublicKeyToB256(PUBLIC_KEY);
+
+      expect(result).toEqual(expectedB256Address);
+    });
+
+    test('fromPublicKeyToB256 (invalid public key)', async () => {
+      const invalidPublicKey = '0x123';
+      const expectedError = new FuelError(
+        FuelError.CODES.INVALID_PUBLIC_KEY,
+        `Invalid Public Key: ${invalidPublicKey}.`
+      );
+      await expectToThrowFuelError(
+        () => utils.fromPublicKeyToB256(invalidPublicKey),
+        expectedError
+      );
+    });
+
+    test('fromDynamicInputToB256 [public key]', () => {
+      const address = utils.fromDynamicInputToB256(PUBLIC_KEY);
+
+      expect(address).toEqual(expectedB256Address);
+    });
+
+    test('fromDynamicInputToB256 [b256Address]', () => {
+      const address = utils.fromDynamicInputToB256(expectedB256Address);
+
+      expect(address).toEqual(expectedB256Address);
+    });
+
+    test('fromDynamicInputToB256 [b256Address]', () => {
+      const address = utils.fromDynamicInputToB256(expectedB256Address);
+
+      expect(address).toEqual(expectedB256Address);
+    });
+
+    test('fromDynamicInputToB256 [evmAddress]', () => {
+      const address = utils.fromDynamicInputToB256(ADDRESS_EVM);
+
+      expect(address).toEqual(ADDRESS_B256_EVM_PADDED);
+    });
+
+    test('fromDynamicInputToB256 [bad input]', async () => {
+      const expectedError = new FuelError(
+        FuelError.CODES.PARSE_FAILED,
+        `Unknown address format: only 'B256', 'Public Key (512)', or 'EVM Address' are supported.`
+      );
+      await expectToThrowFuelError(() => utils.fromDynamicInputToB256('badinput'), expectedError);
+    });
+
+    test('fromDynamicInputToB256 [Address]', () => {
+      const address: Address = Address.fromRandom();
+      const newAddress: B256Address = utils.fromDynamicInputToB256(address);
+
+      expect(newAddress).toEqual(address.toB256());
+    });
   });
 
   describe('Address class', () => {
@@ -158,6 +233,48 @@ describe('Address', () => {
       expect(`cast as string${result}`).toEqual(`cast as string${ADDRESS_CHECKSUM}`);
       expect(result.toB256()).toEqual(ADDRESS_B256);
       expect(result.toBytes()).toEqual(new Uint8Array(ADDRESS_BYTES));
+    });
+
+    test('instantiate an Address class [public key]', () => {
+      const address = new Address(PUBLIC_KEY);
+
+      expect(address.toAddress()).toEqual(expectedB256Address);
+      expect(address.toB256()).toEqual(expectedB256Address);
+    });
+
+    test('instantiate an Address class [b256Address]', () => {
+      const address = new Address(expectedB256Address);
+
+      expect(address.toAddress()).toEqual(expectedB256Address);
+    });
+
+    test('instantiate an Address class [b256Address]', () => {
+      const address = new Address(expectedB256Address);
+
+      expect(address.toB256()).toEqual(expectedB256Address);
+    });
+
+    test('instantiate an Address class [evmAddress]', () => {
+      const address = new Address(ADDRESS_EVM);
+
+      expect(address.toB256()).toEqual(ADDRESS_B256_EVM_PADDED);
+    });
+
+    test('instantiate an Address class [bad input]', async () => {
+      const expectedError = new FuelError(
+        FuelError.CODES.PARSE_FAILED,
+        `Unknown address format: only 'B256', 'Public Key (512)', or 'EVM Address' are supported.`
+      );
+      await expectToThrowFuelError(() => new Address('badinput'), expectedError);
+    });
+
+    test('instantiate an Address class [Address]', () => {
+      const address = Address.fromRandom();
+      const newAddress = new Address(address);
+
+      expect(newAddress.toB256()).toEqual(address.toB256());
+      expect(address).toBe(address);
+      expect(newAddress).not.toBe(address);
     });
 
     test('instance equality', () => {
