@@ -5,7 +5,7 @@ import type { Transaction } from '@fuel-ts/transactions';
 import { InputType, InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
-import { checkFuelCoreVersionCompatibility, versions } from '@fuel-ts/versions';
+import { checkFuelCoreVersionCompatibility, gte, versions } from '@fuel-ts/versions';
 import { equalBytes } from '@noble/curves/abstract/utils';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
@@ -73,6 +73,11 @@ export const BALANCES_PAGE_SIZE_LIMIT = 100;
 export const BLOCKS_PAGE_SIZE_LIMIT = 5;
 export const DEFAULT_RESOURCE_CACHE_TTL = 20_000; // 20 seconds
 export const GAS_USED_MODIFIER = 1.2;
+
+export type Features = {
+  balancePagination: boolean;
+  amount128: boolean;
+};
 
 export type DryRunFailureStatusFragment = GqlDryRunFailureStatusFragment;
 export type DryRunSuccessStatusFragment = GqlDryRunSuccessStatusFragment;
@@ -418,6 +423,12 @@ export default class Provider {
   /** @hidden */
   private urlWithoutAuth: string;
   /** @hidden */
+  private features: Features = {
+    balancePagination: false,
+    amount128: false,
+  };
+
+  /** @hidden */
   private static chainInfoCache: ChainInfoCache = {};
   /** @hidden */
   private static nodeInfoCache: NodeInfoCache = {};
@@ -526,7 +537,8 @@ export default class Provider {
    * Initialize Provider async stuff
    */
   async init(): Promise<Provider> {
-    await this.fetchChainAndNodeInfo();
+    const { nodeInfo } = await this.fetchChainAndNodeInfo();
+    this.setupFeatures(nodeInfo.nodeVersion);
     return this;
   }
 
@@ -718,6 +730,16 @@ export default class Provider {
 
     // @ts-expect-error This is due to this function being generic. Its type is specified when calling a specific operation via provider.operations.xyz.
     return { ...getOperationsSdk(executeQuery), ...customOperations(executeQuery) };
+  }
+
+  /**
+   * @hidden
+   */
+  private setupFeatures(nodeVersion: string) {
+    if (gte(nodeVersion, '0.41.0')) {
+      this.features.balancePagination = true;
+      this.features.amount128 = true;
+    }
   }
 
   /**
