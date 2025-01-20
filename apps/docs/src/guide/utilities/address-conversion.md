@@ -2,11 +2,11 @@
 
 Addresses and varying address formats are commonplace when interacting with decentralized applications. Furthermore, different networks may enforce different address formats.
 
-The Fuel Network uses the [`Bits256`](../types/bits256.md) address format for its interactions, an example of which can be seen below:
+The Fuel Network uses the [`B256`](../types/b256.md) address format for its interactions, an example of which can be seen below:
 
 <<< @/../../docs/src/guide/types/snippets/b256.ts#addresses-1{ts:line-numbers}
 
-However, a hexlified [Bits256](../types/bits256.md) (hex) is another common address format; an example can be seen below:
+However, a hexlified [B256](../types/b256.md) (hex) is another common address format; an example can be seen below:
 
 <<< @/../../docs/src/guide/types/snippets/evm-address/creating-an-evm.ts#snippet-2{ts:line-numbers}
 apps/
@@ -37,6 +37,6 @@ Similarly, the Wallet `address` property is also of type [`Address`](https://fue
 
 ## Converting an Asset ID
 
-[Asset IDs](../types/asset-id.md) are a wrapped [b256](../types/bits256.md) value. The following example shows how to create an [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) from a `b256` type:
+[Asset IDs](../types/asset-id.md) are a wrapped [b256](../types/b256.md) value. The following example shows how to create an [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) from a `b256` type:
 
 <<< @./snippets/address-conversion/asset-id.ts#conversion-4{ts:line-numbers}

@@ -4,7 +4,7 @@ In Sway, the [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_a
 
 ## Address Class
 
-The [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class also provides a set of utility functions for easy manipulation and conversion between address formats along with one property; `b256Address`, which is of the [`B256`](./bits256.md) type.
+The [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class also provides a set of utility functions for easy manipulation and conversion between address formats along with one property; `b256Address`, which is of the [`B256`](./b256.md) type.
 
 <<< @/../../../packages/address/src/address.ts#address-2{ts:line-numbers}
 
