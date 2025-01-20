@@ -51,7 +51,7 @@ describe('Resource Cache', () => {
     expect(resourceCache.isCached(messageNonce)).toBeTruthy();
   });
 
-  it.only(
+  it(
     'can get active [no data]',
     async () => {
       const EXPECTED = { utxos: [], messages: [] };
