@@ -2187,48 +2187,52 @@ describe('Provider', () => {
       expect(pageInfo.endCursor).toBeDefined();
     });
 
-    // it('can get balances', async () => {
-    //   using launched = await setupTestProviderAndWallets({
-    //     walletsConfig: {
-    //       assets: 110,
-    //     },
-    //   });
-    //   const {
-    //     provider,
-    //     wallets: [wallet],
-    //   } = launched;
+    it('can get balances', async () => {
+      using launched = await setupTestProviderAndWallets({
+        walletsConfig: {
+          assets: 110,
+        },
+      });
+      const {
+        provider,
+        wallets: [wallet],
+      } = launched;
 
-    //   let { balances, pageInfo } = await provider.getBalances(wallet.address, { first: 10 });
+      let { balances, pageInfo } = await provider.getBalances(wallet.address, { first: 10 });
 
-    //   expect(balances.length).toBe(10);
-    //   expect(pageInfo.hasNextPage).toBeTruthy();
-    //   expect(pageInfo.hasPreviousPage).toBeFalsy();
-    //   expect(pageInfo.startCursor).toBeDefined();
-    //   expect(pageInfo.endCursor).toBeDefined();
+      pageInfo = pageInfo as GqlPageInfo;
 
-    //   ({ balances, pageInfo } = await provider.getBalances(wallet.address, {
-    //     after: pageInfo.endCursor,
-    //   }));
+      expect(balances.length).toBe(10);
+      expect(pageInfo.hasNextPage).toBeTruthy();
+      expect(pageInfo.hasPreviousPage).toBeFalsy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
 
-    //   expect(balances.length).toBe(100);
-    //   expect(pageInfo.hasNextPage).toBeFalsy();
-    //   expect(pageInfo.hasPreviousPage).toBeTruthy();
-    //   expect(pageInfo.startCursor).toBeDefined();
-    //   expect(pageInfo.endCursor).toBeDefined();
+      ({ balances, pageInfo } = await provider.getBalances(wallet.address, {
+        after: pageInfo.endCursor,
+      }));
 
-    //   ({ balances, pageInfo } = await provider.getBalances(wallet.address, {
-    //     before: pageInfo.startCursor,
-    //     last: 10,
-    //   }));
+      pageInfo = pageInfo as GqlPageInfo;
 
-    //   expect(balances.length).toBe(10);
-    //   expect(pageInfo.hasNextPage).toBeFalsy();
-    //   expect(pageInfo.hasPreviousPage).toBeTruthy();
-    //   expect(pageInfo.startCursor).toBeDefined();
-    //   expect(pageInfo.endCursor).toBeDefined();
-    // });
+      expect(balances.length).toBe(100);
+      expect(pageInfo.hasNextPage).toBeFalsy();
+      expect(pageInfo.hasPreviousPage).toBeTruthy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
 
-    it.todo('can get balances amount greater than u64', () => {});
+      ({ balances, pageInfo } = await provider.getBalances(wallet.address, {
+        before: pageInfo.startCursor,
+        last: 10,
+      }));
+
+      pageInfo = pageInfo as GqlPageInfo;
+
+      expect(balances.length).toBe(10);
+      expect(pageInfo.hasNextPage).toBeFalsy();
+      expect(pageInfo.hasPreviousPage).toBeTruthy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+    });
 
     describe('pagination arguments', async () => {
       using launched = await setupTestProviderAndWallets({
@@ -2259,11 +2263,11 @@ describe('Provider', () => {
             invocation: () => provider.getBlocks(args),
             limit: BLOCKS_PAGE_SIZE_LIMIT,
           },
-          // {
-          //   name: 'getBalances',
-          //   invocation: () => provider.getBalances(address, args),
-          //   limit: BALANCES_PAGE_SIZE_LIMIT,
-          // },
+          {
+            name: 'getBalances',
+            invocation: () => provider.getBalances(address, args),
+            limit: BALANCES_PAGE_SIZE_LIMIT,
+          },
         ];
       }
 
