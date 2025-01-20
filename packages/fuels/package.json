@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.97.2",
+  "version": "0.98.0",
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -71,7 +71,6 @@
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/math": "workspace:*",
-    "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/program": "workspace:*",
     "@fuel-ts/script": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",

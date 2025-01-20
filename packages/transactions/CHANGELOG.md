@@ -1,5 +1,28 @@
 # Change Log
 
+## 0.98.0
+
+### Minor Changes
+
+- 254bf53: chore!: remove receipts deprecated properties
+- f132203: chore!: remove receipt coders
+
+### Patch Changes
+
+- 12e801e: chore: dependency pinning and auditing
+- 0b4c3ab: chore!: redistributed the `@fuel-ts/interfaces` package
+- Updated dependencies [12e801e]
+- Updated dependencies [a7eb9b6]
+- Updated dependencies [4ccc628]
+- Updated dependencies [08a31d8]
+- Updated dependencies [0b4c3ab]
+  - @fuel-ts/abi-coder@0.98.0
+  - @fuel-ts/address@0.98.0
+  - @fuel-ts/hasher@0.98.0
+  - @fuel-ts/utils@0.98.0
+  - @fuel-ts/math@0.98.0
+  - @fuel-ts/errors@0.98.0
+
 ## 0.97.2
 
 ### Patch Changes

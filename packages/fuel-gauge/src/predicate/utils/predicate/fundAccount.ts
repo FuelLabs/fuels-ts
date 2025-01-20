@@ -14,7 +14,7 @@ export const fundAccount = async (
     request.addCoinOutput(accountToBeFunded.address, new BN(amount).div(utxosAmount), baseAssetId);
   }
 
-  await request.autoCost(fundedAccount);
+  await request.estimateAndFund(fundedAccount);
 
   const submit = await fundedAccount.sendTransaction(request);
   await submit.waitForResult();

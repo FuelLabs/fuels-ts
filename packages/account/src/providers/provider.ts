@@ -49,8 +49,9 @@ import {
   isTransactionTypeCreate,
   isTransactionTypeScript,
   transactionRequestify,
+  validateTransactionForAssetBurn,
 } from './transaction-request';
-import type { TransactionResult, TransactionResultReceipt } from './transaction-response';
+import type { TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse, getDecodedLogs } from './transaction-response';
 import { processGqlReceipt } from './transaction-summary/receipt';
 import {
@@ -61,7 +62,7 @@ import {
 } from './utils';
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
-import { handleGqlErrorMessage } from './utils/handle-gql-error-message';
+import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
 const MAX_RETRIES = 10;
@@ -363,7 +364,12 @@ export type ProviderCallParams = UTXOValidationParams & EstimateTransactionParam
 /**
  * Provider Send transaction params
  */
-export type ProviderSendTxParams = EstimateTransactionParams;
+export type ProviderSendTxParams = EstimateTransactionParams & {
+  /**
+   * Whether to enable asset burn for the transaction.
+   */
+  enableAssetBurn?: boolean;
+};
 
 /**
  * URL - Consensus Params mapping.
@@ -408,6 +414,8 @@ export default class Provider {
   private static chainInfoCache: ChainInfoCache = {};
   /** @hidden */
   private static nodeInfoCache: NodeInfoCache = {};
+  /** @hidden */
+  private static incompatibleNodeVersionMessage: string = '';
 
   /** @hidden */
   public consensusParametersTimestamp?: number;
@@ -603,7 +611,7 @@ export default class Provider {
         vmBacktrace: data.nodeInfo.vmBacktrace,
       };
 
-      Provider.ensureClientVersionIsSupported(nodeInfo);
+      Provider.setIncompatibleNodeVersionMessage(nodeInfo);
 
       chain = processGqlChain(data.chain);
 
@@ -622,18 +630,18 @@ export default class Provider {
   /**
    * @hidden
    */
-  private static ensureClientVersionIsSupported(nodeInfo: NodeInfo) {
+  private static setIncompatibleNodeVersionMessage(nodeInfo: NodeInfo) {
     const { isMajorSupported, isMinorSupported, supportedVersion } =
       checkFuelCoreVersionCompatibility(nodeInfo.nodeVersion);
 
     if (!isMajorSupported || !isMinorSupported) {
-      // eslint-disable-next-line no-console
-      console.warn(
-        `The Fuel Node that you are trying to connect to is using fuel-core version ${nodeInfo.nodeVersion},
-which is not supported by the version of the TS SDK that you are using.
-Things may not work as expected.
-Supported fuel-core version: ${supportedVersion}.`
-      );
+      Provider.incompatibleNodeVersionMessage = [
+        `The Fuel Node that you are trying to connect to is using fuel-core version ${nodeInfo.nodeVersion}.`,
+        `The TS SDK currently supports fuel-core version ${supportedVersion}.`,
+        `Things may not work as expected.`,
+      ].join('\n');
+      FuelGraphqlSubscriber.incompatibleNodeVersionMessage =
+        Provider.incompatibleNodeVersionMessage;
     }
   }
 
@@ -651,12 +659,10 @@ Supported fuel-core version: ${supportedVersion}.`
       responseMiddleware: (response: GraphQLClientResponse<unknown> | Error) => {
         if ('response' in response) {
           const graphQlResponse = response.response as GraphQLResponse;
-
-          if (Array.isArray(graphQlResponse?.errors)) {
-            for (const error of graphQlResponse.errors) {
-              handleGqlErrorMessage(error.message, error);
-            }
-          }
+          assertGqlResponseHasNoErrors(
+            graphQlResponse.errors,
+            Provider.incompatibleNodeVersionMessage
+          );
         }
       },
     });
@@ -853,9 +859,15 @@ Supported fuel-core version: ${supportedVersion}.`
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true }: ProviderSendTxParams = {}
+    { estimateTxDependencies = true, enableAssetBurn }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    validateTransactionForAssetBurn(
+      await this.getBaseAssetId(),
+      transactionRequest,
+      enableAssetBurn
+    );
+
     if (estimateTxDependencies) {
       await this.estimateTxDependencies(transactionRequest);
     }
@@ -878,22 +890,6 @@ Supported fuel-core version: ${supportedVersion}.`
 
     const chainId = await this.getChainId();
     return new TransactionResponse(transactionRequest, this, chainId, abis, subscription);
-  }
-
-  /**
-   * Submits a transaction to the chain and awaits its status response.
-   *
-   * @param transactionRequestLike - the request to submit.
-   * @param sendTransactionParams - The provider send transaction parameters (optional).
-   * @returns A promise that resolves to a settled transaction.
-   */
-  async sendTransactionAndAwaitStatus(
-    transactionRequestLike: TransactionRequestLike,
-    providerSendTxParams: ProviderSendTxParams = {}
-  ): Promise<TransactionResult<void>> {
-    const response = await this.sendTransaction(transactionRequestLike, providerSendTxParams);
-    const result = await response.waitForResult();
-    return result;
   }
 
   /**

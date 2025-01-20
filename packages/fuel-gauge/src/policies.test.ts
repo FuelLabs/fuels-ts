@@ -127,7 +127,7 @@ describe('Policies', () => {
 
     txRequest.addCoinOutput(receiver.address, 500, await provider.getBaseAssetId());
 
-    await txRequest.autoCost(wallet);
+    await txRequest.estimateAndFund(wallet);
 
     const tx = await wallet.sendTransaction(txRequest);
 

@@ -2,6 +2,8 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { DocumentNode } from 'graphql';
 import { print } from 'graphql';
 
+import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
+
 type FuelGraphQLSubscriberOptions = {
   url: string;
   query: DocumentNode;
@@ -10,6 +12,7 @@ type FuelGraphQLSubscriberOptions = {
 };
 
 export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
+  public static incompatibleNodeVersionMessage: string | false = false;
   private static textDecoder = new TextDecoder();
 
   private constructor(private stream: ReadableStreamDefaultReader<Uint8Array>) {}
@@ -50,12 +53,7 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
       if (this.events.length > 0) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const { data, errors } = this.events.shift()!;
-        if (Array.isArray(errors)) {
-          throw new FuelError(
-            FuelError.CODES.INVALID_REQUEST,
-            errors.map((err) => err.message).join('\n\n')
-          );
-        }
+        assertGqlResponseHasNoErrors(errors, FuelGraphqlSubscriber.incompatibleNodeVersionMessage);
         return { value: data, done: false };
       }
       const { value, done } = await this.stream.read();
