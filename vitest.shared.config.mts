@@ -14,7 +14,6 @@ export default defineConfig({
   ],
   esbuild: { target: "es2022" },
   test: {
-    allowOnly: true,
     globalSetup: ["vitest.global-setup.ts"],
     setupFiles: ["./vitest.setup-files.ts"],
     coverage: {
