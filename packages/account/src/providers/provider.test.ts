@@ -23,10 +23,12 @@ import {
 import { mockIncompatibleVersions } from '../../test/utils/mockIncompabileVersions';
 import { setupTestProviderAndWallets, launchNode, TestMessage } from '../test-utils';
 
+import type { GqlPageInfo } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { Message } from './message';
 import type { ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
 import Provider, {
+  BALANCES_PAGE_SIZE_LIMIT,
   BLOCKS_PAGE_SIZE_LIMIT,
   DEFAULT_RESOURCE_CACHE_TTL,
   GAS_USED_MODIFIER,
@@ -495,7 +497,7 @@ describe('Provider', () => {
       .spyOn(Provider.prototype, 'fetchChainAndNodeInfo')
       .mockResolvedValue({
         chain: {} as ChainInfo,
-        nodeInfo: {} as NodeInfo,
+        nodeInfo: { nodeVersion: '0.41.0' } as NodeInfo,
       });
 
     const provider = new Provider(providerUrl, {
