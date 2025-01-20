@@ -10,6 +10,10 @@ import {
 } from '../../test/typegen/scripts/ScriptWithComplexArgs';
 import type { Vec } from '../../test/typegen/scripts/common';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('abi-script', () => {
   describe('decodeArguments', () => {
     it('should decode arguments with a simple script', async () => {
@@ -53,13 +57,21 @@ describe('abi-script', () => {
       >;
       const arg5 = { Address: { bits: getRandomB256() } };
       const arg6 = 100;
+      const expected = [
+        expect.toEqualBn(arg1),
+        arg2,
+        expect.toEqualBn(arg3),
+        arg4,
+        arg5,
+        expect.toEqualBn(arg6),
+      ];
 
       // Run script
       const script = new ScriptWithComplexArgs(wallet);
       const args: ScriptWithComplexArgsInputs = [arg1, arg2, arg3, arg4, arg5, arg6];
       const tx = await script.functions.main(...args).call();
       const { value, transactionResult } = await tx.waitForResult();
-      expect(value).toEqual(true);
+      expect(value).toEqual(expected);
 
       // Assert script data
       const scriptData = transactionResult.transaction.scriptData;
@@ -70,14 +82,7 @@ describe('abi-script', () => {
       // Assert the decoded script data matches the input arguments
       const fn = script.interface.getFunction('main');
       const decoded = fn.decodeArguments(scriptData);
-      expect(decoded).toEqual([
-        expect.toEqualBn(arg1),
-        arg2,
-        expect.toEqualBn(arg3),
-        arg4,
-        arg5,
-        expect.toEqualBn(arg6),
-      ]);
+      expect(decoded).toEqual(expected);
     });
   });
 });

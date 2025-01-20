@@ -2,7 +2,9 @@ script;
 
 use std::bytes::Bytes;
 
-pub type PoolId = (AssetId, AssetId, bool);
+type PoolId = (AssetId, AssetId, bool);
+
+type ScriptResult = (u64, AssetId, u64, Vec<PoolId>, Identity, u32);
 
 fn main(
     amount_in: u64,
@@ -11,6 +13,6 @@ fn main(
     pools: Vec<PoolId>,
     recipient: Identity,
     deadline: u32,
-) -> bool {
-    return true;
+) -> ScriptResult {
+    return (amount_in, asset_in, amount_out_min, pools, recipient, deadline);
 }
