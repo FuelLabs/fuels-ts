@@ -1817,11 +1817,22 @@ export default class Provider {
     /** The asset ID of coins to get */
     assetId: BytesLike
   ): Promise<BN> {
-    const { balance } = await this.operations.getBalance({
-      owner: Address.fromAddressOrString(owner).toB256(),
-      assetId: hexlify(assetId),
+    const ownerStr = Address.fromAddressOrString(owner).toB256();
+    const assetIdStr = hexlify(assetId);
+
+    if (!this.features.amount128) {
+      const { balance } = await this.operations.getBalance({
+        owner: ownerStr,
+        assetId: assetIdStr,
+      });
+      return bn(balance.amount, 10);
+    }
+
+    const { balance } = await this.operations.getBalanceV2({
+      owner: ownerStr,
+      assetId: assetIdStr,
     });
-    return bn(balance.amount, 10);
+    return bn(balance.amountU128, 10);
   }
 
   /**
