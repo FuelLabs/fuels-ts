@@ -128,6 +128,7 @@ export type GetMessagesResponse = {
 
 export type GetBalancesResponse = {
   balances: CoinQuantity[];
+  pageInfo?: PageInfo;
 };
 
 export type GetTransactionsResponse = {
@@ -1830,7 +1831,24 @@ export default class Provider {
    * @param paginationArgs - Pagination arguments (optional).
    * @returns A promise that resolves to the balances.
    */
-  async getBalances(owner: string | Address): Promise<GetBalancesResponse> {
+  async getBalances(
+    owner: string | Address,
+    paginationArgs?: CursorPaginationArgs
+  ): Promise<GetBalancesResponse> {
+    if (!this.features.balancePagination) {
+      return this.getBalancesV1(owner, paginationArgs);
+    }
+
+    return this.getBalancesV2(owner, paginationArgs);
+  }
+
+  /**
+   * @hidden
+   */
+  private async getBalancesV1(
+    owner: string | Address,
+    _paginationArgs?: CursorPaginationArgs
+  ): Promise<GetBalancesResponse> {
     const {
       balances: { edges },
     } = await this.operations.getBalances({
@@ -1848,6 +1866,31 @@ export default class Provider {
     }));
 
     return { balances };
+  }
+
+  /**
+   * @hidden
+   */
+  private async getBalancesV2(
+    owner: string | Address,
+    paginationArgs?: CursorPaginationArgs
+  ): Promise<GetBalancesResponse> {
+    const {
+      balances: { edges, pageInfo },
+    } = await this.operations.getBalancesV2({
+      ...validatePaginationArgs({
+        inputArgs: paginationArgs,
+        paginationLimit: BALANCES_PAGE_SIZE_LIMIT,
+      }),
+      filter: { owner: Address.fromAddressOrString(owner).toB256() },
+    });
+
+    const balances = edges.map(({ node }) => ({
+      assetId: node.assetId,
+      amount: bn(node.amountU128),
+    }));
+
+    return { balances, pageInfo };
   }
 
   /**
