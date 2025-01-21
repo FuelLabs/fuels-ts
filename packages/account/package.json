@@ -15,6 +15,11 @@
       "require": "./dist/index.js",
       "import": "./dist/index.mjs"
     },
+    "./configs": {
+      "types": "./dist/configs.d.ts",
+      "require": "./dist/configs.js",
+      "import": "./dist/configs.mjs"
+    },
     "./test-utils": {
       "types": "./dist/test-utils.d.ts",
       "require": "./dist/test-utils.js",
@@ -23,6 +28,9 @@
   },
   "typesVersions": {
     "*": {
+      "configs": [
+        "./dist/configs.d.ts"
+      ],
       "test-utils": [
         "./dist/test-utils.d.ts"
       ]
@@ -66,7 +74,6 @@
     "@graphql-codegen/typescript": "4.0.9",
     "@graphql-codegen/typescript-generic-sdk": "4.0.1",
     "@graphql-codegen/typescript-operations": "4.2.3",
-    "@internal/utils": "workspace:*",
     "@types/ramda": "0.30.2",
     "get-graphql-schema": "2.1.2",
     "type-fest": "4.26.1"
