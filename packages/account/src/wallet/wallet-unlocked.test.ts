@@ -1,6 +1,6 @@
 import { randomBytes } from '@fuel-ts/crypto';
 import { hashMessage } from '@fuel-ts/hasher';
-import type { BytesLike } from '@fuel-ts/interfaces';
+import type { BytesLike } from '@fuel-ts/utils';
 
 import walletSpec from '../../test/fixtures/wallet-spec';
 import { SCRIPT_TX_REQUEST, SIGNED_TX, PRIVATE_KEY } from '../../test/fixtures/wallet-unlocked';
@@ -56,7 +56,7 @@ describe('WalletUnlocked', () => {
 
     const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
     const signedTransaction = await wallet.signTransaction(SCRIPT_TX_REQUEST);
-    const chainId = wallet.provider.getChainId();
+    const chainId = await wallet.provider.getChainId();
     const verifiedAddress = Signer.recoverAddress(
       SCRIPT_TX_REQUEST.getTransactionId(chainId),
       signedTransaction

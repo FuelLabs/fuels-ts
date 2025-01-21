@@ -4,7 +4,7 @@ import { Provider, Wallet } from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_ADDRESS } from '../../../../env';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 
 const wallet: WalletLocked = Wallet.fromAddress(WALLET_ADDRESS, provider);
 // #endregion instantiating-wallets-10

@@ -1,27 +1,15 @@
 {
-  "ignore": [
-    ".github/**",
-    "**/*/fuels.config.*",
-    "**/*/.vitepress/*",
-    "/apps/docs/*",
-    "/packages/abi-typegen/test/**",
-    "templates/**",
-    "/apps/docs/**/*.test.ts",
-    "apps/create-fuels-counter-guide/**",
-    "apps/docs-api/**"
+  "entry": [
+    "apps/docs/src/versions.data.ts",
+    "apps/docs/src/guide/types/snippets/numbers/for-u8-u16-and-u32-2.ts"
   ],
+  "ignore": [".github/**"],
   "ignoreDependencies": [
-    "autocannon",
+    "fuels",
     "bun",
-    "@/sway-api/*",
-    "@fuel-ts/*",
-    "@fuels/connectors",
-    "@internal/fuel-core",
-    "@internal/forc",
-    "@types/jest",
     "@types/rimraf",
-    "@graphql-codegen*",
-    "graphql-tag",
+    "@fuel-ts/abi-typegen",
+    "@internal/fuel-core",
     "get-graphql-schema",
     "events",
     "eslint-plugin-jsdoc",
@@ -30,14 +18,11 @@
     "eslint-plugin-react",
     "eslint-plugin-react-hooks",
     "dotenv",
-    "ethers",
-    "kill",
-    "lsof",
     "memfs",
     "open",
     "markdown-link-check",
     "ts-generator",
-    "webdriverio",
-    "syncpack"
+    "vitepress-plugin-search",
+    "vue"
   ]
 }

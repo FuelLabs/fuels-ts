@@ -16,7 +16,7 @@ const queryClient = new QueryClient();
 
 const connectors = defaultConnectors({
   devMode: true,
-  fuelProvider: Provider.create(providerUrl),
+  fuelProvider: new Provider(providerUrl),
 });
 
 const networks: Network[] = [{ url: providerUrl, chainId }];

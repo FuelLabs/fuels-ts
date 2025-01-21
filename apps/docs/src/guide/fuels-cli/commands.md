@@ -15,11 +15,17 @@ npx fuels@{{fuels}} help init
 
 ```console
 Options:
-  -w, --workspace <path>          Relative dir path to Forc workspace
-  -c, --contracts <path|global>   Relative path/globals to  Contracts
-  -s, --scripts <path|global>     Relative path/globals to  Scripts
-  -p, --predicates <path|global>  Relative path/globals to  Predicates
-  -o, --output <path>             Relative dir path for Typescript generation
+  --path <path>                Path to project root (default: current directory)
+  -w, --workspace <path>       Relative dir path to Forc workspace
+  -c, --contracts [paths...]   Relative paths to Contracts
+  -s, --scripts [paths...]     Relative paths to Scripts
+  -p, --predicates [paths...]  Relative paths to Predicates
+  -o, --output <path>          Relative dir path for Typescript generation output
+  --forc-path <path>           Path to the `forc` binary
+  --fuel-core-path <path>      Path to the `fuel-core` binary
+  --auto-start-fuel-core       Auto-starts a `fuel-core` node during `dev` command
+  --fuel-core-port <port>      Port to use when starting a local `fuel-core` node for dev mode
+  -h, --help                   Display help
 ```
 
 Creating a sample `fuel.config.ts` file:

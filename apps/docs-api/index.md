@@ -19,7 +19,6 @@
 - [crypto](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_crypto.html)
 - [errors](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_errors.html)
 - [hasher](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_hasher.html)
-- [interfaces](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_interfaces.html)
 - [math](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_math.html)
 - [program](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_program.html)
 - [script](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_script.html)

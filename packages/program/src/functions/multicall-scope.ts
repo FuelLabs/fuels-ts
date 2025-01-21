@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { AbstractContract } from '@fuel-ts/interfaces';
+import type { AbstractContract } from '../types';
 
 import { BaseInvocationScope } from './base-invocation-scope';
 import type { FunctionInvocationScope } from './invocation-scope';

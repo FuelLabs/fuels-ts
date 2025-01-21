@@ -333,20 +333,24 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Transaction Request',
-                link: '/guide/transactions/transaction-request',
+                text: 'Modifying the Request',
+                link: '/guide/transactions/modifying-the-request',
               },
               {
-                text: 'Transaction Response',
-                link: '/guide/transactions/transaction-response',
+                text: 'Adding Parameters',
+                link: '/guide/transactions/adding-parameters',
               },
               {
-                text: 'Transaction Parameters',
-                link: '/guide/transactions/transaction-parameters',
+                text: 'Adding Policies',
+                link: '/guide/transactions/adding-policies',
               },
               {
-                text: 'Transaction Policies',
-                link: '/guide/transactions/transaction-policies',
+                text: 'Getting the Response',
+                link: '/guide/transactions/getting-the-response',
+              },
+              {
+                text: 'Optimizing Frontend Apps',
+                link: '/guide/transactions/optimizing-frontend-apps',
               },
             ],
           },
@@ -433,6 +437,10 @@ export default defineConfig({
                 text: 'Splitting UTXOs',
                 link: '/guide/cookbook/splitting-utxos',
               },
+              {
+                text: 'Optimized React Example',
+                link: '/guide/cookbook/optimized-react-example',
+              },
             ],
           },
           {
@@ -488,12 +496,12 @@ export default defineConfig({
                 link: '/guide/types/asset-id',
               },
               {
-                text: 'Bits256',
-                link: '/guide/types/bits256',
+                text: 'B256',
+                link: '/guide/types/b256',
               },
               {
-                text: 'Bits512',
-                link: '/guide/types/bits512',
+                text: 'B512',
+                link: '/guide/types/b512',
               },
               {
                 text: 'Bytes',

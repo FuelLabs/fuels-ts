@@ -25,6 +25,7 @@ export enum ErrorCode {
   WORKSPACE_NOT_DETECTED = 'workspace-not-detected',
 
   // address
+  INVALID_ADDRESS = 'invalid-address',
   INVALID_EVM_ADDRESS = 'invalid-evm-address',
   INVALID_B256_ADDRESS = 'invalid-b256-address',
 
@@ -85,6 +86,8 @@ export enum ErrorCode {
   FUNDS_TOO_LOW = 'funds-too-low',
   MAX_OUTPUTS_EXCEEDED = 'max-outputs-exceeded',
   MAX_COINS_REACHED = 'max-coins-reached',
+  ASSET_BURN_DETECTED = 'asset-burn-detected',
+
   // receipt
   INVALID_RECEIPT_TYPE = 'invalid-receipt-type',
 

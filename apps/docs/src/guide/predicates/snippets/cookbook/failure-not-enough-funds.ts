@@ -4,7 +4,7 @@ import { safeExec } from 'fuels/test-utils';
 import { LOCAL_NETWORK_URL } from '../../../../env';
 import { SimplePredicate } from '../../../../typegend';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const receiver = Wallet.generate({ provider });
 
 const inputAddress =
@@ -20,7 +20,7 @@ const { error } = await safeExec(async () =>
   predicate.transfer(
     receiver.address,
     amountOfCoinsToFail,
-    provider.getBaseAssetId()
+    await provider.getBaseAssetId()
   )
 );
 

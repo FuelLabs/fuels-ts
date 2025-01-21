@@ -6,7 +6,7 @@ import { WALLET_PVT_KEY, LOCAL_NETWORK_URL } from '../../../env';
 import { ScriptSum } from '../../../typegend/scripts/ScriptSum';
 
 // #region script-with-configurable-contants-2
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const script = new Script(ScriptSum.bytecode, ScriptSum.abi, wallet);
 

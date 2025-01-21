@@ -1,5 +1,50 @@
 # @internal/check-imports
 
+## 0.0.18
+
+### Patch Changes
+
+- 0b4c3ab: chore!: redistributed the `@fuel-ts/interfaces` package
+- Updated dependencies [981b992]
+- Updated dependencies [12e801e]
+- Updated dependencies [d5a696c]
+- Updated dependencies [13977df]
+- Updated dependencies [04ca73e]
+- Updated dependencies [68821a9]
+- Updated dependencies [11fcd7b]
+- Updated dependencies [458b7cf]
+- Updated dependencies [0fb6fa8]
+- Updated dependencies [a7eb9b6]
+- Updated dependencies [254bf53]
+- Updated dependencies [f132203]
+- Updated dependencies [8d8452e]
+- Updated dependencies [0f138cd]
+- Updated dependencies [d404734]
+- Updated dependencies [f2407dc]
+- Updated dependencies [4ccc628]
+- Updated dependencies [f293646]
+- Updated dependencies [75fae34]
+- Updated dependencies [a278e71]
+- Updated dependencies [08a31d8]
+- Updated dependencies [0b4c3ab]
+- Updated dependencies [68ef74d]
+  - fuels@0.98.0
+  - @fuel-ts/transactions@0.98.0
+  - @fuel-ts/abi-typegen@0.98.0
+  - @fuel-ts/abi-coder@0.98.0
+  - @fuel-ts/contract@0.98.0
+  - @fuel-ts/versions@0.98.0
+  - @fuel-ts/account@0.98.0
+  - @fuel-ts/address@0.98.0
+  - @fuel-ts/program@0.98.0
+  - @fuel-ts/crypto@0.98.0
+  - @fuel-ts/hasher@0.98.0
+  - @fuel-ts/merkle@0.98.0
+  - @fuel-ts/utils@0.98.0
+  - @fuel-ts/math@0.98.0
+  - @fuel-ts/script@0.98.0
+  - @fuel-ts/errors@0.98.0
+
 ## 0.0.17
 
 ### Patch Changes

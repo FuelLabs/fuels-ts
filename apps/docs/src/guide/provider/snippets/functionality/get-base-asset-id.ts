@@ -4,8 +4,8 @@ import { Address, Provider, ScriptTransactionRequest } from 'fuels';
 import { LOCAL_NETWORK_URL, WALLET_ADDRESS } from '../../../../env';
 
 // Fetch the base asset ID using the provider
-const provider = await Provider.create(LOCAL_NETWORK_URL);
-const baseAssetId = provider.getBaseAssetId();
+const provider = new Provider(LOCAL_NETWORK_URL);
+const baseAssetId = await provider.getBaseAssetId();
 // 0x...
 
 // Instantiate our recipients address

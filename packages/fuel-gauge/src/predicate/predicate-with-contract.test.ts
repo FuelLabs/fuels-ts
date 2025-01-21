@@ -33,7 +33,7 @@ describe('Predicate', () => {
       const { waitForResult } = await contractPredicate.functions
         .return_context_amount()
         .callParams({
-          forward: [500, provider.getBaseAssetId()],
+          forward: [500, await provider.getBaseAssetId()],
         })
         .call();
 
@@ -87,7 +87,7 @@ describe('Predicate', () => {
       const tx = await predicate.transfer(
         receiver.address,
         amountToReceiver,
-        provider.getBaseAssetId()
+        await provider.getBaseAssetId()
       );
       const { isStatusSuccess } = await tx.waitForResult();
       expect(isStatusSuccess).toBeTruthy();

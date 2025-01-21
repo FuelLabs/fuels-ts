@@ -10,10 +10,8 @@ function App() {
   const [balance, setBalance] = useState(0);
 
   useEffect(() => {
-    const main = async () => {
-      const provider = await Provider.create(
-        "https://mainnet.fuel.network/v1/graphql",
-      );
+    const onPageLoad = async () => {
+      const provider = new Provider("https://mainnet.fuel.network/v1/graphql");
 
       const wallet = Wallet.fromAddress("0x...", provider);
       const { balances } = await wallet.getBalances();
@@ -21,7 +19,7 @@ function App() {
       setBalance(new BN(balances[0].amount).toNumber());
     };
 
-    main();
+    onPageLoad();
   }, []);
 
   return <div>My Balance: {balance}</div>;
@@ -30,6 +28,7 @@ function App() {
 export default App;
 ```
 
-# More
+# See Also
 
+- [Optimized React Example](../cookbook/optimized-react-example.md)
 - [CDN Usage](./cdn-usage.md)
