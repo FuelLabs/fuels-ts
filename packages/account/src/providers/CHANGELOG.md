@@ -1136,7 +1136,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### 🚀 Features
 
 - add support to void return ([#181](https://github.com/FuelLabs/fuels-ts/issues/181))
-- call contract method with mutiple params ([#170](https://github.com/FuelLabs/fuels-ts/issues/170))
+- call contract method with multiple params ([#170](https://github.com/FuelLabs/fuels-ts/issues/170))
 - update abi code to support new syntax ([#169](https://github.com/FuelLabs/fuels-ts/issues/169))
 
 <a name="v0.3.0"></a>
