@@ -837,6 +837,12 @@ export default class Provider {
     return baseAssetId;
   }
 
+  /**
+   * Retrieves the details of an asset given its ID.
+   *
+   * @param assetId - The unique identifier of the asset.
+   * @returns A promise that resolves to an object containing the asset details.
+   */
   async getAssetDetails(assetId: string): Promise<GetAssetDetailsResponse> {
     if (!this.features.getAssetDetails) {
       const { nodeVersion } = await this.getNode();
@@ -1738,6 +1744,12 @@ export default class Provider {
     }
   }
 
+  /**
+   * Fetches a compressed block at the specified height.
+   *
+   * @param height - The height of the block to fetch.
+   * @returns The compressed block if available, otherwise `null`.
+   */
   async daCompressedBlock(height: string) {
     if (!this.features.daCompressedBlock) {
       const { nodeVersion } = await this.getNode();
