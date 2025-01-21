@@ -10,6 +10,12 @@ import { ResourceCache } from './resource-cache';
 describe('Resource Cache', () => {
   const randomValue = () => hexlify(randomBytes(32));
 
+  afterEach(() => {
+    // Reset the cache after each test
+    const resourceCache = new ResourceCache(1000);
+    resourceCache.clear();
+  });
+
   it('can instantiate [valid numerical ttl]', () => {
     const memCache = new ResourceCache(1000);
 
