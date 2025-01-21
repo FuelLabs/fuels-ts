@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { DEVNET_NETWORK_URL, TESTNET_NETWORK_URL } from '@fuel-ts/account';
+import { DEVNET_NETWORK_URL, TESTNET_NETWORK_URL } from '@fuel-ts/account/configs';
 import { WalletUnlocked, Provider, TransactionType, CHAIN_IDS, rawAssets, assets, bn } from 'fuels';
 
 import { ScriptMainArgBool } from '../test/typegen';
