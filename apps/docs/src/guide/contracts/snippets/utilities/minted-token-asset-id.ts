@@ -10,7 +10,7 @@ const deployer = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const deployContract = await TokenFactory.deploy(deployer);
 const { contract } = await deployContract.waitForResult();
 
-// Any valid bits256 string can be used as a sub ID
+// Any valid B256 string can be used as a sub ID
 const subID =
   '0xc7fd1d987ada439fc085cfa3c49416cf2b504ac50151e3c2335d60595cb90745';
 const mintAmount = bn(1000);
