@@ -75,7 +75,7 @@ export interface BaseTransactionRequestLike {
   tip?: BigNumberish;
   /** Block until which tx cannot be included */
   maturity?: number;
-  /** TODO: describe me please */
+  /** The block number after which the transaction is no longer valid. */
   expiration?: number;
   /** The maximum fee payable by this transaction using BASE_ASSET. */
   maxFee?: BigNumberish;
@@ -111,7 +111,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   tip?: BN;
   /** Block until which tx cannot be included */
   maturity?: number;
-  /** TODO: describe me please */
+  /** The block number after which the transaction is no longer valid. */
   expiration?: number;
   /** The maximum fee payable by this transaction using BASE_ASSET. */
   maxFee: BN;
