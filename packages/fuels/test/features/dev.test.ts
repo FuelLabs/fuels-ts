@@ -97,7 +97,8 @@ describe('dev', () => {
     });
 
     await new Promise((resolve) => {
-      devProcess.on('exit', () => {
+      devProcess.on('exit', (code) => {
+        expect(code).not.toEqual(0);
         resolve(undefined);
       });
     });
