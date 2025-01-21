@@ -25,8 +25,9 @@ export default defineConfig({
     // because opening in the same tab doesn't work in the preview
     return code.replace(/(<a\s+[^>]*href="\/api\/[^"]*")/g, '$1 target="_blank" rel="noreferrer"');
   },
-  // finds dead DOCS_API_URL links
-  // which get replaced later in the markdown transformer
+  // Finds dead DOCS_API_URL links and fails,
+  // but they get replaced later in the markdown transformer.
+  // We have the md link checker workflow which covers this.
   ignoreDeadLinks: true,
   head: [
     ['link', { rel: 'icon', href: '/fuels-ts/favicon.ico', type: 'image/png' }],
