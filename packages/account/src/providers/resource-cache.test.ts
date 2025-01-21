@@ -7,7 +7,7 @@ import { ResourceCache } from './resource-cache';
  * @group node
  * @group browser
  */
-describe.sequential('Resource Cache', () => {
+describe('Resource Cache', () => {
   const randomValue = () => hexlify(randomBytes(32));
 
   afterEach(() => {
