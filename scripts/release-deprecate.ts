@@ -74,11 +74,13 @@ const main = async () => {
                   (err, _stdout, stderr) => {
                     if (err) {
                       log(`❌ Error ${packageName}@${versionToDelete} not deprecated!\n`);
+                      error(err);
                       reject(err);
                       return;
                     }
                     if (stderr) {
                       log(`❌ Error ${packageName}@${versionToDelete} not deprecated!\n`);
+                      error(stderr);
                       reject(new Error(stderr));
                       return;
                     }
