@@ -1,4 +1,4 @@
-import { DEVNET_NETWORK_URL, TESTNET_NETWORK_URL } from '@internal/utils';
+import { DEVNET_NETWORK_URL, TESTNET_NETWORK_URL } from './configs';
 
 /**
  * @group node
