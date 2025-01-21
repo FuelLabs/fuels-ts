@@ -31,6 +31,11 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/ci-setup
 
+      - name: Setup NPM registry
+        uses: FuelLabs/github-actions/setups/npm@master
+        with:
+          npm-token: ${{ secrets.NPM_TOKEN }}
+
       - name: Deprecate
         run: pnpm release:deprecate
         env:
