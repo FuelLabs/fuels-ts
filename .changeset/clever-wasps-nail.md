@@ -1,6 +1,6 @@
 ---
-"@fuel-ts/account": minor
-"fuels": minor
+"@fuel-ts/account": patch
+"fuels": patch
 ---
 
-chore!: removed network URLs
+chore: un-deprecated network URLs
