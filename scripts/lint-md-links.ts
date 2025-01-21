@@ -1,8 +1,7 @@
 #!/usr/bin/env node
-import { exec, execSync, spawn } from 'child_process';
+import { execSync, spawn } from 'child_process';
 import { readFileSync, writeFileSync } from 'fs';
 import { globSync } from 'glob';
-import { cwd } from 'process';
 
 const { log } = console;
 
