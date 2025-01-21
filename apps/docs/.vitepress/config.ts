@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress';
 import { codeInContextPlugin } from './plugins/codeInContextPlugin';
 import { snippetPlugin } from './plugins/snippetPlugin';
 
-// @ts-expect-error type not available
+// @ts-expect-error this works but the types aren't available
 export default ({ mode }) =>
   defineConfig({
     title: 'Fuels-ts',
@@ -513,12 +513,12 @@ export default ({ mode }) =>
                   link: '/guide/types/asset-id',
                 },
                 {
-                  text: 'Bits256',
-                  link: '/guide/types/bits256',
+                  text: 'B256',
+                  link: '/guide/types/b256',
                 },
                 {
-                  text: 'Bits512',
-                  link: '/guide/types/bits512',
+                  text: 'B512',
+                  link: '/guide/types/b512',
                 },
                 {
                   text: 'Bytes',
