@@ -8,17 +8,15 @@ export enum GqlErrorMessage {
 type GqlError = { message: string } | GraphQLError;
 
 const mapGqlErrorMessage = (error: GqlError): FuelError => {
-  switch (error.message) {
-    case GqlErrorMessage.NOT_ENOUGH_COINS_MAX_COINS:
-      return new FuelError(
-        ErrorCode.NOT_ENOUGH_FUNDS,
-        `Insufficient funds or too many small value coins. Consider combining UTXOs.`,
-        {},
-        error
-      );
-    default:
-      return new FuelError(ErrorCode.INVALID_REQUEST, error.message, {}, error);
+  if (new RegExp(GqlErrorMessage.NOT_ENOUGH_COINS_MAX_COINS).test(error.message)) {
+    return new FuelError(
+      ErrorCode.NOT_ENOUGH_FUNDS,
+      `Insufficient funds or too many small value coins. Consider combining UTXOs.`,
+      {},
+      error
+    );
   }
+  return new FuelError(ErrorCode.INVALID_REQUEST, error.message, {}, error);
 };
 
 const mapGqlErrorWithIncompatibleNodeVersion = (
