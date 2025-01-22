@@ -1,5 +1,5 @@
 import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
-import type { WithAddress } from '@fuel-ts/address';
+import type { AddressInput, WithAddress } from '@fuel-ts/address';
 import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -102,11 +102,11 @@ export class Account extends AbstractAccount implements WithAddress {
    * @param provider - A Provider instance  (optional).
    * @param connector - A FuelConnector instance (optional).
    */
-  constructor(address: string | Address, provider?: Provider, connector?: FuelConnector) {
+  constructor(address: AddressInput, provider?: Provider, connector?: FuelConnector) {
     super();
     this._provider = provider;
     this._connector = connector;
-    this.address = Address.fromDynamicInput(address);
+    this.address = new Address(address);
   }
 
   /**
@@ -408,7 +408,7 @@ export class Account extends AbstractAccount implements WithAddress {
   addTransfer(request: ScriptTransactionRequest, transferParams: TransferParams) {
     const { destination, amount, assetId } = transferParams;
     this.validateTransferAmount(amount);
-    request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetId);
+    request.addCoinOutput(new Address(destination), amount, assetId);
     return request;
   }
 
@@ -462,7 +462,7 @@ export class Account extends AbstractAccount implements WithAddress {
 
     const transferParams = contractTransferParams.map((transferParam) => {
       const amount = bn(transferParam.amount);
-      const contractAddress = Address.fromAddressOrString(transferParam.contractId);
+      const contractAddress = new Address(transferParam.contractId);
 
       const assetId = transferParam.assetId ? hexlify(transferParam.assetId) : defaultAssetId;
 
@@ -502,11 +502,11 @@ export class Account extends AbstractAccount implements WithAddress {
    * @returns A promise that resolves to the transaction response.
    */
   async withdrawToBaseLayer(
-    recipient: string | Address,
+    recipient: AddressInput,
     amount: BigNumberish,
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    const recipientAddress = Address.fromAddressOrString(recipient);
+    const recipientAddress = new Address(recipient);
     // add recipient and amount to the transaction script code
     const recipientDataArray = arrayify(
       '0x'.concat(recipientAddress.toHexString().substring(2).padStart(64, '0'))

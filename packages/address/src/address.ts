@@ -2,7 +2,7 @@ import { FuelError } from '@fuel-ts/errors';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 import { sha256 } from '@noble/hashes/sha256';
 
-import type { B256Address, EvmAddress, AssetId, ChecksumAddress } from './types';
+import type { B256Address, EvmAddress, AssetId, ChecksumAddress, AddressInput } from './types';
 import {
   getRandomB256,
   isB256,
@@ -25,7 +25,7 @@ export class Address {
   /**
    * @param address - A B256 address, public key, EVM address, or Address instance
    */
-  constructor(address: string | B256Address | Address) {
+  constructor(address: AddressInput) {
     const b256Address = fromDynamicInputToB256(address);
     this.b256Address = normalizeB256(b256Address);
   }
@@ -167,7 +167,7 @@ export class Address {
    * @returns A new `Address` instance
    */
   static fromRandom(): Address {
-    return this.fromB256(getRandomB256());
+    return new Address(getRandomB256());
   }
 
   /**
