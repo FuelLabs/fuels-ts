@@ -6,7 +6,7 @@ abi MyContract {
 
 // #region b512-1
 pub struct B512 {
-    /// The two `b256`s that make up the `B512`.
+    /// The two `B256`s that make up the `B512`.
     bits: [b256; 2],
 }
 // #endregion b512-1

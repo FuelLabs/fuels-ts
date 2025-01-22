@@ -24,9 +24,9 @@ A fixed-length string's size is known at compile time due to the argument declar
 
 <<< @./snippets/working-with-bytes.ts#working-with-bytes-3{ts:line-numbers}
 
-### `b256` / `b512`
+### `B256` / `B512`
 
-These are fixed-length byte arrays, with `b256` containing 256 bits and `b512` containing 512 bits. You can use them for address and signature formats.
+These are fixed-length byte arrays, with `B256` containing 256 bits and `B512` containing 512 bits. You can use them for address and signature formats.
 
 <<< @./snippets/working-with-bytes.ts#working-with-bytes-4{ts:line-numbers}
 
