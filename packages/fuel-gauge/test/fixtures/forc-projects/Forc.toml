@@ -3,6 +3,7 @@ members = [
   "abi-contract",
   "abi-script",
   "abi-predicate",
+  "parser",
   "advanced-logging",
   "advanced-logging-abi",
   "advanced-logging-other-contract",

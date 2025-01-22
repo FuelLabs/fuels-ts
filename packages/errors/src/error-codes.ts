@@ -13,6 +13,7 @@ export enum ErrorCode {
   TYPE_NOT_SUPPORTED = 'type-not-supported',
   INVALID_DECODE_VALUE = 'invalid-decode-value',
   JSON_ABI_ERROR = 'json-abi-error',
+  ABI_SPECIFICATION_INVALID = 'abi-specification-invalid',
   TYPE_ID_NOT_FOUND = 'type-id-not-found',
   BIN_FILE_NOT_FOUND = 'bin-file-not-found',
   CODER_NOT_FOUND = 'coder-not-found',

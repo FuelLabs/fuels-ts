@@ -578,6 +578,9 @@ importers:
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../utils
 
   packages/abi-coder:
     dependencies:
@@ -847,6 +850,9 @@ importers:
 
   packages/fuels:
     dependencies:
+      '@fuel-ts/abi':
+        specifier: workspace:*
+        version: link:../abi
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder

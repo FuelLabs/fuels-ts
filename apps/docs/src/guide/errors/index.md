@@ -18,6 +18,12 @@ When the arguments supplied to the function do not match the minimum required in
 
 Check that the arguments supplied to the function match the required type.
 
+### `ABI_SPECIFICATION_INVALID`
+
+When the ABI specification provided is invalid.
+
+Check that the ABI specification is valid.
+
 ### `ACCOUNT_REQUIRED`
 
 When an [`Account`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.Account.html) is required for an operation. This will usually be in the form of a [`Wallet`](../wallets/index.md).

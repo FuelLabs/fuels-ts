@@ -26,7 +26,8 @@
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
   "dependencies": {
-    "@fuel-ts/errors": "workspace:*"
+    "@fuel-ts/errors": "workspace:*",
+    "@fuel-ts/utils": "workspace:*"
   },
   "devDependencies": {}
 }

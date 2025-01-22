@@ -27,7 +27,6 @@ const testMappings: Record<keyof typeof swayTypeMatchers, `${string}-matched`> =
   array: 'array-matched',
   assetId: 'assetId-matched',
   evmAddress: 'evmAddress-matched',
-  rawUntypedPtr: 'rawUntypedPtr-matched',
   rawUntypedSlice: 'rawUntypedSlice-matched',
   str: 'str-matched',
 };
@@ -226,14 +225,6 @@ describe('sway type matchers', () => {
   test('result', async () => {
     const key = 'result';
     const swayType = 'enum std::result::Result';
-
-    expect(matcher({ swayType })).toEqual(`${key}-matched`);
-    await verifyOtherMatchersDontMatch(key, swayType);
-  });
-
-  test('rawUntypedPtr', async () => {
-    const key = 'rawUntypedPtr';
-    const swayType = 'raw untyped ptr';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
     await verifyOtherMatchersDontMatch(key, swayType);

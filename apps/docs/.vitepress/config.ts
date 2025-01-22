@@ -441,6 +441,10 @@ export default defineConfig({
                 text: 'Optimized React Example',
                 link: '/guide/cookbook/optimized-react-example',
               },
+              {
+                text: 'Working with the ABI',
+                link: '/guide/cookbook/working-with-the-abi',
+              },
             ],
           },
           {

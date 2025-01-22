@@ -7,7 +7,6 @@
   "baseBranch": "master",
   "updateInternalDependencies": "patch",
   "ignore": [
-    "@fuel-ts/abi",
     "fuel-gauge",
     "docs",
     "demo-fuels",

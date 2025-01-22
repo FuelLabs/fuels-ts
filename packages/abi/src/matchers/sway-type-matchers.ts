@@ -24,7 +24,6 @@ export type SwayType =
   | 'array'
   | 'assetId'
   | 'evmAddress'
-  | 'rawUntypedPtr'
   | 'rawUntypedSlice';
 
 type Matcher = (type: string) => boolean;
@@ -69,7 +68,6 @@ const result: Matcher = (type) => type === 'enum std::result::Result';
 export const ENUM_REGEX = /^enum (.+::)?(?<name>.+)$/m;
 const enumMatcher: Matcher = (type) => !option(type) && !result(type) && ENUM_REGEX.test(type);
 
-const rawUntypedPtr: Matcher = (type) => type === 'raw untyped ptr';
 const rawUntypedSlice: Matcher = (type) => type === 'raw untyped slice';
 
 export const swayTypeMatchers: Record<SwayType, Matcher> = {
@@ -100,7 +98,6 @@ export const swayTypeMatchers: Record<SwayType, Matcher> = {
   option,
   result,
 
-  rawUntypedPtr,
   rawUntypedSlice,
 };
 
