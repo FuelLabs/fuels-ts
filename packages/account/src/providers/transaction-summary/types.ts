@@ -106,6 +106,7 @@ export type Operation = {
   to?: OperationTransactionAddress;
   assetsSent?: Array<OperationCoin>;
   calls?: Array<OperationFunctionCall>;
+  receipts?: TransactionResultReceipt[];
 };
 
 /**
@@ -197,4 +198,5 @@ export type TransactionSummary<TTransactionType = void> = {
   date?: Date;
   receipts: TransactionResultReceipt[];
   transaction: Transaction<TTransactionType>;
+  michaelJackson: string;
 };
