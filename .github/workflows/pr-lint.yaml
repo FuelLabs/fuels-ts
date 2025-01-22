@@ -39,10 +39,10 @@ jobs:
             feat
             fix
             chore
+            test
             build
             docs
             ci
-            rc
 
       - name: Check PR title length
         env:

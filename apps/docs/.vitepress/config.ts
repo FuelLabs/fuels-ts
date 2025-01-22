@@ -496,12 +496,12 @@ export default defineConfig({
                 link: '/guide/types/asset-id',
               },
               {
-                text: 'Bits256',
-                link: '/guide/types/bits256',
+                text: 'B256',
+                link: '/guide/types/b256',
               },
               {
-                text: 'Bits512',
-                link: '/guide/types/bits512',
+                text: 'B512',
+                link: '/guide/types/b512',
               },
               {
                 text: 'Bytes',

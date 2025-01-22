@@ -10,7 +10,7 @@ import { launchTestContract } from './utils';
  * @group browser
  */
 describe('mapped error messages', () => {
-  test('not enough coins error', async () => {
+  it('should throw not enough coins error', async () => {
     using contract = await launchTestContract({ factory: CallTestContractFactory });
 
     const emptyWallet = Wallet.generate({ provider: contract.provider });
@@ -23,7 +23,7 @@ describe('mapped error messages', () => {
     });
   });
 
-  test('max coins reached error', async () => {
+  it('should throw max coins reached error', async () => {
     using launched = await launchTestNode({
       walletsConfig: {
         amountPerCoin: 1,
