@@ -10,6 +10,7 @@ import { DateTime, arrayify, sleep } from '@fuel-ts/utils';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import { versions } from '@fuel-ts/versions';
 
+import type { CoinQuantity } from '..';
 import { Wallet } from '..';
 import {
   messageStatusResponse,
@@ -2355,6 +2356,40 @@ describe('Provider', () => {
       expect(balance.amount.toNumber()).toBe(fundAmount);
       expect([baseAssetId, ASSET_A, ASSET_B].includes(balance.assetId)).toBeTruthy();
     });
+  });
+
+  test('should ensure getBalance and getBalances can return u128 amounts ', async () => {
+    const fundingAmount = 2 ** 63;
+    const maxU64 = bn('0xFFFFFFFFFFFFFFFF');
+
+    using launched = await setupTestProviderAndWallets({
+      walletsConfig: {
+        amountPerCoin: fundingAmount,
+        count: 3,
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet1, wallet2, recipient],
+    } = launched;
+
+    const baseAssetId = await provider.getBaseAssetId();
+
+    const tx1 = await wallet1.transfer(recipient.address, bn(String(fundingAmount)).sub(1000));
+    await tx1.waitForResult();
+
+    const tx2 = await wallet2.transfer(recipient.address, bn(String(fundingAmount)).sub(1000));
+    await tx2.waitForResult();
+
+    const balance = await recipient.getBalance();
+
+    expect(balance.gt(maxU64)).toBeTruthy();
+
+    const { balances } = await recipient.getBalances();
+    const baseAssetBalance = balances.find((b) => b.assetId === baseAssetId) as CoinQuantity;
+
+    expect(baseAssetBalance).toBeDefined();
+    expect(baseAssetBalance.amount.gt(maxU64)).toBeTruthy();
   });
 
   test('should not refetch consensus params in less than 1min', async () => {
