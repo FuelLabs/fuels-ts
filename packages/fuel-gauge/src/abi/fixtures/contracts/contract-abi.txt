@@ -9,7 +9,9 @@
 */
 
 
-export const abi = {
+import { AbiSpecification } from 'fuels';
+
+export const abi: AbiSpecification = {
   "programType": "contract",
   "specVersion": "1",
   "encodingVersion": "1",
@@ -1676,6 +1678,119 @@ export const abi = {
   "functions": [
     {
       "inputs": [],
+      "name": "attributes_doc_comment",
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
+      "attributes": [
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " This is a doc"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " This is another doc comment"
+          ]
+        }
+      ]
+    },
+    {
+      "inputs": [],
+      "name": "attributes_inline_always",
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
+      "attributes": [
+        {
+          "name": "inline",
+          "arguments": [
+            "always"
+          ]
+        }
+      ]
+    },
+    {
+      "inputs": [],
+      "name": "attributes_inline_never",
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
+      "attributes": [
+        {
+          "name": "inline",
+          "arguments": [
+            "never"
+          ]
+        }
+      ]
+    },
+    {
+      "inputs": [],
+      "name": "attributes_none",
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
+      "attributes": null
+    },
+    {
+      "inputs": [],
+      "name": "attributes_payable",
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
+      "attributes": [
+        {
+          "name": "payable",
+          "arguments": []
+        }
+      ]
+    },
+    {
+      "inputs": [],
+      "name": "attributes_storage_read",
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
+      "attributes": [
+        {
+          "name": "storage",
+          "arguments": [
+            "read"
+          ]
+        }
+      ]
+    },
+    {
+      "inputs": [],
+      "name": "attributes_storage_read_write",
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
+      "attributes": [
+        {
+          "name": "storage",
+          "arguments": [
+            "read",
+            "write"
+          ]
+        }
+      ]
+    },
+    {
+      "inputs": [],
+      "name": "attributes_storage_write",
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
+      "attributes": [
+        {
+          "name": "storage",
+          "arguments": [
+            "write"
+          ]
+        }
+      ]
+    },
+    {
+      "inputs": [],
+      "name": "attributes_test",
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
+      "attributes": [
+        {
+          "name": "test",
+          "arguments": []
+        }
+      ]
+    },
+    {
+      "inputs": [],
       "name": "configurables",
       "output": "69d4f1cc5ce793681d98a55ab013f42ab56260131d39af6c1e71a5f3531557bc",
       "attributes": null
@@ -2782,27 +2897,27 @@ export const abi = {
     {
       "name": "U8_VALUE",
       "concreteTypeId": "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b",
-      "offset": 119320
+      "offset": 120208
     },
     {
       "name": "BOOL_VALUE",
       "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903",
-      "offset": 119288
+      "offset": 120176
     },
     {
       "name": "B256_VALUE",
       "concreteTypeId": "7c5ee1cecf5f8eacd1284feb5f0bf2bdea533a51e2f0c9aabe9236d335989f3b",
-      "offset": 119256
+      "offset": 120144
     },
     {
       "name": "OPTION_U8_VALUE",
       "concreteTypeId": "2da102c46c7263beeed95818cd7bee801716ba8303dddafdcd0f6c9efda4a0f1",
-      "offset": 119304
+      "offset": 120192
     },
     {
       "name": "GENERIC_STRUCT_VALUE",
       "concreteTypeId": "08dbec793087c5686c1a493513b158a999bb653126ee51151dfa85fa683edce5",
-      "offset": 119296
+      "offset": 120184
     }
   ]
 };

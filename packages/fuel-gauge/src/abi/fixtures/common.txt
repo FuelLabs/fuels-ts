@@ -9,7 +9,7 @@
 */
 
 
-import type { FunctionFragment, InvokeFunction } from 'fuels';
+import type { AbiCoderFunction, InvokeFunction } from 'fuels';
 
 /**
  * Mimics Sway Enum.
@@ -49,5 +49,5 @@ export type ProgramFunctionMapper<T extends Types['functions']> = {
 };
 
 export type InterfaceFunctionMapper<T extends Types['functions']> = {
-  [K in keyof T]: FunctionFragment;
+  [K in keyof T]: AbiCoderFunction;
 };

@@ -9,7 +9,9 @@
 */
 
 
-export const abi = {
+import { AbiSpecification } from 'fuels';
+
+export const abi: AbiSpecification = {
   "programType": "predicate",
   "specVersion": "1",
   "encodingVersion": "1",
