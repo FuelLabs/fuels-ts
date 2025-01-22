@@ -7,7 +7,7 @@ export function evaluateFunctionInputsOptionality(
   let isMandatory = false;
   return fn.inputs.reduceRight<(AbiFunctionInput & { isOptional: boolean })[]>((result, input) => {
     const isTypeMandatory =
-      !swayTypeMatchers.void(input.type.swayType) && !swayTypeMatchers.option(input.type.swayType);
+      !swayTypeMatchers.void(input.type) && !swayTypeMatchers.option(input.type);
 
     isMandatory = isMandatory || isTypeMandatory;
     return [{ ...input, isOptional: !isMandatory }, ...result];

@@ -12,7 +12,7 @@ import type { Src14OwnedProxyTypes as Types } from './Src14OwnedProxyTypes';
 import type { InterfaceFunctionMapper, ProgramFunctionMapper } from '../common';
 
 import { Contract } from '@fuel-ts/program';
-import { Interface } from '@fuel-ts/abi-coder';
+import { AbiCoder } from '@fuel-ts/abi';
 import { type Address } from '@fuel-ts/address';
 import { type Account, type Provider } from '@fuel-ts/account';
 import { abi } from './Src14OwnedProxy-abi';
@@ -21,7 +21,7 @@ export * from './Src14OwnedProxyTypes';
 
 export type Src14OwnedProxyConfigurables = Types['configurables'];
 
-export class Src14OwnedProxyInterface extends Interface {
+export class Src14OwnedProxyAbiCoder extends AbiCoder {
   declare functions: InterfaceFunctionMapper<Types['functions']>;
 
   constructor() {
@@ -30,7 +30,7 @@ export class Src14OwnedProxyInterface extends Interface {
 }
 
 export class Src14OwnedProxy extends Contract {
-  declare interface: Src14OwnedProxyInterface;
+  declare interface: Src14OwnedProxyAbiCoder;
   declare functions: ProgramFunctionMapper<Types['functions']>;
 
   public static readonly abi = abi;

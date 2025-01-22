@@ -8,7 +8,9 @@
   Forc version: 0.66.5
 */
 
-export const abi = {
+import { AbiSpecification } from '@fuel-ts/abi';
+
+export const abi: AbiSpecification = {
   programType: 'contract',
   specVersion: '1',
   encodingVersion: '1',

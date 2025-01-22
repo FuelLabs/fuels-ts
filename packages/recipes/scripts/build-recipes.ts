@@ -6,7 +6,7 @@ execSync(`fuels-typegen -i src/contracts/src14 -o src/types`);
 
 const typesPath = join(__dirname, '..', 'src', 'types');
 const supportedRecipes = ['Src14OwnedProxy']
-  .map((s) => [s, `${s}Factory`, `${s}Types`, `${s}-bytecode`, `${s}-storage-slots`])
+  .map((s) => [s, `${s}Factory`, `${s}Types`, `${s}-bytecode`, `${s}-storage-slots`, `${s}-abi`])
   .flat()
   .map((s) => join(typesPath, 'contracts', `${s}.ts`))
   .concat([join(typesPath, 'common.ts')]);
