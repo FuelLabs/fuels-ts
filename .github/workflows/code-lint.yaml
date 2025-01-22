@@ -13,7 +13,6 @@ concurrency:
 jobs:
   docs:
     uses: FuelLabs/github-actions/.github/workflows/vp-docs.yml@master
-    timeout-minutes: 15
     with:
       doc-folder-path: "apps/docs/src"
       spellcheck-config-path: "apps/docs/.spellcheck.yml"
