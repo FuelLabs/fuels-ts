@@ -3,6 +3,7 @@ import type { GraphQLError } from 'graphql';
 
 enum GqlErrorMessage {
   NOT_ENOUGH_COINS_MAX_COINS = 'the target cannot be met due to no coins available or exceeding the \\d+ coin limit.',
+  ASSET_NOT_FOUND = 'resource was not found in table',
 }
 
 type GqlError = { message: string } | GraphQLError;
@@ -16,6 +17,16 @@ const mapGqlErrorMessage = (error: GqlError): FuelError => {
       error
     );
   }
+
+  if (new RegExp(GqlErrorMessage.ASSET_NOT_FOUND).test(error.message)) {
+    return new FuelError(
+      ErrorCode.ASSET_NOT_FOUND,
+      `Asset not found for given asset id.`,
+      {},
+      error
+    );
+  }
+
   return new FuelError(ErrorCode.INVALID_REQUEST, error.message, {}, error);
 };
 

@@ -852,22 +852,15 @@ export default class Provider {
       );
     }
 
-    try {
-      const { assetDetails } = await this.operations.getAssetDetails({ assetId });
+    const { assetDetails } = await this.operations.getAssetDetails({ assetId });
 
-      const { contractId, subId, totalSupply } = assetDetails;
+    const { contractId, subId, totalSupply } = assetDetails;
 
-      return {
-        subId,
-        contractId,
-        totalSupply: bn(totalSupply),
-      };
-    } catch (e) {
-      throw new FuelError(
-        ErrorCode.ASSET_NOT_FOUND,
-        `Asset not found for given asset id: ${assetId}`
-      );
-    }
+    return {
+      subId,
+      contractId,
+      totalSupply: bn(totalSupply),
+    };
   }
 
   /**
