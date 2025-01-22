@@ -1,0 +1,33 @@
+{{header}}
+
+import { Contract, Interface } from "fuels";
+import type { Address, Account, Provider } from 'fuels';
+import type { {{name}}Types as Types } from './{{name}}Types';
+import type { InterfaceFunctionMapper, ProgramFunctionMapper } from '../common';
+import { abi } from './{{name}}-abi';
+
+export * from './{{name}}Types';
+
+export type {{name}}Configurables = Types['configurables'];
+
+export class {{name}}Interface extends Interface {
+  declare functions: InterfaceFunctionMapper<Types['functions']>;
+
+  constructor() {
+    super(abi);
+  }
+}
+
+export class {{name}} extends Contract {
+    declare interface: {{name}}Interface;
+    declare functions: ProgramFunctionMapper<Types['functions']>;
+
+    public static readonly abi = abi;
+
+    constructor(
+        id: string | Address,
+        accountOrProvider: Account | Provider,
+    ) {
+        super(id, abi, accountOrProvider);
+    }
+}

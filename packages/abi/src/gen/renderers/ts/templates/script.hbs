@@ -1,0 +1,25 @@
+{{header}}
+
+import { Script } from 'fuels';
+import type { Account } from 'fuels';
+import { abi } from './{{name}}-abi';
+import { bytecode } from './{{name}}-bytecode';
+import type { {{name}}Types as Types } from './{{name}}Types';
+
+export * from './{{name}}Types';
+
+export type {{name}}Inputs = Types['inputs'];
+export type {{name}}Output = Types['output'];
+export type {{name}}Configurables = Types['configurables'];
+
+export class {{name}} extends Script<
+  Types['inputs'],
+  Types['output']
+> {
+    public static readonly abi = abi;
+    public static readonly bytecode = bytecode;
+
+    constructor(wallet: Account) {
+        super(bytecode, abi, wallet);
+    }
+}

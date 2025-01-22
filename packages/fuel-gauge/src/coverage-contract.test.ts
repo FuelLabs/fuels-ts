@@ -12,9 +12,11 @@ import {
 import { TestMessage, type LaunchTestNodeOptions } from 'fuels/test-utils';
 
 import { CoverageContractFactory } from '../test/typegen/contracts';
-import type { MixedNativeEnumInput } from '../test/typegen/contracts/CoverageContract';
-import { SmallEnumInput } from '../test/typegen/contracts/Vectors';
-import type { Vec } from '../test/typegen/contracts/common';
+import {
+  ColorEnum,
+  type MixedNativeEnumInput,
+} from '../test/typegen/contracts/CoverageContractTypes';
+import { SmallEnum } from '../test/typegen/contracts/VectorsTypes';
 
 import { launchTestContract } from './utils';
 
@@ -25,18 +27,6 @@ const U256_MAX = bn(2).pow(256).sub(1);
 const B256 = '0x000000000000000000000000000000000000000000000000000000000000002a';
 const B512 =
   '0x059bc9c43ea1112f3eb2bd30415de72ed24c1c4416a1316f0f48cc6f958073f42a6d8c12e4829826316d8dcf444498717b5a2fbf27defac367271065f6a1d4a5';
-
-enum ColorEnumInput {
-  Red = 'Red',
-  Green = 'Green',
-  Blue = 'Blue',
-}
-
-enum ColorEnumOutput {
-  Red = 'Red',
-  Green = 'Green',
-  Blue = 'Blue',
-}
 
 enum MixedNativeEnum {
   Native = 'Native',
@@ -100,7 +90,7 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
 
     expect(result.value).toStrictEqual(expectedValue);
 
-    expectedValue = SmallEnumInput.Empty;
+    expectedValue = SmallEnum.Empty;
     call = await contractInstance.functions.get_empty_enum().call();
     result = await call.waitForResult();
 
@@ -321,7 +311,7 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
   it('should test enum < 8 byte variable type', async () => {
     using contractInstance = await setupContract();
 
-    const INPUT = SmallEnumInput.Empty;
+    const INPUT = SmallEnum.Empty;
     const { waitForResult } = await contractInstance.functions.echo_enum_small(INPUT).call();
     const { value } = await waitForResult();
     expect(value).toStrictEqual(INPUT);
@@ -713,8 +703,9 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
   it('should test native enum [Red->Green]', async () => {
     using contractInstance = await setupContract();
 
-    const INPUT: ColorEnumInput = ColorEnumInput.Red;
-    const OUTPUT: ColorEnumOutput = ColorEnumOutput.Green;
+    const INPUT = ColorEnum.Red;
+    const OUTPUT = ColorEnum.Green;
+
     const { waitForResult } = await contractInstance.functions.color_enum(INPUT).call();
     const { value } = await waitForResult();
 
@@ -724,8 +715,8 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
   it('should test native enum [Green->Blue]', async () => {
     using contractInstance = await setupContract();
 
-    const INPUT: ColorEnumInput = ColorEnumInput.Green;
-    const OUTPUT: ColorEnumOutput = ColorEnumOutput.Blue;
+    const INPUT = ColorEnum.Green;
+    const OUTPUT = ColorEnum.Blue;
 
     const { waitForResult } = await contractInstance.functions.color_enum(INPUT).call();
     const { value } = await waitForResult();
@@ -735,8 +726,8 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
   it('should test native enum [Blue->Red]', async () => {
     using contractInstance = await setupContract();
 
-    const INPUT: ColorEnumInput = ColorEnumInput.Blue;
-    const OUTPUT: ColorEnumOutput = ColorEnumOutput.Red;
+    const INPUT = ColorEnum.Blue;
+    const OUTPUT = ColorEnum.Red;
 
     const { waitForResult } = await contractInstance.functions.color_enum(INPUT).call();
     const { value } = await waitForResult();
@@ -817,10 +808,10 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
     expect(isStatusSuccess).toBeTruthy();
   });
 
-  it('should support array in vec', async () => {
+  it('should support vec in array', async () => {
     using contractInstance = await setupContract();
 
-    const INPUT: [Vec<BigNumberish>, Vec<BigNumberish>] = [
+    const INPUT: [Array<BigNumberish>, Array<BigNumberish>] = [
       [0, 1, 2],
       [0, 1, 2],
     ];
@@ -864,14 +855,14 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
         contractInstance.functions.echo_b256_middle(INPUT_A, INPUT_B, INPUT_C, INPUT_D),
         contractInstance.functions.echo_u8(13),
         contractInstance.functions.echo_u8(23),
-        contractInstance.functions.echo_enum_small(SmallEnumInput.Empty),
+        contractInstance.functions.echo_enum_small(SmallEnum.Empty),
         contractInstance.functions.echo_b256_middle(INPUT_B, INPUT_A, INPUT_C, INPUT_D),
       ])
       .call();
 
     const { value: results } = await waitForResult();
 
-    expect(results).toStrictEqual([INPUT_B, 13, 23, SmallEnumInput.Empty, INPUT_A]);
+    expect(results).toStrictEqual([INPUT_B, 13, 23, SmallEnum.Empty, INPUT_A]);
   });
 
   it('should handle multiple calls [with vectors + stack data first]', async () => {
@@ -886,7 +877,7 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
       .multiCall([
         contractInstance.functions.echo_u8(1),
         contractInstance.functions.echo_u8(2),
-        contractInstance.functions.echo_enum_small(SmallEnumInput.Empty),
+        contractInstance.functions.echo_enum_small(SmallEnum.Empty),
         contractInstance.functions.echo_b256_middle(INPUT_A, INPUT_B, INPUT_C, INPUT_D),
         contractInstance.functions.echo_b256_middle(INPUT_B, INPUT_A, INPUT_C, INPUT_D),
       ])
@@ -894,7 +885,7 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
 
     const { value: results } = await waitForResult();
 
-    expect(results).toStrictEqual([1, 2, SmallEnumInput.Empty, INPUT_B, INPUT_A]);
+    expect(results).toStrictEqual([1, 2, SmallEnum.Empty, INPUT_B, INPUT_A]);
   });
 
   it('should handle an enum from a library', async () => {

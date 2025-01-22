@@ -135,7 +135,7 @@ describe('Contract Factory', () => {
     using contract = await launchTestContract({
       factory: StorageTestContractFactory,
 
-      storageSlots: StorageTestContract.storageSlots,
+      storageSlots: StorageTestContractFactory.storageSlots,
     });
 
     const call1 = await contract.functions.return_var1().call();
@@ -203,7 +203,7 @@ describe('Contract Factory', () => {
 
     const { waitForResult } = await factory.deploy({
       storageSlots: [
-        ...StorageTestContract.storageSlots, // initializing from storage_slots.json
+        ...StorageTestContractFactory.storageSlots, // initializing from storage_slots.json
         { key: '0000000000000000000000000000000000000000000000000000000000000001', value: b256 }, // Initializing manual value
       ],
     });
@@ -510,7 +510,7 @@ describe('Contract Factory', () => {
     );
 
     const deploy = await factory.deployAsBlobTx({
-      storageSlots: StorageTestContract.storageSlots,
+      storageSlots: StorageTestContractFactory.storageSlots,
     });
 
     const { contract } = await deploy.waitForResult();

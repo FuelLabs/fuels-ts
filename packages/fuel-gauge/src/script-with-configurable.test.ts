@@ -36,7 +36,9 @@ describe('Script With Configurable', () => {
       wallets: [wallet],
     } = launched;
 
-    const configurableConstants: Required<ScriptWithConfigurableConfigurables> = { FEE: 71 };
+    const configurableConstants: Required<ScriptWithConfigurableConfigurables> = {
+      FEE: 71,
+    };
 
     expect(configurableConstants.FEE).not.toEqual(defaultValues.FEE);
 
@@ -57,7 +59,9 @@ describe('Script With Configurable', () => {
       wallets: [wallet],
     } = launched;
 
-    const configurableConstants: Required<ScriptWithConfigurableConfigurables> = { FEE: 35 };
+    const configurableConstants: Required<ScriptWithConfigurableConfigurables> = {
+      FEE: 35,
+    };
 
     const script = new ScriptWithConfigurable(wallet);
 

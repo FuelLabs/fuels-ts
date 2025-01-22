@@ -2,11 +2,9 @@
 import { toHex, Address, Wallet, FuelError, ErrorCode } from 'fuels';
 import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
-import storageSlots from '../demo-contract/out/release/demo-contract-storage_slots.json';
-
 import { DemoContract, DemoContractFactory } from './contract-types';
 import { DemoPredicate } from './predicate-types';
-import type { DemoPredicateInputs } from './predicate-types/DemoPredicate';
+import type { DemoPredicateInputs } from './predicate-types/predicates/DemoPredicate';
 import { DemoScript } from './script-types';
 
 /**
@@ -25,7 +23,7 @@ describe('ExampleContract', () => {
     // #context import { DemoContractFactory } from './sway-programs-api';
 
     const { waitForResult } = await DemoContractFactory.deploy(wallet, {
-      storageSlots,
+      storageSlots: DemoContractFactory.storageSlots,
     });
 
     const { contract } = await waitForResult();

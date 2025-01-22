@@ -19,7 +19,7 @@ export const fuelsConfig: FuelsConfig = {
   ],
   scripts: [join(scriptsDir, 'script')],
   predicates: [join(predicatesDir, 'predicate')],
-  output: '/output',
+  output: './typegen',
   forcPath: 'fuels-forc',
   fuelCorePath: 'fuels-core',
   deployConfig: {},
@@ -27,6 +27,8 @@ export const fuelsConfig: FuelsConfig = {
   fuelCorePort: 4000,
   providerUrl: 'http://127.0.0.1:4000/v1/graphql',
   configPath: __filename,
-  forcBuildFlags: [],
-  buildMode: 'debug',
+  forcBuildFlags: ['--release'],
+  buildMode: 'release',
 };
+
+export default fuelsConfig;

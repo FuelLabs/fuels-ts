@@ -1,0 +1,36 @@
+{{header}}
+
+import type { {{fuelsTypeImports}} } from 'fuels';
+import type { {{commonTypeImports}} } from '../common';
+
+{{#each enums}}
+export enum {{input}};
+{{/each}}
+
+{{#each types}}
+export type {{input}};
+export type {{output}};
+{{/each}}
+
+export interface {{name}}Types {
+    {{#if isContract}}
+    functions: {
+        {{#each functions}}
+        {{name}}: {
+            inputs: {{inputs}};
+            output: {{output}};
+        };
+        {{/each}}
+    };
+    {{else}}
+    {{#each functions}}
+    inputs: {{inputs}};
+    output: {{output}};
+    {{/each}}
+    {{/if}}
+    configurables: {{#if configurables}}Partial<{
+        {{#each configurables}}
+        {{name}}: {{input}};
+        {{/each}}
+    }>{{else}}undefined{{/if}};
+}
