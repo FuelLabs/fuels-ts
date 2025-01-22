@@ -7,7 +7,9 @@
   "scripts": {
     "pretest": "pnpm build:forc",
     "build:forc": "pnpm fuels build --deploy",
-    "type:check": "tsc --noEmit"
+    "type:check": "tsc --noEmit",
+    "test": "cd ../.. && pnpm run test:filter packages/fuel-gauge",
+    "test:update-fixtures": "UPDATE_FIXTURES=true pnpm run test"
   },
   "license": "Apache-2.0",
   "dependencies": {
