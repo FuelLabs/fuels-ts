@@ -8,7 +8,6 @@ import {
   type AssetIdInput,
   type ScriptWithComplexArgsInputs,
 } from '../../test/typegen/scripts/ScriptWithComplexArgs';
-import type { Vec } from '../../test/typegen/scripts/common';
 
 /**
  * @group browser
@@ -52,9 +51,11 @@ describe('abi-script', () => {
       const arg1 = 100;
       const arg2 = { bits: getRandomB256() };
       const arg3 = 100;
-      const arg4 = [[{ bits: getRandomB256() }, { bits: getRandomB256() }, true]] as Vec<
-        [AssetIdInput, AssetIdInput, boolean]
-      >;
+      const arg4 = [[{ bits: getRandomB256() }, { bits: getRandomB256() }, true]] as [
+        AssetIdInput,
+        AssetIdInput,
+        boolean,
+      ][];
       const arg5 = { Address: { bits: getRandomB256() } };
       const arg6 = 100;
       const expected = [

@@ -48,7 +48,7 @@ export async function deployContract(
 
   const proxyBytecode = Src14OwnedProxyFactory.bytecode;
   const proxyAbi = Src14OwnedProxy.abi;
-  const proxyStorageSlots = Src14OwnedProxy.storageSlots ?? [];
+  const proxyStorageSlots = Src14OwnedProxyFactory.storageSlots ?? [];
 
   const isProxyEnabled = tomlContents?.proxy?.enabled;
   const proxyAddress = tomlContents?.proxy?.address;

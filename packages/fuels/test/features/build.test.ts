@@ -98,7 +98,7 @@ describe('build', { timeout: 180000 }, () => {
     ].map((f) => join(paths.outputDir, f));
 
     files.forEach((file) => expect(existsSync(file), `${file} does not exist`).toBeTruthy());
-    expect(readdirSync(paths.outputContractsDir)).toHaveLength(3);
+    expect(readdirSync(paths.outputContractsDir)).toHaveLength(7);
 
     expect(autoStartFuelCore).toHaveBeenCalledTimes(0);
     expect(deploy).toHaveBeenCalledTimes(0);
@@ -132,7 +132,7 @@ describe('build', { timeout: 180000 }, () => {
     ].map((f) => join(paths.outputDir, f));
 
     files.forEach((file) => expect(existsSync(file), `${file} does not exist`).toBeTruthy());
-    expect(readdirSync(paths.outputContractsDir)).toHaveLength(9);
+    expect(readdirSync(paths.outputContractsDir)).toHaveLength(25);
 
     expect(autoStartFuelCore).toHaveBeenCalledTimes(0);
     expect(deploy).toHaveBeenCalledTimes(0);

@@ -581,6 +581,18 @@ importers:
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
+      '@fuel-ts/versions':
+        specifier: workspace:*
+        version: link:../versions
+      commander:
+        specifier: 12.1.0
+        version: 12.1.0
+      glob:
+        specifier: 10.4.5
+        version: 10.4.5
+      handlebars:
+        specifier: 4.7.8
+        version: 4.7.8
 
   packages/abi-coder:
     dependencies:
@@ -835,6 +847,9 @@ importers:
         specifier: workspace:*
         version: link:../fuels
     devDependencies:
+      '@fuel-ts/abi':
+        specifier: workspace:*
+        version: link:../abi
       '@fuel-ts/account':
         specifier: workspace:*
         version: link:../account
@@ -856,9 +871,6 @@ importers:
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
-      '@fuel-ts/abi-typegen':
-        specifier: workspace:*
-        version: link:../abi-typegen
       '@fuel-ts/account':
         specifier: workspace:*
         version: link:../account
@@ -1033,12 +1045,12 @@ importers:
 
   packages/recipes:
     dependencies:
+      '@fuel-ts/abi':
+        specifier: workspace:*
+        version: link:../abi
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
-      '@fuel-ts/abi-typegen':
-        specifier: workspace:*
-        version: link:../abi-typegen
       '@fuel-ts/account':
         specifier: workspace:*
         version: link:../account

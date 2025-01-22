@@ -1,4 +1,4 @@
-import { configureCliOptions as configureTypegenCliOptions } from '@fuel-ts/abi-typegen/cli';
+import { configureTypegenCliOptions } from '@fuel-ts/abi/cli';
 import { versions } from '@fuel-ts/versions';
 import { runVersions } from '@fuel-ts/versions/cli';
 import { Command, Option } from 'commander';
@@ -98,11 +98,7 @@ export const configureCli = () => {
   /**
    * Routing external commands from sub-packages' CLIs
    */
-
-  // Typegen
-  configureTypegenCliOptions(
-    program.command('typegen').description(`Generate Typescript from Sway ABI JSON files`)
-  );
+  command = configureTypegenCliOptions(program.command(Commands.typegen));
 
   // Versions
   (command = program.command('versions'))

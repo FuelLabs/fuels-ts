@@ -79,7 +79,7 @@ npx fuels@{{fuels}} build
 ```
 
 1.  Build all Sway programs under your `workspace` using `forc` <sup>[1](https://docs.fuel.network/docs/forc/commands/forc_build/)</sup>
-1.  Generate types for them using `fuels-typegen` <sup>[2](#fuels-typegen)</sup>
+1.  Generate types for them using `fuels typegen` <sup>[2](#fuels-typegen)</sup>
 
 ```console-vue
 npx fuels@{{fuels}} build --deploy
@@ -167,9 +167,6 @@ npx fuels@{{fuels}} help typegen
 Options:
   -i, --inputs <path|glob...>  Input paths/globals to your Abi JSON files
   -o, --output <dir>           Directory path for generated files
-  -c, --contract               Generate types for Contracts [default]
-  -s, --script                 Generate types for Scripts
-  -p, --predicate              Generate types for Predicates
   -S, --silent                 Omit output messages
 ```
 
