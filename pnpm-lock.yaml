@@ -679,8 +679,8 @@ importers:
         specifier: 16.9.0
         version: 16.9.0
       graphql-request:
-        specifier: 6.1.0
-        version: 6.1.0(graphql@16.9.0)
+        specifier: 6.2.0-next.4
+        version: 6.2.0-next.4(graphql@16.9.0)
       graphql-tag:
         specifier: 2.12.6
         version: 2.12.6(graphql@16.9.0)
@@ -8726,6 +8726,11 @@ packages:
 
   graphql-request@6.1.0:
     resolution: {integrity: sha512-p+XPfS4q7aIpKVcgmnZKhMNqhltk20hfXtkaIkTfjjmiKMJ5xrt5c743cL03y/K7y1rg3WrIC49xGiEQ4mxdNw==}
+    peerDependencies:
+      graphql: 14 - 16
+
+  graphql-request@6.2.0-next.4:
+    resolution: {integrity: sha512-jkr/lHxvHF6PYG6Hpf5vFyRJ48hKw0asASQHAtmik96M8Xsf4IiF3NjolkbMGS9FER+RnezSCuVOD+Y8LS6FpQ==}
     peerDependencies:
       graphql: 14 - 16
 
@@ -24533,6 +24538,14 @@ snapshots:
       - utf-8-validate
 
   graphql-request@6.1.0(graphql@16.9.0):
+    dependencies:
+      '@graphql-typed-document-node/core': 3.2.0(graphql@16.9.0)
+      cross-fetch: 4.0.0
+      graphql: 16.9.0
+    transitivePeerDependencies:
+      - encoding
+
+  graphql-request@6.2.0-next.4(graphql@16.9.0):
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.9.0)
       cross-fetch: 4.0.0
