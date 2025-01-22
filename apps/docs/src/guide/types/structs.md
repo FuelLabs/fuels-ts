@@ -18,4 +18,4 @@ Please note that TypeScript does not have native support for `u8` and `u64` type
 
 Additionally, TypeScript does not support specifying string length, so just use `string` for the `name`.
 
-In a similar way, since the type `b256` on the SDK is just an hexlified string, we use `string` as well.
+In a similar way, since the type `B256` on the SDK is just an hexlified string, we use `string` as well.

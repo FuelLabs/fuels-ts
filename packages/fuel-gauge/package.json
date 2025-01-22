@@ -18,7 +18,6 @@
     "@fuel-ts/account": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/merkle": "workspace:*",
-    "@fuel-ts/utils": "workspace:*",
-    "@internal/utils": "workspace:*"
+    "@fuel-ts/utils": "workspace:*"
   }
 }

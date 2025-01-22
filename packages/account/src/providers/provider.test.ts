@@ -9,8 +9,8 @@ import { InputType, OutputType, ReceiptType } from '@fuel-ts/transactions';
 import { DateTime, arrayify, sleep } from '@fuel-ts/utils';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import { versions } from '@fuel-ts/versions';
-import * as fuelTsVersionsMod from '@fuel-ts/versions';
 
+import { Wallet } from '..';
 import {
   messageStatusResponse,
   MESSAGE_PROOF_RAW_RESPONSE,
@@ -20,6 +20,7 @@ import {
   MOCK_TX_UNKNOWN_RAW_PAYLOAD,
   MOCK_TX_SCRIPT_RAW_PAYLOAD,
 } from '../../test/fixtures/transaction-summary';
+import { mockIncompatibleVersions } from '../../test/utils/mockIncompabileVersions';
 import { setupTestProviderAndWallets, launchNode, TestMessage } from '../test-utils';
 
 import type { Coin } from './coin';
@@ -1148,74 +1149,132 @@ describe('Provider', () => {
     expect(gasConfig.maxGasPerTx).toBeDefined();
   });
 
-  it('warns on difference between major client version and supported major version', async () => {
-    const { FUEL_CORE } = versions;
-    const [major, minor, patch] = FUEL_CORE.split('.');
-    const majorMismatch = major === '0' ? 1 : parseInt(patch, 10) - 1;
-
-    const mock = {
-      isMajorSupported: false,
-      isMinorSupported: true,
-      isPatchSupported: true,
-      supportedVersion: `${majorMismatch}.${minor}.${patch}`,
-    };
-
-    if (mock.supportedVersion === FUEL_CORE) {
-      throw new Error();
-    }
-
-    const spy = vi.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
-    spy.mockImplementationOnce(() => mock);
-
-    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+  it('Prepend a warning to an error with version mismatch [major]', async () => {
+    const { current, supported } = mockIncompatibleVersions({
+      isMajorMismatch: true,
+      isMinorMismatch: false,
+    });
 
     using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    const {
+      provider: { url },
+    } = launched;
 
-    await new Provider(provider.url).init();
+    const provider = await new Provider(url).init();
+    const sender = Wallet.generate({ provider });
+    const receiver = Wallet.generate({ provider });
 
-    expect(consoleWarnSpy).toHaveBeenCalledOnce();
-    expect(consoleWarnSpy).toHaveBeenCalledWith(
-      `The Fuel Node that you are trying to connect to is using fuel-core version ${FUEL_CORE},
-which is not supported by the version of the TS SDK that you are using.
-Things may not work as expected.
-Supported fuel-core version: ${mock.supportedVersion}.`
-    );
+    await expectToThrowFuelError(() => sender.transfer(receiver.address, 1), {
+      code: ErrorCode.NOT_ENOUGH_FUNDS,
+      message: [
+        `The account(s) sending the transaction don't have enough funds to cover the transaction.`,
+        ``,
+        `The Fuel Node that you are trying to connect to is using fuel-core version ${current.FUEL_CORE}.`,
+        `The TS SDK currently supports fuel-core version ${supported.FUEL_CORE}.`,
+        `Things may not work as expected.`,
+      ].join('\n'),
+    });
   });
 
-  it('warns on difference between minor client version and supported minor version', async () => {
-    const { FUEL_CORE } = versions;
-    const [major, minor, patch] = FUEL_CORE.split('.');
-    const minorMismatch = minor === '0' ? 1 : parseInt(patch, 10) - 1;
+  it('Prepend a warning to an error with version mismatch [minor]', async () => {
+    const { current, supported } = mockIncompatibleVersions({
+      isMajorMismatch: false,
+      isMinorMismatch: true,
+    });
 
-    const mock = {
-      isMajorSupported: true,
-      isMinorSupported: false,
-      isPatchSupported: true,
-      supportedVersion: `${major}.${minorMismatch}.${patch}`,
-    };
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider: { url },
+    } = launched;
 
-    if (mock.supportedVersion === FUEL_CORE) {
-      throw new Error();
-    }
+    const provider = await new Provider(url).init();
+    const sender = Wallet.generate({ provider });
+    const receiver = Wallet.generate({ provider });
 
-    const spy = vi.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
-    spy.mockImplementationOnce(() => mock);
+    await expectToThrowFuelError(() => sender.transfer(receiver.address, 1), {
+      code: ErrorCode.NOT_ENOUGH_FUNDS,
+      message: [
+        `The account(s) sending the transaction don't have enough funds to cover the transaction.`,
+        ``,
+        `The Fuel Node that you are trying to connect to is using fuel-core version ${current.FUEL_CORE}.`,
+        `The TS SDK currently supports fuel-core version ${supported.FUEL_CORE}.`,
+        `Things may not work as expected.`,
+      ].join('\n'),
+    });
+  });
 
-    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+  it('Prepend a warning to a subscription error with version mismatch [major]', async () => {
+    const { current, supported } = mockIncompatibleVersions({
+      isMajorMismatch: true,
+      isMinorMismatch: false,
+    });
 
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
-    await new Provider(provider.url).init();
+    await expectToThrowFuelError(
+      async () => {
+        for await (const value of await provider.operations.statusChange({
+          transactionId: 'invalid transaction id',
+        })) {
+          // shouldn't be reached and should fail if reached
+          expect(value).toBeFalsy();
+        }
+      },
 
-    expect(consoleWarnSpy).toHaveBeenCalledOnce();
-    expect(consoleWarnSpy).toHaveBeenCalledWith(
-      `The Fuel Node that you are trying to connect to is using fuel-core version ${FUEL_CORE},
-which is not supported by the version of the TS SDK that you are using.
-Things may not work as expected.
-Supported fuel-core version: ${mock.supportedVersion}.`
+      { code: FuelError.CODES.INVALID_REQUEST }
     );
+
+    const chainId = await provider.getChainId();
+    const response = new TransactionResponse('invalid transaction id', provider, chainId);
+
+    await expectToThrowFuelError(() => response.waitForResult(), {
+      code: FuelError.CODES.INVALID_REQUEST,
+      message: [
+        `Failed to parse "TransactionId": Invalid character 'i' at position 0`,
+        ``,
+        `The Fuel Node that you are trying to connect to is using fuel-core version ${current.FUEL_CORE}.`,
+        `The TS SDK currently supports fuel-core version ${supported.FUEL_CORE}.`,
+        `Things may not work as expected.`,
+      ].join('\n'),
+    });
+  });
+
+  it('Prepend a warning to a subscription error with version mismatch [minor]', async () => {
+    const { current, supported } = mockIncompatibleVersions({
+      isMajorMismatch: false,
+      isMinorMismatch: true,
+    });
+
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    await expectToThrowFuelError(
+      async () => {
+        for await (const value of await provider.operations.statusChange({
+          transactionId: 'invalid transaction id',
+        })) {
+          // shouldn't be reached and should fail if reached
+          expect(value).toBeFalsy();
+        }
+      },
+
+      { code: FuelError.CODES.INVALID_REQUEST }
+    );
+
+    const chainId = await provider.getChainId();
+    const response = new TransactionResponse('invalid transaction id', provider, chainId);
+
+    await expectToThrowFuelError(() => response.waitForResult(), {
+      code: FuelError.CODES.INVALID_REQUEST,
+      message: [
+        `Failed to parse "TransactionId": Invalid character 'i' at position 0`,
+        ``,
+        `The Fuel Node that you are trying to connect to is using fuel-core version ${current.FUEL_CORE}.`,
+        `The TS SDK currently supports fuel-core version ${supported.FUEL_CORE}.`,
+        `Things may not work as expected.`,
+      ].join('\n'),
+    });
   });
 
   it('An invalid subscription request throws a FuelError and does not hold the test runner (closes all handles)', async () => {

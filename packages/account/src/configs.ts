@@ -1,9 +1,9 @@
 /**
- * @deprecated This export is deprecated and will be removed in the future.
+ * Devnet network URL
  */
 export const DEVNET_NETWORK_URL = 'https://devnet.fuel.network/v1/graphql';
 
 /**
- * @deprecated This export is deprecated and will be removed in the future.
+ * Testnet network URL
  */
 export const TESTNET_NETWORK_URL = 'https://testnet.fuel.network/v1/graphql';
