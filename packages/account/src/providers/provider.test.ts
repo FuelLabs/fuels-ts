@@ -2237,6 +2237,34 @@ describe('Provider', () => {
       expect(pageInfo.endCursor).toBeDefined();
     });
 
+    it('can get balances [V1]', async () => {
+      vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo').mockImplementationOnce(async () =>
+        Promise.resolve({
+          nodeInfo: { nodeVersion: '0.40.0' } as NodeInfo,
+          chain: {} as ChainInfo,
+        })
+      );
+
+      using launched = await setupTestProviderAndWallets();
+      const {
+        provider,
+        wallets: [wallet],
+      } = launched;
+
+      const spy = vi.spyOn(provider.operations, 'getBalances');
+
+      const { pageInfo } = await wallet.getBalances();
+
+      expect(spy).toHaveBeenCalledWith({
+        first: 10000,
+        filter: { owner: wallet.address.toB256() },
+      });
+
+      expect(pageInfo).not.toBeDefined();
+
+      vi.restoreAllMocks();
+    });
+
     describe('pagination arguments', async () => {
       using launched = await setupTestProviderAndWallets({
         walletsConfig: {
