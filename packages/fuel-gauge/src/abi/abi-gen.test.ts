@@ -6,7 +6,7 @@ import { expectToThrowFuelError } from 'fuels/test-utils';
 import { tmpdir } from 'os';
 import { join } from 'path';
 
-import { AbiProjectsEnum, getAbiForcProject } from './utils';
+import { AbiProjectsEnum, autoUpdateFixture, getAbiForcProject } from './utils';
 
 function generateTmpDir(fromDir?: string) {
   const dir = join(tmpdir(), 'fuels', randomUUID());
@@ -24,6 +24,8 @@ function generateTmpDir(fromDir?: string) {
  * @group node
  */
 describe('AbiGen', () => {
+  beforeAll(() => {});
+
   test('Generates all files correctly', () => {
     const fixtureResultMap = new Map([
       ['index', 'index.ts'],
@@ -67,7 +69,9 @@ describe('AbiGen', () => {
       const expected = readFileSync(fixtureFile).toString();
       const generated = readFileSync(join(output.path, filename)).toString();
 
-      expect(generated).toEqual(expected);
+      autoUpdateFixture(fixtureFile, generated);
+
+      expect(generated, `Generated file ${filename} does not match expected`).toEqual(expected);
     });
   });
 
