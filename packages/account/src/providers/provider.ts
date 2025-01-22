@@ -77,8 +77,6 @@ export const GAS_USED_MODIFIER = 1.2;
 export type Features = {
   balancePagination: boolean;
   amount128: boolean;
-  daCompressedBlock: boolean;
-  getAssetDetails: boolean;
 };
 
 export type DryRunFailureStatusFragment = GqlDryRunFailureStatusFragment;
@@ -429,8 +427,6 @@ export default class Provider {
   private features: Features = {
     balancePagination: false,
     amount128: false,
-    daCompressedBlock: false,
-    getAssetDetails: false,
   };
 
   /** @hidden */
@@ -744,8 +740,6 @@ export default class Provider {
     if (gte(nodeVersion, '0.41.0')) {
       this.features.balancePagination = true;
       this.features.amount128 = true;
-      this.features.daCompressedBlock = true;
-      this.features.getAssetDetails = true;
     }
   }
 
@@ -844,14 +838,6 @@ export default class Provider {
    * @returns A promise that resolves to an object containing the asset details.
    */
   async getAssetDetails(assetId: string): Promise<GetAssetDetailsResponse> {
-    if (!this.features.getAssetDetails) {
-      const { nodeVersion } = await this.getNode();
-      throw new FuelError(
-        ErrorCode.NOT_SUPPORTED,
-        `The query "getAssetDetails" is not supported by node version: ${nodeVersion}`
-      );
-    }
-
     const { assetDetails } = await this.operations.getAssetDetails({ assetId });
 
     const { contractId, subId, totalSupply } = assetDetails;
@@ -1744,14 +1730,6 @@ export default class Provider {
    * @returns The compressed block if available, otherwise `null`.
    */
   async daCompressedBlock(height: string) {
-    if (!this.features.daCompressedBlock) {
-      const { nodeVersion } = await this.getNode();
-      throw new FuelError(
-        ErrorCode.NOT_SUPPORTED,
-        `The query "daCompressedBlock" is not supported by node version: ${nodeVersion}`
-      );
-    }
-
     const { daCompressedBlock } = await this.operations.daCompressedBlock({
       height,
     });
