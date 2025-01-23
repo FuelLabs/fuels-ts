@@ -284,7 +284,7 @@ This error can occur during a funding operation or when calling the `getResource
 
 `UTXO Limit Exceeded`: Although the account has enough total funds, the funds are spread across too many UTXOs (coins). The blockchain limits how many UTXOs can be used in a single transaction, and exceeding this limit prevents the transaction from being processed.
 
-To solve this you need first to determine the cause of the issue. You can check the balance of the relevant `assetId` to confirm if the issue is due to insufficient funds or too many UTXOs.
+To solve this, you first need to determine the cause of the issue. You can check the balance of the relevant `assetId` to confirm whether the problem is due to insufficient funds or too many UTXOs.
 
 First to be sure what is the real reason, you can fetch the [balance](../wallets/checking-balances.md) of the `assetId` in order to make sure that the account have enough funds to cover the amount. After knowing the reason, to solve you can:
 
