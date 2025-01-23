@@ -1165,7 +1165,7 @@ describe('Provider', () => {
     const receiver = Wallet.generate({ provider });
 
     await expectToThrowFuelError(() => sender.transfer(receiver.address, 1), {
-      code: ErrorCode.NOT_ENOUGH_FUNDS,
+      code: ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
       message: [
         `Insufficient funds or too many small value coins. Consider combining UTXOs.`,
         ``,
@@ -1192,7 +1192,7 @@ describe('Provider', () => {
     const receiver = Wallet.generate({ provider });
 
     await expectToThrowFuelError(() => sender.transfer(receiver.address, 1), {
-      code: ErrorCode.NOT_ENOUGH_FUNDS,
+      code: ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
       message: [
         `Insufficient funds or too many small value coins. Consider combining UTXOs.`,
         ``,

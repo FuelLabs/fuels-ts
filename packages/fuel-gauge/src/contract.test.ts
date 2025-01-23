@@ -1110,7 +1110,7 @@ describe('Contract', () => {
           })
           .simulate(),
       new FuelError(
-        ErrorCode.NOT_ENOUGH_FUNDS,
+        ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
         `Insufficient funds or too many small value coins. Consider combining UTXOs.`
       )
     );

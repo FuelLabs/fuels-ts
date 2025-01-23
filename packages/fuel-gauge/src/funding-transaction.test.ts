@@ -264,7 +264,7 @@ describe('Funding Transactions', () => {
     await expectToThrowFuelError(
       () => sender.fund(request, txCost),
       new FuelError(
-        FuelError.CODES.NOT_ENOUGH_FUNDS,
+        FuelError.CODES.INSUFFICIENT_FUNDS_OR_MAX_COINS,
         `Insufficient funds or too many small value coins. Consider combining UTXOs.`
       )
     );
