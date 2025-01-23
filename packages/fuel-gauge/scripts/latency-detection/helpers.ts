@@ -7,19 +7,6 @@ import type { MeasureResponse } from './types';
  * @returns An object containing the `response` of the operation and the `duration` in seconds.
  */
 export async function measure<T>(operation: () => Promise<T>): Promise<MeasureResponse<T>> {
-  // Should we run in try/catch?
-  // let response: T;
-  // try {
-  //   response = await operation();
-  // } catch (err) {
-  //   const endTime = Date.now();
-  //   console.error(err);
-  //   throw err;
-  // } finally {
-  //   const duration = (Date.now() - startTime) / 1000;
-  //   return { response, duration };
-  // }
-
   const start = Date.now();
   const response = await operation();
   const end = Date.now();
