@@ -1,6 +1,6 @@
 library;
 
-use ::data_structures::*;
+use data_structures::*;
 use core::ops::Eq;
 
 impl Eq for [u8; 4] {
