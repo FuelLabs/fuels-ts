@@ -1,7 +1,7 @@
 library;
 
-use data_structures::*;
 use core::ops::Eq;
+use ::data_structures::*;
 
 impl Eq for [u8; 4] {
     fn eq(self, other: Self) -> bool {
