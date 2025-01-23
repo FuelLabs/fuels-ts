@@ -30,3 +30,5 @@ export type PerformanceResult = {
   tag: TagEnum;
   duration: number;
 };
+
+export type Operation = (params: PerformanceOperationParams) => Promise<PerformanceResult>;
