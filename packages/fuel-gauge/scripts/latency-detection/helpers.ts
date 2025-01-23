@@ -1,7 +1,7 @@
 import { Provider, Wallet } from 'fuels';
 import ora from 'ora';
 
-import { TransferContractFactory } from '../../test/typegen/contracts';
+import { TransferContract, TransferContractFactory } from '../../test/typegen/contracts';
 import { PredicateWithConfigurable } from '../../test/typegen/predicates';
 
 import type {
@@ -60,6 +60,7 @@ export const preparatorySteps = async (): Promise<PerformanceOperationParams> =>
   // Preparatory steps
   const providerUrl = process.env.PERFORMANCE_ANALYSIS_TEST_URL;
   const privateKey = process.env.PERFORMANCE_ANALYSIS_PVT_KEY;
+  const contractAddress = process.env.PERFORMANCE_ANALYSIS_CONTRACT_ADDRESS;
 
   if (!providerUrl || !privateKey) {
     throw new Error(
@@ -86,9 +87,17 @@ export const preparatorySteps = async (): Promise<PerformanceOperationParams> =>
     ];
 
     // Deploying contract that will be executed
-    const factory = new TransferContractFactory(account);
-    const deploy = await factory.deploy();
-    const { contract } = await deploy.waitForResult();
+    let contract: TransferContract;
+    let deployedMsg = '';
+    if (!contractAddress) {
+      const factory = new TransferContractFactory(account);
+      const deploy = await factory.deploy();
+      const result = await deploy.waitForResult();
+      contract = result.contract;
+      deployedMsg = `\n- contract deployed on address: ${contract.id.toB256()}`;
+    } else {
+      contract = new TransferContract(contractAddress, account);
+    }
 
     // Instantiating predicate
     const predicate = new PredicateWithConfigurable({
@@ -104,8 +113,7 @@ export const preparatorySteps = async (): Promise<PerformanceOperationParams> =>
     const res = await account.transfer(predicate.address, 3000, baseAssetId);
     await res.waitForResult();
 
-    logger.text = 'Preparatory steps done';
-    logger.succeed();
+    logger.succeed(`Preparatory steps done${deployedMsg}`);
 
     return { account, baseAssetId, provider, contract, callParams, predicate };
   } catch (e) {
