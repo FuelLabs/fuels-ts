@@ -1,4 +1,15 @@
-import type { MeasureResponse } from './types';
+import { Provider, Wallet } from 'fuels';
+import ora from 'ora';
+
+import { TransferContractFactory } from '../../test/typegen/contracts';
+import { PredicateWithConfigurable } from '../../test/typegen/predicates';
+
+import type {
+  MeasureResponse,
+  Operation,
+  PerformanceOperationParams,
+  PerformanceResult,
+} from './types';
 
 /**
  * Function to measure the execution time (in seconds) of an asynchronous operation.
@@ -28,4 +39,115 @@ export const toCsv = (headers: [string, string], data: Record<string, unknown>[]
   let valuesAsStrings = data.map((r) => Object.values(r).map((value) => String(value)));
   valuesAsStrings = [headers, ...valuesAsStrings];
   return valuesAsStrings.map((row) => row.join(',')).join('\n');
+};
+
+/**
+ * Executes preparatory steps for latency detection.
+ *
+ * This function performs the following steps:
+ * 1. Retrieves the provider URL and private key from environment variables.
+ * 2. Initializes a logger to indicate the progress of the preparatory steps.
+ * 3. Creates a provider and account using the retrieved credentials.
+ * 4. Retrieves the base asset ID from the provider.
+ * 5. Deploys a transfer contract and waits for the deployment result.
+ * 6. Instantiates a predicate with configurable constants.
+ * 7. Funds the predicate with a specified amount.
+ *
+ *
+ * @returns The parameters to run a performance operation.
+ */
+export const preparatorySteps = async (): Promise<PerformanceOperationParams> => {
+  // Preparatory steps
+  const providerUrl = process.env.PERFORMANCE_ANALYSIS_TEST_URL;
+  const privateKey = process.env.PERFORMANCE_ANALYSIS_PVT_KEY;
+
+  if (!providerUrl || !privateKey) {
+    throw new Error(
+      'Please provide PERFORMANCE_ANALYSIS_TEST_URL and PERFORMANCE_ANALYSIS_PVT_KEY in the .env file'
+    );
+  }
+
+  const logger = ora({
+    text: 'Running preparatory steps..',
+    color: 'green',
+  }).start();
+
+  try {
+    const provider = new Provider(providerUrl);
+    const account = Wallet.fromPrivateKey(privateKey, provider);
+    const baseAssetId = await provider.getBaseAssetId();
+    const amount = 100;
+    const callParams = [
+      {
+        recipient: { Address: { bits: account.address.toB256() } },
+        asset_id: { bits: baseAssetId },
+        amount,
+      },
+    ];
+
+    // Deploying contract that will be executed
+    const factory = new TransferContractFactory(account);
+    const deploy = await factory.deploy();
+    const { contract } = await deploy.waitForResult();
+
+    // Instantiating predicate
+    const predicate = new PredicateWithConfigurable({
+      provider: contract.provider,
+      data: [10, account.address.toString()],
+      configurableConstants: {
+        ADDRESS: account.address.toString(),
+        FEE: 10,
+      },
+    });
+
+    // Funding predicate
+    const res = await account.transfer(predicate.address, 3000, baseAssetId);
+    await res.waitForResult();
+
+    logger.text = 'Preparatory steps done';
+    logger.succeed();
+
+    return { account, baseAssetId, provider, contract, callParams, predicate };
+  } catch (e) {
+    logger.fail('Failed to run preparatory steps');
+    throw e;
+  }
+};
+
+/**
+ * Executes a series of performance measure operations and returns their results.
+ *
+ * @param operations - An array of operations to be performed.
+ * @param params - Parameters to be passed to each operation.
+ * @returns A promise that resolves to an array of performance results.
+ */
+export const runOperations = async (
+  operations: Array<Operation>,
+  params: PerformanceOperationParams
+) => {
+  const results: PerformanceResult[] = [];
+
+  // Performing measure operations
+  for (const operation of operations) {
+    const logger = ora({
+      text: `Performing operation: ${operation.name}`,
+      color: 'green',
+    }).start();
+    try {
+      // Clear chain info cache
+      Provider.clearChainAndNodeCaches();
+
+      const result = await operation(params);
+
+      logger.text = `Operation: ${operation.name} completed`;
+      logger.succeed();
+
+      results.push(result);
+    } catch (e) {
+      logger.fail(`Operation: ${operation.name} failed`);
+      throw e;
+    }
+  }
+
+  return results;
 };
