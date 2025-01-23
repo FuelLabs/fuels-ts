@@ -19,11 +19,20 @@ jobs:
     if: github.event.before != '0000000000000000000000000000000000000000'
 
     steps:
+      - name: Create GitHub App Token
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
+          # Make sure the value of GITHUB_TOKEN will not be persisted in repo's config
+          persist-credentials: false
 
       - name: CI Setup
         uses: ./.github/actions/ci-setup
@@ -37,7 +46,7 @@ jobs:
           echo "FORC_VERSION=$(cat ./internal/forc/VERSION)" >> $GITHUB_ENV
           git reset --hard
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Ensure NPM access
         run: npm whoami
@@ -59,7 +68,7 @@ jobs:
           pnpm add --global semver
           echo "RELEASE_VERSION_HIGHER_THAN_LATEST=$(semver $LATEST_RELEASE $RELEASE_VERSION | tail -n1 | grep ${RELEASE_VERSION#v} --silent && echo true || echo false)" >> $GITHUB_ENV
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
@@ -73,13 +82,13 @@ jobs:
           githubReleaseName: ${{ env.RELEASE_VERSION }}
           githubTagName: ${{ env.RELEASE_VERSION }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Prettify changelog
         run: pnpm changeset:update-changelog
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           RELEASE_TAG: ${{ env.RELEASE_VERSION }}
           PUBLISHED: ${{ steps.changesets.outputs.published }}
           REF_NAME: ${{ github.ref_name }}
@@ -109,7 +118,7 @@ jobs:
           pnpm changeset publish --tag next
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
       # ensure docs are always deployed after merge of changeset PR
       - name: Get the last commit message and set env vars
@@ -126,7 +135,7 @@ jobs:
           workflow: update-nightly.yml
           ref: master
           repo: FuelLabs/docs-hub
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Create PR to apply latest release to master
         if: steps.changesets.outputs.published == 'true' && startsWith(github.ref_name, 'release/') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
@@ -142,7 +151,7 @@ jobs:
 
           gh pr create -B master -H $GITHUB_REF_NAME --title "$PR_TITLE" --body "$PR_BODY"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
           LATEST_VERSION: ${{ env.LATEST_VERSION }}
 
@@ -152,7 +161,7 @@ jobs:
         if: steps.changesets.outputs.published == 'true' && startsWith(github.ref_name, 'release/') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'false'
         run: git push origin --delete ${{ github.ref_name }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
       # Upload assets to S3
       - uses: unfor19/install-aws-cli-action@v1.0.7
@@ -182,6 +191,6 @@ jobs:
         run: |
           curl -X POST \
             -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: token ${{ secrets.MIGRATIONS_RELEASE_TRIGGER_TOKEN }}" \
+            -H "Authorization: token ${{ steps.app-token.outputs.token }}" \
             https://api.github.com/repos/FuelLabs/migrations-and-disclosures/dispatches \
             -d '{"event_type":"update_versions"}'
