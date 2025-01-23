@@ -224,7 +224,6 @@ export class BaseInvocationScope<TReturn = any> {
   /**
    * Gets the transaction cost for dry running the transaction.
    *
-   * @param options - Optional transaction cost options.
    * @returns The transaction cost details.
    */
   async getTransactionCost(): Promise<TransactionCost> {

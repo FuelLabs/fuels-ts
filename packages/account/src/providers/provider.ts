@@ -367,6 +367,30 @@ export type TransactionCostParams = EstimateTransactionParams & {
    * @returns A promise that resolves to the signed transaction request.
    */
   signatureCallback?: (request: ScriptTransactionRequest) => Promise<ScriptTransactionRequest>;
+
+  /**
+   * The gas price to use for the transaction.
+   */
+  gasPrice?: BN;
+};
+
+export type EstimateTxDependenciesParams = {
+  /**
+   * The gas price to use for the transaction.
+   */
+  gasPrice?: BN;
+};
+
+export type EstimateTxGasAndFeeParams = {
+  /**
+   * The transaction request to estimate the gas and fee for.
+   */
+  transactionRequest: TransactionRequest;
+
+  /**
+   * The gas price to use for the transaction.
+   */
+  gasPrice?: BN;
 };
 
 /**
@@ -1019,10 +1043,12 @@ export default class Provider {
    * `addVariableOutputs` is called on the transaction.
    *
    * @param transactionRequest - The transaction request object.
+   * @param gasPrice - The gas price to use for the transaction, if not provided it will be fetched.
    * @returns A promise that resolves to the estimate transaction dependencies.
    */
   async estimateTxDependencies(
-    transactionRequest: TransactionRequest
+    transactionRequest: TransactionRequest,
+    { gasPrice: gasPriceParam }: EstimateTxDependenciesParams = {}
   ): Promise<EstimateTxDependenciesReturns> {
     if (isTransactionTypeCreate(transactionRequest)) {
       return {
@@ -1039,13 +1065,15 @@ export default class Provider {
 
     await this.validateTransaction(transactionRequest);
 
+    const gasPrice = gasPriceParam ?? (await this.estimateGasPrice(10));
+
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
       const {
         dryRun: [{ receipts: rawReceipts, status }],
       } = await this.operations.dryRun({
         encodedTransactions: [hexlify(transactionRequest.toTransactionBytes())],
         utxoValidation: false,
-        gasPrice: '0',
+        gasPrice: gasPrice.toString(),
       });
 
       receipts = rawReceipts.map(processGqlReceipt);
@@ -1067,7 +1095,7 @@ export default class Provider {
 
         const { maxFee } = await this.estimateTxGasAndFee({
           transactionRequest,
-          gasPrice: bn(0),
+          gasPrice,
         });
 
         // eslint-disable-next-line no-param-reassign
@@ -1234,12 +1262,12 @@ export default class Provider {
 
   /**
    * Estimates the transaction gas and fee based on the provided transaction request.
-   * @param transactionRequest - The transaction request object.
+   * @param params - The parameters for estimating the transaction gas and fee.
    * @returns An object containing the estimated minimum gas, minimum fee, maximum gas, and maximum fee.
    */
-  async estimateTxGasAndFee(params: { transactionRequest: TransactionRequest; gasPrice?: BN }) {
-    const { transactionRequest } = params;
-    let { gasPrice } = params;
+  async estimateTxGasAndFee(params: EstimateTxGasAndFeeParams) {
+    const { transactionRequest, gasPrice: gasPriceParam } = params;
+    let gasPrice = gasPriceParam;
 
     await this.autoRefetchConfigs();
 
@@ -1355,7 +1383,7 @@ export default class Provider {
    */
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
-    { signatureCallback }: TransactionCostParams = {}
+    { signatureCallback, gasPrice: gasPriceParam }: TransactionCostParams = {}
   ): Promise<Omit<TransactionCost, 'requiredQuantities'>> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const updateMaxFee = txRequestClone.maxFee.eq(0);
@@ -1377,12 +1405,16 @@ export default class Provider {
     await this.estimatePredicates(signedRequest);
     txRequestClone.updatePredicateGasUsed(signedRequest.inputs);
 
+    const gasPrice = gasPriceParam ?? (await this.estimateGasPrice(10));
+
     /**
      * Calculate minGas and maxGas based on the real transaction
      */
     // eslint-disable-next-line prefer-const
-    let { maxFee, maxGas, minFee, minGas, gasPrice, gasLimit } = await this.estimateTxGasAndFee({
+    let { maxFee, maxGas, minFee, minGas, gasLimit } = await this.estimateTxGasAndFee({
+      // Fetches and returns a gas price
       transactionRequest: signedRequest,
+      gasPrice,
     });
 
     let receipts: TransactionResultReceipt[] = [];
@@ -1399,7 +1431,7 @@ export default class Provider {
       }
 
       ({ receipts, missingContractIds, outputVariables, dryRunStatus } =
-        await this.estimateTxDependencies(txRequestClone));
+        await this.estimateTxDependencies(txRequestClone, { gasPrice }));
 
       if (dryRunStatus && 'reason' in dryRunStatus) {
         throw this.extractDryRunError(txRequestClone, receipts, dryRunStatus);
@@ -1411,7 +1443,7 @@ export default class Provider {
       gasUsed = bn(pristineGasUsed.muln(GAS_USED_MODIFIER)).max(maxGasPerTx.sub(minGas));
       txRequestClone.gasLimit = gasUsed;
 
-      ({ maxFee, maxGas, minFee, minGas, gasPrice } = await this.estimateTxGasAndFee({
+      ({ maxFee, maxGas, minFee, minGas } = await this.estimateTxGasAndFee({
         transactionRequest: txRequestClone,
         gasPrice,
       }));
