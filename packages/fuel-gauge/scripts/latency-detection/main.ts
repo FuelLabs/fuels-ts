@@ -22,10 +22,11 @@ const main = async () => {
 
   const csvString = toCsv(['tag', 'time'], results);
   const date = new Date();
-  const filename = `${date.toISOString().slice(0, 10)}.csv`;
-  fs.mkdirSync('snapshots', { recursive: true });
-  fs.writeFileSync(filename, csvString);
-  log(`Snapshots saved into "snapshots/${filename}"`);
+  const dirName = 'snapshots';
+  const filename = `${date.toISOString().slice(0, 16)}.csv`;
+  fs.mkdirSync(dirName, { recursive: true });
+  fs.writeFileSync(`${dirName}/${filename}`, csvString);
+  log(`Snapshots saved into "${dirName}/${filename}"`);
 };
 
 main().catch(error);
