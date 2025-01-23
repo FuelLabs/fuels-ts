@@ -14,4 +14,4 @@ jobs:
         with:
           pull_number: ${{ github.event.pull_request.number }}
           linear_api_key: ${{ secrets.LINEAR_TOKEN }}
-          github_token: ${{ secrets.REPO_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
