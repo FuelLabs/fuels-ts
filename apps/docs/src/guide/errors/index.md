@@ -286,7 +286,7 @@ This error can occur during a funding operation or when calling the `getResource
 
 To solve this, you first need to determine the cause of the issue. You can check the balance of the relevant `assetId` to confirm whether the problem is due to insufficient funds or too many UTXOs.
 
-First to be sure what is the real reason, you can fetch the [balance](../wallets/checking-balances.md) of the `assetId` in order to make sure that the account have enough funds to cover the amount. After knowing the reason, to solve you can:
+First, to be sure what the real reason is, you can fetch the [balance](../wallets/checking-balances.md) of the `assetId` to ensure that the account has enough funds to cover the amount. After knowing the reason, to solve you can:
 
 `For Insufficient Balance`: Acquire additional funds in the required asset to meet the amount needed.
 
