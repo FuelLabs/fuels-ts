@@ -1,11 +1,11 @@
-import { BigNumberCoder } from '@fuel-ts/abi-coder';
+import { encoding } from '@fuel-ts/abi';
 import type { AssetId } from '@fuel-ts/address';
 import { getRandomB256 } from '@fuel-ts/address';
 import { sha256 } from '@fuel-ts/hasher';
 import { bn } from '@fuel-ts/math';
 import { arrayify, concat } from '@fuel-ts/utils';
 
-import { ByteArrayCoder } from './coders/byte-array';
+import { byteArray } from './coders/byte-array';
 import { getMintedAssetId, createAssetId, getMessageId } from './receipt';
 
 /**
@@ -52,10 +52,10 @@ describe('getMessageId', () => {
 
     const parts: Uint8Array[] = [];
 
-    parts.push(new ByteArrayCoder(32).encode(sender));
-    parts.push(new ByteArrayCoder(32).encode(recipient));
-    parts.push(new ByteArrayCoder(32).encode(nonce));
-    parts.push(new BigNumberCoder('u64').encode(amount));
+    parts.push(byteArray(32).encode(sender));
+    parts.push(byteArray(32).encode(recipient));
+    parts.push(byteArray(32).encode(nonce));
+    parts.push(encoding.v1.u64.encode(amount));
     parts.push(data);
 
     const expected = sha256(concat(parts));
@@ -73,10 +73,10 @@ describe('getMessageId', () => {
 
     const parts: Uint8Array[] = [];
 
-    parts.push(new ByteArrayCoder(32).encode(sender));
-    parts.push(new ByteArrayCoder(32).encode(recipient));
-    parts.push(new ByteArrayCoder(32).encode(nonce));
-    parts.push(new BigNumberCoder('u64').encode(amount));
+    parts.push(byteArray(32).encode(sender));
+    parts.push(byteArray(32).encode(recipient));
+    parts.push(byteArray(32).encode(nonce));
+    parts.push(encoding.v1.u64.encode(amount));
     parts.push(data);
 
     const expected = sha256(concat(parts));

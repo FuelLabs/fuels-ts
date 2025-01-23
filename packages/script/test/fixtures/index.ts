@@ -1,4 +1,4 @@
-import type { JsonAbi } from '@fuel-ts/abi-coder';
+import type { AbiSpecification } from '@fuel-ts/abi';
 import { getForcProject } from '@fuel-ts/utils/test-utils';
 import { join } from 'path';
 
@@ -7,7 +7,7 @@ export enum ScriptProjectsEnum {
 }
 
 export const getScriptForcProject = (project: ScriptProjectsEnum) =>
-  getForcProject<JsonAbi>({
+  getForcProject<AbiSpecification>({
     projectDir: join(__dirname, 'forc-projects', project),
     projectName: project,
     build: 'release',

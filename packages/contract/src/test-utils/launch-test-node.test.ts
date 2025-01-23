@@ -1,4 +1,4 @@
-import type { JsonAbi } from '@fuel-ts/abi-coder';
+import type { AbiSpecification } from '@fuel-ts/abi';
 import { Provider } from '@fuel-ts/account';
 import * as setupTestProviderAndWalletsMod from '@fuel-ts/account/test-utils';
 import { randomBytes, randomUUID } from '@fuel-ts/crypto';
@@ -15,7 +15,7 @@ import ContractFactory from '../contract-factory';
 
 import { launchTestNode } from './launch-test-node';
 
-const { binHexlified, abiContents } = getForcProject<JsonAbi>({
+const { binHexlified, abiContents } = getForcProject<AbiSpecification>({
   projectDir: join(__dirname, '../../test/fixtures/forc-projects/simple-contract'),
   projectName: 'simple-contract',
   build: 'release',

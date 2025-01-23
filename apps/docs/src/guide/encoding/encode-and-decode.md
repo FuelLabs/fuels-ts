@@ -1,13 +1,13 @@
 # Encode and Decode
 
-To interact with the FuelVM, types must be encoded and decoded per the [argument encoding specification](https://docs.fuel.network/docs/specs/abi/argument-encoding/). The SDK provides the `Interface` class to encode and decode data.
+To interact with the FuelVM, types must be encoded and decoded per the [argument encoding specification](https://docs.fuel.network/docs/specs/abi/argument-encoding/). The SDK provides the `AbiCoder` class to encode and decode data.
 
-The relevant methods of `Interface` are:
+To encode and decode types, the `AbiCoder` class provides the `getType` method which returns a `AbiCoderType` instance that provides the following methods:
 
-- `encodeType`
-- `decodeType`
+- `encode`
+- `decode`
 
-The `Interface` class requires you to pass the [ABI](https://docs.fuel.network/docs/specs/abi/json-abi-format/) on initialization. Both methods accept a `concreteTypeId`, which must exist in the ABI's `concreteTypes` array. After that, a suitable coder will be assigned to encode/decode that type.
+The `AbiCoder` class requires you to pass the [ABI](https://docs.fuel.network/docs/specs/abi/json-abi-format/) on initialization. Both methods accept a `concreteTypeId`, which must exist in the ABI's `concreteTypes` array. After that, a suitable coder will be assigned to encode/decode that type.
 
 Imagine we are working with the following script that returns the sum of two `u32` integers:
 
@@ -23,7 +23,7 @@ It will produce the following ABI:
 
 <<< @./snippets/encode-and-decode.jsonc#encode-and-decode-2{json:line-numbers}
 
-Now, let's prepare some data to pass to the `main` function to retrieve the combined integer. The function expects and returns a `u32` integer. So here, we will encode the `u32` to pass it to the function and receive the same `u32` back, as bytes, that we'll use for decoding. We can do both of these with the `Interface`.
+Now, let's prepare some data to pass to the `main` function to retrieve the combined integer. The function expects and returns a `u32` integer. So here, we will encode the `u32` to pass it to the function and receive the same `u32` back, as bytes, that we'll use for decoding. We can do both of these with the `AbiCoder`.
 
 First, let's prepare the transaction:
 

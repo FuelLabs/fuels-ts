@@ -1,10 +1,10 @@
-import type { CryptoApi, Encoding } from '../types';
+import type { CryptoApi, BufferEncoding } from '../types';
 
 import { btoa } from './crypto';
 
 export const stringFromBuffer: CryptoApi['stringFromBuffer'] = (
   buffer: Uint8Array,
-  encoding: Encoding = 'base64'
+  encoding: BufferEncoding = 'base64'
 ): string => {
   switch (encoding) {
     case 'utf-8': {

@@ -8,7 +8,7 @@
   Forc version: 0.66.5
 */
 
-import { type FunctionFragment } from '@fuel-ts/abi-coder';
+import { type AbiCoderFunction } from '@fuel-ts/abi';
 import { type InvokeFunction } from '@fuel-ts/program';
 
 /**
@@ -49,5 +49,5 @@ export type ProgramFunctionMapper<T extends Types['functions']> = {
 };
 
 export type InterfaceFunctionMapper<T extends Types['functions']> = {
-  [K in keyof T]: FunctionFragment;
+  [K in keyof T]: AbiCoderFunction;
 };

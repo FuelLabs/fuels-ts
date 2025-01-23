@@ -51,7 +51,7 @@ export type {{capitalizedName}}Configurables = Partial<{
 }>;
 {{/if}}
 
-const abi = {{abiJsonString}};
+const abi: AbiSpecification = {{abiJsonString}};
 
 const bytecode = decompressBytecode('{{compressedBytecode}}');
 

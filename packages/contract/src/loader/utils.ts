@@ -1,4 +1,4 @@
-import { WORD_SIZE } from '@fuel-ts/abi-coder';
+import { WORD_SIZE } from '@fuel-ts/abi';
 import { concat } from '@fuel-ts/utils';
 
 export const getContractChunks = (bytecode: Uint8Array, chunkSize: number) => {

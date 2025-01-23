@@ -1,0 +1,138 @@
+import { FuelError } from '@fuel-ts/errors';
+import { concat, toUtf8Bytes, toUtf8String } from '@fuel-ts/utils';
+
+import {
+  BYTES_TYPE,
+  RAW_SLICE_TYPE,
+  STD_STRING_TYPE,
+  STR_SLICE_TYPE,
+  VECTOR_TYPE,
+} from '../encoding-constants';
+import type { Coder } from '../encoding-types';
+import { assertDataLengthLessThanMax, assertEncodedLengthEquals, errors } from '../validation';
+
+import { u64 } from './fixed';
+
+const createHeapType = <TEncoded extends { length: number }, TDecoded>({
+  type,
+  encode,
+  decode,
+}: Coder<TEncoded, TDecoded>): Coder<TEncoded, TDecoded> => ({
+  type,
+  encode: (value: TEncoded) => {
+    try {
+      // Encode the length of the bytes
+      const dataLengthBytes = u64.encode(value.length);
+
+      // Encode the value
+      const valueBytes = encode(value);
+
+      // Concatenate the encoded length with the bytes
+      return concat([dataLengthBytes, valueBytes]);
+    } catch (error) {
+      throw errors.invalidValue(type, value);
+    }
+  },
+  decode: (data: Uint8Array, initialOffset = 0): [TDecoded, number] => {
+    try {
+      // Obtain the length of the bytes
+      const [dataLengthBn, dataLowerOffset] = u64.decode(data, initialOffset);
+      const dataLength = dataLengthBn.toNumber();
+
+      // Obtain the data bytes
+      const dataUpperOffset = dataLowerOffset + dataLength;
+      const dataBytes = data.slice(dataLowerOffset, dataUpperOffset);
+      assertEncodedLengthEquals(dataBytes, dataLength, type);
+
+      return decode(dataBytes, dataUpperOffset);
+    } catch (error) {
+      throw errors.malformedBytes(type, data);
+    }
+  },
+});
+
+const bytesTransformer: Coder<Uint8Array | number[], Uint8Array> = {
+  type: BYTES_TYPE,
+  encode: (value: Uint8Array | number[]) => (Array.isArray(value) ? new Uint8Array(value) : value),
+  decode: (data: Uint8Array, offset: number): [Uint8Array, number] => [data, offset],
+};
+export const bytes: Coder<Uint8Array | number[], Uint8Array> = createHeapType(bytesTransformer);
+
+const rawSliceTransformer: Coder<number[]> = {
+  type: RAW_SLICE_TYPE,
+  encode: (value: number[]) => new Uint8Array(value),
+  decode: (data: Uint8Array, offset: number): [number[], number] => [Array.from(data), offset],
+};
+export const rawSlice: Coder<number[]> = createHeapType(rawSliceTransformer);
+
+const createStringCoder = (type: string): Coder<string, string> =>
+  createHeapType({
+    type,
+    encode: (value: string) => toUtf8Bytes(value),
+    decode: (data: Uint8Array, offset: number): [string, number] => [toUtf8String(data), offset],
+  });
+
+export const stdString = createStringCoder(STD_STRING_TYPE);
+export const str = createStringCoder(STR_SLICE_TYPE);
+
+export type VecEncodedValue<TCoder extends Coder = Coder> =
+  | Array<ReturnType<TCoder['encode']>[0]>
+  | Uint8Array;
+export type VecDecodedValue<TCoder extends Coder = Coder> =
+  | Array<ReturnType<TCoder['decode']>[0]>
+  | Uint8Array;
+
+const isUint8Array = (value: unknown): value is Uint8Array => value instanceof Uint8Array;
+
+export const vector = <TCoder extends Coder>(coder: TCoder): Coder<VecDecodedValue<TCoder>> => ({
+  type: VECTOR_TYPE,
+  encode: (value: VecEncodedValue<TCoder>): Uint8Array => {
+    if (!Array.isArray(value) && !isUint8Array(value)) {
+      throw new FuelError(
+        FuelError.CODES.ENCODE_ERROR,
+        `Invalid ${VECTOR_TYPE} value - expected array value, or a Uint8Array.`,
+        { value }
+      );
+    }
+
+    const valueArray = Array.isArray(value) ? value : Array.from(value);
+
+    // Encode the length of the bytes
+    const dataLengthBytes = u64.encode(valueArray.length);
+
+    // Encode the value
+    const valueBytes = valueArray.map((elementValue) => coder.encode(elementValue));
+
+    // Concatenate the encoded length with the bytes
+    return concat([dataLengthBytes, ...valueBytes]);
+  },
+  decode: (data: Uint8Array, initialOffset = 0): [VecDecodedValue<TCoder>, number] => {
+    assertDataLengthLessThanMax(data, VECTOR_TYPE);
+
+    let dataLengthBn;
+    let dataLowerOffset;
+
+    try {
+      // Obtain the length of the bytes
+      [dataLengthBn, dataLowerOffset] = u64.decode(data, initialOffset);
+    } catch (error) {
+      throw new FuelError(
+        FuelError.CODES.DECODE_ERROR,
+        `Invalid ${VECTOR_TYPE} data - malformed bytes.`,
+        { data }
+      );
+    }
+
+    // Obtain the data bytes
+    const elements: unknown[] = [];
+    const dataLength = dataLengthBn.toNumber();
+    let offset = dataLowerOffset;
+    for (let i = 0; i < dataLength; i++) {
+      const [decodedElement, elementOffset] = coder.decode(data, offset);
+      offset = elementOffset;
+      elements.push(decodedElement);
+    }
+
+    return [elements as VecDecodedValue<TCoder>, offset];
+  },
+});

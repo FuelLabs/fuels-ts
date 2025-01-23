@@ -11,6 +11,7 @@
 */
 
 import {
+  AbiSpecification,
   Account,
   BigNumberish,
   BN,
@@ -31,7 +32,7 @@ export type ScoreOutput = { user: number, points: number };
 export type MyScriptInputs = [vec: Vec<ScoreInput>, enm: MyGenericEnumInput<BigNumberish>, opt: Option<BigNumberish>, res: Result<MyGenericStructInput<string>, BigNumberish>];
 export type MyScriptOutput = boolean;
 
-const abi = {
+const abi: AbiSpecification = {
   "programType": "script",
   "specVersion": "1",
   "encodingVersion": "1",

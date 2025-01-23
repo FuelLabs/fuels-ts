@@ -1,6 +1,6 @@
-import type { JsonAbi } from '@fuel-ts/abi-coder';
+import type { AbiSpecification } from '@fuel-ts/abi';
 
-export const predicateAbi: JsonAbi = {
+export const predicateAbi: AbiSpecification = {
   programType: 'predicate',
   specVersion: '1',
   encodingVersion: '1',

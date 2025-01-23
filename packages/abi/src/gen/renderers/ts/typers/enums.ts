@@ -4,7 +4,7 @@ import { structTyper } from './struct';
 import type { Typer, TyperAbiType } from './types';
 
 function isNativeEnum(abiType: TyperAbiType) {
-  return abiType.components?.every((t) => swayTypeMatchers.void(t.type.swayType)) === true;
+  return abiType.components?.every((t) => swayTypeMatchers.void(t.type)) === true;
 }
 
 export const enumTyper: Typer = (params, typer) => {

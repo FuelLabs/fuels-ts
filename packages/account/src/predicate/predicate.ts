@@ -1,5 +1,5 @@
-import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
-import { Interface } from '@fuel-ts/abi-coder';
+import type { AbiSpecification, InputValue } from '@fuel-ts/abi';
+import { AbiCoder } from '@fuel-ts/abi';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/utils';
@@ -33,7 +33,7 @@ export type PredicateParams<
 > = {
   bytecode: BytesLike;
   provider: Provider;
-  abi: JsonAbi;
+  abi: AbiSpecification;
   data?: TData;
   configurableConstants?: TConfigurables;
 };
@@ -47,7 +47,7 @@ export class Predicate<
 > extends Account {
   bytes: Uint8Array;
   predicateData: TData = [] as unknown as TData;
-  interface: Interface;
+  interface: AbiCoder;
   initialBytecode: Uint8Array;
   configurableConstants: TConfigurables | undefined;
   /**
@@ -160,7 +160,7 @@ export class Predicate<
   ) {
     return new Predicate<TData, TConfigurables>({
       bytecode: this.initialBytecode,
-      abi: this.interface.jsonAbi,
+      abi: this.interface.specification,
       provider: this.provider,
       data: overrides.data ?? this.predicateData,
       configurableConstants: overrides.configurableConstants ?? this.configurableConstants,
@@ -177,13 +177,13 @@ export class Predicate<
    */
   private static processPredicateData(
     bytes: BytesLike,
-    jsonAbi: JsonAbi,
+    jsonAbi: AbiSpecification,
     configurableConstants?: { [name: string]: unknown }
   ) {
     let predicateBytes = arrayify(bytes);
-    const abiInterface: Interface = new Interface(jsonAbi);
+    const abiCoder: AbiCoder = AbiCoder.fromAbi(jsonAbi);
 
-    if (abiInterface.functions.main === undefined) {
+    if (abiCoder.functions.main === undefined) {
       throw new FuelError(
         ErrorCode.ABI_MAIN_METHOD_MISSING,
         'Cannot use ABI without "main" function.'
@@ -194,13 +194,13 @@ export class Predicate<
       predicateBytes = Predicate.setConfigurableConstants(
         predicateBytes,
         configurableConstants,
-        abiInterface
+        abiCoder
       );
     }
 
     return {
       predicateBytes,
-      predicateInterface: abiInterface,
+      predicateInterface: abiCoder,
     };
   }
 
@@ -246,18 +246,18 @@ export class Predicate<
    *
    * @param bytes - The bytes of the predicate.
    * @param configurableConstants - Configurable constants to be set.
-   * @param abiInterface - The ABI interface of the predicate.
+   * @param abiCoder - The ABI interface of the predicate.
    * @returns The mutated bytes with the configurable constants set.
    */
   private static setConfigurableConstants(
     bytes: Uint8Array,
     configurableConstants: { [name: string]: unknown },
-    abiInterface: Interface
+    abiCoder: AbiCoder
   ) {
     const mutatedBytes = bytes;
 
     try {
-      if (Object.keys(abiInterface.configurables).length === 0) {
+      if (Object.keys(abiCoder.configurables).length === 0) {
         throw new FuelError(
           ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
           'Predicate has no configurable constants to be set'
@@ -265,16 +265,16 @@ export class Predicate<
       }
 
       Object.entries(configurableConstants).forEach(([key, value]) => {
-        if (!abiInterface?.configurables[key]) {
+        if (!abiCoder?.configurables[key]) {
           throw new FuelError(
             ErrorCode.CONFIGURABLE_NOT_FOUND,
             `No configurable constant named '${key}' found in the Predicate`
           );
         }
 
-        const { offset } = abiInterface.configurables[key];
+        const { offset } = abiCoder.configurables[key];
 
-        const encoded = abiInterface.encodeConfigurable(key, value as InputValue);
+        const encoded = abiCoder.getConfigurable(key).encode(value as InputValue);
 
         mutatedBytes.set(encoded, offset);
       });
@@ -339,7 +339,7 @@ export class Predicate<
   async deploy<T = this>(account: Account) {
     return deployScriptOrPredicate<T>({
       deployer: account,
-      abi: this.interface.jsonAbi,
+      abi: this.interface.specification,
       bytecode: this.bytes,
       loaderInstanceCallback: (loaderBytecode, newAbi) =>
         new Predicate({

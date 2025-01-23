@@ -140,7 +140,7 @@ describe('PoliciesCoder', () => {
       // bitfield is 1 representing tip
       const policyTypes = PolicyType.Tip;
 
-      const [policies] = new PoliciesCoder().decode(data, 0, policyTypes);
+      const [policies] = new PoliciesCoder(policyTypes).decode(data, 0);
 
       expect(policies).toHaveLength(1);
       expect(policies[0]).toStrictEqual({
@@ -157,7 +157,7 @@ describe('PoliciesCoder', () => {
       // bitfield is 2 representing witnessLimit
       const policyTypes = PolicyType.WitnessLimit;
 
-      const [policies] = new PoliciesCoder().decode(data, 0, policyTypes);
+      const [policies] = new PoliciesCoder(policyTypes).decode(data, 0);
 
       expect(policies).toHaveLength(1);
       expect(policies[0]).toStrictEqual({
@@ -174,7 +174,7 @@ describe('PoliciesCoder', () => {
       // bitfield is 4 representing maturity
       const policyTypes = PolicyType.Maturity;
 
-      const [policies] = new PoliciesCoder().decode(data, 0, policyTypes);
+      const [policies] = new PoliciesCoder(policyTypes).decode(data, 0);
 
       expect(policies).toHaveLength(1);
       expect(policies[0]).toStrictEqual({
@@ -191,7 +191,7 @@ describe('PoliciesCoder', () => {
       // bitfield is 8 representing maxFee
       const policyTypes = PolicyType.MaxFee;
 
-      const [policies] = new PoliciesCoder().decode(data, 0, policyTypes);
+      const [policies] = new PoliciesCoder(policyTypes).decode(data, 0);
 
       expect(policies).toHaveLength(1);
       expect(policies[0]).toStrictEqual({
@@ -210,7 +210,7 @@ describe('PoliciesCoder', () => {
       const policyTypes = PolicyType.Tip + PolicyType.WitnessLimit;
       expect(policyTypes).toBe(3);
 
-      const [policies] = new PoliciesCoder().decode(data, 0, policyTypes);
+      const [policies] = new PoliciesCoder(policyTypes).decode(data, 0);
 
       expect(policies).toHaveLength(2);
       expect(policies[0]).toStrictEqual({
@@ -233,7 +233,7 @@ describe('PoliciesCoder', () => {
       const policyTypes = PolicyType.WitnessLimit + PolicyType.Maturity;
       expect(policyTypes).toBe(6);
 
-      const [policies] = new PoliciesCoder().decode(data, 0, policyTypes);
+      const [policies] = new PoliciesCoder(policyTypes).decode(data, 0);
 
       expect(policies).toHaveLength(2);
       expect(policies[0]).toStrictEqual({
@@ -256,7 +256,7 @@ describe('PoliciesCoder', () => {
       const policyTypes = PolicyType.WitnessLimit + PolicyType.MaxFee;
       expect(policyTypes).toBe(10);
 
-      const [policies] = new PoliciesCoder().decode(data, 0, policyTypes);
+      const [policies] = new PoliciesCoder(policyTypes).decode(data, 0);
 
       expect(policies).toHaveLength(2);
       expect(policies[0]).toStrictEqual({
@@ -287,7 +287,7 @@ describe('PoliciesCoder', () => {
         PolicyType.Tip + PolicyType.WitnessLimit + PolicyType.Maturity + PolicyType.MaxFee;
       expect(policyTypes).toBe(15);
 
-      const [policies] = new PoliciesCoder().decode(data, 0, policyTypes);
+      const [policies] = new PoliciesCoder(policyTypes).decode(data, 0);
 
       expect(policies).toHaveLength(4);
       expect(policies).toStrictEqual([

@@ -22,9 +22,10 @@ describe('deploying blobs', () => {
   ): Record<string, unknown> {
     const configurables: Record<string, unknown> = {};
 
-    Object.entries(program.interface.configurables).forEach(([key, { offset, concreteTypeId }]) => {
+    Object.entries(program.interface.configurables).forEach(([key, { offset }]) => {
       const data = program.bytes.slice(offset);
-      configurables[key] = program.interface.decodeType(concreteTypeId, data)[0];
+      const coder = program.interface.getConfigurable(key);
+      configurables[key] = coder.decode(data);
     });
 
     return configurables;
@@ -236,7 +237,7 @@ describe('deploying blobs', () => {
     const predicate = new Predicate({
       data: [configurable.FEE, configurable.ADDRESS],
       bytecode: loaderPredicate.bytes,
-      abi: loaderPredicate.interface.jsonAbi,
+      abi: loaderPredicate.interface.specification,
       provider,
       configurableConstants: configurable,
     });

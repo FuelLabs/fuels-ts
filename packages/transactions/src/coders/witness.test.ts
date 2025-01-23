@@ -1,7 +1,6 @@
 import { arrayify, hexlify } from '@fuel-ts/utils';
 
-import type { Witness } from './witness';
-import { WitnessCoder } from './witness';
+import { WitnessCoder, type Witness } from './witness';
 
 /**
  * @group node

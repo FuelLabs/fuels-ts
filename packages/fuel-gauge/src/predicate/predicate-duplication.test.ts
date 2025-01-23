@@ -34,7 +34,7 @@ describe('Predicate.fromInstance', () => {
     const newPredicate: PredicateWithConfigurable = basePredicate.toNewInstance();
 
     expect(newPredicate.predicateData).toEqual(basePredicate.predicateData);
-    expect(newPredicate.interface).toEqual(basePredicate.interface);
+    expect(newPredicate.interface.specification).toEqual(basePredicate.interface.specification);
     expect(newPredicate.provider).toEqual(basePredicate.provider);
     expect(newPredicate.bytes).toEqual(basePredicate.bytes);
   });
@@ -56,7 +56,7 @@ describe('Predicate.fromInstance', () => {
     const newPredicate: PredicateWithConfigurable = basePredicate.toNewInstance({ data });
 
     expect(newPredicate.predicateData).toEqual(data);
-    expect(newPredicate.interface).toEqual(basePredicate.interface);
+    expect(newPredicate.interface.specification).toEqual(basePredicate.interface.specification);
     expect(newPredicate.provider).toEqual(basePredicate.provider);
     expect(newPredicate.bytes).toEqual(basePredicate.bytes);
     expect(newPredicate.predicateData).not.toEqual(basePredicate.predicateData);
@@ -81,7 +81,7 @@ describe('Predicate.fromInstance', () => {
     });
 
     expect(newPredicate.predicateData).toEqual(basePredicate.predicateData);
-    expect(newPredicate.interface).toEqual(basePredicate.interface);
+    expect(newPredicate.interface.specification).toEqual(basePredicate.interface.specification);
     expect(newPredicate.provider).toEqual(basePredicate.provider);
     expect(newPredicate.bytes).toEqual(
       new PredicateWithConfigurable({
@@ -116,7 +116,7 @@ describe('Predicate.fromInstance', () => {
     });
 
     expect(newPredicate.predicateData).toEqual(data);
-    expect(newPredicate.interface).toEqual(basePredicate.interface);
+    expect(newPredicate.interface.specification).toEqual(basePredicate.interface.specification);
     expect(newPredicate.provider).toEqual(basePredicate.provider);
     expect(newPredicate.bytes).toEqual(
       new PredicateWithConfigurable({

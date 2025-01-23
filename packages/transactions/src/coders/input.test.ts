@@ -96,7 +96,7 @@ describe('InputCoder', () => {
 
     await expectToThrowFuelError(
       () => new InputCoder().encode(input),
-      new FuelError(ErrorCode.ENCODE_ERROR, 'Invalid u64.')
+      new FuelError(ErrorCode.ENCODE_ERROR, 'Invalid u64 value - value exceeds maximum.')
     );
   });
 

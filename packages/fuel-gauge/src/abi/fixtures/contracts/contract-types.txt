@@ -78,6 +78,42 @@ export type StructWithVectorOutput = { a: number, b: number[] };
 
 export interface AbiContractTypes {
     functions: {
+        attributes_doc_comment: {
+            inputs: [];
+            output: void;
+        };
+        attributes_inline_always: {
+            inputs: [];
+            output: void;
+        };
+        attributes_inline_never: {
+            inputs: [];
+            output: void;
+        };
+        attributes_none: {
+            inputs: [];
+            output: void;
+        };
+        attributes_payable: {
+            inputs: [];
+            output: void;
+        };
+        attributes_storage_read: {
+            inputs: [];
+            output: void;
+        };
+        attributes_storage_read_write: {
+            inputs: [];
+            output: void;
+        };
+        attributes_storage_write: {
+            inputs: [];
+            output: void;
+        };
+        attributes_test: {
+            inputs: [];
+            output: void;
+        };
         configurables: {
             inputs: [];
             output: ConfigurablesOutput;

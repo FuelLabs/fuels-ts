@@ -29,10 +29,9 @@ const scriptRequest = new ScriptRequest(
       throw new Error('fail');
     }
 
-    const [decodedResult] = script.interface.functions.main.decodeOutput(
+    return script.interface.functions.main.decodeOutput(
       scriptResult.returnReceipt.data
     );
-    return decodedResult;
   }
 );
 // #endregion script-init

@@ -177,7 +177,7 @@ export class ResolvableType {
      * This propagates to the parent type, forcing it to be a `ResolvableType` as well,
      * as it can't be resolved until this generic type is substituted with a type argument.
      */
-    if (swayTypeMatchers.generic(metadataType.type)) {
+    if (swayTypeMatchers.generic({ swayType: metadataType.type })) {
       /**
        * This search solves the case where an e.g. `generic T` is being substituted by `generic E`.
        * This can happen when a generic type is nested in another generic type and they have differently-named type parameters.

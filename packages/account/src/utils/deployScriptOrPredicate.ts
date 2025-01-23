@@ -1,4 +1,4 @@
-import type { JsonAbi } from '@fuel-ts/abi-coder';
+import type { AbiSpecification } from '@fuel-ts/abi';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { hash } from '@fuel-ts/hasher';
 import { bn } from '@fuel-ts/math';
@@ -40,21 +40,21 @@ async function fundBlobTx(deployer: Account, blobTxRequest: BlobTransactionReque
   return deployer.fund(blobTxRequest, txCost);
 }
 
-function adjustConfigurableOffsets(jsonAbi: JsonAbi, configurableOffsetDiff: number) {
+function adjustConfigurableOffsets(jsonAbi: AbiSpecification, configurableOffsetDiff: number) {
   const { configurables: readOnlyConfigurables } = jsonAbi;
-  const configurables: JsonAbi['configurables'] = [];
+  const configurables: AbiSpecification['configurables'] = [];
   readOnlyConfigurables.forEach((config) => {
     // @ts-expect-error shut up the read-only thing
     configurables.push({ ...config, offset: config.offset - configurableOffsetDiff });
   });
-  return { ...jsonAbi, configurables } as JsonAbi;
+  return { ...jsonAbi, configurables } as AbiSpecification;
 }
 
 interface Deployer<T> {
   deployer: Account;
   bytecode: Uint8Array;
-  abi: JsonAbi;
-  loaderInstanceCallback: (loaderBytecode: Uint8Array, newAbi: JsonAbi) => T;
+  abi: AbiSpecification;
+  loaderInstanceCallback: (loaderBytecode: Uint8Array, newAbi: AbiSpecification) => T;
 }
 
 export async function deployScriptOrPredicate<T>({

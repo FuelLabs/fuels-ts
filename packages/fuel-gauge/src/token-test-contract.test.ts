@@ -199,7 +199,9 @@ describe('TokenTestContract', () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       () => token.functions.transfer_to_address(addressParameter, assetId, 50).call(),
-      new FuelError(ErrorCode.ENCODE_ERROR, 'Invalid b256.')
+      new FuelError(ErrorCode.ENCODE_ERROR, 'Invalid b256 value - malformed hex value.', {
+        value: userWallet.address,
+      })
     );
   });
 });

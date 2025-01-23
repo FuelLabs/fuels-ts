@@ -6,23 +6,24 @@ execSync(`fuels-typegen -i src/contracts/src14 -o src/types`);
 
 const typesPath = join(__dirname, '..', 'src', 'types');
 const supportedRecipes = ['Src14OwnedProxy']
-  .map((s) => [s, `${s}Factory`, `${s}Types`, `${s}-bytecode`, `${s}-storage-slots`])
+  .map((s) => [s, `${s}Factory`, `${s}Types`, `${s}-bytecode`, `${s}-storage-slots`, `${s}-abi`])
   .flat()
   .map((s) => join(typesPath, 'contracts', `${s}.ts`))
   .concat([join(typesPath, 'common.ts')]);
 
 const importReplacementMap = {
+  AbiCoder: '@fuel-ts/abi',
+  AbiCoderFunction: '@fuel-ts/abi',
+  AbiSpecification: '@fuel-ts/abi',
+  StrSlice: '@fuel-ts/abi',
   Contract: '@fuel-ts/program',
   ContractFactory: '@fuel-ts/contract',
   DeployContractOptions: '@fuel-ts/contract',
-  Interface: '@fuel-ts/abi-coder',
   Provider: '@fuel-ts/account',
   Account: '@fuel-ts/account',
   StorageSlot: '@fuel-ts/transactions',
   Address: '@fuel-ts/address',
-  FunctionFragment: '@fuel-ts/abi-coder',
   InvokeFunction: '@fuel-ts/program',
-  StrSlice: '@fuel-ts/abi-coder',
   decompressBytecode: '@fuel-ts/utils',
 };
 

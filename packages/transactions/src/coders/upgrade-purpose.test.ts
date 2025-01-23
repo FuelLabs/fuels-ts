@@ -1,6 +1,6 @@
-import { B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import { arrayify } from '@fuel-ts/utils';
 
+import { coders } from './coders';
 import type { UpgradePurpose } from './upgrade-purpose';
 import { UpgradePurposeCoder, UpgradePurposeTypeEnum } from './upgrade-purpose';
 
@@ -23,8 +23,8 @@ describe('UpgradePurposeCoder', () => {
     };
 
     const typeBytes = [0, 0, 0, 0, 0, 0, 0, UpgradePurposeTypeEnum.ConsensusParameters];
-    const witnessIndexBytes = new NumberCoder('u8', { padToWordSize: true }).encode(witnessIndex);
-    const checksumBytes = new B256Coder().encode(checksum);
+    const witnessIndexBytes = coders.u8.encode(witnessIndex);
+    const checksumBytes = coders.b256.encode(checksum);
 
     const expectedEncoded = Uint8Array.from([...typeBytes, ...witnessIndexBytes, ...checksumBytes]);
 
@@ -42,7 +42,7 @@ describe('UpgradePurposeCoder', () => {
     };
 
     const typeBytes = [0, 0, 0, 0, 0, 0, 0, UpgradePurposeTypeEnum.StateTransition];
-    const bytecodeRootBytes = new B256Coder().encode(bytecodeRoot);
+    const bytecodeRootBytes = coders.b256.encode(bytecodeRoot);
     const expectedEncoded = Uint8Array.from([...typeBytes, ...bytecodeRootBytes]);
 
     const encoded = new UpgradePurposeCoder().encode(upgradePurpose);

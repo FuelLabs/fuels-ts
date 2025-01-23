@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { FunctionFragment } from '@fuel-ts/abi-coder';
+import type { AbiCoderFunction } from '@fuel-ts/abi';
 import type { CoinQuantity } from '@fuel-ts/account';
 import { coinQuantityfy } from '@fuel-ts/account';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -18,7 +18,7 @@ export class FunctionInvocationScope<
   TArgs extends Array<any> = Array<any>,
   TReturn = any,
 > extends BaseInvocationScope<TReturn> {
-  protected func: FunctionFragment;
+  protected func: AbiCoderFunction;
   private callParameters?: CallParams;
   private forward?: CoinQuantity;
   protected args: TArgs;
@@ -30,7 +30,7 @@ export class FunctionInvocationScope<
    * @param func - The function fragment.
    * @param args - The arguments.
    */
-  constructor(program: AbstractProgram, func: FunctionFragment, args: TArgs) {
+  constructor(program: AbstractProgram, func: AbiCoderFunction, args: TArgs) {
     super(program, false);
     this.func = func;
     this.args = args || [];
@@ -80,7 +80,7 @@ export class FunctionInvocationScope<
     this.callParameters = callParams;
 
     if (callParams?.forward) {
-      if (!this.func.attributes.find((attr) => attr.name === 'payable')) {
+      if (!this.func.attributes?.find((attr) => attr.name === 'payable')) {
         throw new FuelError(
           ErrorCode.TRANSACTION_ERROR,
           `The target function ${this.func.name} cannot accept forwarded funds as it's not marked as 'payable'.`

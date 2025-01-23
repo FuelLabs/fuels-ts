@@ -30,11 +30,10 @@
   "dependencies": {
     "@fuel-ts/abi": "workspace:*",
     "@fuel-ts/address": "workspace:*",
-    "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/account": "workspace:*",
+    "@fuel-ts/contract": "workspace:*",
     "@fuel-ts/program": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
-    "@fuel-ts/utils": "workspace:*",
-    "@fuel-ts/contract": "workspace:*"
+    "@fuel-ts/utils": "workspace:*"
   }
 }

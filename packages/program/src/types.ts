@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import type { FunctionFragment, JsonAbi, Interface } from '@fuel-ts/abi-coder';
+import type { AbiCoderFunction, AbiSpecification, AbiCoder } from '@fuel-ts/abi';
 import type {
   CallResult,
   CoinQuantity,
@@ -21,7 +21,7 @@ import type { FunctionInvocationScope } from './functions/invocation-scope';
  */
 export abstract class AbstractProgram {
   abstract account: AbstractAccount | null;
-  abstract interface: Pick<Interface, 'jsonAbi'>;
+  abstract interface: Pick<AbiCoder, 'specification'>;
   abstract provider: Pick<Provider, 'sendTransaction' | 'getTransactionCost'> | null;
 }
 
@@ -39,7 +39,7 @@ export type ContractCall = {
   amount?: BigNumberish;
   assetId?: BytesLike;
   gas?: BigNumberish;
-  externalContractsAbis?: Record<string, JsonAbi>;
+  externalContractsAbis?: Record<string, AbiSpecification>;
 };
 
 /**
@@ -68,12 +68,12 @@ export type TxParams = Partial<{
  * @template T - Type of the function's arguments.
  */
 export type CallConfig<T = unknown> = {
-  func: FunctionFragment;
+  func: AbiCoderFunction;
   program: AbstractProgram;
   callParameters?: CallParams;
   txParameters?: TxParams;
   forward?: CoinQuantity;
-  externalAbis: Record<string, JsonAbi>;
+  externalAbis: Record<string, AbiSpecification>;
   args: T;
 };
 

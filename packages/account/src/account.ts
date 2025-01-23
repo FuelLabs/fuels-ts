@@ -1,4 +1,4 @@
-import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
+import { UTXO_ID_LEN } from '@fuel-ts/abi';
 import type { WithAddress } from '@fuel-ts/address';
 import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';

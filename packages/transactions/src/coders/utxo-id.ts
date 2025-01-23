@@ -1,4 +1,6 @@
-import { B256Coder, NumberCoder, StructCoder } from '@fuel-ts/abi-coder';
+import { Coder } from '@fuel-ts/abi';
+
+import { coders } from './coders';
 
 export type UtxoId = {
   /** Transaction ID (b256) */
@@ -7,14 +9,19 @@ export type UtxoId = {
   outputIndex: number;
 };
 
-export class UtxoIdCoder extends StructCoder<{
-  transactionId: B256Coder;
-  outputIndex: NumberCoder;
-}> {
-  constructor() {
-    super('UtxoId', {
-      transactionId: new B256Coder(),
-      outputIndex: new NumberCoder('u16', { padToWordSize: true }),
-    });
+const utxoIdCoder: Coder<UtxoId, UtxoId> = coders.struct({
+  transactionId: coders.b256,
+  outputIndex: coders.u16,
+});
+
+export class UtxoIdCoder extends Coder<UtxoId, UtxoId> {
+  override type = 'UtxoId';
+
+  encode(value: UtxoId): Uint8Array {
+    return utxoIdCoder.encode(value);
+  }
+
+  decode(data: Uint8Array, offset: number): [UtxoId, number] {
+    return utxoIdCoder.decode(data, offset);
   }
 }

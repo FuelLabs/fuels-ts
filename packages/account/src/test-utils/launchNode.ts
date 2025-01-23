@@ -1,4 +1,4 @@
-import { BYTES_32 } from '@fuel-ts/abi-coder';
+import { BYTES_32 } from '@fuel-ts/abi';
 import { randomBytes, randomUUID } from '@fuel-ts/crypto';
 import { FuelError } from '@fuel-ts/errors';
 import type { SnapshotConfigs } from '@fuel-ts/utils';

@@ -1,6 +1,6 @@
-import type { CryptoApi, Encoding } from '../types';
+import type { CryptoApi, BufferEncoding } from '../types';
 
 export const stringFromBuffer: CryptoApi['stringFromBuffer'] = (
   buffer: Uint8Array,
-  encoding: Encoding = 'base64'
+  encoding: BufferEncoding = 'base64'
 ): string => Buffer.from(buffer).toString(encoding);

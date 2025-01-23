@@ -1,4 +1,4 @@
-import { bn, FuelError, getRandomB256 } from 'fuels';
+import { bn, ContractFactory, FuelError, getRandomB256 } from 'fuels';
 import type { AssetId, BigNumberish, EvmAddress, RawSlice, WalletUnlocked } from 'fuels';
 import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
@@ -61,7 +61,8 @@ describe('AbiCoder', () => {
     const { contracts, wallets } = launched;
 
     wallet = wallets[0];
-    contract = contracts[0] as AbiContract;
+    contract = contracts[0];
+
     cleanup = launched.cleanup;
   });
 
@@ -100,7 +101,8 @@ describe('AbiCoder', () => {
         },
       };
 
-      const { waitForResult: waitForDeploy } = await AbiContractFactory.deploy(wallet, {
+      const factory = new ContractFactory(AbiContractFactory.bytecode, contract.interface, wallet);
+      const { waitForResult: waitForDeploy } = await factory.deploy({
         configurableConstants: NEW_CONFIGURABLES,
       });
 
@@ -122,6 +124,68 @@ describe('AbiCoder', () => {
         ])
       );
       expect(fn.attributes).toEqual([]);
+    });
+  });
+
+  describe('attributes', () => {
+    it('should have storage read attribute', () => {
+      const fn = contract.interface.getFunction('attributes_storage_read');
+      expect(fn.attributes).toEqual([{ name: 'storage', arguments: ['read'] }]);
+    });
+
+    it('should have storage write attribute', () => {
+      const fn = contract.interface.getFunction('attributes_storage_write');
+      expect(fn.attributes).toEqual([{ name: 'storage', arguments: ['write'] }]);
+    });
+
+    it('should have storage read and write attribute', () => {
+      const fn = contract.interface.getFunction('attributes_storage_read_write');
+      expect(fn.attributes).toEqual([{ name: 'storage', arguments: ['read', 'write'] }]);
+    });
+
+    it('should have payable attribute', () => {
+      const fn = contract.interface.getFunction('attributes_payable');
+      expect(fn.attributes).toEqual([{ name: 'payable' }]);
+    });
+
+    it('should have test attribute', () => {
+      const fn = contract.interface.getFunction('attributes_test');
+      expect(fn.attributes).toEqual([{ name: 'test' }]);
+    });
+
+    it('should have inline never attribute', () => {
+      const fn = contract.interface.getFunction('attributes_inline_never');
+      expect(fn.attributes).toEqual([{ name: 'inline', arguments: 'never' }]);
+    });
+
+    it('should have inline always attribute', () => {
+      const fn = contract.interface.getFunction('attributes_inline_always');
+      expect(fn.attributes).toEqual([{ name: 'inline', arguments: 'always' }]);
+    });
+
+    it('should have doc attribute', () => {
+      const fn = contract.interface.getFunction('attributes_doc_comment');
+      expect(fn.attributes).toEqual([
+        { name: 'doc-comment', arguments: [' This is a doc'] },
+        { name: 'doc-comment', arguments: [' This is another doc comment'] },
+      ]);
+    });
+  });
+
+  describe('isReadOnly', () => {
+    it('should return true for a storage read function', () => {
+      const fn = contract.interface.getFunction('attributes_storage_read');
+      expect(fn.isReadOnly()).toBe(true);
+    });
+
+    it('should return true for a function that does not use storage', () => {
+      const fn = contract.interface.getFunction('attributes_none');
+      expect(fn.isReadOnly()).toBe(true);
+    });
+
+    it('should return false for a storage write function', () => {
+      const fn = contract.interface.getFunction('attributes_storage_write');
+      expect(fn.isReadOnly()).toBe(false);
     });
   });
 
@@ -156,7 +220,10 @@ describe('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_u8(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u8.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u8 value - value is less than zero.', {
+          type: 'u8',
+          value: input.toString(),
+        })
       );
     });
 
@@ -165,7 +232,10 @@ describe('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_u8(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u8, too many bytes.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u8 value - value exceeds maximum.', {
+          type: 'u8',
+          value: input.toString(),
+        })
       );
     });
   });
@@ -199,7 +269,14 @@ describe('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_u16(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u16.')
+        new FuelError(
+          FuelError.CODES.ENCODE_ERROR,
+          'Invalid u16 value - value is less than zero.',
+          {
+            type: 'u16',
+            value: input.toString(),
+          }
+        )
       );
     });
 
@@ -208,7 +285,10 @@ describe('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_u16(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u16, too many bytes.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u16 value - value exceeds maximum.', {
+          type: 'u16',
+          value: input.toString(),
+        })
       );
     });
   });
@@ -242,7 +322,14 @@ describe('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_u32(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u32.')
+        new FuelError(
+          FuelError.CODES.ENCODE_ERROR,
+          'Invalid u32 value - value is less than zero.',
+          {
+            type: 'u32',
+            value: input.toString(),
+          }
+        )
       );
     });
 
@@ -251,7 +338,10 @@ describe('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_u32(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u32, too many bytes.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u32 value - value exceeds maximum.', {
+          type: 'u32',
+          value: input.toString(),
+        })
       );
     });
   });
@@ -288,7 +378,14 @@ describe('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_u64(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u64.')
+        new FuelError(
+          FuelError.CODES.ENCODE_ERROR,
+          'Invalid u64 value - value is less than zero.',
+          {
+            type: 'u64',
+            value: input.toString(),
+          }
+        )
       );
     });
 
@@ -297,7 +394,10 @@ describe('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_u64(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u64.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u64 value - value exceeds maximum.', {
+          type: 'u64',
+          value: input.toString(),
+        })
       );
     });
   });
@@ -334,7 +434,14 @@ describe('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_u256(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u256.')
+        new FuelError(
+          FuelError.CODES.ENCODE_ERROR,
+          'Invalid u256 value - value is less than zero.',
+          {
+            type: 'u256',
+            value: input.toString(),
+          }
+        )
       );
     });
 
@@ -343,7 +450,10 @@ describe('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_u256(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u256.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u256 value - value exceeds maximum.', {
+          type: 'u256',
+          value: input.toString(),
+        })
       );
     });
   });
@@ -420,7 +530,9 @@ describe('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_b256(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b256.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b256 value - malformed hex value.', {
+          value: input,
+        })
       );
     });
 
@@ -429,7 +541,9 @@ describe('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_b256(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b256.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b256 value - malformed hex value.', {
+          value: input,
+        })
       );
     });
 
@@ -438,7 +552,9 @@ describe('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_b256(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b256.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b256 value - malformed hex value.', {
+          value: input,
+        })
       );
     });
   });
@@ -472,7 +588,9 @@ describe('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_b512(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid struct B512.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b512 value - malformed hex value.', {
+          value: input,
+        })
       );
     });
 
@@ -481,7 +599,9 @@ describe('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_b512(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid struct B512.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b512 value - malformed hex value.', {
+          value: input,
+        })
       );
     });
 
@@ -490,7 +610,9 @@ describe('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_b512(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid struct B512.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b512 value - malformed hex value.', {
+          value: input,
+        })
       );
     });
   });
@@ -566,7 +688,9 @@ describe('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_str(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Value length mismatch during encode.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid string value - unexpected length.', {
+          value: input,
+        })
       );
     });
 
@@ -575,7 +699,9 @@ describe('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_str(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Value length mismatch during encode.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid string value - unexpected length.', {
+          value: input,
+        })
       );
     });
   });
@@ -698,7 +824,9 @@ describe('AbiCoder', () => {
 
       await expectToThrowFuelError(
         () => contract.functions.types_array(input).call(),
-        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Types/values length mismatch.')
+        new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid array value - unexpected length.', {
+          value: input,
+        })
       );
     });
   });
@@ -987,9 +1115,9 @@ describe('AbiCoder', () => {
 
       expect(fn.name).toBe('types_struct_with_implicit_generics');
       expect(fn.signature).toEqual(
-        'types_struct_with_implicit_generics(s<b256,u8>(a[b256;3],<b256,u8>(b256,u8)))'
+        'types_struct_with_implicit_generics(s<b256,u8>(a[b256;3],(b256,u8)))'
       );
-      expect(fn.selector).toEqual('0x0000000099d41855');
+      expect(fn.selector).toEqual('0x0000000098941324');
       expect(fn.selectorBytes).toEqual(
         new Uint8Array([
           0, 0, 0, 0, 0, 0, 0, 35, 116, 121, 112, 101, 115, 95, 115, 116, 114, 117, 99, 116, 95,
@@ -1002,10 +1130,7 @@ describe('AbiCoder', () => {
   });
 
   describe('types_struct_with_array', () => {
-    /**
-     * TODO: This is causing a generic to be left into the parsed format.
-     */
-    it.skip('should encode/decode just fine', async () => {
+    it('should encode/decode just fine', async () => {
       // Inputs
       const inputB256: string =
         '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
@@ -1238,9 +1363,6 @@ describe('AbiCoder', () => {
         .call();
 
       await waitForResult();
-      // const { value, logs } = await waitForResult();
-      // expect(value).toStrictEqual(expected);
-      // expect(logs).toStrictEqual([expected]);
     });
 
     it('should have function properties', () => {

@@ -9,7 +9,7 @@
 */
 
 
-import { Contract, Interface } from "fuels";
+import { Contract, AbiCoder } from "fuels";
 import type { Address, Account, Provider } from 'fuels';
 import type { AbiContractTypes as Types } from './AbiContractTypes';
 import type { InterfaceFunctionMapper, ProgramFunctionMapper } from '../common';
@@ -19,7 +19,7 @@ export * from './AbiContractTypes';
 
 export type AbiContractConfigurables = Types['configurables'];
 
-export class AbiContractInterface extends Interface {
+export class AbiContractAbiCoder extends AbiCoder {
   declare functions: InterfaceFunctionMapper<Types['functions']>;
 
   constructor() {
@@ -28,7 +28,7 @@ export class AbiContractInterface extends Interface {
 }
 
 export class AbiContract extends Contract {
-    declare interface: AbiContractInterface;
+    declare interface: AbiContractAbiCoder;
     declare functions: ProgramFunctionMapper<Types['functions']>;
 
     public static readonly abi = abi;

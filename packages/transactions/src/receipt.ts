@@ -1,10 +1,10 @@
-import { BigNumberCoder } from '@fuel-ts/abi-coder';
+import { encoding } from '@fuel-ts/abi';
 import type { AssetId } from '@fuel-ts/address';
 import { sha256 } from '@fuel-ts/hasher';
 import type { BN } from '@fuel-ts/math';
 import { arrayify, concat } from '@fuel-ts/utils';
 
-import { ByteArrayCoder } from './coders/byte-array';
+import { byteArray } from './coders/byte-array';
 
 export enum ReceiptType /* u8 */ {
   Call = 0,
@@ -263,10 +263,10 @@ export const getMessageId = (
 ): string => {
   const parts: Uint8Array[] = [];
 
-  parts.push(new ByteArrayCoder(32).encode(value.sender));
-  parts.push(new ByteArrayCoder(32).encode(value.recipient));
-  parts.push(new ByteArrayCoder(32).encode(value.nonce));
-  parts.push(new BigNumberCoder('u64').encode(value.amount));
+  parts.push(byteArray(32).encode(value.sender));
+  parts.push(byteArray(32).encode(value.recipient));
+  parts.push(byteArray(32).encode(value.nonce));
+  parts.push(encoding.v1.u64.encode(value.amount));
   parts.push(arrayify(value.data || '0x'));
 
   return sha256(concat(parts));

@@ -1,4 +1,4 @@
-import { BYTES_32, UTXO_ID_LEN } from '@fuel-ts/abi-coder';
+import { BYTES_32, UTXO_ID_LEN } from '@fuel-ts/abi';
 import { Address } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
