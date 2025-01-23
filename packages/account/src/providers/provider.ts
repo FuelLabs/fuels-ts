@@ -2154,6 +2154,10 @@ export default class Provider {
    * @returns A promise that resolves to the result of the check.
    */
   async isUserAccount(id: string): Promise<boolean> {
+    const type = await this.getAddressType(id);
+    return type === 'Account';
+  }
+
   /**
    * Determines the type of address based on the provided ID.
    *
