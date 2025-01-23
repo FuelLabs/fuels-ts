@@ -23,6 +23,7 @@
     "markdown-link-check",
     "ts-generator",
     "vitepress-plugin-search",
-    "vue"
+    "vue",
+    "forc"
   ]
 }
