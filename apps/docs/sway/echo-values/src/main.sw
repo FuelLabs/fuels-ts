@@ -38,11 +38,11 @@ impl EchoValues for Contract {
     }
     // #endregion tuples-2
 
-    // #region bits512-3
+    // #region b512-3
     fn echo_b512(input: B512) -> B512 {
         input
     }
-    // #endregion bits512-3
+    // #endregion b512-3
     fn echo_u64(value: u64) -> u64 {
         value
     }
