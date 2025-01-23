@@ -393,6 +393,66 @@ Once the environment is set up, run the network tests using the following comman
 pnpm test:network
 ```
 
+# Transaction Time Measure
+
+A script designed to run locally is available to measure the time required to submit and process different types of transactions on a specified network.
+
+The script code is located at: `packages/fuel-gauge/scripts/latency-detection/main.ts`.
+
+### Setup Instructions
+
+Before running the tests, you need to configure the `.env` file:
+
+1. Copy the `.env.example` file:
+
+```sh
+cp .env.example .env
+```
+
+2. Set the values for the following environment variables in the `.env` file:
+
+```env
+PERFORMANCE_ANALYSIS_TEST_URL=https://testnet.fuel.network/v1/graphql
+PERFORMANCE_ANALYSIS_PVT_KEY=...
+PERFORMANCE_ANALYSIS_CONTRACT_ADDRESS=...
+```
+
+- `PERFORMANCE_ANALYSIS_TEST_URL`: The URL of which network the test should run (e.g., Fuel Testnet endpoint).
+- `PERFORMANCE_ANALYSIS_PVT_KEY`: Your private key for the network.
+- `PERFORMANCE_ANALYSIS_CONTRACT_ADDRESS`: The address of the contract used by the script. If this variable is left empty, the script will deploy the contract before running the time measurement tests. The deployed contract address will be logged, allowing you to add it here for subsequent test runs to avoid re-deployment.
+
+### Running the Test Suite
+
+Once the environment is set up, run the network tests using the following command:
+
+```sh
+pnpm tx:pef
+```
+
+### Output and Results
+
+The test results are saved in the snapshots directory as a CSV file. The filename follows a timestamp format, such as:
+
+```
+2025-01-23T13:23.csv
+```
+
+A sample of the results is shown below:
+
+| Tag                          | Time (in seconds) |
+| ---------------------------- | ----------------- |
+| `script`                     | 1.907             |
+| `missing-output-variable`    | 2.159             |
+| `missing-4x-output-variable` | 3.072             |
+| `script-with-predicate`      | 1.997             |
+
+### Notes on Transaction Types
+
+- `script`: Represents a script transaction, such as a simple contract call performing one asset transfer.
+- `missing-output-variable`: A similar contract call as the `script` case, but without specifying the `OutputVariable`, resulting in one additional dry run.
+- `missing-4x-output-variable`: Executes an asset transfer transaction to four destinations without specifying `OutputVariable`, leading to four additional dry runs.
+- `script-with-predicate`: Performs the contract asset transfer transaction to one address and adds the `OutputVariable` before hand. The account submitting the transaction is a predicate, which it will result in the additional request to `estimatePredicates`.
+
 # FAQ
 
 ### Why is the prefix `fuels` and not `fuel`?
