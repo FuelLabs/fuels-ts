@@ -552,7 +552,7 @@ export class Account extends AbstractAccount implements WithAddress {
    */
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
-    { signatureCallback, quantities = [] }: TransactionCostParams = {}
+    { signatureCallback, quantities = [], gasPrice }: TransactionCostParams = {}
   ): Promise<TransactionCost> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const baseAssetId = await this.provider.getBaseAssetId();
@@ -603,6 +603,7 @@ export class Account extends AbstractAccount implements WithAddress {
 
     const txCost = await this.provider.getTransactionCost(txRequestClone, {
       signatureCallback,
+      gasPrice,
     });
 
     return {
