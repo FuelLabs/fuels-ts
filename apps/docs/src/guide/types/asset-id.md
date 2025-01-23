@@ -1,6 +1,6 @@
 # Asset ID
 
-An Asset ID can be represented using the `AssetId` type. It's definition matches the Sway standard library type being a `Struct` wrapper around an inner `Bits256` value.
+An Asset ID can be represented using the `AssetId` type. It's definition matches the Sway standard library type being a `Struct` wrapper around an inner `B256` value.
 
 <<< @./snippets/asset-id/intro.ts#full{ts:line-numbers}
 

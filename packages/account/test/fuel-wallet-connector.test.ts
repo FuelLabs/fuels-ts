@@ -5,10 +5,10 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { BytesLike } from '@fuel-ts/utils';
-import { TESTNET_NETWORK_URL } from '@internal/utils';
 import { EventEmitter } from 'events';
 
 import type { AccountSendTxParams, Network, ProviderOptions, SelectNetworkArguments } from '../src';
+import { TESTNET_NETWORK_URL } from '../src/configs';
 import { Fuel } from '../src/connectors/fuel';
 import { FuelConnectorEventType } from '../src/connectors/types';
 import { Provider, ScriptTransactionRequest, TransactionStatus } from '../src/providers';

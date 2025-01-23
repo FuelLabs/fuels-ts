@@ -16,4 +16,4 @@ You can use the `hexlify` function to convert a byte array to a hex string, and 
 
 ## Working with b256 in Fuel
 
-In Fuel, there is a special type called b256, which is similar to `bytes32`. Like `bytes32`, `b256` is also used to represent hashes and holds a 256-bit value. You can learn more about working with `b256` values in the [Bits256 documentation](./bits256.md).
+In Fuel, there is a special type called b256, which is similar to `bytes32`. Like `bytes32`, `B256` is also used to represent hashes and holds a 256-bit value. You can learn more about working with `B256` values in the [B256 documentation](./b256.md).
