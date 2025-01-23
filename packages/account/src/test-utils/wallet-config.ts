@@ -123,7 +123,7 @@ export class WalletsConfig {
         assetIds.forEach((assetId) => {
           for (let index = 0; index < coinsPerAsset; index++) {
             coins.push({
-              amount: bn(amountPerCoin),
+              amount: bn(amountPerCoin).toString(),
               asset_id: assetId,
               owner: walletAddress,
               tx_pointer_block_height: 0,
