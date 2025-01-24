@@ -1,6 +1,6 @@
 {{header}}
 
-import { Contract, Interface } from "fuels";
+import { Contract as __Contract, Interface } from "fuels";
 {{#if imports}}
 import type {
   Provider,
@@ -69,7 +69,7 @@ export class {{capitalizedName}}Interface extends Interface {
   };
 }
 
-export class {{capitalizedName}} extends Contract {
+export class {{capitalizedName}} extends __Contract {
   static readonly abi = abi;
   static readonly storageSlots = storageSlots;
 

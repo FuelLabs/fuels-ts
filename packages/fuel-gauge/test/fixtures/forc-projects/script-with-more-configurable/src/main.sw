@@ -1,66 +1,55 @@
 script;
 
-use std::{string::String,};
-
+use std::string::String;
 struct Struct1 {
     tag: str[3],
     age: u8,
     scores: [u8; 3],
 }
-
 enum Colors {
     red: (),
     blue: (),
 }
-
 impl Eq for [u32; 2] {
     fn eq(self, other: Self) -> bool {
         self[0] == other[0] && self[1] == other[1]
     }
 }
-
 impl Eq for [u8; 3] {
     fn eq(self, other: Self) -> bool {
         self[0] == other[0] && self[1] == other[1] && self[2] == other[2]
     }
 }
-
 impl Eq for [[u32; 2]; 2] {
     fn eq(self, other: Self) -> bool {
         self[0] == other[0] && self[1] == other[1]
     }
 }
-
 impl Eq for str[2] {
     fn eq(self, other: Self) -> bool {
         from_str_array(self) == from_str_array(other)
     }
 }
-
 impl Eq for str[3] {
     fn eq(self, other: Self) -> bool {
         from_str_array(self) == from_str_array(other)
     }
 }
-
 impl Eq for str[4] {
     fn eq(self, other: Self) -> bool {
         from_str_array(self) == from_str_array(other)
     }
 }
-
 impl Eq for (u8, bool, str[2]) {
     fn eq(self, other: Self) -> bool {
         self.0 == other.0 && self.1 == other.1 && self.2 == other.2
     }
 }
-
 impl Eq for Struct1 {
     fn eq(self, other: Self) -> bool {
         self.tag == other.tag && self.age == other.age && self.scores == other.scores
     }
 }
-
 impl Eq for Colors {
     fn eq(self, other: Self) -> bool {
         match (self, other) {
@@ -70,7 +59,6 @@ impl Eq for Colors {
         }
     }
 }
-
 configurable {
     U8: u8 = 10,
     U16: u16 = 301u16,
@@ -88,7 +76,6 @@ configurable {
         scores: [1, 3, 4],
     },
 }
-
 fn main() -> bool {
     assert(U8 == 16);
     log(U8);
@@ -118,6 +105,5 @@ fn main() -> bool {
         },
     );
     log(STRUCT_1);
-
     true
 }

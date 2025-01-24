@@ -1,13 +1,13 @@
 {{header}}
 
-import { ContractFactory, decompressBytecode } from "fuels";
+import { ContractFactory as __ContractFactory, decompressBytecode } from "fuels";
 import type { Provider, Account, DeployContractOptions } from "fuels";
 
 import { {{capitalizedName}} } from "./{{capitalizedName}}";
 
 const bytecode = decompressBytecode("{{compressedBytecode}}");
 
-export class {{capitalizedName}}Factory extends ContractFactory<{{capitalizedName}}> {
+export class {{capitalizedName}}Factory extends __ContractFactory<{{capitalizedName}}> {
 
   static readonly bytecode = bytecode;
 
