@@ -2387,7 +2387,7 @@ describe('Provider', () => {
   });
 
   test('should ensure getBalance and getBalances can return u128 amounts ', async () => {
-    const fundingAmount = 2 ** 63;
+    const fundingAmount = bn(2).pow(63);
     const maxU64 = bn('0xFFFFFFFFFFFFFFFF');
 
     using launched = await setupTestProviderAndWallets({
