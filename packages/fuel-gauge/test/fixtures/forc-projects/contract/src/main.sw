@@ -7,7 +7,6 @@ abi Contract {
     fn check_msg_sender(expected_id: Address) -> bool;
 }
 
-
 impl Contract for Contract {
     fn is_caller_external() -> bool {
         caller_is_external()
