@@ -14,7 +14,7 @@ import {
   Account,
   BigNumberish,
   decompressBytecode,
-  Script,
+  Script as __Script,
 } from 'fuels';
 
 export type ScoreInput = { user: BigNumberish, points: BigNumberish };
@@ -88,7 +88,7 @@ const abi = {
 
 const bytecode = decompressBytecode('0x-bytecode-here');
 
-export class MyScript extends Script<MyScriptInputs, MyScriptOutput> {
+export class MyScript extends __Script<MyScriptInputs, MyScriptOutput> {
 
   static readonly abi = abi;
   static readonly bytecode = bytecode;
