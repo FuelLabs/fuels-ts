@@ -17,7 +17,7 @@ const response1 = await contract.functions.address(addressInput).get();
 
 // #region address-output
 const addressOutput = response1.value;
-const addressFromOutput: Address = Address.fromB256(addressOutput.bits);
+const addressFromOutput: Address = new Address(addressOutput.bits);
 // #endregion address-output
 
 console.log('equals', addressFromOutput.equals(address));

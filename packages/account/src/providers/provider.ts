@@ -1,3 +1,4 @@
+import type { AddressInput } from '@fuel-ts/address';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { BN, bn } from '@fuel-ts/math';
@@ -1041,7 +1042,7 @@ export default class Provider {
         outputVariables += missingOutputVariables.length;
         transactionRequest.addVariableOutputs(missingOutputVariables.length);
         missingOutputContractIds.forEach(({ contractId }) => {
-          transactionRequest.addContractInputAndOutput(Address.fromString(contractId));
+          transactionRequest.addContractInputAndOutput(new Address(contractId));
           missingContractIds.push(contractId);
         });
 
@@ -1128,7 +1129,7 @@ export default class Provider {
           result.outputVariables += missingOutputVariables.length;
           request.addVariableOutputs(missingOutputVariables.length);
           missingOutputContractIds.forEach(({ contractId }) => {
-            request.addContractInputAndOutput(Address.fromString(contractId));
+            request.addContractInputAndOutput(new Address(contractId));
             result.missingContractIds.push(contractId);
           });
           const { maxFee } = await this.estimateTxGasAndFee({
@@ -1428,11 +1429,11 @@ export default class Provider {
    * @returns A promise that resolves to the coins.
    */
   async getCoins(
-    owner: string | Address,
+    owner: AddressInput,
     assetId?: BytesLike,
     paginationArgs?: CursorPaginationArgs
   ): Promise<GetCoinsResponse> {
-    const ownerAddress = Address.fromAddressOrString(owner);
+    const ownerAddress = new Address(owner);
     const {
       coins: { edges, pageInfo },
     } = await this.operations.getCoins({
@@ -1467,11 +1468,11 @@ export default class Provider {
    * @returns A promise that resolves to the resources.
    */
   async getResourcesToSpend(
-    owner: string | Address,
+    owner: AddressInput,
     quantities: CoinQuantityLike[],
     excludedIds?: ExcludeResourcesOption
   ): Promise<Resource[]> {
-    const ownerAddress = Address.fromAddressOrString(owner);
+    const ownerAddress = new Address(owner);
     const excludeInput = {
       messages: excludedIds?.messages?.map((nonce) => hexlify(nonce)) || [],
       utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
@@ -1506,8 +1507,8 @@ export default class Provider {
               amount: bn(coin.amount),
               assetId: coin.assetId,
               daHeight: bn(coin.daHeight),
-              sender: Address.fromAddressOrString(coin.sender),
-              recipient: Address.fromAddressOrString(coin.recipient),
+              sender: new Address(coin.sender),
+              recipient: new Address(coin.recipient),
               nonce: coin.nonce,
             } as MessageCoin;
           case 'Coin':
@@ -1768,7 +1769,7 @@ export default class Provider {
     assetId: BytesLike
   ): Promise<BN> {
     const { contractBalance } = await this.operations.getContractBalance({
-      contract: Address.fromAddressOrString(contractId).toB256(),
+      contract: new Address(contractId).toB256(),
       asset: hexlify(assetId),
     });
     return bn(contractBalance.amount, 10);
@@ -1783,12 +1784,12 @@ export default class Provider {
    */
   async getBalance(
     /** The address to get coins for */
-    owner: string | Address,
+    owner: AddressInput,
     /** The asset ID of coins to get */
     assetId: BytesLike
   ): Promise<BN> {
     const { balance } = await this.operations.getBalance({
-      owner: Address.fromAddressOrString(owner).toB256(),
+      owner: new Address(owner).toB256(),
       assetId: hexlify(assetId),
     });
     return bn(balance.amount, 10);
@@ -1801,7 +1802,7 @@ export default class Provider {
    * @param paginationArgs - Pagination arguments (optional).
    * @returns A promise that resolves to the balances.
    */
-  async getBalances(owner: string | Address): Promise<GetBalancesResponse> {
+  async getBalances(owner: AddressInput): Promise<GetBalancesResponse> {
     const {
       balances: { edges },
     } = await this.operations.getBalances({
@@ -1810,7 +1811,7 @@ export default class Provider {
        * but the current Fuel-Core implementation does not support pagination yet.
        */
       first: 10000,
-      filter: { owner: Address.fromAddressOrString(owner).toB256() },
+      filter: { owner: new Address(owner).toB256() },
     });
 
     const balances = edges.map(({ node }) => ({
@@ -1829,7 +1830,7 @@ export default class Provider {
    * @returns A promise that resolves to the messages.
    */
   async getMessages(
-    address: string | Address,
+    address: AddressInput,
     paginationArgs?: CursorPaginationArgs
   ): Promise<GetMessagesResponse> {
     const {
@@ -1839,7 +1840,7 @@ export default class Provider {
         inputArgs: paginationArgs,
         paginationLimit: RESOURCES_PAGE_SIZE_LIMIT,
       }),
-      owner: Address.fromAddressOrString(address).toB256(),
+      owner: new Address(address).toB256(),
     });
 
     const messages = edges.map(({ node }) => ({
@@ -1850,8 +1851,8 @@ export default class Provider {
         amount: bn(node.amount),
         data: node.data,
       }),
-      sender: Address.fromAddressOrString(node.sender),
-      recipient: Address.fromAddressOrString(node.recipient),
+      sender: new Address(node.sender),
+      recipient: new Address(node.recipient),
       nonce: node.nonce,
       amount: bn(node.amount),
       data: InputMessageCoder.decodeData(node.data),
@@ -1970,8 +1971,8 @@ export default class Provider {
         eventInboxRoot: commitBlockHeader.eventInboxRoot,
         stateTransitionBytecodeVersion: Number(commitBlockHeader.stateTransitionBytecodeVersion),
       },
-      sender: Address.fromAddressOrString(sender),
-      recipient: Address.fromAddressOrString(recipient),
+      sender: new Address(sender),
+      recipient: new Address(recipient),
       nonce,
       amount: bn(amount),
       data,
@@ -2102,8 +2103,8 @@ export default class Provider {
         amount: bn(rawMessage.amount),
         data: rawMessage.data,
       }),
-      sender: Address.fromAddressOrString(rawMessage.sender),
-      recipient: Address.fromAddressOrString(rawMessage.recipient),
+      sender: new Address(rawMessage.sender),
+      recipient: new Address(rawMessage.recipient),
       nonce,
       amount: bn(rawMessage.amount),
       data: InputMessageCoder.decodeData(rawMessage.data),

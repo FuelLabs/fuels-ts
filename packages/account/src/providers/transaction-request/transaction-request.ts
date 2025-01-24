@@ -1,6 +1,6 @@
 import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
 import { Address, addressify } from '@fuel-ts/address';
-import type { AddressLike } from '@fuel-ts/address';
+import type { AddressInput, AddressLike } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
 import { FuelError } from '@fuel-ts/errors';
@@ -264,8 +264,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param address - The address to get the coin input witness index for.
    * @param signature - The signature to update the witness with.
    */
-  updateWitnessByOwner(address: string | Address, signature: BytesLike) {
-    const ownerAddress = Address.fromAddressOrString(address);
+  updateWitnessByOwner(address: AddressInput, signature: BytesLike) {
+    const ownerAddress = new Address(address);
     const witnessIndex = this.getCoinInputWitnessIndexByOwner(ownerAddress);
     if (typeof witnessIndex === 'number') {
       this.updateWitness(witnessIndex, signature);
@@ -689,7 +689,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     this.inputs.filter(isRequestInputResource).forEach((i) => {
       const owner = getRequestInputResourceOwner(i);
       const correspondingInput = inputsToExtractGasUsed.find((x) =>
-        isRequestInputResourceFromOwner(x, Address.fromString(String(owner)))
+        isRequestInputResourceFromOwner(x, new Address(String(owner)))
       );
 
       if (

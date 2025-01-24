@@ -1,6 +1,7 @@
 import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { Account, Provider } from '@fuel-ts/account';
+import type { AddressInput } from '@fuel-ts/address';
 import { Address } from '@fuel-ts/address';
 import type { BytesLike } from '@fuel-ts/utils';
 
@@ -44,13 +45,9 @@ export default class Contract implements AbstractContract {
    * @param abi - The contract's ABI (JSON ABI or Interface instance).
    * @param accountOrProvider - The account or provider for interaction.
    */
-  constructor(
-    id: string | Address,
-    abi: JsonAbi | Interface,
-    accountOrProvider: Account | Provider
-  ) {
+  constructor(id: AddressInput, abi: JsonAbi | Interface, accountOrProvider: Account | Provider) {
     this.interface = abi instanceof Interface ? abi : new Interface(abi);
-    this.id = Address.fromAddressOrString(id);
+    this.id = new Address(id);
 
     /**
       Instead of using `instanceof` to compare classes, we instead check
