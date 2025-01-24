@@ -174,7 +174,7 @@ jobs:
       - name: Upload assets to s3
         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         run: |
-          aws s3 cp ./packages/account/src/providers/assets/images/ s3://${S3_CDN_BUCKET}/assets/ --recursive
+          aws s3 cp ./packages/account/src/assets/images/ s3://${S3_CDN_BUCKET}/assets/ --recursive
         env:
           S3_CDN_BUCKET: ${{ secrets.S3_CDN_BUCKET }}
 
