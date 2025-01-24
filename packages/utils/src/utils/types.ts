@@ -1,4 +1,4 @@
-import type { BN } from '@fuel-ts/math';
+import type { BigNumberish, BN } from '@fuel-ts/math';
 
 interface Coin {
   tx_id: string;
@@ -6,7 +6,7 @@ interface Coin {
   tx_pointer_block_height: number;
   tx_pointer_tx_idx: number;
   owner: string;
-  amount: number | BN;
+  amount: BigNumberish;
   asset_id: string;
 }
 
