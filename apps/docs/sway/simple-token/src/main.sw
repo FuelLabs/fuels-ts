@@ -1,12 +1,13 @@
 // #region inter-contract-calls-1
 contract;
 
-use ::simple_token_abi::SimpleToken;
-
 use std::hash::*;
+use simple_token_abi::SimpleToken;
+
 storage {
     balances: StorageMap<b256, u64> = StorageMap {},
 }
+
 impl SimpleToken for Contract {
     #[storage(read, write)]
     fn deposit(address: b256, amount: u64) {

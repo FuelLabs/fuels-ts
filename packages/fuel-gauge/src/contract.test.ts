@@ -702,7 +702,7 @@ describe('Contract', () => {
     using launched = await launchTestNode({
       contractsConfigs,
       walletsConfig: {
-        amountPerCoin: 2 ** 62,
+        amountPerCoin: bn(2).pow(62),
       },
     });
     const {
@@ -734,7 +734,7 @@ describe('Contract', () => {
     using launched = await launchTestNode({
       contractsConfigs,
       walletsConfig: {
-        amountPerCoin: 2 ** 62,
+        amountPerCoin: bn(2).pow(62),
       },
     });
     const {
