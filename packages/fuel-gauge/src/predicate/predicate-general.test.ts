@@ -1,8 +1,8 @@
-import type { BN, FakeResources } from 'fuels';
-import { Address, Predicate, ScriptTransactionRequest, bn } from 'fuels';
+import type { FakeResources } from 'fuels';
+import { Address, ScriptTransactionRequest, bn } from 'fuels';
 import { ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
 
-import { PredicateSum } from '../../test/typegen';
+import { Predicate } from '../../test/typegen';
 
 /**
  * @group node
@@ -28,9 +28,7 @@ describe('Predicate', () => {
     const value2 = bn(200);
     const value1 = bn(100);
 
-    const predicate = new Predicate<[BN, BN]>({
-      abi: PredicateSum.abi,
-      bytecode: PredicateSum.bytecode,
+    const predicate = new Predicate({
       provider,
       data: [value1, value2],
     });
