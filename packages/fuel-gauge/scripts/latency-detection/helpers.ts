@@ -29,19 +29,6 @@ export async function measure<T>(operation: () => Promise<T>): Promise<MeasureRe
 }
 
 /**
- * Converts an array of objects into a CSV formatted string.
- *
- * @param headers - A tuple containing the headers for the CSV columns.
- * @param data - An array of objects where each object represents a row of data.
- * @returns A string representing the CSV formatted data.
- */
-export const toCsv = (headers: [string, string], data: Record<string, unknown>[]) => {
-  let valuesAsStrings = data.map((r) => Object.values(r).map((value) => String(value)));
-  valuesAsStrings = [headers, ...valuesAsStrings];
-  return valuesAsStrings.map((row) => row.join(',')).join('\n');
-};
-
-/**
  * Executes preparatory steps for latency detection.
  *
  * This function performs the following steps:
