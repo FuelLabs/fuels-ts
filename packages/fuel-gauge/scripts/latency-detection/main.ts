@@ -1,13 +1,15 @@
 import 'dotenv/config';
 import fs from 'fs';
 
-import { preparatorySteps, runOperations, toCsv } from './helpers';
+import { preparatorySteps, runOperations } from './helpers';
 import { missing4xOutputVariableCall } from './missing-4x-variable-output-call';
 import { missingOutputVariableCall } from './missing-variable-output-call';
 import { scriptCall } from './script-call';
 import { scriptWithPredicateCall } from './script-with-predicate-call';
 
 const { log, error } = console;
+
+const DIR_NAME = 'snapshots';
 
 const main = async () => {
   const operations = [
@@ -20,13 +22,14 @@ const main = async () => {
   const operationsParams = await preparatorySteps();
   const results = await runOperations(operations, operationsParams);
 
-  const csvString = toCsv(['tag', 'time'], results);
   const date = new Date();
-  const dirName = 'snapshots';
-  const filename = `${date.toISOString().slice(0, 16)}.csv`;
-  fs.mkdirSync(dirName, { recursive: true });
-  fs.writeFileSync(`${dirName}/${filename}`, csvString);
-  log(`Snapshots saved into "${dirName}/${filename}"`);
+
+  const filename = `${date.toISOString().slice(0, 16)}.json`;
+
+  fs.mkdirSync(DIR_NAME, { recursive: true });
+  fs.writeFileSync(`${DIR_NAME}/${filename}`, JSON.stringify(results, null, 2));
+
+  log(`Snapshots saved into "${DIR_NAME}/${filename}"`);
 };
 
 main().catch(error);
