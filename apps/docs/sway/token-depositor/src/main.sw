@@ -3,7 +3,7 @@ contract;
 
 use std::auth::msg_sender;
 
-use ::simple_token_abi::SimpleToken;
+use simple_token_abi::SimpleToken;
 
 abi TokenDepositor {
     fn deposit_to_simple_token(contract_id: b256, amount: u64);

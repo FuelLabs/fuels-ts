@@ -1,3 +1,4 @@
+import type { AddressInput } from '@fuel-ts/address';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { BN, bn } from '@fuel-ts/math';
@@ -354,6 +355,30 @@ export type TransactionCostParams = EstimateTransactionParams & {
    * @returns A promise that resolves to the signed transaction request.
    */
   signatureCallback?: (request: ScriptTransactionRequest) => Promise<ScriptTransactionRequest>;
+
+  /**
+   * The gas price to use for the transaction.
+   */
+  gasPrice?: BN;
+};
+
+export type EstimateTxDependenciesParams = {
+  /**
+   * The gas price to use for the transaction.
+   */
+  gasPrice?: BN;
+};
+
+export type EstimateTxGasAndFeeParams = {
+  /**
+   * The transaction request to estimate the gas and fee for.
+   */
+  transactionRequest: TransactionRequest;
+
+  /**
+   * The gas price to use for the transaction.
+   */
+  gasPrice?: BN;
 };
 
 /**
@@ -971,10 +996,12 @@ export default class Provider {
    * `addVariableOutputs` is called on the transaction.
    *
    * @param transactionRequest - The transaction request object.
+   * @param gasPrice - The gas price to use for the transaction, if not provided it will be fetched.
    * @returns A promise that resolves to the estimate transaction dependencies.
    */
   async estimateTxDependencies(
-    transactionRequest: TransactionRequest
+    transactionRequest: TransactionRequest,
+    { gasPrice: gasPriceParam }: EstimateTxDependenciesParams = {}
   ): Promise<EstimateTxDependenciesReturns> {
     if (isTransactionTypeCreate(transactionRequest)) {
       return {
@@ -991,13 +1018,15 @@ export default class Provider {
 
     await this.validateTransaction(transactionRequest);
 
+    const gasPrice = gasPriceParam ?? (await this.estimateGasPrice(10));
+
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
       const {
         dryRun: [{ receipts: rawReceipts, status }],
       } = await this.operations.dryRun({
         encodedTransactions: [hexlify(transactionRequest.toTransactionBytes())],
         utxoValidation: false,
-        gasPrice: '0',
+        gasPrice: gasPrice.toString(),
       });
 
       receipts = rawReceipts.map(processGqlReceipt);
@@ -1013,13 +1042,13 @@ export default class Provider {
         outputVariables += missingOutputVariables.length;
         transactionRequest.addVariableOutputs(missingOutputVariables.length);
         missingOutputContractIds.forEach(({ contractId }) => {
-          transactionRequest.addContractInputAndOutput(Address.fromString(contractId));
+          transactionRequest.addContractInputAndOutput(new Address(contractId));
           missingContractIds.push(contractId);
         });
 
         const { maxFee } = await this.estimateTxGasAndFee({
           transactionRequest,
-          gasPrice: bn(0),
+          gasPrice,
         });
 
         // eslint-disable-next-line no-param-reassign
@@ -1100,7 +1129,7 @@ export default class Provider {
           result.outputVariables += missingOutputVariables.length;
           request.addVariableOutputs(missingOutputVariables.length);
           missingOutputContractIds.forEach(({ contractId }) => {
-            request.addContractInputAndOutput(Address.fromString(contractId));
+            request.addContractInputAndOutput(new Address(contractId));
             result.missingContractIds.push(contractId);
           });
           const { maxFee } = await this.estimateTxGasAndFee({
@@ -1186,12 +1215,12 @@ export default class Provider {
 
   /**
    * Estimates the transaction gas and fee based on the provided transaction request.
-   * @param transactionRequest - The transaction request object.
+   * @param params - The parameters for estimating the transaction gas and fee.
    * @returns An object containing the estimated minimum gas, minimum fee, maximum gas, and maximum fee.
    */
-  async estimateTxGasAndFee(params: { transactionRequest: TransactionRequest; gasPrice?: BN }) {
-    const { transactionRequest } = params;
-    let { gasPrice } = params;
+  async estimateTxGasAndFee(params: EstimateTxGasAndFeeParams) {
+    const { transactionRequest, gasPrice: gasPriceParam } = params;
+    let gasPrice = gasPriceParam;
 
     await this.autoRefetchConfigs();
 
@@ -1307,7 +1336,7 @@ export default class Provider {
    */
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
-    { signatureCallback }: TransactionCostParams = {}
+    { signatureCallback, gasPrice: gasPriceParam }: TransactionCostParams = {}
   ): Promise<Omit<TransactionCost, 'requiredQuantities'>> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const updateMaxFee = txRequestClone.maxFee.eq(0);
@@ -1329,12 +1358,16 @@ export default class Provider {
     await this.estimatePredicates(signedRequest);
     txRequestClone.updatePredicateGasUsed(signedRequest.inputs);
 
+    const gasPrice = gasPriceParam ?? (await this.estimateGasPrice(10));
+
     /**
      * Calculate minGas and maxGas based on the real transaction
      */
     // eslint-disable-next-line prefer-const
-    let { maxFee, maxGas, minFee, minGas, gasPrice, gasLimit } = await this.estimateTxGasAndFee({
+    let { maxFee, maxGas, minFee, minGas, gasLimit } = await this.estimateTxGasAndFee({
+      // Fetches and returns a gas price
       transactionRequest: signedRequest,
+      gasPrice,
     });
 
     let receipts: TransactionResultReceipt[] = [];
@@ -1351,7 +1384,7 @@ export default class Provider {
       }
 
       ({ receipts, missingContractIds, outputVariables, dryRunStatus } =
-        await this.estimateTxDependencies(txRequestClone));
+        await this.estimateTxDependencies(txRequestClone, { gasPrice }));
 
       if (dryRunStatus && 'reason' in dryRunStatus) {
         throw this.extractDryRunError(txRequestClone, receipts, dryRunStatus);
@@ -1363,7 +1396,7 @@ export default class Provider {
       gasUsed = bn(pristineGasUsed.muln(GAS_USED_MODIFIER)).max(maxGasPerTx.sub(minGas));
       txRequestClone.gasLimit = gasUsed;
 
-      ({ maxFee, maxGas, minFee, minGas, gasPrice } = await this.estimateTxGasAndFee({
+      ({ maxFee, maxGas, minFee, minGas } = await this.estimateTxGasAndFee({
         transactionRequest: txRequestClone,
         gasPrice,
       }));
@@ -1396,11 +1429,11 @@ export default class Provider {
    * @returns A promise that resolves to the coins.
    */
   async getCoins(
-    owner: string | Address,
+    owner: AddressInput,
     assetId?: BytesLike,
     paginationArgs?: CursorPaginationArgs
   ): Promise<GetCoinsResponse> {
-    const ownerAddress = Address.fromAddressOrString(owner);
+    const ownerAddress = new Address(owner);
     const {
       coins: { edges, pageInfo },
     } = await this.operations.getCoins({
@@ -1435,11 +1468,11 @@ export default class Provider {
    * @returns A promise that resolves to the resources.
    */
   async getResourcesToSpend(
-    owner: string | Address,
+    owner: AddressInput,
     quantities: CoinQuantityLike[],
     excludedIds?: ExcludeResourcesOption
   ): Promise<Resource[]> {
-    const ownerAddress = Address.fromAddressOrString(owner);
+    const ownerAddress = new Address(owner);
     const excludeInput = {
       messages: excludedIds?.messages?.map((nonce) => hexlify(nonce)) || [],
       utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
@@ -1474,8 +1507,8 @@ export default class Provider {
               amount: bn(coin.amount),
               assetId: coin.assetId,
               daHeight: bn(coin.daHeight),
-              sender: Address.fromAddressOrString(coin.sender),
-              recipient: Address.fromAddressOrString(coin.recipient),
+              sender: new Address(coin.sender),
+              recipient: new Address(coin.recipient),
               nonce: coin.nonce,
             } as MessageCoin;
           case 'Coin':
@@ -1736,7 +1769,7 @@ export default class Provider {
     assetId: BytesLike
   ): Promise<BN> {
     const { contractBalance } = await this.operations.getContractBalance({
-      contract: Address.fromAddressOrString(contractId).toB256(),
+      contract: new Address(contractId).toB256(),
       asset: hexlify(assetId),
     });
     return bn(contractBalance.amount, 10);
@@ -1751,12 +1784,12 @@ export default class Provider {
    */
   async getBalance(
     /** The address to get coins for */
-    owner: string | Address,
+    owner: AddressInput,
     /** The asset ID of coins to get */
     assetId: BytesLike
   ): Promise<BN> {
     const { balance } = await this.operations.getBalance({
-      owner: Address.fromAddressOrString(owner).toB256(),
+      owner: new Address(owner).toB256(),
       assetId: hexlify(assetId),
     });
     return bn(balance.amount, 10);
@@ -1769,7 +1802,7 @@ export default class Provider {
    * @param paginationArgs - Pagination arguments (optional).
    * @returns A promise that resolves to the balances.
    */
-  async getBalances(owner: string | Address): Promise<GetBalancesResponse> {
+  async getBalances(owner: AddressInput): Promise<GetBalancesResponse> {
     const {
       balances: { edges },
     } = await this.operations.getBalances({
@@ -1778,7 +1811,7 @@ export default class Provider {
        * but the current Fuel-Core implementation does not support pagination yet.
        */
       first: 10000,
-      filter: { owner: Address.fromAddressOrString(owner).toB256() },
+      filter: { owner: new Address(owner).toB256() },
     });
 
     const balances = edges.map(({ node }) => ({
@@ -1797,7 +1830,7 @@ export default class Provider {
    * @returns A promise that resolves to the messages.
    */
   async getMessages(
-    address: string | Address,
+    address: AddressInput,
     paginationArgs?: CursorPaginationArgs
   ): Promise<GetMessagesResponse> {
     const {
@@ -1807,7 +1840,7 @@ export default class Provider {
         inputArgs: paginationArgs,
         paginationLimit: RESOURCES_PAGE_SIZE_LIMIT,
       }),
-      owner: Address.fromAddressOrString(address).toB256(),
+      owner: new Address(address).toB256(),
     });
 
     const messages = edges.map(({ node }) => ({
@@ -1818,8 +1851,8 @@ export default class Provider {
         amount: bn(node.amount),
         data: node.data,
       }),
-      sender: Address.fromAddressOrString(node.sender),
-      recipient: Address.fromAddressOrString(node.recipient),
+      sender: new Address(node.sender),
+      recipient: new Address(node.recipient),
       nonce: node.nonce,
       amount: bn(node.amount),
       data: InputMessageCoder.decodeData(node.data),
@@ -1938,8 +1971,8 @@ export default class Provider {
         eventInboxRoot: commitBlockHeader.eventInboxRoot,
         stateTransitionBytecodeVersion: Number(commitBlockHeader.stateTransitionBytecodeVersion),
       },
-      sender: Address.fromAddressOrString(sender),
-      recipient: Address.fromAddressOrString(recipient),
+      sender: new Address(sender),
+      recipient: new Address(recipient),
       nonce,
       amount: bn(amount),
       data,
@@ -2070,8 +2103,8 @@ export default class Provider {
         amount: bn(rawMessage.amount),
         data: rawMessage.data,
       }),
-      sender: Address.fromAddressOrString(rawMessage.sender),
-      recipient: Address.fromAddressOrString(rawMessage.recipient),
+      sender: new Address(rawMessage.sender),
+      recipient: new Address(rawMessage.recipient),
       nonce,
       amount: bn(rawMessage.amount),
       data: InputMessageCoder.decodeData(rawMessage.data),

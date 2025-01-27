@@ -34,7 +34,13 @@ export function renderMainTemplate(params: { abi: Abi; versions: BinaryVersions 
   const { structs } = formatStructs({ types });
   const { imports } = formatImports({
     types,
-    baseMembers: ['Predicate', 'Provider', 'InputValue', 'PredicateParams', 'decompressBytecode'],
+    baseMembers: [
+      'Predicate as __Predicate',
+      'Provider',
+      'InputValue',
+      'PredicateParams',
+      'decompressBytecode',
+    ],
   });
 
   const { prefixedInputs: inputs, output } = func.attributes;

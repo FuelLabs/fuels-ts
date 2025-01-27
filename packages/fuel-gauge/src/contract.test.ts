@@ -701,7 +701,7 @@ describe('Contract', () => {
     using launched = await launchTestNode({
       contractsConfigs,
       walletsConfig: {
-        amountPerCoin: 2 ** 62,
+        amountPerCoin: bn(2).pow(62),
       },
     });
     const {
@@ -713,7 +713,7 @@ describe('Contract', () => {
     const initialBalance = new BN(
       await contract.getBalance(await provider.getBaseAssetId())
     ).toNumber();
-    const amountToContract = bn(2).pow(62); // Very big number
+    const amountToContract = bn(2).pow(61); // Very big number
 
     const tx = await wallet.transferToContract(
       contract.id,
@@ -733,7 +733,7 @@ describe('Contract', () => {
     using launched = await launchTestNode({
       contractsConfigs,
       walletsConfig: {
-        amountPerCoin: 2 ** 62,
+        amountPerCoin: bn(2).pow(62),
       },
     });
     const {
