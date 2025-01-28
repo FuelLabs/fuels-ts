@@ -543,7 +543,7 @@ describe('Math - BN', () => {
   });
 
   describe('precision validation', () => {
-    let consoleWarnSpy: jest.SpyInstance;
+    let consoleWarnSpy: MockInstance;
 
     beforeEach(() => {
       consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
