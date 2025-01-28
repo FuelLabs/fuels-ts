@@ -15,7 +15,9 @@
   "dependencies": {
     "@fuels/connectors": "0.36.1",
     "@fuels/react": "0.36.1",
+    "@fuel-ts/versions": "workspace:*",
     "@tanstack/react-query": "5.55.4",
+    "@iarna/toml": "2.2.5",
     "clsx": "2.1.1",
     "dotenv": "16.4.5",
     "fuels": "workspace:*",
