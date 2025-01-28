@@ -4,4 +4,4 @@
 "@fuel-ts/account": patch
 ---
 
-chore: upgrade `fuel-core` to `0.40.3`
+chore: upgrade `fuel-core` to `0.40.4`
