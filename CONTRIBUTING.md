@@ -426,7 +426,7 @@ PERFORMANCE_ANALYSIS_CONTRACT_ADDRESS=...
 Once the environment is set up, run the network tests using the following command:
 
 ```sh
-pnpm tx:pef
+pnpm tx:perf
 ```
 
 ### Output and Results
