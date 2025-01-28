@@ -1,6 +1,7 @@
 import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { join, basename } from 'path';
 
+import type { FuelsConfig } from '../../src';
 import { Commands } from '../../src';
 import { run } from '../../src/run';
 
@@ -186,4 +187,13 @@ export function resetDiskAndMocks(dirPath: string) {
     rmSync(dirPath, { recursive: true });
   }
   vi.restoreAllMocks();
+}
+
+/**
+ * Loaders
+ */
+export async function loadFuelsConfig(configPath: string): Promise<FuelsConfig> {
+  const configPathWithCacheBust = `${configPath}?update=${Date.now()}`;
+  const { default: fuelsConfig } = await import(configPathWithCacheBust);
+  return fuelsConfig;
 }
