@@ -42,7 +42,7 @@ When transferring assets to a deployed contract, we use the `transferToContract`
 
 However, instead of supplying the target wallet's address, as done in `destination.address` for the transfer method, we need to provide an instance of [Address](../types/address.md) created from the deployed contract id.
 
-If you have the [Contract](../contracts/) instance of the deployed contract, you can simply use its `id` property. However, if the contract was deployed with `forc deploy` or not by you, you will likely only have its ID in a hex string format. In such cases, you can create an [Address](../types/address.md) instance from the contract ID using `Address.fromAddressOrString('0x123...')`.
+If you have the [Contract](../contracts/) instance of the deployed contract, you can simply use its `id` property. However, if the contract was deployed with `forc deploy` or not by you, you will likely only have its ID in a hex string format. In such cases, you can create an [Address](../types/address.md) instance from the contract ID using `new Address('0x123...')`.
 
 Here's an example demonstrating how to use `transferToContract`:
 
