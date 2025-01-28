@@ -546,7 +546,7 @@ describe('Math - BN', () => {
     let consoleWarnSpy: MockInstance;
 
     beforeEach(() => {
-      consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+      consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation();
     });
 
     afterEach(() => {
