@@ -18,6 +18,10 @@ interface ToolchainComponents extends toml.JsonMap {
   'fuel-core': string;
 }
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('versions', () => {
   it('should have versions compatible with fuel-core', () => {
     const expectedVersions = {
