@@ -7,9 +7,9 @@ const REG_START_OF_LOADED_CODE = 0x11;
 const REG_GENERAL_USE = 0x12;
 const WORD_SIZE = 8; // size in bytes
 
-export function getDataOffset(binary: Uint8Array): number {
-  // Extract 8 bytes starting from index 8 (similar to binary[8..16] in Rust)
-  const OFFSET_INDEX = 8;
+export function getConfigurableOffset(binary: Uint8Array): number {
+  // Extract 8 bytes starting from index 16 (similar to binary[16..24] in Rust)
+  const OFFSET_INDEX = 16;
   const dataView = new DataView(binary.buffer, OFFSET_INDEX, 8);
 
   // Read the value as a 64-bit big-endian unsigned integer
@@ -100,7 +100,7 @@ export function getPredicateScriptLoaderInstructions(
     asm.jmp(REG_START_OF_LOADED_CODE),
   ];
 
-  const offset = getDataOffset(originalBinary);
+  const offset = getConfigurableOffset(originalBinary);
 
   // if the binary length is smaller than the offset
   if (originalBinary.length < offset) {
@@ -109,11 +109,11 @@ export function getPredicateScriptLoaderInstructions(
     );
   }
 
-  // Extract the data section from the binary (slice from the offset onwards)
-  const dataSection = originalBinary.slice(offset);
+  // Extract the configurable section from the binary (slice from the configurable offset onwards)
+  const configurableSection = originalBinary.slice(offset);
 
-  // Check if the data section is non-empty
-  if (dataSection.length > 0) {
+  // Check if the configurable section is non-empty
+  if (configurableSection.length > 0) {
     // Get the number of instructions (assuming it won't exceed u16::MAX)
     const numOfInstructions = getInstructions(0).length;
     if (numOfInstructions > 65535) {
@@ -133,7 +133,7 @@ export function getPredicateScriptLoaderInstructions(
     // Convert data section length to big-endian 8-byte array
     const dataSectionLenBytes = new Uint8Array(8);
     const dataView = new DataView(dataSectionLenBytes.buffer);
-    dataView.setBigUint64(0, BigInt(dataSection.length), false); // false for big-endian
+    dataView.setBigUint64(0, BigInt(configurableSection.length), false); // false for big-endian
 
     // Combine the instruction bytes, blob bytes, data section length, and the data section
     const loaderBytecode = new Uint8Array([
@@ -143,11 +143,11 @@ export function getPredicateScriptLoaderInstructions(
     ]);
 
     return {
-      loaderBytecode: concat([loaderBytecode, dataSection]),
+      loaderBytecode: concat([loaderBytecode, configurableSection]),
       blobOffset: loaderBytecode.length,
     };
   }
-  // Handle case where there is no data section
+  // Handle case where there is no configurable section
   const numOfInstructions = getInstructionsNoDataSection(0).length;
   if (numOfInstructions > 65535) {
     throw new Error('Too many instructions, exceeding u16::MAX.');
