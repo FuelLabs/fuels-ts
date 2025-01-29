@@ -12,6 +12,7 @@ jobs:
   release:
     name: "Release"
     runs-on: ubuntu-latest
+    environment: npm-deploy
     permissions: write-all
     # Ensure that the workflow runs only after a commit is pushed into the branch
     # and not when the branch is created.
