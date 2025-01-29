@@ -9,7 +9,9 @@
     "build": "pnpm run xprebuild && next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "vitest",
+    "test": "run-s test:*",
+    "test:forc": "forc test --path ./sway-programs",
+    "test:e2e": "vitest",
     "test:ui": "sh ./test/ui/test-ui.sh"
   },
   "dependencies": {
