@@ -7,6 +7,10 @@ import {
   getLegacyBlobId,
 } from './predicate-script-loader-instructions';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('Predicate Script Loader Instructions', () => {
   const suffixBytes = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0]);
   const dataBytes = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 3]);
