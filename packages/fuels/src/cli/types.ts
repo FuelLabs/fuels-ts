@@ -70,7 +70,7 @@ export type OptionsFunction = (
 export type FuelsEventListener<CType extends Commands> = (
   config: FuelsConfig,
   data: Extract<CommandEvent, { type: CType }>['data']
-) => void;
+) => void | Promise<void>;
 
 export type UserFuelsConfig = {
   /** Relative directory path to Forc workspace */
@@ -164,7 +164,7 @@ export type UserFuelsConfig = {
    * @param config - Configuration in use
    * @param error - Original error object
    */
-  onFailure?: (config: FuelsConfig, error: Error) => void;
+  onFailure?: (config: FuelsConfig, error: Error) => void | Promise<void>;
 };
 
 export type FuelsConfig = UserFuelsConfig &
