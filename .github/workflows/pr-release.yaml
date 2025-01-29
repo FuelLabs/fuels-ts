@@ -19,6 +19,10 @@ jobs:
 
       - name: CI Setup
         uses: ./.github/actions/ci-setup
+        inputs:
+          registry-url: "https://npm.pkg.github.com"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build
         run: pnpm build
@@ -27,7 +31,7 @@ jobs:
         id: release
         uses: ./.github/actions/pr-release
         with:
-          npm-token: ${{ secrets.NPM_TOKEN }}
+          npm-token: ${{ secrets.GITHUB_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           pr-number: ${{ github.event.pull_request.number }}
 
