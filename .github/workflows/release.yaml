@@ -111,16 +111,8 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # ensure docs are always deployed after merge of changeset PR
-      - name: Get the last commit message and set env vars
-        run: echo LAST_COMMIT_MSG=$(git --no-pager log -1 --pretty=%B) >> $GITHUB_ENV
-
-      - name: Decides if Docs should be deployed
-        if: startsWith(env.LAST_COMMIT_MSG, 'ci(release):') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
-        run: echo SHOULD_DEPLOY_DOCS=true >> $GITHUB_ENV
-
-      - name: Update docs (nightly)
-        if: github.ref_name == 'master' && env.SHOULD_DEPLOY_DOCS == 'true'
+      - name: Update docs
+        if: github.ref_name == 'master'
         uses: benc-uk/workflow-dispatch@v1
         with:
           workflow: update-nightly.yml
@@ -128,8 +120,16 @@ jobs:
           repo: FuelLabs/docs-hub
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      # ensure docs API is always deployed after merge of changeset PR
+      - name: Get the last commit message and set env vars
+        run: echo LAST_COMMIT_MSG=$(git --no-pager log -1 --pretty=%B) >> $GITHUB_ENV
+
+      - name: Decides if Docs API should be deployed
+        if: startsWith(env.LAST_COMMIT_MSG, 'ci(release):') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
+        run: echo DEPLOY_STABLE_DOCS_API=true >> $GITHUB_ENV
+
       - name: Update Docs API (stable)
-        if: github.ref_name == 'master' && env.SHOULD_DEPLOY_DOCS == 'true'
+        if: github.ref_name == 'master' && env.DEPLOY_STABLE_DOCS_API == 'true'
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_TS_DOCS_PROJECT_ID }}
