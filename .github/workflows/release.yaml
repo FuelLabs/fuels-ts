@@ -120,14 +120,15 @@ jobs:
         if: startsWith(env.LAST_COMMIT_MSG, 'ci(release):') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
         run: echo SHOULD_DEPLOY_DOCS=true >> $GITHUB_ENV
 
-      - name: Update docs (nightly)
-        if: github.ref_name == 'master' && env.SHOULD_DEPLOY_DOCS == 'true'
-        uses: benc-uk/workflow-dispatch@v1
-        with:
-          workflow: update-nightly.yml
-          ref: master
-          repo: FuelLabs/docs-hub
-          token: ${{ secrets.GITHUB_TOKEN }}
+      # # Commenting out as we require permissions to trigger across repos
+      # - name: Update docs (nightly)
+      #   if: github.ref_name == 'master' && env.SHOULD_DEPLOY_DOCS == 'true'
+      #   uses: benc-uk/workflow-dispatch@v1
+      #   with:
+      #     workflow: update-nightly.yml
+      #     ref: master
+      #     repo: FuelLabs/docs-hub
+      #     token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create PR to apply latest release to master
         if: steps.changesets.outputs.published == 'true' && startsWith(github.ref_name, 'release/') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
@@ -179,10 +180,11 @@ jobs:
         env:
           S3_CDN_BUCKET: ${{ secrets.S3_CDN_BUCKET }}
 
-      - name: Notify migrations and disclosures of the new release (breaking changes)
-        run: |
-          curl -X POST \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: token ${{ secrets.MIGRATIONS_RELEASE_TRIGGER_TOKEN }}" \
-            https://api.github.com/repos/FuelLabs/migrations-and-disclosures/dispatches \
-            -d '{"event_type":"update_versions"}'
+      # # Commenting out as we require permissions to trigger across repos
+      # - name: Notify migrations and disclosures of the new release (breaking changes)
+      #   run: |
+      #     curl -X POST \
+      #       -H "Accept: application/vnd.github.v3+json" \
+      #       -H "Authorization: token ${{ secrets.MIGRATIONS_RELEASE_TRIGGER_TOKEN }}" \
+      #       https://api.github.com/repos/FuelLabs/migrations-and-disclosures/dispatches \
+      #       -d '{"event_type":"update_versions"}'
