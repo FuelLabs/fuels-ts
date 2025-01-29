@@ -27,7 +27,7 @@ export async function deploy(config: FuelsConfig) {
   const predicates = await deployPredicates(config);
   savePredicateFiles(predicates, config);
 
-  config.onDeploy?.(config, {
+  await config.onDeploy?.(config, {
     contracts,
     scripts,
     predicates,

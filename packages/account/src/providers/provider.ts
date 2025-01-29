@@ -1742,6 +1742,24 @@ export default class Provider {
   }
 
   /**
+   * Fetches a compressed block at the specified height.
+   *
+   * @param height - The height of the block to fetch.
+   * @returns The compressed block if available, otherwise `null`.
+   */
+  async daCompressedBlock(height: string) {
+    const { daCompressedBlock } = await this.operations.daCompressedBlock({
+      height,
+    });
+
+    if (!daCompressedBlock) {
+      return null;
+    }
+
+    return daCompressedBlock;
+  }
+
+  /**
    * Get deployed contract with the given ID.
    *
    * @param contractId - ID of the contract.
