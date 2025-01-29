@@ -111,15 +111,6 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Update docs
-        if: github.ref_name == 'master'
-        uses: benc-uk/workflow-dispatch@v1
-        with:
-          workflow: update-nightly.yml
-          ref: master
-          repo: FuelLabs/docs-hub
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       # ensure docs API is always deployed after merge of changeset PR
       - name: Get the last commit message and set env vars
         run: echo LAST_COMMIT_MSG=$(git --no-pager log -1 --pretty=%B) >> $GITHUB_ENV
@@ -136,6 +127,15 @@ jobs:
         run: |
           pnpm install --global vercel@latest
           vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Update docs
+        if: github.ref_name == 'master'
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: update-nightly.yml
+          ref: master
+          repo: FuelLabs/docs-hub
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create PR to apply latest release to master
         if: steps.changesets.outputs.published == 'true' && startsWith(github.ref_name, 'release/') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
