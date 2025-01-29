@@ -14,7 +14,7 @@ export default defineConfig({
       md.use(snippetPlugin);
       md.use(codeInContextPlugin);
       md.block.ruler.disable('snippet');
-      md.core.ruler.before('normalize', 'replace-magic-string', (state) => {
+      md.core.ruler.before('normalize', 'replace-docs-api-url', (state) => {
         const apiUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:5174' : '/api';
         state.src = state.src.replace(/DOCS_API_URL/g, apiUrl);
       });
