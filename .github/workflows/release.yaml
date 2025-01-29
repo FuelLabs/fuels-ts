@@ -126,7 +126,7 @@ jobs:
         if: github.ref_name == 'master' && env.DEPLOY_STABLE_DOCS_API == 'true'
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_TS_DOCS_PROJECT_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_TS_DOCS_API_PROJECT_ID }}
         run: |
           pnpm install --global vercel@latest
           vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
