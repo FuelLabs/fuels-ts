@@ -19,7 +19,7 @@ jobs:
 
       - name: CI Setup
         uses: ./.github/actions/ci-setup
-        inputs:
+        with:
           registry-url: "https://npm.pkg.github.com"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
