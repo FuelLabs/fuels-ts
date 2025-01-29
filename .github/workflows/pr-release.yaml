@@ -51,9 +51,10 @@ jobs:
           published_version=$(echo "$changetsets" | grep -oP '@\K([0-9]+\.){2}[0-9]+-pr-${{ env.PR_NUMBER }}-\d+' | head -1)
           echo "published_version=$published_version" >> $GITHUB_OUTPUT
         env:
-          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: mshick/add-pr-comment@v2
         with:
