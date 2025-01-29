@@ -1,3 +1,5 @@
+import { BigNumberCoder } from '@fuel-ts/abi-coder';
+import { sha256 } from '@fuel-ts/hasher';
 import { concat } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
 
@@ -7,16 +9,55 @@ const REG_START_OF_LOADED_CODE = 0x11;
 const REG_GENERAL_USE = 0x12;
 const WORD_SIZE = 8; // size in bytes
 
-export function getConfigurableOffset(binary: Uint8Array): number {
-  // Extract 8 bytes starting from index 16 (similar to binary[16..24] in Rust)
-  const OFFSET_INDEX = 16;
-  const dataView = new DataView(binary.buffer, OFFSET_INDEX, 8);
+export const DATA_OFFSET_INDEX = 8;
+export const CONFIGURABLE_OFFSET_INDEX = 16;
 
-  // Read the value as a 64-bit big-endian unsigned integer
-  const dataOffset = dataView.getBigUint64(0, false); // false means big-endian
+/**
+ * Get the offset of the data section in the bytecode
+ *
+ * @param bytecode - The bytecode to get the offset from
+ * @returns The offset of the data section
+ */
+export function getBytecodeDataOffset(bytecode: Uint8Array): number {
+  const [offset] = new BigNumberCoder('u64').decode(bytecode, DATA_OFFSET_INDEX);
+  return offset.toNumber();
+}
 
-  // Convert the BigInt to a regular number (safe as long as the offset is within Number.MAX_SAFE_INTEGER)
-  return Number(dataOffset);
+/**
+ * Get the offset of the configurable section in the bytecode
+ *
+ * @param bytecode - The bytecode to get the offset from
+ * @returns The offset of the configurable section
+ */
+export function getBytecodeConfigurableOffset(bytecode: Uint8Array): number {
+  const [offset] = new BigNumberCoder('u64').decode(bytecode, CONFIGURABLE_OFFSET_INDEX);
+  return offset.toNumber();
+}
+
+/**
+ * Takes bytecode and generates it's associated bytecode ID
+ *
+ * @param bytecode - The bytecode to get the id from
+ * @returns The id of the bytecode
+ */
+export function getBytecodeId(bytecode: Uint8Array): string {
+  const configurableOffset = getBytecodeConfigurableOffset(bytecode);
+  const byteCodeWithoutConfigurableSection = bytecode.slice(0, configurableOffset);
+
+  return sha256(byteCodeWithoutConfigurableSection);
+}
+
+/**
+ * Takes bytecode and generates it's associated legacy blob ID
+ *
+ * @param bytecode - The bytecode to get the id from
+ * @returns The id of the bytecode
+ */
+export function getLegacyBlobId(bytecode: Uint8Array): string {
+  const dataOffset = getBytecodeDataOffset(bytecode);
+  const byteCodeWithoutDataSection = bytecode.slice(0, dataOffset);
+
+  return sha256(byteCodeWithoutDataSection);
 }
 
 export function getPredicateScriptLoaderInstructions(
@@ -100,7 +141,7 @@ export function getPredicateScriptLoaderInstructions(
     asm.jmp(REG_START_OF_LOADED_CODE),
   ];
 
-  const offset = getConfigurableOffset(originalBinary);
+  const offset = getBytecodeConfigurableOffset(originalBinary);
 
   // if the binary length is smaller than the offset
   if (originalBinary.length < offset) {

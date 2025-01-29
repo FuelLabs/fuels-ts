@@ -10,3 +10,9 @@ export * from './predicate';
 export * from './providers';
 export * from './connectors';
 export { deployScriptOrPredicate } from './utils/deployScriptOrPredicate';
+export {
+  getBytecodeId,
+  getLegacyBlobId,
+  getBytecodeConfigurableOffset,
+  getBytecodeDataOffset,
+} from './utils/predicate-script-loader-instructions';
