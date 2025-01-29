@@ -1,1 +1,1 @@
-export const fuelAssetsBaseUrl = 'https://cdn.fuel.network/assets/'
+export const fuelAssetsBaseUrl = 'https://assets.fuel.network/providers/'

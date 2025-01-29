@@ -166,19 +166,17 @@ jobs:
           rootdir: ""
           workdir: ""
 
-      - uses: aws-actions/configure-aws-credentials@v4
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         with:
-          aws-access-key-id: ${{ secrets.S3_CDN_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.S3_CDN_SECRET_KEY }}
-          aws-region: us-east-1
+          role-to-assume: ${{ env.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_S3_REGION }}
 
       - name: Upload assets to s3
         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         run: |
-          aws s3 cp ./packages/account/src/providers/assets/images/ s3://${S3_CDN_BUCKET}/assets/ --recursive
-        env:
-          S3_CDN_BUCKET: ${{ secrets.S3_CDN_BUCKET }}
+          aws s3 cp ./packages/account/src/providers/assets/images/ s3://${{ env.AWS_S3_BUCKET }}/providers/ --recursive
 
       # # Commenting out as we require permissions to trigger across repos
       # - name: Notify migrations and disclosures of the new release (breaking changes)
