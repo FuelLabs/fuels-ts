@@ -5,7 +5,7 @@ on:
 
 jobs:
   release-pr:
-    name: "Release PR to npm"
+    name: "Release PR to GitHub Packages"
     runs-on: ubuntu-latest
     # comment out if:false to enable release PR to npm
     # if: false
@@ -17,27 +17,47 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
 
+      - name: Create .npmrc
+        run: |
+          cat << EOF > "$HOME/.npmrc"
+            //npm.pkg.github.com/:_authToken=$NPM_TOKEN
+          EOF
+        env:
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: CI Setup
         uses: ./.github/actions/ci-setup
         with:
-          registry-url: "https://npm.pkg.github.com"
+          # Disable NPM registry setup
+          registry-url: ""
+
+      - name: Ensure NPM access
+        shell: bash
+        run: npm whoami --registry=https://npm.pkg.github.com
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build
         run: pnpm build
 
-      - name: Publish to NPM
+      - name: Release to @pr-${{ env.PR_NUMBER }} tag on GitHub Packages
         id: release
-        uses: ./.github/actions/pr-release
-        with:
-          npm-token: ${{ secrets.GITHUB_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          pr-number: ${{ github.event.pull_request.number }}
+        shell: bash
+        run: |
+          pnpm changeset:next
+          git add .changeset/fuel-labs-ci.md
+          pnpm changeset version --snapshot pr-${{ env.PR_NUMBER }}
+          changetsets=$(pnpm changeset publish --tag pr-${{ env.PR_NUMBER }})
+          published_version=$(echo "$changetsets" | grep -oP '@\K([0-9]+\.){2}[0-9]+-pr-${{ env.PR_NUMBER }}-\d+' | head -1)
+          echo "published_version=$published_version" >> $GITHUB_OUTPUT
+        env:
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
 
       - uses: mshick/add-pr-comment@v2
         with:
           message: |
-            This PR is published in NPM with version **${{ steps.release.outputs.published_version }}**
+            This PR is published in GitHub Packages with version **${{ steps.release.outputs.published_version }}**
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
