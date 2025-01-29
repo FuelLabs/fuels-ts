@@ -13,6 +13,15 @@
     },
     {
       "pattern": "https://docs.fuel.network/docs/fuels-ts/getting-started/running-a-local-fuel-node"
+    },
+    {
+      "pattern": "^modules/_fuel_ts"
+    }
+  ],
+  "replacementPatterns": [
+    {
+      "pattern": "DOCS_API_URL",
+      "replacement": "http://localhost:9876"
     }
   ]
 }

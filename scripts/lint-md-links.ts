@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 import { execSync, spawn } from 'child_process';
-import { readFileSync, writeFileSync } from 'fs';
 import { globSync } from 'glob';
 
 const { log } = console;
@@ -21,10 +20,6 @@ void (async () => {
     ignore: ['**/node_modules/**', 'apps/demo-*/**', '.changeset/**', '**/CHANGELOG.md'],
   });
 
-  mdFiles.forEach((filepath) => {
-    const content = readFileSync(filepath).toString();
-    writeFileSync(filepath, content.replace(/DOCS_API_URL/g, 'http://localhost:9876'));
-  });
   // TODO: Stop ignoring doc links in `link-check.config.json`
   // The above requires this to be merged and deployed:
   //  - https://github.com/FuelLabs/fuels-ts/pull/3500
