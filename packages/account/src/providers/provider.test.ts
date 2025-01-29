@@ -6,7 +6,7 @@ import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, OutputType, ReceiptType } from '@fuel-ts/transactions';
-import { DateTime, arrayify, sleep } from '@fuel-ts/utils';
+import { DateTime, arrayify, hexlify, sleep } from '@fuel-ts/utils';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import { versions } from '@fuel-ts/versions';
 
@@ -2461,5 +2461,30 @@ describe('Provider', () => {
     await expectToThrowFuelError(() => response.waitForResult(), {
       code: ErrorCode.SCRIPT_REVERTED,
     });
+  });
+
+  it('can get compressed block bytes', async () => {
+    const bytes = hexlify(randomBytes(32));
+
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    // Should return null when block is not found
+    let compressed = await provider.daCompressedBlock('1');
+
+    expect(compressed).toBeNull();
+
+    vi.spyOn(provider, 'daCompressedBlock').mockImplementationOnce(async () =>
+      Promise.resolve({
+        bytes,
+      })
+    );
+
+    const block = await provider.getBlock('latest');
+    compressed = await provider.daCompressedBlock(String(block?.height));
+
+    expect(compressed).toStrictEqual({ bytes });
+
+    vi.restoreAllMocks();
   });
 });
