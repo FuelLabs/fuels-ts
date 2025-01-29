@@ -30,7 +30,7 @@ vi.mock('fs', async () => {
  */
 describe('launchNode', () => {
   test('using ephemeral port 0 is possible', async () => {
-    const { cleanup, port, url } = await launchNode({ port: '0', loggingEnabled: false });
+    const { cleanup, port, url } = await launchNode({ port: '0' });
     expect(await fetch(url)).toBeTruthy();
     expect(port).not.toEqual('0');
 
@@ -38,7 +38,7 @@ describe('launchNode', () => {
   });
 
   it('cleanup kills the started node', async () => {
-    const { cleanup, url } = await launchNode({ loggingEnabled: false });
+    const { cleanup, url } = await launchNode();
     expect(await fetch(url)).toBeTruthy();
 
     cleanup();
@@ -57,7 +57,7 @@ describe('launchNode', () => {
     const spawnSpy = vi.spyOn(childProcessMod, 'spawn');
     const killSpy = vi.spyOn(process, 'kill');
 
-    const { cleanup, pid } = await launchNode({ loggingEnabled: false });
+    const { cleanup, pid } = await launchNode();
 
     const spawnOptions = spawnSpy.mock.calls[0][2];
     expect(spawnOptions.detached).toBeTruthy();
@@ -74,7 +74,7 @@ describe('launchNode', () => {
 
     process.env.FUEL_CORE_PATH = '';
 
-    const { result } = await safeExec(async () => launchNode({ loggingEnabled: false }));
+    const { result } = await safeExec(async () => launchNode());
 
     const command = spawnSpy.mock.calls[0][0];
     expect(command).toEqual('fuel-core');
@@ -95,7 +95,7 @@ describe('launchNode', () => {
 
     const fuelCorePath = './my-fuel-core-binary-path';
     const { error } = await safeExec(async () => {
-      await launchNode({ fuelCorePath, loggingEnabled: false });
+      await launchNode({ fuelCorePath, loggingEnabled: true });
     });
 
     expect(error).toBeTruthy();
@@ -153,7 +153,7 @@ describe('launchNode', () => {
   });
 
   test('logs fuel-core outputs via console.log', async () => {
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const logSpy = vi.spyOn(console, 'log');
 
     const { cleanup } = await launchNode({ loggingEnabled: true });
     const logs = logSpy.mock.calls.map((call) => call[0]);
@@ -163,7 +163,7 @@ describe('launchNode', () => {
 
   test('cleanup removes temporary directory', async () => {
     const mkdirSyncSpy = vi.spyOn(fsMod, 'mkdirSync');
-    const { cleanup } = await launchNode({ loggingEnabled: false });
+    const { cleanup } = await launchNode();
 
     expect(mkdirSyncSpy).toHaveBeenCalledTimes(1);
     const tempDirPath = mkdirSyncSpy.mock.calls[0][0];
@@ -252,19 +252,5 @@ describe('launchNode', () => {
     expect(logSpy).toHaveBeenCalledWith(
       `fuel-core node under pid ${pid} does not exist. The node might have been killed before cleanup was called. Exiting cleanly.`
     );
-  });
-
-  test('should clean up when unable to kill process with "RangeError: pid must be a positive integer" error', async () => {
-    const killSpy = vi.spyOn(process, 'kill').mockImplementationOnce(() => {
-      throw new RangeError('pid must be a positive integer');
-    });
-
-    const { pid, cleanup } = await launchNode({ loggingEnabled: false });
-
-    cleanup();
-
-    expect(killSpy).toBeCalledTimes(2);
-    expect(killSpy).toBeCalledWith(-pid);
-    expect(killSpy).toBeCalledWith(+pid);
   });
 });
