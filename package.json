@@ -40,6 +40,7 @@
     "lint:package-jsons": "tsx ./scripts/lint-package-jsons",
     "type:check": "turbo run type:check",
     "type:check-tests": "tsc -p tsconfig.test.json",
+    "tx:perf": "tsx packages/fuel-gauge/scripts/latency-detection/main.ts",
     "prettier:check": "prettier --check packages --check apps/docs",
     "prettier:format": "prettier --write packages --write apps/docs",
     "verify:package-exports": "tsx ./scripts/verify-package-exports",
