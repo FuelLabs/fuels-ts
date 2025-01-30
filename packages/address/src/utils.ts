@@ -1,6 +1,7 @@
 import { randomBytes } from '@fuel-ts/crypto';
 import { FuelError } from '@fuel-ts/errors';
 import { arrayify, concat, hexlify } from '@fuel-ts/utils';
+import { sha256 } from '@noble/hashes/sha256';
 
 import type { Address } from './address';
 import type { AddressLike, ContractIdLike, B256Address, B256AddressEvm } from './types';
@@ -32,6 +33,14 @@ export function isEvmAddress(address: string): boolean {
   return address.length === 42 && /(0x)[0-9a-f]{40}$/i.test(address);
 }
 
+/**
+ * Normalizes a B256 address to lowercase
+ *
+ * @param address - The B256 address to normalize
+ * @returns The normalized B256 address
+ *
+ * @hidden
+ */
 export function normalizeB256(address: B256Address): B256Address {
   return address.toLowerCase();
 }
@@ -111,4 +120,62 @@ export const padFirst12BytesOfEvmAddress = (address: string): B256AddressEvm => 
   }
 
   return address.replace('0x', '0x000000000000000000000000') as B256AddressEvm;
+};
+
+/**
+ * Converts an EVM address to a B256 address
+ *
+ * @param address - The EVM address to convert
+ * @returns The B256 address
+ *
+ * @hidden
+ */
+export const fromEvmAddressToB256 = (address: string): B256Address =>
+  padFirst12BytesOfEvmAddress(address);
+
+/**
+ * Converts a Public Key to a B256 address
+ *
+ * @param publicKey - The Public Key to convert
+ * @returns The B256 address
+ *
+ * @hidden
+ */
+export const fromPublicKeyToB256 = (publicKey: string): B256Address => {
+  if (!isPublicKey(publicKey)) {
+    throw new FuelError(FuelError.CODES.INVALID_PUBLIC_KEY, `Invalid Public Key: ${publicKey}.`);
+  }
+
+  return hexlify(sha256(arrayify(publicKey)));
+};
+
+/**
+ * Converts a dynamic input to a B256 address
+ *
+ * @param address - The dynamic input to convert
+ * @returns The B256 address
+ *
+ * @hidden
+ */
+export const fromDynamicInputToB256 = (address: string | Address): B256Address => {
+  if (typeof address !== 'string' && 'toB256' in address) {
+    return address.toB256();
+  }
+
+  if (isB256(address)) {
+    return address;
+  }
+
+  if (isPublicKey(address)) {
+    return fromPublicKeyToB256(address);
+  }
+
+  if (isEvmAddress(address)) {
+    return fromEvmAddressToB256(address);
+  }
+
+  throw new FuelError(
+    FuelError.CODES.PARSE_FAILED,
+    `Unknown address format: only 'B256', 'Public Key (512)', or 'EVM Address' are supported.`
+  );
 };

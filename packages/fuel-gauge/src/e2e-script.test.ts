@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { DEVNET_NETWORK_URL, TESTNET_NETWORK_URL } from '@internal/utils';
+import { DEVNET_NETWORK_URL, TESTNET_NETWORK_URL } from '@fuel-ts/account/configs';
 import { WalletUnlocked, Provider, TransactionType, CHAIN_IDS, rawAssets, assets, bn } from 'fuels';
 
 import { ScriptMainArgBool } from '../test/typegen';
@@ -219,7 +219,7 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
     const expectedBaseAsset = [
       {
         ...expectedRawBaseAsset[0],
-        icon: 'https://cdn.fuel.network/assets/eth.svg',
+        icon: 'https://assets.fuel.network/providers/eth.svg',
       },
     ];
 

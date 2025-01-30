@@ -18,11 +18,7 @@ export const formatTransferToContractScriptData = (
   return transferParams.reduce((acc, transferParam) => {
     const { assetId, amount, contractId } = transferParam;
     const encoded = numberCoder.encode(amount);
-    const scriptData = concat([
-      Address.fromAddressOrString(contractId).toBytes(),
-      encoded,
-      arrayify(assetId),
-    ]);
+    const scriptData = concat([new Address(contractId).toBytes(), encoded, arrayify(assetId)]);
     return concat([acc, scriptData]);
   }, new Uint8Array());
 };

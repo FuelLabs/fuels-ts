@@ -10,6 +10,6 @@ describe('assets', async () => {
   });
 
   it.each(assets)('$symbol should have icon resolved to URL', async ({ icon }) => {
-    expect(icon).toContain('https://cdn.fuel.network/assets');
+    expect(icon).toContain('https://assets.fuel.network/providers');
   });
 });
