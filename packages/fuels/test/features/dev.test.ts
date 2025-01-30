@@ -92,6 +92,8 @@ describe('dev', () => {
       root: paths.root,
       output: paths.outputDir,
       workspace: paths.workspaceDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
       fuelCorePort: '0',
     });
 
