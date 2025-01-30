@@ -19,7 +19,7 @@ export const closeAllFileHandlers = (handlers: FSWatcher[]) => {
 export const buildAndDeploy = async (config: FuelsConfig) => {
   await build(config);
   const deployedContracts = await deploy(config);
-  config.onDev?.(config);
+  await config.onDev?.(config);
 
   return deployedContracts;
 };

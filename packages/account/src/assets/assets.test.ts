@@ -9,7 +9,7 @@ describe('assets', async () => {
     expect(icon).not.toContain('/');
   });
 
-  it.each(assets)('$symbol should have icon resolved to URL', ({ icon }) => {
-    expect(icon).toContain('https://cdn.fuel.network/assets');
+  it.each(assets)('$symbol should have icon resolved to URL', async ({ icon }) => {
+    expect(icon).toContain('https://assets.fuel.network/providers');
   });
 });
