@@ -1,4 +1,5 @@
 import { B256Address } from "@fuel-ts/address";
+import { NetworkEthereum, NetworkFuel } from "./types";
 
 export const MAINNET_ASSET_API_URL = 'https://mainnet-explorer.fuel.network'
 export const TESTNET_ASSET_API_URL = 'https://testnet-explorer.fuel.network'
@@ -35,27 +36,26 @@ const buildQueryString = (parameters: Record<string, string | { toString: () => 
   return query.size > 0 ? `?${query.toString()}` : '';
 };
 
-export interface AssetByIdInfoResponse {
+export interface AssetInfo {
   assetId: string;
   contractId?: string;
-
+  subId?: string;
   name: string;
   symbol: string;
   decimals: number;
-  icon: string;
-
   suspicious: boolean;
   verified: boolean;
-
-  // owner: string;
-  // uri: string;
-
-  /**
-   * For NFT's
-   */
-  subId: string;
+  totalSupply?: string;
+  networks?: (NetworkEthereum | NetworkFuel)[];
+  rate?: number;
+  icon?: string;
+  owner?: string;
+  amount?: string;
+  amountInUsd?: string;
+  uri?: string;
   metadata: Record<string, string>;
-  isNFT: boolean;
+  collection?: string;
+  isNFT?: boolean;
 }
 
 /**
@@ -63,43 +63,16 @@ export interface AssetByIdInfoResponse {
  *
  * @param url {string} - The Base URL of the explorer API
  * @param assetId {string} - The ID of the asset to get information about
- * @returns {Promise<ExplorerAssetResponse>} - The information about the asset
+ * @returns {Promise<AssetInfo>} - The information about the asset
  *
  * @see {@link https://github.com/FuelLabs/fuel-explorer/wiki/Assets-API#instructions-for-consuming-assets-data-from-indexer-api}
  */
-export const getAssetById = (url: string, assetId: B256Address): Promise<AssetByIdInfoResponse | null> => {
-  return request<AssetByIdInfoResponse>(url, `/assets/${assetId}`);
+export const getAssetById = (url: string, assetId: B256Address): Promise<AssetInfo | null> => {
+  return request<AssetInfo>(url, `/assets/${assetId}`);
 };
 
-export interface AssetByOwnerInfo {
-  assetId: string;
-  contractId?: string;
-
-  name: string;
-  symbol: string;
-  decimals: number;
-  icon: string;
-
-  suspicious: boolean;
-  verified: boolean;
-
-  // owner: string;
-  // uri: string;
-
-  /**
-   * For NFT's
-   */
-  subId: string;
-  metadata: Record<string, string>;
-  isNFT: boolean;
-
-  owner: B256Address;
-  amount: string;
-  amountInUsd: string;
-}
-
 export interface AssetsByOwnerResponse {
-  data: AssetByOwnerInfo[];
+  data: AssetInfo[];
   pageInfo: PageInfo;
 }
 
