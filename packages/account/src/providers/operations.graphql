@@ -762,6 +762,12 @@ query getMessages(
   }
 }
 
+query daCompressedBlock($height: U32!) {
+  daCompressedBlock(height: $height) {
+    bytes
+  }
+}
+
 query getMessageProof(
   $transactionId: TransactionId!
   $nonce: Nonce!

@@ -25,7 +25,7 @@ export default function LocalFaucet({ refetch, addressToFund }: Props) {
         wallet.provider,
       );
       const tx = await genesis.transfer(
-        Address.fromB256(addressToFund || wallet.address.toB256()),
+        new Address(addressToFund || wallet.address.toB256()),
         bn(5_000_000_000),
       );
       transactionSubmitNotification(tx.id);

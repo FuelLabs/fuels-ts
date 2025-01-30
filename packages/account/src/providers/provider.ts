@@ -1756,24 +1756,6 @@ export default class Provider {
   }
 
   /**
-   * Fetches a compressed block at the specified height.
-   *
-   * @param height - The height of the block to fetch.
-   * @returns The compressed block if available, otherwise `null`.
-   */
-  async daCompressedBlock(height: string) {
-    const { daCompressedBlock } = await this.operations.daCompressedBlock({
-      height,
-    });
-
-    if (!daCompressedBlock) {
-      return null;
-    }
-
-    return daCompressedBlock;
-  }
-
-  /**
    * Retrieves transactions based on the provided pagination arguments.
    * @param paginationArgs - The pagination arguments for retrieving transactions.
    * @returns A promise that resolves to an object containing the retrieved transactions and pagination information.
@@ -1805,6 +1787,24 @@ export default class Provider {
       .filter((tx): tx is Transaction => tx !== null);
 
     return { transactions, pageInfo };
+  }
+
+  /**
+   * Fetches a compressed block at the specified height.
+   *
+   * @param height - The height of the block to fetch.
+   * @returns The compressed block if available, otherwise `null`.
+   */
+  async daCompressedBlock(height: string) {
+    const { daCompressedBlock } = await this.operations.daCompressedBlock({
+      height,
+    });
+
+    if (!daCompressedBlock) {
+      return null;
+    }
+
+    return daCompressedBlock;
   }
 
   /**

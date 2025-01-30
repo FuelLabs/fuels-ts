@@ -105,6 +105,9 @@ export enum ErrorCode {
   // asset
   ASSET_NOT_FOUND = 'asset-not-found',
 
+  // bn
+  NUMBER_TOO_BIG = 'number-too-big',
+
   // chain
   ERROR_BUILDING_BLOCK_EXPLORER_URL = 'error-building-block-explorer-url',
 

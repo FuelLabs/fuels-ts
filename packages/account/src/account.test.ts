@@ -998,4 +998,19 @@ describe('Account', () => {
       expect([baseAssetId, ASSET_A, ASSET_B].includes(balance.assetId)).toBeTruthy();
     });
   });
+
+  test('can ensure using unsafe numbers throws proper error', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+
+    const baseAssetId = await provider.getBaseAssetId();
+
+    await expectToThrowFuelError(
+      () => wallet.transfer(wallet.address, Number.MAX_SAFE_INTEGER + 1, baseAssetId),
+      { code: ErrorCode.NUMBER_TOO_BIG }
+    );
+  });
 });

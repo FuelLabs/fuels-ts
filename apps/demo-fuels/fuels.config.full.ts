@@ -85,31 +85,31 @@ export default createConfig({
   // #endregion deployConfig-fn
 
   // #region onBuild
-  onBuild: (config: FuelsConfig) => {
+  onBuild: (config: FuelsConfig): void | Promise<void> => {
     console.log('fuels:onBuild', { config });
   },
   // #endregion onBuild
 
   // #region onDeploy
-  onDeploy: (config: FuelsConfig, data: DeployedData) => {
+  onDeploy: (config: FuelsConfig, data: DeployedData): void | Promise<void> => {
     console.log('fuels:onDeploy', { config, data });
   },
   // #endregion onDeploy
 
   // #region onDev
-  onDev: (config: FuelsConfig) => {
+  onDev: (config: FuelsConfig): void | Promise<void> => {
     console.log('fuels:onDev', { config });
   },
   // #endregion onDev
 
   // #region onNode
-  onNode: (config: FuelsConfig) => {
+  onNode: (config: FuelsConfig): void | Promise<void> => {
     console.log('fuels:onNode', { config });
   },
   // #endregion onNode
 
   // #region onFailure
-  onFailure: (config: FuelsConfig, error: Error) => {
+  onFailure: (config: FuelsConfig, error: Error): void | Promise<void> => {
     console.log('fuels:onFailure', { config, error });
   },
   // #endregion onFailure

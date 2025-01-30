@@ -582,7 +582,7 @@ importers:
         specifier: workspace:*
         version: link:../errors
       '@fuel-ts/hasher':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../hasher
       '@fuel-ts/math':
         specifier: workspace:*
@@ -743,7 +743,7 @@ importers:
         specifier: workspace:*
         version: link:../hasher
       '@fuel-ts/math':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../math
       '@fuel-ts/merkle':
         specifier: workspace:*
@@ -838,6 +838,9 @@ importers:
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
+      ora:
+        specifier: 5.4.1
+        version: 5.4.1
 
   packages/fuels:
     dependencies:
@@ -1086,7 +1089,7 @@ importers:
         specifier: workspace:*
         version: link:../errors
       '@fuel-ts/hasher':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../hasher
       '@fuel-ts/math':
         specifier: workspace:*

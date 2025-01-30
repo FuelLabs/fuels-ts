@@ -1,3 +1,6 @@
+import { FuelError, ErrorCode } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+
 import type { BN } from './bn';
 import { bn } from './bn';
 import type { BigNumberish } from './types';
@@ -109,6 +112,18 @@ describe('Math - BN', () => {
     numberToConvert = 273;
     expect(bn(hexToConvert).toNumber()).toEqual(numberToConvert);
     expect(bn(numberToConvert).toHex()).toEqual(hexToConvert);
+  });
+
+  it('should convert safe numbers', () => {
+    let number = Number.MAX_SAFE_INTEGER;
+    let expectedHex = '0x1fffffffffffff';
+    expect(bn(number).toNumber()).toEqual(number);
+    expect(bn(number).toHex()).toEqual(expectedHex);
+
+    number = Number.MAX_SAFE_INTEGER - 0.5;
+    expectedHex = '0x1ffffffffffffe';
+    expect(bn(number).toNumber()).toEqual(number);
+    expect(bn(number).toHex()).toEqual(expectedHex);
   });
 
   it('should toHex accept bytePadding config', () => {
@@ -540,5 +555,19 @@ describe('Math - BN', () => {
 
   it('should return significant figures even if it exceeds the precision', () => {
     expect(bn('4000000').format({ precision: 1 })).toEqual('0.004');
+  });
+
+  it('should throws expected error when using unsafe numbers', async () => {
+    const unsafeNumbers = [Number.MAX_SAFE_INTEGER + 1, Number.MAX_SAFE_INTEGER + 1.1];
+
+    for (const unsafeNumber of unsafeNumbers) {
+      await expectToThrowFuelError(
+        () => bn(unsafeNumber),
+        new FuelError(
+          ErrorCode.NUMBER_TOO_BIG,
+          `Value ${unsafeNumber} is too large to be represented as a number, use string instead.`
+        )
+      );
+    }
   });
 });
