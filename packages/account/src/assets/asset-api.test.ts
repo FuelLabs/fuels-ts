@@ -13,6 +13,10 @@ const mockFetch = () => {
   }
 }
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('Asset API', () => {
   describe('getAssetById', () => {
     it('should get an asset by id [Base Asset - Verified]', async () => {
@@ -27,13 +31,12 @@ describe('Asset API', () => {
         verified: expect.any(Boolean),
         networks: expect.any(Array),
       }
-      const { json } = mockFetch();
+      const { fetch, json } = mockFetch();
       json.mockResolvedValueOnce(MOCK_BASE_ASSET);
 
-      const response = await getAssetById(
-        TESTNET_ASSET_API_URL,
-        MOCK_BASE_ASSET.assetId
-      );
+      const response = await getAssetById({
+        assetId: MOCK_BASE_ASSET.assetId
+      });
 
       const assetInfo = response as AssetInfo;
       expect(assetInfo).toEqual(MOCK_BASE_ASSET)
@@ -60,10 +63,9 @@ describe('Asset API', () => {
       const { json } = mockFetch();
       json.mockResolvedValueOnce(MOCK_FUEL_ASSET);
 
-      const response = await getAssetById(
-        TESTNET_ASSET_API_URL,
-        MOCK_FUEL_ASSET.assetId
-      );
+      const response = await getAssetById({
+        assetId: MOCK_FUEL_ASSET.assetId
+      });
 
       const assetInfo = response as AssetInfo;
       expect(response).toEqual(MOCK_FUEL_ASSET)
@@ -98,10 +100,9 @@ describe('Asset API', () => {
       const { json } = mockFetch();
       json.mockResolvedValueOnce(MOCK_NFT_ASSET);
 
-      const response = await getAssetById(
-        MAINNET_ASSET_API_URL,
-        MOCK_NFT_ASSET.assetId
-      );
+      const response = await getAssetById({
+        assetId: MOCK_NFT_ASSET.assetId
+      });
 
       const assetInfo = response as AssetInfo;
       expect(response).toEqual(MOCK_NFT_ASSET)
@@ -114,10 +115,9 @@ describe('Asset API', () => {
       // The API returns a 200 status code but the response is not valid JSON
       json.mockRejectedValueOnce(null);
 
-      const response = await getAssetById(
-        TESTNET_ASSET_API_URL,
-        '0x0000000000000000000000000000000000000000000000000000000000000000'
-      );
+      const response = await getAssetById({
+        assetId: '0x0000000000000000000000000000000000000000000000000000000000000000'
+      });
 
       expect(response).toBeNull();
     });
@@ -128,11 +128,9 @@ describe('Asset API', () => {
       const { json } = mockFetch();
       json.mockResolvedValueOnce(MOCK_ASSET_INFO_BY_OWNER);
 
-      const response = await getAssetsByOwner(
-        TESTNET_ASSET_API_URL,
-        MOCK_NFT_ASSET.owner,
-        { last: 10 }
-      );
+      const response = await getAssetsByOwner({
+        owner: MOCK_NFT_ASSET.owner,
+      });
 
       expect(response?.data).toEqual([MOCK_NFT_ASSET]);
       expect(response?.pageInfo).toEqual({
