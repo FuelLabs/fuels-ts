@@ -12,7 +12,6 @@ import { mockCheckForUpdates } from '../utils/mockCheckForUpdates';
 import { mockLogger } from '../utils/mockLogger';
 import { resetDiskAndMocks } from '../utils/resetDiskAndMocks';
 import { runInit, runDev, bootstrapProject, resetConfigAndMocks } from '../utils/runCommands';
-import { runInitTemp } from '../utils/testHelpers';
 
 vi.mock('chokidar', async () => {
   const mod = await vi.importActual('chokidar');
@@ -85,15 +84,26 @@ describe('dev', () => {
   });
 
   it('exits when build fails', { timeout: 30_000 }, async () => {
-    using temp = runInitTemp();
-    const mainSw = readFileSync(`${temp.contractDir}/src/main.sw`).toString();
+    const mainSw = readFileSync(`${paths.contractsBarDir}/src/main.sw`).toString();
     const invalidSwayCode = `${mainSw}\nabi `;
-    writeFileSync(`${temp.contractDir}/src/main.sw`, invalidSwayCode);
+    writeFileSync(`${paths.contractsBarDir}/src/main.sw`, invalidSwayCode);
 
-    const devProcess = spawn('pnpm fuels dev', {
-      cwd: temp.rootDir,
+    await runInit({
+      root: paths.root,
+      output: paths.outputDir,
+      workspace: paths.workspaceDir,
+      fuelCorePort: '0',
+    });
+
+    const devProcess = spawn(`pnpm fuels dev --path ${paths.root}`, {
       detached: true,
       shell: 'bash',
+    });
+
+    const data: string[] = [];
+
+    devProcess.stdout?.on('data', (chunk) => {
+      data.push(chunk.toString());
     });
 
     await new Promise((resolve) => {
@@ -102,7 +112,10 @@ describe('dev', () => {
         resolve(undefined);
       });
     });
+
+    expect(data.join('')).toContain('forc exited with error code 1');
   });
+
   test('`dev` command can work with ephemeral port 0', { timeout: 25000 }, async () => {
     await runInit({
       root: paths.root,
