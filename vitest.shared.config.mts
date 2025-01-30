@@ -14,6 +14,7 @@ export default defineConfig({
   ],
   esbuild: { target: "es2022" },
   test: {
+    globalSetup: ["vitest.global-setup.ts"],
     setupFiles: ["./vitest.setup-files.ts"],
     coverage: {
       enabled: true,
@@ -41,11 +42,7 @@ export default defineConfig({
       "/apps/demo-react-vite",
     ],
     globals: true,
-    env: {
-      ...loadEnv(mode, process.cwd(), ""),
-      FUEL_CORE_PATH: "fuels-core",
-      FORC_PATH: "fuels-forc",
-    },
+    env: loadEnv(mode, process.cwd(), ""),
     poolOptions: {
       threads: {
         minThreads: 1,
