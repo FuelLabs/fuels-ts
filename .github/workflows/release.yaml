@@ -12,6 +12,7 @@ jobs:
   release:
     name: "Release"
     runs-on: ubuntu-latest
+    environment: npm-deploy
     permissions: write-all
     # Ensure that the workflow runs only after a commit is pushed into the branch
     # and not when the branch is created.
@@ -42,7 +43,7 @@ jobs:
       - name: Ensure NPM access
         run: npm whoami
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_DEPLOY_TOKEN }}
 
       - name: Build
         run: pnpm build
@@ -74,7 +75,7 @@ jobs:
           githubTagName: ${{ env.RELEASE_VERSION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_DEPLOY_TOKEN }}
 
       - name: Prettify changelog
         run: pnpm changeset:update-changelog
@@ -108,7 +109,7 @@ jobs:
           pnpm changeset version --snapshot next
           pnpm changeset publish --tag next
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_DEPLOY_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # ensure docs are always deployed after merge of changeset PR
@@ -119,14 +120,15 @@ jobs:
         if: startsWith(env.LAST_COMMIT_MSG, 'ci(release):') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
         run: echo SHOULD_DEPLOY_DOCS=true >> $GITHUB_ENV
 
-      - name: Update docs (nightly)
-        if: github.ref_name == 'master' && env.SHOULD_DEPLOY_DOCS == 'true'
-        uses: benc-uk/workflow-dispatch@v1
-        with:
-          workflow: update-nightly.yml
-          ref: master
-          repo: FuelLabs/docs-hub
-          token: ${{ secrets.GITHUB_TOKEN }}
+      # # Commenting out as we require permissions to trigger across repos
+      # - name: Update docs (nightly)
+      #   if: github.ref_name == 'master' && env.SHOULD_DEPLOY_DOCS == 'true'
+      #   uses: benc-uk/workflow-dispatch@v1
+      #   with:
+      #     workflow: update-nightly.yml
+      #     ref: master
+      #     repo: FuelLabs/docs-hub
+      #     token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create PR to apply latest release to master
         if: steps.changesets.outputs.published == 'true' && startsWith(github.ref_name, 'release/') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
@@ -164,24 +166,23 @@ jobs:
           rootdir: ""
           workdir: ""
 
-      - uses: aws-actions/configure-aws-credentials@v4
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         with:
-          aws-access-key-id: ${{ secrets.S3_CDN_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.S3_CDN_SECRET_KEY }}
-          aws-region: us-east-1
+          role-to-assume: ${{ env.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_S3_REGION }}
 
       - name: Upload assets to s3
         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         run: |
-          aws s3 cp ./packages/account/src/assets/images/ s3://${S3_CDN_BUCKET}/assets/ --recursive
-        env:
-          S3_CDN_BUCKET: ${{ secrets.S3_CDN_BUCKET }}
+          aws s3 cp ./packages/account/src/assets/images/ s3://${{ env.AWS_S3_BUCKET }}/providers/ --recursive
 
-      - name: Notify migrations and disclosures of the new release (breaking changes)
-        run: |
-          curl -X POST \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: token ${{ secrets.MIGRATIONS_RELEASE_TRIGGER_TOKEN }}" \
-            https://api.github.com/repos/FuelLabs/migrations-and-disclosures/dispatches \
-            -d '{"event_type":"update_versions"}'
+      # # Commenting out as we require permissions to trigger across repos
+      # - name: Notify migrations and disclosures of the new release (breaking changes)
+      #   run: |
+      #     curl -X POST \
+      #       -H "Accept: application/vnd.github.v3+json" \
+      #       -H "Authorization: token ${{ secrets.MIGRATIONS_RELEASE_TRIGGER_TOKEN }}" \
+      #       https://api.github.com/repos/FuelLabs/migrations-and-disclosures/dispatches \
+      #       -d '{"event_type":"update_versions"}'

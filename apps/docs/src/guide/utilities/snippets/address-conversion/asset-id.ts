@@ -4,7 +4,7 @@ import { Address } from 'fuels';
 
 const b256: B256Address =
   '0x6d309766c0f1c6f103d147b287fabecaedd31beb180d45cf1bf7d88397aecc6f';
-const address: Address = Address.fromB256(b256);
+const address: Address = new Address(b256);
 const assetId: AssetId = address.toAssetId();
 // {
 //    bits: '0x6d309766c0f1c6f103d147b287fabecaedd31beb180d45cf1bf7d88397aecc6f

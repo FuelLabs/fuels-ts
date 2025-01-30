@@ -57,6 +57,13 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
       bnBase = base || 'hex';
     }
 
+    if (typeof bnValue === 'number' && bnValue > Number.MAX_SAFE_INTEGER) {
+      throw new FuelError(
+        ErrorCode.NUMBER_TOO_BIG,
+        `Value ${bnValue} is too large to be represented as a number, use string instead.`
+      );
+    }
+
     super(bnValue == null ? 0 : bnValue, bnBase, endian);
   }
 

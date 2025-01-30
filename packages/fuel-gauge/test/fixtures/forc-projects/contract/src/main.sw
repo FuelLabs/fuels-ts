@@ -1,9 +1,13 @@
 contract;
 
 use std::auth::{AuthError, caller_is_external, msg_sender};
-use auth_testing_abi::*;
 
-impl AuthTesting for Contract {
+abi Contract {
+    fn is_caller_external() -> bool;
+    fn check_msg_sender(expected_id: Address) -> bool;
+}
+
+impl Contract for Contract {
     fn is_caller_external() -> bool {
         caller_is_external()
     }

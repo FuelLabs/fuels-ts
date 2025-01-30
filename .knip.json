@@ -4,6 +4,7 @@
     "apps/docs/src/guide/types/snippets/numbers/for-u8-u16-and-u32-2.ts"
   ],
   "ignore": [".github/**"],
+  "ignoreBinaries": ["forc"],
   "ignoreDependencies": [
     "fuels",
     "bun",

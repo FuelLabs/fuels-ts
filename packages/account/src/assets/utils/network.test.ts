@@ -24,7 +24,7 @@ describe('Network Utils', () => {
       type: 'ethereum',
       chainId: CHAIN_IDS.eth.sepolia,
       decimals: 18,
-      icon: 'https://cdn.fuel.network/assets/eth.svg',
+      icon: 'https://assets.fuel.network/providers/eth.svg',
       name: 'Ethereum',
       symbol: 'ETH',
     });
@@ -42,7 +42,7 @@ describe('Network Utils', () => {
       chainId: CHAIN_IDS.fuel.testnet,
       decimals: 9,
       assetId: '0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07',
-      icon: 'https://cdn.fuel.network/assets/eth.svg',
+      icon: 'https://assets.fuel.network/providers/eth.svg',
       name: 'Ethereum',
       symbol: 'ETH',
     });
@@ -61,7 +61,7 @@ describe('Network Utils', () => {
       type: 'ethereum',
       chainId: CHAIN_IDS.eth.sepolia,
       decimals: 18,
-      icon: 'https://cdn.fuel.network/assets/eth.svg',
+      icon: 'https://assets.fuel.network/providers/eth.svg',
       name: 'Ethereum',
       symbol: 'ETH',
     });
@@ -76,7 +76,7 @@ describe('Network Utils', () => {
       chainId: CHAIN_IDS.fuel.testnet,
       decimals: 9,
       assetId: '0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07',
-      icon: 'https://cdn.fuel.network/assets/eth.svg',
+      icon: 'https://assets.fuel.network/providers/eth.svg',
       name: 'Ethereum',
       symbol: 'ETH',
     });

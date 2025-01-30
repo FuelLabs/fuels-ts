@@ -32,6 +32,10 @@
     "test": {
       "dependsOn": ["^test", "pretest"],
       "outputLogs": "new-only"
+    },
+    "test:forc": {
+      "dependsOn": ["^test:forc", "build"],
+      "outputLogs": "new-only"
     }
   }
 }
