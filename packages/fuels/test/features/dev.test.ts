@@ -1,6 +1,7 @@
 import { deferPromise } from '@fuel-ts/account';
 import { spawn } from 'child_process';
 import * as chokidar from 'chokidar';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'path';
 import { cwd } from 'process';
 
@@ -80,6 +81,39 @@ describe('dev', () => {
 
     expect(watch).toHaveBeenCalledTimes(2);
     expect(on).toHaveBeenCalledTimes(2);
+  });
+
+  it('exits when build fails', { timeout: 30_000 }, async () => {
+    const mainSw = readFileSync(`${paths.contractsBarDir}/src/main.sw`).toString();
+    const invalidSwayCode = `${mainSw}\nabi `;
+    writeFileSync(`${paths.contractsBarDir}/src/main.sw`, invalidSwayCode);
+
+    await runInit({
+      root: paths.root,
+      output: paths.outputDir,
+      workspace: paths.workspaceDir,
+      fuelCorePort: '0',
+    });
+
+    const devProcess = spawn(`pnpm fuels dev --path ${paths.root}`, {
+      detached: true,
+      shell: 'bash',
+    });
+
+    const data: string[] = [];
+
+    devProcess.stdout?.on('data', (chunk) => {
+      data.push(chunk.toString());
+    });
+
+    await new Promise((resolve) => {
+      devProcess.on('exit', (code) => {
+        expect(code).not.toEqual(0);
+        resolve(undefined);
+      });
+    });
+
+    expect(data.join('')).toContain('forc exited with error code 1');
   });
 
   test('`dev` command can work with ephemeral port 0', { timeout: 25000 }, async () => {
