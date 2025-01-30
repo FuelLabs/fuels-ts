@@ -98,6 +98,12 @@ describe('dev', () => {
     const devProcess = spawn(`pnpm fuels dev --path ${paths.root}`, {
       detached: true,
       shell: 'bash',
+      /**
+       * pnpm fuels dev fails because the test is run in the root directory
+       * and there is no `fuels` dependency in `package.json` there,
+       * so we have to give the spawn a cwd which has `fuels` as a dependency.
+       */
+      cwd: join(cwd(), 'packages/fuel-gauge'),
     });
 
     const data: string[] = [];
