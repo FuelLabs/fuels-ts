@@ -2496,7 +2496,7 @@ describe('Provider', () => {
     } = launched;
 
     const { balances } = await provider.operations.getBalances({
-      first: 10000,
+      first: 100,
       filter: { owner: wallet.address.toB256() },
     });
 
