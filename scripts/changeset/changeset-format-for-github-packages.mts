@@ -53,3 +53,10 @@ const changesetConfig = {
 };
 writeFileSync(CHANGESET_CONFIG_PATH, JSON.stringify(changesetConfig, null, 2));
 execSync(`git add ${CHANGESET_CONFIG_PATH}`);
+
+/**
+ * Add a changeset for the next `fuels` version
+ */
+const output = `---\n"${GITHUB_ORGANIZATION_SCOPE}/fuels": patch\n---\n\nincremental\n`;
+writeFileSync(".changeset/fuel-labs-ci.md", output);
+execSync(`git add .changeset/fuel-labs-ci.md`);

@@ -45,8 +45,6 @@ jobs:
         shell: bash
         run: |
           pnpm changeset:format-for-github-packages
-          pnpm changeset:next
-          git add .changeset/fuel-labs-ci.md
           pnpm changeset version --snapshot pr-${{ github.event.pull_REQUEST.NUMBER }}
           changetsets=$(pnpm changeset publish --tag pr-${{ github.event.pull_REQUEST.NUMBER }})
           published_version=$(echo "$changetsets" | grep -oP '@\K([0-9]+\.){2}[0-9]+-pr-${{ github.event.pull_REQUEST.NUMBER }}-\d+' | head -1)
