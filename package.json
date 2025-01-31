@@ -48,6 +48,7 @@
     "changeset:version-with-docs": "tsx ./scripts/changeset/changeset-version-with-docs",
     "changeset:update-changelog": "tsx ./scripts/changeset/update-changelog.mts",
     "changeset:get-latest-release": "tsx ./scripts/changeset/get-latest-release.mts",
+    "changeset:format-for-github-packages": "tsx ./scripts/changeset/changeset-format-for-github-packages.mts",
     "changeset:dependabot": "./scripts/changeset/dependabot-changeset.sh",
     "release:deprecate": "tsx ./scripts/release-deprecate.ts",
     "forc:update": "tsx ./scripts/forc-update",

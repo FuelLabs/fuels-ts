@@ -17,19 +17,19 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
 
-      - name: Create .npmrc
-        run: |
-          cat << EOF > "$HOME/.npmrc"
-            //npm.pkg.github.com/:_authToken=$NPM_TOKEN
-          EOF
-        env:
-          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: CI Setup
         uses: ./.github/actions/ci-setup
         with:
-          # Disable NPM registry setup
-          registry-url: ""
+          registry-url: "https://npm.pkg.github.com"
+
+      - name: Create .npmrc
+        run: |
+          cat << EOF > "$HOME/.npmrc"
+            //npm.pkg.github.com/:_authToken=$GITHUB_TOKEN
+            @FuelLabs:registry=https://npm.pkg.github.com
+          EOF
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Ensure NPM access
         shell: bash
@@ -44,6 +44,7 @@ jobs:
         id: release
         shell: bash
         run: |
+          pnpm changeset:format-for-github-packages
           pnpm changeset:next
           git add .changeset/fuel-labs-ci.md
           pnpm changeset version --snapshot pr-${{ github.event.pull_REQUEST.NUMBER }}
@@ -51,7 +52,7 @@ jobs:
           published_version=$(echo "$changetsets" | grep -oP '@\K([0-9]+\.){2}[0-9]+-pr-${{ github.event.pull_REQUEST.NUMBER }}-\d+' | head -1)
           echo "published_version=$published_version" >> $GITHUB_OUTPUT
         env:
-          # NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HOME: ${{ github.workspace }}
