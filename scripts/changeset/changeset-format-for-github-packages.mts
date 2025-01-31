@@ -2,6 +2,7 @@ import { execSync } from "child_process";
 import { readFileSync, writeFileSync } from "fs";
 import { globSync } from "glob";
 
+const CHANGESET_CONFIG_PATH = ".changeset/config.json";
 const GITHUB_ORGANIZATION_SCOPE = "@FuelLabs";
 
 const formatPackageJsonContents = (contents: { name: string }) => ({
@@ -39,3 +40,16 @@ globSync("**/package.json")
     // Add the formatted package.json files to the git index
     execSync(`git add ${pkg.path}`);
   });
+
+/**
+ * Update the changeset config to include the FuelLabs organization scope
+ */
+const changesetConfigContents = JSON.parse(
+  readFileSync(CHANGESET_CONFIG_PATH, "utf-8"),
+);
+const changesetConfig = {
+  ...changesetConfigContents,
+  fixed: [[`${GITHUB_ORGANIZATION_SCOPE}/*`]],
+};
+writeFileSync(CHANGESET_CONFIG_PATH, JSON.stringify(changesetConfig, null, 2));
+execSync(`git add ${CHANGESET_CONFIG_PATH}`);
