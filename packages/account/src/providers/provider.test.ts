@@ -2487,4 +2487,23 @@ describe('Provider', () => {
 
     vi.restoreAllMocks();
   });
+
+  it('should ensures getBalances query does not returns pageInfo', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const { balances } = await provider.operations.getBalances({
+      first: 10000,
+      filter: { owner: wallet.address.toB256() },
+    });
+
+    const keys = Object.keys(balances);
+
+    expect(keys.includes('edges')).toBeTruthy();
+
+    expect(keys.includes('pageInfo')).toBeFalsy();
+  });
 });
