@@ -5,20 +5,22 @@ import { globSync } from "glob";
 const CHANGESET_CONFIG_PATH = ".changeset/config.json";
 const GITHUB_ORGANIZATION_SCOPE = "@FuelLabs";
 
+const formatPackageName = (name: string) =>
+  `${GITHUB_ORGANIZATION_SCOPE}/${name.replace("@fuel-ts/", "")}`;
+
 const formatPackageJsonContents = (contents: { name: string }) => ({
   ...contents,
   // We need to add the GitHub organization name to the scope to publish to GitHub
   // We also need to strip off and prefixes (e.g. '@fuel-ts/' -> '')
-  name: `${GITHUB_ORGANIZATION_SCOPE}/${contents.name.replace("@fuel-ts/", "")}`,
+  name: formatPackageName(contents.name),
   // We also need a repository field to publish to GitHub
   repository: "https://github.com/FuelLabs/fuels-ts",
 });
 
 /**
  * Gather all the package.json files to be published
- * and format them to be used to publish to GitHub packages
  */
-globSync("**/package.json")
+const packages = globSync("**/package.json")
   // Read in the package.json file
   .map((fileName) => {
     const packageJson = JSON.parse(readFileSync(fileName, "utf-8"));
@@ -28,8 +30,10 @@ globSync("**/package.json")
     };
   })
   // Filter out private packages
-  .filter((pkg) => !pkg.contents.private)
-  // Format the package contents to be used to publish to GitHub
+  .filter((pkg) => !pkg.contents.private);
+
+// Format the package contents to be used to publish to GitHub
+packages
   .map((pkg) => ({
     path: pkg.path,
     contents: formatPackageJsonContents(pkg.contents),
@@ -53,6 +57,24 @@ const changesetConfig = {
 };
 writeFileSync(CHANGESET_CONFIG_PATH, JSON.stringify(changesetConfig, null, 2));
 execSync(`git add ${CHANGESET_CONFIG_PATH}`);
+
+/**
+ * Update all pre-existing changeset package scopes
+ */
+const packageNames = packages.map((pkg) => pkg.contents.name).join("|");
+const regex = new RegExp(packageNames, "g");
+globSync(".changeset/*.md")
+  .map((fileName) => {
+    const contents = readFileSync(fileName, "utf-8");
+    return {
+      path: fileName,
+      contents,
+    };
+  })
+  .forEach((pkg) => {
+    writeFileSync(pkg.path, pkg.contents.replace(regex, formatPackageName));
+    execSync(`git add ${pkg.path}`);
+  });
 
 /**
  * Add a changeset for the next `fuels` version
