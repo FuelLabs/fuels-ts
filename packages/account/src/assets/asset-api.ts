@@ -69,14 +69,14 @@ export interface AssetInfo {
  * @see {@link https://github.com/FuelLabs/fuel-explorer/wiki/Assets-API#instructions-for-consuming-assets-data-from-indexer-api}
  */
 export const getAssetById = (opts: {
-  url?: string;
   assetId: B256Address;
+  url?: string;
 }): Promise<AssetInfo | null> => {
   const { url = MAINNET_ASSET_API_URL, assetId } = opts;
   return request<AssetInfo>(url, `/assets/${assetId}`);
 };
 
-export interface AssetsByOwnerResponse {
+export interface AssetsByOwner {
   data: AssetInfo[];
   pageInfo: AssetPageInfo;
 }
@@ -85,20 +85,27 @@ export interface AssetsByOwnerResponse {
  * Get assets by owner
  *
  * @param opts - The options for the request
- * @param opts.url {string} - The Base URL of the explorer API (default: `MAINNET_ASSET_API_URL`)
  * @param opts.owner {B256Address} - The owner of the assets
+ * @param opts.url {string} - The Base URL of the explorer API (default: `MAINNET_ASSET_API_URL`)
  * @param opts.pagination {AssetPaginationOptions} - The pagination options (default: 10)
  * @returns {Promise<AssetsByOwnerResponse>} - The assets by owner
  *
  * @see {@link https://github.com/FuelLabs/fuel-explorer/wiki/Assets-API#instructions-for-consuming-assets-data-owned-by-an-account-from-indexer-api}
  */
-export const getAssetsByOwner = (opts: {
-  url?: string;
+export const getAssetsByOwner = async (opts: {
   owner: B256Address;
+  url?: string;
   pagination?: AssetPaginationOptions;
-}): Promise<AssetsByOwnerResponse | null> => {
+}): Promise<AssetsByOwner> => {
   const { url = MAINNET_ASSET_API_URL, owner, pagination = { last: 10 } } = opts;
   const { last } = pagination;
   const queryString = buildQueryString({ last });
-  return request<AssetsByOwnerResponse>(url, `/accounts/${owner}/assets${queryString}`);
+  const response = await request<AssetsByOwner>(url, `/accounts/${owner}/assets${queryString}`);
+
+  // If the response is not valid JSON, return an empty array
+  if (!response) {
+    return { data: [], pageInfo: { count: 0 } };
+  }
+
+  return response;
 };

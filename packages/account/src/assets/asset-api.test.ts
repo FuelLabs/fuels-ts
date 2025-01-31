@@ -132,9 +132,24 @@ describe('Asset API', () => {
         owner: MOCK_NFT_ASSET.owner,
       });
 
-      expect(response?.data).toEqual([MOCK_NFT_ASSET]);
-      expect(response?.pageInfo).toEqual({
+      expect(response.data).toEqual([MOCK_NFT_ASSET]);
+      expect(response.pageInfo).toEqual({
         count: 1,
+      })
+    });
+
+    it('should return response if no owner is found', async () => {
+      const { json } = mockFetch();
+      // The API returns a 200 status code but the response is not valid JSON
+      json.mockRejectedValueOnce(null);
+
+      const response = await getAssetsByOwner({
+        owner: '0x0000000000000000000000000000000000000000000000000000000000000000'
+      });
+
+      expect(response.data).toEqual([]);
+      expect(response.pageInfo).toEqual({
+        count: 0,
       })
     });
   })
