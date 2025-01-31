@@ -6,7 +6,7 @@ const assets: AssetsByOwner = await getAssetsByOwner({
   owner: '0x0000000000000000000000000000000000000000000000000000000000000000',
 });
 
-console.log(assets);
+console.log('AssetsByOwner', assets);
 // AssetsByOwner { data: [], pageInfo: { count: 0 } }
 // #endregion full
 
