@@ -1,5 +1,5 @@
 import { MOCK_ASSET_INFO_BY_OWNER, MOCK_BASE_ASSET, MOCK_FUEL_ASSET, MOCK_NFT_ASSET } from "../../test/fixtures/assets";
-import { getAssetById, TESTNET_ASSET_API_URL, getAssetsByOwner, MAINNET_ASSET_API_URL, AssetInfo } from "./asset-api";
+import { getAssetById, getAssetsByOwner, AssetInfo } from "./asset-api";
 
 const mockFetch = () => {
   const jsonResponse = vi.fn();
@@ -93,7 +93,7 @@ describe('Asset API', () => {
 
         owner: expect.any(String),
         amount: expect.any(String),
-        amountInUsd: expect.nullOrAny(String),
+        amountInUsd: null,
         uri: expect.any(String),
       }
 
