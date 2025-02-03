@@ -31,8 +31,6 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
-          # Make sure the value of GITHUB_TOKEN will not be persisted in repo's config
-          persist-credentials: false
 
       - name: CI Setup
         uses: ./.github/actions/ci-setup
@@ -46,7 +44,7 @@ jobs:
           echo "FORC_VERSION=$(cat ./internal/forc/VERSION)" >> $GITHUB_ENV
           git reset --hard
         env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Ensure NPM access
         run: npm whoami
@@ -68,7 +66,7 @@ jobs:
           pnpm add --global semver
           echo "RELEASE_VERSION_HIGHER_THAN_LATEST=$(semver $LATEST_RELEASE $RELEASE_VERSION | tail -n1 | grep ${RELEASE_VERSION#v} --silent && echo true || echo false)" >> $GITHUB_ENV
         env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
@@ -82,13 +80,13 @@ jobs:
           githubReleaseName: ${{ env.RELEASE_VERSION }}
           githubTagName: ${{ env.RELEASE_VERSION }}
         env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Prettify changelog
         run: pnpm changeset:update-changelog
         env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_TAG: ${{ env.RELEASE_VERSION }}
           PUBLISHED: ${{ steps.changesets.outputs.published }}
           REF_NAME: ${{ github.ref_name }}
@@ -118,7 +116,7 @@ jobs:
           pnpm changeset publish --tag next
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # ensure docs are always deployed after merge of changeset PR
       - name: Get the last commit message and set env vars
@@ -151,7 +149,7 @@ jobs:
 
           gh pr create -B master -H $GITHUB_REF_NAME --title "$PR_TITLE" --body "$PR_BODY"
         env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
           LATEST_VERSION: ${{ env.LATEST_VERSION }}
 
@@ -161,7 +159,7 @@ jobs:
         if: steps.changesets.outputs.published == 'true' && startsWith(github.ref_name, 'release/') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'false'
         run: git push origin --delete ${{ github.ref_name }}
         env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Upload assets to S3
       - uses: unfor19/install-aws-cli-action@v1.0.7
