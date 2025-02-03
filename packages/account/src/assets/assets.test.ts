@@ -3,7 +3,7 @@
  * @group browser
  */
 describe('assets', async () => {
-  const { rawAssets, assets } = (await import('./assets'));
+  const { rawAssets, assets } = await import('./assets');
 
   it.each(rawAssets)('$symbol should have icon not resolved to URL', ({ icon }) => {
     expect(icon).not.toContain('/');
