@@ -1,8 +1,10 @@
 import { B256Address } from "@fuel-ts/address";
 import { NetworkEthereum, NetworkFuel } from "./types";
 
-export const MAINNET_ASSET_API_URL = 'https://mainnet-explorer.fuel.network'
-export const TESTNET_ASSET_API_URL = 'https://testnet-explorer.fuel.network'
+const networks = {
+  mainnet: 'https://mainnet-explorer.fuel.network',
+  testnet: 'https://explorer-indexer-testnet.fuel.network',
+} as const;
 
 export interface AssetPaginationOptions {
   last: number;
@@ -62,7 +64,7 @@ export interface AssetInfo {
  * Get information about any asset (including NFTs)
  *
  * @param opts - The options for the request
- * @param opts.url {string} - The Base URL of the explorer API (default: `MAINNET_ASSET_API_URL`)
+ * @param opts.network {'mainnet' | 'testnet'} - The network to use (default: `mainnet`)
  * @param opts.assetId {string} - The ID of the asset to get information about
  * @returns {Promise<AssetInfo>} - The information about the asset
  *
@@ -70,9 +72,10 @@ export interface AssetInfo {
  */
 export const getAssetById = (opts: {
   assetId: B256Address;
-  url?: string;
+  network?: keyof typeof networks;
 }): Promise<AssetInfo | null> => {
-  const { url = MAINNET_ASSET_API_URL, assetId } = opts;
+  const { network = 'mainnet', assetId } = opts;
+  const url = networks[network];
   return request<AssetInfo>(url, `/assets/${assetId}`);
 };
 
@@ -86,7 +89,7 @@ export interface AssetsByOwner {
  *
  * @param opts - The options for the request
  * @param opts.owner {B256Address} - The owner of the assets
- * @param opts.url {string} - The Base URL of the explorer API (default: `MAINNET_ASSET_API_URL`)
+ * @param opts.network {'mainnet' | 'testnet'} - The network to use (default: `mainnet`)
  * @param opts.pagination {AssetPaginationOptions} - The pagination options (default: 10)
  * @returns {Promise<AssetsByOwnerResponse>} - The assets by owner
  *
@@ -94,10 +97,11 @@ export interface AssetsByOwner {
  */
 export const getAssetsByOwner = async (opts: {
   owner: B256Address;
-  url?: string;
+  network?: keyof typeof networks;
   pagination?: AssetPaginationOptions;
 }): Promise<AssetsByOwner> => {
-  const { url = MAINNET_ASSET_API_URL, owner, pagination = { last: 10 } } = opts;
+  const { network = 'mainnet', owner, pagination = { last: 10 } } = opts;
+  const url = networks[network];
   const { last } = pagination;
   const queryString = buildQueryString({ last });
   const response = await request<AssetsByOwner>(url, `/accounts/${owner}/assets${queryString}`);

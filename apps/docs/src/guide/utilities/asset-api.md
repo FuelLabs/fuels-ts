@@ -15,7 +15,7 @@ We can request information about an asset by its asset ID, using the `getAssetBy
 
 <<< @./snippets/asset-api/asset-by-id.ts#full{ts:line-numbers}
 
-By default, we will request the asset information for Mainnet. If you want to request the asset information for Testnet, you can pass the `url` parameter (this is the same for the [`getAssetsByOwner`](#assets-by-owner) function).
+By default, we will request the asset information for `mainnet`. If you want to request the asset information from other networks, you can pass the `network` parameter (this is the same for the [`getAssetsByOwner`](#assets-by-owner) function).
 
 <<< @./snippets/asset-api/asset-by-id.ts#testnet{ts:line-numbers}
 

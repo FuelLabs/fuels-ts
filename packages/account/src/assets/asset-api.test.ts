@@ -110,6 +110,24 @@ describe('Asset API', () => {
       expect(Object.keys(assetInfo).sort()).toEqual(Object.keys(expected).sort())
     });
 
+    it('should use the correct network [mainnet]', async () => {
+      const { fetch } = mockFetch();
+      const assetId = '0x0000000000000000000000000000000000000000000000000000000000000000';
+
+      await getAssetById({ assetId });
+
+      expect(fetch.mock.calls[0][0]).toMatch(`https://mainnet-explorer.fuel.network/assets/${assetId}`);
+    });
+
+    it('should use the correct network [testnet]', async () => {
+      const { fetch } = mockFetch();
+      const assetId = '0x0000000000000000000000000000000000000000000000000000000000000000';
+
+      await getAssetById({ assetId, network: 'testnet' });
+
+      expect(fetch.mock.calls[0][0]).toMatch(`https://explorer-indexer-testnet.fuel.network/assets/${assetId}`);
+    });
+
     it('should return null if asset not found', async () => {
       const { json } = mockFetch();
       // The API returns a 200 status code but the response is not valid JSON
@@ -136,6 +154,25 @@ describe('Asset API', () => {
       expect(response.pageInfo).toEqual({
         count: 1,
       })
+    });
+
+
+    it('should use the correct network [mainnet]', async () => {
+      const { fetch } = mockFetch();
+      const owner = '0x0000000000000000000000000000000000000000000000000000000000000000';
+
+      await getAssetsByOwner({ owner });
+
+      expect(fetch.mock.calls[0][0]).toMatch(`https://mainnet-explorer.fuel.network/accounts/${owner}/assets`);
+    });
+
+    it('should use the correct network [testnet]', async () => {
+      const { fetch } = mockFetch();
+      const owner = '0x0000000000000000000000000000000000000000000000000000000000000000';
+
+      await getAssetsByOwner({ owner, network: 'testnet' });
+
+      expect(fetch.mock.calls[0][0]).toMatch(`https://explorer-indexer-testnet.fuel.network/accounts/${owner}/assets`);
     });
 
     it('should return response if no owner is found', async () => {
