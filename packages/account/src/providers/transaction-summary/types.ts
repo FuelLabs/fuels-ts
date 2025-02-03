@@ -198,5 +198,4 @@ export type TransactionSummary<TTransactionType = void> = {
   date?: Date;
   receipts: TransactionResultReceipt[];
   transaction: Transaction<TTransactionType>;
-  michaelJackson: string;
 };
