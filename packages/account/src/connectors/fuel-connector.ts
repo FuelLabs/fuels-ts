@@ -2,8 +2,8 @@
 import { FuelError } from '@fuel-ts/errors';
 import { EventEmitter } from 'events';
 
+import type { Asset } from '../assets/types';
 import type { TransactionRequestLike } from '../providers';
-import type { Asset } from '../providers/assets/types';
 
 import { FuelConnectorEventTypes } from './types';
 import type {

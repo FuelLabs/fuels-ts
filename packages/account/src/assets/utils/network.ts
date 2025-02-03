@@ -1,13 +1,17 @@
-import { CHAIN_IDS } from '../../chains';
+import { CHAIN_IDS } from '../../providers/chains';
 import type { Asset, AssetEth, AssetFuel, NetworkEthereum, NetworkFuel } from '../types';
 
 type Network = NetworkEthereum | NetworkFuel;
 export type NetworkTypes = NetworkEthereum['type'] | NetworkFuel['type'];
-type NetworkTypeToNetwork<T> = T extends 'ethereum' ? NetworkEthereum : T extends 'fuel' ? NetworkFuel : Network;
+type NetworkTypeToNetwork<T> = T extends 'ethereum'
+  ? NetworkEthereum
+  : T extends 'fuel'
+    ? NetworkFuel
+    : Network;
 
 /**
  * Returns the default chainId for the given network
-*/
+ */
 export const getDefaultChainId = (networkType: NetworkTypes): number | undefined => {
   if (networkType === 'ethereum') {
     return CHAIN_IDS.eth.sepolia;
@@ -28,7 +32,7 @@ export type GetAssetNetworkParams<T extends NetworkTypes | undefined> = {
 /**
  * Returns the asset's network on the given network
  * eg. getAssetNetwork({ asset, chainId: 1, networkType: 'ethereum' }) will return the asset's details on Ethereum mainnet
-*/
+ */
 export const getAssetNetwork = <T extends NetworkTypes | undefined>({
   asset,
   chainId,
@@ -42,14 +46,15 @@ export const getAssetNetwork = <T extends NetworkTypes | undefined>({
 };
 
 /**
- * Returns the asset's details on the given network alongwith the asset itself
+ * Returns the asset's details on the given network along with the asset itself
  * eg. getAssetWithNetwork({ asset, chainId: 1, networkType: 'ethereum' }) will return the asset's details on Ethereum mainnet and the asset itself
-*/
+ */
 export const getAssetWithNetwork = <T extends NetworkTypes>({
   asset,
   chainId,
   networkType,
 }: GetAssetNetworkParams<T>): AssetEth | AssetFuel | undefined => {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   const { networks: _, ...assetRest } = asset;
 
   const chainIdToUse = chainId ?? getDefaultChainId(networkType);
@@ -76,7 +81,7 @@ export const getAssetWithNetwork = <T extends NetworkTypes>({
 
 /**
  * Returns the asset's details on Ethereum
-*/
+ */
 export const getAssetEth = (asset: Asset, chainId?: number): AssetEth | undefined =>
   getAssetWithNetwork({
     asset,
@@ -86,7 +91,7 @@ export const getAssetEth = (asset: Asset, chainId?: number): AssetEth | undefine
 
 /**
  * Returns the asset's details on Fuel
-*/
+ */
 export const getAssetFuel = (asset: Asset, chainId?: number): AssetFuel | undefined =>
   getAssetWithNetwork({
     asset,

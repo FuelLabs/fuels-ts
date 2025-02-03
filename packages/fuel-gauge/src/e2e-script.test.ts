@@ -219,7 +219,7 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
     const expectedBaseAsset = [
       {
         ...expectedRawBaseAsset[0],
-        icon: 'https://cdn.fuel.network/assets/eth.svg',
+        icon: 'https://assets.fuel.network/providers/eth.svg',
       },
     ];
 

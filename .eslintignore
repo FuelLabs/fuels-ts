@@ -18,7 +18,7 @@ apps/docs/src/**/*.test.ts
 packages/recipes/src
 packages/fuels/test/fixtures/project
 packages/account/src/providers/__generated__
-packages/account/src/providers/assets
+packages/account/src/assets
 
 out
 CHANGELOG.md
