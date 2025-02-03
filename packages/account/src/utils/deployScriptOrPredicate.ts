@@ -1,6 +1,5 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
-import { hash } from '@fuel-ts/hasher';
 import { bn } from '@fuel-ts/math';
 import { arrayify } from '@fuel-ts/utils';
 
@@ -8,7 +7,8 @@ import type { Account } from '../account';
 import { BlobTransactionRequest, calculateGasFee, TransactionStatus } from '../providers';
 
 import {
-  getConfigurableOffset,
+  getBytecodeConfigurableOffset,
+  getBytecodeId,
   getPredicateScriptLoaderInstructions,
 } from './predicate-script-loader-instructions';
 
@@ -63,11 +63,10 @@ export async function deployScriptOrPredicate<T>({
   abi,
   loaderInstanceCallback,
 }: Deployer<T>) {
-  const configurableOffset = getConfigurableOffset(arrayify(bytecode));
-  const byteCodeWithoutConfigurableSection = bytecode.slice(0, configurableOffset);
+  const blobId = getBytecodeId(arrayify(bytecode));
 
-  // Generate the associated create tx for the loader contract
-  const blobId = hash(byteCodeWithoutConfigurableSection);
+  const configurableOffset = getBytecodeConfigurableOffset(arrayify(bytecode));
+  const byteCodeWithoutConfigurableSection = bytecode.slice(0, configurableOffset);
 
   const blobTxRequest = new BlobTransactionRequest({
     blobId,
