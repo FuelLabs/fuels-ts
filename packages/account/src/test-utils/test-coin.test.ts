@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { Coin } from '@fuel-ts/account';
-import { bn } from '@fuel-ts/math';
+import { type Coin } from '@fuel-ts/account';
+import { bn, type BN } from '@fuel-ts/math';
 import { getRandomB256 } from '@fuel-ts/crypto';
 
 import { TestCoin } from './TestCoin';
@@ -9,8 +9,9 @@ import { TestCoin } from './TestCoin';
  * @group node
  */
 describe('TestCoin', () => {
-  test('create() returns coin with default values', () => {
-    const coin = TestCoin.create();
+  test('constructor creates coin with default values', () => {
+    const testCoin = new TestCoin();
+    const coin = testCoin.toCoin();
 
     expect(coin.id).toBeDefined();
     expect(coin.id).toMatch(/^0x[a-f0-9]{64}$/);
@@ -21,20 +22,21 @@ describe('TestCoin', () => {
     expect(coin.type).toBe(0);
   });
 
-  test('create() accepts custom values', () => {
-    const customCoin: Partial<Coin> = {
+  test('constructor accepts custom values', () => {
+    const customParams = {
       id: getRandomB256(),
       owner: getRandomB256(),
       amount: bn(500),
       type: 1,
     };
 
-    const coin = TestCoin.create(customCoin);
+    const testCoin = new TestCoin(customParams);
+    const coin = testCoin.toCoin();
 
-    expect(coin.id).toBe(customCoin.id);
-    expect(coin.owner).toBe(customCoin.owner);
-    expect(coin.amount).toBe(customCoin.amount);
-    expect(coin.type).toBe(customCoin.type);
+    expect(coin.id).toBe(customParams.id);
+    expect(coin.owner).toBe(customParams.owner);
+    expect(coin.amount).toBe(customParams.amount);
+    expect(coin.type).toBe(customParams.type);
   });
 
   test('many() creates specified number of coins', () => {
@@ -47,7 +49,7 @@ describe('TestCoin', () => {
   });
 
   test('many() applies same base parameters to all coins', () => {
-    const baseParams: Partial<Coin> = {
+    const baseParams = {
       owner: getRandomB256(),
       amount: bn(1000),
       type: 2,
