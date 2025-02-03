@@ -7,6 +7,12 @@
   "ignorePatterns": [
     {
       "pattern": "^http://localhost:3000"
+    },
+    {
+      "pattern": "https://mainnet-explorer.fuel.network"
+    },
+    {
+      "pattern": "https://explorer-indexer-testnet.fuel.network"
     }
   ]
 }
