@@ -1,25 +1,51 @@
 import { Coin } from '@fuel-ts/account';
-import { bn } from '@fuel-ts/math';
+import { bn, type BN } from '@fuel-ts/math';
 import { getRandomB256 } from '@fuel-ts/crypto';
 
+interface TestCoinSpecs {
+  id: string;
+  owner: string;
+  amount: BN;
+  type: number;
+}
+
 export class TestCoin {
+  public readonly id: string;
+  public readonly owner: string;
+  public readonly amount: BN;
+  public readonly type: number;
+
   /**
-   * Creates a single test coin with given parameters
+   * A helper class to create coins for testing purposes.
    */
-  static create(params: Partial<Coin> = {}): Coin {
+  constructor({
+    id = getRandomB256(),
+    owner = getRandomB256(),
+    amount = bn(1000000),
+    type = 0,
+  }: Partial<TestCoinSpecs> = {}) {
+    this.id = id;
+    this.owner = owner;
+    this.amount = amount;
+    this.type = type;
+  }
+
+  /**
+   * Creates a chain-compatible coin object
+   */
+  toCoin(): Coin {
     return {
-      id: params.id || getRandomB256(),
-      owner: params.owner || getRandomB256(),
-      amount: params.amount || bn(1000000),
-      type: params.type || 0,
-      ...params
+      id: this.id,
+      owner: this.owner,
+      amount: this.amount,
+      type: this.type,
     };
   }
 
   /**
-   * Generates an array of test coins with the same base parameters
+   * Creates multiple test coins with the same base parameters
    */
-  static many(params: Partial<Coin> = {}, count = 1): Coin[] {
-    return Array.from({ length: count }, () => TestCoin.create(params));
+  static many(params: Partial<TestCoinSpecs> = {}, count = 1): Coin[] {
+    return Array.from({ length: count }, () => new TestCoin(params).toCoin());
   }
 }
