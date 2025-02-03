@@ -17,26 +17,10 @@ jobs:
     if: github.actor  == 'dependabot[bot]'
 
     steps:
-      - name: Create GitHub App Token
-        uses: actions/create-github-app-token@v1
-        id: app-token
-        with:
-          app-id: ${{ vars.APP_ID }}
-          private-key: ${{ secrets.PRIVATE_KEY }}
-
-      - name: Configure GitHub user
-        id: github-user
-        run: |
-          echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
-          echo "user-name=${{ steps.app-token.outputs.app-slug }}[bot]" >> "$GITHUB_OUTPUT"
-          echo "user-email=${{ steps.github-user.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com" >> "$GITHUB_OUTPUT"
-
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.event.client_payload.ref }}
-          # Make sure the value of GITHUB_TOKEN will not be persisted in repo's config
-          persist-credentials: false
 
       - name: Get PR's changeset file
         run: |
@@ -63,20 +47,20 @@ jobs:
         if: env.CHANGESET_FILE == ''
         run: |
           echo "machine github.com" > $HOME/.netrc
-          echo "login ${{ steps.github-user.outputs.user-name }}" >> $HOME/.netrc
-          echo "password ${{ steps.app-token.outputs.token }}" >> $HOME/.netrc
+          echo "login github-actions[bot]" >> $HOME/.netrc
+          echo "password ${{ secrets.GITHUB_TOKEN }}" >> $HOME/.netrc
           chmod 600 $HOME/.netrc
 
       - name: Commit Changeset
         if: env.CHANGESET_FILE == ''
         run: |
-          git config user.email '${{ steps.github-user.outputs.user-email }}'
-          git config user.name '${{ steps.github-user.outputs.user-name }}'
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
           git add .
           git commit -m "build: update dependency changeset"
           git push origin HEAD:${{ github.event.pull_request.head.ref }}
         env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   validate-changeset:
     name: Validate PR Changeset
