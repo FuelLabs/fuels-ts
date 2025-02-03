@@ -19,6 +19,8 @@ export type Paths = {
   contractsDir: string;
   contractsFooDir: string;
   scriptsDir: string;
+  scriptDir: string;
+  predicatesDir: string;
   predicateDir: string;
   fooContractMainPath: string;
   fuelsConfigPath: string;
@@ -48,7 +50,10 @@ export function bootstrapProject(testFilepath: string) {
   const upgradableChunkedContractPath = join(contractsDir, 'upgradable-chunked');
 
   const scriptsDir = join(workspaceDir, 'scripts');
-  const predicateDir = join(workspaceDir, 'predicates');
+  const scriptDir = join(scriptsDir, 'script');
+
+  const predicatesDir = join(workspaceDir, 'predicates');
+  const predicateDir = join(predicatesDir, 'predicate');
 
   const outputDir = join(root, 'output');
   const outputContractsDir = join(outputDir, 'contracts');
@@ -68,6 +73,8 @@ export function bootstrapProject(testFilepath: string) {
     upgradableContractPath,
     upgradableChunkedContractPath,
     scriptsDir,
+    scriptDir,
+    predicatesDir,
     predicateDir,
     fooContractMainPath,
     fuelsConfigPath,

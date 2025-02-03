@@ -1,9 +1,9 @@
 import { FuelError } from '@fuel-ts/errors';
 import { type Command } from 'commander';
 import { existsSync, writeFileSync } from 'fs';
-import { globSync } from 'glob';
 import { join, relative, resolve } from 'path';
 
+import { findPrograms } from '../../config/forcUtils';
 import { renderFuelsConfigTemplate } from '../../templates/fuels.config';
 import { log } from '../../utils/logger';
 
@@ -25,13 +25,18 @@ export function init(program: Command) {
 
   const [contracts, scripts, predicates] = ['contracts', 'scripts', 'predicates'].map(
     (optionName) => {
-      const pathOrGlob: string = options[optionName];
-      if (!pathOrGlob) {
+      const pathsOrGlobs: string[] = options[optionName];
+      if (!pathsOrGlobs) {
         return undefined;
       }
-      const expanded = globSync(pathOrGlob, { cwd: path });
-      const relatives = expanded.map((e) => relative(path, e));
-      return relatives;
+
+      const selectedSwayType = optionName.slice(0, -1);
+
+      const programs = pathsOrGlobs.flatMap((pathOrGlob) => findPrograms(pathOrGlob));
+      const programDirs = programs
+        .filter(({ swayType }) => swayType === selectedSwayType)
+        .map(({ path: programPath }) => relative(path, programPath));
+      return programDirs;
     }
   );
 

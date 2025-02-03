@@ -1,7 +1,8 @@
 import { FuelError } from '@fuel-ts/errors';
 import { readFileSync, existsSync, writeFileSync } from 'fs';
+import { globSync } from 'glob';
 import camelCase from 'lodash.camelcase';
-import { join } from 'path';
+import { dirname, join } from 'path';
 import toml from 'toml';
 
 import type { FuelsConfig } from '../types';
@@ -151,4 +152,19 @@ export function getABIPaths(paths: string[], config: FuelsConfig) {
 export const getStorageSlotsPath = (contractPath: string, { buildMode }: FuelsConfig) => {
   const projectName = getContractName(contractPath);
   return join(contractPath, `/out/${buildMode}/${projectName}-storage_slots.json`);
+};
+
+export const findPrograms = (pathOrGlob: string) => {
+  const pathWithoutGlob = pathOrGlob.replace(/[/][*]*$/, '');
+  const allTomlPaths = globSync(`${pathWithoutGlob}/**/*.toml`);
+
+  return (
+    allTomlPaths
+      // Filter out the workspace
+      .map((path) => ({ path, isWorkspace: readForcToml(path).workspace !== undefined }))
+      .filter(({ isWorkspace }) => !isWorkspace)
+      // Parse the sway type and filter out the library
+      .map(({ path }) => ({ path: dirname(path), swayType: readSwayType(dirname(path)) }))
+      .filter(({ swayType }) => swayType !== SwayType.library)
+  );
 };

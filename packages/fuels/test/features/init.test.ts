@@ -47,7 +47,7 @@ describe('init', () => {
     });
   });
 
-  it('should run `init` command with --contracts [absolute path]', async () => {
+  it('should run `init` command with --contracts [absolute paths]', async () => {
     await runInit({
       root: paths.root,
       contracts: [paths.contractsBarDir, paths.contractsFooDir],
@@ -110,7 +110,7 @@ describe('init', () => {
   it('should run `init` command with --predicates', async () => {
     await runInit({
       root: paths.root,
-      predicates: paths.predicateDir,
+      predicates: paths.predicatesDir,
       output: paths.outputDir,
     });
 
@@ -131,7 +131,7 @@ describe('init', () => {
       output: paths.outputDir,
     });
 
-    const relativeScriptDir = paths.scriptsDir.replace(paths.workspaceDir, 'workspace');
+    const relativeScriptDir = paths.scriptDir.replace(paths.workspaceDir, 'workspace');
 
     expect(existsSync(paths.fuelsConfigPath)).toBeTruthy();
     const fuelsConfig = await loadFuelsConfig(paths.fuelsConfigPath);
