@@ -1,4 +1,4 @@
-# Querying the Asset API
+# Asset API
 
 The Asset API is a RESTful API that allows you to query the assets on the Fuel blockchain. We allow for querying the Asset API on both the Mainnet and Testnet.
 
