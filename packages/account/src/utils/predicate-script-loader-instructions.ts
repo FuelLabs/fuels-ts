@@ -35,7 +35,11 @@ export function getBytecodeConfigurableOffset(bytecode: Uint8Array): number {
 }
 
 /**
- * Takes bytecode and generates it's associated bytecode ID
+ * Takes bytecode and generates it's associated bytecode ID.
+ *
+ * The bytecode ID is a hash of the bytecode when sliced at the configurable offset. This
+ * superseded legacy blob IDs when uploading blobs for scripts and predicates so that
+ * the bytecode ID is equal to the legacy blob ID. Therefore blobs can be used for ABI verification.
  *
  * @param bytecode - The bytecode to get the id from
  * @returns The id of the bytecode
@@ -48,7 +52,9 @@ export function getBytecodeId(bytecode: Uint8Array): string {
 }
 
 /**
- * Takes bytecode and generates it's associated legacy blob ID
+ * Takes bytecode and generates it's associated legacy blob ID.
+ *
+ * The legacy blob ID is a hash of the bytecode when sliced at the data section offset.
  *
  * @param bytecode - The bytecode to get the id from
  * @returns The id of the bytecode
