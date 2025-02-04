@@ -29,12 +29,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Ensure NPM access
-      #   shell: bash
-      #   run: npm whoami --registry=https://npm.pkg.github.com
-      #   env:
-      #     NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Build
         run: pnpm build
 
