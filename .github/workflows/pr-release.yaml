@@ -19,8 +19,8 @@ jobs:
 
       - name: CI Setup
         uses: ./.github/actions/ci-setup
-        with:
-          registry-url: "https://npm.pkg.github.com"
+        # with:
+        #   registry-url: "https://npm.pkg.github.com"
 
       - name: Create .npmrc
         run: |
@@ -29,6 +29,7 @@ jobs:
             @FuelLabs:registry=https://npm.pkg.github.com
           EOF
         env:
+          HOME: ${{ github.workspace }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build
