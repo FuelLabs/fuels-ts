@@ -1,5 +1,57 @@
 # @fuel-ts/utils
 
+## 0.98.0
+
+### Patch Changes
+
+- 12e801e: chore: dependency pinning and auditing
+- 0b4c3ab: chore!: redistributed the `@fuel-ts/interfaces` package
+- Updated dependencies [12e801e]
+- Updated dependencies [04ca73e]
+- Updated dependencies [4ccc628]
+- Updated dependencies [08a31d8]
+- Updated dependencies [0b4c3ab]
+  - @fuel-ts/versions@0.98.0
+  - @fuel-ts/math@0.98.0
+  - @fuel-ts/errors@0.98.0
+
+## 0.97.2
+
+### Patch Changes
+
+- 0970bc4: fix: Vitest matcher integration
+- 896bf5b: chore: integrate vitest matchers globally
+- ebe5ecd: chore: update internally used chain config
+- Updated dependencies [5ec254d]
+  - @fuel-ts/versions@0.97.2
+  - @fuel-ts/errors@0.97.2
+  - @fuel-ts/math@0.97.2
+  - @fuel-ts/interfaces@0.97.2
+
+## 0.97.1
+
+### Patch Changes
+
+- Updated dependencies [c904a98]
+- Updated dependencies [27e8808]
+- Updated dependencies [165c49c]
+  - @fuel-ts/math@0.97.1
+  - @fuel-ts/interfaces@0.97.1
+  - @fuel-ts/errors@0.97.1
+  - @fuel-ts/versions@0.97.1
+
+## 0.97.0
+
+### Patch Changes
+
+- Updated dependencies [9dba357]
+- Updated dependencies [4e057d5]
+- Updated dependencies [7c162de]
+  - @fuel-ts/versions@0.97.0
+  - @fuel-ts/errors@0.97.0
+  - @fuel-ts/math@0.97.0
+  - @fuel-ts/interfaces@0.97.0
+
 ## 0.96.1
 
 ### Patch Changes

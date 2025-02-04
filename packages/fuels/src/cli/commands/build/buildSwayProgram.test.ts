@@ -56,7 +56,7 @@ describe('buildSwayPrograms', () => {
 
   test('logs to console when logging is enabled', async () => {
     const { spawn } = mockAll();
-    const logSpy = vi.spyOn(console, 'log');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
     configureLogging({ isLoggingEnabled: true, isDebugEnabled: false });
 
@@ -70,7 +70,7 @@ describe('buildSwayPrograms', () => {
 
   test('logs debug to console when debug is enabled', async () => {
     const { spawn } = mockAll();
-    const logSpy = vi.spyOn(console, 'log');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     configureLogging({ isLoggingEnabled: true, isDebugEnabled: true });
 
     await buildSwayProgram(fuelsConfig, '/any/workspace/path');

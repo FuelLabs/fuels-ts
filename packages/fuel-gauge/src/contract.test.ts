@@ -10,14 +10,24 @@ import {
   transactionRequestify,
   Wallet,
   ContractFactory,
-  Predicate,
   PolicyType,
   buildFunctionResult,
   ReceiptType,
 } from 'fuels';
-import type { ReceiptMessageOut, ScriptTransactionRequest, TransferParams } from 'fuels';
-import { expectToThrowFuelError, ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
-import type { DeployContractConfig } from 'fuels/test-utils';
+import type {
+  ContractTransferParams,
+  ReceiptMessageOut,
+  ReceiptTransfer,
+  ScriptTransactionRequest,
+  TransferParams,
+} from 'fuels';
+import {
+  expectToThrowFuelError,
+  ASSET_A,
+  ASSET_B,
+  launchTestNode,
+  TestAssetId,
+} from 'fuels/test-utils';
 
 import {
   CallTestContract,
@@ -25,28 +35,20 @@ import {
   SmoContractFactory,
   StorageTestContract,
   StorageTestContractFactory,
+  VoidFactory,
 } from '../test/typegen/contracts';
 import { PredicateTrue } from '../test/typegen/predicates/PredicateTrue';
 
 import { launchTestContract } from './utils';
 
-const contractsConfigs: DeployContractConfig[] = [
-  {
-    factory: CallTestContractFactory,
-  },
-  {
-    factory: CallTestContractFactory,
-  },
-];
+const contractsConfigs = [CallTestContractFactory, CallTestContractFactory];
 
 const txPointer = '0x00000000000000000000000000000000';
 
 const AltToken = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
 function setupTestContract() {
-  return launchTestContract({
-    factory: CallTestContractFactory,
-  });
+  return launchTestContract(CallTestContractFactory);
 }
 
 /**
@@ -63,7 +65,7 @@ describe('Contract', () => {
     expect(contract.provider).toEqual(provider);
   });
 
-  it('should executes a contract call just nice', async () => {
+  it('should executes a contract call just fine', async () => {
     using contract = await setupTestContract();
 
     const numberToSend = 1336;
@@ -309,7 +311,7 @@ describe('Contract', () => {
     const { waitForResult } = await contract
       .multiCall([
         contract.functions.return_context_amount().callParams({
-          forward: [100, contract.provider.getBaseAssetId()],
+          forward: [100, await contract.provider.getBaseAssetId()],
         }),
         contract.functions.return_context_amount().callParams({
           forward: [200, AltToken],
@@ -335,7 +337,7 @@ describe('Contract', () => {
       contract
         .multiCall([
           contract.functions.return_context_amount().callParams({
-            forward: [100, contract.provider.getBaseAssetId()],
+            forward: [100, await contract.provider.getBaseAssetId()],
             gasLimit: 100,
           }),
           contract.functions.return_context_amount().callParams({
@@ -386,7 +388,7 @@ describe('Contract', () => {
 
     const invocationScope = contract.multiCall([
       contract.functions.return_context_amount().callParams({
-        forward: [100, contract.provider.getBaseAssetId()],
+        forward: [100, await contract.provider.getBaseAssetId()],
       }),
       contract.functions.return_context_amount().callParams({
         forward: [200, AltToken],
@@ -411,7 +413,7 @@ describe('Contract', () => {
     using contract = await setupTestContract();
 
     const invocationScope = contract.functions.return_context_amount().callParams({
-      forward: [100, contract.provider.getBaseAssetId()],
+      forward: [100, await contract.provider.getBaseAssetId()],
     });
     const { gasUsed } = await invocationScope.getTransactionCost();
 
@@ -533,7 +535,7 @@ describe('Contract', () => {
     const { value } = await contract
       .multiCall([
         contract.functions.return_context_amount().callParams({
-          forward: [100, contract.provider.getBaseAssetId()],
+          forward: [100, await contract.provider.getBaseAssetId()],
         }),
         contract.functions.return_context_amount().callParams({
           forward: [200, AltToken],
@@ -649,7 +651,9 @@ describe('Contract', () => {
       contracts: [contract],
     } = launched;
 
-    const initialBalance = new BN(await contract.getBalance(provider.getBaseAssetId())).toNumber();
+    const initialBalance = new BN(
+      await contract.getBalance(await provider.getBaseAssetId())
+    ).toNumber();
 
     const u64Amount = bn(10_000);
     const amountToContract = u64Amount;
@@ -657,14 +661,200 @@ describe('Contract', () => {
     const tx = await wallet.transferToContract(
       contract.id,
       amountToContract,
-      provider.getBaseAssetId()
+      await provider.getBaseAssetId()
     );
 
     await tx.waitForResult();
 
-    const finalBalance = new BN(await contract.getBalance(provider.getBaseAssetId())).toNumber();
+    const finalBalance = new BN(
+      await contract.getBalance(await provider.getBaseAssetId())
+    ).toNumber();
 
     expect(finalBalance).toBe(initialBalance + amountToContract.toNumber());
+  });
+
+  it('should transfer asset to a deployed contract just fine (NON-NATIVE ASSET)', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs,
+    });
+    const {
+      provider,
+      wallets: [wallet],
+      contracts: [contract],
+    } = launched;
+
+    const initialBalance = new BN(
+      await contract.getBalance(await provider.getBaseAssetId())
+    ).toNumber();
+    const amountToContract = bn(10_000);
+    const assetId = TestAssetId.A.value;
+
+    const tx = await wallet.transferToContract(contract.id, amountToContract, assetId);
+
+    await tx.waitForResult();
+
+    const finalBalance = new BN(await contract.getBalance(assetId)).toNumber();
+    expect(finalBalance).toBe(initialBalance + amountToContract.toNumber());
+  });
+
+  it('should transferToContract with a large amount of assets', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs,
+      walletsConfig: {
+        amountPerCoin: bn(2).pow(62),
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet],
+      contracts: [contract],
+    } = launched;
+
+    const initialBalance = new BN(
+      await contract.getBalance(await provider.getBaseAssetId())
+    ).toNumber();
+    const amountToContract = bn(2).pow(61); // Very big number
+
+    const tx = await wallet.transferToContract(
+      contract.id,
+      amountToContract,
+      await provider.getBaseAssetId()
+    );
+
+    await tx.waitForResult();
+
+    const finalBalance = new BN(
+      await contract.getBalance(await provider.getBaseAssetId())
+    ).toString();
+    expect(finalBalance).toBe(amountToContract.add(initialBalance).toString());
+  });
+
+  it('should batch transfer with a large amount of assets', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs,
+      walletsConfig: {
+        amountPerCoin: bn(2).pow(62),
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet],
+      contracts: [contract],
+    } = launched;
+
+    const baseAssetId = await provider.getBaseAssetId();
+    const contractTransferParams: ContractTransferParams[] = [
+      {
+        contractId: contract.id,
+        amount: bn(2).pow(50),
+        assetId: baseAssetId,
+      },
+      {
+        contractId: contract.id,
+        amount: bn(2).pow(10),
+        assetId: baseAssetId,
+      },
+    ];
+
+    const tx = await wallet.batchTransferToContracts(contractTransferParams);
+
+    const { receipts } = await tx.waitForResult();
+
+    const transferReceipts = receipts.filter(
+      ({ type }) => type === ReceiptType.Transfer
+    ) as ReceiptTransfer[];
+
+    expect(transferReceipts.length).toBe(contractTransferParams.length);
+
+    contractTransferParams.forEach(({ amount, contractId, assetId = baseAssetId }) => {
+      const foundReceipt = transferReceipts.find(
+        (r) =>
+          r.amount.eq(amount) &&
+          r.to.toLowerCase() === contractId.toString().toLowerCase() &&
+          r.assetId === assetId
+      );
+
+      expect(foundReceipt).toBeDefined();
+    });
+  });
+
+  it('should transfer assets to deployed contracts just fine', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        { factory: StorageTestContractFactory },
+        { factory: VoidFactory },
+        { factory: SmoContractFactory },
+      ],
+    });
+    const {
+      provider,
+      wallets: [wallet],
+      contracts: [storageContract, voidContract, smoContract],
+    } = launched;
+
+    const baseAssetId = await provider.getBaseAssetId();
+    const assetA = TestAssetId.A.value;
+    const assetB = TestAssetId.B.value;
+
+    const storageId = storageContract.id.toB256();
+    const voidId = voidContract.id.toB256();
+    const smoId = smoContract.id.toB256();
+
+    const contractTransferParams: ContractTransferParams[] = [
+      {
+        contractId: storageId,
+        amount: 999,
+        assetId: baseAssetId,
+      },
+      {
+        contractId: storageId,
+        amount: 550,
+        assetId: assetA,
+      },
+      {
+        contractId: voidId,
+        amount: 200,
+        assetId: baseAssetId,
+      },
+      {
+        contractId: voidId,
+        amount: 133,
+        assetId: assetB,
+      },
+      {
+        contractId: smoId,
+        amount: 800,
+        assetId: assetA,
+      },
+      {
+        contractId: voidId,
+        amount: 166,
+        assetId: assetB,
+      },
+      {
+        contractId: storageId,
+        amount: 2278,
+        assetId: assetB,
+      },
+    ];
+
+    const submit = await wallet.batchTransferToContracts(contractTransferParams);
+
+    const { receipts } = await submit.waitForResult();
+
+    const transferReceipts = receipts.filter(
+      ({ type }) => type === ReceiptType.Transfer
+    ) as ReceiptTransfer[];
+
+    expect(transferReceipts.length).toBe(contractTransferParams.length);
+
+    contractTransferParams.forEach(({ amount, contractId, assetId = baseAssetId }) => {
+      const foundReceipt = transferReceipts.find(
+        (r) => r.amount.eq(amount) && r.to === contractId && r.assetId === assetId
+      );
+
+      expect(foundReceipt).toBeDefined();
+    });
   });
 
   it('should set "gasLimit" and "maxFee" when transferring amounts to contract just fine', async () => {
@@ -685,7 +875,7 @@ describe('Contract', () => {
     const tx = await wallet.transferToContract(
       contract.id,
       amountToContract,
-      provider.getBaseAssetId(),
+      await provider.getBaseAssetId(),
       {
         gasLimit,
         maxFee,
@@ -716,7 +906,7 @@ describe('Contract', () => {
       const result = await wallet.transferToContract(
         contract.id.toB256(),
         amountToContract,
-        contract.provider.getBaseAssetId(),
+        await contract.provider.getBaseAssetId(),
         {
           gasLimit: 1,
         }
@@ -760,21 +950,18 @@ describe('Contract', () => {
     } = launched;
 
     const initialBalance = new BN(
-      await contract.getBalance(contract.provider.getBaseAssetId())
+      await contract.getBalance(await contract.provider.getBaseAssetId())
     ).toNumber();
 
     const amountToContract = 200;
     const amountToPredicate = 500_000;
 
-    const predicate = new Predicate({
-      bytecode: PredicateTrue.bytecode,
-      provider,
-    });
+    const predicate = new PredicateTrue({ provider });
 
     const tx1 = await wallet.transfer(
       predicate.address,
       amountToPredicate,
-      provider.getBaseAssetId()
+      await provider.getBaseAssetId()
     );
 
     await tx1.waitForResult();
@@ -782,12 +969,14 @@ describe('Contract', () => {
     const tx2 = await predicate.transferToContract(
       contract.id,
       amountToContract,
-      provider.getBaseAssetId()
+      await provider.getBaseAssetId()
     );
 
     await tx2.waitForResult();
 
-    const finalBalance = new BN(await contract.getBalance(provider.getBaseAssetId())).toNumber();
+    const finalBalance = new BN(
+      await contract.getBalance(await provider.getBaseAssetId())
+    ).toNumber();
 
     expect(finalBalance).toBe(initialBalance + amountToContract);
   });
@@ -817,7 +1006,7 @@ describe('Contract', () => {
       .addTransfer({
         destination: receiver.address,
         amount: amountToTransfer,
-        assetId: provider.getBaseAssetId(),
+        assetId: await provider.getBaseAssetId(),
       })
       .call();
 
@@ -856,7 +1045,7 @@ describe('Contract', () => {
       {
         destination: receiver1.address,
         amount: amountToTransfer1,
-        assetId: provider.getBaseAssetId(),
+        assetId: await provider.getBaseAssetId(),
       },
       { destination: receiver2.address, amount: amountToTransfer2, assetId: ASSET_A },
       { destination: receiver3.address, amount: amountToTransfer3, assetId: ASSET_B },
@@ -865,7 +1054,7 @@ describe('Contract', () => {
     const call = await contract.functions.sum(40, 50).addBatchTransfer(transferParams).call();
     await call.waitForResult();
 
-    const finalBalance1 = await receiver1.getBalance(provider.getBaseAssetId());
+    const finalBalance1 = await receiver1.getBalance(await provider.getBaseAssetId());
     const finalBalance2 = await receiver2.getBalance(ASSET_A);
     const finalBalance3 = await receiver3.getBalance(ASSET_B);
 
@@ -893,14 +1082,14 @@ describe('Contract', () => {
 
     await expectToThrowFuelError(
       async () => {
-        await wallet.transferToContract(contract.id, 0, provider.getBaseAssetId());
+        await wallet.transferToContract(contract.id, 0, await provider.getBaseAssetId());
       },
       new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
     );
 
     await expectToThrowFuelError(
       async () => {
-        await wallet.transferToContract(contract.id, -1, provider.getBaseAssetId());
+        await wallet.transferToContract(contract.id, -1, await provider.getBaseAssetId());
       },
       new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
     );
@@ -912,11 +1101,11 @@ describe('Contract', () => {
     contract.account = Wallet.generate({ provider: contract.provider });
 
     await expectToThrowFuelError(
-      () =>
+      async () =>
         contract.functions
           .return_context_amount()
           .callParams({
-            forward: [100, contract.provider.getBaseAssetId()],
+            forward: [100, await contract.provider.getBaseAssetId()],
           })
           .simulate(),
       new FuelError(
@@ -934,7 +1123,7 @@ describe('Contract', () => {
       contract.functions
         .return_context_amount()
         .callParams({
-          forward: [100, contract.provider.getBaseAssetId()],
+          forward: [100, await contract.provider.getBaseAssetId()],
         })
         .simulate()
     ).rejects.toThrowError('Wallet is required!');
@@ -949,7 +1138,7 @@ describe('Contract', () => {
       contract.functions
         .return_context_amount()
         .callParams({
-          forward: [100, contract.provider.getBaseAssetId()],
+          forward: [100, await contract.provider.getBaseAssetId()],
         })
         .simulate()
     ).rejects.toThrowError('An unlocked wallet is required to simulate a contract call.');
@@ -964,7 +1153,7 @@ describe('Contract', () => {
       contract.functions
         .return_context_amount()
         .callParams({
-          forward: [100, contract.provider.getBaseAssetId()],
+          forward: [100, await contract.provider.getBaseAssetId()],
         })
         .dryRun()
     ).resolves.not.toThrow();
@@ -1130,7 +1319,7 @@ describe('Contract', () => {
     } = launched;
 
     const data = [1, 2, 3, 4, 5, 6, 7, 8];
-    const baseAssetId = provider.getBaseAssetId();
+    const baseAssetId = await provider.getBaseAssetId();
 
     const { waitForResult } = await contract
       .multiCall([

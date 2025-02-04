@@ -48,7 +48,7 @@ describe('Minimum gas tests', () => {
     const resources = await provider.getResourcesToSpend(wallet.address, [
       {
         amount: bn(100_000),
-        assetId: provider.getBaseAssetId(),
+        assetId: await provider.getBaseAssetId(),
       },
     ]);
     request.addResources(resources);
@@ -63,8 +63,8 @@ describe('Minimum gas tests', () => {
     /**
      * Send transaction
      */
-    const result = await wallet.sendTransaction(request);
-    const { status } = await result.waitForResult();
+    const { waitForResult } = await wallet.sendTransaction(request);
+    const { status } = await waitForResult();
 
     expect(status).toBe(TransactionStatus.success);
   });
@@ -85,7 +85,7 @@ describe('Minimum gas tests', () => {
       script: ComplexScript.bytecode,
       scriptData: hexlify(new BigNumberCoder('u64').encode(bn(2000))),
     });
-    request.addCoinOutput(Address.fromRandom(), bn(100), provider.getBaseAssetId());
+    request.addCoinOutput(Address.fromRandom(), bn(100), await provider.getBaseAssetId());
 
     /**
      * Get the transaction cost to set a strict gasLimit and min gasPrice
@@ -127,14 +127,14 @@ describe('Minimum gas tests', () => {
     /**
      * Fund the predicate
      */
-    const tx = await wallet.transfer(predicate.address, 1_000_000, provider.getBaseAssetId());
+    const tx = await wallet.transfer(predicate.address, 1_000_000, await provider.getBaseAssetId());
     await tx.wait();
 
     /**
      * Create a script transaction transfer
      */
     const request = new ScriptTransactionRequest();
-    request.addCoinOutput(Address.fromRandom(), bn(100), provider.getBaseAssetId());
+    request.addCoinOutput(Address.fromRandom(), bn(100), await provider.getBaseAssetId());
 
     /**
      * Get the transaction cost to set a strict gasLimit and min gasPrice
@@ -149,8 +149,8 @@ describe('Minimum gas tests', () => {
     /**
      * Send transaction predicate
      */
-    const result = await predicate.sendTransaction(request);
-    const { status, receipts } = await result.waitForResult();
+    const { waitForResult } = await predicate.sendTransaction(request);
+    const { status, receipts } = await waitForResult();
     const gasUsedFromReceipts = getGasUsedFromReceipts(receipts);
 
     expect(status).toBe(TransactionStatus.success);
@@ -166,7 +166,7 @@ describe('Minimum gas tests', () => {
       wallets: [wallet],
     } = launched;
 
-    const baseAssetId = provider.getBaseAssetId();
+    const baseAssetId = await provider.getBaseAssetId();
 
     /**
      * Setup predicate

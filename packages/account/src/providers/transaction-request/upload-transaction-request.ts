@@ -1,7 +1,7 @@
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
-import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { type TransactionUpload, TransactionType } from '@fuel-ts/transactions';
+import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
@@ -122,7 +122,7 @@ export class UploadTransactionRequest extends BaseTransactionRequest {
    *
    * @returns metadata gas cost for the upload transaction.
    */
-  metadataGas(gasCosts: GasCosts): BN {
+  override metadataGas(gasCosts: GasCosts): BN {
     return calculateMetadataGasForTxUpload({
       gasCosts,
       txBytesSize: this.byteSize(),
@@ -138,7 +138,7 @@ export class UploadTransactionRequest extends BaseTransactionRequest {
    *
    * @returns the minimum gas for the upload transaction
    */
-  calculateMinGas(chainInfo: ChainInfo): BN {
+  override calculateMinGas(chainInfo: ChainInfo): BN {
     const minGas = super.calculateMinGas(chainInfo);
     const { gasCosts } = chainInfo.consensusParameters;
     const bytecode = this.witnesses[this.witnessIndex] ?? ZeroBytes32;

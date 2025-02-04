@@ -1,5 +1,32 @@
 # @fuel-ts/versions
 
+## 0.98.0
+
+### Patch Changes
+
+- 12e801e: chore: dependency pinning and auditing
+- 04ca73e: chore: upgrade `fuel-core` to `0.40.2`
+
+## 0.97.2
+
+### Patch Changes
+
+- 5ec254d: chore: updated forc version to `0.66.5`
+
+## 0.97.1
+
+### Patch Changes
+
+- 165c49c: chore: bump `fuel-core` to `0.40.1`
+
+## 0.97.0
+
+### Patch Changes
+
+- 9dba357: chore: upgrading `fuel-core` to `0.40.0`
+- 4e057d5: chore: upgrading `forc` to `0.66.4`
+- 7c162de: chore: upgrading `forc` to `0.66.2`
+
 ## 0.96.1
 
 ### Patch Changes

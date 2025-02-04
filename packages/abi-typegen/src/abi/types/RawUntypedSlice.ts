@@ -3,17 +3,17 @@ import type { IType } from '../../types/interfaces/IType';
 import { ArrayType } from './ArrayType';
 
 export class RawUntypedSlice extends ArrayType {
-  public static swayType = 'raw untyped slice';
+  public static override swayType = 'raw untyped slice';
 
-  public name = 'rawUntypedSlice';
+  public override name = 'rawUntypedSlice';
 
-  public static MATCH_REGEX: RegExp = /^raw untyped slice$/m;
+  public static override MATCH_REGEX: RegExp = /^raw untyped slice$/m;
 
-  static isSuitableFor(params: { type: string }) {
+  static override isSuitableFor(params: { type: string }) {
     return RawUntypedSlice.MATCH_REGEX.test(params.type);
   }
 
-  public parseComponentsAttributes(_params: { types: IType[] }) {
+  public override parseComponentsAttributes(_params: { types: IType[] }) {
     const capitalizedName = 'RawSlice';
 
     this.attributes = {

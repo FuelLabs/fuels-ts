@@ -15,7 +15,7 @@ import {
   BN,
   decompressBytecode,
   InputValue,
-  Predicate,
+  Predicate as __Predicate,
   PredicateParams,
   Provider,
 } from 'fuels';
@@ -276,7 +276,7 @@ const abi = {
 
 const bytecode = decompressBytecode('0x-bytecode-here');
 
-export class MyPredicate extends Predicate<
+export class MyPredicate extends __Predicate<
   MyPredicateInputs,
   MyPredicateConfigurables
 > {

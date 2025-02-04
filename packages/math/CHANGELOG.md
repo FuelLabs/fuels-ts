@@ -1,5 +1,36 @@
 # Change Log
 
+## 0.98.0
+
+### Patch Changes
+
+- 12e801e: chore: dependency pinning and auditing
+- Updated dependencies [4ccc628]
+- Updated dependencies [08a31d8]
+- Updated dependencies [0b4c3ab]
+  - @fuel-ts/errors@0.98.0
+
+## 0.97.2
+
+### Patch Changes
+
+- @fuel-ts/errors@0.97.2
+
+## 0.97.1
+
+### Patch Changes
+
+- c904a98: chore: added noImplicitOverride option to config
+- Updated dependencies [27e8808]
+  - @fuel-ts/errors@0.97.1
+
+## 0.97.0
+
+### Patch Changes
+
+- Updated dependencies [9dba357]
+  - @fuel-ts/errors@0.97.0
+
 ## 0.96.1
 
 ### Patch Changes

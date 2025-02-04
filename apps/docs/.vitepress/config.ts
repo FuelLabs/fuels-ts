@@ -1,7 +1,6 @@
 import { defineConfig } from 'vitepress';
 import { codeInContextPlugin } from './plugins/codeInContextPlugin';
 import { snippetPlugin } from './plugins/snippetPlugin';
-import apiLinks from '../.typedoc/api-links.json';
 
 export default defineConfig({
   title: 'Fuels-ts',
@@ -52,20 +51,24 @@ export default defineConfig({
                 link: '/guide/getting-started/installation',
               },
               {
-                text: 'Usage',
-                link: '/guide/getting-started/usage',
+                text: 'Connecting to the Network',
+                link: '/guide/getting-started/connecting-to-the-network',
               },
               {
-                text: 'Connecting to Testnet',
-                link: '/guide/getting-started/connecting-to-testnet',
+                text: 'Running a local Fuel node',
+                link: '/guide/getting-started/running-a-local-fuel-node',
               },
               {
-                text: 'Connecting to a Local Node',
-                link: '/guide/getting-started/connecting-to-a-local-node',
+                text: 'React Example',
+                link: '/guide/getting-started/react-example',
               },
               {
-                text: 'Further Resources',
-                link: '/guide/getting-started/further-resources',
+                text: 'CDN Usage',
+                link: '/guide/getting-started/cdn-usage',
+              },
+              {
+                text: 'Next Steps',
+                link: '/guide/getting-started/next-steps',
               },
             ],
           },
@@ -330,20 +333,24 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Transaction Request',
-                link: '/guide/transactions/transaction-request',
+                text: 'Modifying the Request',
+                link: '/guide/transactions/modifying-the-request',
               },
               {
-                text: 'Transaction Response',
-                link: '/guide/transactions/transaction-response',
+                text: 'Adding Parameters',
+                link: '/guide/transactions/adding-parameters',
               },
               {
-                text: 'Transaction Parameters',
-                link: '/guide/transactions/transaction-parameters',
+                text: 'Adding Policies',
+                link: '/guide/transactions/adding-policies',
               },
               {
-                text: 'Transaction Policies',
-                link: '/guide/transactions/transaction-policies',
+                text: 'Getting the Response',
+                link: '/guide/transactions/getting-the-response',
+              },
+              {
+                text: 'Optimizing Frontend Apps',
+                link: '/guide/transactions/optimizing-frontend-apps',
               },
             ],
           },
@@ -383,6 +390,10 @@ export default defineConfig({
                 text: 'Using assets',
                 link: '/guide/utilities/using-assets',
               },
+              {
+                text: 'Asset API',
+                link: '/guide/utilities/asset-api',
+              },
             ],
           },
           {
@@ -421,6 +432,18 @@ export default defineConfig({
               {
                 text: 'Resubmitting Failed Transactions',
                 link: '/guide/cookbook/resubmitting-failed-transactions',
+              },
+              {
+                text: 'Combining UTXOs',
+                link: '/guide/cookbook/combining-utxos',
+              },
+              {
+                text: 'Splitting UTXOs',
+                link: '/guide/cookbook/splitting-utxos',
+              },
+              {
+                text: 'Optimized React Example',
+                link: '/guide/cookbook/optimized-react-example',
               },
             ],
           },
@@ -477,16 +500,12 @@ export default defineConfig({
                 link: '/guide/types/asset-id',
               },
               {
-                text: 'Bech32',
-                link: '/guide/types/bech32',
+                text: 'B256',
+                link: '/guide/types/b256',
               },
               {
-                text: 'Bits256',
-                link: '/guide/types/bits256',
-              },
-              {
-                text: 'Bits512',
-                link: '/guide/types/bits512',
+                text: 'B512',
+                link: '/guide/types/b512',
               },
               {
                 text: 'Bytes',
@@ -548,7 +567,6 @@ export default defineConfig({
             collapsed: false,
             items: [],
           },
-          apiLinks,
         ],
       },
     ],

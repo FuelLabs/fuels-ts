@@ -2,7 +2,7 @@
 
 **@fuel-ts/address** is a sub-module for interacting with **Fuel**.
 
-This module contains the utilities for encoding and decoding address and contract ids between Bech32 and other address formats.
+This module contains the utilities for encoding and decoding address and contract ids between B256 and other address formats.
 
 # Table of contents
 

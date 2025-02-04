@@ -1,5 +1,23 @@
 # @internal/fuel-core
 
+## 0.89.7
+
+### Patch Changes
+
+- 04ca73e: chore: upgrade `fuel-core` to `0.40.2`
+
+## 0.89.6
+
+### Patch Changes
+
+- 165c49c: chore: bump `fuel-core` to `0.40.1`
+
+## 0.89.5
+
+### Patch Changes
+
+- 9dba357: chore: upgrading `fuel-core` to `0.40.0`
+
 ## 0.89.4
 
 ### Patch Changes

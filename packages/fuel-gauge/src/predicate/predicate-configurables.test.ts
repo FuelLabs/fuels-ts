@@ -1,9 +1,9 @@
-import { getRandomB256, WalletUnlocked, Predicate, FuelError } from 'fuels';
+import { getRandomB256, WalletUnlocked, FuelError } from 'fuels';
 import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
 import { PredicateTrue, PredicateWithConfigurable } from '../../test/typegen';
 
-import { fundPredicate, assertBalance } from './utils/predicate';
+import { fundAccount, assertBalance } from './utils/predicate';
 
 /**
  * @group node
@@ -26,28 +26,26 @@ describe('Predicate', () => {
         wallets: [wallet],
       } = launched;
 
-      const predicate = new Predicate({
-        abi: PredicateWithConfigurable.abi,
-        bytecode: PredicateWithConfigurable.bytecode,
+      const predicate = new PredicateWithConfigurable({
         provider: wallet.provider,
         data: [defaultValues.FEE, defaultValues.ADDRESS], // set predicate input data to be the same as default configurable value
       });
 
       const amountToTransfer = 200;
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundAccount(wallet, predicate, amountToPredicate);
 
       // create destination wallet
       const destination = WalletUnlocked.generate({
         provider: wallet.provider,
       });
 
-      await assertBalance(destination, 0, provider.getBaseAssetId());
+      await assertBalance(destination, 0, await provider.getBaseAssetId());
 
       const tx = await predicate.transfer(
         destination.address,
         amountToTransfer,
-        provider.getBaseAssetId(),
+        await provider.getBaseAssetId(),
         {
           gasLimit: 1000,
         }
@@ -55,7 +53,7 @@ describe('Predicate', () => {
 
       await tx.waitForResult();
 
-      await assertBalance(destination, amountToTransfer, provider.getBaseAssetId());
+      await assertBalance(destination, amountToTransfer, await provider.getBaseAssetId());
     });
 
     it('calls a predicate with configurables where first param is equal', async () => {
@@ -69,9 +67,7 @@ describe('Predicate', () => {
       const configurableConstants = { FEE: 35 };
 
       expect(configurableConstants.FEE).not.toEqual(defaultValues.FEE);
-      const predicate = new Predicate({
-        abi: PredicateWithConfigurable.abi,
-        bytecode: PredicateWithConfigurable.bytecode,
+      const predicate = new PredicateWithConfigurable({
         provider,
         data: [configurableConstants.FEE, defaultValues.ADDRESS],
         configurableConstants,
@@ -83,16 +79,16 @@ describe('Predicate', () => {
         provider: wallet.provider,
       });
 
-      await assertBalance(destination, 0, provider.getBaseAssetId());
+      await assertBalance(destination, 0, await provider.getBaseAssetId());
 
       // transfer funds to predicate
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundAccount(wallet, predicate, amountToPredicate);
 
       // executing predicate transfer
       const tx = await predicate.transfer(
         destination.address,
         amountToTransfer,
-        provider.getBaseAssetId(),
+        await provider.getBaseAssetId(),
         {
           gasLimit: 1000,
         }
@@ -100,7 +96,7 @@ describe('Predicate', () => {
 
       await tx.waitForResult();
 
-      await assertBalance(destination, amountToTransfer, provider.getBaseAssetId());
+      await assertBalance(destination, amountToTransfer, await provider.getBaseAssetId());
     });
 
     it('calls a predicate with configurables where second param is equal', async () => {
@@ -114,9 +110,7 @@ describe('Predicate', () => {
       const configurableConstants = { ADDRESS: getRandomB256() };
 
       expect(configurableConstants.ADDRESS).not.toEqual(defaultValues.ADDRESS);
-      const predicate = new Predicate({
-        abi: PredicateWithConfigurable.abi,
-        bytecode: PredicateWithConfigurable.bytecode,
+      const predicate = new PredicateWithConfigurable({
         provider,
         data: [defaultValues.FEE, configurableConstants.ADDRESS],
         configurableConstants,
@@ -128,16 +122,16 @@ describe('Predicate', () => {
         provider: wallet.provider,
       });
 
-      await assertBalance(destination, 0, provider.getBaseAssetId());
+      await assertBalance(destination, 0, await provider.getBaseAssetId());
 
       // transfer funds to predicate
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundAccount(wallet, predicate, amountToPredicate);
 
       // executing predicate transfer
       const tx = await predicate.transfer(
         destination.address,
         amountToTransfer,
-        provider.getBaseAssetId(),
+        await provider.getBaseAssetId(),
         {
           gasLimit: 1000,
         }
@@ -145,7 +139,7 @@ describe('Predicate', () => {
 
       await tx.waitForResult();
 
-      await assertBalance(destination, amountToTransfer, provider.getBaseAssetId());
+      await assertBalance(destination, amountToTransfer, await provider.getBaseAssetId());
     });
 
     it('calls a predicate with configurables where both params are equal', async () => {
@@ -163,9 +157,7 @@ describe('Predicate', () => {
 
       expect(configurableConstants.FEE).not.toEqual(defaultValues.FEE);
       expect(configurableConstants.ADDRESS).not.toEqual(defaultValues.ADDRESS);
-      const predicate = new Predicate({
-        abi: PredicateWithConfigurable.abi,
-        bytecode: PredicateWithConfigurable.bytecode,
+      const predicate = new PredicateWithConfigurable({
         provider,
         data: [configurableConstants.FEE, configurableConstants.ADDRESS],
         configurableConstants,
@@ -177,14 +169,14 @@ describe('Predicate', () => {
         provider: wallet.provider,
       });
 
-      await assertBalance(destination, 0, provider.getBaseAssetId());
+      await assertBalance(destination, 0, await provider.getBaseAssetId());
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundAccount(wallet, predicate, amountToPredicate);
 
       const tx = await predicate.transfer(
         destination.address,
         amountToTransfer,
-        provider.getBaseAssetId(),
+        await provider.getBaseAssetId(),
         {
           gasLimit: 1000,
         }
@@ -192,7 +184,7 @@ describe('Predicate', () => {
 
       await tx.waitForResult();
 
-      await assertBalance(destination, amountToTransfer, provider.getBaseAssetId());
+      await assertBalance(destination, amountToTransfer, await provider.getBaseAssetId());
     });
 
     it('calls a predicate with partial configurables being set', async () => {
@@ -219,14 +211,14 @@ describe('Predicate', () => {
         provider: wallet.provider,
       });
 
-      await assertBalance(destination, 0, provider.getBaseAssetId());
+      await assertBalance(destination, 0, await provider.getBaseAssetId());
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundAccount(wallet, predicate, amountToPredicate);
 
       const tx = await predicate.transfer(
         destination.address,
         amountToTransfer,
-        provider.getBaseAssetId(),
+        await provider.getBaseAssetId(),
         {
           gasLimit: 1000,
         }
@@ -234,7 +226,7 @@ describe('Predicate', () => {
 
       await tx.waitForResult();
 
-      await assertBalance(destination, amountToTransfer, provider.getBaseAssetId());
+      await assertBalance(destination, amountToTransfer, await provider.getBaseAssetId());
     });
 
     it('throws when configurable data is not set', async () => {
@@ -245,9 +237,7 @@ describe('Predicate', () => {
         wallets: [wallet],
       } = launched;
 
-      const predicate = new Predicate({
-        abi: PredicateWithConfigurable.abi,
-        bytecode: PredicateWithConfigurable.bytecode,
+      const predicate = new PredicateWithConfigurable({
         provider,
       });
 
@@ -255,10 +245,12 @@ describe('Predicate', () => {
         provider: wallet.provider,
       });
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundAccount(wallet, predicate, amountToPredicate);
 
       await expect(
-        predicate.transfer(destination.address, 300, provider.getBaseAssetId(), { gasLimit: 1000 })
+        predicate.transfer(destination.address, 300, await provider.getBaseAssetId(), {
+          gasLimit: 1000,
+        })
       ).rejects.toThrow(/PredicateVerificationFailed/);
     });
 
@@ -269,11 +261,9 @@ describe('Predicate', () => {
 
       await expectToThrowFuelError(
         () =>
-          new Predicate({
-            bytecode: PredicateTrue.bytecode,
-            abi: PredicateTrue.abi,
+          new PredicateTrue({
             provider,
-            data: ['NADA'],
+            // @ts-expect-error testing invalid configurable
             configurableConstants: {
               constant: 'NADA',
             },
@@ -292,40 +282,16 @@ describe('Predicate', () => {
 
       await expectToThrowFuelError(
         () =>
-          new Predicate({
-            bytecode: PredicateWithConfigurable.bytecode,
-            abi: PredicateWithConfigurable.abi,
+          new PredicateWithConfigurable({
             provider,
-            data: ['NADA'],
             configurableConstants: {
+              // @ts-expect-error testing invalid configurable
               NOPE: 'NADA',
             },
           }),
         new FuelError(
           FuelError.CODES.INVALID_CONFIGURABLE_CONSTANTS,
           `Error setting configurable constants: No configurable constant named 'NOPE' found in the Predicate.`
-        )
-      );
-    });
-
-    it('throws when setting a configurable with no ABI', async () => {
-      using launched = await launchTestNode();
-
-      const { provider } = launched;
-
-      await expectToThrowFuelError(
-        () =>
-          new Predicate({
-            bytecode: PredicateWithConfigurable.bytecode,
-            provider,
-            data: ['NADA'],
-            configurableConstants: {
-              NOPE: 'NADA',
-            },
-          }),
-        new FuelError(
-          FuelError.CODES.INVALID_CONFIGURABLE_CONSTANTS,
-          `Error setting configurable constants: Cannot validate configurable constants because the Predicate was instantiated without a JSON ABI.`
         )
       );
     });

@@ -36,6 +36,7 @@ import type Provider from '../provider';
 import type { JsonAbisFromAllCalls, TransactionRequest } from '../transaction-request';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
 import { processGqlReceipt } from '../transaction-summary/receipt';
+import { getTotalFeeFromStatus } from '../transaction-summary/status';
 import type { TransactionSummary, GqlTransaction, AbiMap } from '../transaction-summary/types';
 import { extractTxError } from '../utils';
 
@@ -145,14 +146,17 @@ export class TransactionResponse {
   constructor(
     tx: string | TransactionRequest,
     provider: Provider,
+    chainId: number,
     abis?: JsonAbisFromAllCalls,
     private submitTxSubscription?: AsyncIterable<GqlSubmitAndAwaitStatusSubscription>
   ) {
-    this.id = typeof tx === 'string' ? tx : tx.getTransactionId(provider.getChainId());
+    this.id = typeof tx === 'string' ? tx : tx.getTransactionId(chainId);
 
     this.provider = provider;
     this.abis = abis;
     this.request = typeof tx === 'string' ? undefined : tx;
+
+    this.waitForResult = this.waitForResult.bind(this);
   }
 
   /**
@@ -168,7 +172,8 @@ export class TransactionResponse {
     provider: Provider,
     abis?: JsonAbisFromAllCalls
   ): Promise<TransactionResponse> {
-    const response = new TransactionResponse(id, provider, abis);
+    const chainId = await provider.getChainId();
+    const response = new TransactionResponse(id, provider, chainId, abis);
     await response.fetch();
     return response;
   }
@@ -295,10 +300,15 @@ export class TransactionResponse {
     const { tx: transaction, bytes: transactionBytes } =
       await this.getTransaction<TTransactionType>();
 
-    const { gasPerByte, gasPriceFactor, gasCosts, maxGasPerTx } = this.provider.getGasConfig();
-    const gasPrice = await this.provider.getLatestGasPrice();
-    const maxInputs = this.provider.getChain().consensusParameters.txParameters.maxInputs;
-    const baseAssetId = this.provider.getBaseAssetId();
+    const { gasPerByte, gasPriceFactor, gasCosts, maxGasPerTx } =
+      await this.provider.getGasConfig();
+
+    // If we have the total fee, we do not need to refetch the gas price
+    const totalFee = getTotalFeeFromStatus(this.status ?? this.gqlTransaction?.status);
+    const gasPrice = totalFee ? bn(0) : await this.provider.getLatestGasPrice();
+
+    const maxInputs = (await this.provider.getChain()).consensusParameters.txParameters.maxInputs;
+    const baseAssetId = await this.provider.getBaseAssetId();
 
     const transactionSummary = assembleTransactionSummary<TTransactionType>({
       id: this.id,

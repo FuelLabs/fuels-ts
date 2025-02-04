@@ -1,5 +1,37 @@
 # Change Log
 
+## 0.98.0
+
+### Patch Changes
+
+- 12e801e: chore: dependency pinning and auditing
+- Updated dependencies [12e801e]
+- Updated dependencies [0b4c3ab]
+  - @fuel-ts/hasher@0.98.0
+  - @fuel-ts/math@0.98.0
+
+## 0.97.2
+
+### Patch Changes
+
+- @fuel-ts/hasher@0.97.2
+- @fuel-ts/math@0.97.2
+
+## 0.97.1
+
+### Patch Changes
+
+- Updated dependencies [c904a98]
+  - @fuel-ts/math@0.97.1
+  - @fuel-ts/hasher@0.97.1
+
+## 0.97.0
+
+### Patch Changes
+
+- @fuel-ts/math@0.97.0
+- @fuel-ts/hasher@0.97.0
+
 ## 0.96.1
 
 ### Patch Changes

@@ -1,8 +1,8 @@
 import { bufferFromString } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { sha256 } from '@fuel-ts/hasher';
-import type { BytesLike } from '@fuel-ts/interfaces';
 import { bn } from '@fuel-ts/math';
+import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify } from '@fuel-ts/utils';
 
 import { AbiCoder } from './AbiCoder';
@@ -105,11 +105,11 @@ export class FunctionFragment {
     const result = this.jsonFnOld.inputs.reduce(
       (obj: { decoded: unknown[]; offset: number }, input) => {
         const coder = AbiCoder.getCoder(this.jsonAbiOld, input, { encoding: this.encoding });
-        const [decodedValue, decodedValueByteSize] = coder.decode(bytes, obj.offset);
+        const [decodedValue, decodedOffset] = coder.decode(bytes, obj.offset);
 
         return {
           decoded: [...obj.decoded, decodedValue],
-          offset: obj.offset + decodedValueByteSize,
+          offset: decodedOffset,
         };
       },
       { decoded: [], offset: 0 }

@@ -18,6 +18,7 @@ describe('Predicate', () => {
 
       const predicate = new Predicate({
         bytecode: predicateBytecode,
+        abi: predicateAbi,
         provider,
       });
       expect(predicate.address.toB256()).toEqual(predicateAddress);

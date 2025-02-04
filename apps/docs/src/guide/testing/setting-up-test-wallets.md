@@ -4,7 +4,7 @@ You'll often want to create one or more test wallets when testing your contracts
 
 ## Create a single wallet
 
-<<< @/../../docs-snippets/src/guide/wallets/access.test.ts#wallets{ts:line-numbers}
+<<< @/../../docs/src/guide/wallets/snippets/access.ts#wallets{ts:line-numbers}
 
 ## Setting up multiple test wallets
 
@@ -12,4 +12,4 @@ You can set up multiple test wallets using the `launchTestNode` utility via the 
 
 To understand the different configurations, check out the [walletsConfig](./test-node-options.md#walletsconfig) in the test node options guide.
 
-<<< @/../../docs-snippets/src/guide/wallets/instantiating-wallets.test.ts#multiple-wallets{ts:line-numbers}
+<<< @./snippets/launch-test-node-wallets.ts#multiple-wallets{ts:line-numbers}

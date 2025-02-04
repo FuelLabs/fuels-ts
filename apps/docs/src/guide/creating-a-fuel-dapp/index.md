@@ -20,15 +20,15 @@ The first step is to run the command:
 ::: code-group
 
 ```sh-vue [npm]
-npm create fuels@{{fuels}} -- --npm
+npm create fuels@{{fuels}}
 ```
 
 ```sh-vue [pnpm]
-pnpm create fuels@{{fuels}} --pnpm
+pnpm create fuels@{{fuels}}
 ```
 
 ```sh-vue [bun]
-bunx --bun create-fuels@{{fuels}} --bun
+bun create fuels@{{fuels}}
 ```
 
 :::
@@ -196,13 +196,25 @@ You can find the complete source code of the dApp we built [here](https://github
 
 Whenever you want to add a new feature to your dApp and quickly prototype things, you can follow the same steps we followed in this guide.
 
-### 3. Extending the Test Suite (Optional)
+### 3. Extending the contract testing suite (Optional)
+
+Testing our smart contract is a good practice to ensure that our implementation is working as expected. It also give assurances down the line if we decide to change the implementation of our contract.
+
+We write our test in the `#[test]` macro within our Sway contract, these can be inline within our Sway contract or in a separate file.
+
+For the guide, we'll add a test for our new `decrement_counter` function in the `./sway-programs/contract/src/main.sw` file:
+
+<<< @/../../create-fuels-counter-guide/sway-programs/contract/src/main.sw#create-fuels-counter-guide-sway-contract-test{rust:line-numbers}
+
+After writing our test, we can run either using `forc test` or via PNPM using `pnpm test:forc`.
+
+### 4. Extending the integration test suite (Optional)
 
 Testing the integration with your smart contract isn't essential, but it's good practice to ensure that your application is working as expected. It also gives you the ability to test your application in a controlled environment against a local node.
 
 We've provided some examples for each program type in the `./test` directory of your project. But let's also add a test for our new `decrement_counter` function in the `./test/contract.test.ts` file:
 
-<<< @/../../docs-snippets/src/guide/create-fuels/decrement_counter.test.ts#decrement-counter{ts:line-numbers}
+<<< @./snippets/decrement-counter.ts#full{ts:line-numbers}
 
 The template also comes with a UI testing setup using [Playwright](https://playwright.dev/). We can add a test for our new `decrement_counter` function in the `./test/ui/ui.test.ts` file:
 

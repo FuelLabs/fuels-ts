@@ -125,14 +125,9 @@ describe('Policies', () => {
 
     const txRequest = new ScriptTransactionRequest(txParams);
 
-    txRequest.addCoinOutput(receiver.address, 500, provider.getBaseAssetId());
+    txRequest.addCoinOutput(receiver.address, 500, await provider.getBaseAssetId());
 
-    const txCost = await wallet.getTransactionCost(txRequest);
-
-    txRequest.gasLimit = txCost.gasUsed;
-    txRequest.maxFee = txCost.maxFee;
-
-    await wallet.fund(txRequest, txCost);
+    await txRequest.estimateAndFund(wallet);
 
     const tx = await wallet.sendTransaction(txRequest);
 
@@ -272,7 +267,7 @@ describe('Policies', () => {
     const pendingTx = await wallet.transfer(
       receiver.address,
       500,
-      provider.getBaseAssetId(),
+      await provider.getBaseAssetId(),
       txParams
     );
 
@@ -309,7 +304,7 @@ describe('Policies', () => {
     const pendingTx = await wallet.transferToContract(
       contract.id,
       500,
-      provider.getBaseAssetId(),
+      await provider.getBaseAssetId(),
       txParams
     );
 
@@ -339,7 +334,7 @@ describe('Policies', () => {
       const pendingTx = await wallet.transfer(
         receiver.address,
         500,
-        provider.getBaseAssetId(),
+        await provider.getBaseAssetId(),
         txParams
       );
 
@@ -362,7 +357,7 @@ describe('Policies', () => {
 
       const receiver = Wallet.generate({ provider });
 
-      const maxFee = 1;
+      const maxFee = 0;
 
       const txParams: CustomTxParams = {
         witnessLimit: 800,
@@ -373,7 +368,7 @@ describe('Policies', () => {
         const pendingTx = await wallet.transfer(
           receiver.address,
           500,
-          provider.getBaseAssetId(),
+          await provider.getBaseAssetId(),
           txParams
         );
         await pendingTx.waitForResult();
@@ -395,7 +390,7 @@ describe('Policies', () => {
         wallets: [wallet],
       } = launched;
 
-      const maxFee = 1;
+      const maxFee = 0;
 
       const txParams: CustomTxParams = {
         witnessLimit: 800,
@@ -406,7 +401,7 @@ describe('Policies', () => {
         const pendingTx = await wallet.transferToContract(
           contract.id,
           500,
-          provider.getBaseAssetId(),
+          await provider.getBaseAssetId(),
           txParams
         );
         await pendingTx.waitForResult();
@@ -425,7 +420,7 @@ describe('Policies', () => {
         wallets: [wallet],
       } = launched;
 
-      const maxFee = 1;
+      const maxFee = 0;
       const receiver = Wallet.generate({ provider });
 
       const txParams: CustomTxParams = {
@@ -450,7 +445,7 @@ describe('Policies', () => {
         wallets: [wallet],
       } = launched;
 
-      const maxFee = 1;
+      const maxFee = 0;
 
       const factory = new ContractFactory(
         PayableAnnotationFactory.bytecode,
@@ -469,7 +464,7 @@ describe('Policies', () => {
     });
 
     it('on a contract call', async () => {
-      const maxFee = 1;
+      const maxFee = 0;
 
       using launched = await launchTestNode({
         contractsConfigs: [

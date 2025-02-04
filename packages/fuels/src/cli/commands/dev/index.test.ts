@@ -42,7 +42,11 @@ describe('dev', () => {
       .mockReturnValue(Promise.resolve(fuelsConfig));
 
     const build = vi.spyOn(buildMod, 'build').mockResolvedValue();
-    const deploy = vi.spyOn(deployMod, 'deploy').mockResolvedValue([]);
+    const deploy = vi.spyOn(deployMod, 'deploy').mockResolvedValue({
+      contracts: [],
+      scripts: [],
+      predicates: [],
+    });
 
     return {
       autoStartFuelCore,

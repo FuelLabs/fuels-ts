@@ -1,5 +1,5 @@
-import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
+import type { BytesLike } from '@fuel-ts/utils';
 
 import type { Option } from './OptionCoder';
 

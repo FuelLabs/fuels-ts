@@ -1,0 +1,29 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPointStrategy": "packages",
+  "entryPoints": [
+    "../../packages/abi-coder",
+    "../../packages/abi-typegen",
+    "../../packages/address",
+    "../../packages/interfaces",
+    "../../packages/predicate",
+    "../../packages/account",
+    "../../packages/program",
+    "../../packages/contract",
+    "../../packages/script",
+    "../../packages/utils",
+    "../../packages/crypto",
+    "../../packages/errors",
+    "../../packages/hasher",
+    "../../packages/math",
+    "../../packages/transactions",
+    "../../packages/recipes"
+  ],
+  "out": "src/api",
+  "readme": "./index.md",
+  "name": "Fuels TS SDK API Documentation",
+  "navigationLinks": {
+    "Docs": "https://docs.fuel.network/docs/intro/what-is-fuel/",
+    "GitHub": "https://github.com/FuelLabs/fuels-ts"
+  }
+}

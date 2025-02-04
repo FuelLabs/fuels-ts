@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
-import { DEVNET_NETWORK_URL, TESTNET_NETWORK_URL } from '@internal/utils';
-import { WalletUnlocked, Provider, TransactionType, CHAIN_IDS, rawAssets, assets } from 'fuels';
+import { DEVNET_NETWORK_URL, TESTNET_NETWORK_URL } from '@fuel-ts/account/configs';
+import { WalletUnlocked, Provider, TransactionType, CHAIN_IDS, rawAssets, assets, bn } from 'fuels';
 
 import { ScriptMainArgBool } from '../test/typegen';
 
@@ -56,15 +56,16 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
   let wallet: WalletUnlocked;
   let shouldSkip: boolean;
 
-  beforeAll(async () => {
+  beforeAll(() => {
     const { networkUrl, privateKey } = configuredNetworks[selectedNetwork];
+
     if (!privateKey) {
       console.log(`Skipping live Fuel Node test - ${networkUrl}`);
       shouldSkip = true;
       return;
     }
 
-    provider = await Provider.create(networkUrl);
+    provider = new Provider(networkUrl);
     wallet = new WalletUnlocked(privateKey, provider);
   });
 
@@ -84,13 +85,13 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
 
       output = value;
     } catch (e) {
-      const address = wallet.address.toAddress();
+      const address = wallet.address.toB256();
 
       console.error((e as Error).message);
       console.warn(`
         not enough coins to fit the target?
         - add assets: ${configuredNetworks[selectedNetwork].faucetUrl}
-        - bech32 address: ${address}
+        - B256 address: ${address}
       `);
     }
 
@@ -120,7 +121,54 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
     15_000
   );
 
-  it(`should have correct assets`, () => {
+  describe('optimized graphql queries', () => {
+    it('should get the balance of the wallet', { timeout: 15_000 }, async () => {
+      if (shouldSkip) {
+        return;
+      }
+
+      const balance = await provider.getBalance(wallet.address, await provider.getBaseAssetId());
+      expect(bn(balance).gt(0));
+    });
+
+    it('should get the chain and node info', { timeout: 15_000 }, async () => {
+      if (shouldSkip) {
+        return;
+      }
+
+      const chainInfo = await provider.fetchChainAndNodeInfo();
+      expect(chainInfo).toBeDefined();
+    });
+
+    it('should get latest block height', { timeout: 15_000 }, async () => {
+      if (shouldSkip) {
+        return;
+      }
+
+      const blockNumber = await provider.getBlockNumber();
+      expect(bn(blockNumber).gt(0));
+    });
+
+    it('should get the latest block', { timeout: 15_000 }, async () => {
+      if (shouldSkip) {
+        return;
+      }
+
+      const block = await provider.getBlock('latest');
+      expect(block).toBeDefined();
+    });
+
+    it('should get block with transactions', { timeout: 15_000 }, async () => {
+      if (shouldSkip) {
+        return;
+      }
+
+      const block = await provider.getBlockWithTransactions('latest');
+      expect(block).toBeDefined();
+    });
+  });
+
+  it(`should have correct assets`, async () => {
     if (shouldSkip) {
       return;
     }
@@ -171,13 +219,14 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
     const expectedBaseAsset = [
       {
         ...expectedRawBaseAsset[0],
-        icon: 'https://cdn.fuel.network/assets/eth.svg',
+        icon: 'https://assets.fuel.network/providers/eth.svg',
       },
     ];
 
     const totalAssets = 27;
+    const chainId = await provider.getChainId();
 
-    expect(CHAIN_IDS.fuel[selectedNetwork]).toEqual(provider.getChainId());
+    expect(CHAIN_IDS.fuel[selectedNetwork]).toEqual(chainId);
 
     // Ensure contains base asset
     expect(rawAssets).containSubset(expectedRawBaseAsset);

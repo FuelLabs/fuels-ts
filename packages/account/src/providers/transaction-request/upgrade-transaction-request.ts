@@ -1,6 +1,5 @@
 import { FuelError } from '@fuel-ts/errors';
 import { hash } from '@fuel-ts/hasher';
-import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import {
   TransactionType,
@@ -8,6 +7,7 @@ import {
   type UpgradePurpose,
   UpgradePurposeTypeEnum,
 } from '@fuel-ts/transactions';
+import type { BytesLike } from '@fuel-ts/utils';
 import { hexlify } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
@@ -177,7 +177,7 @@ export class UpgradeTransactionRequest extends BaseTransactionRequest {
    *
    * @returns metadata gas cost for the upgrade transaction.
    */
-  metadataGas(gasCosts: GasCosts): BN {
+  override metadataGas(gasCosts: GasCosts): BN {
     const txBytesSize = this.byteSize();
 
     if (this.upgradePurpose.type === UpgradePurposeTypeEnum.ConsensusParameters) {

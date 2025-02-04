@@ -153,7 +153,7 @@ describe('runTypegen.js', () => {
   });
 
   test('should log messages to stdout', async () => {
-    const logSpy = vi.spyOn(console, 'log');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
     // setup temp sway project
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
@@ -272,7 +272,7 @@ describe('runTypegen.js', () => {
     cpSync(fromBin, toBin);
 
     // mocking
-    const logSpy = vi.spyOn(console, 'log');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
     // executes program
     const fn = () =>

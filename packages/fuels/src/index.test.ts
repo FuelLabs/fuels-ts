@@ -7,7 +7,7 @@ describe('index.js', () => {
   test('should export everything', () => {
     expect(fuels.hexlify).toBeTruthy();
     expect(fuels.arrayify).toBeTruthy();
-
+    expect(fuels.concat).toBeTruthy();
     expect(fuels.Interface).toBeTruthy();
     expect(fuels.Address).toBeTruthy();
     expect(fuels.FuelError).toBeTruthy();
@@ -19,8 +19,6 @@ describe('index.js', () => {
     expect(fuels.TransactionType).toBeTruthy();
     expect(fuels.Script).toBeTruthy();
     expect(fuels.FunctionInvocationScope).toBeTruthy();
-    expect(fuels.arrayify).toBeTruthy();
-    expect(fuels.hexlify).toBeTruthy();
-    expect(fuels.concat).toBeTruthy();
+    expect(fuels.Src14OwnedProxy).toBeTruthy();
   });
 });

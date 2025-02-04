@@ -11,13 +11,13 @@ Wallets can be used for many important things, for instance:
 
 The SDK has multiple classes related to a Wallet instance:
 
-- [Wallet](../../api/Account/Wallet.md): Works simply like a wrapper providing methods to create and instantiating `WalletUnlocked` and `WalletLocked` instances.
+- [Wallet](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.Wallet.html): Works simply like a wrapper providing methods to create and instantiating `WalletUnlocked` and `WalletLocked` instances.
 
-- [WalletLocked](../../api/Account/WalletLocked.md): Provides the functionalities for a locked wallet.
+- [WalletLocked](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.WalletLocked.html): Provides the functionalities for a locked wallet.
 
-- [WalletUnlocked](../../api/Account/WalletUnlocked.md): Provides the functionalities for an unlocked wallet.
+- [WalletUnlocked](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.WalletUnlocked.html): Provides the functionalities for an unlocked wallet.
 
-- [Account](../../api/Account/Account.md): Provides an abstraction with basic functionalities for wallets or accounts to interact with the network. It is essential to notice that both `WalletLocked` and `WalletUnlocked` extend from the `Account` class.
+- [Account](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.Account.html): Provides an abstraction with basic functionalities for wallets or accounts to interact with the network. It is essential to notice that both `WalletLocked` and `WalletUnlocked` extend from the `Account` class.
 
 Let's explore these different approaches in the following sub-chapters.
 

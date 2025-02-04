@@ -2,8 +2,8 @@
 import { FuelError } from '@fuel-ts/errors';
 import { EventEmitter } from 'events';
 
+import type { Asset } from '../assets/types';
 import type { TransactionRequestLike } from '../providers';
-import type { Asset } from '../providers/assets/types';
 
 import { FuelConnectorEventTypes } from './types';
 import type {
@@ -14,6 +14,7 @@ import type {
   FuelEventArg,
   Version,
   SelectNetworkArguments,
+  FuelConnectorSendTxParams,
 } from './types';
 
 interface Connector {
@@ -42,7 +43,11 @@ interface Connector {
   signTransaction(address: string, transaction: TransactionRequestLike): Promise<string>;
   // #endregion fuel-connector-method-signTransaction
   // #region fuel-connector-method-sendTransaction
-  sendTransaction(address: string, transaction: TransactionRequestLike): Promise<string>;
+  sendTransaction(
+    address: string,
+    transaction: TransactionRequestLike,
+    params?: FuelConnectorSendTxParams
+  ): Promise<string>;
   // #endregion fuel-connector-method-sendTransaction
   // #region fuel-connector-method-currentAccount
   currentAccount(): Promise<string | null>;
@@ -193,10 +198,14 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    *
    * @param address - The address to sign the transaction
    * @param transaction - The transaction to send
-   *
+   * @param params - Optional parameters to send the transaction
    * @returns The transaction id
    */
-  async sendTransaction(_address: string, _transaction: TransactionRequestLike): Promise<string> {
+  async sendTransaction(
+    _address: string,
+    _transaction: TransactionRequestLike,
+    _params?: FuelConnectorSendTxParams
+  ): Promise<string> {
     throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
@@ -330,7 +339,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @param eventName - The event name to listen
    * @param listener - The listener function
    */
-  on<E extends FuelConnectorEvents['type'], D extends FuelEventArg<E>>(
+  override on<E extends FuelConnectorEvents['type'], D extends FuelEventArg<E>>(
     eventName: E,
     listener: (data: D) => void
   ): this {

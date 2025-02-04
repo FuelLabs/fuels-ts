@@ -36,23 +36,13 @@ const callScript = async <TData, TResult>(
 
   // Keep a list of coins we need to input to this transaction
 
-  const txCost = await account.getTransactionCost(request);
-
-  request.gasLimit = txCost.gasUsed;
-  request.maxFee = txCost.maxFee;
-
-  await account.fund(request, txCost);
-
+  await request.estimateAndFund(account);
   const response = await account.sendTransaction(request);
   const transactionResult = await response.waitForResult();
   const result = script.decodeCallResult(transactionResult);
 
   return { transactionResult, result, response };
 };
-
-// #region script-init
-// #import { ScriptRequest, arrayify };
-// #context const scriptBin = readFileSync(join(__dirname, './path/to/script-binary.bin'));
 
 type MyStruct = {
   arg_one: boolean;
@@ -86,7 +76,6 @@ describe('Script', () => {
       }
     );
   });
-  // #endregion script-init
 
   it('can call a script', async () => {
     using launched = await setupTestProviderAndWallets();

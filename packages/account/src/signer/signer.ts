@@ -1,8 +1,8 @@
 import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { hash } from '@fuel-ts/hasher';
-import type { BytesLike } from '@fuel-ts/interfaces';
 import { toBytes } from '@fuel-ts/math';
+import type { BytesLike } from '@fuel-ts/utils';
 import { hexlify, concat, arrayify } from '@fuel-ts/utils';
 import { secp256k1 } from '@noble/curves/secp256k1';
 
@@ -38,7 +38,7 @@ export class Signer {
     // Slice(1) removes the encoding scheme from the public key
     this.publicKey = hexlify(secp256k1.getPublicKey(privateKeyBytes, false).slice(1));
     this.compressedPublicKey = hexlify(secp256k1.getPublicKey(privateKeyBytes, true));
-    this.address = Address.fromPublicKey(this.publicKey);
+    this.address = new Address(this.publicKey);
   }
 
   /**
@@ -108,7 +108,7 @@ export class Signer {
    * @returns Address from signature
    */
   static recoverAddress(data: BytesLike, signature: BytesLike): Address {
-    return Address.fromPublicKey(Signer.recoverPublicKey(data, signature));
+    return new Address(Signer.recoverPublicKey(data, signature));
   }
 
   /**

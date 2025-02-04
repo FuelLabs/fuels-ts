@@ -1,9 +1,9 @@
 import { hashMessage } from '@fuel-ts/hasher';
-import type { BytesLike } from '@fuel-ts/interfaces';
+import type { BytesLike } from '@fuel-ts/utils';
 import { hexlify } from '@fuel-ts/utils';
 
 import { Account } from '../account';
-import { transactionRequestify } from '../providers';
+import { transactionRequestify, validateTransactionForAssetBurn } from '../providers';
 import type {
   TransactionRequestLike,
   CallResult,
@@ -67,7 +67,7 @@ export class BaseWalletUnlocked extends Account {
    * @param message - The message to sign.
    * @returns A promise that resolves to the signature as a ECDSA 64 bytes string.
    */
-  async signMessage(message: string): Promise<string> {
+  override async signMessage(message: string): Promise<string> {
     const signedMessage = await this.signer().sign(hashMessage(message));
     return hexlify(signedMessage);
   }
@@ -78,9 +78,9 @@ export class BaseWalletUnlocked extends Account {
    * @param transactionRequestLike - The transaction request to sign.
    * @returns A promise that resolves to the signature as a ECDSA 64 bytes string.
    */
-  async signTransaction(transactionRequestLike: TransactionRequestLike): Promise<string> {
+  override async signTransaction(transactionRequestLike: TransactionRequestLike): Promise<string> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    const chainId = this.provider.getChainId();
+    const chainId = await this.provider.getChainId();
     const hashedTransaction = transactionRequest.getTransactionId(chainId);
     const signature = await this.signer().sign(hashedTransaction);
     return hexlify(signature);
@@ -110,17 +110,22 @@ export class BaseWalletUnlocked extends Account {
    * @param estimateTxDependencies - Whether to estimate the transaction dependencies.
    * @returns A promise that resolves to the TransactionResponse object.
    */
-  async sendTransaction(
+  override async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = false }: ProviderSendTxParams = {}
+    { estimateTxDependencies = false, enableAssetBurn }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    validateTransactionForAssetBurn(
+      await this.provider.getBaseAssetId(),
+      transactionRequest,
+      enableAssetBurn
+    );
     if (estimateTxDependencies) {
       await this.provider.estimateTxDependencies(transactionRequest);
     }
     return this.provider.sendTransaction(
       await this.populateTransactionWitnessesSignature(transactionRequest),
-      { estimateTxDependencies: false }
+      { estimateTxDependencies: false, enableAssetBurn }
     );
   }
 
@@ -130,7 +135,7 @@ export class BaseWalletUnlocked extends Account {
    * @param transactionRequestLike - The transaction request to simulate.
    * @returns A promise that resolves to the CallResult object.
    */
-  async simulateTransaction(
+  override async simulateTransaction(
     transactionRequestLike: TransactionRequestLike,
     { estimateTxDependencies = true }: EstimateTransactionParams = {}
   ): Promise<CallResult> {

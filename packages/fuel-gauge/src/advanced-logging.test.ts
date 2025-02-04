@@ -1,5 +1,5 @@
 import type { FuelError } from '@fuel-ts/errors';
-import { Script, bn } from 'fuels';
+import { bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
@@ -233,16 +233,13 @@ describe('Advanced Logging', () => {
         ])
         .getTransactionRequest();
 
-      const txCost = await wallet.getTransactionCost(request);
+      await request.estimateAndFund(wallet);
 
-      request.gasLimit = txCost.gasUsed;
-      request.maxFee = txCost.maxFee;
+      const { waitForResult } = await wallet.sendTransaction(request, {
+        estimateTxDependencies: false,
+      });
 
-      await wallet.fund(request, txCost);
-
-      const tx = await wallet.sendTransaction(request, { estimateTxDependencies: false });
-
-      const { logs } = await tx.waitForResult();
+      const { logs } = await waitForResult();
 
       expect(logs).toBeDefined();
 
@@ -280,7 +277,7 @@ describe('Advanced Logging', () => {
         wallets: [wallet],
       } = launched;
 
-      const script = new Script(ScriptCallContract.bytecode, ScriptCallContract.abi, wallet);
+      const script = new ScriptCallContract(wallet);
 
       const { waitForResult } = await script.functions
         .main(advancedLogContract.id.toB256(), otherAdvancedLogContract.id.toB256(), amount)
@@ -305,23 +302,18 @@ describe('Advanced Logging', () => {
         wallets: [wallet],
       } = launched;
 
-      const script = new Script(ScriptCallContract.bytecode, ScriptCallContract.abi, wallet);
+      const script = new ScriptCallContract(wallet);
 
       const request = await script.functions
         .main(advancedLogContract.id.toB256(), otherAdvancedLogContract.id.toB256(), amount)
         .addContracts([advancedLogContract, otherAdvancedLogContract])
         .getTransactionRequest();
 
-      const txCost = await wallet.getTransactionCost(request);
+      await request.estimateAndFund(wallet);
 
-      request.gasLimit = txCost.gasUsed;
-      request.maxFee = txCost.maxFee;
+      const { waitForResult } = await wallet.sendTransaction(request);
 
-      await wallet.fund(request, txCost);
-
-      const tx = await wallet.sendTransaction(request);
-
-      const { logs } = await tx.waitForResult();
+      const { logs } = await waitForResult();
 
       expect(logs).toBeDefined();
 

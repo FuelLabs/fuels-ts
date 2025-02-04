@@ -17,18 +17,13 @@ import {
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { hash } from '@fuel-ts/hasher';
-import type { BytesLike } from '@fuel-ts/interfaces';
 import { bn } from '@fuel-ts/math';
 import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
-import { arrayify, isDefined, hexlify } from '@fuel-ts/utils';
+import type { BytesLike } from '@fuel-ts/utils';
+import { arrayify, isDefined } from '@fuel-ts/utils';
 
-import {
-  getLoaderInstructions,
-  getPredicateScriptLoaderInstructions,
-  getContractChunks,
-  getDataOffset,
-} from './loader';
+import { getLoaderInstructions, getContractChunks } from './loader';
 import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
 
 /** Amount of percentage override for chunk sizes in blob transactions */
@@ -57,11 +52,12 @@ export type DeployContractResult<TContract extends Contract = Contract> = {
 /**
  * `ContractFactory` provides utilities for deploying and configuring contracts.
  */
-export default class ContractFactory {
+export default class ContractFactory<TContract extends Contract = Contract> {
   bytecode: BytesLike;
   interface: Interface;
   provider!: Provider | null;
   account!: Account | null;
+  storageSlots: StorageSlot[];
 
   /**
    * Create a ContractFactory instance.
@@ -73,7 +69,8 @@ export default class ContractFactory {
   constructor(
     bytecode: BytesLike,
     abi: JsonAbi | Interface,
-    accountOrProvider: Account | Provider | null = null
+    accountOrProvider: Account | Provider | null = null,
+    storageSlots: StorageSlot[] = []
   ) {
     // Force the bytecode to be a byte array
     this.bytecode = arrayify(bytecode);
@@ -104,6 +101,8 @@ export default class ContractFactory {
       this.provider = accountOrProvider;
       this.account = null;
     }
+
+    this.storageSlots = storageSlots;
   }
 
   /**
@@ -123,17 +122,19 @@ export default class ContractFactory {
    * @returns The CreateTransactionRequest object for deploying the contract.
    */
   createTransactionRequest(deployOptions?: DeployContractOptions & { bytecode?: BytesLike }) {
-    const storageSlots = deployOptions?.storageSlots
-      ?.map(({ key, value }) => ({
+    const storageSlots = (deployOptions?.storageSlots ?? [])
+      .concat(this.storageSlots)
+      .map(({ key, value }) => ({
         key: hexlifyWithPrefix(key),
         value: hexlifyWithPrefix(value),
       }))
+      .filter((el, index, self) => self.findIndex((s) => s.key === el.key) === index)
       .sort(({ key: keyA }, { key: keyB }) => keyA.localeCompare(keyB));
 
     const options = {
       salt: randomBytes(32),
-      ...deployOptions,
-      storageSlots: storageSlots || [],
+      ...(deployOptions ?? {}),
+      storageSlots,
     };
 
     if (!this.provider) {
@@ -197,16 +198,16 @@ export default class ContractFactory {
    * @param deployOptions - Options for deploying the contract.
    * @returns A promise that resolves to the deployed contract instance.
    */
-  async deploy<TContract extends Contract = Contract>(
+  async deploy<T extends Contract = TContract>(
     deployOptions: DeployContractOptions = {}
-  ): Promise<DeployContractResult<TContract>> {
+  ): Promise<DeployContractResult<T>> {
     const account = this.getAccount();
-    const { consensusParameters } = account.provider.getChain();
+    const { consensusParameters } = await account.provider.getChain();
     const maxContractSize = consensusParameters.contractParameters.contractMaxSize.toNumber();
 
     return this.bytecode.length > maxContractSize
       ? this.deployAsBlobTx(deployOptions)
-      : this.deployAsCreateTx(deployOptions);
+      : this.deployAsCreateTx<T>(deployOptions);
   }
 
   /**
@@ -215,11 +216,11 @@ export default class ContractFactory {
    * @param deployOptions - Options for deploying the contract.
    * @returns A promise that resolves to the deployed contract instance.
    */
-  async deployAsCreateTx<TContract extends Contract = Contract>(
+  async deployAsCreateTx<T extends Contract = TContract>(
     deployOptions: DeployContractOptions = {}
-  ): Promise<DeployContractResult<TContract>> {
+  ): Promise<DeployContractResult<T>> {
     const account = this.getAccount();
-    const { consensusParameters } = account.provider.getChain();
+    const { consensusParameters } = await account.provider.getChain();
     const maxContractSize = consensusParameters.contractParameters.contractMaxSize.toNumber();
 
     if (this.bytecode.length > maxContractSize) {
@@ -235,7 +236,7 @@ export default class ContractFactory {
 
     const waitForResult = async () => {
       const transactionResult = await transactionResponse.waitForResult<TransactionType.Create>();
-      const contract = new Contract(contractId, this.interface, account) as TContract;
+      const contract = new Contract(contractId, this.interface, account) as T;
 
       return { contract, transactionResult };
     };
@@ -253,11 +254,11 @@ export default class ContractFactory {
    * @param deployOptions - Options for deploying the contract.
    * @returns A promise that resolves to the deployed contract instance.
    */
-  async deployAsBlobTx<TContract extends Contract = Contract>(
+  async deployAsBlobTx<T extends Contract = TContract>(
     deployOptions: DeployContractOptions = {
       chunkSizeMultiplier: CHUNK_SIZE_MULTIPLIER,
     }
-  ): Promise<DeployContractResult<TContract>> {
+  ): Promise<DeployContractResult<T>> {
     const account = this.getAccount();
     const { configurableConstants, chunkSizeMultiplier } = deployOptions;
     if (configurableConstants) {
@@ -265,7 +266,7 @@ export default class ContractFactory {
     }
 
     // Generate the chunks based on the maximum chunk size and create blob txs
-    const chunkSize = this.getMaxChunkSize(deployOptions, chunkSizeMultiplier);
+    const chunkSize = await this.getMaxChunkSize(deployOptions, chunkSizeMultiplier);
     const chunks = getContractChunks(arrayify(this.bytecode), chunkSize).map((c) => {
       const transactionRequest = this.blobTransactionRequest({
         ...deployOptions,
@@ -293,7 +294,7 @@ export default class ContractFactory {
 
     // Check the account can afford to deploy all chunks and loader
     let totalCost = bn(0);
-    const chainInfo = account.provider.getChain();
+    const chainInfo = await account.provider.getChain();
     const gasPrice = await account.provider.estimateGasPrice(10);
     const priceFactor = chainInfo.consensusParameters.feeParameters.gasPriceFactor;
 
@@ -364,10 +365,10 @@ export default class ContractFactory {
       }
 
       await this.fundTransactionRequest(createRequest, deployOptions);
-      txIdResolver(createRequest.getTransactionId(account.provider.getChainId()));
+      txIdResolver(createRequest.getTransactionId(await account.provider.getChainId()));
       const transactionResponse = await account.sendTransaction(createRequest);
       const transactionResult = await transactionResponse.waitForResult<TransactionType.Create>();
-      const contract = new Contract(contractId, this.interface, account) as TContract;
+      const contract = new Contract(contractId, this.interface, account) as T;
 
       return { contract, transactionResult };
     };
@@ -375,88 +376,6 @@ export default class ContractFactory {
     const waitForTransactionId = () => txIdPromise;
 
     return { waitForResult, contractId, waitForTransactionId };
-  }
-
-  async deployAsBlobTxForScript(): Promise<{
-    waitForResult: () => Promise<{
-      loaderBytecode: string;
-      configurableOffsetDiff: number;
-    }>;
-    blobId: string;
-  }> {
-    const account = this.getAccount();
-
-    const dataSectionOffset = getDataOffset(arrayify(this.bytecode));
-    const byteCodeWithoutDataSection = this.bytecode.slice(0, dataSectionOffset);
-
-    // Generate the associated create tx for the loader contract
-    const blobId = hash(byteCodeWithoutDataSection);
-
-    const bloTransactionRequest = this.blobTransactionRequest({
-      bytecode: byteCodeWithoutDataSection,
-    });
-
-    const { loaderBytecode, blobOffset } = getPredicateScriptLoaderInstructions(
-      arrayify(this.bytecode),
-      arrayify(blobId)
-    );
-
-    const configurableOffsetDiff = byteCodeWithoutDataSection.length - (blobOffset || 0);
-
-    const blobExists = (await account.provider.getBlobs([blobId])).length > 0;
-    if (blobExists) {
-      return {
-        waitForResult: () =>
-          Promise.resolve({ loaderBytecode: hexlify(loaderBytecode), configurableOffsetDiff }),
-        blobId,
-      };
-    }
-
-    // Check the account can afford to deploy all chunks and loader
-    let totalCost = bn(0);
-    const chainInfo = account.provider.getChain();
-    const gasPrice = await account.provider.estimateGasPrice(10);
-    const priceFactor = chainInfo.consensusParameters.feeParameters.gasPriceFactor;
-
-    const minGas = bloTransactionRequest.calculateMinGas(chainInfo);
-    const minFee = calculateGasFee({
-      gasPrice,
-      gas: minGas,
-      priceFactor,
-      tip: bloTransactionRequest.tip,
-    }).add(1);
-
-    totalCost = totalCost.add(minFee);
-
-    if (totalCost.gt(await account.getBalance())) {
-      throw new FuelError(ErrorCode.FUNDS_TOO_LOW, 'Insufficient balance to deploy contract.');
-    }
-
-    // Transaction id is unset until we have funded the create tx, which is dependent on the blob txs
-    const waitForResult = async () => {
-      // Deploy the chunks as blob txs
-      const fundedBlobRequest = await this.fundTransactionRequest(bloTransactionRequest);
-
-      let result: TransactionResult<TransactionType.Blob>;
-
-      try {
-        const blobTx = await account.sendTransaction(fundedBlobRequest);
-        result = await blobTx.waitForResult();
-      } catch (err: unknown) {
-        throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
-      }
-
-      if (!result.status || result.status !== TransactionStatus.success) {
-        throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
-      }
-
-      return { loaderBytecode: hexlify(loaderBytecode), configurableOffsetDiff };
-    };
-
-    return {
-      waitForResult,
-      blobId,
-    };
   }
 
   /**
@@ -544,7 +463,7 @@ export default class ContractFactory {
   /**
    * Get the maximum chunk size for deploying a contract by chunks.
    */
-  private getMaxChunkSize(
+  private async getMaxChunkSize(
     deployOptions: DeployContractOptions,
     chunkSizeMultiplier: number = CHUNK_SIZE_MULTIPLIER
   ) {
@@ -556,7 +475,7 @@ export default class ContractFactory {
     }
 
     const account = this.getAccount();
-    const { consensusParameters } = account.provider.getChain();
+    const { consensusParameters } = await account.provider.getChain();
     const contractSizeLimit = consensusParameters.contractParameters.contractMaxSize.toNumber();
     const transactionSizeLimit = consensusParameters.txParameters.maxSize.toNumber();
     const maxLimit = 64000;
@@ -570,7 +489,9 @@ export default class ContractFactory {
       ...deployOptions,
       bytecode: randomBytes(32),
     }).addResources(
-      account.generateFakeResources([{ assetId: account.provider.getBaseAssetId(), amount: bn(1) }])
+      account.generateFakeResources([
+        { assetId: await account.provider.getBaseAssetId(), amount: bn(1) },
+      ])
     );
     // Given above, calculate the maximum chunk size
     const maxChunkSize = (sizeLimit - blobTx.byteLength() - WORD_SIZE) * chunkSizeMultiplier;

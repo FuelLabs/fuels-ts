@@ -25,7 +25,7 @@ export enum ErrorCode {
   WORKSPACE_NOT_DETECTED = 'workspace-not-detected',
 
   // address
-  INVALID_BECH32_ADDRESS = 'invalid-bech32-address',
+  INVALID_ADDRESS = 'invalid-address',
   INVALID_EVM_ADDRESS = 'invalid-evm-address',
   INVALID_B256_ADDRESS = 'invalid-b256-address',
 
@@ -85,6 +85,8 @@ export enum ErrorCode {
   MAX_INPUTS_EXCEEDED = 'max-inputs-exceeded',
   FUNDS_TOO_LOW = 'funds-too-low',
   MAX_OUTPUTS_EXCEEDED = 'max-outputs-exceeded',
+  MAX_COINS_REACHED = 'max-coins-reached',
+  ASSET_BURN_DETECTED = 'asset-burn-detected',
 
   // receipt
   INVALID_RECEIPT_TYPE = 'invalid-receipt-type',
@@ -100,6 +102,9 @@ export enum ErrorCode {
   INVALID_PASSWORD = 'invalid-password',
   ACCOUNT_REQUIRED = 'account-required',
   UNLOCKED_WALLET_REQUIRED = 'unlocked-wallet-required',
+
+  // bn
+  NUMBER_TOO_BIG = 'number-too-big',
 
   // chain
   ERROR_BUILDING_BLOCK_EXPLORER_URL = 'error-building-block-explorer-url',

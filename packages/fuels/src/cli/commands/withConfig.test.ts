@@ -45,7 +45,11 @@ describe('withConfig', () => {
       if (params?.shouldErrorOnDeploy) {
         throw new Error('Something happened');
       }
-      return Promise.resolve([]);
+      return Promise.resolve({
+        contracts: [],
+        scripts: [],
+        predicates: [],
+      });
     });
 
     const { error } = mockLogger();
@@ -65,7 +69,7 @@ describe('withConfig', () => {
       shouldErrorOnDeploy: true,
     });
 
-    await withConfig(command, Commands.deploy, deploy)();
+    await expect(withConfig(command, Commands.deploy, deploy)).rejects.toThrow();
 
     expect(loadConfig).toHaveBeenCalledTimes(1);
     expect(loadConfig.mock.calls[0][0]).toEqual(configPath);
@@ -80,7 +84,7 @@ describe('withConfig', () => {
       shouldErrorOnLoadConfig: true,
     });
 
-    await withConfig(command, Commands.deploy, deploy)();
+    await expect(withConfig(command, Commands.deploy, deploy)).rejects.toThrow();
 
     expect(loadConfig).toHaveBeenCalledTimes(1);
     expect(loadConfig.mock.calls[0][0]).toEqual(configPath);

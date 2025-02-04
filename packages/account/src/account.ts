@@ -1,16 +1,16 @@
 import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
+import type { AddressInput, WithAddress } from '@fuel-ts/address';
 import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { AbstractAccount } from '@fuel-ts/interfaces';
-import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { InputType } from '@fuel-ts/transactions';
+import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, isDefined } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
-import type { FuelConnector } from './connectors';
+import type { FuelConnector, FuelConnectorSendTxParams } from './connectors';
 import type {
   TransactionRequest,
   CoinQuantityLike,
@@ -23,7 +23,6 @@ import type {
   EstimateTransactionParams,
   CursorPaginationArgs,
   TransactionRequestLike,
-  ProviderSendTxParams,
   CallResult,
   GetCoinsResponse,
   GetMessagesResponse,
@@ -31,6 +30,7 @@ import type {
   Coin,
   TransactionCostParams,
   TransactionResponse,
+  ProviderSendTxParams,
 } from './providers';
 import {
   withdrawScript,
@@ -46,6 +46,7 @@ import {
   isRequestInputResource,
 } from './providers/transaction-request/helpers';
 import { mergeQuantities } from './providers/utils/merge-quantities';
+import { AbstractAccount } from './types';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
 
 export type TxParamsType = Pick<
@@ -54,10 +55,18 @@ export type TxParamsType = Pick<
 >;
 
 export type TransferParams = {
-  destination: string | AbstractAddress;
+  destination: string | Address;
   amount: BigNumberish;
-  assetId?: BytesLike;
+  assetId: BytesLike;
 };
+
+export type ContractTransferParams = {
+  contractId: string | Address;
+  amount: BigNumberish;
+  assetId: BytesLike;
+};
+
+export type AccountSendTxParams = ProviderSendTxParams & FuelConnectorSendTxParams;
 
 export type EstimatedTxParams = Pick<
   TransactionCost,
@@ -70,11 +79,11 @@ export type FakeResources = Partial<Coin> & Required<Pick<Coin, 'amount' | 'asse
 /**
  * `Account` provides an abstraction for interacting with accounts or wallets on the network.
  */
-export class Account extends AbstractAccount {
+export class Account extends AbstractAccount implements WithAddress {
   /**
    * The address associated with the account.
    */
-  readonly address: AbstractAddress;
+  readonly address: Address;
 
   /**
    * The provider used to interact with the network.
@@ -93,11 +102,11 @@ export class Account extends AbstractAccount {
    * @param provider - A Provider instance  (optional).
    * @param connector - A FuelConnector instance (optional).
    */
-  constructor(address: string | AbstractAddress, provider?: Provider, connector?: FuelConnector) {
+  constructor(address: AddressInput, provider?: Provider, connector?: FuelConnector) {
     super();
     this._provider = provider;
     this._connector = connector;
-    this.address = Address.fromDynamicInput(address);
+    this.address = new Address(address);
   }
 
   /**
@@ -178,7 +187,7 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves to the balance amount.
    */
   async getBalance(assetId?: BytesLike): Promise<BN> {
-    const assetIdToFetch = assetId ?? this.provider.getBaseAssetId();
+    const assetIdToFetch = assetId ?? (await this.provider.getBaseAssetId());
     const amount = await this.provider.getBalance(this.address, assetIdToFetch);
     return amount;
   }
@@ -205,7 +214,7 @@ export class Account extends AbstractAccount {
       params;
 
     const fee = request.maxFee;
-    const baseAssetId = this.provider.getBaseAssetId();
+    const baseAssetId = await this.provider.getBaseAssetId();
     const requiredInBaseAsset =
       requiredQuantities.find((quantity) => quantity.assetId === baseAssetId)?.amount || bn(0);
 
@@ -302,7 +311,7 @@ export class Account extends AbstractAccount {
       );
     }
 
-    this.provider.validateTransaction(request);
+    await this.provider.validateTransaction(request);
 
     request.updatePredicateGasUsed(estimatedPredicates);
 
@@ -317,6 +326,7 @@ export class Account extends AbstractAccount {
 
     const { maxFee } = await this.provider.estimateTxGasAndFee({
       transactionRequest: requestToReestimate,
+      gasPrice,
     });
 
     request.maxFee = maxFee;
@@ -334,14 +344,21 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves to the prepared transaction request.
    */
   async createTransfer(
-    destination: string | AbstractAddress,
+    destination: string | Address,
     amount: BigNumberish,
     assetId?: BytesLike,
     txParams: TxParamsType = {}
   ): Promise<ScriptTransactionRequest> {
     let request = new ScriptTransactionRequest(txParams);
-    request = this.addTransfer(request, { destination, amount, assetId });
+
+    request = this.addTransfer(request, {
+      destination,
+      amount,
+      assetId: assetId || (await this.provider.getBaseAssetId()),
+    });
+
     request = await this.estimateAndFundTransaction(request, txParams);
+
     return request;
   }
 
@@ -355,7 +372,7 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves to the transaction response.
    */
   async transfer(
-    destination: string | AbstractAddress,
+    destination: string | Address,
     amount: BigNumberish,
     assetId?: BytesLike,
     txParams: TxParamsType = {}
@@ -391,11 +408,7 @@ export class Account extends AbstractAccount {
   addTransfer(request: ScriptTransactionRequest, transferParams: TransferParams) {
     const { destination, amount, assetId } = transferParams;
     this.validateTransferAmount(amount);
-    request.addCoinOutput(
-      Address.fromAddressOrString(destination),
-      amount,
-      assetId ?? this.provider.getBaseAssetId()
-    );
+    request.addCoinOutput(new Address(destination), amount, assetId);
     return request;
   }
 
@@ -407,12 +420,11 @@ export class Account extends AbstractAccount {
    * @returns The updated script transaction request.
    */
   addBatchTransfer(request: ScriptTransactionRequest, transferParams: TransferParams[]) {
-    const baseAssetId = this.provider.getBaseAssetId();
     transferParams.forEach(({ destination, amount, assetId }) => {
       this.addTransfer(request, {
         destination,
         amount,
-        assetId: assetId ?? baseAssetId,
+        assetId,
       });
     });
     return request;
@@ -428,46 +440,55 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves to the transaction response.
    */
   async transferToContract(
-    contractId: string | AbstractAddress,
+    contractId: string | Address,
     amount: BigNumberish,
-    assetId?: BytesLike,
+    assetId: BytesLike,
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    if (bn(amount).lte(0)) {
-      throw new FuelError(
-        ErrorCode.INVALID_TRANSFER_AMOUNT,
-        'Transfer amount must be a positive number.'
-      );
-    }
+    return this.batchTransferToContracts([{ amount, assetId, contractId }], txParams);
+  }
 
-    const contractAddress = Address.fromAddressOrString(contractId);
-    const assetIdToTransfer = assetId ?? this.provider.getBaseAssetId();
-    const { script, scriptData } = await assembleTransferToContractScript({
-      hexlifiedContractId: contractAddress.toB256(),
-      amountToTransfer: bn(amount),
-      assetId: assetIdToTransfer,
-    });
-
+  async batchTransferToContracts(
+    contractTransferParams: ContractTransferParams[],
+    txParams: TxParamsType = {}
+  ): Promise<TransactionResponse> {
     let request = new ScriptTransactionRequest({
       ...txParams,
-      script,
-      scriptData,
     });
 
-    request.addContractInputAndOutput(contractAddress);
+    const quantities: CoinQuantity[] = [];
 
-    const txCost = await this.getTransactionCost(request, {
-      quantities: [{ amount: bn(amount), assetId: String(assetIdToTransfer) }],
+    const defaultAssetId = await this.provider.getBaseAssetId();
+
+    const transferParams = contractTransferParams.map((transferParam) => {
+      const amount = bn(transferParam.amount);
+      const contractAddress = new Address(transferParam.contractId);
+
+      const assetId = transferParam.assetId ? hexlify(transferParam.assetId) : defaultAssetId;
+
+      if (amount.lte(0)) {
+        throw new FuelError(
+          ErrorCode.INVALID_TRANSFER_AMOUNT,
+          'Transfer amount must be a positive number.'
+        );
+      }
+
+      request.addContractInputAndOutput(contractAddress);
+      quantities.push({ amount, assetId });
+
+      return {
+        amount,
+        contractId: contractAddress.toB256(),
+        assetId,
+      };
     });
 
-    request = this.validateGasLimitAndMaxFee({
-      transactionRequest: request,
-      gasUsed: txCost.gasUsed,
-      maxFee: txCost.maxFee,
-      txParams,
-    });
+    const { script, scriptData } = await assembleTransferToContractScript(transferParams);
 
-    await this.fund(request, txCost);
+    request.script = script;
+    request.scriptData = scriptData;
+
+    request = await this.estimateAndFundTransaction(request, txParams, { quantities });
 
     return this.sendTransaction(request);
   }
@@ -481,11 +502,11 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves to the transaction response.
    */
   async withdrawToBaseLayer(
-    recipient: string | AbstractAddress,
+    recipient: AddressInput,
     amount: BigNumberish,
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    const recipientAddress = Address.fromAddressOrString(recipient);
+    const recipientAddress = new Address(recipient);
     // add recipient and amount to the transaction script code
     const recipientDataArray = arrayify(
       '0x'.concat(recipientAddress.toHexString().substring(2).padStart(64, '0'))
@@ -501,7 +522,7 @@ export class Account extends AbstractAccount {
 
     const params: ScriptTransactionRequestLike = { script, ...txParams };
 
-    const baseAssetId = this.provider.getBaseAssetId();
+    const baseAssetId = await this.provider.getBaseAssetId();
     let request = new ScriptTransactionRequest(params);
     const quantities = [{ amount: bn(amount), assetId: baseAssetId }];
 
@@ -531,10 +552,10 @@ export class Account extends AbstractAccount {
    */
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
-    { signatureCallback, quantities = [] }: TransactionCostParams = {}
+    { signatureCallback, quantities = [], gasPrice }: TransactionCostParams = {}
   ): Promise<TransactionCost> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
-    const baseAssetId = this.provider.getBaseAssetId();
+    const baseAssetId = await this.provider.getBaseAssetId();
 
     // Fund with fake UTXOs to avoid not enough funds error
     // Getting coin quantities from amounts being transferred
@@ -582,6 +603,7 @@ export class Account extends AbstractAccount {
 
     const txCost = await this.provider.getTransactionCost(txRequestClone, {
       signatureCallback,
+      gasPrice,
     });
 
     return {
@@ -630,11 +652,14 @@ export class Account extends AbstractAccount {
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true }: ProviderSendTxParams = {}
+    { estimateTxDependencies = true, onBeforeSend, skipCustomFee = false }: AccountSendTxParams = {}
   ): Promise<TransactionResponse> {
     if (this._connector) {
       return this.provider.getTransactionResponse(
-        await this._connector.sendTransaction(this.address.toString(), transactionRequestLike)
+        await this._connector.sendTransaction(this.address.toString(), transactionRequestLike, {
+          onBeforeSend,
+          skipCustomFee,
+        })
       );
     }
     const transactionRequest = transactionRequestify(transactionRequestLike);
@@ -693,10 +718,11 @@ export class Account extends AbstractAccount {
   /** @hidden * */
   private async estimateAndFundTransaction(
     transactionRequest: ScriptTransactionRequest,
-    txParams: TxParamsType
+    txParams: TxParamsType,
+    costParams?: TransactionCostParams
   ) {
     let request = transactionRequest;
-    const txCost = await this.getTransactionCost(request);
+    const txCost = await this.getTransactionCost(request, costParams);
     request = this.validateGasLimitAndMaxFee({
       transactionRequest: request,
       gasUsed: txCost.gasUsed,
