@@ -1,9 +1,9 @@
 import { ErrorCode } from '@fuel-ts/errors';
-import { TransactionResponse, Wallet, ScriptTransactionRequest, buildFunctionResult } from 'fuels';
+import { TransactionResponse, Wallet, ScriptTransactionRequest } from 'fuels';
 import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 import type { MockInstance } from 'vitest';
 
-import { CallTestContract, CallTestContractFactory } from '../test/typegen';
+import { CallTestContractFactory } from '../test/typegen';
 
 async function verifyKeepAliveMessageWasSent(subscriptionStream: ReadableStream<Uint8Array>) {
   const decoder = new TextDecoder();
