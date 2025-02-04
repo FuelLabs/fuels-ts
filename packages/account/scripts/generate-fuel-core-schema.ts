@@ -1,15 +1,18 @@
-import { execSync } from "child_process";
-import { join } from "path";
+import { execSync } from 'child_process';
+import { join } from 'path';
 
-import { setupTestProviderAndWallets } from "../src/test-utils/setup-test-provider-and-wallets";
+import { setupTestProviderAndWallets } from '../src/test-utils/setup-test-provider-and-wallets';
 
-using launched = await setupTestProviderAndWallets();
+const { error } = console;
 
-const accountPackageDir = join(process.cwd(), "packages/account");
-const schemaPath = join(
-  accountPackageDir,
-  "src/providers/fuel-core-schema.graphql",
-);
-execSync(
-  `cd ${accountPackageDir} && pnpm get-graphql-schema ${launched.provider.url} > ${schemaPath} && prettier --write ${schemaPath}`,
-);
+const main = async () => {
+  using launched = await setupTestProviderAndWallets();
+
+  const schemaPath = join(__dirname, '..', 'src/providers/fuel-core-schema.graphql');
+
+  execSync(
+    `pnpm get-graphql-schema ${launched.provider.url} > ${schemaPath} && prettier --write ${schemaPath}`
+  );
+};
+
+main().catch(error);
