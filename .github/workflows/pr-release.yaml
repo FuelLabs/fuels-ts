@@ -53,6 +53,8 @@ jobs:
           NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HOME: ${{ github.workspace }}
+          npm_config_registry: "https://npm.pkg.github.com"
 
       - uses: mshick/add-pr-comment@v2
         with:
