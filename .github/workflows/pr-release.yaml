@@ -60,5 +60,19 @@ jobs:
         with:
           message: |
             This PR is published in GitHub Packages with version **${{ steps.release.outputs.published_version }}**
+
+            Install using the following command:
+
+            ```bash
+            pnpm add @fuel-labs/fuels@${{ steps.release.outputs.published_version }}
+            ```
+
+            Or update your package.json:
+
+            ```json
+            "dependencies": {
+              "@fuel-labs/fuels": "${{ steps.release.outputs.published_version }}"
+            }
+            ```
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
