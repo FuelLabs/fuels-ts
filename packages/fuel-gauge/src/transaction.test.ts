@@ -9,7 +9,8 @@ import {
   sleep,
   TransactionType,
 } from 'fuels';
-import { ASSET_A, expectToThrowFuelError, launchTestNode, TestMessage } from 'fuels/test-utils';
+import { ASSET_A, expectToThrowFuelError, launchTestNode, TestMessage, TestCoin } from 'fuels/test-utils';
+import { bn } from 'fuels';
 
 import { CallTestContractFactory } from '../test/typegen';
 
@@ -316,5 +317,47 @@ describe('Transaction', () => {
         assetId: await provider.getBaseAssetId(),
       })
     );
+  });
+
+  it('should handle transaction with TestCoin', async () => {
+    using launched = await launchTestNode();
+    const { provider, wallets: [wallet] } = launched;
+
+    const baseAssetId = await provider.getBaseAssetId();
+    const initialBalance = await wallet.getBalance(baseAssetId);
+
+    // Create test coins with specific parameters
+    const testCoin = new TestCoin({
+      amount: bn(1000),
+      owner: wallet.address.toB256(),
+      assetId: baseAssetId,
+    });
+
+    const request = new ScriptTransactionRequest({
+      gasLimit: 10000,
+      gasPrice: 1,
+    });
+
+    // Add test coin as input
+    request.addCoinInput(testCoin.toCoin());
+
+    // Add output to send coins back to wallet
+    request.addCoinOutput(wallet.address.toB256(), testCoin.amount, baseAssetId);
+
+    // Fund and send transaction
+    await request.estimateAndFund(wallet);
+    const tx = await wallet.sendTransaction(request);
+    const result = await tx.waitForResult();
+
+    // Verify transaction success
+    expect(result.isStatusSuccess).toBeTruthy();
+
+    // Verify balance changes
+    const finalBalance = await wallet.getBalance(baseAssetId);
+    expect(finalBalance.gte(initialBalance)).toBeTruthy();
+
+    // Verify coin was spent
+    const spentCoins = await wallet.getCoinsToSpend(baseAssetId);
+    expect(spentCoins.find((c) => c.id === testCoin.id)).toBeUndefined();
   });
 });
