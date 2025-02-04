@@ -3,6 +3,8 @@ import { TransactionResponse, Wallet, ScriptTransactionRequest } from 'fuels';
 import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 import type { MockInstance } from 'vitest';
 
+import { CallTestContractFactory } from '../test/typegen';
+
 async function verifyKeepAliveMessageWasSent(subscriptionStream: ReadableStream<Uint8Array>) {
   const decoder = new TextDecoder();
   const reader = subscriptionStream.getReader();
@@ -460,5 +462,49 @@ describe('TransactionResponse', () => {
     expect(finalisedResult.fee.toNumber()).toBeGreaterThan(0);
     expect(getLatestGasPriceSpy).toHaveBeenCalledTimes(1);
     expect(finalisedResult.id).toBe(tx.id);
+  });
+
+  it('builds response and assembles result [from contract call]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [CallTestContractFactory],
+    });
+
+    const {
+      provider,
+      wallets: [genesisWallet],
+      contracts: [contract],
+    } = launched;
+
+    const txReq = await contract.functions.assert_u8(100, 100).getTransactionRequest();
+    await txReq.estimateAndFund(genesisWallet);
+    const txId = await txReq.getTransactionId(await provider.getChainId());
+
+    const response = await genesisWallet.sendTransaction(txReq);
+    const result = await response.waitForResult();
+
+    expect(result.isStatusSuccess).toBe(true);
+    expect(result.id).toBe(txId);
+  });
+
+  it('builds response and assembles result [from contract call w/ destructure]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [CallTestContractFactory],
+    });
+
+    const {
+      provider,
+      wallets: [genesisWallet],
+      contracts: [contract],
+    } = launched;
+
+    const txReq = await contract.functions.assert_u8(100, 100).getTransactionRequest();
+    await txReq.estimateAndFund(genesisWallet);
+    const txId = await txReq.getTransactionId(await provider.getChainId());
+
+    const { waitForResult } = await genesisWallet.sendTransaction(txReq);
+    const result = await waitForResult();
+
+    expect(result.isStatusSuccess).toBe(true);
+    expect(result.id).toBe(txId);
   });
 });
