@@ -32,7 +32,9 @@ export function init(program: Command) {
 
       const selectedSwayType = optionName.slice(0, -1);
 
-      const programs = pathsOrGlobs.flatMap((pathOrGlob) => findPrograms(pathOrGlob));
+      const programs = pathsOrGlobs.flatMap((pathOrGlob) =>
+        findPrograms(pathOrGlob, { cwd: path })
+      );
       const programDirs = programs
         .filter(({ swayType }) => swayType === selectedSwayType)
         .map(({ path: programPath }) => relative(path, programPath));
@@ -40,37 +42,60 @@ export function init(program: Command) {
     }
   );
 
+  // Check that at least one of the options is informed
   const noneIsInformed = ![workspace, contracts, scripts, predicates].find((v) => v !== undefined);
-
   if (noneIsInformed) {
     // mimicking commander property validation
     // eslint-disable-next-line no-console
     console.log(`error: required option '-w, --workspace <path>' not specified\r`);
     process.exit(1);
-  } else {
-    const fuelsConfigPath = join(path, 'fuels.config.ts');
+  }
 
-    if (existsSync(fuelsConfigPath)) {
-      throw new FuelError(
-        FuelError.CODES.CONFIG_FILE_ALREADY_EXISTS,
-        `Config file exists, aborting.\n  ${fuelsConfigPath}`
-      );
+  // Ensure that every program that is defined, has at least one program
+  const programLengths = [contracts, scripts, predicates]
+    .filter(Boolean)
+    .map((programs) => programs?.length);
+  if (programLengths.some((length) => length === 0)) {
+    const [contractLength, scriptLength, predicateLength] = programLengths;
+
+    const message = ['error: unable to detect program/s'];
+    if (contractLength === 0) {
+      message.push(`- contract/s detected ${contractLength}`);
+    }
+    if (scriptLength === 0) {
+      message.push(`- script/s detected ${scriptLength}`);
+    }
+    if (predicateLength === 0) {
+      message.push(`- predicate/s detected ${predicateLength}`);
     }
 
-    const renderedConfig = renderFuelsConfigTemplate({
-      workspace,
-      contracts,
-      scripts,
-      predicates,
-      output,
-      forcPath,
-      fuelCorePath,
-      autoStartFuelCore,
-      fuelCorePort,
-    });
-
-    writeFileSync(fuelsConfigPath, renderedConfig);
-
-    log(`Config file created at:\n\n ${fuelsConfigPath}\n`);
+    // eslint-disable-next-line no-console
+    console.log(message.join('\r\n'));
+    process.exit(1);
   }
+
+  const fuelsConfigPath = join(path, 'fuels.config.ts');
+
+  if (existsSync(fuelsConfigPath)) {
+    throw new FuelError(
+      FuelError.CODES.CONFIG_FILE_ALREADY_EXISTS,
+      `Config file exists, aborting.\n  ${fuelsConfigPath}`
+    );
+  }
+
+  const renderedConfig = renderFuelsConfigTemplate({
+    workspace,
+    contracts,
+    scripts,
+    predicates,
+    output,
+    forcPath,
+    fuelCorePath,
+    autoStartFuelCore,
+    fuelCorePort,
+  });
+
+  writeFileSync(fuelsConfigPath, renderedConfig);
+
+  log(`Config file created at:\n\n ${fuelsConfigPath}\n`);
 }

@@ -77,14 +77,14 @@ describe('init', () => {
     const relativeContractPaths = [
       paths.upgradableChunkedContractPath,
       paths.upgradableContractPath,
-      paths.contractsBarDir,
       paths.contractsFooDir,
+      paths.contractsBarDir,
     ].map((path) => path.replace(paths.workspaceDir, 'workspace'));
 
     expect(existsSync(paths.fuelsConfigPath)).toBeTruthy();
     const fuelsConfig = await loadFuelsConfig(paths.fuelsConfigPath);
     expect(fuelsConfig).toEqual({
-      contracts: expect.arrayContaining(relativeContractPaths),
+      contracts: relativeContractPaths,
       output: './output',
     });
   });
@@ -105,6 +105,47 @@ describe('init', () => {
       contracts: [relativeBarDir],
       output: './output',
     });
+  });
+
+  it('should run `init` command with --contracts [glob path - multiple contracts]', async () => {
+    await runInit({
+      root: paths.root,
+      contracts: [`${paths.workspaceDir}/*`],
+      output: paths.outputDir,
+    });
+
+    const relativeContractPaths = [
+      paths.upgradableChunkedContractPath,
+      paths.upgradableContractPath,
+      paths.contractsFooDir,
+      paths.contractsBarDir,
+    ].map((path) => path.replace(paths.workspaceDir, 'workspace'));
+
+    expect(existsSync(paths.fuelsConfigPath)).toBeTruthy();
+
+    const fuelsConfig = await loadFuelsConfig(paths.fuelsConfigPath);
+    expect(fuelsConfig).toEqual({
+      contracts: relativeContractPaths,
+      output: './output',
+    });
+  });
+
+  it('should run `init` command with --contracts [no matches - log error]', async () => {
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const exit = vi.spyOn(process, 'exit').mockResolvedValue({} as never);
+
+    await runInit({
+      root: paths.root,
+      contracts: [`${paths.predicatesDir}/*`],
+      output: paths.outputDir,
+    });
+
+    expect(logSpy).toHaveBeenCalledTimes(1);
+    expect(logSpy).toHaveBeenCalledWith(
+      ['error: unable to detect program/s', '- contract/s detected 0'].join('\r\n')
+    );
+    expect(exit).toHaveBeenCalledTimes(1);
+    expect(exit).toHaveBeenCalledWith(1);
   });
 
   it('should run `init` command with --predicates', async () => {

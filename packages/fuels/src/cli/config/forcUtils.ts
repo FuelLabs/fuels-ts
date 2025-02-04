@@ -154,9 +154,10 @@ export const getStorageSlotsPath = (contractPath: string, { buildMode }: FuelsCo
   return join(contractPath, `/out/${buildMode}/${projectName}-storage_slots.json`);
 };
 
-export const findPrograms = (pathOrGlob: string) => {
-  const pathWithoutGlob = pathOrGlob.replace(/[/][*]*$/, '');
-  const allTomlPaths = globSync(`${pathWithoutGlob}/**/*.toml`);
+export const findPrograms = (pathOrGlob: string, opts?: { cwd?: string }) => {
+  const pathWithoutGlob = pathOrGlob.replace(/[/][*]*$/, '').replace(opts?.cwd ?? '', '');
+  const absolutePath = join(opts?.cwd ?? '', pathWithoutGlob);
+  const allTomlPaths = globSync(`${absolutePath}/**/*.toml`);
 
   return (
     allTomlPaths
