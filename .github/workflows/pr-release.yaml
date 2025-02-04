@@ -62,14 +62,14 @@ jobs:
             Install using the following command:
 
             ```bash
-            pnpm add @fuel-labs/fuels@${{ steps.release.outputs.published_version }}
+            pnpm add @fuellabs/fuels@${{ steps.release.outputs.published_version }}
             ```
 
             Or update your package.json:
 
             ```json
             "dependencies": {
-              "@fuel-labs/fuels": "${{ steps.release.outputs.published_version }}"
+              "@fuellabs/fuels": "${{ steps.release.outputs.published_version }}"
             }
             ```
         env:
