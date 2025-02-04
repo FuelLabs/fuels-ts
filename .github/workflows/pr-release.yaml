@@ -1,4 +1,4 @@
-name: Release to @pr-<number> tag on npm
+name: Release to @pr-<number> tag on GitHub Packages
 on:
   pull_request:
   workflow_dispatch:
@@ -7,7 +7,7 @@ jobs:
   release-pr:
     name: "Release PR to GitHub Packages"
     runs-on: ubuntu-latest
-    # comment out if:false to enable release PR to npm
+    # comment out if:false to enable release PR to GitHub Packages
     # if: false
     permissions: write-all
     steps:
