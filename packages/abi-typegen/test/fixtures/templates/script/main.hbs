@@ -15,7 +15,7 @@ import {
   BigNumberish,
   BN,
   decompressBytecode,
-  Script,
+  Script as __Script,
 } from 'fuels';
 
 import type { Option, Enum, Vec, Result } from "./common";
@@ -268,7 +268,7 @@ const abi = {
 
 const bytecode = decompressBytecode('0x-bytecode-here');
 
-export class MyScript extends Script<MyScriptInputs, MyScriptOutput> {
+export class MyScript extends __Script<MyScriptInputs, MyScriptOutput> {
 
   static readonly abi = abi;
   static readonly bytecode = bytecode;

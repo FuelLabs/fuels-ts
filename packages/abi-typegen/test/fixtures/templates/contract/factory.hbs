@@ -10,14 +10,14 @@
   Fuel-Core version: 33.33.33
 */
 
-import { ContractFactory, decompressBytecode } from "fuels";
+import { ContractFactory as __ContractFactory, decompressBytecode } from "fuels";
 import type { Provider, Account, DeployContractOptions } from "fuels";
 
 import { MyContract } from "./MyContract";
 
 const bytecode = decompressBytecode("0x-bytecode-here");
 
-export class MyContractFactory extends ContractFactory<MyContract> {
+export class MyContractFactory extends __ContractFactory<MyContract> {
 
   static readonly bytecode = bytecode;
 

@@ -71,7 +71,7 @@ export class Predicate<
       abi,
       configurableConstants
     );
-    const address = Address.fromB256(getPredicateRoot(predicateBytes));
+    const address = new Address(getPredicateRoot(predicateBytes));
     super(address, provider);
 
     this.initialBytecode = arrayify(bytecode);

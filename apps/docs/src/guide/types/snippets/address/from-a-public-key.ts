@@ -7,7 +7,7 @@ const provider = new Provider(LOCAL_NETWORK_URL);
 
 const wallet = Wallet.generate({ provider });
 
-const address = Address.fromPublicKey(wallet.publicKey);
+const address = new Address(wallet.publicKey);
 // #endregion full
 
 console.log('address', address);

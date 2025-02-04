@@ -63,8 +63,8 @@ describe('Minimum gas tests', () => {
     /**
      * Send transaction
      */
-    const result = await wallet.sendTransaction(request);
-    const { status } = await result.waitForResult();
+    const { waitForResult } = await wallet.sendTransaction(request);
+    const { status } = await waitForResult();
 
     expect(status).toBe(TransactionStatus.success);
   });
@@ -149,8 +149,8 @@ describe('Minimum gas tests', () => {
     /**
      * Send transaction predicate
      */
-    const result = await predicate.sendTransaction(request);
-    const { status, receipts } = await result.waitForResult();
+    const { waitForResult } = await predicate.sendTransaction(request);
+    const { status, receipts } = await waitForResult();
     const gasUsedFromReceipts = getGasUsedFromReceipts(receipts);
 
     expect(status).toBe(TransactionStatus.success);
