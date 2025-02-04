@@ -45,7 +45,7 @@
     "prettier:format": "prettier --write packages --write apps/docs",
     "verify:package-exports": "tsx ./scripts/verify-package-exports",
     "changeset:publish": "tsx ./scripts/changeset/changeset-publish",
-    "changeset:next": "tsx ./scripts/changeset/changeset-next",
+    "changeset:next": "tsx ./scripts/changeset/changeset-next.mts",
     "changeset:version-with-docs": "tsx ./scripts/changeset/changeset-version-with-docs",
     "changeset:update-changelog": "tsx ./scripts/changeset/update-changelog.mts",
     "changeset:get-latest-release": "tsx ./scripts/changeset/get-latest-release.mts",
