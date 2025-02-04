@@ -6,8 +6,7 @@ type OnErrorFn = (reason?: number | Error) => void;
 export const onForcExit =
   (onResultFn: OnResultFn, onErrorFn: OnErrorFn) => (code: number | null) => {
     if (code) {
-      onErrorFn(code);
-      //  process.exit()?
+      onErrorFn(new Error(`forc exited with error code ${code}`));
     } else {
       onResultFn();
     }

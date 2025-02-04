@@ -693,9 +693,6 @@ query getBalances(
     first: $first
     last: $last
   ) {
-    pageInfo {
-      ...pageInfoFragment
-    }
     edges {
       node {
         assetId
@@ -727,6 +724,12 @@ query getMessages(
         ...getMessageFragment
       }
     }
+  }
+}
+
+query daCompressedBlock($height: U32!) {
+  daCompressedBlock(height: $height) {
+    bytes
   }
 }
 

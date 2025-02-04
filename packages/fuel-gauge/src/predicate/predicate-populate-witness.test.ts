@@ -73,9 +73,9 @@ describe('Predicate', () => {
       transactionRequest.gasLimit = bn(100_000);
       transactionRequest.maxFee = bn(120_000);
 
-      const tx = await provider.sendTransaction(transactionRequest);
+      const { waitForResult } = await provider.sendTransaction(transactionRequest);
 
-      const { isStatusSuccess } = await tx.waitForResult();
+      const { isStatusSuccess } = await waitForResult();
 
       expect(isStatusSuccess).toBeTruthy();
     });
@@ -129,9 +129,9 @@ describe('Predicate', () => {
 
       transactionRequest = await wallet1.populateTransactionWitnessesSignature(transactionRequest);
 
-      const tx = await provider.sendTransaction(transactionRequest);
+      const { waitForResult } = await provider.sendTransaction(transactionRequest);
 
-      const { isStatusSuccess } = await tx.waitForResult();
+      const { isStatusSuccess } = await waitForResult();
 
       expect(isStatusSuccess).toBeTruthy();
     });
@@ -201,9 +201,9 @@ describe('Predicate', () => {
       transactionRequest = await wallet1.populateTransactionWitnessesSignature(transactionRequest);
       transactionRequest = await wallet2.populateTransactionWitnessesSignature(transactionRequest);
 
-      const tx = await provider.sendTransaction(transactionRequest);
+      const { waitForResult } = await provider.sendTransaction(transactionRequest);
 
-      const { isStatusSuccess } = await tx.waitForResult();
+      const { isStatusSuccess } = await waitForResult();
 
       expect(isStatusSuccess).toBeTruthy();
     });
@@ -296,9 +296,9 @@ describe('Predicate', () => {
       transactionRequest = await wallet2.populateTransactionWitnessesSignature(transactionRequest);
       transactionRequest = await wallet3.populateTransactionWitnessesSignature(transactionRequest);
 
-      const tx = await provider.sendTransaction(transactionRequest);
+      const { waitForResult } = await provider.sendTransaction(transactionRequest);
 
-      const { isStatusSuccess } = await tx.waitForResult();
+      const { isStatusSuccess } = await waitForResult();
 
       expect(isStatusSuccess).toBeTruthy();
     });
@@ -378,9 +378,9 @@ describe('Predicate', () => {
       transactionRequest = await wallet1.populateTransactionWitnessesSignature(transactionRequest);
       transactionRequest = await wallet2.populateTransactionWitnessesSignature(transactionRequest);
 
-      const tx = await provider.sendTransaction(transactionRequest);
+      const { waitForResult } = await provider.sendTransaction(transactionRequest);
 
-      const { isStatusSuccess } = await tx.waitForResult();
+      const { isStatusSuccess } = await waitForResult();
 
       expect(isStatusSuccess).toBeTruthy();
     });
@@ -472,9 +472,9 @@ describe('Predicate', () => {
       transactionRequest = await wallet2.populateTransactionWitnessesSignature(transactionRequest);
       transactionRequest = await wallet3.populateTransactionWitnessesSignature(transactionRequest);
 
-      const tx = await provider.sendTransaction(transactionRequest);
+      const { waitForResult } = await provider.sendTransaction(transactionRequest);
 
-      const { isStatusSuccess } = await tx.waitForResult();
+      const { isStatusSuccess } = await waitForResult();
 
       expect(isStatusSuccess).toBeTruthy();
     });

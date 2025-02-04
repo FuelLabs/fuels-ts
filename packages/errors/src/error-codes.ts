@@ -103,6 +103,9 @@ export enum ErrorCode {
   ACCOUNT_REQUIRED = 'account-required',
   UNLOCKED_WALLET_REQUIRED = 'unlocked-wallet-required',
 
+  // bn
+  NUMBER_TOO_BIG = 'number-too-big',
+
   // chain
   ERROR_BUILDING_BLOCK_EXPLORER_URL = 'error-building-block-explorer-url',
 
