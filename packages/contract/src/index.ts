@@ -3,7 +3,4 @@ export {
   DeployContractOptions,
   DeployContractResult,
 } from './contract-factory';
-/**
- * @hidden
- */
-export * as ContractUtils from './util';
+export { getContractRoot, getContractStorageRoot, getContractId, hexlifyWithPrefix } from './util';
