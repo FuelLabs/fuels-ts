@@ -273,7 +273,7 @@ describe('Doc Examples', () => {
 
     const assetId = await provider.getBaseAssetId();
 
-    const submitted = await fundingWallet.batchTransfer([
+    const { waitForResult } = await fundingWallet.batchTransfer([
       {
         amount: 1_000_000,
         destination: wallet1.address,
@@ -291,7 +291,7 @@ describe('Doc Examples', () => {
       },
     ]);
 
-    await submitted.waitForResult();
+    await waitForResult();
 
     const receiver = Wallet.generate({ provider });
 
