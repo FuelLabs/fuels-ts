@@ -24,7 +24,7 @@ const response = await contract.functions.identity(addressIdentityInput).get();
 const identityFromOutput: IdentityOutput = response.value;
 const addressStringFromOutput: AddressOutput =
   identityFromOutput.Address as AddressOutput;
-const addressFromOutput = Address.fromB256(addressStringFromOutput.bits);
+const addressFromOutput = new Address(addressStringFromOutput.bits);
 // #endregion identity-address-output
 
 console.log('equals', addressFromOutput.equals(address));

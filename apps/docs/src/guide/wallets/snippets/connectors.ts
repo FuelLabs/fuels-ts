@@ -99,7 +99,7 @@ class WalletConnector extends FuelConnector {
       {
         name: 'Ethereum',
         symbol: 'ETH',
-        icon: 'https://cdn.fuel.network/assets/eth.svg',
+        icon: 'https://assets.fuel.network/providers/eth.svg',
         networks: [
           {
             type: 'ethereum',

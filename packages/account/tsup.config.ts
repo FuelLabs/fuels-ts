@@ -3,7 +3,7 @@ import { mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import type { Options } from 'tsup';
 
-import { assets } from './src/providers/assets';
+import { assets } from './src/assets';
 
 const configs: Options = {
   ...tsupDefaults,
@@ -14,7 +14,7 @@ const configs: Options = {
   },
   // eslint-disable-next-line @typescript-eslint/require-await
   onSuccess: async () => {
-    const outputDir = join(__dirname, 'src', 'providers', 'assets', 'images');
+    const outputDir = join(__dirname, 'src', 'assets', 'images');
     mkdirSync(outputDir, {
       recursive: true,
     });

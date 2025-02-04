@@ -1,8 +1,8 @@
 import type { BigNumberish } from 'fuels';
-import { bn, Script } from 'fuels';
+import { bn, Script as FuelScript } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { ScriptMainArgs, ScriptMainReturnStruct, ScriptMainTwoArgs } from '../test/typegen';
+import { ScriptMainArgs, ScriptMainReturnStruct, Script } from '../test/typegen';
 
 type Baz = {
   x: number;
@@ -20,7 +20,7 @@ describe('Script Coverage', () => {
     } = launched;
 
     const foo = 33;
-    const scriptInstance = new Script<BigNumberish[], BigNumberish>(
+    const scriptInstance = new FuelScript<BigNumberish[], BigNumberish>(
       ScriptMainArgs.bytecode,
       ScriptMainArgs.abi,
       wallet
@@ -40,7 +40,7 @@ describe('Script Coverage', () => {
       wallets: [wallet],
     } = launched;
 
-    const scriptInstance = new ScriptMainTwoArgs(wallet);
+    const scriptInstance = new Script(wallet);
     const foo = 33;
     const bar: Baz = {
       x: 12,
@@ -79,7 +79,7 @@ describe('Script Coverage', () => {
       wallets: [wallet],
     } = launched;
 
-    const scriptInstance = new Script<BigNumberish[], BigNumberish>(
+    const scriptInstance = new FuelScript<BigNumberish[], BigNumberish>(
       ScriptMainArgs.bytecode,
       ScriptMainArgs.abi,
       wallet

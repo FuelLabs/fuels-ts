@@ -390,6 +390,10 @@ export default defineConfig({
                 text: 'Using assets',
                 link: '/guide/utilities/using-assets',
               },
+              {
+                text: 'Asset API',
+                link: '/guide/utilities/asset-api',
+              },
             ],
           },
           {

@@ -86,8 +86,8 @@ describe('CLI', { timeout: 15_000 }, () => {
 
     expect(toolchain).toEqual({ channel: 'testnet' });
     expect(components).toEqual({
-      forc: '0.66.5',
-      'fuel-core': '0.40.2',
+      forc: '0.66.6',
+      'fuel-core': '0.40.4',
     });
   });
 
