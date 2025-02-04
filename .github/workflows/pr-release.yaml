@@ -19,6 +19,8 @@ jobs:
 
       - name: CI Setup
         uses: ./.github/actions/ci-setup
+        with:
+          registry-url: "https://npm.pkg.github.com"
 
       - name: Create .npmrc
         run: |
