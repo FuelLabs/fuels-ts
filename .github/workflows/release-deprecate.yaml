@@ -24,6 +24,7 @@ jobs:
   deprecate-npm-versions:
     name: Deprecate versions next, pr and rc
     runs-on: buildjet-4vcpu-ubuntu-2204
+    environment: npm-deploy
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -34,7 +35,7 @@ jobs:
       - name: Setup NPM registry
         uses: FuelLabs/github-actions/setups/npm@master
         with:
-          npm-token: ${{ secrets.NPM_TOKEN }}
+          npm-token: ${{ secrets.NPM_DEPLOY_TOKEN }}
 
       - name: Deprecate
         run: pnpm release:deprecate
