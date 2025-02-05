@@ -1,7 +1,7 @@
 import { FuelError } from '@fuel-ts/errors';
 import { type Command } from 'commander';
-import { existsSync, writeFileSync } from 'fs';
-import { join, relative, resolve } from 'path';
+import { existsSync, statSync, writeFileSync } from 'fs';
+import { dirname, join, relative, resolve } from 'path';
 
 import { findPrograms } from '../../config/forcUtils';
 import { renderFuelsConfigTemplate } from '../../templates/fuels.config';
@@ -23,22 +23,27 @@ export function init(program: Command) {
   const absoluteOutput = resolve(path, options.output);
   const output = `./${relative(path, absoluteOutput)}`;
 
+  const convertFilePathToDir = (filePath: string) =>
+    statSync(resolve(path, filePath)).isDirectory() ? filePath : dirname(filePath);
+
   const [contracts, scripts, predicates] = ['contracts', 'scripts', 'predicates'].map(
     (optionName) => {
-      const pathsOrGlobs: string[] = options[optionName];
-      if (!pathsOrGlobs) {
+      // Globs `/*` get expanded by the OS auto-magically
+      const paths: string[] = options[optionName];
+      if (!paths) {
         return undefined;
       }
 
       const selectedSwayType = optionName.slice(0, -1);
 
-      const programs = pathsOrGlobs.flatMap((pathOrGlob) =>
-        findPrograms(pathOrGlob, { cwd: path })
-      );
+      const programs = paths
+        .map(convertFilePathToDir)
+        .flatMap((pathOrGlob) => findPrograms(pathOrGlob, { cwd: path }));
       const programDirs = programs
         .filter(({ swayType }) => swayType === selectedSwayType)
         .map(({ path: programPath }) => relative(path, programPath));
-      return programDirs;
+
+      return [...new Set(programDirs)];
     }
   );
 

@@ -1,4 +1,5 @@
 import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'fs';
+import { globSync } from 'glob';
 import { join, basename } from 'path';
 
 import type { FuelsConfig } from '../../src';
@@ -120,11 +121,8 @@ export type BuildParams = BaseParams & {
 export async function runInit(params: InitParams) {
   const {
     autoStartFuelCore,
-    contracts,
     output,
-    predicates,
     root,
-    scripts,
     forcPath,
     fuelCorePath,
     workspace,
@@ -136,6 +134,14 @@ export async function runInit(params: InitParams) {
     flags: (string | string[] | undefined)[],
     value?: string | string[] | boolean
   ): string[] => (value ? (flags.flat() as string[]) : []);
+
+  // The OS auto-magically expands glob patterns before passing them to the CLI
+  // We mimic this behavior here, as we by-pass the OS for our tests
+  const expandGlob = (value: undefined | string | string[]) =>
+    value ? globSync(value, { cwd: root }) : undefined;
+  const contracts = expandGlob(params.contracts);
+  const scripts = expandGlob(params.scripts);
+  const predicates = expandGlob(params.predicates);
 
   const flags = [
     flag(['--path', root], root),
