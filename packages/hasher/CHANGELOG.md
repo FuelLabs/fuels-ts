@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.99.0
+
+### Patch Changes
+
+- Updated dependencies [d1825c9]
+  - @fuel-ts/utils@0.99.0
+  - @fuel-ts/crypto@0.99.0
+
 ## 0.98.0
 
 ### Patch Changes
