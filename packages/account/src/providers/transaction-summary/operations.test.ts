@@ -46,7 +46,6 @@ import {
   isTypeCreate,
   isTypeMint,
   isTypeScript,
-  mergeOperations,
 } from './operations';
 import type { Operation } from './types';
 import { AddressType, OperationName, TransactionTypeName, ChainName } from './types';
@@ -828,6 +827,91 @@ describe('operations', () => {
       expect(operationsAddedSameContractCall.length).toEqual(1);
       expect(operationsAddedSameContractCall[0].calls?.length).toEqual(2);
     });
+
+    it('should merge receipts when adding operations', () => {
+      const receipt1: TransactionResultReceipt = {
+        type: ReceiptType.Transfer,
+        to: '0xabc',
+        amount: bn(100),
+        assetId: '0x0',
+        id: '0x123',
+        pc: bn(0),
+        is: bn(0),
+      };
+
+      const receipt2: TransactionResultReceipt = {
+        type: ReceiptType.Transfer,
+        to: '0xdef',
+        amount: bn(200),
+        assetId: '0x0',
+        id: '0x456',
+        pc: bn(0),
+        is: bn(0),
+      };
+
+      const op1: Operation = {
+        name: OperationName.transfer,
+        receipts: [receipt1],
+      };
+
+      const op2: Operation = {
+        name: OperationName.transfer,
+        receipts: [receipt2],
+      };
+
+      const operations = addOperation([op1], op2);
+      expect(operations[0].receipts).toHaveLength(2);
+      expect(operations[0].receipts).toContainEqual(receipt1);
+      expect(operations[0].receipts).toContainEqual(receipt2);
+    });
+
+    it('should not duplicate receipts when adding operations', () => {
+      const receipt: TransactionResultReceipt = {
+        type: ReceiptType.Transfer,
+        to: '0xabc',
+        amount: bn(100),
+        assetId: '0x0',
+        id: '0x123',
+        pc: bn(0),
+        is: bn(0),
+      };
+
+      const op1: Operation = {
+        name: OperationName.transfer,
+        receipts: [receipt],
+      };
+
+      const op2: Operation = {
+        name: OperationName.transfer,
+        receipts: [receipt],
+      };
+
+      const operations = addOperation([op1], op2);
+      expect(operations[0].receipts).toHaveLength(1);
+      expect(operations[0].receipts?.[0]).toEqual(receipt);
+    });
+
+    it('should handle operations without receipts', () => {
+      const op1: Operation = {
+        name: OperationName.transfer,
+      };
+
+      const op2: Operation = {
+        name: OperationName.transfer,
+        receipts: [{
+          type: ReceiptType.Transfer,
+          to: '0xabc',
+          amount: bn(100),
+          assetId: '0x0',
+          id: '0x123',
+          pc: bn(0),
+          is: bn(0),
+        }],
+      };
+
+      const operations = addOperation([op1], op2);
+      expect(operations[0].receipts).toHaveLength(1);
+    });
   });
 
   describe('isType', () => {
@@ -958,94 +1042,5 @@ describe('operations', () => {
     expect(() => getTransactionTypeName('' as unknown as TransactionType)).toThrowError(
       'Unsupported transaction type: '
     );
-  });
-
-  describe('mergeOperations', () => {
-    it('should merge receipts from two operations correctly', () => {
-      const receipt1: TransactionResultReceipt = {
-        type: ReceiptType.Transfer,
-        to: '0xabc',
-        amount: bn(100),
-        assetId: '0x0',
-        id: '0x123',
-        pc: bn(0),
-        is: bn(0),
-      };
-
-      const receipt2: TransactionResultReceipt = {
-        type: ReceiptType.Transfer,
-        to: '0xdef',
-        amount: bn(200),
-        assetId: '0x0',
-        id: '0x456',
-        pc: bn(0),
-        is: bn(0),
-      };
-
-      const op1: Operation = {
-        name: OperationName.transfer,
-        receipts: [receipt1],
-      };
-
-      const op2: Operation = {
-        name: OperationName.transfer,
-        receipts: [receipt2],
-      };
-
-      const merged = mergeOperations(op1, op2);
-      expect(merged.receipts).toHaveLength(2);
-      expect(merged.receipts).toContainEqual(receipt1);
-      expect(merged.receipts).toContainEqual(receipt2);
-    });
-
-    it('should not duplicate receipts when merging', () => {
-      const receipt: TransactionResultReceipt = {
-        type: ReceiptType.Transfer,
-        to: '0xabc',
-        amount: bn(100),
-        assetId: '0x0',
-        id: '0x123',
-        pc: bn(0),
-        is: bn(0),
-      };
-
-      const op1: Operation = {
-        name: OperationName.transfer,
-        receipts: [receipt],
-      };
-
-      const op2: Operation = {
-        name: OperationName.transfer,
-        receipts: [receipt],
-      };
-
-      const merged = mergeOperations(op1, op2);
-      expect(merged.receipts).toHaveLength(1);
-      expect(merged.receipts?.[0]).toEqual(receipt);
-    });
-
-    it('should handle operations without receipts', () => {
-      const op1: Operation = {
-        name: OperationName.transfer,
-      };
-
-      const op2: Operation = {
-        name: OperationName.transfer,
-        receipts: [
-          {
-            type: ReceiptType.Transfer,
-            to: '0xabc',
-            amount: bn(100),
-            assetId: '0x0',
-            id: '0x123',
-            pc: bn(0),
-            is: bn(0),
-          },
-        ],
-      };
-
-      const merged = mergeOperations(op1, op2);
-      expect(merged.receipts).toHaveLength(1);
-    });
   });
 });
