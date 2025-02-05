@@ -191,7 +191,7 @@ function mergeCalls(existing: Operation, toAdd: Operation): Operation['calls'] {
 }
 
 /** @hidden */
-function mergeOperations(existing: Operation, toAdd: Operation): Operation {
+export function mergeOperations(existing: Operation, toAdd: Operation): Operation {
   return {
     ...existing,
     assetsSent: mergeAssetsSent(existing, toAdd),
