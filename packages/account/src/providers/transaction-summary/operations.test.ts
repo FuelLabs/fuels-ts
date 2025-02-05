@@ -898,15 +898,17 @@ describe('operations', () => {
 
       const op2: Operation = {
         name: OperationName.transfer,
-        receipts: [{
-          type: ReceiptType.Transfer,
-          to: '0xabc',
-          amount: bn(100),
-          assetId: '0x0',
-          id: '0x123',
-          pc: bn(0),
-          is: bn(0),
-        }],
+        receipts: [
+          {
+            type: ReceiptType.Transfer,
+            to: '0xabc',
+            amount: bn(100),
+            assetId: '0x0',
+            id: '0x123',
+            pc: bn(0),
+            is: bn(0),
+          },
+        ],
       };
 
       const operations = addOperation([op1], op2);
