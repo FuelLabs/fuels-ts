@@ -1,6 +1,5 @@
 ---
-"@fuel-ts/account": minor
-"@fuel-ts/recipes": minor
+"@fuel-ts/account": patch
 ---
 
-Send receipts with the operations summary.
+feat: add receipts with the operations summary
