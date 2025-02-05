@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.99.0
+
+### Patch Changes
+
+- 69e1ba8: fix: incorrect function coder offset usage
+- 56adcc5: chore: fix version resolutions
+- Updated dependencies [d1825c9]
+- Updated dependencies [b3bb765]
+  - @fuel-ts/utils@0.99.0
+  - @fuel-ts/errors@0.99.0
+  - @fuel-ts/math@0.99.0
+  - @fuel-ts/crypto@0.99.0
+  - @fuel-ts/hasher@0.99.0
+
 ## 0.98.0
 
 ### Patch Changes
