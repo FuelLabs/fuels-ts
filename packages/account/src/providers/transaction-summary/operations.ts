@@ -198,9 +198,7 @@ export function mergeOperations(existing: Operation, toAdd: Operation): Operatio
     calls: mergeCalls(existing, toAdd),
     receipts: [
       ...(existing.receipts || []),
-      ...(toAdd.receipts?.filter(
-        (r) => !existing.receipts?.some((er) => er === r)
-      ) || []),
+      ...(toAdd.receipts?.filter((r) => !existing.receipts?.some((er) => er === r)) || []),
     ],
   };
 }
