@@ -1,3 +1,4 @@
+import type { AddressInput } from '@fuel-ts/address';
 import { Address } from '@fuel-ts/address';
 import type { Keystore } from '@fuel-ts/crypto';
 import { encrypt, decrypt } from '@fuel-ts/crypto';
@@ -111,8 +112,8 @@ export class WalletManager extends EventEmitter {
   /**
    * Create a Wallet instance for the specific account
    */
-  getWallet(address: string | Address): WalletUnlocked {
-    const ownerAddress = Address.fromAddressOrString(address);
+  getWallet(address: AddressInput): WalletUnlocked {
+    const ownerAddress = new Address(address);
     const vaultState = this.#vaults.find((vs) =>
       vs.vault.getAccounts().find((a) => a.address.equals(ownerAddress))
     );
@@ -124,8 +125,8 @@ export class WalletManager extends EventEmitter {
   /**
    * Export specific account privateKey
    */
-  exportPrivateKey(address: string | Address) {
-    const ownerAddress = Address.fromAddressOrString(address);
+  exportPrivateKey(address: AddressInput) {
+    const ownerAddress = new Address(address);
     assert(!this.#isLocked, ERROR_MESSAGES.wallet_not_unlocked);
     const vaultState = this.#vaults.find((vs) =>
       vs.vault.getAccounts().find((a) => a.address.equals(ownerAddress))

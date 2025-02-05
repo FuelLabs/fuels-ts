@@ -1,6 +1,5 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
-import { hash } from '@fuel-ts/hasher';
 import { bn } from '@fuel-ts/math';
 import { arrayify } from '@fuel-ts/utils';
 
@@ -8,7 +7,8 @@ import type { Account } from '../account';
 import { BlobTransactionRequest, calculateGasFee, TransactionStatus } from '../providers';
 
 import {
-  getDataOffset,
+  getBytecodeConfigurableOffset,
+  getBytecodeId,
   getPredicateScriptLoaderInstructions,
 } from './predicate-script-loader-instructions';
 
@@ -63,16 +63,15 @@ export async function deployScriptOrPredicate<T>({
   abi,
   loaderInstanceCallback,
 }: Deployer<T>) {
-  const dataSectionOffset = getDataOffset(arrayify(bytecode));
-  const byteCodeWithoutDataSection = bytecode.slice(0, dataSectionOffset);
+  const blobId = getBytecodeId(arrayify(bytecode));
 
-  // Generate the associated create tx for the loader contract
-  const blobId = hash(byteCodeWithoutDataSection);
+  const configurableOffset = getBytecodeConfigurableOffset(arrayify(bytecode));
+  const byteCodeWithoutConfigurableSection = bytecode.slice(0, configurableOffset);
 
   const blobTxRequest = new BlobTransactionRequest({
     blobId,
     witnessIndex: 0,
-    witnesses: [byteCodeWithoutDataSection],
+    witnesses: [byteCodeWithoutConfigurableSection],
   });
 
   const { loaderBytecode, blobOffset } = getPredicateScriptLoaderInstructions(
@@ -80,8 +79,8 @@ export async function deployScriptOrPredicate<T>({
     arrayify(blobId)
   );
 
-  const configurableOffsetDiff = byteCodeWithoutDataSection.length - (blobOffset || 0);
-  const newAbi = adjustConfigurableOffsets(abi, configurableOffsetDiff);
+  const newConfigurableOffsetDiff = byteCodeWithoutConfigurableSection.length - (blobOffset || 0);
+  const newAbi = adjustConfigurableOffsets(abi, newConfigurableOffsetDiff);
 
   const blobExists = (await deployer.provider.getBlobs([blobId])).length > 0;
 

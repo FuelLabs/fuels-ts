@@ -6,7 +6,7 @@ Check the online docs:
 
 |             | Command      | Documentation                                                                                          |
 | ----------- | ------------ | ------------------------------------------------------------------------------------------------------ |
-| Fuel Binary | `fuel-core`  | [docs](https://docs.fuel.network/guides/running-a-node/running-a-local-node/) — Running a local node   |
+| Fuel Binary | `fuel-core`  | [docs](https://docs.fuel.network/docs/node-operator/fuel-ignition/local-node/) — Running a local node  |
 | TS SDK      | `fuels node` | [docs](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands/#fuels-node) — Using the `fuels` CLI |
 
 <!-- | Forc | `forc node` | [docs](https://docs.fuel.network/docs/forc/commands/forc_node/) | -->

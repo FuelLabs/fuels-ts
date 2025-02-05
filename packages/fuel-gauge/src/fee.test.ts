@@ -348,6 +348,158 @@ describe('Fee', () => {
     });
   });
 
+  it('should not run estimateGasPrice in between estimateTxDependencies dry run attempts', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: MultiTokenContractFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+      wallets: [wallet],
+      provider,
+    } = launched;
+
+    const assetId = getMintedAssetId(contract.id.toB256(), SUB_ID);
+
+    // Minting coins first
+    const mintCall = await contract.functions.mint_coins(SUB_ID, 10_000).call();
+    await mintCall.waitForResult();
+
+    const estimateGasPrice = vi.spyOn(provider, 'estimateGasPrice');
+    const dryRun = vi.spyOn(provider.operations, 'dryRun');
+
+    /**
+     * Sway transfer without adding `OutputVariable` which will result in
+     * 2 dry runs at the `Provider.estimateTxDependencies` method:
+     * - 1st dry run will fail due to missing `OutputVariable`
+     * - 2nd dry run will succeed
+     */
+    const transferCall = await contract.functions
+      .transfer_to_address({ bits: wallet.address.toB256() }, { bits: assetId }, 10_000)
+      .call();
+
+    await transferCall.waitForResult();
+
+    expect(estimateGasPrice).toHaveBeenCalledOnce();
+    expect(dryRun).toHaveBeenCalledTimes(2);
+  });
+
+  it('should ensure estimateGasPrice runs only once when funding a transaction.', async () => {
+    const amountPerCoin = 100;
+
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin, // Funding with multiple UTXOs so the fee will change after funding the TX.
+        coinsPerAsset: 250,
+      },
+      contractsConfigs: [
+        {
+          factory: MultiTokenContractFactory,
+        },
+      ],
+    });
+
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+
+    const fund = vi.spyOn(wallet, 'fund');
+    const estimateGasPrice = vi.spyOn(provider, 'estimateGasPrice');
+
+    const tx = await wallet.transfer(
+      wallet.address,
+      amountPerCoin * 20,
+      await provider.getBaseAssetId()
+    );
+    const { isStatusSuccess } = await tx.waitForResult();
+
+    expect(fund).toHaveBeenCalledOnce();
+    expect(estimateGasPrice).toHaveBeenCalledOnce();
+
+    expect(isStatusSuccess).toBeTruthy();
+  });
+
+  it('ensures estimateGasPrice runs only once when getting transaction cost [w/ gas price]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: CallTestContractFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const estimateGasPrice = vi.spyOn(provider, 'estimateGasPrice');
+
+    const txRequest = await contract.functions.foo(10).getTransactionRequest();
+    const cost = await wallet.getTransactionCost(txRequest);
+
+    expect(cost.gasUsed.toNumber()).toBeGreaterThan(0);
+    expect(estimateGasPrice).toHaveBeenCalledOnce();
+  });
+
+  it('ensures estimateGasPrice runs twice when getting transaction cost with estimate gas and fee [w/o gas price]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: CallTestContractFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const estimateGasPrice = vi.spyOn(provider, 'estimateGasPrice');
+
+    const txRequest = await contract.functions.foo(10).getTransactionRequest();
+    const { gasPrice } = await provider.estimateTxGasAndFee({ transactionRequest: txRequest });
+    const { gasUsed } = await wallet.getTransactionCost(txRequest);
+
+    expect(estimateGasPrice).toHaveBeenCalledTimes(2);
+    expect(gasPrice.toNumber()).toBeGreaterThan(0);
+    expect(gasUsed.toNumber()).toBeGreaterThan(0);
+  });
+
+  it('ensures estimateGasPrice runs only once when getting transaction cost with estimate gas and fee', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: CallTestContractFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const estimateGasPrice = vi.spyOn(provider, 'estimateGasPrice');
+
+    const txRequest = await contract.functions.foo(10).getTransactionRequest();
+    const { gasPrice } = await provider.estimateTxGasAndFee({ transactionRequest: txRequest });
+    const { gasUsed } = await wallet.getTransactionCost(txRequest, { gasPrice });
+
+    expect(gasPrice.toNumber()).toBeGreaterThan(0);
+    expect(gasUsed.toNumber()).toBeGreaterThan(0);
+    expect(estimateGasPrice).toHaveBeenCalledOnce();
+  });
+
   describe('Estimation with Message containing data within TX request inputs', () => {
     // Message with data and amount
     const testMessage1 = new TestMessage({
@@ -436,82 +588,6 @@ describe('Fee', () => {
       const cost = await fundedWallet.getTransactionCost(request);
 
       expect(cost.dryRunStatus?.type).toBe('DryRunSuccessStatus');
-    });
-
-    it('should not run estimateGasPrice in between estimateTxDependencies dry run attempts', async () => {
-      using launched = await launchTestNode({
-        contractsConfigs: [
-          {
-            factory: MultiTokenContractFactory,
-          },
-        ],
-      });
-
-      const {
-        contracts: [contract],
-        wallets: [wallet],
-        provider,
-      } = launched;
-
-      const assetId = getMintedAssetId(contract.id.toB256(), SUB_ID);
-
-      // Minting coins first
-      const mintCall = await contract.functions.mint_coins(SUB_ID, 10_000).call();
-      await mintCall.waitForResult();
-
-      const estimateGasPrice = vi.spyOn(provider, 'estimateGasPrice');
-      const dryRun = vi.spyOn(provider.operations, 'dryRun');
-
-      /**
-       * Sway transfer without adding `OutputVariable` which will result in
-       * 2 dry runs at the `Provider.estimateTxDependencies` method:
-       * - 1st dry run will fail due to missing `OutputVariable`
-       * - 2nd dry run will succeed
-       */
-      const transferCall = await contract.functions
-        .transfer_to_address({ bits: wallet.address.toB256() }, { bits: assetId }, 10_000)
-        .call();
-
-      await transferCall.waitForResult();
-
-      expect(estimateGasPrice).toHaveBeenCalledOnce();
-      expect(dryRun).toHaveBeenCalledTimes(2);
-    });
-
-    it('should ensure estimateGasPrice runs only once when funding a transaction.', async () => {
-      const amountPerCoin = 100;
-
-      using launched = await launchTestNode({
-        walletsConfig: {
-          amountPerCoin, // Funding with multiple UTXOs so the fee will change after funding the TX.
-          coinsPerAsset: 250,
-        },
-        contractsConfigs: [
-          {
-            factory: MultiTokenContractFactory,
-          },
-        ],
-      });
-
-      const {
-        wallets: [wallet],
-        provider,
-      } = launched;
-
-      const fund = vi.spyOn(wallet, 'fund');
-      const estimateGasPrice = vi.spyOn(provider, 'estimateGasPrice');
-
-      const tx = await wallet.transfer(
-        wallet.address,
-        amountPerCoin * 20,
-        await provider.getBaseAssetId()
-      );
-      const { isStatusSuccess } = await tx.waitForResult();
-
-      expect(fund).toHaveBeenCalledOnce();
-      expect(estimateGasPrice).toHaveBeenCalledOnce();
-
-      expect(isStatusSuccess).toBeTruthy();
     });
   });
 });

@@ -47,13 +47,21 @@ describe('str slice', () => {
     const amountToPredicate = 250_000;
     const amountToReceiver = 50_000;
 
-    const setupTx = await sender.transfer(predicate.address, amountToPredicate, baseAssetId);
-    await setupTx.waitForResult();
+    const { waitForResult: setupTx } = await sender.transfer(
+      predicate.address,
+      amountToPredicate,
+      baseAssetId
+    );
+    await setupTx();
 
     const initialReceiverBalance = await receiver.getBalance();
 
-    const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId);
-    const { isStatusSuccess } = await tx.waitForResult();
+    const { waitForResult } = await predicate.transfer(
+      receiver.address,
+      amountToReceiver,
+      baseAssetId
+    );
+    const { isStatusSuccess } = await waitForResult();
     const finalReceiverBalance = await receiver.getBalance();
     expect(bn(initialReceiverBalance).add(amountToReceiver).toHex()).toEqual(
       finalReceiverBalance.toHex()

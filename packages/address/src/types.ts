@@ -1,12 +1,7 @@
 import type { Address } from './address';
 
-// #region bech32-1
-/**
- * @deprecated
- * Type `Bech32Address` is now deprecated. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
- */
-export type Bech32Address = `fuel${string}`;
-// #endregion bech32-1
+export type AddressInput = string | B256Address | Address;
+
 export type B256Address = string;
 
 export type ChecksumAddress = string;

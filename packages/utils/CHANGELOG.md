@@ -1,5 +1,17 @@
 # @fuel-ts/utils
 
+## 0.99.0
+
+### Patch Changes
+
+- d1825c9: chore: update `amountPerCoin` prop in `WalletConfig` to accept BN
+- Updated dependencies [ab56ded]
+- Updated dependencies [b3bb765]
+- Updated dependencies [45cc32e]
+  - @fuel-ts/versions@0.99.0
+  - @fuel-ts/errors@0.99.0
+  - @fuel-ts/math@0.99.0
+
 ## 0.98.0
 
 ### Patch Changes

@@ -155,6 +155,8 @@ export class TransactionResponse {
     this.provider = provider;
     this.abis = abis;
     this.request = typeof tx === 'string' ? undefined : tx;
+
+    this.waitForResult = this.waitForResult.bind(this);
   }
 
   /**

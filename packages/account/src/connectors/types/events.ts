@@ -1,4 +1,4 @@
-import type { Asset } from '../../providers/assets/types';
+import type { Asset } from '../../assets/types';
 import type { FuelConnector } from '../fuel-connector';
 
 import type { FuelConnectorEventTypes } from './connector-types';

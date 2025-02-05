@@ -1,3 +1,4 @@
+import type { AddressInput } from '@fuel-ts/address';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
@@ -53,8 +54,8 @@ export class PrivateKeyVault implements Vault<PkVaultOptions> {
     return this.getPublicAccount(wallet.privateKey);
   }
 
-  exportAccount(address: string | Address): string {
-    const ownerAddress = Address.fromAddressOrString(address);
+  exportAccount(address: AddressInput): string {
+    const ownerAddress = new Address(address);
     const privateKey = this.#privateKeys.find((pk) =>
       Wallet.fromPrivateKey(pk).address.equals(ownerAddress)
     );

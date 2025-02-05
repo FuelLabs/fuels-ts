@@ -235,9 +235,11 @@ describe('Advanced Logging', () => {
 
       await request.estimateAndFund(wallet);
 
-      const tx = await wallet.sendTransaction(request, { estimateTxDependencies: false });
+      const { waitForResult } = await wallet.sendTransaction(request, {
+        estimateTxDependencies: false,
+      });
 
-      const { logs } = await tx.waitForResult();
+      const { logs } = await waitForResult();
 
       expect(logs).toBeDefined();
 
@@ -309,9 +311,9 @@ describe('Advanced Logging', () => {
 
       await request.estimateAndFund(wallet);
 
-      const tx = await wallet.sendTransaction(request);
+      const { waitForResult } = await wallet.sendTransaction(request);
 
-      const { logs } = await tx.waitForResult();
+      const { logs } = await waitForResult();
 
       expect(logs).toBeDefined();
 

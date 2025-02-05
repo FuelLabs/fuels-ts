@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/account",
-  "version": "0.98.0",
+  "version": "0.99.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -42,7 +42,7 @@
   "scripts": {
     "build": "tsup",
     "prebuild": "pnpm build:operations",
-    "build:schema": "tsx ./scripts/generate-fuel-core-schema.mts",
+    "build:schema": "tsx ./scripts/generate-fuel-core-schema.ts",
     "build:operations": "pnpm graphql-codegen",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
@@ -74,7 +74,6 @@
     "@graphql-codegen/typescript": "4.0.9",
     "@graphql-codegen/typescript-generic-sdk": "4.0.1",
     "@graphql-codegen/typescript-operations": "4.2.3",
-    "@internal/utils": "workspace:*",
     "@types/ramda": "0.30.2",
     "get-graphql-schema": "2.1.2",
     "type-fest": "4.26.1"

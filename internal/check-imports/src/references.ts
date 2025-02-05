@@ -60,7 +60,7 @@ log(runCliAction);
  * address
  */
 log(Address);
-log(Address.fromPublicKey('asdfasdf'));
+log(new Address('asdfasdf'));
 
 /**
  * contract
