@@ -185,9 +185,9 @@ jobs:
           aws s3 cp ./packages/account/src/assets/images/ s3://${{ vars.AWS_S3_BUCKET }}/providers/ --recursive
 
       - name: Notify migrations and disclosures of the new release (breaking changes)
-        run: |
-          curl -X POST \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: token ${{ steps.app-token.outputs.token }}" \
-            https://api.github.com/repos/FuelLabs/migrations-and-disclosures/dispatches \
-            -d '{"event_type":"update_versions"}'
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: migrations.yml
+          ref: master
+          repo: FuelLabs/migrations-and-disclosures
+          token: ${{ steps.app-token.outputs.token }}
