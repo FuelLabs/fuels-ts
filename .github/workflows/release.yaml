@@ -117,9 +117,7 @@ jobs:
 
           pnpm changeset:next
           pnpm changeset version --snapshot next
-          changetsets=$(pnpm changeset publish --tag next)
-          published_version=$(echo "$changetsets" | grep -oP '@\K([0-9]+\.){2}[0-9]+-next-\d+' | head -1)
-          echo "published_version=$published_version" >> $GITHUB_OUTPUT
+          pnpm changeset publish --tag next
         env:
           NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
