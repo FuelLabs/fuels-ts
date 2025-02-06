@@ -41,9 +41,19 @@ jobs:
         with:
           npm-token: ${{ secrets.NPM_DEPLOY_TOKEN }}
 
+      - name: Ensure NPM access
+        run: npm whoami
+        env:
+          HOME: ${{ github.workspace }}
+          NPM_TOKEN: ${{ secrets.NPM_DEPLOY_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_DEPLOY_TOKEN }}
+
       - name: Deprecate
         run: pnpm release:deprecate
         env:
+          HOME: ${{ github.workspace }}
+          NPM_TOKEN: ${{ secrets.NPM_DEPLOY_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_DEPLOY_TOKEN }}
           DEPRECATE_VERSIONS: ${{ github.event.inputs.deprecate_versions }}
           FILTER_BY_PACKAGE_NAME: ${{ github.event.inputs.filter_by_package_name }}
           FILTER_BY_VERSION: ${{ github.event.inputs.filter_by_package_version }}
