@@ -139,6 +139,34 @@ describe('build', { timeout: 180000 }, () => {
     expect(killChildProcess).toHaveBeenCalledTimes(0);
   });
 
+  it('should run `build` command with contracts-only [with glob to a single program]', async () => {
+    const { autoStartFuelCore, killChildProcess, deploy } = mockAll();
+
+    await runInit({
+      root: paths.root,
+      contracts: `${paths.upgradableContractPath}/*`,
+      output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
+    });
+
+    await runBuild({ root: paths.root });
+
+    const files = [
+      'contracts/Upgradable.ts',
+      'contracts/UpgradableFactory.ts',
+      'contracts/index.ts',
+      'index.ts',
+    ].map((f) => join(paths.outputDir, f));
+
+    files.forEach((file) => expect(existsSync(file), `${file} does not exist`).toBeTruthy());
+    expect(readdirSync(paths.outputContractsDir)).toHaveLength(3);
+
+    expect(autoStartFuelCore).toHaveBeenCalledTimes(0);
+    expect(deploy).toHaveBeenCalledTimes(0);
+    expect(killChildProcess).toHaveBeenCalledTimes(0);
+  });
+
   it('should run `build` command with `--deploy` flag', async () => {
     const { autoStartFuelCore, killChildProcess, deploy } = mockAll();
 
