@@ -5,7 +5,7 @@ import { join } from 'node:path';
 
 const { log, error } = console;
 
-const deprecateTags = /next|pr|rc/;
+const deprecateTags = /alpha|0.0.0/;
 const { version: currentVersion } = JSON.parse(
   readFileSync(join(process.cwd(), '/packages/fuels/package.json')).toString()
 );
@@ -35,9 +35,14 @@ const getVersionsToDeprecate = async (packageName: string): Promise<string[]> =>
   );
 
   // Only deprecate certain tags
-  const validVersions = Object.keys(versions).filter(
-    (version) => version.search(deprecateTags) > -1 && !compare(version, currentVersion, '>=')
-  );
+  const validVersions = Object.entries(versions)
+    .filter(
+      ([version, metadata]) =>
+        metadata?.deprecated === undefined &&
+        version.search(deprecateTags) > -1 &&
+        !compare(version, currentVersion, '>=')
+    )
+    .map(([version]) => version);
 
   // Remove the latest next tag from the deprecation list
   const latestNextVersion = validVersions.filter((version) => version.search('next') > -1).pop();
