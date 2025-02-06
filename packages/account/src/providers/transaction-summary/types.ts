@@ -118,6 +118,7 @@ export type Operation = {
   to?: OperationTransactionAddress;
   assetsSent?: Array<OperationCoin>;
   calls?: Array<OperationFunctionCall>;
+  receipts?: TransactionResultReceipt[];
 };
 
 /**

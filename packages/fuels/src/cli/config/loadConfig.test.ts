@@ -114,6 +114,22 @@ describe('loadConfig', () => {
     expect(config.predicates.length).toEqual(0);
   });
 
+  test(`should resolve a single contract`, async () => {
+    await runInit({
+      root: paths.root,
+      output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
+      contracts: 'workspace/contracts/bar/*',
+    });
+
+    const config = await loadConfig(paths.root);
+
+    expect(config.contracts.length).toEqual(1);
+    expect(config.scripts.length).toEqual(0);
+    expect(config.predicates.length).toEqual(0);
+  });
+
   test(`should resolve only scripts`, async () => {
     await runInit({
       root: paths.root,
