@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { existsSync, readFileSync } from 'fs';
+import { existsSync } from 'fs';
 
 import { Commands } from '../../src';
 import { mockCheckForUpdates } from '../utils/mockCheckForUpdates';
@@ -10,6 +10,7 @@ import {
   runInit,
   resetDiskAndMocks,
   resetConfigAndMocks,
+  loadFuelsConfig,
 } from '../utils/runCommands';
 
 /**
@@ -39,14 +40,14 @@ describe('init', () => {
     });
 
     expect(existsSync(paths.fuelsConfigPath)).toBeTruthy();
-    const fuelsContents = readFileSync(paths.fuelsConfigPath, 'utf-8');
-    expect(fuelsContents).toMatch(`workspace: './workspace',`);
-    expect(fuelsContents).toMatch(`output: './output',`);
-    expect(fuelsContents).not.toMatch(`forcPath: 'fuels-forc',`);
-    expect(fuelsContents).not.toMatch(`fuelCorePath: 'fuels-core',`);
+    const fuelsConfig = await loadFuelsConfig(paths.fuelsConfigPath);
+    expect(fuelsConfig).toEqual({
+      workspace: './workspace',
+      output: './output',
+    });
   });
 
-  it('should run `init` command with --contracts', async () => {
+  it('should run `init` command with --contracts [absolute paths]', async () => {
     await runInit({
       root: paths.root,
       contracts: [paths.contractsBarDir, paths.contractsFooDir],
@@ -59,25 +60,109 @@ describe('init', () => {
     ];
 
     expect(existsSync(paths.fuelsConfigPath)).toBeTruthy();
-    const fuelsContents = readFileSync(paths.fuelsConfigPath, 'utf-8');
-    expect(fuelsContents).toMatch(/contracts:/);
-    expect(fuelsContents).toMatch(relativeBarDir);
-    expect(fuelsContents).toMatch(relativeFooDir);
+    const fuelsConfig = await loadFuelsConfig(paths.fuelsConfigPath);
+    expect(fuelsConfig).toEqual({
+      contracts: [relativeBarDir, relativeFooDir],
+      output: './output',
+    });
+  });
+
+  it('should run `init` command with --contracts [glob path - multiple matches]', async () => {
+    await runInit({
+      root: paths.root,
+      contracts: [`${paths.contractsDir}/*`],
+      output: paths.outputDir,
+    });
+
+    const relativeContractPaths = [
+      paths.upgradableChunkedContractPath,
+      paths.upgradableContractPath,
+      paths.contractsFooDir,
+      paths.contractsBarDir,
+    ].map((path) => path.replace(paths.workspaceDir, 'workspace'));
+
+    expect(existsSync(paths.fuelsConfigPath)).toBeTruthy();
+    const fuelsConfig = await loadFuelsConfig(paths.fuelsConfigPath);
+    expect(fuelsConfig).toEqual({
+      contracts: relativeContractPaths,
+      output: './output',
+    });
+  });
+
+  it('should run `init` command with --contracts [glob path - single path]', async () => {
+    await runInit({
+      root: paths.root,
+      contracts: [`${paths.contractsBarDir}/*`],
+      output: paths.outputDir,
+    });
+
+    const [relativeBarDir] = [paths.contractsBarDir.replace(paths.workspaceDir, 'workspace')];
+
+    expect(existsSync(paths.fuelsConfigPath)).toBeTruthy();
+
+    const fuelsConfig = await loadFuelsConfig(paths.fuelsConfigPath);
+    expect(fuelsConfig).toEqual({
+      contracts: [relativeBarDir],
+      output: './output',
+    });
+  });
+
+  it('should run `init` command with --contracts [glob path - multiple contracts]', async () => {
+    await runInit({
+      root: paths.root,
+      contracts: [`${paths.workspaceDir}/*`],
+      output: paths.outputDir,
+    });
+
+    const relativeContractPaths = [
+      paths.upgradableChunkedContractPath,
+      paths.upgradableContractPath,
+      paths.contractsFooDir,
+      paths.contractsBarDir,
+    ].map((path) => path.replace(paths.workspaceDir, 'workspace'));
+
+    expect(existsSync(paths.fuelsConfigPath)).toBeTruthy();
+
+    const fuelsConfig = await loadFuelsConfig(paths.fuelsConfigPath);
+    expect(fuelsConfig).toEqual({
+      contracts: relativeContractPaths,
+      output: './output',
+    });
+  });
+
+  it('should run `init` command with --contracts [no matches - log error]', async () => {
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const exit = vi.spyOn(process, 'exit').mockResolvedValue({} as never);
+
+    await runInit({
+      root: paths.root,
+      contracts: [`${paths.predicatesDir}/*`],
+      output: paths.outputDir,
+    });
+
+    expect(logSpy).toHaveBeenCalledTimes(1);
+    expect(logSpy).toHaveBeenCalledWith(
+      ['error: unable to detect program/s', '- contract/s detected 0'].join('\r\n')
+    );
+    expect(exit).toHaveBeenCalledTimes(1);
+    expect(exit).toHaveBeenCalledWith(1);
   });
 
   it('should run `init` command with --predicates', async () => {
     await runInit({
       root: paths.root,
-      predicates: paths.predicateDir,
+      predicates: paths.predicatesDir,
       output: paths.outputDir,
     });
 
     const relativePredicateDir = paths.predicateDir.replace(paths.workspaceDir, 'workspace');
 
     expect(existsSync(paths.fuelsConfigPath)).toBeTruthy();
-    const fuelsContents = readFileSync(paths.fuelsConfigPath, 'utf-8');
-    expect(fuelsContents).toMatch(/predicates:/);
-    expect(fuelsContents).toMatch(relativePredicateDir);
+    const fuelsConfig = await loadFuelsConfig(paths.fuelsConfigPath);
+    expect(fuelsConfig).toEqual({
+      predicates: [relativePredicateDir],
+      output: './output',
+    });
   });
 
   it('should run `init` command with --scripts', async () => {
@@ -87,12 +172,14 @@ describe('init', () => {
       output: paths.outputDir,
     });
 
-    const relativeScriptDir = paths.scriptsDir.replace(paths.workspaceDir, 'workspace');
+    const relativeScriptDir = paths.scriptDir.replace(paths.workspaceDir, 'workspace');
 
     expect(existsSync(paths.fuelsConfigPath)).toBeTruthy();
-    const fuelsContents = readFileSync(paths.fuelsConfigPath, 'utf-8');
-    expect(fuelsContents).toMatch(/scripts:/);
-    expect(fuelsContents).toMatch(relativeScriptDir);
+    const fuelsConfig = await loadFuelsConfig(paths.fuelsConfigPath);
+    expect(fuelsConfig).toEqual({
+      scripts: [relativeScriptDir],
+      output: './output',
+    });
   });
 
   it('should run `init` command using custom binaries', async () => {
@@ -105,11 +192,13 @@ describe('init', () => {
     });
 
     expect(existsSync(paths.fuelsConfigPath)).toBeTruthy();
-    const fuelsContents = readFileSync(paths.fuelsConfigPath, 'utf-8');
-    expect(fuelsContents).toMatch(`workspace: './workspace',`);
-    expect(fuelsContents).toMatch(`output: './output',`);
-    expect(fuelsContents).toMatch(`forcPath: 'fuels-forc',`);
-    expect(fuelsContents).toMatch(`fuelCorePath: 'fuels-core',`);
+    const fuelsConfig = await loadFuelsConfig(paths.fuelsConfigPath);
+    expect(fuelsConfig).toEqual({
+      workspace: './workspace',
+      output: './output',
+      forcPath: 'fuels-forc',
+      fuelCorePath: 'fuels-core',
+    });
   });
 
   it('should run `init` command with custom fuel-core-port', async () => {
@@ -120,8 +209,12 @@ describe('init', () => {
       fuelCorePort: '1234',
     });
 
-    const fuelsContents = readFileSync(paths.fuelsConfigPath, 'utf-8');
-    expect(fuelsContents).toMatch(`fuelCorePort: 1234,`);
+    const fuelsConfig = await loadFuelsConfig(paths.fuelsConfigPath);
+    expect(fuelsConfig).toEqual({
+      fuelCorePort: 1234,
+      output: './output',
+      workspace: './workspace',
+    });
   });
 
   it('should run `init` command and throw for existent config file', async () => {
