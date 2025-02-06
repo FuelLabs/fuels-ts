@@ -66,7 +66,7 @@ const main = async () => {
         );
       }
 
-      log('The following versions will be deprecated:');
+      log(`The following versions will be deprecated ${packageName}:`);
       log(versionsToDeprecate.map((v) => `   - ${v}`).join('\n'));
 
       if (SHOULD_DEPRECATE_VERSIONS) {
