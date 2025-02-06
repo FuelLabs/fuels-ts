@@ -14,7 +14,7 @@ const FILTER_BY_PACKAGE_NAME: string = process.env.FILTER_BY_PACKAGE_NAME ?? "";
 /**
  * Restricted tags that can be deprecated
  */
-const DEPRECIABLE_TAGS: string[] = ["0.0.0-x"];
+const DEPRECIABLE_TAGS: string[] = [">=0.0.0-pr <0.0.1 || >=0.0.0-next <0.0.1"];
 
 /**
  * Packages that are no longer published to npm
@@ -94,6 +94,8 @@ for await (const packageAndVersion of depreciablePackageAndVersions) {
 
   const dryRun = SHOULD_DEPRECATE_VERSIONS ? "" : "--dry-run ";
   const command = `npm deprecate ${packageAndVersion} ${dryRun}"Version no longer supported."`;
+
+  log("Command", command);
 
   try {
     const result = execSync(command);
