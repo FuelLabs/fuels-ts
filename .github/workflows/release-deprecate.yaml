@@ -11,14 +11,6 @@ on:
         type: string
         description: Filter by package name
         default: ""
-      filter_by_package_version:
-        type: string
-        description: Filter by package version
-        default: ""
-      chunk_size:
-        type: number
-        description: Chunk size
-        default: 1000
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -56,5 +48,3 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_DEPLOY_TOKEN }}
           DEPRECATE_VERSIONS: ${{ github.event.inputs.deprecate_versions }}
           FILTER_BY_PACKAGE_NAME: ${{ github.event.inputs.filter_by_package_name }}
-          FILTER_BY_VERSION: ${{ github.event.inputs.filter_by_package_version }}
-          CHUNK_SIZE: ${{ github.event.inputs.chunk_size }}
