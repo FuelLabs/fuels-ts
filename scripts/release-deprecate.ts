@@ -1,5 +1,5 @@
 import { compare } from 'compare-versions';
-import { exec } from 'node:child_process';
+import { exec, execSync } from 'node:child_process';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -70,32 +70,23 @@ const main = async () => {
       log(versionsToDeprecate.map((v) => `   - ${v}`).join('\n'));
 
       if (SHOULD_DEPRECATE_VERSIONS) {
-        await Promise.allSettled(
-          versionsToDeprecate.map(
-            async (versionToDelete) =>
-              new Promise((resolve, reject) => {
-                exec(
-                  `npm deprecate ${packageName}@${versionToDelete} "Version no longer supported."`,
-                  (err, _stdout, stderr) => {
-                    if (err) {
-                      log(`❌ Error ${packageName}@${versionToDelete} not deprecated!\n`);
-                      error(err);
-                      reject(err);
-                      return;
-                    }
-                    if (stderr) {
-                      log(`❌ Error ${packageName}@${versionToDelete} not deprecated!\n`);
-                      error(stderr);
-                      reject(new Error(stderr));
-                      return;
-                    }
-                    log(`✅ Package ${packageName}@${versionToDelete} deprecated!\n`);
-                    resolve(true);
-                  }
-                );
-              })
-          )
-        );
+        for await (const versionToDelete of versionsToDeprecate) {
+          const command = `npm deprecate ${packageName}@"${versionToDelete}" "Version no longer supported."`;
+
+          try {
+            await execSync(command);
+            log(`✅ Package ${packageName}@${versionToDelete} deprecated!\n`);
+          } catch (err) {
+            log(`❌ Error ${packageName}@${versionToDelete} not deprecated!\n`);
+            error(err);
+          }
+
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(true);
+            }, 1000);
+          });
+        }
       }
     })
   );
