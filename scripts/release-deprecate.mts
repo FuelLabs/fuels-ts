@@ -103,7 +103,6 @@ for await (const packageAndVersion of depreciablePackageAndVersions) {
   } catch (err) {
     error(`❌ Error - unable to deprecate ${packageAndVersion}`);
     error(err);
-    process.exit(1);
   }
 
   await new Promise((resolve) => {
