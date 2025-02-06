@@ -20,8 +20,6 @@ const DEPRECIABLE_TAGS: string[] = [
 
 /**
  * Packages that are no longer published to npm
- *
- * TODO: Consider deprecating these packages
  */
 const NO_LONGER_MAINTAINED_PACKAGES: string[] = [
   "@fuel-ts/merkle-shared",
@@ -59,15 +57,14 @@ const MAINTAINED_PACKAGES: string[] = globSync("**/package.json")
   .filter((pkg) => !pkg.contents.private)
   .map((pkg) => pkg.contents.name);
 
-let packages: string[] = MAINTAINED_PACKAGES;
+let packages: string[] = [
+  ...MAINTAINED_PACKAGES,
+  ...NO_LONGER_MAINTAINED_PACKAGES,
+];
 
 // Only by using filter by package name, are we allowed to deprecate the no longer maintained packages
 if (FILTER_BY_PACKAGE_NAME !== "") {
-  const allPackages = [
-    ...MAINTAINED_PACKAGES,
-    ...NO_LONGER_MAINTAINED_PACKAGES,
-  ];
-  packages = allPackages.filter((pkg) => pkg === FILTER_BY_PACKAGE_NAME);
+  packages = packages.filter((pkg) => pkg === FILTER_BY_PACKAGE_NAME);
 
   // Ensure that we have found a package
   if (packages.length === 0) {
