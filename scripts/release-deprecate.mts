@@ -78,7 +78,7 @@ if (FILTER_BY_PACKAGE_NAME !== "") {
  * Construct the depreciable package and versions
  */
 const depreciablePackageAndVersions = packages.flatMap((pkgName) =>
-  DEPRECIABLE_TAGS.map((tag) => `${pkgName}@${tag}`),
+  DEPRECIABLE_TAGS.map((tag) => `${pkgName}@"${tag}"`),
 );
 log(
   "The following packages and versions will be deprecated\n",
