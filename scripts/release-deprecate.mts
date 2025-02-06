@@ -14,7 +14,7 @@ const FILTER_BY_PACKAGE_NAME: string = process.env.FILTER_BY_PACKAGE_NAME ?? "";
 /**
  * Restricted tags that can be deprecated
  */
-const DEPRECIABLE_TAGS: string[] = ["0.0.0-next", "0.0.0-pr", "0.0.0-rc"];
+const DEPRECIABLE_TAGS: string[] = ["0.0.0-x"];
 
 /**
  * Packages that are no longer published to npm
