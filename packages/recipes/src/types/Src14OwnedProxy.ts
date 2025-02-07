@@ -5,10 +5,10 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 
 /*
-  Fuels version: 0.97.2
+  Fuels version: 0.99.0
 */
 
-import { Contract, type InvokeFunction } from '@fuel-ts/program';
+import { Contract as __Contract, type InvokeFunction } from '@fuel-ts/program';
 import { Interface, type FunctionFragment, type StrSlice } from '@fuel-ts/abi-coder';
 import { type Provider, type Account } from '@fuel-ts/account';
 import { type StorageSlot } from '@fuel-ts/transactions';
@@ -666,7 +666,7 @@ export class Src14OwnedProxyInterface extends Interface {
   };
 }
 
-export class Src14OwnedProxy extends Contract {
+export class Src14OwnedProxy extends __Contract {
   static readonly abi = abi;
   static readonly storageSlots = storageSlots;
 
