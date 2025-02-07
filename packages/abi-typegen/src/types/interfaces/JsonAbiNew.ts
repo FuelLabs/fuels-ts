@@ -98,5 +98,5 @@ export interface Configurable {
   readonly name: string;
   readonly concreteTypeId: string;
   readonly offset: number;
-  readonly indirect: boolean;
+  readonly indirect?: boolean;
 }
