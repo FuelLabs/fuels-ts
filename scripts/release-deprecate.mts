@@ -113,8 +113,6 @@ const deprecatePackageVersions = async (packages: string[]) => {
   }
 };
 
-await deprecatePackageVersions(allPackages);
-
 const deprecateDistTags = async (packages: string[]) => {
   const packageDistTags = await Promise.all(
     packages.map(async (packageName) => {
@@ -180,4 +178,5 @@ const deprecateDistTags = async (packages: string[]) => {
   }
 };
 
+await deprecatePackageVersions(allPackages);
 await deprecateDistTags(allPackages);
