@@ -949,12 +949,12 @@ export default class Provider {
   }
 
   /**
-   * Verifies whether enough gas is available to complete transaction.
+   * Estimates the gas usage for predicates in a transaction request.
    *
    * @template T - The type of the transaction request object.
    *
-   * @param transactionRequest - The transaction request object.
-   * @returns A promise that resolves to the estimated transaction request object.
+   * @param transactionRequest - The transaction request to estimate predicates for.
+   * @returns A promise that resolves to the updated transaction request with estimated gas usage for predicates.
    */
   async estimatePredicates<T extends TransactionRequest>(transactionRequest: T): Promise<T> {
     const shouldEstimatePredicates = transactionRequest.inputs.some(
