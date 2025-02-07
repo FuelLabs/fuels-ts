@@ -57,17 +57,17 @@ const MAINTAINED_PACKAGES: string[] = globSync("**/package.json")
   .filter((pkg) => !pkg.contents.private)
   .map((pkg) => pkg.contents.name);
 
-let packages: string[] = [
+let allPackages: string[] = [
   ...MAINTAINED_PACKAGES,
   ...NO_LONGER_MAINTAINED_PACKAGES,
 ];
 
 // Only by using filter by package name, are we allowed to deprecate the no longer maintained packages
 if (FILTER_BY_PACKAGE_NAME !== "") {
-  packages = packages.filter((pkg) => pkg === FILTER_BY_PACKAGE_NAME);
+  allPackages = allPackages.filter((pkg) => pkg === FILTER_BY_PACKAGE_NAME);
 
   // Ensure that we have found a package
-  if (packages.length === 0) {
+  if (allPackages.length === 0) {
     error(`❌ No package found with name: ${FILTER_BY_PACKAGE_NAME}`);
     process.exit(1);
   }
@@ -76,38 +76,41 @@ if (FILTER_BY_PACKAGE_NAME !== "") {
 /**
  * Construct the depreciable package and versions
  */
-const depreciablePackageAndVersions = packages.flatMap((pkgName) =>
-  DEPRECIABLE_TAGS.map((tag) => `${pkgName}@"${tag}"`),
-);
-log(
-  "The following packages and versions will be deprecated\n",
-  depreciablePackageAndVersions.join("\n"),
-  "----------------------------------\n",
-);
+const deprecatePackageVersions = async (packages: string[]) => {
+  // Gather the depreciable package and versions
+  const depreciablePackageAndVersions = packages.flatMap((pkgName) =>
+    DEPRECIABLE_TAGS.map((tag) => `${pkgName}@"${tag}"`),
+  );
+  log(
+    "The following packages and versions will be deprecated\n",
+    depreciablePackageAndVersions.join("\n"),
+    "----------------------------------\n",
+  );
 
-/**
- * Deprecate the packages and versions
- */
-for await (const packageAndVersion of depreciablePackageAndVersions) {
-  log(`Deprecating ${packageAndVersion}`);
+  // Perform the deprecations of the packages and versions
+  for await (const packageAndVersion of depreciablePackageAndVersions) {
+    log(`Deprecating ${packageAndVersion}`);
 
-  const dryRun = SHOULD_DEPRECATE_VERSIONS ? "" : "--dry-run ";
-  const command = `npm deprecate ${packageAndVersion} ${dryRun}"Version no longer supported."`;
+    const dryRun = SHOULD_DEPRECATE_VERSIONS ? "" : "--dry-run ";
+    const deprecateCommand = `npm deprecate ${packageAndVersion} ${dryRun}"Version no longer supported."`;
 
-  log("Command", command);
+    try {
+      const result = execSync(deprecateCommand);
+      log(`✅ Deprecated ${packageAndVersion}`);
+      log(result.toString());
+    } catch (err) {
+      error(`❌ Error - unable to deprecate ${packageAndVersion}`);
+      error(err);
+    }
 
-  try {
-    const result = execSync(command);
-    log(`✅ Deprecated ${packageAndVersion}`);
-    log(result.toString());
-  } catch (err) {
-    error(`❌ Error - unable to deprecate ${packageAndVersion}`);
-    error(err);
+    // Wait for 1 second to avoid rate limiting
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true);
+      }, 1000);
+    });
   }
+};
 
-  await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true);
-    }, 1000);
-  });
-}
+await deprecatePackageVersions(allPackages);
+
