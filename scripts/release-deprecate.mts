@@ -1,6 +1,6 @@
 import { globSync } from "glob";
 import { execSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 
 const { log, error } = console;
 
@@ -17,6 +17,7 @@ const FILTER_BY_PACKAGE_NAME: string = process.env.FILTER_BY_PACKAGE_NAME ?? "";
 const DEPRECIABLE_TAGS: string[] = [
   ">=0.0.0-pr <0.0.1 || >=0.0.0-next <0.0.1 || >=0.0.0-master <0.0.1",
 ];
+const IGNORE_DIST_TAGS = ["latest", "next"];
 
 /**
  * Packages that are no longer published to npm
@@ -114,3 +115,69 @@ const deprecatePackageVersions = async (packages: string[]) => {
 
 await deprecatePackageVersions(allPackages);
 
+const deprecateDistTags = async (packages: string[]) => {
+  const packageDistTags = await Promise.all(
+    packages.map(async (packageName) => {
+      const resp = await fetch(`https://registry.npmjs.org/${packageName}`);
+      const data = await resp.json();
+      return { packageName, distTags: Object.keys(data["dist-tags"] ?? {}) };
+    }),
+  );
+
+  const packageDistTagsForRemoval = packageDistTags
+    .map((pkg) => ({
+      ...pkg,
+      distTags: pkg.distTags.filter(
+        (distTag) => !IGNORE_DIST_TAGS.includes(distTag),
+      ),
+    }))
+    .filter((pkg) => pkg.distTags.length > 0)
+    .flatMap((pkg) =>
+      // Format into the following format
+      // npm dist-tag rm <package-spec> <tag>
+      pkg.distTags.flatMap((distTag) => `${pkg.packageName} ${distTag}`),
+    );
+
+  // Log out all the dist tags for removal
+  log(
+    "The following dist tags will be removed\n",
+    packageDistTagsForRemoval.join("\n"),
+    "\n----------------------------------\n",
+  );
+
+  // Write out the dist tags for removal to a file
+  writeFileSync(
+    "package-dist-tags-for-removal.json",
+    JSON.stringify(packageDistTagsForRemoval, null, 2),
+  );
+
+  // If we are not deprecating the versions, then we can skip this step
+  if (!SHOULD_DEPRECATE_VERSIONS) {
+    return;
+  }
+
+  for await (const packageAndDistTag of packageDistTagsForRemoval) {
+    log(`Removing dist tag ${packageAndDistTag}`);
+
+    const removeDistTagCommand = `npm dist-tag rm ${packageAndDistTag}`;
+    log(removeDistTagCommand);
+
+    try {
+      const result = execSync(removeDistTagCommand);
+      log(`✅ Removed dist tag ${packageAndDistTag}`);
+      log(result.toString());
+    } catch (err) {
+      error(`❌ Error - unable to remove dist tag ${packageAndDistTag}`);
+      error(err);
+    }
+
+    // Wait for 1 second to avoid rate limiting
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true);
+      }, 1000);
+    });
+  }
+};
+
+await deprecateDistTags(allPackages);
