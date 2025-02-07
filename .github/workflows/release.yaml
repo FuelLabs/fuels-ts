@@ -31,11 +31,6 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/ci-setup
 
-      - name: Ensure NPM access
-        run: npm whoami
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_DEPLOY_TOKEN }}
-
       # if there are changesets present, package.json will be bumped
       - name: Bump and Collect Versions
         run: |
@@ -46,6 +41,11 @@ jobs:
           git reset --hard
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Ensure NPM access
+        run: npm whoami
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_DEPLOY_TOKEN }}
 
       - name: Build
         run: pnpm build
@@ -82,6 +82,16 @@ jobs:
           LATEST_RELEASE: ${{ env.LATEST_RELEASE }}
           RELEASE_VERSION_HIGHER_THAN_LATEST: ${{ env.RELEASE_VERSION_HIGHER_THAN_LATEST }}
 
+        # # Commenting out as we require permissions to trigger across repos
+      # - name: Update docs (nightly)
+      #   if: github.ref_name == 'master' && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
+      #   uses: benc-uk/workflow-dispatch@v1
+      #   with:
+      #     workflow: update-nightly.yml
+      #     ref: master
+      #     repo: FuelLabs/docs-hub
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create PR to apply latest release to master
         if: startsWith(github.ref_name, 'release/') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
         run: |
@@ -102,21 +112,11 @@ jobs:
 
       - name: Delete the release branch
         # We check env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'false'
-        # because we don't want to delete the branch if it's used in the "Create PR to apply latest release to master" step above
+        # because we don't want to delete the branch that os used in the "Create PR to apply latest release to master" step above
         if: startsWith(github.ref_name, 'release/') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'false'
         run: git push origin --delete ${{ github.ref_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-        # # Commenting out as we require permissions to trigger across repos
-      # - name: Update docs (nightly)
-      #   if: github.ref_name == 'master' && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
-      #   uses: benc-uk/workflow-dispatch@v1
-      #   with:
-      #     workflow: update-nightly.yml
-      #     ref: master
-      #     repo: FuelLabs/docs-hub
-      #     token: ${{ secrets.GITHUB_TOKEN }}
 
     # # Commenting out as we require permissions to trigger across repos
     # - name: Notify migrations and disclosures of the new release (breaking changes)
