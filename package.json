@@ -87,7 +87,6 @@
     "@typescript-eslint/parser": "6.21.0",
     "@vitest/browser": "2.0.5",
     "@vitest/coverage-istanbul": "2.0.5",
-    "compare-versions": "6.1.1",
     "coverage-diff": "3.2.0",
     "eslint": "8.57.0",
     "eslint-config-airbnb-base": "15.0.0",
