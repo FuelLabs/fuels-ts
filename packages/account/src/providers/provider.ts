@@ -1379,10 +1379,16 @@ export default class Provider {
       addedSignatures = signedRequest.witnesses.length - lengthBefore;
     }
 
-    await this.estimatePredicates(signedRequest);
-    txRequestClone.updatePredicateGasUsed(signedRequest.inputs);
+    let gasPrice: BN;
 
-    const gasPrice = gasPriceParam ?? (await this.estimateGasPrice(10));
+    if (gasPriceParam) {
+      gasPrice = gasPriceParam;
+      await this.estimatePredicates(signedRequest);
+    } else {
+      ({ gasPrice } = await this.estimatePredicatesAndGasPrice(signedRequest, 10));
+    }
+
+    txRequestClone.updatePredicateGasUsed(signedRequest.inputs);
 
     /**
      * Calculate minGas and maxGas based on the real transaction
