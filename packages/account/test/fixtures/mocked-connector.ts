@@ -11,9 +11,9 @@ import type {
   SelectNetworkArguments,
   AccountSendTxParams,
 } from '../../src';
+import type { Asset } from '../../src/assets/types';
 import { FuelConnector } from '../../src/connectors/fuel-connector';
 import { FuelConnectorEventTypes } from '../../src/connectors/types';
-import type { Asset } from '../../src/providers/assets/types';
 
 import { generateAccounts } from './generate-accounts';
 

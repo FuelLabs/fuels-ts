@@ -73,6 +73,7 @@ describe('operations', () => {
             assetId: ZeroBytes32,
           },
         ],
+        receipts: [MOCK_RECEIPT_CALL],
       };
 
       const receipts = [
@@ -266,6 +267,7 @@ describe('operations', () => {
           chain: ChainName.ethereum,
           type: 1,
         },
+        receipts: [MOCK_RECEIPT_MESSAGE_OUT],
       };
 
       const operations = getWithdrawFromFuelOperations({
@@ -324,6 +326,7 @@ describe('operations', () => {
               assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
             },
           ],
+          receipts: [MOCK_RECEIPT_TRANSFER_OUT],
         },
         {
           name: OperationName.contractCall,
@@ -342,6 +345,7 @@ describe('operations', () => {
               assetId: ZeroBytes32,
             },
           ],
+          receipts: [MOCK_RECEIPT_CALL],
         },
       ];
 
@@ -400,6 +404,7 @@ describe('operations', () => {
       const operationsCallNoAmount: Operation = {
         ...expected,
         assetsSent: undefined,
+        receipts: [{ ...MOCK_RECEIPT_CALL, amount: bn(0) }],
       };
 
       const operations = getOperations({
@@ -821,6 +826,93 @@ describe('operations', () => {
       const operationsAddedSameContractCall = addOperation(baseOperations, OPERATION_CONTRACT_CALL);
       expect(operationsAddedSameContractCall.length).toEqual(1);
       expect(operationsAddedSameContractCall[0].calls?.length).toEqual(2);
+    });
+
+    it('should merge receipts when adding operations', () => {
+      const receipt1: TransactionResultReceipt = {
+        type: ReceiptType.Transfer,
+        to: '0xabc',
+        amount: bn(100),
+        assetId: '0x0',
+        id: '0x123',
+        pc: bn(0),
+        is: bn(0),
+      };
+
+      const receipt2: TransactionResultReceipt = {
+        type: ReceiptType.Transfer,
+        to: '0xdef',
+        amount: bn(200),
+        assetId: '0x0',
+        id: '0x456',
+        pc: bn(0),
+        is: bn(0),
+      };
+
+      const op1: Operation = {
+        name: OperationName.transfer,
+        receipts: [receipt1],
+      };
+
+      const op2: Operation = {
+        name: OperationName.transfer,
+        receipts: [receipt2],
+      };
+
+      const operations = addOperation([op1], op2);
+      expect(operations[0].receipts).toHaveLength(2);
+      expect(operations[0].receipts).toContainEqual(receipt1);
+      expect(operations[0].receipts).toContainEqual(receipt2);
+    });
+
+    it('should not duplicate receipts when adding operations', () => {
+      const receipt: TransactionResultReceipt = {
+        type: ReceiptType.Transfer,
+        to: '0xabc',
+        amount: bn(100),
+        assetId: '0x0',
+        id: '0x123',
+        pc: bn(0),
+        is: bn(0),
+      };
+
+      const op1: Operation = {
+        name: OperationName.transfer,
+        receipts: [receipt],
+      };
+
+      const op2: Operation = {
+        name: OperationName.transfer,
+        receipts: [receipt],
+      };
+
+      const operations = addOperation([op1], op2);
+      expect(operations[0].receipts).toHaveLength(1);
+      expect(operations[0].receipts?.[0]).toEqual(receipt);
+    });
+
+    it('should handle operations without receipts', () => {
+      const op1: Operation = {
+        name: OperationName.transfer,
+      };
+
+      const op2: Operation = {
+        name: OperationName.transfer,
+        receipts: [
+          {
+            type: ReceiptType.Transfer,
+            to: '0xabc',
+            amount: bn(100),
+            assetId: '0x0',
+            id: '0x123',
+            pc: bn(0),
+            is: bn(0),
+          },
+        ],
+      };
+
+      const operations = addOperation([op1], op2);
+      expect(operations[0].receipts).toHaveLength(1);
     });
   });
 

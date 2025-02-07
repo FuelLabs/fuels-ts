@@ -7,6 +7,18 @@ on:
         type: boolean
         description: Deprecate versions? Otherwise dry-run mode will be used.
         default: false
+      filter_by_package_name:
+        type: string
+        description: Filter by package name
+        default: ""
+      filter_by_package_version:
+        type: string
+        description: Filter by package version
+        default: ""
+      chunk_size:
+        type: number
+        description: Chunk size
+        default: 1000
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -16,6 +28,7 @@ jobs:
   deprecate-npm-versions:
     name: Deprecate versions next, pr and rc
     runs-on: buildjet-4vcpu-ubuntu-2204
+    environment: npm-deploy
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,7 +36,15 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/ci-setup
 
+      - name: Setup NPM registry
+        uses: FuelLabs/github-actions/setups/npm@master
+        with:
+          npm-token: ${{ secrets.NPM_DEPLOY_TOKEN }}
+
       - name: Deprecate
         run: pnpm release:deprecate
         env:
           DEPRECATE_VERSIONS: ${{ github.event.inputs.deprecate_versions }}
+          FILTER_BY_PACKAGE_NAME: ${{ github.event.inputs.filter_by_package_name }}
+          FILTER_BY_VERSION: ${{ github.event.inputs.filter_by_package_version }}
+          CHUNK_SIZE: ${{ github.event.inputs.chunk_size }}

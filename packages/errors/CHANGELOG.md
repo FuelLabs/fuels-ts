@@ -1,5 +1,14 @@
 # @fuel-ts/errors
 
+## 0.99.0
+
+### Patch Changes
+
+- b3bb765: fix: improve BN unsafe numbers error handling
+- Updated dependencies [ab56ded]
+- Updated dependencies [45cc32e]
+  - @fuel-ts/versions@0.99.0
+
 ## 0.98.0
 
 ### Patch Changes

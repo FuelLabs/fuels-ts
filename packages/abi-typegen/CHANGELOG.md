@@ -1,5 +1,18 @@
 # @fuel-ts/abi-typegen
 
+## 0.99.0
+
+### Patch Changes
+
+- 68e4b5a: chore: prevent naming collisions on typegen
+- Updated dependencies [ab56ded]
+- Updated dependencies [d1825c9]
+- Updated dependencies [b3bb765]
+- Updated dependencies [45cc32e]
+  - @fuel-ts/versions@0.99.0
+  - @fuel-ts/utils@0.99.0
+  - @fuel-ts/errors@0.99.0
+
 ## 0.98.0
 
 ### Patch Changes
