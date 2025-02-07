@@ -178,5 +178,5 @@ const deprecateDistTags = async (packages: string[]) => {
   }
 };
 
-await deprecatePackageVersions(allPackages);
+// await deprecatePackageVersions(allPackages);
 await deprecateDistTags(allPackages);
