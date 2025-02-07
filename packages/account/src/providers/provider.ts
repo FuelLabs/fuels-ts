@@ -30,6 +30,7 @@ import type {
   GqlRelayedTransactionFailed,
   Requester,
   GqlBlockFragment,
+  GqlEstimatePredicatesQuery,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -2175,5 +2176,22 @@ export default class Provider {
       receipts,
       statusReason: status.reason,
     });
+  }
+
+  private parseEstimatePredicatesResponse<T extends TransactionRequest>(
+    transactionRequest: T,
+    { inputs }: GqlEstimatePredicatesQuery['estimatePredicates']
+  ): T {
+    if (inputs) {
+      inputs.forEach((input, i) => {
+        if (input && 'predicateGasUsed' in input && bn(input.predicateGasUsed).gt(0)) {
+          // eslint-disable-next-line no-param-reassign
+          (<CoinTransactionRequestInput>transactionRequest.inputs[i]).predicateGasUsed =
+            input.predicateGasUsed;
+        }
+      });
+    }
+
+    return transactionRequest;
   }
 }
