@@ -119,4 +119,27 @@ describe('configurables', () => {
       { name: 'LAST_U8', value: 16 },
     ]);
   });
+
+  it('should write direct configurables', () => {
+    const configurables = createConfigurables({
+      bytecode,
+      abi: new Interface(abi),
+    });
+
+    configurables.set({
+      BOOL: false,
+      U8: 16,
+      LAST_U8: 32,
+    });
+
+    const entries = configurables.all();
+    expect(entries).toEqual([
+      { name: 'BOOL', value: false },
+      { name: 'U8', value: 16 },
+      { name: 'STR', value: 'sway' },
+      { name: 'STR_2', value: 'forc' },
+      { name: 'STR_3', value: 'fuel' },
+      { name: 'LAST_U8', value: 32 },
+    ]);
+  });
 });

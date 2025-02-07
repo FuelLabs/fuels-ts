@@ -1,11 +1,13 @@
-import { BigNumberCoder, type Interface } from '@fuel-ts/abi-coder';
+import { BigNumberCoder } from '@fuel-ts/abi-coder';
+import type { InputValue, Interface } from '@fuel-ts/abi-coder';
 import type { Configurable } from '@fuel-ts/abi-coder/dist/types/JsonAbiNew';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import { getBytecodeDataOffset } from '../utils/predicate-script-loader-instructions';
 
 export const createConfigurables = (opts: { bytecode: Uint8Array; abi: Interface }) => {
-  const { bytecode, abi } = opts;
+  const { abi } = opts;
+  const bytecode = new Uint8Array(opts.bytecode);
   const bytecodeDataOffset = getBytecodeDataOffset(bytecode);
   const dynamicOffsetCoder = new BigNumberCoder('u64');
 
@@ -20,6 +22,9 @@ export const createConfigurables = (opts: { bytecode: Uint8Array; abi: Interface
     return configurable;
   };
 
+  /**
+   * Readers
+   */
   const readDirect = ({ name, concreteTypeId, offset }: Configurable) => {
     const coder = abi.getCoder(concreteTypeId);
     const [value] = coder.decode(bytecode, offset);
@@ -43,7 +48,41 @@ export const createConfigurables = (opts: { bytecode: Uint8Array; abi: Interface
     return reader(configurable);
   };
 
+  /**
+   * Writers
+   */
+  const writeDirect = (
+    bytes: Uint8Array,
+    { name, offset }: Configurable,
+    value: InputValue
+  ): Uint8Array => {
+    const encodedValue = abi.encodeConfigurable(name, value);
+    bytes.set(encodedValue, offset);
+    return bytes;
+  };
+
+  const writeIndirect = (
+    bytes: Uint8Array,
+    { name, concreteTypeId, offset }: Configurable,
+    value: InputValue
+  ): Uint8Array => {
+    const test = true;
+    return bytes;
+  };
+
+  const write = (bytes: Uint8Array, name: string, value: InputValue) => {
+    const configurable = getConfigurable(name);
+    const writer = configurable.indirect ? writeIndirect : writeDirect;
+    return writer(bytes, configurable, value);
+  };
+
   return {
     all: () => Object.keys(abi.configurables).map(read),
+    set: (configurableValues: Record<string, InputValue>) => {
+      Object.entries(configurableValues).forEach(([name, value]) => {
+        write(bytecode, name, value);
+      });
+      return bytecode;
+    },
   };
 };
