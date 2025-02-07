@@ -3,6 +3,7 @@ import {
   InputMessageCoder,
   ScriptTransactionRequest,
   Wallet,
+  bn,
   getMintedAssetId,
   getRandomB256,
   hexlify,
@@ -472,6 +473,73 @@ describe('Fee', () => {
     expect(estimateGasPrice).toHaveBeenCalledTimes(2);
     expect(gasPrice.toNumber()).toBeGreaterThan(0);
     expect(gasUsed.toNumber()).toBeGreaterThan(0);
+  });
+
+  it('ensures gas price and predicates are estimated on the same request', async () => {
+    using launched = await launchTestNode();
+
+    const { provider } = launched;
+
+    const predicate = new PredicateU32({ provider, data: [1078] });
+
+    const estimateGasPrice = vi.spyOn(provider.operations, 'estimateGasPrice');
+    const estimatePredicates = vi.spyOn(provider.operations, 'estimatePredicates');
+    const estimatePredicatesAndGasPrice = vi.spyOn(
+      provider.operations,
+      'estimatePredicatesAndGasPrice'
+    );
+
+    await predicate.getTransactionCost(new ScriptTransactionRequest());
+
+    expect(estimateGasPrice).not.toHaveBeenCalledOnce();
+    expect(estimatePredicates).not.toHaveBeenCalledOnce();
+
+    expect(estimatePredicatesAndGasPrice).toHaveBeenCalledOnce();
+  });
+
+  it('ensures gas price is estimated alone when no predicates are present', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const estimateGasPrice = vi.spyOn(provider.operations, 'estimateGasPrice');
+    const estimatePredicates = vi.spyOn(provider.operations, 'estimatePredicates');
+    const estimatePredicatesAndGasPrice = vi.spyOn(
+      provider.operations,
+      'estimatePredicatesAndGasPrice'
+    );
+
+    await wallet.getTransactionCost(new ScriptTransactionRequest());
+
+    expect(estimatePredicates).not.toHaveBeenCalledOnce();
+    expect(estimatePredicatesAndGasPrice).not.toHaveBeenCalledOnce();
+
+    expect(estimateGasPrice).toHaveBeenCalledOnce();
+  });
+
+  it('ensures predicates are estimated alone when gas price is present', async () => {
+    using launched = await launchTestNode();
+
+    const { provider } = launched;
+
+    const predicate = new PredicateU32({ provider, data: [1078] });
+
+    const estimateGasPrice = vi.spyOn(provider.operations, 'estimateGasPrice');
+    const estimatePredicates = vi.spyOn(provider.operations, 'estimatePredicates');
+    const estimatePredicatesAndGasPrice = vi.spyOn(
+      provider.operations,
+      'estimatePredicatesAndGasPrice'
+    );
+
+    await predicate.getTransactionCost(new ScriptTransactionRequest(), { gasPrice: bn(1) });
+
+    expect(estimatePredicatesAndGasPrice).not.toHaveBeenCalledOnce();
+    expect(estimateGasPrice).not.toHaveBeenCalledOnce();
+
+    expect(estimatePredicates).toHaveBeenCalledOnce();
   });
 
   it('ensures estimateGasPrice runs only once when getting transaction cost with estimate gas and fee', async () => {
