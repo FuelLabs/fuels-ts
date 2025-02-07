@@ -1,0 +1,71 @@
+name: Release to @pr-<number> tag on GitHub Packages
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  release-pr:
+    name: "Release PR to GitHub Packages"
+    runs-on: ubuntu-latest
+    # comment out if:false to enable release PR to GitHub Packages
+    if: false
+    permissions: write-all
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Create .npmrc
+        run: |
+          cat << EOF > "$HOME/.npmrc"
+            //npm.pkg.github.com/:_authToken=$GITHUB_TOKEN
+            @FuelLabs:registry=https://npm.pkg.github.com
+          EOF
+        env:
+          HOME: ${{ github.workspace }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build
+        run: pnpm build
+
+      - name: Release to @pr-${{ github.event.pull_REQUEST.NUMBER }} tag on GitHub Packages
+        id: release
+        shell: bash
+        run: |
+          pnpm changeset:next
+          pnpm changeset version --snapshot pr-${{ github.event.pull_REQUEST.NUMBER }}
+          changetsets=$(pnpm changeset publish --tag pr-${{ github.event.pull_REQUEST.NUMBER }})
+          published_version=$(echo "$changetsets" | grep -oP '@\K([0-9]+\.){2}[0-9]+-pr-${{ github.event.pull_REQUEST.NUMBER }}-\d+' | head -1)
+          echo "published_version=$published_version" >> $GITHUB_OUTPUT
+        env:
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HOME: ${{ github.workspace }}
+          npm_config_registry: "https://npm.pkg.github.com"
+
+      - uses: mshick/add-pr-comment@v2
+        with:
+          message: |
+            This PR is published in GitHub Packages with version **${{ steps.release.outputs.published_version }}**
+
+            Install using the following command:
+
+            ```bash
+            pnpm add @fuellabs/fuels@${{ steps.release.outputs.published_version }}
+            ```
+
+            Or update your package.json:
+
+            ```json
+            "dependencies": {
+              "@fuellabs/fuels": "${{ steps.release.outputs.published_version }}"
+            }
+            ```
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
