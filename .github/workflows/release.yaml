@@ -64,7 +64,6 @@ jobs:
         uses: FuelLabs/changesets-action@main
         with:
           publish: pnpm changeset:publish ${{ env.RELEASE_VERSION }} ${{ github.ref_name }}
-          version: pnpm changeset:version-with-docs
           createGithubReleases: aggregate
           githubReleaseName: ${{ env.RELEASE_VERSION }}
           githubTagName: ${{ env.RELEASE_VERSION }}
