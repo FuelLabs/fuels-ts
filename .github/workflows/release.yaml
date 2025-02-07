@@ -87,7 +87,18 @@ jobs:
           LATEST_RELEASE: ${{ env.LATEST_RELEASE }}
           RELEASE_VERSION_HIGHER_THAN_LATEST: ${{ env.RELEASE_VERSION_HIGHER_THAN_LATEST }}
 
-      - name: Release to @next tag on npm
+      - name: Create .npmrc
+        if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
+        run: |
+          cat << EOF > "$HOME/.npmrc"
+            //npm.pkg.github.com/:_authToken=$GITHUB_TOKEN
+            @FuelLabs:registry=https://npm.pkg.github.com
+          EOF
+        env:
+          HOME: ${{ github.workspace }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release to @next tag on GitHub Packages
         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         run: |
           git checkout master
@@ -105,12 +116,14 @@ jobs:
           fi
 
           pnpm changeset:next
-          git add .changeset/fuel-labs-ci.md
           pnpm changeset version --snapshot next
           pnpm changeset publish --tag next
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_DEPLOY_TOKEN }}
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HOME: ${{ github.workspace }}
+          npm_config_registry: "https://npm.pkg.github.com"
 
       # ensure docs are always deployed after merge of changeset PR
       - name: Get the last commit message and set env vars
