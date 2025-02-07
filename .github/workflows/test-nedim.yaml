@@ -1,0 +1,22 @@
+name: "Ned test"
+
+on:
+  push:
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  changesets-pr:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    # First check ensures that the workflow runs only if the commit is NOT the changesets PR commit.
+    # Second check ensures that the workflow runs only after a commit is pushed into the branch,
+    # and not when the branch is created.
+    # This is to avoid running the workflow when a release/* branch is created.
+    if: |
+      github.event.head_commit.message == 'ci(release): versioning packages and changesets' &&
+      github.event.before != '0000000000000000000000000000000000000000'
+
+    steps:
+      - name: Bump and Collect Versions
+        run: echo ${{ toJson(github.event) }}
