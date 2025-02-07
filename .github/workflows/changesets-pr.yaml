@@ -56,7 +56,6 @@ jobs:
           title: ${{ env.CHANGESET_PR_TITLE }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_DEPLOY_TOKEN }}
 
       - name: Prettify changelog
         run: pnpm changeset:update-changelog
