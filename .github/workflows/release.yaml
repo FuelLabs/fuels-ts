@@ -10,16 +10,14 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   release:
+    name: "Release"
     runs-on: ubuntu-latest
     environment: npm-deploy
     permissions: write-all
-    # First check ensures that the workflow runs only when the changesets PR commit is pushed into the branch.
-    # Second check ensures that the workflow runs only after a commit is pushed into the branch,
+    # Ensure that the workflow runs only after a commit is pushed into the branch
     # and not when the branch is created.
     # This is to avoid running the workflow when a release/* branch is created.
-    if: |
-      github.event.head_commit.message == 'ci(release): versioning packages and changesets' &&
-      github.event.before != '0000000000000000000000000000000000000000'
+    if: github.event.before != '0000000000000000000000000000000000000000'
 
     steps:
       - name: Checkout
@@ -30,11 +28,6 @@ jobs:
 
       - name: CI Setup
         uses: ./.github/actions/ci-setup
-
-      - name: Ensure NPM access
-        run: npm whoami
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_DEPLOY_TOKEN }}
 
       # if there are changesets present, package.json will be bumped
       - name: Bump and Collect Versions
@@ -47,8 +40,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Ensure NPM access
+        run: npm whoami
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_DEPLOY_TOKEN }}
+
       - name: Build
         run: pnpm build
+
+      - name: Set branch name and changeset PR title
+        run: |
+          echo "CHANGESET_PR_TITLE=$(echo "ci(release): \`${{ env.RELEASE_VERSION }}\` @ \`${{ github.ref_name }}\`")" >> $GITHUB_ENV
 
       - name: Get latest release
         run: |
@@ -60,11 +62,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish to npm
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
         uses: FuelLabs/changesets-action@main
         with:
           publish: pnpm changeset:publish ${{ env.RELEASE_VERSION }} ${{ github.ref_name }}
           version: pnpm changeset:version-with-docs
+          commit: "ci(release): versioning packages and changesets"
+          title: ${{ env.CHANGESET_PR_TITLE }}
           createGithubReleases: aggregate
           githubReleaseName: ${{ env.RELEASE_VERSION }}
           githubTagName: ${{ env.RELEASE_VERSION }}
@@ -77,13 +82,56 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_TAG: ${{ env.RELEASE_VERSION }}
-          PUBLISHED: "true"
+          PUBLISHED: ${{ steps.changesets.outputs.published }}
           REF_NAME: ${{ github.ref_name }}
           LATEST_RELEASE: ${{ env.LATEST_RELEASE }}
           RELEASE_VERSION_HIGHER_THAN_LATEST: ${{ env.RELEASE_VERSION_HIGHER_THAN_LATEST }}
 
+      - name: Release to @next tag on npm
+        if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
+        run: |
+          git checkout master
+
+          CHANGESET_FILE=$(git diff-tree --no-commit-id --name-only HEAD -r ".changeset/*-*-*.md")
+          if [ -z "$CHANGESET_FILE" ]; then
+            echo "No changesets found, skipping release to @next tag"
+            exit 0
+          fi
+
+          AFFECTED_PACKAGES=$(sed -n '/---/,/---/p' "$CHANGESET_FILE" | sed '/---/d')
+          if [ -z "$AFFECTED_PACKAGES" ]; then
+            echo "No packages affected by changesets, skipping release to @next tag"
+            exit 0
+          fi
+
+          pnpm changeset:next
+          git add .changeset/fuel-labs-ci.md
+          pnpm changeset version --snapshot next
+          pnpm changeset publish --tag next
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_DEPLOY_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ensure docs are always deployed after merge of changeset PR
+      - name: Get the last commit message and set env vars
+        run: echo LAST_COMMIT_MSG=$(git --no-pager log -1 --pretty=%B) >> $GITHUB_ENV
+
+      - name: Decides if Docs should be deployed
+        if: startsWith(env.LAST_COMMIT_MSG, 'ci(release):') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
+        run: echo SHOULD_DEPLOY_DOCS=true >> $GITHUB_ENV
+
+      # # Commenting out as we require permissions to trigger across repos
+      # - name: Update docs (nightly)
+      #   if: github.ref_name == 'master' && env.SHOULD_DEPLOY_DOCS == 'true'
+      #   uses: benc-uk/workflow-dispatch@v1
+      #   with:
+      #     workflow: update-nightly.yml
+      #     ref: master
+      #     repo: FuelLabs/docs-hub
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create PR to apply latest release to master
-        if: startsWith(github.ref_name, 'release/') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
+        if: steps.changesets.outputs.published == 'true' && startsWith(github.ref_name, 'release/') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
         run: |
           PR_TITLE_TEXT='apply `latest` release to `master`'
           if [ ${RELEASE_VERSION#v} = "$(semver "$LATEST_VERSION" --increment minor)" ]; then
@@ -102,27 +150,39 @@ jobs:
 
       - name: Delete the release branch
         # We check env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'false'
-        # because we don't want to delete the branch if it's used in the "Create PR to apply latest release to master" step above
-        if: startsWith(github.ref_name, 'release/') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'false'
+        # because we don't want to delete the branch that is used in the "Create PR to apply latest release to master" step above
+        if: steps.changesets.outputs.published == 'true' && startsWith(github.ref_name, 'release/') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'false'
         run: git push origin --delete ${{ github.ref_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-        # # Commenting out as we require permissions to trigger across repos
-      # - name: Update docs (nightly)
-      #   if: github.ref_name == 'master' && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
-      #   uses: benc-uk/workflow-dispatch@v1
-      #   with:
-      #     workflow: update-nightly.yml
-      #     ref: master
-      #     repo: FuelLabs/docs-hub
-      #     token: ${{ secrets.GITHUB_TOKEN }}
+      # Upload assets to S3
+      - uses: unfor19/install-aws-cli-action@v1.0.7
+        if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
+        with:
+          version: 2
+          verbose: false
+          arch: amd64
+          rootdir: ""
+          workdir: ""
 
-    # # Commenting out as we require permissions to trigger across repos
-    # - name: Notify migrations and disclosures of the new release (breaking changes)
-    #   run: |
-    #     curl -X POST \
-    #       -H "Accept: application/vnd.github.v3+json" \
-    #       -H "Authorization: token ${{ secrets.MIGRATIONS_RELEASE_TRIGGER_TOKEN }}" \
-    #       https://api.github.com/repos/FuelLabs/migrations-and-disclosures/dispatches \
-    #       -d '{"event_type":"update_versions"}'
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_S3_REGION }}
+
+      - name: Upload assets to s3
+        if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
+        run: |
+          aws s3 cp ./packages/account/src/assets/images/ s3://${{ vars.AWS_S3_BUCKET }}/providers/ --recursive
+
+      # # Commenting out as we require permissions to trigger across repos
+      # - name: Notify migrations and disclosures of the new release (breaking changes)
+      #   run: |
+      #     curl -X POST \
+      #       -H "Accept: application/vnd.github.v3+json" \
+      #       -H "Authorization: token ${{ secrets.MIGRATIONS_RELEASE_TRIGGER_TOKEN }}" \
+      #       https://api.github.com/repos/FuelLabs/migrations-and-disclosures/dispatches \
+      #       -d '{"event_type":"update_versions"}'
