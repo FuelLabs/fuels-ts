@@ -9,9 +9,12 @@ const deprecateTags = /next|pr|rc/;
 const { version: currentVersion } = JSON.parse(
   readFileSync(join(process.cwd(), '/packages/fuels/package.json')).toString()
 );
-const deprecateVersions = process.env.DEPRECATE_VERSIONS === 'true';
+const SHOULD_DEPRECATE_VERSIONS: boolean = process.env.DEPRECATE_VERSIONS === 'true';
+const CHUNK_SIZE: number = process.env.CHUNK_SIZE ? parseInt(process.env.CHUNK_SIZE, 10) : 1000;
+const FILTER_BY_PACKAGE_NAME: string = process.env.FILTER_BY_PACKAGE_NAME ?? '';
+const FILTER_BY_VERSION: string = process.env.FILTER_BY_VERSION ?? '';
 
-const getPublicPackages = () => {
+const getPublicPackages = (): string[] => {
   const packagesDir = join(__dirname, '../packages');
   const packages = readdirSync(packagesDir, { withFileTypes: true });
   const packagesNames = packages.map((p) => {
@@ -26,7 +29,7 @@ const getPublicPackages = () => {
   return packagesNames.filter((p) => !!p);
 };
 
-const getVersionsToDeprecate = async (packageName: string) => {
+const getVersionsToDeprecate = async (packageName: string): Promise<string[]> => {
   const { versions } = await fetch(`https://registry.npmjs.org/${packageName}`).then((resp) =>
     resp.json()
   );
@@ -42,15 +45,26 @@ const getVersionsToDeprecate = async (packageName: string) => {
 };
 
 const main = async () => {
-  const packages = getPublicPackages();
+  let packages = getPublicPackages();
+  if (FILTER_BY_PACKAGE_NAME !== '') {
+    packages = packages.filter((packageName) => packageName === FILTER_BY_PACKAGE_NAME);
+  }
+
   await Promise.allSettled(
     packages.map(async (packageName) => {
-      const versionsToDeprecate = await getVersionsToDeprecate(packageName);
+      const allVersions = await getVersionsToDeprecate(packageName);
+
+      let versionsToDeprecate = allVersions.splice(0, CHUNK_SIZE);
+      if (FILTER_BY_VERSION !== '') {
+        versionsToDeprecate = versionsToDeprecate.filter(
+          (version) => version === FILTER_BY_VERSION
+        );
+      }
 
       log('The following versions will be deprecated:');
       log(versionsToDeprecate.map((v) => `   - ${v}`).join('\n'));
 
-      if (deprecateVersions) {
+      if (SHOULD_DEPRECATE_VERSIONS) {
         await Promise.allSettled(
           versionsToDeprecate.map(
             async (versionToDelete) =>
@@ -60,11 +74,13 @@ const main = async () => {
                   (err, _stdout, stderr) => {
                     if (err) {
                       log(`❌ Error ${packageName}@${versionToDelete} not deprecated!\n`);
+                      error(err);
                       reject(err);
                       return;
                     }
                     if (stderr) {
                       log(`❌ Error ${packageName}@${versionToDelete} not deprecated!\n`);
+                      error(stderr);
                       reject(new Error(stderr));
                       return;
                     }

@@ -9,10 +9,10 @@
       "pattern": "^http://localhost:3000"
     },
     {
-      "pattern": "https://docs.fuel.network/docs/fuels-ts/getting-started/connecting-to-the-network"
+      "pattern": "https://mainnet-explorer.fuel.network"
     },
     {
-      "pattern": "https://docs.fuel.network/docs/fuels-ts/getting-started/running-a-local-fuel-node"
+      "pattern": "https://explorer-indexer-testnet.fuel.network"
     }
   ]
 }

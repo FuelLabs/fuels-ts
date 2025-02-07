@@ -1,5 +1,21 @@
-import type { BaseWalletUnlocked, ContractTransferParams, ReceiptTransfer } from 'fuels';
-import { Provider, ReceiptType, Wallet } from 'fuels';
+/* eslint-disable no-param-reassign */
+
+import type {
+  BaseWalletUnlocked,
+  ChangeTransactionRequestOutput,
+  CoinTransactionRequestOutput,
+  ContractTransferParams,
+  ReceiptTransfer,
+} from 'fuels';
+import {
+  bn,
+  getAssetAmountInRequestInputs,
+  OutputType,
+  Provider,
+  ReceiptType,
+  ScriptTransactionRequest,
+  Wallet,
+} from 'fuels';
 
 import {
   CoverageContract,
@@ -140,10 +156,67 @@ describe('network', () => {
     const { waitForResult } = await predicate.deploy(wallet);
     const predicateAsBlob = await waitForResult();
 
-    const transfer = await wallet.transfer(predicateAsBlob.address, 800, baseAssetId);
+    const {
+      consensusParameters: {
+        txParameters: { maxInputs },
+      },
+    } = await provider.getChain();
+    const amountToTransfer = bn(1);
+    const request = new ScriptTransactionRequest();
+
+    // Using the maximum number of allowed inputs to have the highest possible fee
+    const fakeAmounts = Array.from({ length: maxInputs.toNumber() }, () => ({
+      amount: bn(1),
+      assetId: baseAssetId,
+    }));
+
+    const fakeResources = predicateAsBlob.generateFakeResources(fakeAmounts);
+    request.addResources(fakeResources);
+    request.addCoinOutput(wallet.address, amountToTransfer, baseAssetId);
+
+    // Estimating the request cost using the maximum number of allowed inputs
+    const cost = await predicateAsBlob.getTransactionCost(request);
+
+    const required = amountToTransfer.add(cost.maxFee);
+
+    // Funding the predicate with the highest possible amount to be required
+    const transfer = await wallet.transfer(predicateAsBlob.address, required, baseAssetId);
     await transfer.waitForResult();
 
-    const transfer2 = await predicateAsBlob.transfer(wallet.address, 100, baseAssetId);
+    // Removing fake resources
+    request.inputs = [];
+
+    // Fetching real resources
+    const realResources = await predicateAsBlob.getResourcesToSpend([
+      { amount: required, assetId: baseAssetId },
+    ]);
+
+    request.gasLimit = cost.gasUsed;
+    request.addResources(realResources);
+    request.updatePredicateGasUsed(cost.estimatedPredicates);
+
+    // Re-estimate fee with the real resources
+    const { maxFee: newFee } = await provider.estimateTxGasAndFee({
+      transactionRequest: request,
+      gasPrice: cost.gasPrice,
+    });
+
+    // Using new fee
+    request.maxFee = newFee;
+
+    const totalFunded = getAssetAmountInRequestInputs(request.inputs, baseAssetId, baseAssetId);
+    const exceeded = totalFunded.sub(newFee.add(amountToTransfer));
+
+    // Ensuring all exceeding amount goes back to the used wallet
+    request.outputs.forEach((output) => {
+      if (output.type === OutputType.Coin) {
+        (output as CoinTransactionRequestOutput).amount = exceeded;
+      } else if (output.type === OutputType.Change) {
+        (output as ChangeTransactionRequestOutput).to = wallet.address.toB256();
+      }
+    });
+
+    const transfer2 = await predicateAsBlob.sendTransaction(request);
     const { isStatusSuccess } = await transfer2.waitForResult();
 
     expect(isStatusSuccess).toBeTruthy();

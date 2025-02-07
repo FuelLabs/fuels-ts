@@ -196,6 +196,10 @@ function mergeOperations(existing: Operation, toAdd: Operation): Operation {
     ...existing,
     assetsSent: mergeAssetsSent(existing, toAdd),
     calls: mergeCalls(existing, toAdd),
+    receipts: [
+      ...(existing.receipts || []),
+      ...(toAdd.receipts?.filter((r) => !existing.receipts?.some((er) => er === r)) || []),
+    ],
   };
 }
 
@@ -252,6 +256,7 @@ export function getWithdrawFromFuelOperations({
               assetId: baseAssetId,
             },
           ],
+          receipts: [receipt],
         });
 
         return newWithdrawFromFuelOps;
@@ -332,6 +337,7 @@ function processCallReceipt(
       },
       assetsSent: getAssetsSent(receipt),
       calls,
+      receipts: [receipt],
     },
   ];
 }
@@ -421,6 +427,7 @@ function extractTransferOperationFromReceipt(
         amount,
       },
     ],
+    receipts: [receipt],
   };
 }
 

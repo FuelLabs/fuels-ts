@@ -221,7 +221,7 @@ describe('Predicate', () => {
       const initialReceiverBalance = await receiverWallet.getBalance();
 
       const dryRunSpy = vi.spyOn(provider.operations, 'dryRun');
-      const estimatePredicatesSpy = vi.spyOn(provider.operations, 'estimatePredicates');
+      const estimatePredicatesSpy = vi.spyOn(provider.operations, 'estimatePredicatesAndGasPrice');
 
       const response = await predicateValidateTransfer.transfer(
         receiverWallet.address.toB256(),
