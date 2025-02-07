@@ -1,13 +1,13 @@
 import type { AddressInput } from '@fuel-ts/address';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { BN, bn } from '@fuel-ts/math';
+import type { BN } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import { InputType, InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility, versions } from '@fuel-ts/versions';
-import { equalBytes } from '@noble/curves/abstract/utils';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import type { GraphQLClientResponse, GraphQLResponse } from 'graphql-request/src/types';
@@ -48,6 +48,7 @@ import type {
   ScriptTransactionRequest,
 } from './transaction-request';
 import {
+  isPredicate,
   isTransactionTypeCreate,
   isTransactionTypeScript,
   transactionRequestify,
@@ -956,38 +957,60 @@ export default class Provider {
    * @returns A promise that resolves to the estimated transaction request object.
    */
   async estimatePredicates<T extends TransactionRequest>(transactionRequest: T): Promise<T> {
-    const shouldEstimatePredicates = Boolean(
-      transactionRequest.inputs.find(
-        (input) =>
-          'predicate' in input &&
-          input.predicate &&
-          !equalBytes(arrayify(input.predicate), arrayify('0x')) &&
-          new BN(input.predicateGasUsed).isZero()
-      )
+    const shouldEstimatePredicates = transactionRequest.inputs.some(
+      (input) => isPredicate(input) && bn(input.predicateGasUsed).isZero()
     );
+
     if (!shouldEstimatePredicates) {
       return transactionRequest;
     }
+
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
+
     const response = await this.operations.estimatePredicates({
       encodedTransaction,
     });
 
-    const {
-      estimatePredicates: { inputs },
-    } = response;
+    const { estimatePredicates } = response;
 
-    if (inputs) {
-      inputs.forEach((input, index) => {
-        if ('predicateGasUsed' in input && bn(input.predicateGasUsed).gt(0)) {
-          // eslint-disable-next-line no-param-reassign
-          (<CoinTransactionRequestInput>transactionRequest.inputs[index]).predicateGasUsed =
-            input.predicateGasUsed;
-        }
-      });
-    }
+    // eslint-disable-next-line no-param-reassign
+    transactionRequest = this.parseEstimatePredicatesResponse(
+      transactionRequest,
+      estimatePredicates
+    );
 
     return transactionRequest;
+  }
+
+  async estimatePredicatesAndGasPrice<T extends TransactionRequest>(
+    transactionRequest: T,
+    blockHorizon: number
+  ) {
+    const shouldEstimatePredicates = transactionRequest.inputs.some(
+      (input) => isPredicate(input) && bn(input.predicateGasUsed).isZero()
+    );
+
+    if (!shouldEstimatePredicates) {
+      const gasPrice = await this.estimateGasPrice(blockHorizon);
+
+      return { transactionRequest, gasPrice };
+    }
+
+    const {
+      estimateGasPrice: { gasPrice },
+      estimatePredicates,
+    } = await this.operations.estimatePredicatesAndGasPrice({
+      blockHorizon: String(blockHorizon),
+      encodedTransaction: hexlify(transactionRequest.toTransactionBytes()),
+    });
+
+    // eslint-disable-next-line no-param-reassign
+    transactionRequest = this.parseEstimatePredicatesResponse(
+      transactionRequest,
+      estimatePredicates
+    );
+
+    return { transactionRequest, gasPrice: bn(gasPrice) };
   }
 
   /**
