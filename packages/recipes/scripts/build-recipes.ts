@@ -1,6 +1,9 @@
 import { execSync } from 'child_process';
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, renameSync, writeFileSync } from 'fs';
+import { glob } from 'glob';
 import { join } from 'path';
+
+const { error } = console;
 
 execSync(`fuels-typegen -i src/contracts/**/*-abi.json -o src/types`);
 
@@ -73,3 +76,18 @@ for (const recipe of supportedRecipes) {
   // Write the modified contents back to the file
   writeFileSync(contractPath, contractContents);
 }
+
+/**
+ * Rename all the .d.ts files to .ts so that they can get bundled into the dist
+ */
+glob('src/types/**/*.d.ts')
+  .then((files) => {
+    files.forEach((path) => {
+      renameSync(path, path.replace('.d.ts', '.ts'));
+    });
+    process.exit(0);
+  })
+  .catch((e) => {
+    error(e);
+    process.exit(1);
+  });
