@@ -112,7 +112,7 @@ jobs:
 
       - name: Delete the release branch
         # We check env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'false'
-        # because we don't want to delete the branch that os used in the "Create PR to apply latest release to master" step above
+        # because we don't want to delete the branch that is used in the "Create PR to apply latest release to master" step above
         if: startsWith(github.ref_name, 'release/') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'false'
         run: git push origin --delete ${{ github.ref_name }}
         env:
