@@ -1,9 +1,11 @@
 import { getRandomB256, Address } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
 import { InputType, OutputType } from '@fuel-ts/transactions';
+import { arrayify, hexlify } from '@fuel-ts/utils';
 
 import { generateFakeCoin, generateFakeMessageCoin } from '../../test-utils/resources';
 import {
@@ -24,6 +26,7 @@ import {
   cacheRequestInputsResourcesFromOwner,
   getBurnableAssetCount,
   validateTransactionForAssetBurn,
+  isPredicate,
 } from './helpers';
 import { ScriptTransactionRequest } from './script-transaction-request';
 
@@ -136,6 +139,35 @@ describe('helpers', () => {
       expect(result.utxos).not.toContain(coinInput2.id);
       expect(result.messages).toContain(messageInput1.nonce);
       expect(result.messages).not.toContain(messageInput2.nonce);
+    });
+
+    describe('isPredicate', () => {
+      it('should properly identify if request input is a predicate', () => {
+        const generateFakeResources = [
+          generateFakeRequestInputCoin,
+          generateFakeRequestInputMessage,
+        ];
+
+        generateFakeResources.forEach((generate) => {
+          let nonPredicate = generate();
+          expect(nonPredicate.predicate).toBeUndefined();
+          expect(isPredicate(nonPredicate)).toBeFalsy();
+
+          nonPredicate = generate({ predicate: '0x' });
+          expect(nonPredicate.predicate).toBeDefined();
+          expect(isPredicate(nonPredicate)).toBeFalsy();
+
+          nonPredicate = generate({ predicate: arrayify('0x') });
+          expect(nonPredicate.predicate).toBeDefined();
+          expect(isPredicate(nonPredicate)).toBeFalsy();
+
+          let predicate = generate({ predicate: randomBytes(20) });
+          expect(isPredicate(predicate)).toBeTruthy();
+
+          predicate = generate({ predicate: hexlify(randomBytes(30)) });
+          expect(isPredicate(predicate)).toBeTruthy();
+        });
+      });
     });
 
     describe('getAssetAmountInRequestInputs', () => {
