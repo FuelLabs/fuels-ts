@@ -17,7 +17,7 @@ jobs:
     # and not when the branch is created.
     # This is to avoid running the workflow when a release/* branch is created.
     if: |
-      startsWith(github.event.head_commit.message,'ci(release):') != true &&
+      github.event.head_commit.message != "ci(release): versioning packages and changesets" &&
       github.event.before != '0000000000000000000000000000000000000000'
 
     steps:
