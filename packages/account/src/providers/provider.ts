@@ -982,6 +982,14 @@ export default class Provider {
     return transactionRequest;
   }
 
+  /**
+   * Estimates the gas price and predicates for a given transaction request and block horizon.
+   *
+   * @param transactionRequest - The transaction request to estimate predicates and gas price for.
+   * @param blockHorizon - The block horizon to use for gas price estimation.
+   * @returns A promise that resolves to an object containing the updated transaction
+   * request and the estimated gas price.
+   */
   async estimatePredicatesAndGasPrice<T extends TransactionRequest>(
     transactionRequest: T,
     blockHorizon: number
@@ -2207,6 +2215,9 @@ export default class Provider {
     });
   }
 
+  /**
+   * @hidden
+   */
   private parseEstimatePredicatesResponse<T extends TransactionRequest>(
     transactionRequest: T,
     { inputs }: GqlEstimatePredicatesQuery['estimatePredicates']
