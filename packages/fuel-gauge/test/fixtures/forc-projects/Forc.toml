@@ -41,6 +41,7 @@ members = [
   "predicate-validate-transfer",
   "predicate-vector-types",
   "predicate-with-configurable",
+  "predicate-with-dynamic-configurables",
   "predicate-with-more-configurables",
   "predicate-false-configurable",
   "proxy-contract",
@@ -78,3 +79,6 @@ members = [
   "vectors",
   "void",
 ]
+
+[patch.'https://github.com/fuellabs/sway']
+std = { git = "https://github.com/fuellabs/sway", branch = "xunilrj/dynamic-types-configurables" }
