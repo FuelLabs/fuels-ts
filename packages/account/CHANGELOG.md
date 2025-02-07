@@ -1,5 +1,43 @@
 # Change Log
 
+## 0.99.0
+
+### Minor Changes
+
+- 4428556: chore!: remove `pageInfo` from `getBalances` GraphQl operations
+
+### Patch Changes
+
+- edefe59: chore: prepend version mismatch to GraphQL errors
+- f3d5240: fix: bind `waitForResult` in `TransactionResponse`
+- 86b8e94: chore: `Address` constructor now accepts a range of inputs.
+- e5251e2: feat: allow passing `gasPrice` to `getTransactionCost`
+- f986891: chore: un-deprecated network URLs
+- d35ccb7: feat: bytecode ID helpers
+- ec84b8a: feat: use configurable offset for blob ID
+- d1825c9: chore: update `amountPerCoin` prop in `WalletConfig` to accept BN
+- f7f0f0a: fix: s3 publishing
+- d591df0: chore: organized `assets` in account package
+- 8030180: feat: support Explorer Asset API
+- 45cc32e: chore: upgrade `fuel-core` to `0.40.4`
+- Updated dependencies [86b8e94]
+- Updated dependencies [ab56ded]
+- Updated dependencies [69e1ba8]
+- Updated dependencies [d1825c9]
+- Updated dependencies [56adcc5]
+- Updated dependencies [b3bb765]
+- Updated dependencies [45cc32e]
+  - @fuel-ts/address@0.99.0
+  - @fuel-ts/versions@0.99.0
+  - @fuel-ts/abi-coder@0.99.0
+  - @fuel-ts/utils@0.99.0
+  - @fuel-ts/transactions@0.99.0
+  - @fuel-ts/errors@0.99.0
+  - @fuel-ts/math@0.99.0
+  - @fuel-ts/crypto@0.99.0
+  - @fuel-ts/hasher@0.99.0
+  - @fuel-ts/merkle@0.99.0
+
 ## 0.98.0
 
 ### Minor Changes
