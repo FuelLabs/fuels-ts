@@ -106,7 +106,9 @@ jobs:
       #     token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create PR to apply latest release to master
-        if: startsWith(github.ref_name, 'release/') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
+        if: |
+          startsWith(github.ref_name, 'release/') &&
+          env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
         run: |
           PR_TITLE_TEXT='apply `latest` release to `master`'
           if [ ${RELEASE_VERSION#v} = "$(semver "$LATEST_VERSION" --increment minor)" ]; then
@@ -126,7 +128,9 @@ jobs:
       - name: Delete the release branch
         # We check env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'false'
         # because we don't want to delete the branch that is used in the "Create PR to apply latest release to master" step above
-        if: startsWith(github.ref_name, 'release/') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'false'
+        if: |
+          startsWith(github.ref_name, 'release/') &&
+          env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'false'
         run: git push origin --delete ${{ github.ref_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
