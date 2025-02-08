@@ -65,8 +65,8 @@ jobs:
           PUBLISHED: "false"
 
         # # Commenting out as we require permissions to trigger across repos
-      # - name: Update docs (nightly)
-      #   if: github.ref_name == 'master' && env.SHOULD_DEPLOY_DOCS == 'true'
+      # - name: Update docs
+      #   if: github.ref_name == 'master'
       #   uses: benc-uk/workflow-dispatch@v1
       #   with:
       #     workflow: update-nightly.yml

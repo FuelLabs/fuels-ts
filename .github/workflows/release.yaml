@@ -96,8 +96,8 @@ jobs:
           vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
 
         # # Commenting out as we require permissions to trigger across repos
-      # - name: Update docs (nightly)
-      #   if: github.ref_name == 'master' && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
+      # - name: Update docs
+      #   if: github.ref_name == 'master'
       #   uses: benc-uk/workflow-dispatch@v1
       #   with:
       #     workflow: update-nightly.yml
