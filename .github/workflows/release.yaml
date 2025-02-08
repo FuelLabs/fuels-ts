@@ -95,7 +95,7 @@ jobs:
           pnpm install --global vercel@latest
           vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
 
-        # # Commenting out as we require permissions to trigger across repos
+      # # Commenting out as we require permissions to trigger across repos
       # - name: Update docs
       #   if: github.ref_name == 'master'
       #   uses: benc-uk/workflow-dispatch@v1
