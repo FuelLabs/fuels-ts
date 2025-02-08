@@ -81,6 +81,20 @@ jobs:
           LATEST_RELEASE: ${{ env.LATEST_RELEASE }}
           RELEASE_VERSION_HIGHER_THAN_LATEST: ${{ env.RELEASE_VERSION_HIGHER_THAN_LATEST }}
 
+      # nightly docs API gets updated on every merge to master
+      # and is configured in the vercel dashboard
+      # stable docs API gets updated only when a new release is published
+      - name: Update Docs API (stable)
+        if: |
+          github.ref_name == 'master' &&
+          env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_TS_DOCS_API_PROJECT_ID }}
+        run: |
+          pnpm install --global vercel@latest
+          vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
+
         # # Commenting out as we require permissions to trigger across repos
       # - name: Update docs (nightly)
       #   if: github.ref_name == 'master' && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
