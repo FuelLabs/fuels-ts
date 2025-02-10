@@ -36,8 +36,5 @@
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/contract": "workspace:*"
-  },
-  "devDependencies": {
-    "glob": "10.4.5"
   }
 }
