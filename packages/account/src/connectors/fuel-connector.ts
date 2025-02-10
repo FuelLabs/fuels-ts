@@ -97,6 +97,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
   installed: boolean = false;
   external: boolean = true;
   events = FuelConnectorEventTypes;
+  usePrepareForSend: boolean = false;
 
   /**
    * Should return true if the connector is loaded
@@ -206,6 +207,23 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
     _transaction: TransactionRequestLike,
     _params?: FuelConnectorSendTxParams
   ): Promise<string> {
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
+  }
+
+  /**
+   * Should perform all necessary operations (i.e estimation,
+   * funding, signing) to prepare a tx so it can be submitted
+   * at the app level.
+   *
+   * @param address - The address to sign the tx
+   * @param transaction - The tx to prepare
+   *
+   * @returns The prepared tx request
+   */
+  async prepareForSend(
+    _address: string,
+    _transaction: TransactionRequestLike
+  ): Promise<TransactionRequestLike> {
     throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 

@@ -655,6 +655,15 @@ export class Account extends AbstractAccount implements WithAddress {
     { estimateTxDependencies = true, onBeforeSend, skipCustomFee = false }: AccountSendTxParams = {}
   ): Promise<TransactionResponse> {
     if (this._connector) {
+      if (this._connector.usePrepareForSend) {
+        return this.provider.sendTransaction(
+          await this._connector.prepareForSend(this.address.toString(), transactionRequestLike),
+          {
+            estimateTxDependencies: false,
+          }
+        );
+      }
+
       return this.provider.getTransactionResponse(
         await this._connector.sendTransaction(this.address.toString(), transactionRequestLike, {
           onBeforeSend,
