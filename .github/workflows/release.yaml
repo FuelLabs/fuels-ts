@@ -27,12 +27,12 @@ jobs:
           app-id: ${{ vars.INTERNAL_APP_ID }}
           private-key: ${{ secrets.INTERNAL_APP_KEY }}
 
-      - name: Create the External GitHub App Token
+      - name: Create Fuel Docs GitHub Token
         uses: actions/create-github-app-token@v1
-        id: external-app-token
+        id: docs-token
         with:
-          app-id: ${{ vars.EXTERNAL_APP_ID }}
-          private-key: ${{ secrets.EXTERNAL_APP_KEY }}
+          app-id: ${{ vars.FUEL_DOCS_BOT_APP_ID }}
+          private-key: ${{ secrets.FUEL_DOCS_BOT_APP_KEY }}
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -164,7 +164,7 @@ jobs:
           workflow: update-nightly.yml
           ref: master
           repo: FuelLabs/docs-hub
-          token: ${{ steps.external-app-token.outputs.token }}
+          token: ${{ steps.docs-token.outputs.token }}
 
       - name: Create PR to apply latest release to master
         if: steps.changesets.outputs.published == 'true' && startsWith(github.ref_name, 'release/') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
@@ -220,4 +220,4 @@ jobs:
           workflow: migrations.yml
           ref: master
           repo: FuelLabs/migrations-and-disclosures
-          token: ${{ steps.external-app-token.outputs.token }}
+          token: ${{ steps.docs-token.outputs.token }}
