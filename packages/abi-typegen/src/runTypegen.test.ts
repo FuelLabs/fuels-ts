@@ -57,7 +57,7 @@ describe('runTypegen.js', () => {
     // check if all files were created
     const files = [
       join(output, 'index.ts'),
-      join(output, 'common.d.ts'),
+      join(output, 'common.ts'),
       join(output, `${normalizedName}.ts`),
       join(output, `${normalizedName}Factory.ts`),
     ];
@@ -101,7 +101,7 @@ describe('runTypegen.js', () => {
     // check if all files were created
     const files = [
       join(output, 'index.ts'),
-      join(output, 'common.d.ts'),
+      join(output, 'common.ts'),
       join(output, `${normalizedName}.ts`),
       join(output, `${normalizedName}Factory.ts`),
     ];
@@ -292,7 +292,7 @@ describe('runTypegen.js', () => {
     // check if all files were created
     const files = [
       join(output, 'index.ts'),
-      join(output, 'common.d.ts'),
+      join(output, 'common.ts'),
       join(output, `${normalizedName}.ts`),
       join(output, `${normalizedName}Factory.ts`),
     ];
