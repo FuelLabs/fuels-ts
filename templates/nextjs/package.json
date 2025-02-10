@@ -21,7 +21,7 @@
     "clsx": "2.1.1",
     "dotenv": "16.4.5",
     "fuels": "workspace:*",
-    "next": "14.2.15",
+    "next": "14.2.21",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-toastify": "10.0.6"
@@ -34,10 +34,10 @@
     "autoprefixer": "10.4.20",
     "eslint": "8.57.0",
     "eslint-config-next": "14.2.15",
-    "postcss": "8.4.49",
+    "postcss": "8.5.0",
     "tailwindcss": "3.4.14",
     "typescript": "5.6.3",
-    "vitest": "2.0.5"
+    "vitest": "2.1.9"
   },
   "overrides": {
     "whatwg-url": "14.1.0"
