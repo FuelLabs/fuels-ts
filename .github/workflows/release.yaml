@@ -51,8 +51,6 @@ jobs:
           echo "FUEL_CORE_VERSION=$(cat ./internal/fuel-core/VERSION)" >> $GITHUB_ENV
           echo "FORC_VERSION=$(cat ./internal/forc/VERSION)" >> $GITHUB_ENV
           git reset --hard
-        env:
-          GITHUB_TOKEN: ${{ steps.internal-app-token.outputs.token }}
 
       - name: Ensure NPM access
         run: npm whoami
