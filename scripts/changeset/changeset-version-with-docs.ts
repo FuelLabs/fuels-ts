@@ -2,6 +2,7 @@
 
 import { execSync } from 'child_process';
 import { error } from 'console';
+import { existsSync } from 'fs';
 
 (() => {
   try {
@@ -23,12 +24,20 @@ import { error } from 'console';
      */
     execSync(`pnpm -C packages/versions build`);
 
-    // Invoke fuels' build:proxy script (will rewrite header versions in generated files)
+    // Invoke recipes build script (will rewrite header versions in generated files)
     execSync(`pnpm -C packages/recipes build`);
 
     // Checks if the commands above generated git changes
     const versionsFilePath = `packages/versions/src/lib/getBuiltinVersions.ts`;
     const recipeDirPath = `packages/recipes/src`;
+
+    // Ensure paths exist
+    const paths = [versionsFilePath, recipeDirPath];
+    if (!paths.every(existsSync)) {
+      throw new Error(
+        `Paths do not exist: ${paths.filter((path) => !existsSync(path)).join(', ')}`
+      );
+    }
 
     const versionsChanged = !!execSync(`git status --porcelain ${versionsFilePath}`)
       .toString()
@@ -43,5 +52,6 @@ import { error } from 'console';
     }
   } catch (err) {
     error(err.toString());
+    process.exit(1);
   }
 })();
