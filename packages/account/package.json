@@ -76,6 +76,6 @@
     "@graphql-codegen/typescript-operations": "4.4.1",
     "@types/ramda": "0.30.2",
     "get-graphql-schema": "2.1.2",
-    "type-fest": "4.26.1"
+    "type-fest": "4.34.1"
   }
 }
