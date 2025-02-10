@@ -1,6 +1,7 @@
 ---
+"@fuel-ts/abi-typegen": patch
 "fuels": patch
 "@fuel-ts/recipes": patch
 ---
 
-fix: correctly bundle `@fuel-ts/recipes` files
+fix: favour `.ts` over `.d.ts` files in `@fuel-ts/abi-typegen`
