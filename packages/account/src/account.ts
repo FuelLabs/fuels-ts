@@ -654,27 +654,43 @@ export class Account extends AbstractAccount implements WithAddress {
     transactionRequestLike: TransactionRequestLike,
     { estimateTxDependencies = true, onBeforeSend, skipCustomFee = false }: AccountSendTxParams = {}
   ): Promise<TransactionResponse> {
+    // Check if the account is using a connector, and therefore we do not have direct access to the
+    // private key.
     if (this._connector) {
+      // If the connector is using prepareForSend, the connector will prepare the transaction for the dapp,
+      // and submission is owned by the dapp. This reduces network requests to submit and create the
+      // summary for a tx.
       if (this._connector.usePrepareForSend) {
-        return this.provider.sendTransaction(
-          await this._connector.prepareForSend(this.address.toString(), transactionRequestLike),
-          {
-            estimateTxDependencies: false,
-          }
+        const preparedTransaction = await this._connector.prepareForSend(
+          this.address.toString(),
+          transactionRequestLike
         );
+        // Submit the prepared transaction using the provider.
+        return this.provider.sendTransaction(preparedTransaction, {
+          estimateTxDependencies: false,
+        });
       }
 
-      return this.provider.getTransactionResponse(
-        await this._connector.sendTransaction(this.address.toString(), transactionRequestLike, {
+      // Otherwise, the connector itself will submit the transaction, and the app will use
+      // the tx id to create the summary, requiring multiple network requests.
+      const txId = await this._connector.sendTransaction(
+        this.address.toString(),
+        transactionRequestLike,
+        {
           onBeforeSend,
           skipCustomFee,
-        })
+        }
       );
+      // And return the transaction response for the returned tx id.
+      return this.provider.getTransactionResponse(txId);
     }
+
     const transactionRequest = transactionRequestify(transactionRequestLike);
+
     if (estimateTxDependencies) {
       await this.provider.estimateTxDependencies(transactionRequest);
     }
+
     return this.provider.sendTransaction(transactionRequest, {
       estimateTxDependencies: false,
     });
