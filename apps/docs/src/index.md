@@ -23,4 +23,4 @@ This documentation was generated using Fuels `v{{fuels}}`, Fuel Core `v{{fuelCor
 
 ## API Documentation
 
-The Complete API documentation for the SDK is available [here](https://fuels-ts-docs-api.vercel.app/).
+The Complete API documentation for the SDK is available [here](DOCS_API_URL/).
