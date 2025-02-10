@@ -100,7 +100,7 @@
     "eslint-plugin-prettier": "5.2.3",
     "eslint-plugin-react": "7.37.4",
     "eslint-plugin-react-hooks": "4.6.2",
-    "eslint-plugin-tsdoc": "0.4.0",
+    "eslint-plugin-tsdoc": "0.3.0",
     "glob": "10.4.5",
     "knip": "5.43.6",
     "markdown-link-check": "3.13.6",
