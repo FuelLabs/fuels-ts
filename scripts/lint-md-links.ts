@@ -1,12 +1,16 @@
 #!/usr/bin/env node
+import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { execSync, spawn } from 'child_process';
 import { globSync } from 'glob';
 
-const { log } = console;
+const { error } = console;
+
+let docsApi: ChildProcessWithoutNullStreams;
+let exitCode = 0;
 
 // eslint-disable-next-line no-void
 void (async () => {
-  const docsApi = spawn(`pnpm vite preview --port 9876 --outDir apps/docs-api/src/api`, {
+  docsApi = spawn(`pnpm vite preview --port 9876 --outDir apps/docs-api/src/api`, {
     shell: true,
   });
 
@@ -24,8 +28,14 @@ void (async () => {
     stdio: 'inherit',
   });
 })()
-  .catch(() => {
-    log('Some files have broken links. Please fix them.');
-    process.exit(1);
+  .catch((e) => {
+    error('Some files have broken links. Please fix them.');
+    error(e);
+    exitCode = 1;
   })
-  .then(() => process.exit(0));
+  .finally(() => {
+    if (docsApi.pid) {
+      process.kill(docsApi.pid);
+    }
+    process.exit(exitCode);
+  });
