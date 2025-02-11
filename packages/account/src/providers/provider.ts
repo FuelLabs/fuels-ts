@@ -4,7 +4,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
-import { InputType, InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
+import { InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility, versions } from '@fuel-ts/versions';
@@ -835,19 +835,7 @@ export default class Provider {
       return;
     }
 
-    const inputsToCache = inputs.reduce(
-      (acc, input) => {
-        if (input.type === InputType.Coin) {
-          acc.utxos.push(input.id);
-        } else if (input.type === InputType.Message) {
-          acc.messages.push(input.nonce);
-        }
-        return acc;
-      },
-      { utxos: [], messages: [] } as Required<ExcludeResourcesOption>
-    );
-
-    this.cache.set(transactionId, inputsToCache);
+    this.cache.set(transactionId, inputs);
   }
 
   /**
@@ -1517,7 +1505,7 @@ export default class Provider {
     };
 
     if (this.cache) {
-      const cached = this.cache.getActiveData();
+      const cached = this.cache.getActiveData(ownerAddress.toB256());
       excludeInput.messages.push(...cached.messages);
       excludeInput.utxos.push(...cached.utxos);
     }

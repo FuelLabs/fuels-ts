@@ -659,7 +659,7 @@ describe('Provider', () => {
 
     await wallet.transfer(receiver.address, 10_000);
 
-    const cachedResources = provider.cache?.getActiveData();
+    const cachedResources = provider.cache?.getActiveData(wallet.address.toB256());
     expect(new Set(cachedResources?.utxos)).toEqual(new Set(EXPECTED.utxos));
     expect(new Set(cachedResources?.messages)).toEqual(new Set(EXPECTED.messages));
   });
@@ -707,7 +707,7 @@ describe('Provider', () => {
 
     // No resources were cached since the TX submission failed
     [...utxos, ...messages].forEach((key) => {
-      expect(provider.cache?.isCached(key)).toBeFalsy();
+      expect(provider.cache?.isCached(wallet.address.toB256(), key)).toBeFalsy();
     });
   });
 
@@ -754,7 +754,7 @@ describe('Provider', () => {
 
     // Resources were cached since the TX submission succeeded
     [...utxos, ...messages].forEach((key) => {
-      expect(provider.cache?.isCached(key)).toBeTruthy();
+      expect(provider.cache?.isCached(wallet.address.toB256(), key)).toBeTruthy();
     });
 
     // TX execution will fail
@@ -764,7 +764,7 @@ describe('Provider', () => {
 
     // Ensure user's resouces were unset from the cache
     [...utxos, ...messages].forEach((key) => {
-      expect(provider.cache?.isCached(key)).toBeFalsy();
+      expect(provider.cache?.isCached(wallet.address.toB256(), key)).toBeFalsy();
     });
   });
 
@@ -797,12 +797,14 @@ describe('Provider', () => {
       messages: [message],
     } = await wallet.getMessages();
 
+    const owner = wallet.address.toB256();
+
     // One of the resources will be cached as the TX submission was successful
     await wallet.transfer(receiver.address, transferAmount);
 
     // Determine the used and unused resource
-    const cachedResource = provider.cache?.isCached(coin.id) ? coin : message;
-    const uncachedResource = provider.cache?.isCached(coin.id) ? message : coin;
+    const cachedResource = provider.cache?.isCached(owner, coin.id) ? coin : message;
+    const uncachedResource = provider.cache?.isCached(owner, coin.id) ? message : coin;
 
     expect(cachedResource).toBeDefined();
     expect(uncachedResource).toBeDefined();
@@ -828,7 +830,7 @@ describe('Provider', () => {
 
     // Ensure the getCoinsToSpend query was called excluding the cached resource
     expect(resourcesToSpendSpy).toHaveBeenCalledWith({
-      owner: wallet.address.toB256(),
+      owner,
       queryPerAsset: [
         {
           assetId: baseAssetId,
