@@ -1,10 +1,10 @@
 import { nodePolyfills } from "vite-plugin-node-polyfills";
-import type { UserConfig } from "vitest/config";
+import type { ViteUserConfig } from "vitest/config";
 import { mergeConfig, defineProject } from "vitest/config";
 
 import sharedConfig from "./vitest.shared.config.mts";
 
-const config: UserConfig = {
+const config: ViteUserConfig = {
   plugins: [
     nodePolyfills({
       globals: {
