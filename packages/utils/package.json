@@ -53,6 +53,6 @@
     "fflate": "0.8.2"
   },
   "peerDependencies": {
-    "vitest": "2.1.9"
+    "vitest": "3.0.5"
   }
 }
