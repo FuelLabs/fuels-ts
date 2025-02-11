@@ -557,6 +557,18 @@ query estimatePredicates($encodedTransaction: HexString!) {
   }
 }
 
+query estimatePredicatesAndGasPrice(
+  $encodedTransaction: HexString!
+  $blockHorizon: U32!
+) {
+  estimatePredicates(tx: $encodedTransaction) {
+    ...transactionEstimatePredicatesFragment
+  }
+  estimateGasPrice(blockHorizon: $blockHorizon) {
+    gasPrice
+  }
+}
+
 query getLatestBlock {
   chain {
     latestBlock {

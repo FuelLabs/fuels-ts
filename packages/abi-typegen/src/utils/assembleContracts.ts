@@ -51,9 +51,9 @@ export function assembleContracts(params: {
 
   files.push(indexFile);
 
-  // Conditionally includes `common.d.ts` file if needed
+  // Conditionally includes `common.ts` file if needed
   if (usesCommonTypes) {
-    const commonsFilepath = join(outputDir, 'common.d.ts');
+    const commonsFilepath = join(outputDir, 'common.ts');
     const file: IFile = {
       path: commonsFilepath,
       contents: renderCommonTemplate({ versions }),
