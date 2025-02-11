@@ -23,7 +23,7 @@
     "fuels": "workspace:*",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-toastify": "10.0.6"
+    "react-toastify": "11.0.3"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "4.3.4",

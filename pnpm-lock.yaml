@@ -202,8 +202,8 @@ importers:
         specifier: 19.0.0
         version: 19.0.0(react@19.0.0)
       react-toastify:
-        specifier: 10.0.6
-        version: 10.0.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        specifier: 11.0.3
+        version: 11.0.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
     devDependencies:
       '@eslint/js':
         specifier: 9.20.0
@@ -1159,8 +1159,8 @@ importers:
         specifier: 19.0.0
         version: 19.0.0(react@19.0.0)
       react-toastify:
-        specifier: 10.0.6
-        version: 10.0.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        specifier: 11.0.3
+        version: 11.0.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
     devDependencies:
       '@playwright/test':
         specifier: 1.50.1
@@ -1223,8 +1223,8 @@ importers:
         specifier: 19.0.0
         version: 19.0.0(react@19.0.0)
       react-toastify:
-        specifier: 10.0.6
-        version: 10.0.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        specifier: 11.0.3
+        version: 11.0.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
     devDependencies:
       '@eslint/js':
         specifier: 9.20.0
@@ -12248,11 +12248,11 @@ packages:
       '@types/react':
         optional: true
 
-  react-toastify@10.0.6:
-    resolution: {integrity: sha512-yYjp+omCDf9lhZcrZHKbSq7YMuK0zcYkDFTzfRFgTXkTFHZ1ToxwAonzA4JI5CxA91JpjFLmwEsZEgfYfOqI1A==}
+  react-toastify@11.0.3:
+    resolution: {integrity: sha512-cbPtHJPfc0sGqVwozBwaTrTu1ogB9+BLLjd4dDXd863qYLj7DGrQ2sg5RAChjFUB4yc3w8iXOtWcJqPK/6xqRQ==}
     peerDependencies:
-      react: '>=18'
-      react-dom: '>=18'
+      react: ^18 || ^19
+      react-dom: ^18 || ^19
 
   react@18.3.1:
     resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
@@ -30198,7 +30198,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.0.8
 
-  react-toastify@10.0.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+  react-toastify@11.0.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
       clsx: 2.1.1
       react: 19.0.0
