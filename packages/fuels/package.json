@@ -80,7 +80,7 @@
     "bundle-require": "5.1.0",
     "chalk": "4",
     "chokidar": "3.6.0",
-    "commander": "13.1.0",
+    "commander": "12.1.0",
     "esbuild": "0.25.0",
     "glob": "10.4.5",
     "handlebars": "4.7.8",
