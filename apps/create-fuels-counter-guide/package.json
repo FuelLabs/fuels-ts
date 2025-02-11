@@ -21,8 +21,8 @@
     "clsx": "2.1.1",
     "dotenv": "16.4.7",
     "fuels": "workspace:*",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
     "react-toastify": "10.0.6"
   },
   "devDependencies": {
@@ -30,8 +30,8 @@
     "@eslint/js": "9.20.0",
     "@types/node": "22.13.1",
     "@playwright/test": "1.50.1",
-    "@types/react": "18.3.11",
-    "@types/react-dom": "18.3",
+    "@types/react": "19.0.8",
+    "@types/react-dom": "19.0.3",
     "autoprefixer": "10.4.20",
     "eslint": "8.57.0",
     "eslint-plugin-react-hooks": "4.6.2",
