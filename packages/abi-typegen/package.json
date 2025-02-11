@@ -55,7 +55,7 @@
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "commander": "12.1.0",
+    "commander": "13.1.0",
     "glob": "10.4.5",
     "handlebars": "4.7.8",
     "mkdirp": "3.0.1",

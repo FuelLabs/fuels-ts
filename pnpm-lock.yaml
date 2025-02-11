@@ -606,8 +606,8 @@ importers:
         specifier: workspace:*
         version: link:../versions
       commander:
-        specifier: 12.1.0
-        version: 12.1.0
+        specifier: 13.1.0
+        version: 13.1.0
       glob:
         specifier: 10.4.5
         version: 10.4.5
@@ -786,8 +786,8 @@ importers:
         specifier: '4'
         version: 4.1.2
       commander:
-        specifier: 12.1.0
-        version: 12.1.0
+        specifier: 13.1.0
+        version: 13.1.0
       ora:
         specifier: 5.4.1
         version: 5.4.1
@@ -899,8 +899,8 @@ importers:
         specifier: 3.6.0
         version: 3.6.0
       commander:
-        specifier: 12.1.0
-        version: 12.1.0
+        specifier: 13.1.0
+        version: 13.1.0
       esbuild:
         specifier: 0.25.0
         version: 0.25.0
@@ -7265,6 +7265,10 @@ packages:
 
   commander@12.1.0:
     resolution: {integrity: sha512-Vw8qHK3bZM9y/P10u3Vib8o/DdkvA2OtPtZvD871QKjy74Wj1WSKFILMPRPSdUSx5RFK1arlJzEtA4PkFgnbuA==}
+    engines: {node: '>=18'}
+
+  commander@13.1.0:
+    resolution: {integrity: sha512-/rFeCpNJQbhSZjGVwO9RFV3xPqbnERS8MmIQzCtD/zl6gpJuV/bMLuN92oG3F7d8oDEHHRrujSXNUr8fpjntKw==}
     engines: {node: '>=18'}
 
   commander@2.20.3:
@@ -23748,6 +23752,8 @@ snapshots:
   commander@12.0.0: {}
 
   commander@12.1.0: {}
+
+  commander@13.1.0: {}
 
   commander@2.20.3: {}
 
