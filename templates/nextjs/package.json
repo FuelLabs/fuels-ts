@@ -37,7 +37,7 @@
     "postcss": "8.5.1",
     "tailwindcss": "3.4.14",
     "typescript": "5.7.3",
-    "vitest": "2.0.5"
+    "vitest": "2.1.9"
   },
   "overrides": {
     "whatwg-url": "14.1.0"
