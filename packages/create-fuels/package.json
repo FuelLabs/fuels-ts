@@ -30,7 +30,7 @@
     "prompts": "2.4.2"
   },
   "devDependencies": {
-    "@types/prompts": "2.4.8",
+    "@types/prompts": "2.4.9",
     "glob": "10.4.5"
   }
 }
