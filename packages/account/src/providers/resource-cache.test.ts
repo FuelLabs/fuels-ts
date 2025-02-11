@@ -1,14 +1,37 @@
+import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
-import { hexlify, sleep } from '@fuel-ts/utils';
+import { hexlify } from '@fuel-ts/utils';
 
+import {
+  generateFakeRequestInputCoin,
+  generateFakeRequestInputMessage,
+} from '../test-utils/transactionRequest';
+
+import type { ExcludeResourcesOption } from './resource';
 import { ResourceCache } from './resource-cache';
+import type {
+  CoinTransactionRequestInput,
+  MessageTransactionRequestInput,
+} from './transaction-request';
+import { isRequestInputCoin, isRequestInputMessage } from './transaction-request';
 
 /**
  * @group node
  * @group browser
  */
 describe('Resource Cache', () => {
-  const randomValue = () => hexlify(randomBytes(32));
+  const randomTxId = () => hexlify(randomBytes(32));
+
+  const inputsToExcludeResourcesOption = (
+    inputs: Array<CoinTransactionRequestInput | MessageTransactionRequestInput>
+  ): ExcludeResourcesOption =>
+    inputs.reduce(
+      (acc, input) => {
+        isRequestInputCoin(input) ? acc.utxos.push(input.id) : acc.messages.push(input.nonce);
+        return acc;
+      },
+      { utxos: [], messages: [] } as Required<ExcludeResourcesOption>
+    );
 
   afterEach(() => {
     // Reset the cache after each test
@@ -33,91 +56,148 @@ describe('Resource Cache', () => {
     );
   });
 
-  it('can validade if it is cached [UTXO]', () => {
+  it('can validate if it is cached [UTXO]', () => {
     const resourceCache = new ResourceCache(1000);
-    const utxoId = randomValue();
+    const owner = Address.fromRandom().b256Address;
+    const utxo = generateFakeRequestInputCoin({ owner });
+    const utxoId = String(utxo.id);
 
-    expect(resourceCache.isCached(utxoId)).toBeFalsy();
+    expect(resourceCache.isCached(owner, utxoId)).toBeFalsy();
 
-    const txID = randomValue();
-    resourceCache.set(txID, { utxos: [utxoId], messages: [] });
+    const txID = randomTxId();
+    resourceCache.set(txID, [utxo]);
 
-    expect(resourceCache.isCached(utxoId)).toBeTruthy();
+    expect(resourceCache.isCached(owner, utxoId)).toBeTruthy();
   });
 
-  it('can validade if it is cached [Message]', () => {
+  it('can validate if it is cached [Message]', () => {
     const resourceCache = new ResourceCache(1000);
-    const messageNonce = randomValue();
+    const owner = Address.fromRandom().b256Address;
+    const message = generateFakeRequestInputMessage({ recipient: owner });
+    const messageNonce = String(message.nonce);
 
-    expect(resourceCache.isCached(messageNonce)).toBeFalsy();
+    expect(resourceCache.isCached(owner, messageNonce)).toBeFalsy();
 
-    const txID = randomValue();
-    resourceCache.set(txID, { utxos: [], messages: [messageNonce] });
+    const txID = randomTxId();
+    resourceCache.set(txID, [message]);
 
-    expect(resourceCache.isCached(messageNonce)).toBeTruthy();
+    expect(resourceCache.isCached(owner, messageNonce)).toBeTruthy();
   });
 
-  it('can get active [no data]', async () => {
-    const EXPECTED = { utxos: [], messages: [] };
-    const resourceCache = new ResourceCache(1);
+  it('can get active [no data]', () => {
+    const expected = { utxos: [], messages: [] };
+    const resourceCache = new ResourceCache(1000);
+    const owner = Address.fromRandom().b256Address;
 
-    await sleep(1);
-
-    expect(resourceCache.getActiveData()).toStrictEqual(EXPECTED);
+    expect(resourceCache.getActiveData(owner)).toStrictEqual(expected);
   });
 
   it('can get active', () => {
-    const EXPECTED = {
-      utxos: [randomValue(), randomValue()],
-      messages: [randomValue(), randomValue(), randomValue()],
-    };
+    const owner = Address.fromRandom().b256Address;
+
+    const inputs = [
+      generateFakeRequestInputCoin({ owner }),
+      generateFakeRequestInputCoin({ owner }),
+      generateFakeRequestInputMessage({ recipient: owner }),
+      generateFakeRequestInputMessage({ recipient: owner }),
+      generateFakeRequestInputMessage({ recipient: owner }),
+    ];
+
     const resourceCache = new ResourceCache(1000);
 
-    const txId = randomValue();
-    resourceCache.set(txId, EXPECTED);
+    const txId = randomTxId();
+    resourceCache.set(txId, inputs);
 
-    const activeData = resourceCache.getActiveData();
+    const activeData = resourceCache.getActiveData(owner);
 
-    expect(activeData.messages).containSubset(EXPECTED.messages);
-    expect(activeData.utxos).containSubset(EXPECTED.utxos);
+    const expected = inputsToExcludeResourcesOption(inputs);
+
+    expect(activeData.messages).containSubset(expected.messages);
+    expect(activeData.utxos).containSubset(expected.utxos);
+  });
+
+  it('should ensure active data is owner specific', () => {
+    const owner1 = Address.fromRandom().b256Address;
+    const owner2 = Address.fromRandom().b256Address;
+
+    // Owner 1 inputs
+    const owner1Inputs = [
+      generateFakeRequestInputCoin({ owner: owner1 }),
+      generateFakeRequestInputCoin({ owner: owner1 }),
+      generateFakeRequestInputMessage({ recipient: owner1 }),
+    ];
+
+    // Owner 2 inputs
+    const owner2Inputs = [
+      generateFakeRequestInputCoin({ owner: owner2 }),
+      generateFakeRequestInputCoin({ owner: owner2 }),
+      generateFakeRequestInputMessage({ recipient: owner2 }),
+    ];
+
+    const resourceCache = new ResourceCache(1000);
+
+    const txId1 = randomTxId();
+    const txId2 = randomTxId();
+
+    resourceCache.set(txId1, owner1Inputs);
+    resourceCache.set(txId2, owner2Inputs);
+
+    const activeData = resourceCache.getActiveData(owner1);
+
+    const owner1Expected = inputsToExcludeResourcesOption(owner1Inputs);
+    const owner2Expected = inputsToExcludeResourcesOption(owner2Inputs);
+
+    expect(activeData.messages).containSubset(owner1Expected.messages);
+    expect(activeData.utxos).containSubset(owner1Expected.utxos);
+
+    expect(activeData.messages).not.containSubset(owner2Expected.messages);
+    expect(activeData.utxos).not.containSubset(owner2Expected.utxos);
   });
 
   it('should remove expired when getting active data', () => {
     const ttl = 500;
     const resourceCache = new ResourceCache(ttl);
 
-    const utxos = [randomValue(), randomValue()];
-    const messages = [randomValue()];
+    const owner = Address.fromRandom().b256Address;
 
-    const txId1 = randomValue();
-    const txId1Resources = {
-      utxos,
-      messages,
-    };
+    const inputs = [
+      generateFakeRequestInputCoin({ owner }),
+      generateFakeRequestInputCoin({ owner }),
+      generateFakeRequestInputMessage({ recipient: owner }),
+    ];
 
+    const txId1 = randomTxId();
     const originalTimeStamp = 946684800;
     let dateSpy = vi.spyOn(Date, 'now').mockImplementation(() => originalTimeStamp);
 
-    resourceCache.set(txId1, txId1Resources);
-    const oldActiveData = resourceCache.getActiveData();
+    resourceCache.set(txId1, inputs);
+    const oldActiveData = resourceCache.getActiveData(owner);
 
     expect(dateSpy).toHaveBeenCalled();
 
-    expect(oldActiveData.utxos).containSubset(txId1Resources.utxos);
-    expect(oldActiveData.messages).containSubset(txId1Resources.messages);
-    expect(oldActiveData.messages).containSubset(txId1Resources.messages);
+    oldActiveData.utxos.forEach((utxo) => {
+      const match = inputs.filter(isRequestInputCoin).find((input) => input.id === utxo);
+      expect(match).toBeDefined();
+    });
+
+    oldActiveData.messages.forEach((nonce) => {
+      const match = inputs.filter(isRequestInputMessage).find((input) => input.nonce === nonce);
+      expect(match).toBeDefined();
+    });
 
     const expiredTimeStamp = originalTimeStamp + ttl;
     dateSpy = vi.spyOn(Date, 'now').mockImplementation(() => expiredTimeStamp);
 
-    const newActiveData = resourceCache.getActiveData();
+    const newActiveData = resourceCache.getActiveData(owner);
 
-    txId1Resources.utxos.forEach((utxo) => {
-      expect(newActiveData.utxos).not.includes(utxo);
+    newActiveData.utxos.forEach((utxo) => {
+      const match = inputs.filter(isRequestInputCoin).find((input) => input.id === utxo);
+      expect(match).toBeUndefined();
     });
 
-    txId1Resources.messages.forEach((message) => {
-      expect(newActiveData.utxos).not.includes(message);
+    newActiveData.messages.forEach((nonce) => {
+      const match = inputs.filter(isRequestInputMessage).find((input) => input.nonce === nonce);
+      expect(match).toBeUndefined();
     });
 
     vi.restoreAllMocks();
@@ -127,97 +207,116 @@ describe('Resource Cache', () => {
     // use long ttl to avoid cache expiration
     const ttl = 10_000;
     const resourceCache = new ResourceCache(ttl);
+    const owner = Address.fromRandom().b256Address;
 
-    const txId1 = randomValue();
-    const txId2 = randomValue();
+    const txId1 = randomTxId();
+    const txId2 = randomTxId();
 
-    const txId1Resources = {
-      utxos: [randomValue()],
-      messages: [randomValue(), randomValue()],
-    };
+    const utxo1 = generateFakeRequestInputCoin({ owner });
+    const utxo2 = generateFakeRequestInputCoin({ owner });
+    const utxo3 = generateFakeRequestInputCoin({ owner });
 
-    const txId2Resources = {
-      utxos: [randomValue(), randomValue()],
-      messages: [randomValue()],
-    };
+    const message1 = generateFakeRequestInputMessage({ recipient: owner });
+    const message2 = generateFakeRequestInputMessage({ recipient: owner });
+    const message3 = generateFakeRequestInputMessage({ recipient: owner });
 
-    resourceCache.set(txId1, txId1Resources);
-    resourceCache.set(txId2, txId2Resources);
+    const tx1Inputs = [utxo1, message1, message2];
+    const tx2Inputs = [utxo2, utxo3, message3];
 
-    let activeData = resourceCache.getActiveData();
+    resourceCache.set(txId1, tx1Inputs);
+    resourceCache.set(txId2, tx2Inputs);
 
-    expect(activeData.utxos).containSubset([...txId1Resources.utxos, ...txId2Resources.utxos]);
-    expect(activeData.messages).containSubset([
-      ...txId1Resources.messages,
-      ...txId2Resources.messages,
-    ]);
+    let activeData = resourceCache.getActiveData(owner);
+
+    expect(activeData.utxos).containSubset([utxo1.id, utxo2.id, utxo3.id]);
+    expect(activeData.messages).containSubset([message1.nonce, message2.nonce, message3.nonce]);
 
     resourceCache.unset(txId1);
 
-    activeData = resourceCache.getActiveData();
+    activeData = resourceCache.getActiveData(owner);
 
-    expect(activeData.utxos).not.containSubset(txId1Resources.utxos);
-    expect(activeData.messages).not.containSubset(txId1Resources.messages);
+    expect(activeData.utxos).not.containSubset([utxo1.id]);
+    expect(activeData.utxos).containSubset([utxo2.id, utxo3.id]);
 
-    expect(activeData.utxos).containSubset(txId2Resources.utxos);
-    expect(activeData.messages).containSubset(txId2Resources.messages);
+    expect(activeData.messages).not.containSubset([message1.nonce, message2.nonce]);
+    expect(activeData.messages).containSubset([message3.nonce]);
   });
 
   it('can clear cache', () => {
     // use long ttl to avoid cache expiration
     const resourceCache = new ResourceCache(10_000);
+    const owner1 = Address.fromRandom().b256Address;
+    const owner2 = Address.fromRandom().b256Address;
 
-    const txId1 = randomValue();
-    const txId2 = randomValue();
+    const txId1 = randomTxId();
+    const txId2 = randomTxId();
 
-    const txId1Resources = {
-      utxos: [randomValue()],
-      messages: [randomValue(), randomValue()],
-    };
+    const tx1Inputs = [
+      generateFakeRequestInputCoin({ owner: owner1 }),
+      generateFakeRequestInputMessage({ recipient: owner1 }),
+      generateFakeRequestInputMessage({ recipient: owner1 }),
+    ];
 
-    const txId2Resources = {
-      utxos: [randomValue(), randomValue()],
-      messages: [randomValue()],
-    };
+    const tx2Inputs = [
+      generateFakeRequestInputMessage({ recipient: owner2 }),
+      generateFakeRequestInputMessage({ recipient: owner2 }),
+      generateFakeRequestInputCoin({ owner: owner2 }),
+    ];
 
-    resourceCache.set(txId1, txId1Resources);
-    resourceCache.set(txId2, txId2Resources);
+    resourceCache.set(txId1, tx1Inputs);
+    resourceCache.set(txId2, tx2Inputs);
 
-    const activeData = resourceCache.getActiveData();
+    // Verifies that cached resources from owner 1 is correct
+    const owner1Cached = resourceCache.getActiveData(owner1);
 
-    expect(activeData.utxos).containSubset([...txId1Resources.utxos, ...txId2Resources.utxos]);
-    expect(activeData.messages).containSubset([
-      ...txId1Resources.messages,
-      ...txId2Resources.messages,
-    ]);
+    const owner1Expected = inputsToExcludeResourcesOption(tx1Inputs);
+
+    expect(owner1Cached.utxos).containSubset(owner1Expected.utxos);
+    expect(owner1Cached.messages).containSubset(owner1Expected.messages);
+
+    // Verifies that cached resources from owner 2 is correct
+    const owner2Cached = resourceCache.getActiveData(owner2);
+
+    const owner2Expected = inputsToExcludeResourcesOption(tx2Inputs);
+
+    expect(owner2Cached.utxos).containSubset(owner2Expected.utxos);
+    expect(owner2Cached.messages).containSubset(owner2Expected.messages);
 
     resourceCache.clear();
 
-    expect(resourceCache.getActiveData()).toStrictEqual({ utxos: [], messages: [] });
+    // All cache was cleared
+    expect(resourceCache.getActiveData(owner1)).toStrictEqual({ utxos: [], messages: [] });
+    expect(resourceCache.getActiveData(owner2)).toStrictEqual({ utxos: [], messages: [] });
   });
 
   it('should validate that ResourceCache uses a global cache', () => {
-    const oldTxId = randomValue();
-    const oldCache = {
-      utxos: [randomValue(), randomValue()],
-      messages: [randomValue()],
-    };
+    const oldTxId = randomTxId();
+    const owner = Address.fromRandom().b256Address;
+    const oldInputs = [
+      generateFakeRequestInputCoin({ owner }),
+      generateFakeRequestInputCoin({ owner }),
+      generateFakeRequestInputMessage({ recipient: owner }),
+    ];
 
     const oldInstance = new ResourceCache(800);
-    oldInstance.set(oldTxId, oldCache);
+    oldInstance.set(oldTxId, oldInputs);
 
-    const newTxId = randomValue();
-    const newCache = {
-      utxos: [randomValue()],
-      messages: [randomValue(), randomValue()],
-    };
+    const newTxId = randomTxId();
+
+    const newInputs = [
+      generateFakeRequestInputMessage({ recipient: owner }),
+      generateFakeRequestInputMessage({ recipient: owner }),
+      generateFakeRequestInputCoin({ owner }),
+    ];
 
     const newInstance = new ResourceCache(300);
-    newInstance.set(newTxId, newCache);
+    newInstance.set(newTxId, newInputs);
 
-    const activeData = newInstance.getActiveData();
+    const activeData = newInstance.getActiveData(owner);
 
-    expect(activeData.utxos).containSubset([...oldCache.utxos, ...newCache.utxos]);
-    expect(activeData.messages).containSubset([...oldCache.messages, ...newCache.messages]);
+    const allCached = inputsToExcludeResourcesOption([...oldInputs, ...newInputs]);
+
+    expect(activeData.utxos).containSubset(allCached.utxos);
+    expect(activeData.messages).containSubset(allCached.messages);
   });
 });
