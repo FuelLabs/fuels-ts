@@ -70,6 +70,7 @@ describe('TransactionSummary', () => {
       receipts,
       gqlTransactionStatus: status,
       maxInputs,
+      // @ts-expect-error This is not defined..
       gasCosts,
       abiMap: {},
       maxGasPerTx,
