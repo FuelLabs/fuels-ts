@@ -49,6 +49,12 @@ interface Connector {
     params?: FuelConnectorSendTxParams
   ): Promise<string>;
   // #endregion fuel-connector-method-sendTransaction
+  // #region fuel-connector-method-prepareForSend
+  prepareForSend(
+    address: string,
+    transaction: TransactionRequestLike
+  ): Promise<TransactionRequestLike>;
+  // #endregion fuel-connector-method-prepareForSend
   // #region fuel-connector-method-currentAccount
   currentAccount(): Promise<string | null>;
   // #endregion fuel-connector-method-currentAccount
