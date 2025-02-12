@@ -1,8 +1,8 @@
-import type { BN, FakeResources } from 'fuels';
-import { Address, Predicate, ScriptTransactionRequest, bn } from 'fuels';
+import type { FakeResources } from 'fuels';
+import { Address, ScriptTransactionRequest, bn } from 'fuels';
 import { ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
 
-import { PredicateSum } from '../../test/typegen';
+import { Predicate } from '../../test/typegen';
 
 /**
  * @group node
@@ -20,7 +20,7 @@ describe('Predicate', () => {
     const amountToTransferBaseAsset = bn(1000);
 
     const fakeCoinsConfig: FakeResources[] = [
-      { amount: amount1, assetId: provider.getBaseAssetId() },
+      { amount: amount1, assetId: await provider.getBaseAssetId() },
       { amount: amount2, assetId: ASSET_A },
       { amount: amount3, assetId: ASSET_B },
     ];
@@ -28,9 +28,7 @@ describe('Predicate', () => {
     const value2 = bn(200);
     const value1 = bn(100);
 
-    const predicate = new Predicate<[BN, BN]>({
-      abi: PredicateSum.abi,
-      bytecode: PredicateSum.bytecode,
+    const predicate = new Predicate({
       provider,
       data: [value1, value2],
     });
@@ -51,7 +49,7 @@ describe('Predicate', () => {
     request.addCoinOutput(
       Address.fromRandom(),
       amountToTransferBaseAsset,
-      provider.getBaseAssetId()
+      await provider.getBaseAssetId()
     );
     request.addCoinOutput(Address.fromRandom(), amount2, ASSET_A);
     request.addCoinOutput(Address.fromRandom(), amount3, ASSET_B);

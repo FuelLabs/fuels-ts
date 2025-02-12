@@ -1,5 +1,59 @@
 # @fuel-ts/abi-typegen
 
+## 0.99.0
+
+### Patch Changes
+
+- 68e4b5a: chore: prevent naming collisions on typegen
+- Updated dependencies [ab56ded]
+- Updated dependencies [d1825c9]
+- Updated dependencies [b3bb765]
+- Updated dependencies [45cc32e]
+  - @fuel-ts/versions@0.99.0
+  - @fuel-ts/utils@0.99.0
+  - @fuel-ts/errors@0.99.0
+
+## 0.98.0
+
+### Patch Changes
+
+- 12e801e: chore: dependency pinning and auditing
+- 0b4c3ab: chore!: redistributed the `@fuel-ts/interfaces` package
+- Updated dependencies [12e801e]
+- Updated dependencies [04ca73e]
+- Updated dependencies [4ccc628]
+- Updated dependencies [08a31d8]
+- Updated dependencies [0b4c3ab]
+  - @fuel-ts/versions@0.98.0
+  - @fuel-ts/utils@0.98.0
+  - @fuel-ts/errors@0.98.0
+
+## 0.97.2
+
+### Patch Changes
+
+- Updated dependencies [0970bc4]
+- Updated dependencies [5ec254d]
+- Updated dependencies [896bf5b]
+- Updated dependencies [ebe5ecd]
+  - @fuel-ts/utils@0.97.2
+  - @fuel-ts/versions@0.97.2
+  - @fuel-ts/errors@0.97.2
+  - @fuel-ts/interfaces@0.97.2
+
+## 0.97.1
+
+### Patch Changes
+
+- 2cef020: fix: typegen and storage slots integration
+- c904a98: chore: added noImplicitOverride option to config
+- Updated dependencies [27e8808]
+- Updated dependencies [165c49c]
+  - @fuel-ts/interfaces@0.97.1
+  - @fuel-ts/errors@0.97.1
+  - @fuel-ts/versions@0.97.1
+  - @fuel-ts/utils@0.97.1
+
 ## 0.97.0
 
 ### Patch Changes

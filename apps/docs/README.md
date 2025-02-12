@@ -8,6 +8,7 @@
 - [Table of contents](#table-of-contents)
   - [Building](#building)
   - [Testing](#testing)
+  - [Referencing snippets](#referencing-snippets)
 
 ## Building
 
@@ -41,4 +42,18 @@ If no environment is specified, it will run in the browser and node environments
 
 ```sh
 pnpm test
+```
+
+## Referencing snippets
+
+To reference a snippet outside of the current directory, you need to use the following syntax (`<<< @/`):
+
+```md
+`<<< @/../../path/to/snippet.ts#snippet-name{language:line-numbers}
+```
+
+To reference a snippet in the current directory, you can use the following syntax (`<<< @./`):
+
+```md
+`<<< @./snippets/transaction-request/fetch-resources.ts#transaction-request-5{ts:line-numbers}
 ```

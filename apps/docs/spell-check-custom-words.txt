@@ -2,7 +2,6 @@ ABI
 ABI's
 abigen
 ABIs
-AbstractAddress
 ALU
 ANDs
 API's
@@ -21,7 +20,6 @@ backends
 backoff
 backtrace
 backtraces
-Bech
 BigNumber
 Bitfield
 bitmask
@@ -291,6 +289,7 @@ tsconfig
 TTL
 tuple's
 turbofish
+TxParameters
 TypeChain
 typeclass
 typedoc
@@ -321,6 +320,7 @@ Utils
 Utils
 UTXO
 UTXOs
+utxos
 validator
 validators
 vercel
@@ -344,3 +344,4 @@ WSL
 XOR
 XORs
 YAML
+RESTful

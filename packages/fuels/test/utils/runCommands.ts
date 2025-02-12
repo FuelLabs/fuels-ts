@@ -1,6 +1,8 @@
 import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'fs';
+import { globSync } from 'glob';
 import { join, basename } from 'path';
 
+import type { FuelsConfig } from '../../src';
 import { Commands } from '../../src';
 import { run } from '../../src/run';
 
@@ -18,6 +20,8 @@ export type Paths = {
   contractsDir: string;
   contractsFooDir: string;
   scriptsDir: string;
+  scriptDir: string;
+  predicatesDir: string;
   predicateDir: string;
   fooContractMainPath: string;
   fuelsConfigPath: string;
@@ -40,14 +44,20 @@ export function bootstrapProject(testFilepath: string) {
   cpSync(sampleWorkspaceDir, workspaceDir, { recursive: true });
 
   const contractsDir = join(workspaceDir, 'contracts');
+  const contractsBarDir = join(contractsDir, 'bar');
   const contractsFooDir = join(contractsDir, 'foo');
-  const scriptsDir = join(workspaceDir, 'scripts');
-  const predicateDir = join(workspaceDir, 'predicate');
   const fooContractMainPath = join(contractsDir, 'foo', 'src', 'main.sw');
   const upgradableContractPath = join(contractsDir, 'upgradable');
   const upgradableChunkedContractPath = join(contractsDir, 'upgradable-chunked');
 
+  const scriptsDir = join(workspaceDir, 'scripts');
+  const scriptDir = join(scriptsDir, 'script');
+
+  const predicatesDir = join(workspaceDir, 'predicates');
+  const predicateDir = join(predicatesDir, 'predicate');
+
   const outputDir = join(root, 'output');
+  const outputContractsDir = join(outputDir, 'contracts');
   const contractsJsonPath = join(outputDir, 'contract-ids.json');
   const fooContractFactoryPath = join(outputDir, 'contracts', 'factories', 'FooBarAbi.ts');
 
@@ -58,8 +68,14 @@ export function bootstrapProject(testFilepath: string) {
     root,
     workspaceDir,
     contractsDir,
+    outputContractsDir,
+    contractsBarDir,
     contractsFooDir,
+    upgradableContractPath,
+    upgradableChunkedContractPath,
     scriptsDir,
+    scriptDir,
+    predicatesDir,
     predicateDir,
     fooContractMainPath,
     fuelsConfigPath,
@@ -68,8 +84,6 @@ export function bootstrapProject(testFilepath: string) {
     fooContractFactoryPath,
     forcPath,
     fuelCorePath,
-    upgradableContractPath,
-    upgradableChunkedContractPath,
   };
 }
 
@@ -88,15 +102,16 @@ export type BaseParams = {
 
 export type InitParams = BaseParams & {
   workspace?: string;
-  contracts?: string;
-  scripts?: string;
-  predicates?: string;
+  contracts?: string | string[];
+  scripts?: string | string[];
+  predicates?: string | string[];
   output: string;
   forcPath?: string;
   fuelCorePath?: string;
   autoStartFuelCore?: boolean;
   build?: boolean;
   privateKey?: string;
+  fuelCorePort?: string;
 };
 
 export type BuildParams = BaseParams & {
@@ -106,19 +121,27 @@ export type BuildParams = BaseParams & {
 export async function runInit(params: InitParams) {
   const {
     autoStartFuelCore,
-    contracts,
     output,
-    predicates,
     root,
-    scripts,
     forcPath,
     fuelCorePath,
     workspace,
     privateKey,
+    fuelCorePort,
   } = params;
 
-  const flag = (flags: (string | undefined)[], value?: string | boolean): string[] =>
-    value ? (flags as string[]) : [];
+  const flag = (
+    flags: (string | string[] | undefined)[],
+    value?: string | string[] | boolean
+  ): string[] => (value ? (flags.flat() as string[]) : []);
+
+  // The OS auto-magically expands glob patterns before passing them to the CLI
+  // We mimic this behavior here, as we by-pass the OS for our tests
+  const expandGlob = (value: undefined | string | string[]) =>
+    value ? globSync(value, { cwd: root }) : undefined;
+  const contracts = expandGlob(params.contracts);
+  const scripts = expandGlob(params.scripts);
+  const predicates = expandGlob(params.predicates);
 
   const flags = [
     flag(['--path', root], root),
@@ -130,6 +153,7 @@ export async function runInit(params: InitParams) {
     flag(['--forc-path', forcPath], forcPath),
     flag(['--fuel-core-path', fuelCorePath], fuelCorePath),
     flag(['--auto-start-fuel-core'], autoStartFuelCore),
+    flag(['--fuel-core-port', fuelCorePort], fuelCorePort),
   ].flat();
 
   const command = await runCommand(Commands.init, flags);
@@ -176,4 +200,13 @@ export function resetDiskAndMocks(dirPath: string) {
     rmSync(dirPath, { recursive: true });
   }
   vi.restoreAllMocks();
+}
+
+/**
+ * Loaders
+ */
+export async function loadFuelsConfig(configPath: string): Promise<FuelsConfig> {
+  const configPathWithCacheBust = `${configPath}?update=${Date.now()}`;
+  const { default: fuelsConfig } = await import(configPathWithCacheBust);
+  return fuelsConfig;
 }

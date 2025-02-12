@@ -228,15 +228,6 @@ pnpm bench:node
 pnpm bench:node packages/my-desired-package
 ```
 
-# Profiling
-
-We currently use [`clinic`](https://clinicjs.org/) to profile and debug our tooling. For instance you can run clinic's flame command to create a flamegraph for a specific package:
-
-```sh
-# creates a flamegraph for a specific package
-npm_config_package_name=account pnpm clinic:flame  // runs flame against the account package
-```
-
 ### CI Test
 
 During the CI process an automated end-to-end (e2e) test is executed. This test is crucial as it simulates real-world scenarios on the current test-net, ensuring that the changeset maintains the expected functionality and stability.
@@ -244,10 +235,7 @@ During the CI process an automated end-to-end (e2e) test is executed. This test 
 The e2e test can be found at:
 `packages/fuel-gauge/src/e2e-script.test.ts`
 
-The Bech32 address of this wallet is `fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg`. This address can be funded via the [faucet](https://faucet-testnet.fuel.network/).
-
-> [!NOTE] Note
-> `Bech32` addresses like `fuel1..` are now deprecated. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
+The B256 address of this wallet is `0x3463d9064f9128153b00072b4cc543f504372737d5dc04b29c9ebcf1b2a17ee7`. This address can be funded via the [faucet](https://faucet-testnet.fuel.network/).
 
 If you want to run an e2e test locally, you can provide your own wallet address and private key. For obvious security reasons, the private key should not be shared.
 
@@ -270,8 +258,6 @@ This will enable you to run the e2e test locally against the live network:
 pnpm test:filter e2e-script
 ```
 
-<!-- TODO: add/fix block explorer URL after testnet support- Checking Wallet Balance: https://fuellabs.github.io/block-explorer-v2/beta-5/?#/address/fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg -->
-
 # Commit Convention
 
 Before you create a Pull Request, please check whether your commits comply with
@@ -281,11 +267,10 @@ When you create a commit we kindly ask you to follow the convention
 `category(scope or module): message` in your commit message while using one of
 the following categories:
 
-- `feat / feature`: all changes that introduce completely new code or new
+- `feat`: all changes that introduce completely new code or new
   features
 - `fix`: changes that fix a bug (ideally you will additionally reference an
   issue if present)
-- `refactor`: any code related change that is not a fix nor a feature
 - `docs`: changing existing or creating new documentation (i.e. README, docs for
   usage of a lib or cli usage)
 - `build`: all changes regarding the build of the software, changes to
@@ -373,6 +358,100 @@ We'd follow the same approach as explained in the [Patching old releases](#patch
 - The automatically-created PR **must** be merged as soon as possible in order to
   - have the versions of packages on `master` match the `latest` released package versions,
   - have the released functionality on `master` as well
+
+# Network Testing
+
+The network test suite is designed to run locally against a specified network for validation purposes.
+
+You can find the test suite at: `packages/fuel-gauge/src/network.test.ts`.
+
+### Setup Instructions
+
+Before running the tests, you need to configure the `.env` file:
+
+1. Copy the `.env.example` file:
+
+```sh
+cp .env.example .env
+```
+
+2. Set the values for the following environment variables in the `.env` file:
+
+```env
+NETWORK_TEST_URL=https://testnet.fuel.network/v1/graphql
+NETWORK_TEST_PVT_KEY=0x...
+```
+
+- `NETWORK_TEST_URL`: The URL of which network the test should run (e.g., Fuel Testnet endpoint).
+- `NETWORK_TEST_PVT_KEY`: Your private key for the network.
+
+### Running the Test Suite
+
+Once the environment is set up, run the network tests using the following command:
+
+```sh
+pnpm test:network
+```
+
+# Transaction Time Measure
+
+A script designed to run locally is available to measure the time required to submit and process different types of transactions on a specified network.
+
+The script code is located at: `packages/fuel-gauge/scripts/latency-detection/main.ts`.
+
+### Setup Instructions
+
+Before running the tests, you need to configure the `.env` file:
+
+1. Copy the `.env.example` file:
+
+```sh
+cp .env.example .env
+```
+
+2. Set the values for the following environment variables in the `.env` file:
+
+```env
+PERFORMANCE_ANALYSIS_TEST_URL=https://testnet.fuel.network/v1/graphql
+PERFORMANCE_ANALYSIS_PVT_KEY=...
+PERFORMANCE_ANALYSIS_CONTRACT_ADDRESS=...
+```
+
+- `PERFORMANCE_ANALYSIS_TEST_URL`: The URL of which network the test should run (e.g., Fuel Testnet endpoint).
+- `PERFORMANCE_ANALYSIS_PVT_KEY`: Your private key for the network.
+- `PERFORMANCE_ANALYSIS_CONTRACT_ADDRESS`: The address of the contract used by the script. If this variable is left empty, the script will deploy the contract before running the time measurement tests. The deployed contract address will be logged, allowing you to add it here for subsequent test runs to avoid re-deployment.
+
+### Running the Test Suite
+
+Once the environment is set up, run the network tests using the following command:
+
+```sh
+pnpm tx:perf
+```
+
+### Output and Results
+
+The test results are saved in the snapshots directory as a CSV file. The filename follows a timestamp format, such as:
+
+```
+2025-01-23T13:23.csv
+```
+
+A sample of the results is shown below:
+
+| Tag                          | Time (in seconds) |
+| ---------------------------- | ----------------- |
+| `script`                     | 1.907             |
+| `missing-output-variable`    | 2.159             |
+| `missing-4x-output-variable` | 3.072             |
+| `script-with-predicate`      | 1.997             |
+
+### Notes on Transaction Types
+
+- `script`: Represents a script transaction, such as a simple contract call performing one asset transfer.
+- `missing-output-variable`: A similar contract call as the `script` case, but without specifying the `OutputVariable`, resulting in one additional dry run.
+- `missing-4x-output-variable`: Executes an asset transfer transaction to four destinations without specifying `OutputVariable`, leading to four additional dry runs.
+- `script-with-predicate`: Performs the contract asset transfer transaction to one address and adds the `OutputVariable` before hand. The account submitting the transaction is a predicate, which it will result in the additional request to `estimatePredicates`.
 
 # FAQ
 

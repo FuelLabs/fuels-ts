@@ -557,6 +557,18 @@ query estimatePredicates($encodedTransaction: HexString!) {
   }
 }
 
+query estimatePredicatesAndGasPrice(
+  $encodedTransaction: HexString!
+  $blockHorizon: U32!
+) {
+  estimatePredicates(tx: $encodedTransaction) {
+    ...transactionEstimatePredicatesFragment
+  }
+  estimateGasPrice(blockHorizon: $blockHorizon) {
+    gasPrice
+  }
+}
+
 query getLatestBlock {
   chain {
     latestBlock {
@@ -693,9 +705,6 @@ query getBalances(
     first: $first
     last: $last
   ) {
-    pageInfo {
-      ...pageInfoFragment
-    }
     edges {
       node {
         assetId
@@ -727,6 +736,12 @@ query getMessages(
         ...getMessageFragment
       }
     }
+  }
+}
+
+query daCompressedBlock($height: U32!) {
+  daCompressedBlock(height: $height) {
+    bytes
   }
 }
 
@@ -819,12 +834,6 @@ query getConsensusParametersVersion {
         consensusParametersVersion
       }
     }
-  }
-}
-
-subscription submitAndAwait($encodedTransaction: HexString!) {
-  submitAndAwait(tx: $encodedTransaction) {
-    ...transactionStatusSubscriptionFragment
   }
 }
 

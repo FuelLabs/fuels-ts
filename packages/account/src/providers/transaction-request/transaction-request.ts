@@ -1,9 +1,9 @@
 import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
 import { Address, addressify } from '@fuel-ts/address';
+import type { AddressInput, AddressLike } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
 import { FuelError } from '@fuel-ts/errors';
-import type { AddressLike, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type {
@@ -21,6 +21,7 @@ import {
   OutputType,
   TransactionType,
 } from '@fuel-ts/transactions';
+import type { BytesLike } from '@fuel-ts/utils';
 import { concat, hexlify, isDefined } from '@fuel-ts/utils';
 
 import type { Account } from '../../account';
@@ -263,8 +264,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param address - The address to get the coin input witness index for.
    * @param signature - The signature to update the witness with.
    */
-  updateWitnessByOwner(address: string | AbstractAddress, signature: BytesLike) {
-    const ownerAddress = Address.fromAddressOrString(address);
+  updateWitnessByOwner(address: AddressInput, signature: BytesLike) {
+    const ownerAddress = new Address(address);
     const witnessIndex = this.getCoinInputWitnessIndexByOwner(ownerAddress);
     if (typeof witnessIndex === 'number') {
       this.updateWitness(witnessIndex, signature);
@@ -593,11 +594,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @deprecated - This method is deprecated and will be removed in future versions.
    * Please use `Account.generateFakeResources` along with `this.addResources` instead.
    */
-  fundWithFakeUtxos(
-    quantities: CoinQuantity[],
-    baseAssetId: string,
-    resourcesOwner?: AbstractAddress
-  ) {
+  fundWithFakeUtxos(quantities: CoinQuantity[], baseAssetId: string, resourcesOwner?: Address) {
     const findAssetInput = (assetId: string) =>
       this.inputs.find((input) => {
         if ('assetId' in input) {
@@ -692,7 +689,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     this.inputs.filter(isRequestInputResource).forEach((i) => {
       const owner = getRequestInputResourceOwner(i);
       const correspondingInput = inputsToExtractGasUsed.find((x) =>
-        isRequestInputResourceFromOwner(x, Address.fromString(String(owner)))
+        isRequestInputResourceFromOwner(x, new Address(String(owner)))
       );
 
       if (

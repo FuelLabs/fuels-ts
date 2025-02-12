@@ -26,8 +26,8 @@ describe('checkForAndDisplayUpdates', () => {
       FUEL_CORE: '1.0.0',
     });
 
-    const log = vi.spyOn(loggerMod, 'log');
-    const warn = vi.spyOn(loggerMod, 'warn');
+    const log = vi.spyOn(loggerMod, 'log').mockImplementation(() => {});
+    const warn = vi.spyOn(loggerMod, 'warn').mockImplementation(() => {});
 
     return { log, warn };
   };
@@ -67,7 +67,7 @@ describe('checkForAndDisplayUpdates', () => {
       new Error('Failed to fetch')
     );
 
-    const log = vi.spyOn(loggerMod, 'log');
+    const log = vi.spyOn(loggerMod, 'log').mockImplementation(() => {});
 
     await checkForAndDisplayUpdatesMod.checkForAndDisplayUpdates();
 

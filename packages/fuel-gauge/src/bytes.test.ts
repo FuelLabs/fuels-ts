@@ -97,7 +97,7 @@ describe('Bytes Tests', () => {
     const setupTx = await wallet.transfer(
       predicate.address,
       amountToPredicate,
-      launched.provider.getBaseAssetId(),
+      await launched.provider.getBaseAssetId(),
       {
         gasLimit: 10_000,
       }
@@ -109,7 +109,7 @@ describe('Bytes Tests', () => {
     const tx = await predicate.transfer(
       receiver.address,
       amountToReceiver,
-      launched.provider.getBaseAssetId(),
+      await launched.provider.getBaseAssetId(),
       {
         gasLimit: 10_000,
       }

@@ -1,5 +1,48 @@
 # @fuel-ts/logger
 
+## 0.99.0
+
+### Patch Changes
+
+- Updated dependencies [86b8e94]
+- Updated dependencies [b3bb765]
+  - @fuel-ts/address@0.99.0
+  - @fuel-ts/math@0.99.0
+
+## 0.98.0
+
+### Minor Changes
+
+- 4ccc628: chore!: remove Bech32 address
+
+### Patch Changes
+
+- 12e801e: chore: dependency pinning and auditing
+- 0b4c3ab: chore!: redistributed the `@fuel-ts/interfaces` package
+- Updated dependencies [12e801e]
+- Updated dependencies [4ccc628]
+- Updated dependencies [0b4c3ab]
+  - @fuel-ts/address@0.98.0
+  - @fuel-ts/math@0.98.0
+
+## 0.97.2
+
+### Patch Changes
+
+- @fuel-ts/address@0.97.2
+- @fuel-ts/math@0.97.2
+- @fuel-ts/interfaces@0.97.2
+
+## 0.97.1
+
+### Patch Changes
+
+- Updated dependencies [c904a98]
+- Updated dependencies [27e8808]
+  - @fuel-ts/address@0.97.1
+  - @fuel-ts/math@0.97.1
+  - @fuel-ts/interfaces@0.97.1
+
 ## 0.97.0
 
 ### Patch Changes

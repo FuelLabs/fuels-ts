@@ -2,17 +2,17 @@ import { Address } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import { TESTNET_NETWORK_URL } from '@internal/utils';
+import type { BytesLike } from '@fuel-ts/utils';
 import { EventEmitter } from 'events';
 
-import type { Network, ProviderOptions, SelectNetworkArguments } from '../src';
+import type { AccountSendTxParams, Network, ProviderOptions, SelectNetworkArguments } from '../src';
+import { TESTNET_NETWORK_URL } from '../src/configs';
 import { Fuel } from '../src/connectors/fuel';
 import { FuelConnectorEventType } from '../src/connectors/types';
-import { Provider, TransactionStatus } from '../src/providers';
-import { setupTestProviderAndWallets } from '../src/test-utils';
+import { Provider, ScriptTransactionRequest, TransactionStatus } from '../src/providers';
+import { setupTestProviderAndWallets, TestMessage } from '../src/test-utils';
 import { Wallet } from '../src/wallet';
 
 import { MockConnector } from './fixtures/mocked-connector';
@@ -364,7 +364,28 @@ describe('Fuel Connector', () => {
   });
 
   it('should ensure getWallet return an wallet', async () => {
-    using launched = await setupTestProviderAndWallets();
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        snapshotConfig: {
+          stateConfig: {
+            messages: [
+              new TestMessage({
+                sender: Address.fromB256(
+                  '0xc43454aa38dd91f88109a4b7aef5efb96ce34e3f24992fe0f81d233ca686f80f'
+                ),
+                recipient: Address.fromB256(
+                  '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba'
+                ),
+                nonce: '0101010101010101010101010101010101010101010101010101010101010101',
+                amount: 100_000,
+                data: '',
+                da_height: 0,
+              }).toChainMessage(),
+            ],
+          },
+        },
+      },
+    });
     const { provider } = launched;
 
     const wallets = [
@@ -393,10 +414,15 @@ describe('Fuel Connector', () => {
     const wallet = await fuel.getWallet(account);
     expect(wallet.provider.url).toEqual(network.url);
     const receiver = Wallet.fromAddress(Address.fromRandom(), provider);
-    const response = await wallet.transfer(receiver.address, bn(1000), provider.getBaseAssetId(), {
-      tip: bn(1),
-      gasLimit: bn(100_000),
-    });
+    const response = await wallet.transfer(
+      receiver.address,
+      bn(1000),
+      await provider.getBaseAssetId(),
+      {
+        tip: bn(1),
+        gasLimit: bn(100_000),
+      }
+    );
     const { status } = await response.waitForResult();
     expect(status).toEqual(TransactionStatus.success);
     expect((await receiver.getBalance()).toString()).toEqual('1000');
@@ -563,17 +589,12 @@ describe('Fuel Connector', () => {
     }).init();
 
     class CustomProvider extends Provider {
-      static override async create(_url: string, opts?: ProviderOptions) {
-        const provider = new CustomProvider(nodeProvider.url, opts);
-        await provider.fetchChainAndNodeInfo();
-        return provider;
+      constructor(_url: string, opts?: ProviderOptions) {
+        super(nodeProvider.url, opts);
       }
 
       // eslint-disable-next-line @typescript-eslint/require-await
-      override async getBalance(
-        _owner: AbstractAddress,
-        _assetId: BytesLike = ZeroBytes32
-      ): Promise<BN> {
+      override async getBalance(_owner: Address, _assetId: BytesLike = ZeroBytes32): Promise<BN> {
         return bn(1234);
       }
     }
@@ -583,7 +604,7 @@ describe('Fuel Connector', () => {
       throw new Error('Account not found');
     }
 
-    const provider = await CustomProvider.create(nodeProvider.url);
+    const provider = new CustomProvider(nodeProvider.url);
     const wallet = await fuel.getWallet(currentAccount, provider);
     expect(wallet.provider).toBeInstanceOf(CustomProvider);
     expect(await wallet.getBalance()).toEqual(bn(1234));
@@ -647,5 +668,40 @@ describe('Fuel Connector', () => {
       () => fuel.getProvider([] as unknown as Provider),
       new FuelError(ErrorCode.INVALID_PROVIDER, 'Provider is not valid.')
     );
+  });
+
+  it('should ensure sendTransaction works just fine', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider,
+      wallets: [connectorWallet],
+    } = launched;
+    const connector = new MockConnector({
+      wallets: [connectorWallet],
+    });
+    const fuel = await new Fuel({
+      connectors: [connector],
+    });
+
+    const sendTransactionSpy = vi.spyOn(connectorWallet, 'sendTransaction');
+
+    const request = new ScriptTransactionRequest();
+    const resources = await connectorWallet.getResourcesToSpend([
+      { assetId: await provider.getBaseAssetId(), amount: 1000 },
+    ]);
+    request.addResources(resources);
+    await request.estimateAndFund(connectorWallet);
+
+    const params: AccountSendTxParams = {
+      onBeforeSend: vi.fn(),
+      skipCustomFee: true,
+    };
+    const response = await fuel.sendTransaction(
+      connectorWallet.address.toString(),
+      request,
+      params
+    );
+    expect(response).toBeDefined();
+    expect(sendTransactionSpy).toHaveBeenCalledWith(request, params);
   });
 });

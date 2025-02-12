@@ -3,6 +3,8 @@ import {
   InputMessageCoder,
   ScriptTransactionRequest,
   Wallet,
+  bn,
+  getMintedAssetId,
   getRandomB256,
   hexlify,
   isCoin,
@@ -39,6 +41,8 @@ describe('Fee', () => {
         );
     }
   };
+
+  const SUB_ID = '0x4a778acfad1abc155a009dc976d2cf0db6197d3d360194d74b1fb92b96986b00';
 
   it('should ensure fee is properly calculated when minting and burning coins', async () => {
     using launched = await launchTestNode({
@@ -102,7 +106,7 @@ describe('Fee', () => {
     const tx = await wallet.transfer(
       destination.address,
       amountToTransfer,
-      provider.getBaseAssetId(),
+      await provider.getBaseAssetId(),
       {
         gasLimit: 10_000,
       }
@@ -138,16 +142,11 @@ describe('Fee', () => {
       gasLimit: 10000,
     });
 
-    request.addCoinOutput(destination1.address, amountToTransfer, provider.getBaseAssetId());
+    request.addCoinOutput(destination1.address, amountToTransfer, await provider.getBaseAssetId());
     request.addCoinOutput(destination2.address, amountToTransfer, ASSET_A);
     request.addCoinOutput(destination3.address, amountToTransfer, ASSET_B);
 
-    const txCost = await wallet.getTransactionCost(request);
-
-    request.gasLimit = txCost.gasUsed;
-    request.maxFee = txCost.maxFee;
-
-    await wallet.fund(request, txCost);
+    await request.estimateAndFund(wallet);
 
     const tx = await wallet.sendTransaction(request);
     const { fee } = await tx.wait();
@@ -323,12 +322,20 @@ describe('Fee', () => {
 
     const predicate = new PredicateU32({ provider, data: [1078] });
 
-    const tx1 = await wallet.transfer(predicate.address, 1_000_000, provider.getBaseAssetId());
+    const tx1 = await wallet.transfer(
+      predicate.address,
+      1_000_000,
+      await provider.getBaseAssetId()
+    );
     await tx1.wait();
 
     const transferAmount = 100;
     const balanceBefore = await predicate.getBalance();
-    const tx2 = await predicate.transfer(wallet.address, transferAmount, provider.getBaseAssetId());
+    const tx2 = await predicate.transfer(
+      wallet.address,
+      transferAmount,
+      await provider.getBaseAssetId()
+    );
 
     const { fee } = await tx2.wait();
 
@@ -340,6 +347,225 @@ describe('Fee', () => {
       min: balanceDiff - 20,
       max: balanceDiff + 20,
     });
+  });
+
+  it('should not run estimateGasPrice in between estimateTxDependencies dry run attempts', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: MultiTokenContractFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+      wallets: [wallet],
+      provider,
+    } = launched;
+
+    const assetId = getMintedAssetId(contract.id.toB256(), SUB_ID);
+
+    // Minting coins first
+    const mintCall = await contract.functions.mint_coins(SUB_ID, 10_000).call();
+    await mintCall.waitForResult();
+
+    const estimateGasPrice = vi.spyOn(provider, 'estimateGasPrice');
+    const dryRun = vi.spyOn(provider.operations, 'dryRun');
+
+    /**
+     * Sway transfer without adding `OutputVariable` which will result in
+     * 2 dry runs at the `Provider.estimateTxDependencies` method:
+     * - 1st dry run will fail due to missing `OutputVariable`
+     * - 2nd dry run will succeed
+     */
+    const transferCall = await contract.functions
+      .transfer_to_address({ bits: wallet.address.toB256() }, { bits: assetId }, 10_000)
+      .call();
+
+    await transferCall.waitForResult();
+
+    expect(estimateGasPrice).toHaveBeenCalledOnce();
+    expect(dryRun).toHaveBeenCalledTimes(2);
+  });
+
+  it('should ensure estimateGasPrice runs only once when funding a transaction.', async () => {
+    const amountPerCoin = 100;
+
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin, // Funding with multiple UTXOs so the fee will change after funding the TX.
+        coinsPerAsset: 250,
+      },
+      contractsConfigs: [
+        {
+          factory: MultiTokenContractFactory,
+        },
+      ],
+    });
+
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+
+    const fund = vi.spyOn(wallet, 'fund');
+    const estimateGasPrice = vi.spyOn(provider, 'estimateGasPrice');
+
+    const tx = await wallet.transfer(
+      wallet.address,
+      amountPerCoin * 20,
+      await provider.getBaseAssetId()
+    );
+    const { isStatusSuccess } = await tx.waitForResult();
+
+    expect(fund).toHaveBeenCalledOnce();
+    expect(estimateGasPrice).toHaveBeenCalledOnce();
+
+    expect(isStatusSuccess).toBeTruthy();
+  });
+
+  it('ensures estimateGasPrice runs only once when getting transaction cost [w/ gas price]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: CallTestContractFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const estimateGasPrice = vi.spyOn(provider, 'estimateGasPrice');
+
+    const txRequest = await contract.functions.foo(10).getTransactionRequest();
+    const cost = await wallet.getTransactionCost(txRequest);
+
+    expect(cost.gasUsed.toNumber()).toBeGreaterThan(0);
+    expect(estimateGasPrice).toHaveBeenCalledOnce();
+  });
+
+  it('ensures estimateGasPrice runs twice when getting transaction cost with estimate gas and fee [w/o gas price]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: CallTestContractFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const estimateGasPrice = vi.spyOn(provider, 'estimateGasPrice');
+
+    const txRequest = await contract.functions.foo(10).getTransactionRequest();
+    const { gasPrice } = await provider.estimateTxGasAndFee({ transactionRequest: txRequest });
+    const { gasUsed } = await wallet.getTransactionCost(txRequest);
+
+    expect(estimateGasPrice).toHaveBeenCalledTimes(2);
+    expect(gasPrice.toNumber()).toBeGreaterThan(0);
+    expect(gasUsed.toNumber()).toBeGreaterThan(0);
+  });
+
+  it('ensures gas price and predicates are estimated on the same request', async () => {
+    using launched = await launchTestNode();
+
+    const { provider } = launched;
+
+    const predicate = new PredicateU32({ provider, data: [1078] });
+
+    const estimateGasPrice = vi.spyOn(provider.operations, 'estimateGasPrice');
+    const estimatePredicates = vi.spyOn(provider.operations, 'estimatePredicates');
+    const estimatePredicatesAndGasPrice = vi.spyOn(
+      provider.operations,
+      'estimatePredicatesAndGasPrice'
+    );
+
+    await predicate.getTransactionCost(new ScriptTransactionRequest());
+
+    expect(estimateGasPrice).not.toHaveBeenCalledOnce();
+    expect(estimatePredicates).not.toHaveBeenCalledOnce();
+
+    expect(estimatePredicatesAndGasPrice).toHaveBeenCalledOnce();
+  });
+
+  it('ensures gas price is estimated alone when no predicates are present', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const estimateGasPrice = vi.spyOn(provider.operations, 'estimateGasPrice');
+    const estimatePredicates = vi.spyOn(provider.operations, 'estimatePredicates');
+    const estimatePredicatesAndGasPrice = vi.spyOn(
+      provider.operations,
+      'estimatePredicatesAndGasPrice'
+    );
+
+    await wallet.getTransactionCost(new ScriptTransactionRequest());
+
+    expect(estimatePredicates).not.toHaveBeenCalledOnce();
+    expect(estimatePredicatesAndGasPrice).not.toHaveBeenCalledOnce();
+
+    expect(estimateGasPrice).toHaveBeenCalledOnce();
+  });
+
+  it('ensures predicates are estimated alone when gas price is present', async () => {
+    using launched = await launchTestNode();
+
+    const { provider } = launched;
+
+    const predicate = new PredicateU32({ provider, data: [1078] });
+
+    const estimateGasPrice = vi.spyOn(provider.operations, 'estimateGasPrice');
+    const estimatePredicates = vi.spyOn(provider.operations, 'estimatePredicates');
+    const estimatePredicatesAndGasPrice = vi.spyOn(
+      provider.operations,
+      'estimatePredicatesAndGasPrice'
+    );
+
+    await predicate.getTransactionCost(new ScriptTransactionRequest(), { gasPrice: bn(1) });
+
+    expect(estimatePredicatesAndGasPrice).not.toHaveBeenCalledOnce();
+    expect(estimateGasPrice).not.toHaveBeenCalledOnce();
+
+    expect(estimatePredicates).toHaveBeenCalledOnce();
+  });
+
+  it('ensures estimateGasPrice runs only once when getting transaction cost with estimate gas and fee', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: CallTestContractFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const estimateGasPrice = vi.spyOn(provider, 'estimateGasPrice');
+
+    const txRequest = await contract.functions.foo(10).getTransactionRequest();
+    const { gasPrice } = await provider.estimateTxGasAndFee({ transactionRequest: txRequest });
+    const { gasUsed } = await wallet.getTransactionCost(txRequest, { gasPrice });
+
+    expect(gasPrice.toNumber()).toBeGreaterThan(0);
+    expect(gasUsed.toNumber()).toBeGreaterThan(0);
+    expect(estimateGasPrice).toHaveBeenCalledOnce();
   });
 
   describe('Estimation with Message containing data within TX request inputs', () => {
@@ -374,7 +600,7 @@ describe('Fee', () => {
         wallets: [fundedWallet],
       } = launched;
 
-      const baseAssetId = provider.getBaseAssetId();
+      const baseAssetId = await provider.getBaseAssetId();
 
       const {
         messages: [message1, message2],
@@ -415,7 +641,7 @@ describe('Fee', () => {
         wallets: [fundedWallet],
       } = launched;
 
-      const baseAssetId = provider.getBaseAssetId();
+      const baseAssetId = await provider.getBaseAssetId();
 
       const {
         messages: [message1, message2],

@@ -41,6 +41,10 @@ jobs:
       - name: Pretest
         run: pnpm pretest
 
+      - name: Install playwright dependencies
+        if: matrix.env.name == 'browser'
+        run: pnpm exec playwright install --with-deps --only-shell chromium
+
       - name: Run Tests - ${{ matrix.env.name }}
         run: pnpm test:${{ matrix.env.name }}
 
@@ -86,6 +90,25 @@ jobs:
         run: sh ./scripts/tests-ui-integration.sh
         env:
           PUBLISHED_NPM_TAG: next
+
+  forc:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Test Setup
+        uses: ./.github/actions/test-setup
+
+      - name: Setup forc and fuel-core paths
+        shell: bash
+        run: |
+          echo "$PWD/internal/forc/forc-binaries" >> $GITHUB_PATH
+          echo "$PWD/internal/fuel-core/fuel-core-binaries" >> $GITHUB_PATH
+
+      - name: Run Tests
+        run: pnpm test:forc
 
   e2e:
     runs-on: ubuntu-latest
@@ -151,7 +174,7 @@ jobs:
           path: coverage/report
 
       - name: Download Master Coverage Artifact
-        uses: dawidd6/action-download-artifact@v7
+        uses: dawidd6/action-download-artifact@v8
         if: ${{ steps.findPr.outputs.number }}
         with:
           workflow: test.yaml

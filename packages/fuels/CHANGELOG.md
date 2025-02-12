@@ -1,5 +1,158 @@
 # Change Log
 
+## 0.99.0
+
+### Patch Changes
+
+- 43dc5ee: fix: `fuels dev` hangs after compilation errors
+- c822522: feat: enable `fuels` callbacks to be asynchronous
+- Updated dependencies [edefe59]
+- Updated dependencies [4428556]
+- Updated dependencies [f3d5240]
+- Updated dependencies [86b8e94]
+- Updated dependencies [e5251e2]
+- Updated dependencies [f986891]
+- Updated dependencies [d35ccb7]
+- Updated dependencies [ab56ded]
+- Updated dependencies [69e1ba8]
+- Updated dependencies [ec84b8a]
+- Updated dependencies [d1825c9]
+- Updated dependencies [f7f0f0a]
+- Updated dependencies [d591df0]
+- Updated dependencies [baab80c]
+- Updated dependencies [8030180]
+- Updated dependencies [68e4b5a]
+- Updated dependencies [56adcc5]
+- Updated dependencies [b3bb765]
+- Updated dependencies [45cc32e]
+  - @fuel-ts/account@0.99.0
+  - @fuel-ts/address@0.99.0
+  - @fuel-ts/program@0.99.0
+  - @fuel-ts/versions@0.99.0
+  - @fuel-ts/abi-coder@0.99.0
+  - @fuel-ts/utils@0.99.0
+  - @fuel-ts/contract@0.99.0
+  - @fuel-ts/abi-typegen@0.99.0
+  - @fuel-ts/recipes@0.99.0
+  - @fuel-ts/transactions@0.99.0
+  - @fuel-ts/errors@0.99.0
+  - @fuel-ts/math@0.99.0
+  - @fuel-ts/script@0.99.0
+  - @fuel-ts/crypto@0.99.0
+  - @fuel-ts/hasher@0.99.0
+
+## 0.98.0
+
+### Minor Changes
+
+- 458b7cf: feat!: making `provider` initialization `sync` again
+- 0b4c3ab: chore!: redistributed the `@fuel-ts/interfaces` package
+
+### Patch Changes
+
+- 981b992: docs: improving getting started docs for `mainnet`
+- 12e801e: chore: dependency pinning and auditing
+- 11fcd7b: fix: paths and globals in `fuels init`
+- 0fb6fa8: feat: add support for `--fuel-core-port` flag in `fuels init`
+- f293646: fix: usage of `providerUrl` in `fuels dev` command
+- a278e71: fix: unable to kill `fuels dev` with `pnpm`
+- 68ef74d: chore: remove unused deps + update knip config
+- Updated dependencies [12e801e]
+- Updated dependencies [d5a696c]
+- Updated dependencies [13977df]
+- Updated dependencies [04ca73e]
+- Updated dependencies [68821a9]
+- Updated dependencies [458b7cf]
+- Updated dependencies [a7eb9b6]
+- Updated dependencies [254bf53]
+- Updated dependencies [f132203]
+- Updated dependencies [8d8452e]
+- Updated dependencies [0f138cd]
+- Updated dependencies [d404734]
+- Updated dependencies [f2407dc]
+- Updated dependencies [4ccc628]
+- Updated dependencies [75fae34]
+- Updated dependencies [a278e71]
+- Updated dependencies [08a31d8]
+- Updated dependencies [0b4c3ab]
+- Updated dependencies [68ef74d]
+  - @fuel-ts/transactions@0.98.0
+  - @fuel-ts/abi-typegen@0.98.0
+  - @fuel-ts/abi-coder@0.98.0
+  - @fuel-ts/contract@0.98.0
+  - @fuel-ts/versions@0.98.0
+  - @fuel-ts/account@0.98.0
+  - @fuel-ts/address@0.98.0
+  - @fuel-ts/program@0.98.0
+  - @fuel-ts/crypto@0.98.0
+  - @fuel-ts/hasher@0.98.0
+  - @fuel-ts/utils@0.98.0
+  - @fuel-ts/math@0.98.0
+  - @fuel-ts/script@0.98.0
+  - @fuel-ts/recipes@0.98.0
+  - @fuel-ts/errors@0.98.0
+
+## 0.97.2
+
+### Patch Changes
+
+- ebe5ecd: chore: update internally used chain config
+- Updated dependencies [0970bc4]
+- Updated dependencies [5ec254d]
+- Updated dependencies [896bf5b]
+- Updated dependencies [ebe5ecd]
+  - @fuel-ts/utils@0.97.2
+  - @fuel-ts/versions@0.97.2
+  - @fuel-ts/contract@0.97.2
+  - @fuel-ts/account@0.97.2
+  - @fuel-ts/abi-coder@0.97.2
+  - @fuel-ts/abi-typegen@0.97.2
+  - @fuel-ts/address@0.97.2
+  - @fuel-ts/crypto@0.97.2
+  - @fuel-ts/hasher@0.97.2
+  - @fuel-ts/program@0.97.2
+  - @fuel-ts/recipes@0.97.2
+  - @fuel-ts/script@0.97.2
+  - @fuel-ts/transactions@0.97.2
+  - @fuel-ts/errors@0.97.2
+  - @fuel-ts/merkle@0.97.2
+  - @fuel-ts/math@0.97.2
+  - @fuel-ts/interfaces@0.97.2
+
+## 0.97.1
+
+### Patch Changes
+
+- 2cef020: fix: typegen and storage slots integration
+- Updated dependencies [2cef020]
+- Updated dependencies [260274a]
+- Updated dependencies [c904a98]
+- Updated dependencies [27e8808]
+- Updated dependencies [7390114]
+- Updated dependencies [3a178b0]
+- Updated dependencies [165c49c]
+- Updated dependencies [ef94263]
+- Updated dependencies [283a684]
+- Updated dependencies [6ab3e6b]
+- Updated dependencies [4131e74]
+  - @fuel-ts/abi-typegen@0.97.1
+  - @fuel-ts/contract@0.97.1
+  - @fuel-ts/account@0.97.1
+  - @fuel-ts/abi-coder@0.97.1
+  - @fuel-ts/address@0.97.1
+  - @fuel-ts/program@0.97.1
+  - @fuel-ts/script@0.97.1
+  - @fuel-ts/math@0.97.1
+  - @fuel-ts/interfaces@0.97.1
+  - @fuel-ts/errors@0.97.1
+  - @fuel-ts/versions@0.97.1
+  - @fuel-ts/recipes@0.97.1
+  - @fuel-ts/transactions@0.97.1
+  - @fuel-ts/crypto@0.97.1
+  - @fuel-ts/merkle@0.97.1
+  - @fuel-ts/utils@0.97.1
+  - @fuel-ts/hasher@0.97.1
+
 ## 0.97.0
 
 ### Minor Changes

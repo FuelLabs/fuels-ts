@@ -20,9 +20,15 @@ Check that the arguments supplied to the function match the required type.
 
 ### `ACCOUNT_REQUIRED`
 
-When an [`Account`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.Account.html) is required for an operation. This will usually be in the form of a [`Wallet`](../wallets/index.md).
+When an [`Account`](DOCS_API_URL/classes/_fuel_ts_account.Account.html) is required for an operation. This will usually be in the form of a [`Wallet`](../wallets/index.md).
 
 It could be caused during the deployments of contracts when an account is required to sign the transaction. This can be resolved by following the deployment guide [here](../contracts/deploying-contracts.md).
+
+### `ASSET_BURN_DETECTED`
+
+When you are trying to send a transaction that will result in an asset burn.
+
+Add relevant coin change outputs to the transaction, or enable asset burn in the transaction request.
 
 ### `CONFIG_FILE_NOT_FOUND`
 
@@ -214,7 +220,7 @@ Check the status received is within `TransactionStatus`.
 
 When the transaction type from the Fuel Node is _not_ supported.
 
-The type is within [`TransactionType`](https://fuels-ts-docs-api.vercel.app/enums/_fuel_ts_account.TransactionType.html).
+The type is within [`TransactionType`](DOCS_API_URL/enums/_fuel_ts_account.TransactionType.html).
 
 ### `INVALID_TTL`
 
@@ -256,7 +262,7 @@ Ensure that a connector has been supplied to the `Account` or `Wallet`.
 
 A provider is missing when it's required for a given operation.
 
-It could be caused by the provider not being set for either an [`Account`](https://fuels-ts-docs-api.vercel.app/modules/_fuel_ts_account.html) or a [`Wallet`](../wallets/index.md) - use the `connect` method to attach a provider.
+It could be caused by the provider not being set for either an [`Account`](DOCS_API_URL/modules/_fuel_ts_account.html) or a [`Wallet`](../wallets/index.md) - use the `connect` method to attach a provider.
 
 ### `MISSING_REQUIRED_PARAMETER`
 

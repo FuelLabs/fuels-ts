@@ -1,5 +1,40 @@
 # @fuel-ts/errors
 
+## 0.99.0
+
+### Patch Changes
+
+- b3bb765: fix: improve BN unsafe numbers error handling
+- Updated dependencies [ab56ded]
+- Updated dependencies [45cc32e]
+  - @fuel-ts/versions@0.99.0
+
+## 0.98.0
+
+### Patch Changes
+
+- 4ccc628: chore!: remove Bech32 address
+- 08a31d8: feat!: prevent implicit asset burn
+- 0b4c3ab: chore!: redistributed the `@fuel-ts/interfaces` package
+- Updated dependencies [12e801e]
+- Updated dependencies [04ca73e]
+  - @fuel-ts/versions@0.98.0
+
+## 0.97.2
+
+### Patch Changes
+
+- Updated dependencies [5ec254d]
+  - @fuel-ts/versions@0.97.2
+
+## 0.97.1
+
+### Patch Changes
+
+- 27e8808: chore: deprecate bech32 addresses
+- Updated dependencies [165c49c]
+  - @fuel-ts/versions@0.97.1
+
 ## 0.97.0
 
 ### Patch Changes

@@ -1,5 +1,129 @@
 # Change Log
 
+## 0.99.0
+
+### Minor Changes
+
+- baab80c: chore!: remove `ContractUtils` namespaced export
+
+### Patch Changes
+
+- 56adcc5: chore: fix version resolutions
+- Updated dependencies [edefe59]
+- Updated dependencies [4428556]
+- Updated dependencies [f3d5240]
+- Updated dependencies [86b8e94]
+- Updated dependencies [e5251e2]
+- Updated dependencies [f986891]
+- Updated dependencies [d35ccb7]
+- Updated dependencies [69e1ba8]
+- Updated dependencies [ec84b8a]
+- Updated dependencies [d1825c9]
+- Updated dependencies [f7f0f0a]
+- Updated dependencies [d591df0]
+- Updated dependencies [8030180]
+- Updated dependencies [56adcc5]
+- Updated dependencies [b3bb765]
+- Updated dependencies [45cc32e]
+  - @fuel-ts/account@0.99.0
+  - @fuel-ts/program@0.99.0
+  - @fuel-ts/abi-coder@0.99.0
+  - @fuel-ts/utils@0.99.0
+  - @fuel-ts/transactions@0.99.0
+  - @fuel-ts/errors@0.99.0
+  - @fuel-ts/math@0.99.0
+  - @fuel-ts/crypto@0.99.0
+  - @fuel-ts/hasher@0.99.0
+  - @fuel-ts/merkle@0.99.0
+
+## 0.98.0
+
+### Minor Changes
+
+- 458b7cf: feat!: making `provider` initialization `sync` again
+
+### Patch Changes
+
+- 12e801e: chore: dependency pinning and auditing
+- 0b4c3ab: chore!: redistributed the `@fuel-ts/interfaces` package
+- 68ef74d: chore: remove unused deps + update knip config
+- Updated dependencies [12e801e]
+- Updated dependencies [d5a696c]
+- Updated dependencies [13977df]
+- Updated dependencies [68821a9]
+- Updated dependencies [458b7cf]
+- Updated dependencies [a7eb9b6]
+- Updated dependencies [254bf53]
+- Updated dependencies [f132203]
+- Updated dependencies [8d8452e]
+- Updated dependencies [0f138cd]
+- Updated dependencies [d404734]
+- Updated dependencies [f2407dc]
+- Updated dependencies [4ccc628]
+- Updated dependencies [75fae34]
+- Updated dependencies [a278e71]
+- Updated dependencies [08a31d8]
+- Updated dependencies [0b4c3ab]
+- Updated dependencies [68ef74d]
+  - @fuel-ts/transactions@0.98.0
+  - @fuel-ts/abi-coder@0.98.0
+  - @fuel-ts/account@0.98.0
+  - @fuel-ts/program@0.98.0
+  - @fuel-ts/crypto@0.98.0
+  - @fuel-ts/hasher@0.98.0
+  - @fuel-ts/merkle@0.98.0
+  - @fuel-ts/utils@0.98.0
+  - @fuel-ts/math@0.98.0
+  - @fuel-ts/errors@0.98.0
+
+## 0.97.2
+
+### Patch Changes
+
+- ebe5ecd: chore: update internally used chain config
+- Updated dependencies [0970bc4]
+- Updated dependencies [5ec254d]
+- Updated dependencies [896bf5b]
+- Updated dependencies [ebe5ecd]
+  - @fuel-ts/utils@0.97.2
+  - @fuel-ts/versions@0.97.2
+  - @fuel-ts/account@0.97.2
+  - @fuel-ts/abi-coder@0.97.2
+  - @fuel-ts/crypto@0.97.2
+  - @fuel-ts/hasher@0.97.2
+  - @fuel-ts/program@0.97.2
+  - @fuel-ts/transactions@0.97.2
+  - @fuel-ts/errors@0.97.2
+  - @fuel-ts/merkle@0.97.2
+  - @fuel-ts/math@0.97.2
+  - @fuel-ts/interfaces@0.97.2
+
+## 0.97.1
+
+### Patch Changes
+
+- 2cef020: fix: typegen and storage slots integration
+- 6ab3e6b: feat: better typegen contract factory integration with `launchTestNode`
+- Updated dependencies [260274a]
+- Updated dependencies [c904a98]
+- Updated dependencies [27e8808]
+- Updated dependencies [7390114]
+- Updated dependencies [3a178b0]
+- Updated dependencies [165c49c]
+- Updated dependencies [4131e74]
+  - @fuel-ts/account@0.97.1
+  - @fuel-ts/abi-coder@0.97.1
+  - @fuel-ts/program@0.97.1
+  - @fuel-ts/math@0.97.1
+  - @fuel-ts/interfaces@0.97.1
+  - @fuel-ts/errors@0.97.1
+  - @fuel-ts/versions@0.97.1
+  - @fuel-ts/transactions@0.97.1
+  - @fuel-ts/crypto@0.97.1
+  - @fuel-ts/merkle@0.97.1
+  - @fuel-ts/utils@0.97.1
+  - @fuel-ts/hasher@0.97.1
+
 ## 0.97.0
 
 ### Minor Changes

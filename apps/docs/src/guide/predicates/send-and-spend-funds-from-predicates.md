@@ -10,7 +10,7 @@ Consider the following predicate:
 
 <<< @/../../docs/sway/simple-predicate/src/main.sw#send-and-spend-funds-from-predicates-1{rust:line-numbers}
 
-This predicate accepts an address of type `b256` and compares it with a hard-coded address of the same type. If both addresses are equal, the predicate returns true, otherwise it will return false.
+This predicate accepts an address of type `B256` and compares it with a hard-coded address of the same type. If both addresses are equal, the predicate returns true, otherwise it will return false.
 
 ## Interacting with the Predicate Using SDK
 
@@ -18,7 +18,7 @@ Let's use the above predicate to validate our transaction.
 
 Once you've compiled the predicate (`forc build`), you'll obtain two important artifacts: the JSON ABI and the predicate's binary code. These are needed to instantiate a new predicate.
 
-This is where we also pass in the predicate's data. Note that the `main` function in our predicate example requires a parameter called `input_address` of type `b256`. We will pass this parameter to the `Predicate` constructor along with the bytecode and the JSON ABI.
+This is where we also pass in the predicate's data. Note that the `main` function in our predicate example requires a parameter called `input_address` of type `B256`. We will pass this parameter to the `Predicate` constructor along with the bytecode and the JSON ABI.
 
 <<< @./snippets/cookbook/transferring-assets.ts#send-and-spend-funds-from-predicates-2{ts:line-numbers}
 
@@ -38,7 +38,7 @@ Once the predicate resolves with a return value `true` based on its predefined c
 
 ---
 
-In a similar approach, you can use the `createTransfer` method, which returns a [`ScriptTransactionRequest`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.ScriptTransactionRequest.html). Then, we can submit this transaction request by calling the `sendTransaction` method.
+In a similar approach, you can use the `createTransfer` method, which returns a [`ScriptTransactionRequest`](DOCS_API_URL/classes/_fuel_ts_account.ScriptTransactionRequest.html). Then, we can submit this transaction request by calling the `sendTransaction` method.
 
 The following example, we are pre-staging a transaction and therefore we are able to know the transaction ID without actually submitting the transaction.
 

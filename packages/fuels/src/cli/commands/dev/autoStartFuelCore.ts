@@ -25,9 +25,7 @@ export const autoStartFuelCore = async (config: FuelsConfig) => {
 
     const port = config.fuelCorePort ?? (await getPortPromise({ port: 4000 }));
 
-    const providerUrl = `http://${accessIp}:${port}/v1/graphql`;
-
-    const { cleanup, snapshotDir } = await launchNode({
+    const { cleanup, url, snapshotDir } = await launchNode({
       args: [
         ['--snapshot', config.snapshotDir],
         ['--db-type', 'in-memory'],
@@ -37,13 +35,15 @@ export const autoStartFuelCore = async (config: FuelsConfig) => {
       loggingEnabled: loggingConfig.isLoggingEnabled,
       basePath: config.basePath,
       fuelCorePath: config.fuelCorePath,
+      includeInitialState: true,
+      killProcessOnExit: true,
     });
 
     fuelCore = {
       bindIp,
       accessIp,
       port,
-      providerUrl,
+      providerUrl: url,
       snapshotDir,
       killChildProcess: cleanup,
     };

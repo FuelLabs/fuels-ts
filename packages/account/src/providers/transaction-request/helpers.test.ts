@@ -1,7 +1,11 @@
 import { getRandomB256, Address } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import { randomBytes } from '@fuel-ts/crypto';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
-import { InputType } from '@fuel-ts/transactions';
+import { InputType, OutputType } from '@fuel-ts/transactions';
+import { arrayify, hexlify } from '@fuel-ts/utils';
 
 import { generateFakeCoin, generateFakeMessageCoin } from '../../test-utils/resources';
 import {
@@ -20,6 +24,9 @@ import {
   getAssetAmountInRequestInputs,
   cacheRequestInputsResources,
   cacheRequestInputsResourcesFromOwner,
+  getBurnableAssetCount,
+  validateTransactionForAssetBurn,
+  isPredicate,
 } from './helpers';
 import { ScriptTransactionRequest } from './script-transaction-request';
 
@@ -134,6 +141,35 @@ describe('helpers', () => {
       expect(result.messages).not.toContain(messageInput2.nonce);
     });
 
+    describe('isPredicate', () => {
+      it('should properly identify if request input is a predicate', () => {
+        const generateFakeResources = [
+          generateFakeRequestInputCoin,
+          generateFakeRequestInputMessage,
+        ];
+
+        generateFakeResources.forEach((generate) => {
+          let nonPredicate = generate();
+          expect(nonPredicate.predicate).toBeUndefined();
+          expect(isPredicate(nonPredicate)).toBeFalsy();
+
+          nonPredicate = generate({ predicate: '0x' });
+          expect(nonPredicate.predicate).toBeDefined();
+          expect(isPredicate(nonPredicate)).toBeFalsy();
+
+          nonPredicate = generate({ predicate: arrayify('0x') });
+          expect(nonPredicate.predicate).toBeDefined();
+          expect(isPredicate(nonPredicate)).toBeFalsy();
+
+          let predicate = generate({ predicate: randomBytes(20) });
+          expect(isPredicate(predicate)).toBeTruthy();
+
+          predicate = generate({ predicate: hexlify(randomBytes(30)) });
+          expect(isPredicate(predicate)).toBeTruthy();
+        });
+      });
+    });
+
     describe('getAssetAmountInRequestInputs', () => {
       it('should handle empty inputs array', () => {
         const tx = new ScriptTransactionRequest();
@@ -194,6 +230,123 @@ describe('helpers', () => {
         const cached = cacheRequestInputsResources(tx.inputs);
         expect(cached.utxos).toStrictEqual([input2.id, input1.id]);
         expect(cached.messages).toStrictEqual([input3.nonce]);
+      });
+    });
+
+    describe('getBurnableAssetCount', () => {
+      it('should get the number of burnable assets [0]', () => {
+        const request = new ScriptTransactionRequest();
+        request.inputs = [
+          generateFakeRequestInputMessage(), // Will be a `baseAssetId`
+          generateFakeRequestInputCoin({ assetId: ASSET_A, owner: owner.toB256() }),
+          generateFakeRequestInputCoin({ assetId: ASSET_B, owner: owner.toB256() }),
+        ];
+        request.outputs = [
+          { type: OutputType.Change, assetId: baseAssetId, to: owner.toB256() },
+          { type: OutputType.Change, assetId: ASSET_A, to: owner.toB256() },
+          { type: OutputType.Change, assetId: ASSET_B, to: owner.toB256() },
+        ];
+        const expectedBurnableAssets = 0;
+
+        const burnableAssets = getBurnableAssetCount(baseAssetId, request);
+
+        expect(burnableAssets).toBe(expectedBurnableAssets);
+      });
+
+      it('should get the number of burnable coins [2]', () => {
+        const request = new ScriptTransactionRequest();
+        request.inputs = [
+          generateFakeRequestInputMessage(), // Burnable asset - will be a `baseAssetId`
+          generateFakeRequestInputCoin({ assetId: ASSET_A, owner: owner.toB256() }),
+          generateFakeRequestInputCoin({ assetId: ASSET_B, owner: owner.toB256() }), // Burnable asset
+        ];
+        request.outputs = [{ type: OutputType.Change, assetId: ASSET_A, to: owner.toB256() }];
+        const expectedBurnableAssets = 2;
+
+        const burnableAssets = getBurnableAssetCount(baseAssetId, request);
+
+        expect(burnableAssets).toBe(expectedBurnableAssets);
+      });
+    });
+
+    describe('validateTransactionForAssetBurn', () => {
+      it('should successfully validate transactions without burnable assets [enableAssetBurn=false]', () => {
+        const request = new ScriptTransactionRequest();
+        request.inputs = [
+          generateFakeRequestInputMessage(),
+          generateFakeRequestInputCoin({ assetId: ASSET_A, owner: owner.toB256() }),
+          generateFakeRequestInputCoin({ assetId: ASSET_B, owner: owner.toB256() }),
+        ];
+        request.outputs = [
+          { type: OutputType.Change, assetId: baseAssetId, to: owner.toB256() },
+          { type: OutputType.Change, assetId: ASSET_A, to: owner.toB256() },
+          { type: OutputType.Change, assetId: ASSET_B, to: owner.toB256() },
+        ];
+        const enableAssetBurn = false;
+
+        expect(() =>
+          validateTransactionForAssetBurn(baseAssetId, request, enableAssetBurn)
+        ).not.toThrow();
+      });
+
+      it('should throw an error if transaction has burnable assets [enableAssetBurn=false]', async () => {
+        const request = new ScriptTransactionRequest();
+        request.inputs = [
+          generateFakeRequestInputMessage(),
+          generateFakeRequestInputCoin({ assetId: ASSET_A, owner: owner.toB256() }),
+          generateFakeRequestInputCoin({ assetId: ASSET_B, owner: owner.toB256() }),
+        ];
+        request.outputs = [{ type: OutputType.Change, assetId: ASSET_A, to: owner.toB256() }];
+        const enableAssetBurn = false;
+
+        await expectToThrowFuelError(
+          () => validateTransactionForAssetBurn(baseAssetId, request, enableAssetBurn),
+          new FuelError(
+            ErrorCode.ASSET_BURN_DETECTED,
+            [
+              `Asset burn detected.`,
+              `Add the relevant change outputs to the transaction to avoid burning assets.`,
+              `Or enable asset burn, upon sending the transaction.`,
+            ].join('\n')
+          )
+        );
+      });
+
+      it('should successfully validate transactions with burnable assets [enableAssetBurn=true]', () => {
+        const request = new ScriptTransactionRequest();
+        request.inputs = [
+          generateFakeRequestInputMessage(),
+          generateFakeRequestInputCoin({ assetId: ASSET_A, owner: owner.toB256() }),
+          generateFakeRequestInputCoin({ assetId: ASSET_B, owner: owner.toB256() }),
+        ];
+        request.outputs = [];
+        const enableAssetBurn = true;
+
+        expect(() =>
+          validateTransactionForAssetBurn(baseAssetId, request, enableAssetBurn)
+        ).not.toThrow();
+      });
+
+      it('should validate asset burn by default [enableAssetBurn=undefined]', async () => {
+        const request = new ScriptTransactionRequest();
+        request.inputs = [
+          generateFakeRequestInputMessage(),
+          generateFakeRequestInputCoin({ assetId: ASSET_A, owner: owner.toB256() }),
+          generateFakeRequestInputCoin({ assetId: ASSET_B, owner: owner.toB256() }),
+        ];
+        request.outputs = [];
+
+        await expectToThrowFuelError(
+          () => validateTransactionForAssetBurn(baseAssetId, request),
+          new FuelError(
+            ErrorCode.ASSET_BURN_DETECTED,
+            [
+              `Asset burn detected.`,
+              `Add the relevant change outputs to the transaction to avoid burning assets.`,
+              `Or enable asset burn, upon sending the transaction.`,
+            ].join('\n')
+          )
+        );
       });
     });
   });

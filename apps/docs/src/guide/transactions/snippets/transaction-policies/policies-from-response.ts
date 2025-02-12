@@ -5,7 +5,7 @@ import { Provider, Wallet, ScriptTransactionRequest, bn } from 'fuels';
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
 import { ScriptSum } from '../../../../typegend';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 /**
@@ -26,7 +26,7 @@ transactionRequest.setData(ScriptSum.abi, scriptArguments);
 
 // Fund the transaction
 const resources = await wallet.getResourcesToSpend([
-  { amount: 1000, assetId: provider.getBaseAssetId() },
+  { amount: 1000, assetId: await provider.getBaseAssetId() },
 ]);
 
 transactionRequest.addResources(resources);

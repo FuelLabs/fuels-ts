@@ -1,3 +1,5 @@
+import { BigNumberCoder } from '@fuel-ts/abi-coder';
+import { sha256 } from '@fuel-ts/hasher';
 import { concat } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
 
@@ -7,16 +9,61 @@ const REG_START_OF_LOADED_CODE = 0x11;
 const REG_GENERAL_USE = 0x12;
 const WORD_SIZE = 8; // size in bytes
 
-export function getDataOffset(binary: Uint8Array): number {
-  // Extract 8 bytes starting from index 8 (similar to binary[8..16] in Rust)
-  const OFFSET_INDEX = 8;
-  const dataView = new DataView(binary.buffer, OFFSET_INDEX, 8);
+export const DATA_OFFSET_INDEX = 8;
+export const CONFIGURABLE_OFFSET_INDEX = 16;
 
-  // Read the value as a 64-bit big-endian unsigned integer
-  const dataOffset = dataView.getBigUint64(0, false); // false means big-endian
+/**
+ * Get the offset of the data section in the bytecode
+ *
+ * @param bytecode - The bytecode to get the offset from
+ * @returns The offset of the data section
+ */
+export function getBytecodeDataOffset(bytecode: Uint8Array): number {
+  const [offset] = new BigNumberCoder('u64').decode(bytecode, DATA_OFFSET_INDEX);
+  return offset.toNumber();
+}
 
-  // Convert the BigInt to a regular number (safe as long as the offset is within Number.MAX_SAFE_INTEGER)
-  return Number(dataOffset);
+/**
+ * Get the offset of the configurable section in the bytecode
+ *
+ * @param bytecode - The bytecode to get the offset from
+ * @returns The offset of the configurable section
+ */
+export function getBytecodeConfigurableOffset(bytecode: Uint8Array): number {
+  const [offset] = new BigNumberCoder('u64').decode(bytecode, CONFIGURABLE_OFFSET_INDEX);
+  return offset.toNumber();
+}
+
+/**
+ * Takes bytecode and generates it's associated bytecode ID.
+ *
+ * The bytecode ID is a hash of the bytecode when sliced at the configurable offset. This
+ * superseded legacy blob IDs when uploading blobs for scripts and predicates so that
+ * the bytecode ID is equal to the legacy blob ID. Therefore blobs can be used for ABI verification.
+ *
+ * @param bytecode - The bytecode to get the id from
+ * @returns The id of the bytecode
+ */
+export function getBytecodeId(bytecode: Uint8Array): string {
+  const configurableOffset = getBytecodeConfigurableOffset(bytecode);
+  const byteCodeWithoutConfigurableSection = bytecode.slice(0, configurableOffset);
+
+  return sha256(byteCodeWithoutConfigurableSection);
+}
+
+/**
+ * Takes bytecode and generates it's associated legacy blob ID.
+ *
+ * The legacy blob ID is a hash of the bytecode when sliced at the data section offset.
+ *
+ * @param bytecode - The bytecode to get the id from
+ * @returns The id of the bytecode
+ */
+export function getLegacyBlobId(bytecode: Uint8Array): string {
+  const dataOffset = getBytecodeDataOffset(bytecode);
+  const byteCodeWithoutDataSection = bytecode.slice(0, dataOffset);
+
+  return sha256(byteCodeWithoutDataSection);
 }
 
 export function getPredicateScriptLoaderInstructions(
@@ -100,7 +147,7 @@ export function getPredicateScriptLoaderInstructions(
     asm.jmp(REG_START_OF_LOADED_CODE),
   ];
 
-  const offset = getDataOffset(originalBinary);
+  const offset = getBytecodeConfigurableOffset(originalBinary);
 
   // if the binary length is smaller than the offset
   if (originalBinary.length < offset) {
@@ -109,11 +156,11 @@ export function getPredicateScriptLoaderInstructions(
     );
   }
 
-  // Extract the data section from the binary (slice from the offset onwards)
-  const dataSection = originalBinary.slice(offset);
+  // Extract the configurable section from the binary (slice from the configurable offset onwards)
+  const configurableSection = originalBinary.slice(offset);
 
-  // Check if the data section is non-empty
-  if (dataSection.length > 0) {
+  // Check if the configurable section is non-empty
+  if (configurableSection.length > 0) {
     // Get the number of instructions (assuming it won't exceed u16::MAX)
     const numOfInstructions = getInstructions(0).length;
     if (numOfInstructions > 65535) {
@@ -133,7 +180,7 @@ export function getPredicateScriptLoaderInstructions(
     // Convert data section length to big-endian 8-byte array
     const dataSectionLenBytes = new Uint8Array(8);
     const dataView = new DataView(dataSectionLenBytes.buffer);
-    dataView.setBigUint64(0, BigInt(dataSection.length), false); // false for big-endian
+    dataView.setBigUint64(0, BigInt(configurableSection.length), false); // false for big-endian
 
     // Combine the instruction bytes, blob bytes, data section length, and the data section
     const loaderBytecode = new Uint8Array([
@@ -143,11 +190,11 @@ export function getPredicateScriptLoaderInstructions(
     ]);
 
     return {
-      loaderBytecode: concat([loaderBytecode, dataSection]),
+      loaderBytecode: concat([loaderBytecode, configurableSection]),
       blobOffset: loaderBytecode.length,
     };
   }
-  // Handle case where there is no data section
+  // Handle case where there is no configurable section
   const numOfInstructions = getInstructionsNoDataSection(0).length;
   if (numOfInstructions > 65535) {
     throw new Error('Too many instructions, exceeding u16::MAX.');

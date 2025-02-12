@@ -7,7 +7,7 @@ import type {
   AddressOutput,
 } from '../../../../typegend/contracts/InputOutputTypes';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const deploy = await InputOutputTypesFactory.deploy(wallet);
 const { contract } = await deploy.waitForResult();
@@ -24,7 +24,7 @@ const response = await contract.functions.identity(addressIdentityInput).get();
 const identityFromOutput: IdentityOutput = response.value;
 const addressStringFromOutput: AddressOutput =
   identityFromOutput.Address as AddressOutput;
-const addressFromOutput = Address.fromB256(addressStringFromOutput.bits);
+const addressFromOutput = new Address(addressStringFromOutput.bits);
 // #endregion identity-address-output
 
 console.log('equals', addressFromOutput.equals(address));

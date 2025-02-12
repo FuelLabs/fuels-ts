@@ -5,7 +5,7 @@ The asset ID of a token on the Fuel network is determined by two factors:
 - The ID of the contract that minted the token,
 - A sub-identifier (Sub ID)
 
-> Both of which are [bits256](../types/bits256.md) strings.
+> Both of which are [B256](../types/b256.md) strings.
 
 The process involves applying a SHA-256 hash algorithm to the combination of the Contract ID and the Sub ID, to derive an Asset ID - as explained [here](https://docs.fuel.network/docs/specs/identifiers/asset/#asset-id).
 
@@ -23,6 +23,6 @@ Since the asset ID depends on the contract ID, which is always dynamic (unlike t
 
 ## Create Asset Id
 
-The SDK provides a helper named `createAssetId` which takes the contract ID and sub ID as parameters. This helper internally calls `getMintedAssetId` and returns the Sway native parameter [AssetId](https://fuels-ts-docs-api.vercel.app/types/_fuel_ts_interfaces.AssetId.html), ready to be used in a Sway program invocation:
+The SDK provides a helper named `createAssetId` which takes the contract ID and sub ID as parameters. This helper internally calls `getMintedAssetId` and returns the Sway native parameter [AssetId](DOCS_API_URL/types/_fuel_ts_address.AssetId.html), ready to be used in a Sway program invocation:
 
 <<< @./snippets/utilities/create-asset-id.ts#create-asset-id-1{ts:line-numbers}

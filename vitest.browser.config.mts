@@ -1,10 +1,10 @@
 import { nodePolyfills } from "vite-plugin-node-polyfills";
-import type { UserConfig } from "vitest/config";
+import type { ViteUserConfig } from "vitest/config";
 import { mergeConfig, defineProject } from "vitest/config";
 
 import sharedConfig from "./vitest.shared.config.mts";
 
-const config: UserConfig = {
+const config: ViteUserConfig = {
   plugins: [
     nodePolyfills({
       globals: {
@@ -30,7 +30,12 @@ const config: UserConfig = {
     }),
   ],
   optimizeDeps: {
-    exclude: ["fsevents", "path-scurry", "@vitest/coverage-istanbul"],
+    exclude: [
+      "fsevents",
+      "path-scurry",
+      "@vitest/coverage-istanbul",
+      "chromium-bidi",
+    ],
     include: ["events", "timers/promises"],
     entries: ["**/*.test.ts"],
   },
@@ -43,10 +48,10 @@ const config: UserConfig = {
       reportsDirectory: "coverage/environments/browser",
     },
     browser: {
-      provider: "webdriverio",
+      provider: "playwright",
       headless: true,
       enabled: true,
-      name: "chrome",
+      name: "chromium",
     },
   },
 };

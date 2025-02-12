@@ -314,6 +314,10 @@ enum ContractParametersVersion {
   V1
 }
 
+type DaCompressedBlock {
+  bytes: HexString!
+}
+
 union DependentCost = LightOperation | HeavyOperation
 
 type DryRunFailureStatus {
@@ -809,8 +813,11 @@ type NodeInfo {
   utxoValidation: Boolean!
   vmBacktrace: Boolean!
   maxTx: U64!
+  maxGas: U64!
+  maxSize: U64!
   maxDepth: U64!
   nodeVersion: String!
+  txPoolStats: TxPoolStats!
   peers: [PeerInfo!]!
 }
 
@@ -1039,7 +1046,8 @@ type Query {
     """
     The list of requested assets` coins with asset ids, `target` amount the user
     wants to reach, and the `max` number of coins in the selection. Several
-    entries with the same asset id are not allowed.
+    entries with the same asset id are not allowed. The result can't contain
+    more coins than `max_inputs`.
     """
     queryPerAsset: [SpendQueryElementInput!]!
 
@@ -1048,6 +1056,12 @@ type Query {
     """
     excludedIds: ExcludeInput
   ): [[CoinType!]!]!
+  daCompressedBlock(
+    """
+    Height of the block
+    """
+    height: U32!
+  ): DaCompressedBlock
   contract(
     """
     ID of the Contract
@@ -1382,6 +1396,23 @@ enum TxParametersVersion {
 }
 
 scalar TxPointer
+
+type TxPoolStats {
+  """
+  The number of transactions in the pool
+  """
+  txCount: U64!
+
+  """
+  The total size of the transactions in the pool
+  """
+  totalSize: U64!
+
+  """
+  The total gas of the transactions in the pool
+  """
+  totalGas: U64!
+}
 
 scalar U16
 

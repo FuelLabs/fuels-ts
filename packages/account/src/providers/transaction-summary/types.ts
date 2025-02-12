@@ -1,5 +1,5 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
-import type { B256Address } from '@fuel-ts/interfaces';
+import type { B256Address } from '@fuel-ts/address';
 import type { BN, BNInput } from '@fuel-ts/math';
 import type { Input, Output, Transaction, TransactionType } from '@fuel-ts/transactions';
 
@@ -98,26 +98,6 @@ export enum OperationName {
   transfer = 'Transfer asset',
   contractCall = 'Contract call',
   receive = 'Receive asset',
-  /**
-   * @deprecated This value was added by mistake and has never been used.
-   * It will be removed in future versions.
-   */
-  mint = 'Mint asset',
-  /**
-   * @deprecated This value was added by mistake and has never been used.
-   * It will be removed in future versions.
-   */
-  predicatecall = 'Predicate call',
-  /**
-   * @deprecated This value was added by mistake and has never been used.
-   * It will be removed in future versions.
-   */
-  script = 'Script',
-  /**
-   * @deprecated This value was added by mistake and has never been used.
-   * It will be removed in future versions.
-   */
-  sent = 'Sent asset',
   withdrawFromFuel = 'Withdraw from Fuel',
 }
 
@@ -138,6 +118,7 @@ export type Operation = {
   to?: OperationTransactionAddress;
   assetsSent?: Array<OperationCoin>;
   calls?: Array<OperationFunctionCall>;
+  receipts?: TransactionResultReceipt[];
 };
 
 /**

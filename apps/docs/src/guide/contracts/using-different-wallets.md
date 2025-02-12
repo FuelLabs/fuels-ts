@@ -1,6 +1,6 @@
 # Making Calls with Different Wallets or Providers
 
-This guide demonstrates how to make contract calls using different wallets and providers by passing either an [`Account`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.Account.html) or a [`Provider`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.Provider.html) to the contract on instantiation.
+This guide demonstrates how to make contract calls using different wallets and providers by passing either an [`Account`](DOCS_API_URL/classes/_fuel_ts_account.Account.html) or a [`Provider`](DOCS_API_URL/classes/_fuel_ts_account.Provider.html) to the contract on instantiation.
 
 ## Changing Wallets
 
@@ -15,8 +15,8 @@ Similarly, you can assign a custom provider to a contract instance by modifying 
 <!-- TODO: Replace with a proper snippet. We lost this snippet because this test had to be removed/changed -->
 
 ```ts
-const newProvider = await Provider.create(NEW_URL);
+const newProvider = new Provider(NEW_URL);
 deployedContract.provider = newProvider;
 ```
 
-> **Note:** When connecting a different wallet to an existing contract instance, the provider used to deploy the contract takes precedence over the newly set provider. If you have two wallets connected to separate providers (each communicating with a different fuel-core instance), the provider assigned to the deploying wallet will be used for contract calls. This behavior is only relevant when multiple providers (i.e., fuel-core instances) are present and can be ignored otherwise.
+> **Note:** When connecting a different wallet to an existing contract instance, the provider used to deploy the contract takes precedence over the newly set provider. If you have two wallets connected to separate providers (each communicating with a different fuel-core instance), the provider assigned to the deploying wallet will be used for contract calls. This behavior is only relevant when multiple providers (i.e. fuel-core instances) are present and can be ignored otherwise.

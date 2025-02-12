@@ -1,12 +1,13 @@
 import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { Account, Provider } from '@fuel-ts/account';
+import type { AddressInput } from '@fuel-ts/address';
 import { Address } from '@fuel-ts/address';
-import type { AbstractAddress, AbstractContract, BytesLike } from '@fuel-ts/interfaces';
+import type { BytesLike } from '@fuel-ts/utils';
 
 import { FunctionInvocationScope } from './functions/invocation-scope';
 import { MultiCallInvocationScope } from './functions/multicall-scope';
-import type { InvokeFunction, InvokeFunctions } from './types';
+import type { AbstractContract, InvokeFunction, InvokeFunctions } from './types';
 
 /**
  * `Contract` provides a way to interact with the contract program type.
@@ -15,7 +16,7 @@ export default class Contract implements AbstractContract {
   /**
    * The unique contract identifier.
    */
-  id!: AbstractAddress;
+  id!: Address;
 
   /**
    * The provider for interacting with the contract.
@@ -44,13 +45,9 @@ export default class Contract implements AbstractContract {
    * @param abi - The contract's ABI (JSON ABI or Interface instance).
    * @param accountOrProvider - The account or provider for interaction.
    */
-  constructor(
-    id: string | AbstractAddress,
-    abi: JsonAbi | Interface,
-    accountOrProvider: Account | Provider
-  ) {
+  constructor(id: AddressInput, abi: JsonAbi | Interface, accountOrProvider: Account | Provider) {
     this.interface = abi instanceof Interface ? abi : new Interface(abi);
-    this.id = Address.fromAddressOrString(id);
+    this.id = new Address(id);
 
     /**
       Instead of using `instanceof` to compare classes, we instead check

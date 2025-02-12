@@ -9,10 +9,11 @@ import type {
   ConnectorMetadata,
   Network,
   SelectNetworkArguments,
+  AccountSendTxParams,
 } from '../../src';
+import type { Asset } from '../../src/assets/types';
 import { FuelConnector } from '../../src/connectors/fuel-connector';
 import { FuelConnectorEventTypes } from '../../src/connectors/types';
-import type { Asset } from '../../src/providers/assets/types';
 
 import { generateAccounts } from './generate-accounts';
 
@@ -105,12 +106,16 @@ export class MockConnector extends FuelConnector {
     return wallet.signMessage(_message);
   }
 
-  override async sendTransaction(_address: string, _transaction: TransactionRequestLike) {
+  override async sendTransaction(
+    _address: string,
+    _transaction: TransactionRequestLike,
+    _params: AccountSendTxParams
+  ) {
     const wallet = this._wallets.find((w) => w.address.toString() === _address);
     if (!wallet) {
       throw new Error('Wallet is not found!');
     }
-    const { id } = await wallet.sendTransaction(_transaction);
+    const { id } = await wallet.sendTransaction(_transaction, _params);
     return id;
   }
 

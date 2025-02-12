@@ -1,4 +1,0 @@
----
----
-
-chore: ship API documentation

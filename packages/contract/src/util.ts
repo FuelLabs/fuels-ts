@@ -1,12 +1,10 @@
 import { sha256 } from '@fuel-ts/hasher';
-import type { BytesLike } from '@fuel-ts/interfaces';
 import { calcRoot, SparseMerkleTree } from '@fuel-ts/merkle';
 import type { StorageSlot } from '@fuel-ts/transactions';
+import type { BytesLike } from '@fuel-ts/utils';
 import { chunkAndPadBytes, hexlify, concat, arrayify } from '@fuel-ts/utils';
 
 /**
- * @hidden
- *
  * Get the Merkle root of a contract's bytecode.
  *
  * @param bytecode - The bytecode of the contract.
@@ -21,8 +19,6 @@ export const getContractRoot = (bytecode: BytesLike): string => {
 };
 
 /**
- * @hidden
- *
  * Get the Merkle root of a contract's storage slots.
  *
  * @param storageSlots - An array of storage slots containing key-value pairs.
@@ -37,8 +33,6 @@ export const getContractStorageRoot = (storageSlots: StorageSlot[]): string => {
 };
 
 /**
- * @hidden
- *
  * Get the contract ID of a contract based on its bytecode, salt,
  * and state root.
  *
@@ -58,8 +52,6 @@ export const getContractId = (
 };
 
 /**
- * @hidden
- *
  * Ensures that a string is hexlified.
  *
  * @param value - The value to be hexlified.

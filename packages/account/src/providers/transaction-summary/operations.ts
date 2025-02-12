@@ -196,6 +196,10 @@ function mergeOperations(existing: Operation, toAdd: Operation): Operation {
     ...existing,
     assetsSent: mergeAssetsSent(existing, toAdd),
     calls: mergeCalls(existing, toAdd),
+    receipts: [
+      ...(existing.receipts || []),
+      ...(toAdd.receipts?.filter((r) => !existing.receipts?.some((er) => er === r)) || []),
+    ],
   };
 }
 
@@ -252,6 +256,7 @@ export function getWithdrawFromFuelOperations({
               assetId: baseAssetId,
             },
           ],
+          receipts: [receipt],
         });
 
         return newWithdrawFromFuelOps;
@@ -332,6 +337,7 @@ function processCallReceipt(
       },
       assetsSent: getAssetsSent(receipt),
       calls,
+      receipts: [receipt],
     },
   ];
 }
@@ -389,7 +395,7 @@ function extractTransferOperationFromReceipt(
   changeOutputs: OutputChange[]
 ) {
   const { to: toAddress, assetId, amount } = receipt;
-  let { from: fromAddress } = receipt;
+  let { id: fromAddress } = receipt;
 
   const toType = contractInputs.some((input) => input.contractID === toAddress)
     ? AddressType.contract
@@ -421,6 +427,7 @@ function extractTransferOperationFromReceipt(
         amount,
       },
     ],
+    receipts: [receipt],
   };
 }
 

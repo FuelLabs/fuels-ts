@@ -1,12 +1,13 @@
+import type { AddressInput } from '@fuel-ts/address';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
-import { BN, bn } from '@fuel-ts/math';
+import type { BN } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import { InputType, InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
+import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility, versions } from '@fuel-ts/versions';
-import { equalBytes } from '@noble/curves/abstract/utils';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import type { GraphQLClientResponse, GraphQLResponse } from 'graphql-request/src/types';
@@ -29,6 +30,7 @@ import type {
   GqlRelayedTransactionFailed,
   Requester,
   GqlBlockFragment,
+  GqlEstimatePredicatesQuery,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -46,9 +48,11 @@ import type {
   ScriptTransactionRequest,
 } from './transaction-request';
 import {
+  isPredicate,
   isTransactionTypeCreate,
   isTransactionTypeScript,
   transactionRequestify,
+  validateTransactionForAssetBurn,
 } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse, getDecodedLogs } from './transaction-response';
@@ -61,7 +65,7 @@ import {
 } from './utils';
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
-import { handleGqlErrorMessage } from './utils/handle-gql-error-message';
+import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
 const MAX_RETRIES = 10;
@@ -353,6 +357,30 @@ export type TransactionCostParams = EstimateTransactionParams & {
    * @returns A promise that resolves to the signed transaction request.
    */
   signatureCallback?: (request: ScriptTransactionRequest) => Promise<ScriptTransactionRequest>;
+
+  /**
+   * The gas price to use for the transaction.
+   */
+  gasPrice?: BN;
+};
+
+export type EstimateTxDependenciesParams = {
+  /**
+   * The gas price to use for the transaction.
+   */
+  gasPrice?: BN;
+};
+
+export type EstimateTxGasAndFeeParams = {
+  /**
+   * The transaction request to estimate the gas and fee for.
+   */
+  transactionRequest: TransactionRequest;
+
+  /**
+   * The gas price to use for the transaction.
+   */
+  gasPrice?: BN;
 };
 
 /**
@@ -363,7 +391,12 @@ export type ProviderCallParams = UTXOValidationParams & EstimateTransactionParam
 /**
  * Provider Send transaction params
  */
-export type ProviderSendTxParams = EstimateTransactionParams;
+export type ProviderSendTxParams = EstimateTransactionParams & {
+  /**
+   * Whether to enable asset burn for the transaction.
+   */
+  enableAssetBurn?: boolean;
+};
 
 /**
  * URL - Consensus Params mapping.
@@ -377,20 +410,7 @@ type NodeInfoCache = Record<string, NodeInfo>;
 
 type Operations = ReturnType<typeof getOperationsSdk>;
 
-type SdkOperations = Omit<
-  Operations,
-  'submitAndAwait' | 'statusChange' | 'submitAndAwaitStatus'
-> & {
-  /**
-   * This method is DEPRECATED and will be REMOVED in v1.
-   *
-   * This method will hang until the transaction is fully processed, as described in https://github.com/FuelLabs/fuel-core/issues/2108.
-   *
-   * Please use the `submitAndAwaitStatus` method instead.
-   */
-  submitAndAwait: (
-    ...args: Parameters<Operations['submitAndAwait']>
-  ) => Promise<ReturnType<Operations['submitAndAwait']>>;
+type SdkOperations = Omit<Operations, 'statusChange' | 'submitAndAwaitStatus'> & {
   statusChange: (
     ...args: Parameters<Operations['statusChange']>
   ) => Promise<ReturnType<Operations['statusChange']>>;
@@ -421,6 +441,8 @@ export default class Provider {
   private static chainInfoCache: ChainInfoCache = {};
   /** @hidden */
   private static nodeInfoCache: NodeInfoCache = {};
+  /** @hidden */
+  private static incompatibleNodeVersionMessage: string = '';
 
   /** @hidden */
   public consensusParametersTimestamp?: number;
@@ -465,7 +487,7 @@ export default class Provider {
    * @param options - Additional options for the provider
    * @hidden
    */
-  protected constructor(url: string, options: ProviderOptions = {}) {
+  constructor(url: string, options: ProviderOptions = {}) {
     const { url: rawUrl, urlWithoutAuth, headers: authHeaders } = Provider.extractBasicAuth(url);
 
     this.url = rawUrl;
@@ -521,63 +543,44 @@ export default class Provider {
   }
 
   /**
-   * Creates a new instance of the Provider class. This is the recommended way to initialize a Provider.
-   *
-   * @param url - GraphQL endpoint of the Fuel node
-   * @param options - Additional options for the provider
-   *
-   * @returns A promise that resolves to a Provider instance.
+   * Initialize Provider async stuff
    */
-  static async create(url: string, options: ProviderOptions = {}): Promise<Provider> {
-    const provider = new Provider(url, options);
-
-    await provider.fetchChainAndNodeInfo();
-
-    return provider;
+  async init(): Promise<Provider> {
+    await this.fetchChainAndNodeInfo();
+    return this;
   }
 
   /**
-   * Returns the cached chainInfo for the current URL.
+   * Returns the `chainInfo` for the current network.
    *
    * @returns the chain information configuration.
    */
-  getChain(): ChainInfo {
-    const chain = Provider.chainInfoCache[this.urlWithoutAuth];
-    if (!chain) {
-      throw new FuelError(
-        ErrorCode.CHAIN_INFO_CACHE_EMPTY,
-        'Chain info cache is empty. Make sure you have called `Provider.create` to initialize the provider.'
-      );
-    }
-    return chain;
+  async getChain(): Promise<ChainInfo> {
+    await this.init();
+    return Provider.chainInfoCache[this.urlWithoutAuth];
   }
 
   /**
-   * Returns the cached nodeInfo for the current URL.
+   * Returns the `nodeInfo` for the current network.
    *
    * @returns the node information configuration.
    */
-  getNode(): NodeInfo {
-    const node = Provider.nodeInfoCache[this.urlWithoutAuth];
-    if (!node) {
-      throw new FuelError(
-        ErrorCode.NODE_INFO_CACHE_EMPTY,
-        'Node info cache is empty. Make sure you have called `Provider.create` to initialize the provider.'
-      );
-    }
-    return node;
+  async getNode(): Promise<NodeInfo> {
+    await this.init();
+    return Provider.nodeInfoCache[this.urlWithoutAuth];
   }
 
   /**
    * Returns some helpful parameters related to gas fees.
    */
-  getGasConfig() {
+  async getGasConfig() {
     const {
       txParameters: { maxGasPerTx },
       predicateParameters: { maxGasPerPredicate },
       feeParameters: { gasPriceFactor, gasPerByte },
       gasCosts,
-    } = this.getChain().consensusParameters;
+    } = (await this.getChain()).consensusParameters;
+
     return {
       maxGasPerTx,
       maxGasPerPredicate,
@@ -602,7 +605,8 @@ export default class Provider {
     this.options = { ...this.options, headers: { ...this.options.headers, ...headers } };
 
     this.operations = this.createOperations();
-    await this.fetchChainAndNodeInfo();
+
+    await this.init();
   }
 
   /**
@@ -615,11 +619,14 @@ export default class Provider {
     let chain: ChainInfo;
 
     try {
-      if (ignoreCache) {
-        throw new Error(`Jumps to the catch block andre-fetch`);
+      nodeInfo = Provider.nodeInfoCache[this.urlWithoutAuth];
+      chain = Provider.chainInfoCache[this.urlWithoutAuth];
+
+      const noCache = !nodeInfo || !chain;
+
+      if (ignoreCache || noCache) {
+        throw new Error(`Jumps to the catch block and re-fetch`);
       }
-      nodeInfo = this.getNode();
-      chain = this.getChain();
     } catch (_err) {
       const data = await this.operations.getChainAndNodeInfo();
 
@@ -631,7 +638,7 @@ export default class Provider {
         vmBacktrace: data.nodeInfo.vmBacktrace,
       };
 
-      Provider.ensureClientVersionIsSupported(nodeInfo);
+      Provider.setIncompatibleNodeVersionMessage(nodeInfo);
 
       chain = processGqlChain(data.chain);
 
@@ -650,18 +657,18 @@ export default class Provider {
   /**
    * @hidden
    */
-  private static ensureClientVersionIsSupported(nodeInfo: NodeInfo) {
+  private static setIncompatibleNodeVersionMessage(nodeInfo: NodeInfo) {
     const { isMajorSupported, isMinorSupported, supportedVersion } =
       checkFuelCoreVersionCompatibility(nodeInfo.nodeVersion);
 
     if (!isMajorSupported || !isMinorSupported) {
-      // eslint-disable-next-line no-console
-      console.warn(
-        `The Fuel Node that you are trying to connect to is using fuel-core version ${nodeInfo.nodeVersion},
-which is not supported by the version of the TS SDK that you are using.
-Things may not work as expected.
-Supported fuel-core version: ${supportedVersion}.`
-      );
+      Provider.incompatibleNodeVersionMessage = [
+        `The Fuel Node that you are trying to connect to is using fuel-core version ${nodeInfo.nodeVersion}.`,
+        `The TS SDK currently supports fuel-core version ${supportedVersion}.`,
+        `Things may not work as expected.`,
+      ].join('\n');
+      FuelGraphqlSubscriber.incompatibleNodeVersionMessage =
+        Provider.incompatibleNodeVersionMessage;
     }
   }
 
@@ -679,12 +686,10 @@ Supported fuel-core version: ${supportedVersion}.`
       responseMiddleware: (response: GraphQLClientResponse<unknown> | Error) => {
         if ('response' in response) {
           const graphQlResponse = response.response as GraphQLResponse;
-
-          if (Array.isArray(graphQlResponse?.errors)) {
-            for (const error of graphQlResponse.errors) {
-              handleGqlErrorMessage(error.message, error);
-            }
-          }
+          assertGqlResponseHasNoErrors(
+            graphQlResponse.errors,
+            Provider.incompatibleNodeVersionMessage
+          );
         }
       },
     });
@@ -802,10 +807,10 @@ Supported fuel-core version: ${supportedVersion}.`
    *
    * @returns A promise that resolves to the chain ID number.
    */
-  getChainId() {
+  async getChainId() {
     const {
       consensusParameters: { chainId },
-    } = this.getChain();
+    } = await this.getChain();
     return chainId.toNumber();
   }
 
@@ -814,10 +819,11 @@ Supported fuel-core version: ${supportedVersion}.`
    *
    * @returns the base asset ID.
    */
-  getBaseAssetId() {
+  async getBaseAssetId() {
+    const all = await this.getChain();
     const {
       consensusParameters: { baseAssetId },
-    } = this.getChain();
+    } = all;
     return baseAssetId;
   }
 
@@ -847,12 +853,12 @@ Supported fuel-core version: ${supportedVersion}.`
   /**
    * @hidden
    */
-  validateTransaction(tx: TransactionRequest) {
+  async validateTransaction(tx: TransactionRequest) {
     const {
       consensusParameters: {
         txParameters: { maxInputs, maxOutputs },
       },
-    } = this.getChain();
+    } = await this.getChain();
     if (bn(tx.inputs.length).gt(maxInputs)) {
       throw new FuelError(
         ErrorCode.MAX_INPUTS_EXCEEDED,
@@ -880,14 +886,20 @@ Supported fuel-core version: ${supportedVersion}.`
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true }: ProviderSendTxParams = {}
+    { estimateTxDependencies = true, enableAssetBurn }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    validateTransactionForAssetBurn(
+      await this.getBaseAssetId(),
+      transactionRequest,
+      enableAssetBurn
+    );
+
     if (estimateTxDependencies) {
       await this.estimateTxDependencies(transactionRequest);
     }
 
-    this.validateTransaction(transactionRequest);
+    await this.validateTransaction(transactionRequest);
 
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
 
@@ -900,10 +912,11 @@ Supported fuel-core version: ${supportedVersion}.`
 
     this.#cacheInputs(
       transactionRequest.inputs,
-      transactionRequest.getTransactionId(this.getChainId())
+      transactionRequest.getTransactionId(await this.getChainId())
     );
 
-    return new TransactionResponse(transactionRequest, this, abis, subscription);
+    const chainId = await this.getChainId();
+    return new TransactionResponse(transactionRequest, this, chainId, abis, subscription);
   }
 
   /**
@@ -936,46 +949,76 @@ Supported fuel-core version: ${supportedVersion}.`
   }
 
   /**
-   * Verifies whether enough gas is available to complete transaction.
+   * Estimates the gas usage for predicates in a transaction request.
    *
    * @template T - The type of the transaction request object.
    *
-   * @param transactionRequest - The transaction request object.
-   * @returns A promise that resolves to the estimated transaction request object.
+   * @param transactionRequest - The transaction request to estimate predicates for.
+   * @returns A promise that resolves to the updated transaction request with estimated gas usage for predicates.
    */
   async estimatePredicates<T extends TransactionRequest>(transactionRequest: T): Promise<T> {
-    const shouldEstimatePredicates = Boolean(
-      transactionRequest.inputs.find(
-        (input) =>
-          'predicate' in input &&
-          input.predicate &&
-          !equalBytes(arrayify(input.predicate), arrayify('0x')) &&
-          new BN(input.predicateGasUsed).isZero()
-      )
+    const shouldEstimatePredicates = transactionRequest.inputs.some(
+      (input) => isPredicate(input) && bn(input.predicateGasUsed).isZero()
     );
+
     if (!shouldEstimatePredicates) {
       return transactionRequest;
     }
+
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
+
     const response = await this.operations.estimatePredicates({
       encodedTransaction,
     });
 
-    const {
-      estimatePredicates: { inputs },
-    } = response;
+    const { estimatePredicates } = response;
 
-    if (inputs) {
-      inputs.forEach((input, index) => {
-        if ('predicateGasUsed' in input && bn(input.predicateGasUsed).gt(0)) {
-          // eslint-disable-next-line no-param-reassign
-          (<CoinTransactionRequestInput>transactionRequest.inputs[index]).predicateGasUsed =
-            input.predicateGasUsed;
-        }
-      });
-    }
+    // eslint-disable-next-line no-param-reassign
+    transactionRequest = this.parseEstimatePredicatesResponse(
+      transactionRequest,
+      estimatePredicates
+    );
 
     return transactionRequest;
+  }
+
+  /**
+   * Estimates the gas price and predicates for a given transaction request and block horizon.
+   *
+   * @param transactionRequest - The transaction request to estimate predicates and gas price for.
+   * @param blockHorizon - The block horizon to use for gas price estimation.
+   * @returns A promise that resolves to an object containing the updated transaction
+   * request and the estimated gas price.
+   */
+  async estimatePredicatesAndGasPrice<T extends TransactionRequest>(
+    transactionRequest: T,
+    blockHorizon: number
+  ) {
+    const shouldEstimatePredicates = transactionRequest.inputs.some(
+      (input) => isPredicate(input) && bn(input.predicateGasUsed).isZero()
+    );
+
+    if (!shouldEstimatePredicates) {
+      const gasPrice = await this.estimateGasPrice(blockHorizon);
+
+      return { transactionRequest, gasPrice };
+    }
+
+    const {
+      estimateGasPrice: { gasPrice },
+      estimatePredicates,
+    } = await this.operations.estimatePredicatesAndGasPrice({
+      blockHorizon: String(blockHorizon),
+      encodedTransaction: hexlify(transactionRequest.toTransactionBytes()),
+    });
+
+    // eslint-disable-next-line no-param-reassign
+    transactionRequest = this.parseEstimatePredicatesResponse(
+      transactionRequest,
+      estimatePredicates
+    );
+
+    return { transactionRequest, gasPrice: bn(gasPrice) };
   }
 
   /**
@@ -985,10 +1028,12 @@ Supported fuel-core version: ${supportedVersion}.`
    * `addVariableOutputs` is called on the transaction.
    *
    * @param transactionRequest - The transaction request object.
+   * @param gasPrice - The gas price to use for the transaction, if not provided it will be fetched.
    * @returns A promise that resolves to the estimate transaction dependencies.
    */
   async estimateTxDependencies(
-    transactionRequest: TransactionRequest
+    transactionRequest: TransactionRequest,
+    { gasPrice: gasPriceParam }: EstimateTxDependenciesParams = {}
   ): Promise<EstimateTxDependenciesReturns> {
     if (isTransactionTypeCreate(transactionRequest)) {
       return {
@@ -1003,7 +1048,9 @@ Supported fuel-core version: ${supportedVersion}.`
     let outputVariables = 0;
     let dryRunStatus: DryRunStatus | undefined;
 
-    this.validateTransaction(transactionRequest);
+    await this.validateTransaction(transactionRequest);
+
+    const gasPrice = gasPriceParam ?? (await this.estimateGasPrice(10));
 
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
       const {
@@ -1011,6 +1058,7 @@ Supported fuel-core version: ${supportedVersion}.`
       } = await this.operations.dryRun({
         encodedTransactions: [hexlify(transactionRequest.toTransactionBytes())],
         utxoValidation: false,
+        gasPrice: gasPrice.toString(),
       });
 
       receipts = rawReceipts.map(processGqlReceipt);
@@ -1026,12 +1074,13 @@ Supported fuel-core version: ${supportedVersion}.`
         outputVariables += missingOutputVariables.length;
         transactionRequest.addVariableOutputs(missingOutputVariables.length);
         missingOutputContractIds.forEach(({ contractId }) => {
-          transactionRequest.addContractInputAndOutput(Address.fromString(contractId));
+          transactionRequest.addContractInputAndOutput(new Address(contractId));
           missingContractIds.push(contractId);
         });
 
         const { maxFee } = await this.estimateTxGasAndFee({
           transactionRequest,
+          gasPrice,
         });
 
         // eslint-disable-next-line no-param-reassign
@@ -1112,7 +1161,7 @@ Supported fuel-core version: ${supportedVersion}.`
           result.outputVariables += missingOutputVariables.length;
           request.addVariableOutputs(missingOutputVariables.length);
           missingOutputContractIds.forEach(({ contractId }) => {
-            request.addContractInputAndOutput(Address.fromString(contractId));
+            request.addContractInputAndOutput(new Address(contractId));
             result.missingContractIds.push(contractId);
           });
           const { maxFee } = await this.estimateTxGasAndFee({
@@ -1169,7 +1218,13 @@ Supported fuel-core version: ${supportedVersion}.`
       return;
     }
 
-    const chainInfo = this.getChain();
+    // no cache? refetch.
+    if (!Provider.chainInfoCache?.[this.urlWithoutAuth]) {
+      await this.fetchChainAndNodeInfo(true);
+      return;
+    }
+
+    const chainInfo = Provider.chainInfoCache[this.urlWithoutAuth];
 
     const {
       consensusParameters: { version: previous },
@@ -1183,6 +1238,7 @@ Supported fuel-core version: ${supportedVersion}.`
       },
     } = await this.operations.getConsensusParametersVersion();
 
+    // old cache? refetch.
     if (previous !== current) {
       // calling with true to skip cache
       await this.fetchChainAndNodeInfo(true);
@@ -1191,20 +1247,20 @@ Supported fuel-core version: ${supportedVersion}.`
 
   /**
    * Estimates the transaction gas and fee based on the provided transaction request.
-   * @param transactionRequest - The transaction request object.
+   * @param params - The parameters for estimating the transaction gas and fee.
    * @returns An object containing the estimated minimum gas, minimum fee, maximum gas, and maximum fee.
    */
-  async estimateTxGasAndFee(params: { transactionRequest: TransactionRequest; gasPrice?: BN }) {
-    const { transactionRequest } = params;
-    let { gasPrice } = params;
+  async estimateTxGasAndFee(params: EstimateTxGasAndFeeParams) {
+    const { transactionRequest, gasPrice: gasPriceParam } = params;
+    let gasPrice = gasPriceParam;
 
     await this.autoRefetchConfigs();
 
-    const chainInfo = this.getChain();
-    const { gasPriceFactor, maxGasPerTx } = this.getGasConfig();
+    const chainInfo = await this.getChain();
+    const { gasPriceFactor, maxGasPerTx } = await this.getGasConfig();
 
     const minGas = transactionRequest.calculateMinGas(chainInfo);
-    if (!gasPrice) {
+    if (!isDefined(gasPrice)) {
       gasPrice = await this.estimateGasPrice(10);
     }
 
@@ -1312,7 +1368,7 @@ Supported fuel-core version: ${supportedVersion}.`
    */
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
-    { signatureCallback }: TransactionCostParams = {}
+    { signatureCallback, gasPrice: gasPriceParam }: TransactionCostParams = {}
   ): Promise<Omit<TransactionCost, 'requiredQuantities'>> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const updateMaxFee = txRequestClone.maxFee.eq(0);
@@ -1331,15 +1387,25 @@ Supported fuel-core version: ${supportedVersion}.`
       addedSignatures = signedRequest.witnesses.length - lengthBefore;
     }
 
-    await this.estimatePredicates(signedRequest);
+    let gasPrice: BN;
+
+    if (gasPriceParam) {
+      gasPrice = gasPriceParam;
+      await this.estimatePredicates(signedRequest);
+    } else {
+      ({ gasPrice } = await this.estimatePredicatesAndGasPrice(signedRequest, 10));
+    }
+
     txRequestClone.updatePredicateGasUsed(signedRequest.inputs);
 
     /**
      * Calculate minGas and maxGas based on the real transaction
      */
     // eslint-disable-next-line prefer-const
-    let { maxFee, maxGas, minFee, minGas, gasPrice, gasLimit } = await this.estimateTxGasAndFee({
+    let { maxFee, maxGas, minFee, minGas, gasLimit } = await this.estimateTxGasAndFee({
+      // Fetches and returns a gas price
       transactionRequest: signedRequest,
+      gasPrice,
     });
 
     let receipts: TransactionResultReceipt[] = [];
@@ -1356,19 +1422,19 @@ Supported fuel-core version: ${supportedVersion}.`
       }
 
       ({ receipts, missingContractIds, outputVariables, dryRunStatus } =
-        await this.estimateTxDependencies(txRequestClone));
+        await this.estimateTxDependencies(txRequestClone, { gasPrice }));
 
       if (dryRunStatus && 'reason' in dryRunStatus) {
         throw this.extractDryRunError(txRequestClone, receipts, dryRunStatus);
       }
 
-      const { maxGasPerTx } = this.getGasConfig();
+      const { maxGasPerTx } = await this.getGasConfig();
 
       const pristineGasUsed = getGasUsedFromReceipts(receipts);
       gasUsed = bn(pristineGasUsed.muln(GAS_USED_MODIFIER)).max(maxGasPerTx.sub(minGas));
       txRequestClone.gasLimit = gasUsed;
 
-      ({ maxFee, maxGas, minFee, minGas, gasPrice } = await this.estimateTxGasAndFee({
+      ({ maxFee, maxGas, minFee, minGas } = await this.estimateTxGasAndFee({
         transactionRequest: txRequestClone,
         gasPrice,
       }));
@@ -1401,11 +1467,11 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns A promise that resolves to the coins.
    */
   async getCoins(
-    owner: string | AbstractAddress,
+    owner: AddressInput,
     assetId?: BytesLike,
     paginationArgs?: CursorPaginationArgs
   ): Promise<GetCoinsResponse> {
-    const ownerAddress = Address.fromAddressOrString(owner);
+    const ownerAddress = new Address(owner);
     const {
       coins: { edges, pageInfo },
     } = await this.operations.getCoins({
@@ -1440,11 +1506,11 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns A promise that resolves to the resources.
    */
   async getResourcesToSpend(
-    owner: string | AbstractAddress,
+    owner: AddressInput,
     quantities: CoinQuantityLike[],
     excludedIds?: ExcludeResourcesOption
   ): Promise<Resource[]> {
-    const ownerAddress = Address.fromAddressOrString(owner);
+    const ownerAddress = new Address(owner);
     const excludeInput = {
       messages: excludedIds?.messages?.map((nonce) => hexlify(nonce)) || [],
       utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
@@ -1479,8 +1545,8 @@ Supported fuel-core version: ${supportedVersion}.`
               amount: bn(coin.amount),
               assetId: coin.assetId,
               daHeight: bn(coin.daHeight),
-              sender: Address.fromAddressOrString(coin.sender),
-              recipient: Address.fromAddressOrString(coin.recipient),
+              sender: new Address(coin.sender),
+              recipient: new Address(coin.recipient),
               nonce: coin.nonce,
             } as MessageCoin;
           case 'Coin':
@@ -1714,6 +1780,24 @@ Supported fuel-core version: ${supportedVersion}.`
   }
 
   /**
+   * Fetches a compressed block at the specified height.
+   *
+   * @param height - The height of the block to fetch.
+   * @returns The compressed block if available, otherwise `null`.
+   */
+  async daCompressedBlock(height: string) {
+    const { daCompressedBlock } = await this.operations.daCompressedBlock({
+      height,
+    });
+
+    if (!daCompressedBlock) {
+      return null;
+    }
+
+    return daCompressedBlock;
+  }
+
+  /**
    * Get deployed contract with the given ID.
    *
    * @param contractId - ID of the contract.
@@ -1736,12 +1820,12 @@ Supported fuel-core version: ${supportedVersion}.`
    */
   async getContractBalance(
     /** The contract ID to get the balance for */
-    contractId: string | AbstractAddress,
+    contractId: string | Address,
     /** The asset ID of coins to get */
     assetId: BytesLike
   ): Promise<BN> {
     const { contractBalance } = await this.operations.getContractBalance({
-      contract: Address.fromAddressOrString(contractId).toB256(),
+      contract: new Address(contractId).toB256(),
       asset: hexlify(assetId),
     });
     return bn(contractBalance.amount, 10);
@@ -1756,12 +1840,12 @@ Supported fuel-core version: ${supportedVersion}.`
    */
   async getBalance(
     /** The address to get coins for */
-    owner: string | AbstractAddress,
+    owner: AddressInput,
     /** The asset ID of coins to get */
     assetId: BytesLike
   ): Promise<BN> {
     const { balance } = await this.operations.getBalance({
-      owner: Address.fromAddressOrString(owner).toB256(),
+      owner: new Address(owner).toB256(),
       assetId: hexlify(assetId),
     });
     return bn(balance.amount, 10);
@@ -1774,7 +1858,7 @@ Supported fuel-core version: ${supportedVersion}.`
    * @param paginationArgs - Pagination arguments (optional).
    * @returns A promise that resolves to the balances.
    */
-  async getBalances(owner: string | AbstractAddress): Promise<GetBalancesResponse> {
+  async getBalances(owner: AddressInput): Promise<GetBalancesResponse> {
     const {
       balances: { edges },
     } = await this.operations.getBalances({
@@ -1783,7 +1867,7 @@ Supported fuel-core version: ${supportedVersion}.`
        * but the current Fuel-Core implementation does not support pagination yet.
        */
       first: 10000,
-      filter: { owner: Address.fromAddressOrString(owner).toB256() },
+      filter: { owner: new Address(owner).toB256() },
     });
 
     const balances = edges.map(({ node }) => ({
@@ -1802,7 +1886,7 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns A promise that resolves to the messages.
    */
   async getMessages(
-    address: string | AbstractAddress,
+    address: AddressInput,
     paginationArgs?: CursorPaginationArgs
   ): Promise<GetMessagesResponse> {
     const {
@@ -1812,7 +1896,7 @@ Supported fuel-core version: ${supportedVersion}.`
         inputArgs: paginationArgs,
         paginationLimit: RESOURCES_PAGE_SIZE_LIMIT,
       }),
-      owner: Address.fromAddressOrString(address).toB256(),
+      owner: new Address(address).toB256(),
     });
 
     const messages = edges.map(({ node }) => ({
@@ -1823,8 +1907,8 @@ Supported fuel-core version: ${supportedVersion}.`
         amount: bn(node.amount),
         data: node.data,
       }),
-      sender: Address.fromAddressOrString(node.sender),
-      recipient: Address.fromAddressOrString(node.recipient),
+      sender: new Address(node.sender),
+      recipient: new Address(node.recipient),
       nonce: node.nonce,
       amount: bn(node.amount),
       data: InputMessageCoder.decodeData(node.data),
@@ -1943,8 +2027,8 @@ Supported fuel-core version: ${supportedVersion}.`
         eventInboxRoot: commitBlockHeader.eventInboxRoot,
         stateTransitionBytecodeVersion: Number(commitBlockHeader.stateTransitionBytecodeVersion),
       },
-      sender: Address.fromAddressOrString(sender),
-      recipient: Address.fromAddressOrString(recipient),
+      sender: new Address(sender),
+      recipient: new Address(recipient),
       nonce,
       amount: bn(amount),
       data,
@@ -2048,9 +2132,10 @@ Supported fuel-core version: ${supportedVersion}.`
    * @param transactionId - The transaction ID to get the response for.
    * @returns A promise that resolves to the transaction response.
    */
-  // eslint-disable-next-line @typescript-eslint/require-await
+
   async getTransactionResponse(transactionId: string): Promise<TransactionResponse> {
-    return new TransactionResponse(transactionId, this);
+    const chainId = await this.getChainId();
+    return new TransactionResponse(transactionId, this, chainId);
   }
 
   /**
@@ -2074,8 +2159,8 @@ Supported fuel-core version: ${supportedVersion}.`
         amount: bn(rawMessage.amount),
         data: rawMessage.data,
       }),
-      sender: Address.fromAddressOrString(rawMessage.sender),
-      recipient: Address.fromAddressOrString(rawMessage.recipient),
+      sender: new Address(rawMessage.sender),
+      recipient: new Address(rawMessage.recipient),
       nonce,
       amount: bn(rawMessage.amount),
       data: InputMessageCoder.decodeData(rawMessage.data),
@@ -2128,5 +2213,25 @@ Supported fuel-core version: ${supportedVersion}.`
       receipts,
       statusReason: status.reason,
     });
+  }
+
+  /**
+   * @hidden
+   */
+  private parseEstimatePredicatesResponse<T extends TransactionRequest>(
+    transactionRequest: T,
+    { inputs }: GqlEstimatePredicatesQuery['estimatePredicates']
+  ): T {
+    if (inputs) {
+      inputs.forEach((input, i) => {
+        if (input && 'predicateGasUsed' in input && bn(input.predicateGasUsed).gt(0)) {
+          // eslint-disable-next-line no-param-reassign
+          (<CoinTransactionRequestInput>transactionRequest.inputs[i]).predicateGasUsed =
+            input.predicateGasUsed;
+        }
+      });
+    }
+
+    return transactionRequest;
   }
 }

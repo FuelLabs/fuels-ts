@@ -21,9 +21,6 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.client_payload.ref }}
-          # workaround to ensure changeset file is pushed with REPO_TOKEN owner's account
-          # see https://github.com/changesets/action/issues/70
-          persist-credentials: false
 
       - name: Get PR's changeset file
         run: |
@@ -51,7 +48,7 @@ jobs:
         run: |
           echo "machine github.com" > $HOME/.netrc
           echo "login github-actions[bot]" >> $HOME/.netrc
-          echo "password ${{ secrets.REPO_TOKEN }}" >> $HOME/.netrc
+          echo "password ${{ secrets.GITHUB_TOKEN }}" >> $HOME/.netrc
           chmod 600 $HOME/.netrc
 
       - name: Commit Changeset
@@ -63,7 +60,7 @@ jobs:
           git commit -m "build: update dependency changeset"
           git push origin HEAD:${{ github.event.pull_request.head.ref }}
         env:
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   validate-changeset:
     name: Validate PR Changeset

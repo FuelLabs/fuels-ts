@@ -7,6 +7,22 @@
   "ignorePatterns": [
     {
       "pattern": "^http://localhost:3000"
+    },
+    {
+      "pattern": "https://mainnet-explorer.fuel.network"
+    },
+    {
+      "pattern": "https://explorer-indexer-testnet.fuel.network"
+    }
+  ],
+  "replacementPatterns": [
+    {
+      "pattern": "DOCS_API_URL",
+      "replacement": "http://localhost:9876"
+    },
+    {
+      "pattern": "^modules/_fuel_ts",
+      "replacement": "http://localhost:9876/modules/_fuel_ts"
     }
   ]
 }

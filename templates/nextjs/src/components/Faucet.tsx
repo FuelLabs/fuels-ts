@@ -4,16 +4,20 @@ import { useEffect, useState } from "react";
 import LocalFaucet from "./LocalFaucet";
 import Button from "./Button";
 import { isLocal, renderFormattedBalance, testnetFaucetUrl } from "../lib";
+import { useBaseAssetId } from "@/hooks/useBaseAssetId";
 
 export default function Faucet() {
   const { wallet } = useWallet();
+  const { baseAssetId } = useBaseAssetId();
   const connectedWalletAddress = wallet?.address.toB256() || "";
 
   const [addressToFund, setAddressToFund] = useState("");
-
-  const { balance, refetch } = useBalance({ address: addressToFund });
-
   const [initialAddressLoaded, setInitialAddressLoaded] = useState(false);
+
+  const { balance, refetch } = useBalance({
+    address: addressToFund,
+    assetId: baseAssetId,
+  });
 
   useEffect(() => {
     if (connectedWalletAddress && !initialAddressLoaded && !addressToFund) {
@@ -21,6 +25,7 @@ export default function Faucet() {
       setInitialAddressLoaded(true);
     }
   }, [connectedWalletAddress, addressToFund, initialAddressLoaded]);
+
   useEffect(() => {
     refetch();
   }, [refetch]);

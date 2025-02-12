@@ -29,6 +29,10 @@ vi.mock('fs', async () => {
  * @group node
  */
 describe('launchNode', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('using ephemeral port 0 is possible', async () => {
     const { cleanup, port, url } = await launchNode({ port: '0', loggingEnabled: false });
     expect(await fetch(url)).toBeTruthy();
@@ -108,7 +112,8 @@ describe('launchNode', () => {
     const spawnSpy = vi.spyOn(childProcessMod, 'spawn');
     process.env.FUEL_CORE_PATH = 'fuels-core';
     const { cleanup, url } = await launchNode({ loggingEnabled: false });
-    await Provider.create(url);
+
+    await new Provider(url).init();
 
     const command = spawnSpy.mock.calls[0][0];
     expect(command).toEqual('fuels-core');
@@ -117,7 +122,7 @@ describe('launchNode', () => {
   });
 
   test('should throw on error and log error message', { timeout: 15000 }, async () => {
-    const logSpy = vi.spyOn(console, 'log');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
     const invalidCoin = {
       asset_id: 'whatever',
@@ -132,7 +137,7 @@ describe('launchNode', () => {
     const error = await expectToThrowFuelError(
       async () =>
         launchNode({
-          loggingEnabled: false,
+          loggingEnabled: true,
           snapshotConfig: {
             ...defaultSnapshotConfigs,
             stateConfig: {
@@ -238,7 +243,7 @@ describe('launchNode', () => {
 
   test('calling cleanup on externally killed node does not throw', async () => {
     const mkdirSyncSpy = vi.spyOn(fsMod, 'mkdirSync');
-    const logSpy = vi.spyOn(console, 'log');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
     const { pid, cleanup } = await launchNode({ loggingEnabled: false });
     expect(mkdirSyncSpy).toHaveBeenCalledTimes(1);

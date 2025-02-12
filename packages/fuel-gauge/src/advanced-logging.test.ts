@@ -233,16 +233,13 @@ describe('Advanced Logging', () => {
         ])
         .getTransactionRequest();
 
-      const txCost = await wallet.getTransactionCost(request);
+      await request.estimateAndFund(wallet);
 
-      request.gasLimit = txCost.gasUsed;
-      request.maxFee = txCost.maxFee;
+      const { waitForResult } = await wallet.sendTransaction(request, {
+        estimateTxDependencies: false,
+      });
 
-      await wallet.fund(request, txCost);
-
-      const tx = await wallet.sendTransaction(request, { estimateTxDependencies: false });
-
-      const { logs } = await tx.waitForResult();
+      const { logs } = await waitForResult();
 
       expect(logs).toBeDefined();
 
@@ -312,16 +309,11 @@ describe('Advanced Logging', () => {
         .addContracts([advancedLogContract, otherAdvancedLogContract])
         .getTransactionRequest();
 
-      const txCost = await wallet.getTransactionCost(request);
+      await request.estimateAndFund(wallet);
 
-      request.gasLimit = txCost.gasUsed;
-      request.maxFee = txCost.maxFee;
+      const { waitForResult } = await wallet.sendTransaction(request);
 
-      await wallet.fund(request, txCost);
-
-      const tx = await wallet.sendTransaction(request);
-
-      const { logs } = await tx.waitForResult();
+      const { logs } = await waitForResult();
 
       expect(logs).toBeDefined();
 

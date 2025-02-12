@@ -6,17 +6,17 @@ execSync(`fuels-typegen -i src/contracts/**/*-abi.json -o src/types`);
 
 const supportedRecipes = ['Src14OwnedProxy'].map((s) => [s, `${s}Factory`]).flat();
 const importReplacementMap = {
-  Contract: '@fuel-ts/program',
-  ContractFactory: '@fuel-ts/contract',
+  'Contract as __Contract': '@fuel-ts/program',
+  'ContractFactory as __ContractFactory': '@fuel-ts/contract',
   DeployContractOptions: '@fuel-ts/contract',
   Interface: '@fuel-ts/abi-coder',
   Provider: '@fuel-ts/account',
   Account: '@fuel-ts/account',
   StorageSlot: '@fuel-ts/transactions',
-  AbstractAddress: '@fuel-ts/interfaces',
+  Address: '@fuel-ts/address',
   FunctionFragment: '@fuel-ts/abi-coder',
   InvokeFunction: '@fuel-ts/program',
-  StrSlice: '@fuel-ts/interfaces',
+  StrSlice: '@fuel-ts/abi-coder',
   decompressBytecode: '@fuel-ts/utils',
 };
 

@@ -56,7 +56,8 @@ describe('TransactionSummary', () => {
   const runTest = (
     status: GraphqlTransactionStatus,
     expected: Record<string, unknown>,
-    baseAssetId: string
+    baseAssetId: string,
+    calculateTransactionFeeCalls = 1
   ) => {
     const { calculateTransactionFee } = mockCalculateTransactionFee();
 
@@ -69,6 +70,7 @@ describe('TransactionSummary', () => {
       receipts,
       gqlTransactionStatus: status,
       maxInputs,
+      // @ts-expect-error This is not defined..
       gasCosts,
       abiMap: {},
       maxGasPerTx,
@@ -77,7 +79,7 @@ describe('TransactionSummary', () => {
     });
 
     expect(transactionSummary).toMatchObject(expected);
-    expect(calculateTransactionFee).toHaveBeenCalledTimes(1);
+    expect(calculateTransactionFee).toHaveBeenCalledTimes(calculateTransactionFeeCalls);
   };
 
   it('should assemble transaction summary just fine (SUCCESS)', async () => {
@@ -104,7 +106,7 @@ describe('TransactionSummary', () => {
       type: expect.any(String),
     };
 
-    runTest(MOCK_SUCCESS_STATUS, expected, provider.getBaseAssetId());
+    runTest(MOCK_SUCCESS_STATUS, expected, await provider.getBaseAssetId(), 0);
   });
 
   it('should assemble transaction summary just fine (FAILURE)', async () => {
@@ -131,7 +133,7 @@ describe('TransactionSummary', () => {
       type: expect.any(String),
     };
 
-    runTest(MOCK_FAILURE_STATUS, expected, provider.getBaseAssetId());
+    runTest(MOCK_FAILURE_STATUS, expected, await provider.getBaseAssetId(), 0);
   });
 
   it('should assemble transaction summary just fine (SUBMITTED)', async () => {
@@ -158,7 +160,7 @@ describe('TransactionSummary', () => {
       type: expect.any(String),
     };
 
-    runTest(MOCK_SUBMITTED_STATUS, expected, provider.getBaseAssetId());
+    runTest(MOCK_SUBMITTED_STATUS, expected, await provider.getBaseAssetId());
   });
 
   it('should assemble transaction summary just fine (SQUEEZEDOUT)', async () => {
@@ -185,6 +187,6 @@ describe('TransactionSummary', () => {
       type: expect.any(String),
     };
 
-    runTest(MOCK_SQUEEZEDOUT_STATUS, expected, provider.getBaseAssetId());
+    runTest(MOCK_SQUEEZEDOUT_STATUS, expected, await provider.getBaseAssetId());
   });
 });

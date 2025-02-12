@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.89.6
+
+### Patch Changes
+
+- ab56ded: chore: bump `forc` to `0.66.6`
+
+## 0.89.5
+
+### Patch Changes
+
+- 5ec254d: chore: updated forc version to `0.66.5`
+
 ## 0.89.4
 
 ### Patch Changes

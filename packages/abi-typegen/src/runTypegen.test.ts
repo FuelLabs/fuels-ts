@@ -57,7 +57,7 @@ describe('runTypegen.js', () => {
     // check if all files were created
     const files = [
       join(output, 'index.ts'),
-      join(output, 'common.d.ts'),
+      join(output, 'common.ts'),
       join(output, `${normalizedName}.ts`),
       join(output, `${normalizedName}Factory.ts`),
     ];
@@ -101,7 +101,7 @@ describe('runTypegen.js', () => {
     // check if all files were created
     const files = [
       join(output, 'index.ts'),
-      join(output, 'common.d.ts'),
+      join(output, 'common.ts'),
       join(output, `${normalizedName}.ts`),
       join(output, `${normalizedName}Factory.ts`),
     ];
@@ -153,7 +153,7 @@ describe('runTypegen.js', () => {
   });
 
   test('should log messages to stdout', async () => {
-    const logSpy = vi.spyOn(console, 'log');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
     // setup temp sway project
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
@@ -272,7 +272,7 @@ describe('runTypegen.js', () => {
     cpSync(fromBin, toBin);
 
     // mocking
-    const logSpy = vi.spyOn(console, 'log');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
     // executes program
     const fn = () =>
@@ -292,7 +292,7 @@ describe('runTypegen.js', () => {
     // check if all files were created
     const files = [
       join(output, 'index.ts'),
-      join(output, 'common.d.ts'),
+      join(output, 'common.ts'),
       join(output, `${normalizedName}.ts`),
       join(output, `${normalizedName}Factory.ts`),
     ];

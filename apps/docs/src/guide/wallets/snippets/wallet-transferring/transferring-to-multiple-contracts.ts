@@ -6,9 +6,9 @@ import { TestAssetId } from 'fuels/test-utils';
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
 import { CounterFactory, EchoValuesFactory } from '../../../../typegend';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = new Provider(LOCAL_NETWORK_URL);
 const sender = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
-const baseAssetId = provider.getBaseAssetId();
+const baseAssetId = await provider.getBaseAssetId();
 const assetA = TestAssetId.A.value;
 
 const deploy1 = await CounterFactory.deploy(sender);

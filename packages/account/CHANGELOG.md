@@ -1,5 +1,129 @@
 # Change Log
 
+## 0.99.0
+
+### Minor Changes
+
+- 4428556: chore!: remove `pageInfo` from `getBalances` GraphQl operations
+
+### Patch Changes
+
+- edefe59: chore: prepend version mismatch to GraphQL errors
+- f3d5240: fix: bind `waitForResult` in `TransactionResponse`
+- 86b8e94: chore: `Address` constructor now accepts a range of inputs.
+- e5251e2: feat: allow passing `gasPrice` to `getTransactionCost`
+- f986891: chore: un-deprecated network URLs
+- d35ccb7: feat: bytecode ID helpers
+- ec84b8a: feat: use configurable offset for blob ID
+- d1825c9: chore: update `amountPerCoin` prop in `WalletConfig` to accept BN
+- f7f0f0a: fix: s3 publishing
+- d591df0: chore: organized `assets` in account package
+- 8030180: feat: support Explorer Asset API
+- 45cc32e: chore: upgrade `fuel-core` to `0.40.4`
+- Updated dependencies [86b8e94]
+- Updated dependencies [ab56ded]
+- Updated dependencies [69e1ba8]
+- Updated dependencies [d1825c9]
+- Updated dependencies [56adcc5]
+- Updated dependencies [b3bb765]
+- Updated dependencies [45cc32e]
+  - @fuel-ts/address@0.99.0
+  - @fuel-ts/versions@0.99.0
+  - @fuel-ts/abi-coder@0.99.0
+  - @fuel-ts/utils@0.99.0
+  - @fuel-ts/transactions@0.99.0
+  - @fuel-ts/errors@0.99.0
+  - @fuel-ts/math@0.99.0
+  - @fuel-ts/crypto@0.99.0
+  - @fuel-ts/hasher@0.99.0
+  - @fuel-ts/merkle@0.99.0
+
+## 0.98.0
+
+### Minor Changes
+
+- 13977df: docs!: optimizing frontend apps
+- 68821a9: chore!: remove unused operations
+- 458b7cf: feat!: making `provider` initialization `sync` again
+- 254bf53: chore!: remove receipts deprecated properties
+- 8d8452e: feat!: `autoCost` for transaction estimation and funding
+- d404734: chore!: remove deprecated `submitAndAwait` operation
+- f2407dc: feat!: remove redundant gas price call for tx summary
+- 08a31d8: feat!: prevent implicit asset burn
+
+### Patch Changes
+
+- 12e801e: chore: dependency pinning and auditing
+- d5a696c: feat: added method to duplicate predicate
+- 0f138cd: feat: added `onBeforeSend` hook to the connector interface
+- 75fae34: chore: removing obsolete `Provider.create` method
+- a278e71: fix: unable to kill `fuels dev` with `pnpm`
+- 0b4c3ab: chore!: redistributed the `@fuel-ts/interfaces` package
+- Updated dependencies [12e801e]
+- Updated dependencies [04ca73e]
+- Updated dependencies [a7eb9b6]
+- Updated dependencies [254bf53]
+- Updated dependencies [f132203]
+- Updated dependencies [4ccc628]
+- Updated dependencies [08a31d8]
+- Updated dependencies [0b4c3ab]
+- Updated dependencies [68ef74d]
+  - @fuel-ts/transactions@0.98.0
+  - @fuel-ts/abi-coder@0.98.0
+  - @fuel-ts/versions@0.98.0
+  - @fuel-ts/address@0.98.0
+  - @fuel-ts/crypto@0.98.0
+  - @fuel-ts/hasher@0.98.0
+  - @fuel-ts/merkle@0.98.0
+  - @fuel-ts/utils@0.98.0
+  - @fuel-ts/math@0.98.0
+  - @fuel-ts/errors@0.98.0
+
+## 0.97.2
+
+### Patch Changes
+
+- ebe5ecd: chore: update internally used chain config
+- Updated dependencies [0970bc4]
+- Updated dependencies [5ec254d]
+- Updated dependencies [896bf5b]
+- Updated dependencies [ebe5ecd]
+  - @fuel-ts/utils@0.97.2
+  - @fuel-ts/versions@0.97.2
+  - @fuel-ts/abi-coder@0.97.2
+  - @fuel-ts/address@0.97.2
+  - @fuel-ts/crypto@0.97.2
+  - @fuel-ts/hasher@0.97.2
+  - @fuel-ts/transactions@0.97.2
+  - @fuel-ts/errors@0.97.2
+  - @fuel-ts/merkle@0.97.2
+  - @fuel-ts/math@0.97.2
+  - @fuel-ts/interfaces@0.97.2
+
+## 0.97.1
+
+### Patch Changes
+
+- 260274a: chore: upgrade `graphql-request@6.1.0`
+- c904a98: chore: added noImplicitOverride option to config
+- 7390114: fix: `transferToContract` method now allows big numbers
+- 3a178b0: chore: avoid re-estimate `gasPrice` at `estimateTxDependencies`
+- 4131e74: fix: enable `fuel-core` node cleanup to work in Bun
+- Updated dependencies [c904a98]
+- Updated dependencies [27e8808]
+- Updated dependencies [165c49c]
+  - @fuel-ts/abi-coder@0.97.1
+  - @fuel-ts/address@0.97.1
+  - @fuel-ts/math@0.97.1
+  - @fuel-ts/interfaces@0.97.1
+  - @fuel-ts/errors@0.97.1
+  - @fuel-ts/versions@0.97.1
+  - @fuel-ts/transactions@0.97.1
+  - @fuel-ts/crypto@0.97.1
+  - @fuel-ts/merkle@0.97.1
+  - @fuel-ts/utils@0.97.1
+  - @fuel-ts/hasher@0.97.1
+
 ## 0.97.0
 
 ### Minor Changes

@@ -1,5 +1,59 @@
 # Change Log
 
+## 0.99.0
+
+### Patch Changes
+
+- 86b8e94: chore: `Address` constructor now accepts a range of inputs.
+- Updated dependencies [d1825c9]
+- Updated dependencies [b3bb765]
+  - @fuel-ts/utils@0.99.0
+  - @fuel-ts/errors@0.99.0
+  - @fuel-ts/crypto@0.99.0
+
+## 0.98.0
+
+### Minor Changes
+
+- 4ccc628: chore!: remove Bech32 address
+
+### Patch Changes
+
+- 12e801e: chore: dependency pinning and auditing
+- 0b4c3ab: chore!: redistributed the `@fuel-ts/interfaces` package
+- Updated dependencies [12e801e]
+- Updated dependencies [4ccc628]
+- Updated dependencies [08a31d8]
+- Updated dependencies [0b4c3ab]
+- Updated dependencies [68ef74d]
+  - @fuel-ts/crypto@0.98.0
+  - @fuel-ts/utils@0.98.0
+  - @fuel-ts/errors@0.98.0
+
+## 0.97.2
+
+### Patch Changes
+
+- Updated dependencies [0970bc4]
+- Updated dependencies [896bf5b]
+- Updated dependencies [ebe5ecd]
+  - @fuel-ts/utils@0.97.2
+  - @fuel-ts/crypto@0.97.2
+  - @fuel-ts/errors@0.97.2
+  - @fuel-ts/interfaces@0.97.2
+
+## 0.97.1
+
+### Patch Changes
+
+- c904a98: chore: added noImplicitOverride option to config
+- 27e8808: chore: deprecate bech32 addresses
+- Updated dependencies [27e8808]
+  - @fuel-ts/interfaces@0.97.1
+  - @fuel-ts/errors@0.97.1
+  - @fuel-ts/crypto@0.97.1
+  - @fuel-ts/utils@0.97.1
+
 ## 0.97.0
 
 ### Patch Changes
