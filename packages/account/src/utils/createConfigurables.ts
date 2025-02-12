@@ -3,7 +3,7 @@ import type { InputValue, Interface } from '@fuel-ts/abi-coder';
 import type { Configurable } from '@fuel-ts/abi-coder/dist/types/JsonAbiNew';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
-import { getBytecodeDataOffset } from '../utils/predicate-script-loader-instructions';
+import { getBytecodeDataOffset } from './predicate-script-loader-instructions';
 
 export const createConfigurables = (opts: { bytecode: Uint8Array; abi: Interface }) => {
   const { abi } = opts;

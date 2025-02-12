@@ -23,9 +23,9 @@ import type {
   TransactionRequestLike,
   TransactionResponse,
 } from '../providers';
+import { createConfigurables } from '../utils/createConfigurables';
 import { deployScriptOrPredicate } from '../utils/deployScriptOrPredicate';
 
-import { createConfigurables } from './configurable';
 import { getPredicateRoot } from './utils';
 
 export type PredicateParams<

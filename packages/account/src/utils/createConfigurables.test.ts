@@ -1,7 +1,7 @@
 import { Interface } from '@fuel-ts/abi-coder';
 import { decompressBytecode } from '@fuel-ts/utils';
 
-import { createConfigurables } from './configurable';
+import { createConfigurables } from './createConfigurables';
 
 const abi = {
   programType: 'predicate',
