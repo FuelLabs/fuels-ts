@@ -13,6 +13,7 @@ import {
   BlobTransactionRequest,
   TransactionStatus,
   calculateGasFee,
+  createConfigurables,
 } from '@fuel-ts/account';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -385,33 +386,12 @@ export default class ContractFactory<TContract extends Contract = Contract> {
    */
   setConfigurableConstants(configurableConstants: { [name: string]: unknown }) {
     try {
-      const hasConfigurable = Object.keys(this.interface.configurables).length;
-
-      if (!hasConfigurable) {
-        throw new FuelError(
-          ErrorCode.CONFIGURABLE_NOT_FOUND,
-          'Contract does not have configurables to be set'
-        );
-      }
-
-      Object.entries(configurableConstants).forEach(([key, value]) => {
-        if (!this.interface.configurables[key]) {
-          throw new FuelError(
-            ErrorCode.CONFIGURABLE_NOT_FOUND,
-            `Contract does not have a configurable named: '${key}'`
-          );
-        }
-
-        const { offset } = this.interface.configurables[key];
-
-        const encoded = this.interface.encodeConfigurable(key, value as InputValue);
-
-        const bytes = arrayify(this.bytecode);
-
-        bytes.set(encoded, offset);
-
-        this.bytecode = bytes;
+      const configurables = createConfigurables({
+        bytecode: arrayify(this.bytecode),
+        abi: this.interface,
       });
+
+      this.bytecode = configurables.set(configurableConstants);
     } catch (err) {
       throw new FuelError(
         ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
