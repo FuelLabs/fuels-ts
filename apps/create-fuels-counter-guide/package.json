@@ -30,7 +30,7 @@
     "@eslint/js": "9.20.0",
     "@types/node": "22.13.1",
     "@playwright/test": "1.50.1",
-    "@tailwindcss/postcss": "^4.0.6",
+    "@tailwindcss/postcss": "4.0.6",
     "@types/react": "19.0.8",
     "@types/react-dom": "19.0.3",
     "autoprefixer": "10.4.20",

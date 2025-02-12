@@ -212,7 +212,7 @@ importers:
         specifier: 1.50.1
         version: 1.50.1
       '@tailwindcss/postcss':
-        specifier: ^4.0.6
+        specifier: 4.0.6
         version: 4.0.6
       '@types/node':
         specifier: 22.13.1
@@ -436,7 +436,7 @@ importers:
         version: 19.0.0(react@19.0.0)
     devDependencies:
       '@tailwindcss/postcss':
-        specifier: ^4.0.6
+        specifier: 4.0.6
         version: 4.0.6
       '@types/node':
         specifier: 22.13.1
@@ -1172,7 +1172,7 @@ importers:
         specifier: 1.50.1
         version: 1.50.1
       '@tailwindcss/postcss':
-        specifier: ^4.0.6
+        specifier: 4.0.6
         version: 4.0.6
       '@types/node':
         specifier: 22.13.1
@@ -1242,7 +1242,7 @@ importers:
         specifier: 1.50.1
         version: 1.50.1
       '@tailwindcss/postcss':
-        specifier: ^4.0.6
+        specifier: 4.0.6
         version: 4.0.6
       '@types/react':
         specifier: 19.0.8
