@@ -2066,8 +2066,8 @@ export default class Provider {
     if (commitBlockHeight) {
       inputObject = {
         ...inputObject,
-        // Conver BN into a number string required on the query
-        // This should problably be fixed on the fuel client side
+        // Convert BN into a number string required on the query
+        // This should probably be fixed on the fuel client side
         commitBlockHeight: commitBlockHeight.toNumber().toString(),
       };
     }

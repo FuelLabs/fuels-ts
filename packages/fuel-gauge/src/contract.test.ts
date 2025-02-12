@@ -113,7 +113,7 @@ describe('Contract', () => {
     expect(value.toHex()).toEqual(toHex(1338));
   });
 
-  it('adds multiple contracts on multicalls', async () => {
+  it('adds multiple contracts on multi-calls', async () => {
     using launched = await launchTestNode({
       contractsConfigs,
     });
@@ -228,7 +228,7 @@ describe('Contract', () => {
     expect(failed).toEqual(true);
   });
 
-  it('adds multiple contracts on multicalls', async () => {
+  it('adds multiple contracts on multi-calls', async () => {
     using launched = await launchTestNode({
       contractsConfigs,
     });
@@ -355,7 +355,7 @@ describe('Contract', () => {
     );
   });
 
-  it('can forward gas to multicall calls', async () => {
+  it('can forward gas to multi-call calls', async () => {
     using contract = await setupTestContract();
 
     const { waitForResult } = await contract
@@ -612,7 +612,7 @@ describe('Contract', () => {
     expect(result.status).toBe('success');
   });
 
-  it('should ensure multicall allows multiple heap types', async () => {
+  it('should ensure multi-call allows multiple heap types', async () => {
     using contract = await setupTestContract();
 
     const vector = [5, 4, 3, 2, 1];
@@ -892,7 +892,7 @@ describe('Contract', () => {
     expect(bn(maxFeePolicy?.data).toNumber()).toBe(maxFee);
   });
 
-  it('should ensure gas price and gas limit are validated when transfering to contract', async () => {
+  it('should ensure gas price and gas limit are validated when transferring to contract', async () => {
     using launched = await launchTestNode({
       contractsConfigs,
     });
@@ -916,7 +916,7 @@ describe('Contract', () => {
     }).rejects.toThrowError(/Gas limit '1' is lower than the required: ./);
   });
 
-  it('should tranfer asset to a deployed contract just fine (NOT NATIVE ASSET)', async () => {
+  it('should transfer asset to a deployed contract just fine (NOT NATIVE ASSET)', async () => {
     const asset = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
     using launched = await launchTestNode({
@@ -940,7 +940,7 @@ describe('Contract', () => {
     expect(finalBalance).toBe(initialBalance + amountToContract);
   });
 
-  it('should tranfer asset to a deployed contract just fine (FROM PREDICATE)', async () => {
+  it('should transfer asset to a deployed contract just fine (FROM PREDICATE)', async () => {
     using launched = await launchTestNode({
       contractsConfigs,
     });
@@ -995,7 +995,7 @@ describe('Contract', () => {
     );
   });
 
-  it('should ensure assets can be transfered to wallets (SINGLE TRANSFER)', async () => {
+  it('should ensure assets can be transferred to wallets (SINGLE TRANSFER)', async () => {
     using contract = await setupTestContract();
     const { provider } = contract;
 
@@ -1018,7 +1018,7 @@ describe('Contract', () => {
     expect(finalBalance.toNumber()).toBe(amountToTransfer);
   });
 
-  it('should ensure assets can be transfered to wallets (MULTI TRANSFER)', async () => {
+  it('should ensure assets can be transferred to wallets (MULTI TRANSFER)', async () => {
     using launched = await launchTestNode();
     const {
       provider,
@@ -1310,7 +1310,7 @@ describe('Contract', () => {
     });
   });
 
-  it('should ensure "maxFee" and "gasLimit" can be set on a multicall', async () => {
+  it('should ensure "maxFee" and "gasLimit" can be set on a multi-call', async () => {
     using contract = await setupTestContract();
 
     const gasLimit = 500_000;
