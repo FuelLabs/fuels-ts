@@ -31,7 +31,7 @@ import {
   TestMessage,
 } from 'fuels/test-utils';
 
-import { MultiTokenContractFactory, TokenContractFactory } from '../test/typegen';
+import { MultiTokenContractFactory, TokenContractFactory, TokenContract } from '../test/typegen';
 import type { ContractIdInput, TransferParamsInput } from '../test/typegen/contracts/TokenContract';
 
 function convertBnsToHex(value: unknown): unknown {
@@ -299,6 +299,46 @@ describe('TransactionSummary', () => {
     expect(transactions).toHaveLength(length);
     transactions.forEach((transaction) => {
       expect(transaction.blockId).toBeUndefined();
+    });
+  });
+
+  it('getTransactionsSummaries with ABIs and has operation', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: TokenContractFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
+    const contractId = contract.id.toB256();
+    const functionName = 'mint_coins';
+    const argumentName = 'mint_amount';
+    const argumentValue = bn(100_000);
+
+    const call = await contract.functions[functionName](argumentValue).call();
+    const res = await call.waitForResult();
+
+    const summary = await res.transactionResponse.getTransactionSummary({
+      [contractId]: TokenContract.abi,
+    });
+
+    validateTxSummary({
+      transaction: summary,
+    });
+
+    const { operations } = summary;
+    const callOperation = operations[0];
+
+    expect(callOperation.name).toBe(OperationName.contractCall);
+    expect(callOperation.to?.address).toBe(contractId);
+    expect(callOperation.calls?.[0].functionName).toBe(functionName);
+    expect(callOperation.calls?.[0].argumentsProvided).toStrictEqual({
+      [argumentName]: argumentValue.toHex(),
     });
   });
 
