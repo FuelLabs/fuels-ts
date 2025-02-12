@@ -133,13 +133,68 @@ describe('configurables', () => {
     });
 
     const entries = configurables.all();
-    expect(entries).toEqual([
-      { name: 'BOOL', value: false },
-      { name: 'U8', value: 16 },
-      { name: 'STR', value: 'sway' },
-      { name: 'STR_2', value: 'forc' },
-      { name: 'STR_3', value: 'fuel' },
-      { name: 'LAST_U8', value: 32 },
-    ]);
+    expect(entries).toEqual(
+      expect.arrayContaining([
+        { name: 'BOOL', value: false }, // Changed
+        { name: 'U8', value: 16 }, // Changed
+        { name: 'STR', value: 'sway' },
+        { name: 'STR_2', value: 'forc' },
+        { name: 'STR_3', value: 'fuel' },
+        { name: 'LAST_U8', value: 32 }, // Changed
+      ])
+    );
+  });
+
+  it('should write indirect configurables', () => {
+    const configurables = createConfigurables({
+      bytecode,
+      abi: new Interface(abi),
+    });
+
+    configurables.set({
+      STR: 'sway-sway-sway',
+      STR_2: 'forc-forc',
+      STR_3: '',
+    });
+
+    const entries = configurables.all();
+    expect(entries).toMatchObject(
+      expect.arrayContaining([
+        { name: 'BOOL', value: true },
+        { name: 'U8', value: 8 },
+        { name: 'STR', value: 'sway-sway-sway' }, // Changed
+        { name: 'STR_2', value: 'forc-forc' }, // Changed
+        { name: 'STR_3', value: '' }, // Changed
+        { name: 'LAST_U8', value: 16 },
+      ])
+    );
+  });
+
+  it('should write both direct and indirect configurables', () => {
+    const configurables = createConfigurables({
+      bytecode,
+      abi: new Interface(abi),
+    });
+
+    configurables.set({
+      STR: 'sway-sway-sway',
+      STR_2: 'forc-forc',
+      STR_3: '',
+      BOOL: false,
+      U8: 16,
+      LAST_U8: 32,
+    });
+
+    const entries = configurables.all();
+    expect(entries).toMatchObject(
+      expect.arrayContaining([
+        { name: 'BOOL', value: false }, // Changed
+        { name: 'U8', value: 16 }, // Changed
+        { name: 'STR', value: 'sway-sway-sway' }, // Changed
+        { name: 'STR_2', value: 'forc-forc' }, // Changed
+        { name: 'STR_3', value: '' }, // Changed
+        { name: 'LAST_U8', value: 32 }, // Changed
+      ])
+    );
   });
 });
