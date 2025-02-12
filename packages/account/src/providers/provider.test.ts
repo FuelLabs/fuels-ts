@@ -20,7 +20,7 @@ import {
   MOCK_TX_UNKNOWN_RAW_PAYLOAD,
   MOCK_TX_SCRIPT_RAW_PAYLOAD,
 } from '../../test/fixtures/transaction-summary';
-import { mockIncompatibleVersions } from '../../test/utils/mock-incompatible-versions';
+import { mockIncompatibleVersions } from '../../test/utils/mockIncompabileVersions';
 import { setupTestProviderAndWallets, launchNode, TestMessage } from '../test-utils';
 
 import type { Coin } from './coin';
