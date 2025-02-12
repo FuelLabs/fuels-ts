@@ -62,7 +62,7 @@ describe('TokenTestContract', () => {
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(50));
   });
 
-  it('Automatically add variableOuputs', async () => {
+  it('Automatically add variableOutputs', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {

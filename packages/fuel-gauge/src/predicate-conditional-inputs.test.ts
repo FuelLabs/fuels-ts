@@ -46,14 +46,14 @@ describe('PredicateConditionalInputs', () => {
     const request = new ScriptTransactionRequest();
 
     // fetch predicate resources to spend
-    const predicateResoruces = await predicate.getResourcesToSpend([[amountToTransfer, ASSET_A]]);
+    const predicateResources = await predicate.getResourcesToSpend([[amountToTransfer, ASSET_A]]);
     const aliceResources = await aliceWallet.getResourcesToSpend([
       [1, await provider.getBaseAssetId()],
     ]);
 
     request
       .addResources(aliceResources)
-      .addResources(predicateResoruces)
+      .addResources(predicateResources)
       .addCoinOutput(aliceWallet.address, amountToTransfer, ASSET_A);
 
     const txCost = await aliceWallet.getTransactionCost(request);
