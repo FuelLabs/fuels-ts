@@ -1,5 +1,5 @@
 import type { AddressInput } from '@fuel-ts/address';
-import { Address } from '@fuel-ts/address';
+import { Address, isB256 } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
@@ -1601,7 +1601,7 @@ export default class Provider {
       } = await this.operations.getLatestBlock();
       block = latestBlock;
     } else {
-      const isblockId = typeof idOrHeight === 'string' && idOrHeight.length === 66;
+      const isblockId = typeof idOrHeight === 'string' && isB256(idOrHeight);
       const variables = isblockId
         ? { blockId: idOrHeight }
         : { height: bn(idOrHeight).toString(10) };
@@ -1684,7 +1684,7 @@ export default class Provider {
       variables = { blockHeight: bn(idOrHeight).toString(10) };
     } else if (idOrHeight === 'latest') {
       variables = { blockHeight: (await this.getBlockNumber()).toString() };
-    } else if (typeof idOrHeight === 'string' && idOrHeight.length === 66) {
+    } else if (typeof idOrHeight === 'string' && isB256(idOrHeight)) {
       variables = { blockId: idOrHeight };
     } else {
       variables = { blockHeight: bn(idOrHeight).toString() };
