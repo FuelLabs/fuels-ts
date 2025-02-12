@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Interface } from '@fuel-ts/abi-coder';
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
-import { deployScriptOrPredicate, type Account, type Provider } from '@fuel-ts/account';
+import {
+  createConfigurables,
+  deployScriptOrPredicate,
+  type Account,
+  type Provider,
+} from '@fuel-ts/account';
 import { FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import type { ScriptRequest } from '@fuel-ts/program';
@@ -88,29 +93,14 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
    * @throws Will throw an error if the script has no configurable constants to be set or if an invalid constant is provided.
    * @returns This instance of the `Script`.
    */
-  setConfigurableConstants(configurables: { [name: string]: unknown }) {
+  setConfigurableConstants(configurableValues: { [name: string]: unknown }) {
     try {
-      if (!Object.keys(this.interface.configurables).length) {
-        throw new FuelError(
-          FuelError.CODES.INVALID_CONFIGURABLE_CONSTANTS,
-          `The script does not have configurable constants to be set`
-        );
-      }
-
-      Object.entries(configurables).forEach(([key, value]) => {
-        if (!this.interface.configurables[key]) {
-          throw new FuelError(
-            FuelError.CODES.CONFIGURABLE_NOT_FOUND,
-            `The script does not have a configurable constant named: '${key}'`
-          );
-        }
-
-        const { offset } = this.interface.configurables[key];
-
-        const encoded = this.interface.encodeConfigurable(key, value as InputValue);
-
-        this.bytes.set(encoded, offset);
+      const configurables = createConfigurables({
+        bytecode: this.bytes,
+        abi: this.interface,
       });
+
+      this.bytes = configurables.set(configurableValues);
     } catch (err) {
       throw new FuelError(
         FuelError.CODES.INVALID_CONFIGURABLE_CONSTANTS,
