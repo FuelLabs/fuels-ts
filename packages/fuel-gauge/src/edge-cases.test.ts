@@ -48,10 +48,10 @@ describe('Edge Cases', () => {
 
     await response.waitForResult();
 
-    const subsciption = await provider.operations.statusChange({ transactionId });
+    const subscription = await provider.operations.statusChange({ transactionId });
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    for await (const iterator of subsciption) {
+    for await (const iterator of subscription) {
       // we leave this intentionally empty so that we test that the subscription will end the loop when the connection is closed
     }
   });
