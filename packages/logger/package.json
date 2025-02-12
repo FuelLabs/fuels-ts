@@ -30,7 +30,7 @@
     "dist"
   ],
   "dependencies": {
-    "debug": "4.3.7",
+    "debug": "4.4.0",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/math": "workspace:*"
   },
