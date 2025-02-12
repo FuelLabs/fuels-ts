@@ -3,4 +3,4 @@
 "@fuel-ts/abi-coder": patch
 ---
 
-fix: contract operations in transaction summary
+fix!: contract operations in transaction summary
