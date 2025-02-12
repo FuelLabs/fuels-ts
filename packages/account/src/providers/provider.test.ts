@@ -491,7 +491,7 @@ describe('Provider', () => {
 
     /**
      * Mocking and initializing Provider with an invalid fetcher just
-     * to ensure it'll be properly overriden in `connect` method below
+     * to ensure it'll be properly overridden in `connect` method below
      */
     const fetchChainAndNodeInfo = vi
       .spyOn(Provider.prototype, 'fetchChainAndNodeInfo')
@@ -763,7 +763,7 @@ describe('Provider', () => {
       code: ErrorCode.SCRIPT_REVERTED,
     });
 
-    // Ensure user's resouces were unset from the cache
+    // Ensure user's resources were unset from the cache
     [...utxos, ...messages].forEach((key) => {
       expect(provider.cache?.isCached(key)).toBeFalsy();
     });
@@ -1403,7 +1403,7 @@ describe('Provider', () => {
 
     const { error } = await safeExec(async () => {
       for await (const iterator of await provider.operations.statusChange({
-        transactionId: 'doesnt matter, will be aborted',
+        transactionId: "doesn't matter, will be aborted",
       })) {
         // shouldn't be reached and should fail if reached
         expect(iterator).toBeFalsy();
@@ -1415,7 +1415,7 @@ describe('Provider', () => {
       message: 'The operation was aborted due to timeout',
     });
   });
-  it('should ensure calculateMaxgas considers gasLimit for ScriptTransactionRequest', async () => {
+  it('should ensure calculateMaxGas considers gasLimit for ScriptTransactionRequest', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
     const { gasPerByte, maxGasPerTx } = await provider.getGasConfig();
@@ -1445,7 +1445,7 @@ describe('Provider', () => {
     });
   });
 
-  it('should ensure calculateMaxgas does NOT considers gasLimit for CreateTransactionRequest', async () => {
+  it('should ensure calculateMaxGas does NOT considers gasLimit for CreateTransactionRequest', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
     const { gasPerByte, maxGasPerTx } = await provider.getGasConfig();
@@ -1957,7 +1957,7 @@ describe('Provider', () => {
 
     await safeExec(async () => {
       for await (const iterator of await provider.operations.statusChange({
-        transactionId: 'doesnt matter, will be aborted',
+        transactionId: "doesn't matter, will be aborted",
       })) {
         // Just running a subscription to trigger the middleware
         // shouldn't be reached and should fail if reached

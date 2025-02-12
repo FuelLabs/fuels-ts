@@ -69,24 +69,24 @@ export const assembleRevertError = (
       }
 
       case FAILED_ASSERT_EQ_SIGNAL: {
-        const sufix =
+        const suffix =
           logs.length >= 2
             ? ` comparing ${stringify(lastLog)} and ${stringify(lastButOneLog)}.`
             : '.';
 
         reason = 'assert_eq';
-        errorMessage = `The transaction reverted because of an "assert_eq" statement${sufix}`;
+        errorMessage = `The transaction reverted because of an "assert_eq" statement${suffix}`;
         break;
       }
 
       case FAILED_ASSERT_NE_SIGNAL: {
-        const sufix =
+        const suffix =
           logs.length >= 2
             ? ` comparing ${stringify(lastButOneLog)} and ${stringify(lastLog)}.`
             : '.';
 
         reason = 'assert_ne';
-        errorMessage = `The transaction reverted because of an "assert_ne" statement${sufix}`;
+        errorMessage = `The transaction reverted because of an "assert_ne" statement${suffix}`;
         break;
       }
 
