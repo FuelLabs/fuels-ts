@@ -65,6 +65,11 @@ import {
 } from './utils';
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
+import {
+  extractBlockHeight,
+  extractOperationDefinition,
+  isBlockSensitiveOperation,
+} from './utils/graphql-helpers';
 import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
@@ -475,6 +480,12 @@ export default class Provider {
         signal,
         headers: { ...request?.headers, ...headers },
       };
+
+      const requestBody = JSON.parse(fullRequest.body as string);
+      if (isBlockSensitiveOperation(requestBody.operationName)) {
+        requestBody.extensions = { required_fuel_block_height: this.currentBlockHeight };
+        fullRequest.body = JSON.stringify(requestBody);
+      }
 
       if (options.requestMiddleware) {
         fullRequest = await options.requestMiddleware(fullRequest);
