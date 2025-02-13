@@ -119,13 +119,13 @@ describe('Funding Transactions', () => {
     });
 
     // sender has 2 UTXOs for 200_000 each, so it has enough resources to spend 1000 of baseAssetId
-    const enoughtResources = await sender.getResourcesToSpend([
+    const enoughResources = await sender.getResourcesToSpend([
       [100, await provider.getBaseAssetId()],
     ]);
 
     // confirm we only fetched 1 UTXO from the expected amount
-    expect(enoughtResources.length).toBe(1);
-    expect(enoughtResources[0].amount.toNumber()).toBe(200_000);
+    expect(enoughResources.length).toBe(1);
+    expect(enoughResources[0].amount.toNumber()).toBe(200_000);
 
     const request = new ScriptTransactionRequest({
       gasLimit: 1_000,
@@ -134,7 +134,7 @@ describe('Funding Transactions', () => {
     const amountToTransfer = 100;
 
     request.addCoinOutput(receiver.address, amountToTransfer, await provider.getBaseAssetId());
-    request.addResources(enoughtResources);
+    request.addResources(enoughResources);
 
     const txCost = await sender.getTransactionCost(request);
 

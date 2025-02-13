@@ -24,6 +24,10 @@ describe('buildSwayPrograms', () => {
     mockLogger();
   });
 
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   function mockAll(params: { shouldError: boolean } = { shouldError: false }) {
     const spawnMocks = {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

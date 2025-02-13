@@ -458,10 +458,10 @@ describe('TransactionResponse', () => {
     expect(getLatestGasPriceSpy).toHaveBeenCalledTimes(1);
     expect(result.id).toBe(tx.id);
 
-    const finalisedResult = await tx.waitForResult();
-    expect(finalisedResult.fee.toNumber()).toBeGreaterThan(0);
+    const finalizedResult = await tx.waitForResult();
+    expect(finalizedResult.fee.toNumber()).toBeGreaterThan(0);
     expect(getLatestGasPriceSpy).toHaveBeenCalledTimes(1);
-    expect(finalisedResult.id).toBe(tx.id);
+    expect(finalizedResult.id).toBe(tx.id);
   });
 
   it('builds response and assembles result [from contract call]', async () => {
