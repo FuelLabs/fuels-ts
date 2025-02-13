@@ -352,6 +352,9 @@ export class TransactionResponse {
         );
       }
       if (statusChange.type !== 'SubmittedStatus') {
+        // TODO: Fix type here
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        this.provider.setCurrentBlockHeight(sub as any);
         break;
       }
     }
