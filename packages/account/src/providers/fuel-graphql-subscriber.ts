@@ -11,6 +11,12 @@ type FuelGraphQLSubscriberOptions = {
   fetchFn: typeof fetch;
 };
 
+type Events = Array<{
+  data: Record<string, unknown>;
+  extensions: Record<string, unknown>;
+  errors?: { message: string }[];
+}>;
+
 export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
   public static incompatibleNodeVersionMessage: string | false = false;
   private static textDecoder = new TextDecoder();
@@ -67,7 +73,7 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
     }
   }
 
-  private events: Array<{ data: unknown; errors?: { message: string }[] }> = [];
+  private events: Events = [];
   private parsingLeftover = '';
 
   async next(): Promise<IteratorResult<unknown, unknown>> {
@@ -75,9 +81,9 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
     while (true) {
       if (this.events.length > 0) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const { data, errors } = this.events.shift()!;
+        const { data, extensions, errors } = this.events.shift()!;
         assertGqlResponseHasNoErrors(errors, FuelGraphqlSubscriber.incompatibleNodeVersionMessage);
-        return { value: data, done: false };
+        return { value: { ...data, extensions }, done: false };
       }
       const { value, done } = await this.stream.read();
       if (done) {
