@@ -438,6 +438,8 @@ export default class Provider {
   /** @hidden */
   public url: string;
   /** @hidden */
+  private currentBlockHeight: number = 0;
+  /** @hidden */
   private urlWithoutAuth: string;
   /** @hidden */
   private static chainInfoCache: ChainInfoCache = {};
@@ -542,6 +544,17 @@ export default class Provider {
       urlWithoutAuth,
       headers: { Authorization: `Basic ${btoa(`${username}:${password}`)}` },
     };
+  }
+
+  getCurrentBlockHeight(): number {
+    return this.currentBlockHeight;
+  }
+
+  setCurrentBlockHeight(param: { extensions: unknown }) {
+    const blockHeight = extractBlockHeight(param);
+    if (blockHeight && blockHeight > this.currentBlockHeight) {
+      this.currentBlockHeight = blockHeight;
+    }
   }
 
   /**
