@@ -410,6 +410,8 @@ type NodeInfoCache = Record<string, NodeInfo>;
 
 type Operations = ReturnType<typeof getOperationsSdk>;
 
+export type OperationsNames = keyof ReturnType<typeof getOperationsSdk>;
+
 type SdkOperations = Omit<Operations, 'statusChange' | 'submitAndAwaitStatus'> & {
   statusChange: (
     ...args: Parameters<Operations['statusChange']>
