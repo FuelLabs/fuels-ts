@@ -710,6 +710,7 @@ export default class Provider {
       fetch: (input: RequestInfo | URL, requestInit?: RequestInit) =>
         fetchFn(input.toString(), requestInit || {}, this.options),
       responseMiddleware: (response: GraphQLClientResponse<unknown> | Error) => {
+        this.setCurrentBlockHeight(response as { extensions: unknown });
         if ('response' in response) {
           const graphQlResponse = response.response as GraphQLResponse;
           assertGqlResponseHasNoErrors(
