@@ -9,6 +9,7 @@ type FuelGraphQLSubscriberOptions = {
   query: DocumentNode;
   variables?: Record<string, unknown>;
   fetchFn: typeof fetch;
+  operationName?: string;
 };
 
 type Events = Array<{
@@ -24,12 +25,13 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
   private constructor(private stream: ReadableStreamDefaultReader<Uint8Array>) {}
 
   public static async create(options: FuelGraphQLSubscriberOptions) {
-    const { url, query, variables, fetchFn } = options;
+    const { url, query, variables, fetchFn, operationName } = options;
     const response = await fetchFn(`${url}-sub`, {
       method: 'POST',
       body: JSON.stringify({
         query: print(query),
         variables,
+        operationName,
       }),
       headers: {
         'Content-Type': 'application/json',

@@ -722,10 +722,9 @@ export default class Provider {
     });
 
     const executeQuery = (query: DocumentNode, vars: Record<string, unknown>) => {
-      const opDefinition = query.definitions.find((x) => x.kind === 'OperationDefinition') as {
-        operation: string;
-      };
-      const isSubscription = opDefinition?.operation === 'subscription';
+      const operationDefinition = extractOperationDefinition(query);
+
+      const isSubscription = operationDefinition.operation === 'subscription';
 
       if (isSubscription) {
         return FuelGraphqlSubscriber.create({
@@ -733,6 +732,7 @@ export default class Provider {
           query,
           fetchFn: (url, requestInit) => fetchFn(url as string, requestInit, this.options),
           variables: vars,
+          operationName: operationDefinition.name?.value,
         });
       }
       return gqlClient.request(query, vars);
