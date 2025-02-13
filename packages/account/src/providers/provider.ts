@@ -460,7 +460,7 @@ export default class Provider {
   /**
    * @hidden
    */
-  private static getFetchFn(options: ProviderOptions): NonNullable<ProviderOptions['fetch']> {
+  private getFetchFn(options: ProviderOptions): NonNullable<ProviderOptions['fetch']> {
     const { retryOptions, timeout, headers } = options;
 
     return autoRetryFetch(async (...args) => {
@@ -681,7 +681,7 @@ export default class Provider {
    * @hidden
    */
   private createOperations(): SdkOperations {
-    const fetchFn = Provider.getFetchFn(this.options);
+    const fetchFn = this.getFetchFn(this.options);
     const gqlClient = new GraphQLClient(this.urlWithoutAuth, {
       fetch: (input: RequestInfo | URL, requestInit?: RequestInit) =>
         fetchFn(input.toString(), requestInit || {}, this.options),
