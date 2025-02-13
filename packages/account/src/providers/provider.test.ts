@@ -28,7 +28,7 @@ import { setupTestProviderAndWallets, launchNode, TestMessage } from '../test-ut
 import type { GqlPageInfo } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { Message } from './message';
-import type { ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
+import type { Block, ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
 import Provider, {
   BALANCES_PAGE_SIZE_LIMIT,
   BLOCKS_PAGE_SIZE_LIMIT,
@@ -1044,6 +1044,66 @@ describe('Provider', () => {
       transactionIds: expect.any(Array<string>),
       transactions,
     });
+  });
+
+  it('should ensure getBlockWithTransactions supports different parameters types', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider,
+      wallets: [sender],
+    } = launched;
+
+    const baseAssetId = await provider.getBaseAssetId();
+
+    const tx = await sender.transfer(sender.address, 1, baseAssetId);
+    const { blockId } = await tx.waitForResult();
+
+    expect(blockId).toBeDefined();
+
+    const block = (await provider.getBlockWithTransactions('latest')) as Block;
+    expect(block).toBeDefined();
+
+    let sameBlock = await provider.getBlockWithTransactions(blockId as string);
+    expect(block).toStrictEqual(sameBlock);
+
+    sameBlock = await provider.getBlockWithTransactions(block.height.toString());
+    expect(block).toStrictEqual(sameBlock);
+
+    sameBlock = await provider.getBlockWithTransactions(block.height.toNumber());
+    expect(block).toStrictEqual(sameBlock);
+
+    sameBlock = await provider.getBlockWithTransactions(block.height);
+    expect(block).toStrictEqual(sameBlock);
+  });
+
+  it('should ensure getBlock supports different parameters types', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider,
+      wallets: [sender],
+    } = launched;
+
+    const baseAssetId = await provider.getBaseAssetId();
+
+    const tx = await sender.transfer(sender.address, 1, baseAssetId);
+    const { blockId } = await tx.waitForResult();
+
+    expect(blockId).toBeDefined();
+
+    const block = (await provider.getBlock('latest')) as Block;
+    expect(block).toBeDefined();
+
+    let sameBlock = await provider.getBlock(blockId as string);
+    expect(block).toStrictEqual(sameBlock);
+
+    sameBlock = await provider.getBlock(block.height.toNumber());
+    expect(block).toStrictEqual(sameBlock);
+
+    sameBlock = await provider.getBlock(block.height.toString());
+    expect(block).toStrictEqual(sameBlock);
+
+    sameBlock = await provider.getBlock(block.height);
+    expect(block).toStrictEqual(sameBlock);
   });
 
   it('can getMessageProof with all data', async () => {
