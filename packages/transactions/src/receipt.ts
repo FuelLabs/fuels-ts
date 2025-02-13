@@ -36,7 +36,7 @@ export type ReceiptCall = {
   gas: BN;
   /** Method name offset (u64) */
   param1: BN;
-  /** Method args offset */
+  /** Method args offset (u64) */
   param2: BN;
   /** Value of register $pc (u64) */
   pc: BN;
