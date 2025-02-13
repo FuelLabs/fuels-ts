@@ -82,23 +82,16 @@ export function isBytecodeLoader(bytecode: Uint8Array): boolean {
   return preample === LDC_INSTRUCTION_PREAMPLE;
 }
 
-export function getPredicateScriptLoaderInstructions(
-  originalBinary: Uint8Array,
-  blobId: Uint8Array
-) {
-  // The final code is going to have this structure:
-  // 1. loader instructions
-  // 2. blob id
-  // 3. length_of_data_section
-  // 4. the data_section (updated with configurables as needed)
-
+function getInstructionsWithDataSection(): Uint8Array {
   const { RegId, Instruction } = asm;
 
   const REG_PC = RegId.pc().to_u8();
   const REG_SP = RegId.sp().to_u8();
   const REG_IS = RegId.is().to_u8();
 
-  const getInstructions = (numOfInstructions: number) => [
+  const NUM_OF_INSTRUCTIONS = 12;
+
+  const instructions = [
     // 1. Load the blob content into memory
     // Find the start of the hardcoded blob ID, which is located after the loader code ends.
     asm.move_(REG_ADDRESS_OF_DATA_AFTER_CODE, REG_PC),
@@ -106,7 +99,7 @@ export function getPredicateScriptLoaderInstructions(
     asm.addi(
       REG_ADDRESS_OF_DATA_AFTER_CODE,
       REG_ADDRESS_OF_DATA_AFTER_CODE,
-      numOfInstructions * Instruction.size()
+      NUM_OF_INSTRUCTIONS * Instruction.size()
     ),
     // The code is going to be loaded from the current value of SP onwards, save
     // the location into REG_START_OF_LOADED_CODE so we can jump into it at the end.
@@ -134,7 +127,24 @@ export function getPredicateScriptLoaderInstructions(
     asm.jmp(REG_START_OF_LOADED_CODE),
   ];
 
-  const getInstructionsNoDataSection = (numOfInstructions: number) => [
+  // Ensures that the number of instructions is always correct.
+  if (instructions.length !== NUM_OF_INSTRUCTIONS) {
+    throw new Error('Invalid number of instructions, check the NUM_OF_INSTRUCTIONS is correct.');
+  }
+
+  return new Uint8Array(instructions.flatMap((instruction) => Array.from(instruction.to_bytes())));
+}
+
+function getInstructionsWithoutDataSection(): Uint8Array {
+  const { RegId, Instruction } = asm;
+
+  const REG_PC = RegId.pc().to_u8();
+  const REG_SP = RegId.sp().to_u8();
+  const REG_IS = RegId.is().to_u8();
+
+  const NUM_OF_INSTRUCTIONS = 8;
+
+  const instructions = [
     // 1. Load the blob content into memory
     // Find the start of the hardcoded blob ID, which is located after the loader code ends.
     // 1. Load the blob content into memory
@@ -144,7 +154,7 @@ export function getPredicateScriptLoaderInstructions(
     asm.addi(
       REG_ADDRESS_OF_DATA_AFTER_CODE,
       REG_ADDRESS_OF_DATA_AFTER_CODE,
-      numOfInstructions * Instruction.size()
+      NUM_OF_INSTRUCTIONS * Instruction.size()
     ),
     // The code is going to be loaded from the current value of SP onwards, save
     // the location into REG_START_OF_LOADED_CODE so we can jump into it at the end.
@@ -163,6 +173,23 @@ export function getPredicateScriptLoaderInstructions(
     asm.jmp(REG_START_OF_LOADED_CODE),
   ];
 
+  // Ensures that the number of instructions is always correct.
+  if (instructions.length !== NUM_OF_INSTRUCTIONS) {
+    throw new Error('Invalid number of instructions, check the NUM_OF_INSTRUCTIONS is correct.');
+  }
+
+  return new Uint8Array(instructions.flatMap((instruction) => Array.from(instruction.to_bytes())));
+}
+
+export function getPredicateScriptLoaderInstructions(
+  originalBinary: Uint8Array,
+  blobId: Uint8Array
+) {
+  // The final code is going to have this structure:
+  // 1. loader instructions
+  // 2. blob id
+  // 3. length_of_data_section
+  // 4. the data_section (updated with configurables as needed)
   const offset = getBytecodeConfigurableOffset(originalBinary);
 
   // if the binary length is smaller than the offset
@@ -177,18 +204,8 @@ export function getPredicateScriptLoaderInstructions(
 
   // Check if the configurable section is non-empty
   if (configurableSection.length > 0) {
-    // Get the number of instructions (assuming it won't exceed u16::MAX)
-    const numOfInstructions = getInstructions(0).length;
-    if (numOfInstructions > 65535) {
-      throw new Error('Too many instructions, exceeding u16::MAX.');
-    }
-
     // Convert instructions to bytes
-    const instructionBytes = new Uint8Array(
-      getInstructions(numOfInstructions).flatMap((instruction) =>
-        Array.from(instruction.to_bytes())
-      )
-    );
+    const instructionBytes = getInstructionsWithDataSection();
 
     // Convert blobId to bytes
     const blobBytes = new Uint8Array(blobId);
@@ -210,18 +227,9 @@ export function getPredicateScriptLoaderInstructions(
       blobOffset: loaderBytecode.length,
     };
   }
-  // Handle case where there is no configurable section
-  const numOfInstructions = getInstructionsNoDataSection(0).length;
-  if (numOfInstructions > 65535) {
-    throw new Error('Too many instructions, exceeding u16::MAX.');
-  }
 
   // Convert instructions to bytes
-  const instructionBytes = new Uint8Array(
-    getInstructionsNoDataSection(numOfInstructions).flatMap((instruction) =>
-      Array.from(instruction.to_bytes())
-    )
-  );
+  const instructionBytes = getInstructionsWithoutDataSection();
 
   // Convert blobId to bytes
   const blobBytes = new Uint8Array(blobId);
