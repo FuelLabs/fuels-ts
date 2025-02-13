@@ -8,6 +8,8 @@ const REG_ADDRESS_OF_DATA_AFTER_CODE = 0x10;
 const REG_START_OF_LOADED_CODE = 0x11;
 const REG_GENERAL_USE = 0x12;
 const WORD_SIZE = 8; // size in bytes
+// https://github.com/FuelLabs/fuel-vm/blob/a340921a00050bd1734e7dcf278a1d13edf2786b/fuel-asm/src/lib.rs#L185-L186
+const LDC_INSTRUCTION_PREAMPLE = 0x32;
 
 export const DATA_OFFSET_INDEX = 8;
 export const CONFIGURABLE_OFFSET_INDEX = 16;
@@ -64,6 +66,20 @@ export function getLegacyBlobId(bytecode: Uint8Array): string {
   const byteCodeWithoutDataSection = bytecode.slice(0, dataOffset);
 
   return sha256(byteCodeWithoutDataSection);
+}
+
+/**
+ * TODO: verify this is correct
+ *
+ * Check if the bytecode is a loader
+ *
+ * @param bytecode - The bytecode to check
+ * @returns True if the bytecode is a loader, false otherwise
+ */
+export function isBytecodeLoader(bytecode: Uint8Array): boolean {
+  const dataView = new DataView(bytecode.buffer);
+  const preample = dataView.getUint8(REG_ADDRESS_OF_DATA_AFTER_CODE);
+  return preample === LDC_INSTRUCTION_PREAMPLE;
 }
 
 export function getPredicateScriptLoaderInstructions(

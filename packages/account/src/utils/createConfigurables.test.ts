@@ -1,7 +1,12 @@
 import { Interface } from '@fuel-ts/abi-coder';
-import { decompressBytecode } from '@fuel-ts/utils';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import { arrayify, decompressBytecode } from '@fuel-ts/utils';
 
 import { createConfigurables } from './createConfigurables';
+import {
+  getPredicateScriptLoaderInstructions,
+  isBytecodeLoader,
+} from './predicate-script-loader-instructions';
 
 const abi = {
   programType: 'predicate',
@@ -100,6 +105,21 @@ const abi = {
 const bytecode = decompressBytecode(
   'H4sIAAAAAAAAA5VWTWgTWxQ+k8bXwOvjXUwXffctOkjBCi4G/7a9QzrEmIbcEEXFTHuL6EpR6/9Kl24EFfxZunTnLHXXlbiSbgRFhIh2ITXgwoDFRfzOzYwdJ6loIJxhznfu/c53v3MT+dmjC0R5sp9CPyCGvWVH9Hp0m2i3XvtM+gM5uq3I/bqbjnxr5/S3dh51N5ErxDknk3uDnAjXHpJYe7wMzBgwuQymC8xEBrM1g/kEjJvBbMtg3gMzHfPYlck9lZ8099E+p2hkMchRsSLo0n76a2k/5YrB+PVLs+TsQ9eLfu4A8A7i2EKH/tel6JX8SNmer8nyCg15f0tWV0jXoyuck6teNv9O1lfIdDwBzI1NMK8Yo5uRMA2Le7AJ7oXFHY5cc8gTQ7icliXLxZuvCdKBV5gPXI7ClCOB6JpAcfRMoDmq+YAI/XotH7EceToQhVaA2iqeK65qVVBfjx6ZOuqPRU/MUdQ3o+emoe3+clWQfOeRfGtIvlYkX7pZTs+Y05Qiukv07z1YLT6XCVl6SLJ8i2T1Osl622pr13sfZdcYD7EGzsYB18KQvif4bJAT8z64I8pZQdOVvJJfiO5wft2jB9j7Pjgc+Gq5jCZc+jzAodqmBeghu+Cw7ib40Rj/g3sf3+eb4fEP91qsADdH7LV80Scl5+A71fea7EKrdZHlMrB2iDVY+7BGJGqeWvBR13V/Wfsnml4kmvmVpshPWS/BN7FHfkfTyRQXleXC/t7wzM93CvY7HvPZgr2mse9Egh2msemQYN8a8OK4NEsixU2luE3G3GZS3MwGN2gNjcOaR2GDaOkgFUQjgN6K+XqmQYWFjjdqOtb32qAHxonG7LLFlCLFHEKen2bkgn8eeO5BGF8JE5BgP4GTSXlqJubUG86J9TpLsomZOgxPHIN2LUWt8CwV/S3L7CXoMKKV2sVzW/THrb/w7m+8y5mOK/jc7N5r0TANp1nDuGYMNVuBx92Auwdzbyqo+4gzWh2YZZmp24Y6Ze+UKrTZvG4sVce8nT7vg/C0PS9oYxJtekO8pNPnxWfPfWX22LlxhwrwGPjNmpJNzGZtL76YJY35nKP/+K40NeY9cNduj9dTm6w3ae8cnDk8Mixf4J53NPZo2VXco06df+LJkVSPIpl9218pInjKifURqbkf+c3aRNuB2jLuISf+xRdxjD874rg3jn7yzyB//vLi1eT55Jml4z+eL5449R232/RNTQgAAA=='
 );
+
+// TODO: move to more appropriate place
+describe('isBytecodeLoader', () => {
+  it('should return false for non-loader bytecode', () => {
+    const isLoader = isBytecodeLoader(bytecode);
+    expect(isLoader).toBe(false);
+  });
+
+  it('should return true for loader bytecode', () => {
+    const blobId = arrayify(ZeroBytes32);
+    const { loaderBytecode } = getPredicateScriptLoaderInstructions(bytecode, blobId);
+    const isLoader = isBytecodeLoader(loaderBytecode);
+    expect(isLoader).toBe(true);
+  });
+});
 
 describe('configurables', () => {
   it('should return the configurables', () => {
