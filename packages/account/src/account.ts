@@ -663,7 +663,11 @@ export class Account extends AbstractAccount implements WithAddress {
       if (this._connector.usePrepareForSend) {
         const preparedTransaction = await this._connector.prepareForSend(
           this.address.toString(),
-          transactionRequestLike
+          transactionRequestLike,
+          {
+            onBeforeSend,
+            skipCustomFee,
+          }
         );
         // Submit the prepared transaction using the provider.
         return this.provider.sendTransaction(preparedTransaction, {

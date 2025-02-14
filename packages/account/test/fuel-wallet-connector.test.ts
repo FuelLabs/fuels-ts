@@ -739,10 +739,15 @@ describe('Fuel Connector', () => {
 
     const address = connectorWallet.address.toString();
 
-    const tx = await fuel.prepareForSend(address, request);
+    const params: AccountSendTxParams = {
+      onBeforeSend: vi.fn(),
+      skipCustomFee: true,
+    };
+
+    const tx = await fuel.prepareForSend(address, request, params);
 
     expect(tx).toBeDefined();
-    expect(connectorPrepareForSendSpy).toHaveBeenCalledWith(address, request);
+    expect(connectorPrepareForSendSpy).toHaveBeenCalledWith(address, request, params);
   });
 
   it('should ensure account send transaction with connector works just fine', async () => {
@@ -771,11 +776,17 @@ describe('Fuel Connector', () => {
     request.addResources(resources);
     await request.estimateAndFund(connectorWallet);
 
-    const tx = await account.sendTransaction(request);
+    const address = connectorWallet.address.toString();
+    const params: AccountSendTxParams = {
+      onBeforeSend: vi.fn(),
+      skipCustomFee: true,
+    };
+
+    const tx = await account.sendTransaction(request, params);
     expect(tx).toBeDefined();
 
     // transaction prepared via connector and sent via provider
-    expect(connectorPrepareForSendSpy).toHaveBeenCalled();
+    expect(connectorPrepareForSendSpy).toHaveBeenCalledWith(address, request, params);
     expect(providerSendTransactionSpy).toHaveBeenCalled();
     // not sent via connector
     expect(connectorSendTransactionSpy).not.toHaveBeenCalled();

@@ -223,12 +223,14 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    *
    * @param address - The address to sign the tx
    * @param transaction - The tx to prepare
+   * @param params - Optional parameters to send the transactions
    *
    * @returns The prepared tx request
    */
   async prepareForSend(
     _address: string,
-    _transaction: TransactionRequestLike
+    _transaction: TransactionRequestLike,
+    _params?: FuelConnectorSendTxParams
   ): Promise<TransactionRequestLike> {
     throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
