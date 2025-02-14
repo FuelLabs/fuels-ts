@@ -321,6 +321,7 @@ export class Account extends AbstractAccount implements WithAddress {
     }
 
     if (!updateMaxFee) {
+      request.updateFlags({ isFunded: true });
       return request;
     }
 
@@ -331,6 +332,7 @@ export class Account extends AbstractAccount implements WithAddress {
 
     request.maxFee = maxFee;
 
+    request.updateFlags({ isFunded: true });
     return request;
   }
 

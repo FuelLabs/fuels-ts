@@ -99,6 +99,12 @@ type ToBaseTransactionResponse = Pick<
   | 'policyTypes'
 >;
 
+export type TransactionStatusFlags = {
+  isEstimated: string | false;
+  isFunded: string | false;
+  isSigned: string | false;
+};
+
 /**
  * Abstract class to define the functionalities of a transaction request transaction request.
  */
@@ -119,6 +125,17 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   outputs: TransactionRequestOutput[] = [];
   /** List of witnesses */
   witnesses: TransactionRequestWitness[] = [];
+
+  /**
+   * @hidden
+   *
+   * The current status of the transaction
+   */
+  flags: TransactionStatusFlags = {
+    isEstimated: false,
+    isFunded: false,
+    isSigned: false,
+  };
 
   /**
    * Constructor for initializing a base transaction request.
@@ -242,6 +259,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    */
   addWitness(signature: BytesLike) {
     this.witnesses.push(signature);
+    this.updateFlags({ isSigned: true });
     return this.witnesses.length - 1;
   }
 
@@ -254,8 +272,9 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    */
   addEmptyWitness(): number {
     // Push a dummy witness with same byte size as a real witness signature
-    this.addWitness(concat([ZeroBytes32, ZeroBytes32]));
-    return this.witnesses.length - 1;
+    const signature = concat([ZeroBytes32, ZeroBytes32]);
+    const witnessesLength = this.witnesses.push(signature);
+    return witnessesLength - 1;
   }
 
   /**
@@ -284,6 +303,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       throw new NoWitnessAtIndexError(index);
     }
     this.witnesses[index] = witness;
+    this.updateFlags({ isSigned: true });
   }
 
   /**
@@ -705,5 +725,30 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
   byteLength(): number {
     return this.toTransactionBytes().byteLength;
+  }
+
+  /**
+   * @hidden
+   *
+   * Used internally to update the status flags of a transaction request.
+   *
+   * @param flags - The flags to update.
+   */
+  public updateFlags(flags: Partial<{ [keys in keyof TransactionStatusFlags]: boolean }>) {
+    const CHAIN_ID = 0;
+    const transactionId = this.getTransactionId(CHAIN_ID);
+
+    // Helper function to update the flags
+    const updateFlag = (flag: keyof TransactionStatusFlags, value?: boolean) => {
+      if (value === undefined) {
+        return;
+      }
+      this.flags[flag] = value ? transactionId : false;
+    };
+
+    const { isEstimated, isFunded, isSigned } = flags;
+    updateFlag('isEstimated', isEstimated);
+    updateFlag('isFunded', isFunded);
+    updateFlag('isSigned', isSigned);
   }
 }
