@@ -5,6 +5,7 @@ Once a transaction has been submitted, you may want to extract information regar
 - The transaction ID
 - The status (submitted, success, squeezed out, or failure)
 - Receipts (return data, logs, mints/burns, transfers and panic/reverts)
+- Operations (contract calls, transfers, withdrawals)
 - Gas fees and usages
 - Date and time of the transaction
 - The block the transaction was included in
