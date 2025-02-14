@@ -1,4 +1,4 @@
-import { type JsonAbi, decodeScriptData } from '@fuel-ts/abi-coder';
+import { BigNumberCoder, type JsonAbi, StdStringCoder } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
@@ -11,6 +11,7 @@ type GetFunctionCallProps = {
   receipt: ReceiptCall;
   rawPayload: string;
   maxInputs: BN;
+  callScriptOffset: number;
 };
 
 export interface FunctionCall {
@@ -25,6 +26,7 @@ export const getFunctionCall = ({
   abi,
   receipt,
   rawPayload,
+  callScriptOffset,
 }: GetFunctionCallProps): FunctionCall => {
   const [transaction] = new TransactionCoder().decode(arrayify(rawPayload), 0);
 
@@ -35,21 +37,36 @@ export const getFunctionCall = ({
     );
   }
 
-  const { functionArgs, functionSelector } = decodeScriptData(
-    arrayify(transaction.scriptData),
-    abi
+  const scriptData = arrayify(transaction.scriptData);
+
+  // Decode the function selector offset
+  const fnSelectorOffsetBytes = receipt.param1.toBytes(8);
+  const [fnSelectorOffset] = new BigNumberCoder('u64').decode(fnSelectorOffsetBytes, 0);
+
+  // Decode the function selector
+  const [fnSelector] = new StdStringCoder().decode(
+    scriptData,
+    fnSelectorOffset.toNumber() - callScriptOffset
   );
 
+  // Decode the function arguments offset
+  const fnArgumentOffsetBytes = receipt.param2.toBytes(8);
+  const [fnArgumentOffset] = new BigNumberCoder('u64').decode(fnArgumentOffsetBytes, 0);
+
+  // Decode the function arguments
   const abiInterface = new Interface(abi);
-  const functionFragment = abiInterface.getFunction(functionSelector);
-  const inputs = functionFragment.jsonFn.inputs;
+  const fnArgumentsSlice = scriptData.slice(fnArgumentOffset.toNumber() - callScriptOffset);
+  const fnFragment = abiInterface.getFunction(fnSelector);
+  const fnArgs = fnFragment.decodeArguments(fnArgumentsSlice);
 
-  let argumentsProvided;
+  let argumentsProvided: Record<string, unknown> | undefined;
 
-  if (functionArgs) {
+  if (fnArgs) {
+    const inputs = fnFragment.jsonFn.inputs;
+
     // put together decoded data with input names from abi
     argumentsProvided = inputs.reduce((prev, input, index) => {
-      const value = functionArgs[index];
+      const value = fnArgs[index];
       const name = input.name;
 
       if (name) {
@@ -65,8 +82,8 @@ export const getFunctionCall = ({
   }
 
   return {
-    functionSignature: functionFragment.signature,
-    functionName: functionFragment.name,
+    functionSignature: fnFragment.signature,
+    functionName: fnFragment.name,
     argumentsProvided,
     ...(receipt.amount?.isZero() ? {} : { amount: receipt.amount, assetId: receipt.assetId }),
   };
