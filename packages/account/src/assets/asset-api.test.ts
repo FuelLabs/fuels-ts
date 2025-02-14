@@ -18,6 +18,10 @@ const mockFetch = () => {
  * @group browser
  */
 describe('Asset API', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   describe('getAssetById', () => {
     it('should get an asset by id [Base Asset - Verified]', async () => {
       const expected = {

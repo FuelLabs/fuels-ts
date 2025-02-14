@@ -19,7 +19,7 @@ export function getDecodedLogs<T = unknown>(
    * The "mainAbi" parameter represents the ABI of the main contract used to create the transaction
    * or the ABI from a script used within a "BaseInvocationScope" context.
    * The "externalAbis" parameter is a record of contract ABIs that are also part of the transaction.
-   * These ABIs were added using `contract.addContracts` or through a multicall with `contract.multiCall`.
+   * These ABIs were added using `contract.addContracts` or through a multi-call with `contract.multiCall`.
    *
    * @param receipts - The array of transaction result receipts.
    * @param mainAbi - The ABI of the script or main contract.
