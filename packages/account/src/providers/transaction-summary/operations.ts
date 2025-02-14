@@ -1,9 +1,16 @@
+import { calculateVmTxMemory, SCRIPT_FIXED_SIZE, WORD_SIZE } from '@fuel-ts/abi-coder';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
-import type { InputContract, Output, OutputChange, Input, ReceiptCall } from '@fuel-ts/transactions';
+import type {
+  InputContract,
+  Output,
+  OutputChange,
+  Input,
+  ReceiptCall,
+} from '@fuel-ts/transactions';
 import * as asm from '@fuels/vm-asm';
 
 import type {
@@ -42,7 +49,6 @@ import type {
   GetTransferOperationsParams,
   AbiMap,
 } from './types';
-import { calculateVmTxMemory, SCRIPT_FIXED_SIZE, WORD_SIZE } from '@fuel-ts/abi-coder';
 
 /**
  * Extracts a specific type of receipt from a list of receipts.
@@ -318,7 +324,7 @@ function processCallReceipt(
   rawPayload: string,
   maxInputs: BN,
   baseAssetId: string,
-  callScriptOffset: number,
+  callScriptOffset: number
 ): Operation[] {
   const assetId = receipt.assetId === ZeroBytes32 ? baseAssetId : receipt.assetId;
   const input = getInputFromAssetId(inputs, assetId, assetId === baseAssetId);
@@ -327,7 +333,14 @@ function processCallReceipt(
   }
 
   const inputAddress = getInputAccountAddress(input);
-  const calls = getContractCalls(contractInput, abiMap, receipt, rawPayload, maxInputs, callScriptOffset);
+  const calls = getContractCalls(
+    contractInput,
+    abiMap,
+    receipt,
+    rawPayload,
+    maxInputs,
+    callScriptOffset
+  );
 
   return [
     {
@@ -346,6 +359,42 @@ function processCallReceipt(
     },
   ];
 }
+
+/**
+ * Calculates the size of the contract call script based off
+ *
+ * @param calls - The contract call receipts to calculate the size of.
+ * @returns The size of the contract call script.
+ */
+const calculateScriptVariableSize = (calls: ReceiptCall[]): number => {
+  // Calculate the length of the call script for each call and sum
+  const offset = calls.reduce(
+    (total, call) => {
+      let callOffset = total;
+
+      callOffset += asm.movi(0x10, 0).to_bytes().byteLength;
+      callOffset += asm.movi(0x11, 0).to_bytes().byteLength;
+      callOffset += asm.lw(0x11, 0x11, 0).to_bytes().byteLength;
+      callOffset += asm.movi(0x12, 0).to_bytes().byteLength;
+
+      const gasOffset = call.gas.toNumber()
+        ? asm.movi(0x13, call.gas.toNumber()).to_bytes().byteLength
+        : asm.call(0x10, 0x11, 0x12, asm.RegId.cgas().to_u8()).to_bytes().byteLength;
+
+      callOffset += gasOffset;
+
+      return callOffset;
+    },
+    // Placeholder for single RET instruction
+    asm.Instruction.size()
+  );
+
+  // Add padding
+  const paddingLength = (WORD_SIZE - (offset % WORD_SIZE)) % WORD_SIZE;
+  const paddedInstructionsLength = offset + paddingLength;
+
+  return paddedInstructionsLength;
+};
 
 /** @hidden */
 export function getContractCallOperations({
@@ -380,8 +429,8 @@ export function getContractCallOperations({
       // with a different max inputs value, the offset will be incorrect.
       calculateVmTxMemory({ maxInputs: maxInputs.toNumber() });
 
-    const operations = callReceiptsForContract.flatMap((receipt, index) => {
-      return processCallReceipt(
+    const operations = callReceiptsForContract.flatMap((receipt) =>
+      processCallReceipt(
         receipt,
         contractInput,
         inputs,
@@ -390,47 +439,12 @@ export function getContractCallOperations({
         maxInputs,
         baseAssetId,
         callScriptBaseOffset
-      );
-    });
+      )
+    );
 
     return operations;
   });
 }
-
-/**
- * Calculates the size of the contract call script based off
- * contract call receipts.
- *
- * @param calls - The contract call receipts to calculate the size of.
- * @returns The size of the contract call script.
- */
-const calculateScriptVariableSize = (calls: ReceiptCall[]): number => {
-  // Calculate the length of the call script for each call and sum
-  const offset = calls.reduce(
-    (offset, call) => {
-      offset += asm.movi(0x10, 0).to_bytes().byteLength;
-      offset += asm.movi(0x11, 0).to_bytes().byteLength;
-      offset += asm.lw(0x11, 0x11, 0).to_bytes().byteLength;
-      offset += asm.movi(0x12, 0).to_bytes().byteLength;
-
-    const gasOffset = call.gas.toNumber()
-      ? asm.movi(0x13, call.gas.toNumber()).to_bytes().byteLength
-      : asm.call(0x10, 0x11, 0x12, asm.RegId.cgas().to_u8()).to_bytes().byteLength;
-
-      offset += gasOffset;
-
-      return offset;
-    },
-    // Placeholder for single RET instruction
-    asm.Instruction.size()
-  );
-
-  // Add padding
-  const paddingLength = (WORD_SIZE - (offset % WORD_SIZE)) % WORD_SIZE;
-  const paddedInstructionsLength = offset + paddingLength;
-
-  return paddedInstructionsLength;
-};
 
 /**
  * Extracts a transfer operation from a transaction receipt, determining the addresses and types

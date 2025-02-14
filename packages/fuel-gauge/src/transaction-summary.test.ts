@@ -610,17 +610,19 @@ describe('TransactionSummary', () => {
 
     const contractId = contract.id.toB256();
 
-    const call = await contract.multiCall([
-      contract.functions.mint_coins(bn(100_000)),
-      contract.functions.mint_coins(bn(200_000)),
-      contract.functions.mint_coins(bn(300_000)),
-      contract.functions.mint_coins(bn(400_000)),
-      contract.functions.mint_coins(bn(500_000)),
-      contract.functions.mint_coins(bn(600_000)),
-      contract.functions.mint_coins(bn(700_000)),
-      contract.functions.mint_coins(bn(800_000)),
-      contract.functions.mint_coins(bn(900_000)),
-    ]).call();
+    const call = await contract
+      .multiCall([
+        contract.functions.mint_coins(bn(100_000)),
+        contract.functions.mint_coins(bn(200_000)),
+        contract.functions.mint_coins(bn(300_000)),
+        contract.functions.mint_coins(bn(400_000)),
+        contract.functions.mint_coins(bn(500_000)),
+        contract.functions.mint_coins(bn(600_000)),
+        contract.functions.mint_coins(bn(700_000)),
+        contract.functions.mint_coins(bn(800_000)),
+        contract.functions.mint_coins(bn(900_000)),
+      ])
+      .call();
     const res = await call.waitForResult();
 
     const summary = await getTransactionSummary({
@@ -643,7 +645,7 @@ describe('TransactionSummary', () => {
       expect(callOperation.calls?.[0].functionName).toBe('mint_coins');
       expect(callOperation.calls?.[0].functionSignature).toBe('mint_coins(u64)');
       expect(callOperation.calls?.[0].argumentsProvided).toStrictEqual({
-        mint_amount: bn(100_000 + (index * 100_000)).toHex(),
+        mint_amount: bn(100_000 + index * 100_000).toHex(),
       });
     }
 
