@@ -76,7 +76,6 @@ jobs:
           REF_NAME: ${{ github.ref_name }}
           PUBLISHED: "false"
 
-      # Commenting out as we require permissions to trigger across repos
       - name: Update docs
         if: github.ref_name == 'master'
         uses: benc-uk/workflow-dispatch@v1
