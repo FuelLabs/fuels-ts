@@ -12,6 +12,7 @@ import {
 
 import type { Coin } from './coin';
 import type { Message } from './message';
+import type Provider from './provider';
 import { DEFAULT_RESOURCE_CACHE_TTL } from './provider';
 import { isCoin, type ExcludeResourcesOption } from './resource';
 import { ResourceCache } from './resource-cache';
@@ -43,10 +44,21 @@ describe('Resource Cache', () => {
       { utxos: [], messages: [] } as Required<ExcludeResourcesOption>
     );
 
+  const extractBaseAssetAndMaxInputs = async (provider: Provider) => {
+    const baseAssetId = await provider.getBaseAssetId();
+    const {
+      consensusParameters: {
+        txParameters: { maxInputs },
+      },
+    } = await provider.getChain();
+    return { baseAssetId, maxInputs: maxInputs.toNumber() };
+  };
+
   afterEach(() => {
     // Reset the cache after each test
     const resourceCache = new ResourceCache(1000);
     resourceCache.clear();
+    vi.restoreAllMocks();
   });
 
   it('can instantiate [valid numerical ttl]', () => {
@@ -583,5 +595,160 @@ describe('Resource Cache', () => {
       ],
       excludedIds,
     });
+  });
+
+  it("should consider user's given excluded IDs", async () => {
+    using launched = await setupTestProviderAndWallets();
+
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+    const baseAssetId = await provider.getBaseAssetId();
+    const amount = 10;
+
+    const userInput: ExcludeResourcesOption = {
+      utxos: [hexlify(randomBytes(34)), hexlify(randomBytes(34))],
+      messages: [hexlify(randomBytes(32))],
+    };
+
+    const spy = vi.spyOn(provider.operations, 'getCoinsToSpend');
+
+    await wallet.getResourcesToSpend([{ amount, assetId: baseAssetId }], userInput);
+
+    expect(spy).toHaveBeenCalledWith({
+      owner: wallet.address.toB256(),
+      queryPerAsset: [
+        {
+          assetId: baseAssetId,
+          amount: String(amount),
+          max: undefined,
+        },
+      ],
+      excludedIds: userInput,
+    });
+  });
+
+  it("should not add cached IDs when user's input exceeds max_inputs", async () => {
+    using launched = await setupTestProviderAndWallets();
+
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const owner = wallet.address.toB256();
+    const amount = 10;
+    const { baseAssetId, maxInputs } = await extractBaseAssetAndMaxInputs(provider);
+
+    // Generating inputs to be cached
+    const fakeInputs = Array.from({ length: 10 }, (_, i) =>
+      i % 2 === 0
+        ? generateFakeRequestInputCoin({ owner })
+        : generateFakeRequestInputMessage({ recipient: owner })
+    );
+
+    // Caching inputs
+    provider.cache?.set(owner, fakeInputs);
+
+    const activeData = provider.cache?.getActiveData(owner);
+
+    expect(activeData?.utxos.length).toBeGreaterThan(0);
+    expect(activeData?.messages.length).toBeGreaterThan(0);
+
+    const spy = vi.spyOn(provider.operations, 'getCoinsToSpend');
+
+    const userInput: ExcludeResourcesOption = {
+      utxos: Array.from({ length: maxInputs }, () => hexlify(randomBytes(34))),
+      messages: Array.from({ length: maxInputs }, () => hexlify(randomBytes(32))),
+    };
+
+    // TODO: Wrap this test with a expectTOThrowFuelError when upgrading fuel-core to 0.41
+    await wallet.getResourcesToSpend([{ amount, assetId: baseAssetId }], userInput);
+
+    expect(spy).toHaveBeenCalledWith({
+      owner,
+      queryPerAsset: [
+        {
+          assetId: baseAssetId,
+          amount: String(amount),
+          max: undefined,
+        },
+      ],
+      excludedIds: userInput,
+    });
+  });
+
+  it('should ensure that excluded IDs do not exceed max_inputs [W/O USER INPUT]', async () => {
+    using launched = await setupTestProviderAndWallets();
+
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const { baseAssetId, maxInputs } = await extractBaseAssetAndMaxInputs(provider);
+    const owner = wallet.address.toB256();
+
+    const fakeInputs = Array.from({ length: maxInputs + 1 }, (_, i) =>
+      i % 2 === 0
+        ? generateFakeRequestInputCoin({ owner })
+        : generateFakeRequestInputMessage({ recipient: owner })
+    );
+
+    provider.cache?.set(owner, fakeInputs);
+    const activeData = provider.cache!.getActiveData(owner);
+    const totalCached = activeData.utxos.length + activeData.messages.length;
+
+    expect(totalCached).toBeGreaterThan(maxInputs);
+
+    const spy = vi.spyOn(provider.operations, 'getCoinsToSpend');
+
+    await wallet.getResourcesToSpend([{ amount: 1, assetId: baseAssetId }]);
+    const excludedIds = spy.mock.calls[0][0].excludedIds;
+
+    const totalUsed = excludedIds!.utxos.length + excludedIds!.messages.length;
+    expect(totalUsed).toBe(maxInputs);
+  });
+
+  it('should ensure that excluded IDs do not exceed max_inputs [W/ USER INPUT]', async () => {
+    using launched = await setupTestProviderAndWallets();
+
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+    const { baseAssetId, maxInputs } = await extractBaseAssetAndMaxInputs(provider);
+    const owner = wallet.address.toB256();
+
+    const cachedInputs = Array.from({ length: maxInputs + 1 }, (_, i) =>
+      i % 2 === 0
+        ? generateFakeRequestInputCoin({ owner })
+        : generateFakeRequestInputMessage({ recipient: owner })
+    );
+
+    provider.cache?.set(owner, cachedInputs);
+    const activeData = provider.cache!.getActiveData(owner);
+    const totalCached = activeData.utxos.length + activeData.messages.length;
+
+    expect(totalCached).toBeGreaterThan(maxInputs);
+
+    const userInput: ExcludeResourcesOption = {
+      utxos: Array.from({ length: maxInputs / 3 }, () => hexlify(randomBytes(34))),
+      messages: Array.from({ length: maxInputs / 3 }, () => hexlify(randomBytes(32))),
+    };
+
+    const spy = vi.spyOn(provider.operations, 'getCoinsToSpend');
+
+    await wallet.getResourcesToSpend([{ amount: 1, assetId: baseAssetId }], userInput);
+
+    const excludedIds = spy.mock.calls[0][0].excludedIds;
+
+    // User input should be considered first
+    expect(excludedIds?.utxos).containSubset(userInput.utxos);
+    expect(excludedIds?.messages).containSubset(userInput.messages);
+
+    const totalUsed = excludedIds!.utxos.length + excludedIds!.messages.length;
+    expect(totalUsed).toBe(maxInputs);
   });
 });
