@@ -42,7 +42,7 @@ export class ResourceCache {
   }
 
   getActiveData(owner: string) {
-    const allResources: { utxos: string[]; messages: string[] } = { utxos: [], messages: [] };
+    const activeData: { utxos: string[]; messages: string[] } = { utxos: [], messages: [] };
     const currentTime = Date.now();
     const expired: string[] = [];
 
@@ -52,8 +52,8 @@ export class ResourceCache {
       if (isActive) {
         const resourcesFromOwner = resource.owners.get(owner);
         if (resourcesFromOwner) {
-          allResources.utxos.push(...resourcesFromOwner.utxos);
-          allResources.messages.push(...resourcesFromOwner.messages);
+          activeData.utxos.push(...resourcesFromOwner.utxos);
+          activeData.messages.push(...resourcesFromOwner.messages);
         }
       } else {
         expired.push(transactionId);
@@ -62,7 +62,7 @@ export class ResourceCache {
 
     expired.forEach(this.unset);
 
-    return allResources;
+    return activeData;
   }
 
   isCached(owner: string, key: string): boolean {
