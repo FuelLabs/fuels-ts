@@ -697,7 +697,7 @@ describe('Resource Cache', () => {
     );
 
     provider.cache?.set(owner, fakeInputs);
-    const activeData = provider.cache!.getActiveData(owner);
+    const activeData = provider.cache?.getActiveData(owner) as Required<ExcludeResourcesOption>;
     const totalCached = activeData.utxos.length + activeData.messages.length;
 
     expect(totalCached).toBeGreaterThan(maxInputs);
@@ -705,9 +705,9 @@ describe('Resource Cache', () => {
     const spy = vi.spyOn(provider.operations, 'getCoinsToSpend');
 
     await wallet.getResourcesToSpend([{ amount: 1, assetId: baseAssetId }]);
-    const excludedIds = spy.mock.calls[0][0].excludedIds;
+    const excludedIds = spy.mock.calls[0][0].excludedIds as Required<ExcludeResourcesOption>;
 
-    const totalUsed = excludedIds!.utxos.length + excludedIds!.messages.length;
+    const totalUsed = excludedIds.utxos.length + excludedIds.messages.length;
     expect(totalUsed).toBe(maxInputs);
   });
 
@@ -728,7 +728,7 @@ describe('Resource Cache', () => {
     );
 
     provider.cache?.set(owner, cachedInputs);
-    const activeData = provider.cache!.getActiveData(owner);
+    const activeData = provider.cache?.getActiveData(owner) as Required<ExcludeResourcesOption>;
     const totalCached = activeData.utxos.length + activeData.messages.length;
 
     expect(totalCached).toBeGreaterThan(maxInputs);
@@ -742,13 +742,13 @@ describe('Resource Cache', () => {
 
     await wallet.getResourcesToSpend([{ amount: 1, assetId: baseAssetId }], userInput);
 
-    const excludedIds = spy.mock.calls[0][0].excludedIds;
+    const excludedIds = spy.mock.calls[0][0].excludedIds as Required<ExcludeResourcesOption>;
 
     // User input should be considered first
     expect(excludedIds?.utxos).containSubset(userInput.utxos);
     expect(excludedIds?.messages).containSubset(userInput.messages);
 
-    const totalUsed = excludedIds!.utxos.length + excludedIds!.messages.length;
+    const totalUsed = excludedIds.utxos.length + excludedIds.messages.length;
     expect(totalUsed).toBe(maxInputs);
   });
 });
