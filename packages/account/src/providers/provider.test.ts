@@ -24,18 +24,13 @@ import {
 import { mockIncompatibleVersions } from '../../test/utils/mockIncompabileVersions';
 import { setupTestProviderAndWallets, launchNode, TestMessage } from '../test-utils';
 
-import type { Coin } from './coin';
 import { coinQuantityfy } from './coin-quantity';
-import type { Message } from './message';
 import type { Block, ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
 import Provider, {
   BLOCKS_PAGE_SIZE_LIMIT,
-  DEFAULT_RESOURCE_CACHE_TTL,
   GAS_USED_MODIFIER,
   RESOURCES_PAGE_SIZE_LIMIT,
 } from './provider';
-import type { ExcludeResourcesOption } from './resource';
-import { isCoin } from './resource';
 import type {
   ChangeTransactionRequestOutput,
   CoinTransactionRequestInput,
