@@ -631,8 +631,6 @@ describe('TransactionSummary', () => {
     // expect(summary).toStrictEqual(responseSummary);
   });
 
-  // Tx summary with multicall does not set contract operations correctly
-  // https://github.com/FuelLabs/fuels-ts/issues/3706
   it('should ensure getTransactionsSummaries executes just fine [w/ ABI & call/transfer multicall]', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
