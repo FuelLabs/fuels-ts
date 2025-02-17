@@ -4,7 +4,6 @@ import type { BytesLike } from '@fuel-ts/utils';
 
 import type { GqlMessageState } from './__generated__/operations';
 
-// #region Message-shape
 /**
  * A Fuel message
  */
@@ -19,7 +18,6 @@ export type Message = {
   predicate?: BytesLike;
   predicateData?: BytesLike;
 };
-// #endregion Message-shape
 
 export type MessageCoin = {
   assetId: string;
