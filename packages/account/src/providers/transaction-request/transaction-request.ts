@@ -271,9 +271,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    */
   addEmptyWitness(): number {
     // Push a dummy witness with same byte size as a real witness signature
-    const signature = concat([ZeroBytes32, ZeroBytes32]);
-    const witnessesLength = this.witnesses.push(signature);
-    return witnessesLength - 1;
+    this.witnesses.push(concat([ZeroBytes32, ZeroBytes32]));
+    return this.witnesses.length - 1;
   }
 
   /**
