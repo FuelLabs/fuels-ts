@@ -1,7 +1,8 @@
 import { getRandomB256 } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { bn } from '@fuel-ts/math';
-import { ReceiptCall, ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import type { ReceiptCall} from '@fuel-ts/transactions';
+import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import * as asm from '@fuels/vm-asm';
 
@@ -1087,11 +1088,7 @@ describe('operations', () => {
     // RET instruction size
     const retSize = asm.Instruction.size();
 
-    const calculateScriptVariableSizeAsm = (calls: any[]) => {
-      return calls.reduce((acc) => {
-        return acc + callDataOffset.byteLength + amountOffset.byteLength + assetIdOffset.byteLength + loadBytes.byteLength + gasOffset.byteLength;
-      }, retSize);
-    }
+    const calculateScriptVariableSizeAsm = (calls: any[]) => calls.reduce((acc) => acc + callDataOffset.byteLength + amountOffset.byteLength + assetIdOffset.byteLength + loadBytes.byteLength + gasOffset.byteLength, retSize)
 
     const scriptVariableSize = calculateScriptVariableSize(calls);
     expect(scriptVariableSize).toEqual(24);
