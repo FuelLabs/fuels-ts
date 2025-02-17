@@ -685,7 +685,6 @@ describe('Account', () => {
     const recipient = Address.fromB256(RECIPIENT_ID);
 
     const tx = await sender.withdrawToBaseLayer(recipient.toB256(), AMOUNT);
-    // #region Message-getMessageProof
     const result = await tx.waitForResult();
 
     // Wait for the next block to be minter on out case we are using a local provider
@@ -701,7 +700,6 @@ describe('Account', () => {
       messageOutReceipt.nonce,
       nextBlock.blockId
     );
-    // #endregion Message-getMessageProof
 
     expect(messageProof?.amount.toNumber()).toEqual(AMOUNT);
     expect(messageProof?.sender.toHexString()).toEqual(result.id);
