@@ -428,27 +428,32 @@ export function getContractCallOperations({
       (receipt) => receipt.to === contractInput.contractID
     );
 
-    const callScriptBaseOffset =
-      SCRIPT_FIXED_SIZE +
-      calculateScriptVariableSize(callReceiptsForContract) +
-      // Potential weakness here for legacy transactions, if the script data was generated
-      // with a different max inputs value, the offset will be incorrect.
-      calculateVmTxMemory({ maxInputs: maxInputs.toNumber() });
+    // Potential weakness here for legacy transactions, if the script data was generated
+    // with a different max inputs value, the offset will be incorrect and therefore decoding
+    // will fail. In this scenario we won't return the operations.
+    try {
+      const callScriptBaseOffset =
+        SCRIPT_FIXED_SIZE +
+        calculateScriptVariableSize(callReceiptsForContract) +
+        calculateVmTxMemory({ maxInputs: maxInputs.toNumber() });
 
-    const operations = callReceiptsForContract.flatMap((receipt) =>
-      processCallReceipt(
-        receipt,
-        contractInput,
-        inputs,
-        abiMap,
-        rawPayload as string,
-        maxInputs,
-        baseAssetId,
-        callScriptBaseOffset
-      )
-    );
+      const operations = callReceiptsForContract.flatMap((receipt) =>
+        processCallReceipt(
+          receipt,
+          contractInput,
+          inputs,
+          abiMap,
+          rawPayload as string,
+          maxInputs,
+          baseAssetId,
+          callScriptBaseOffset
+        )
+      );
 
-    return operations;
+      return operations;
+    } catch (error) {
+      return [];
+    }
   });
 }
 

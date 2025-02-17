@@ -346,6 +346,69 @@ describe('TransactionSummary', () => {
     });
   });
 
+  it('getTransactionsSummaries has no operations for legacy transactions [mismatch maxInputs]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: TokenContractFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+      provider,
+    } = launched;
+
+    const contractId = contract.id.toB256();
+
+    const call = await contract.functions.mint_coins(bn(100_000)).call();
+    const res = await call.waitForResult();
+
+    const summary = await res.transactionResponse.getTransactionSummary({
+      [contractId]: TokenContract.abi,
+    });
+
+    validateTxSummary({
+      transaction: summary,
+    });
+
+    const { operations } = summary;
+    const callOperation = operations[0];
+
+    expect(callOperation.name).toBe(OperationName.contractCall);
+    expect(callOperation.to?.address).toBe(contractId);
+    expect(callOperation.calls?.[0].functionName).toBe('mint_coins');
+    expect(callOperation.calls?.[0].functionSignature).toBe('mint_coins(u64)');
+    expect(callOperation.calls?.[0].argumentsProvided).toStrictEqual({
+      mint_amount: bn(100_000).toHex(),
+    });
+
+    const chain = await provider.getChain();
+    const chainWithDifferentMaxInputs = {
+      ...chain,
+      consensusParameters: {
+        ...chain.consensusParameters,
+        txParameters: { ...chain.consensusParameters.txParameters, maxInputs: bn(22) },
+      },
+    };
+    const providerSpy = vi
+      .spyOn(provider, 'getChain')
+      .mockResolvedValue(chainWithDifferentMaxInputs);
+
+    const newSummary = await getTransactionSummary({
+      id: res.transactionResponse.id,
+      provider,
+    });
+
+    const { operations: newOperations } = newSummary;
+    const newCallOperation = newOperations[0];
+
+    expect(providerSpy).toHaveBeenCalled();
+    expect(callOperation.calls).not.toStrictEqual(newCallOperation.calls);
+    expect(newCallOperation.calls).toHaveLength(0);
+  });
+
   it('should ensure getTransactionsSummaries executes just fine [w/ ABI & call op & gas forwarded]', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
