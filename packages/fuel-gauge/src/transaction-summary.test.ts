@@ -31,7 +31,7 @@ import {
   TestMessage,
 } from 'fuels/test-utils';
 
-import { MultiTokenContractFactory, TokenContractFactory, TokenContract } from '../test/typegen';
+import { MultiTokenContractFactory, TokenContractFactory, TokenContract, CallTestContractFactory, CallTestContract } from '../test/typegen';
 import type { ContractIdInput, TransferParamsInput } from '../test/typegen/contracts/TokenContract';
 
 function convertBnsToHex(value: unknown): unknown {
@@ -338,6 +338,46 @@ describe('TransactionSummary', () => {
     expect(callOperation.calls?.[0].argumentsProvided).toStrictEqual({
       mint_amount: bn(100_000).toHex(),
     });
+  });
+
+  it('should ensure getTransactionsSummaries executes just fine [w/ ABI & call op & gas forwarded]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: CallTestContractFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+      provider,
+    } = launched;
+
+    const baseAssetId = await provider.getBaseAssetId();
+    const contractId = contract.id.toB256();
+
+    const call = await contract.functions.return_context_gas().callParams({
+      forward: [bn(100_000), baseAssetId],
+    }).call();
+    const res = await call.waitForResult();
+
+    const summary = await res.transactionResponse.getTransactionSummary({
+      [contractId]: CallTestContract.abi,
+    });
+
+    validateTxSummary({
+      transaction: summary,
+    });
+
+    const { operations } = summary;
+    const callOperation = operations[0];
+
+    expect(callOperation.name).toBe(OperationName.contractCall);
+    expect(callOperation.to?.address).toBe(contractId);
+    expect(callOperation.calls?.[0].functionName).toBe('return_context_gas');
+    expect(callOperation.calls?.[0].functionSignature).toBe('return_context_gas()');
+    expect(callOperation.calls?.[0].argumentsProvided).toBe(undefined);
   });
 
   it('should ensure getTransactionsSummaries executes just fine [w/ ABI & call w/ transfer op]', async () => {

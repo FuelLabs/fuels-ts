@@ -1,8 +1,9 @@
 import { getRandomB256 } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { bn } from '@fuel-ts/math';
-import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import { ReceiptCall, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
+import * as asm from '@fuels/vm-asm';
 
 import {
   CONTRACT_CALL_ABI,
@@ -46,6 +47,7 @@ import {
   isTypeCreate,
   isTypeMint,
   isTypeScript,
+  calculateScriptVariableSize,
 } from './operations';
 import type { Operation } from './types';
 import { AddressType, OperationName, TransactionTypeName, ChainName } from './types';
@@ -1044,5 +1046,59 @@ describe('operations', () => {
     expect(() => getTransactionTypeName('' as unknown as TransactionType)).toThrowError(
       'Unsupported transaction type: '
     );
+  });
+
+  /**
+   * This test is to validate the implementation of calculateScriptVariableSize against the actual ASM.
+   * This is because the implementation I opted for uses hardcoded bytes to calculate the size, so that
+   * we do not have to init asm and make the tx summary assembly async. These values should only change
+   * if the VM updates their asm implementation of the opcodes. Should this test fail,
+   * we must update the hardcoded bytes in `calculateScriptVariableSize` to match the ASM.
+   */
+  it('checks calculateScriptVariableSize against actual ASM', async () => {
+    // @ts-expect-error fn does exist
+    await asm.initWasm();
+
+    const calls: ReceiptCall[] = [
+      {
+        type: ReceiptType.Call,
+        id: '0x1',
+        to: '0x1',
+        amount: bn(0),
+        assetId: '0x1',
+        gas: bn(0),
+        param1: bn(0),
+        param2: bn(0),
+        pc: bn(0),
+        is: bn(0),
+      },
+    ];
+
+    // Call Data Offset
+    const callDataOffset = asm.movi(0x10, 0).to_bytes();
+    // Amount Offset
+    const amountOffset = asm.movi(0x11, 0).to_bytes();
+    // Load Asset ID
+    const assetIdOffset = asm.lw(0x11, 0x11, 0).to_bytes();
+    // Asset ID
+    const loadBytes = asm.movi(0x12, 0).to_bytes();
+    // Gas Offset
+    const gasOffset = asm.call(0x10, 0x11, 0x12, asm.RegId.cgas().to_u8()).to_bytes();
+    // RET instruction size
+    const retSize = asm.Instruction.size();
+
+    const calculateScriptVariableSizeAsm = (calls: any[]) => {
+      return calls.reduce((acc) => {
+        return acc + callDataOffset.byteLength + amountOffset.byteLength + assetIdOffset.byteLength + loadBytes.byteLength + gasOffset.byteLength;
+      }, retSize);
+    }
+
+    const scriptVariableSize = calculateScriptVariableSize(calls);
+    expect(scriptVariableSize).toEqual(24);
+
+    const scriptVariableSizeAsm = calculateScriptVariableSizeAsm(calls);
+    expect(scriptVariableSizeAsm).toEqual(24);
+
+    expect(scriptVariableSize).toEqual(scriptVariableSizeAsm);
   });
 });
