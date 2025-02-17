@@ -259,7 +259,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    */
   addWitness(signature: BytesLike) {
     this.witnesses.push(signature);
-    this.updateFlags({ isSigned: true });
     return this.witnesses.length - 1;
   }
 
@@ -303,7 +302,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       throw new NoWitnessAtIndexError(index);
     }
     this.witnesses[index] = witness;
-    this.updateFlags({ isSigned: true });
   }
 
   /**
