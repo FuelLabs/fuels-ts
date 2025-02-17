@@ -129,11 +129,9 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
 
   it('should test u8 variable type', async () => {
     using contractInstance = await setupContract();
-    // #region U8
     const { waitForResult } = await contractInstance.functions.echo_u8(3).call();
     const { value } = await waitForResult();
     expect(value).toBe(3);
-    // #endregion U8
   });
 
   it('should test u8 variable type multiple params', async () => {
