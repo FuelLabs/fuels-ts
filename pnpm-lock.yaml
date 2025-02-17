@@ -106,8 +106,8 @@ importers:
         specifier: 7.37.4
         version: 7.37.4(eslint@8.57.0)
       eslint-plugin-react-hooks:
-        specifier: 4.6.2
-        version: 4.6.2(eslint@8.57.0)
+        specifier: 5.1.0
+        version: 5.1.0(eslint@8.57.0)
       eslint-plugin-tsdoc:
         specifier: 0.3.0
         version: 0.3.0
@@ -233,8 +233,8 @@ importers:
         specifier: 8.57.0
         version: 8.57.0
       eslint-plugin-react-hooks:
-        specifier: 4.6.2
-        version: 4.6.2(eslint@8.57.0)
+        specifier: 5.1.0
+        version: 5.1.0(eslint@8.57.0)
       eslint-plugin-react-refresh:
         specifier: 0.4.19
         version: 0.4.19(eslint@8.57.0)
