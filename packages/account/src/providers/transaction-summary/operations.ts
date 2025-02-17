@@ -11,7 +11,6 @@ import type {
   Input,
   ReceiptCall,
 } from '@fuel-ts/transactions';
-import * as asm from '@fuels/vm-asm';
 
 import type {
   TransactionResultReceipt,
