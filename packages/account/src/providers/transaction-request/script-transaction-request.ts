@@ -87,6 +87,8 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
 
     await account.fund(this, txCost);
 
+    this.updateFlags({ isEstimated: true, isFunded: true });
+
     return this;
   }
 

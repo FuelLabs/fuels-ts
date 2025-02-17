@@ -1,5 +1,9 @@
-import { transactionRequestify, isTransactionTypeScript } from '../../src';
-import type { TransactionRequestLike, TransactionCost, AccountSendTxParams } from '../../src';
+import { transactionRequestify } from '../../src';
+import type {
+  TransactionRequestLike,
+  AccountSendTxParams,
+  ScriptTransactionRequest,
+} from '../../src';
 
 import { MockConnector } from './mocked-connector';
 
@@ -14,29 +18,27 @@ export class MockSendTransactionConnector extends MockConnector {
       throw new Error('Wallet is not found!');
     }
 
-    const transaction = transactionRequestify(_transaction);
-    const { isEstimated = false, isFunded = false, isSigned = false } = transaction.flags ?? {};
-
-    // Estimate
-    let txCost: TransactionCost | undefined;
-    if (isEstimated === false) {
-      txCost = await wallet.getTransactionCost(transaction);
-      transaction.maxFee = txCost.maxFee;
-      if (isTransactionTypeScript(transaction)) {
-        transaction.gasLimit = txCost.gasUsed;
-      }
+    const transaction = transactionRequestify(_transaction) as ScriptTransactionRequest;
+    const { skipCustomFee = false, onBeforeSend } = _params ?? {};
+    if (skipCustomFee) {
+      transaction.updateFlags({ isSigned: true });
     }
 
+    const { isEstimated = false, isFunded = false, isSigned = false } = transaction.flags ?? {};
+
     // Fund
-    if (isFunded === false) {
-      txCost = txCost ?? (await wallet.getTransactionCost(transaction));
-      await wallet.fund(transaction, txCost);
+    if (isEstimated === false || isFunded === false) {
+      await transaction.estimateAndFund(wallet);
     }
 
     // Sign
     if (isSigned === false) {
       const signature = await wallet.signTransaction(transaction);
       await transaction.updateWitnessByOwner(wallet.address, signature);
+    }
+
+    if (onBeforeSend) {
+      await onBeforeSend(transaction);
     }
 
     // Send transaction
