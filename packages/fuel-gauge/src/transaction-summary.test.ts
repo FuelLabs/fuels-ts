@@ -31,7 +31,13 @@ import {
   TestMessage,
 } from 'fuels/test-utils';
 
-import { MultiTokenContractFactory, TokenContractFactory, TokenContract, CallTestContractFactory, CallTestContract } from '../test/typegen';
+import {
+  MultiTokenContractFactory,
+  TokenContractFactory,
+  TokenContract,
+  CallTestContractFactory,
+  CallTestContract,
+} from '../test/typegen';
 import type { ContractIdInput, TransferParamsInput } from '../test/typegen/contracts/TokenContract';
 
 function convertBnsToHex(value: unknown): unknown {
@@ -357,9 +363,12 @@ describe('TransactionSummary', () => {
     const baseAssetId = await provider.getBaseAssetId();
     const contractId = contract.id.toB256();
 
-    const call = await contract.functions.return_context_gas().callParams({
-      forward: [bn(100_000), baseAssetId],
-    }).call();
+    const call = await contract.functions
+      .return_context_gas()
+      .callParams({
+        forward: [bn(100_000), baseAssetId],
+      })
+      .call();
     const res = await call.waitForResult();
 
     const summary = await res.transactionResponse.getTransactionSummary({

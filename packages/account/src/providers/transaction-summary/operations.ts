@@ -374,19 +374,19 @@ export const calculateScriptVariableSize = (calls: ReceiptCall[]): number => {
     (total) => {
       let callOffset = total;
       // Call Data Offset - asm.movi(0x10, 0)
-      const callDataOffset = new Uint8Array([ 114, 64, 0, 0 ]);
+      const callDataOffset = new Uint8Array([114, 64, 0, 0]);
       callOffset += callDataOffset.byteLength;
       // Amount Offset - asm.movi(0x11, 0)
-      const amountOffset = new Uint8Array([ 114, 68, 0, 0 ])
+      const amountOffset = new Uint8Array([114, 68, 0, 0]);
       callOffset += amountOffset.byteLength;
       // Load Asset ID- asm.lw(0x11, 0x11, 0)
-      const assetIdOffset = new Uint8Array([ 93, 69, 16, 0 ])
+      const assetIdOffset = new Uint8Array([93, 69, 16, 0]);
       callOffset += assetIdOffset.byteLength;
       // Asset ID - asm.movi(0x12, 0)
-      const loadBytes = new Uint8Array([ 114, 72, 0, 0 ]);
+      const loadBytes = new Uint8Array([114, 72, 0, 0]);
       callOffset += loadBytes.byteLength;
       // Gas Offset - asm.call(0x10, 0x11, 0x12, asm.RegId.cgas().to_u8())
-      const gasOffset = new Uint8Array([ 45, 65, 20, 138 ]);
+      const gasOffset = new Uint8Array([45, 65, 20, 138]);
       callOffset += gasOffset.byteLength;
 
       return callOffset;
