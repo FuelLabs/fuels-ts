@@ -17,5 +17,23 @@ fn main(
     some_str_3: str,
     some_last_u8: u8,
 ) -> bool {
+    log(BOOL);
+    log(some_bool);
+
+    log(U8);
+    log(some_u8);
+
+    log(STR);
+    log(some_str);
+
+    log(STR_2);
+    log(some_str_2);
+
+    log(STR_3);
+    log(some_str_3);
+
+    log(LAST_U8);
+    log(some_last_u8);
+
     some_bool == BOOL && some_u8 == U8 && some_str == STR && some_str_2 == STR_2 && some_str_3 == STR_3 && some_last_u8 == LAST_U8
 }
