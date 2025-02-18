@@ -438,7 +438,6 @@ describe('Resource Cache', () => {
     } = launched;
 
     const baseAssetId = await provider.getBaseAssetId();
-    const maxFee = 100_000;
     const transferAmount = 10_000;
 
     const { coins } = await wallet.getCoins(baseAssetId);
@@ -449,7 +448,7 @@ describe('Resource Cache', () => {
     const resources = await wallet.getResourcesToSpend([[transferAmount, baseAssetId]]);
 
     const request = new ScriptTransactionRequest({
-      maxFee,
+      maxFee: 0,
     });
 
     request.addCoinOutput(receiver.address, transferAmount, baseAssetId);
@@ -663,8 +662,10 @@ describe('Resource Cache', () => {
       messages: Array.from({ length: maxInputs }, () => hexlify(randomBytes(32))),
     };
 
-    // TODO: Wrap this test with a expectTOThrowFuelError when upgrading fuel-core to 0.41
-    await wallet.getResourcesToSpend([{ amount, assetId: baseAssetId }], userInput);
+    await expectToThrowFuelError(
+      () => wallet.getResourcesToSpend([{ amount, assetId: baseAssetId }], userInput),
+      { code: ErrorCode.INVALID_REQUEST }
+    );
 
     expect(spy).toHaveBeenCalledWith({
       owner,
