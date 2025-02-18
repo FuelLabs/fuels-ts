@@ -914,6 +914,8 @@ export class Account extends AbstractAccount implements WithAddress {
     }
 
     return {
+      // we re-fetch the coins instead of combining the consolidation tx outputs and remaining coins
+      // because the outputs don't have `blockHeight` and `txIdx` set in the `TransactionResult`
       coins: await this.getAllCoins(baseAssetId),
       transactions,
     };
