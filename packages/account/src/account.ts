@@ -11,7 +11,6 @@ import { arrayify, hexlify, isDefined } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
 import type { FuelConnector, FuelConnectorSendTxParams } from './connectors';
-import { Predicate } from './predicate';
 import type {
   TransactionRequest,
   CoinQuantityLike,
