@@ -10,7 +10,7 @@
     "pretest": "pnpm original:build"
   },
   "dependencies": {
-    "@fuels/vm-asm": "0.58.2",
+    "@fuels/vm-asm": "0.59.1",
     "@types/node": "22.13.1",
     "@types/react-dom": "19.0.3",
     "@types/react": "19.0.8",
