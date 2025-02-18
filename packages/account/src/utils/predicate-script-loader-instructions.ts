@@ -1,6 +1,6 @@
 import { BigNumberCoder } from '@fuel-ts/abi-coder';
 import { sha256 } from '@fuel-ts/hasher';
-import { concat } from '@fuel-ts/utils';
+import { concat, arrayify, hexlify } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
 
 const BLOB_ID_SIZE = 32;
@@ -238,4 +238,53 @@ export function getPredicateScriptLoaderInstructions(
   const loaderBytecode = new Uint8Array([...instructionBytes, ...blobBytes]);
 
   return { loaderBytecode };
+}
+
+/**
+ * Extract the blob ID and data offset from the bytecode
+ *
+ * @param bytecode - The bytecode to extract the blob ID and data offset from
+ * @returns The blob ID and data offset
+ */
+export function extractBlobIdAndDataOffset(bytecode: Uint8Array): {
+  blobId: Uint8Array;
+  dataOffset: number;
+} {
+  if (!isBytecodeLoader(bytecode)) {
+    return {
+      blobId: arrayify(getLegacyBlobId(bytecode)),
+      dataOffset: getBytecodeDataOffset(bytecode),
+    };
+  }
+
+  const instructionsWithData = getInstructionsWithDataSection();
+
+  const hexlifiedBytecode = hexlify(bytecode);
+  const hexlifiedInstructionsWithData = hexlify(instructionsWithData);
+
+  // Check if the bytecode starts with the instructions with data section
+  if (hexlifiedBytecode.startsWith(hexlifiedInstructionsWithData)) {
+    let offset = instructionsWithData.length;
+
+    // Read off the blob ID
+    const blobId = bytecode.slice(offset, (offset += BLOB_ID_SIZE));
+    // We skip over `WORD_SIZE` bytes as this stores the data length.
+    // After this, the offset of the data section is found.
+    const dataOffset = offset + WORD_SIZE;
+    return {
+      blobId,
+      dataOffset,
+    };
+  }
+
+  const instructionsWithoutData = getInstructionsWithoutDataSection();
+  let offset = instructionsWithoutData.length;
+
+  // Read off the blob ID
+  const blobId = bytecode.slice(offset, (offset += BLOB_ID_SIZE));
+
+  return {
+    blobId,
+    dataOffset: offset,
+  };
 }
