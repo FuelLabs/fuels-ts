@@ -3,13 +3,13 @@ import type { InputValue, Interface } from '@fuel-ts/abi-coder';
 import type { Configurable } from '@fuel-ts/abi-coder/dist/types/JsonAbiNew';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
-import { getBytecodeDataOffset } from './predicate-script-loader-instructions';
+import { extractBlobIdAndDataOffset } from './predicate-script-loader-instructions';
 
 export const createConfigurables = (opts: { bytecode: Uint8Array; abi: Interface }) => {
   const { abi } = opts;
   let bytecode = new Uint8Array(opts.bytecode);
   const configurables = Object.values(abi.configurables);
-  const bytecodeDataOffset = getBytecodeDataOffset(bytecode);
+  const { dataOffset } = extractBlobIdAndDataOffset(bytecode);
   const dynamicOffsetCoder = new BigNumberCoder('u64');
 
   const getConfigurable = (name: string) => {
@@ -25,7 +25,7 @@ export const createConfigurables = (opts: { bytecode: Uint8Array; abi: Interface
 
   const readIndirectOffset = ({ offset }: Pick<Configurable, 'offset'>) => {
     const [dynamicOffsetBn] = dynamicOffsetCoder.decode(bytecode, offset);
-    const dynamicOffset = bytecodeDataOffset + dynamicOffsetBn.toNumber();
+    const dynamicOffset = dataOffset + dynamicOffsetBn.toNumber();
     return dynamicOffset;
   };
 
@@ -84,7 +84,7 @@ export const createConfigurables = (opts: { bytecode: Uint8Array; abi: Interface
       .filter((configurable) => configurable.indirect && configurable.offset > offset)
       .forEach((configurable) => {
         const newDynamicOffset = readIndirectOffset({ offset: configurable.offset });
-        const newOffset = newDynamicOffset + additionalOffset - bytecodeDataOffset;
+        const newOffset = newDynamicOffset + additionalOffset - dataOffset;
 
         const encodedOffset = dynamicOffsetCoder.encode(newOffset);
         bytecode.set(encodedOffset, configurable.offset);
