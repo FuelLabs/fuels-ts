@@ -11,6 +11,7 @@ import { arrayify, hexlify, isDefined } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
 import type { FuelConnector, FuelConnectorSendTxParams } from './connectors';
+import { Predicate } from './predicate';
 import type {
   TransactionRequest,
   CoinQuantityLike,
@@ -808,6 +809,17 @@ export class Account extends AbstractAccount implements WithAddress {
     const resultingCoinIds: BytesLike[] = [];
     const transactions: TransactionResult[] = [];
 
+    let predicateGasUsed: BigNumberish | undefined;
+    const isPredicate = 'predicateData' in this;
+
+    if (isPredicate) {
+      const request = new ScriptTransactionRequest();
+      request.addCoinInput(remainingCoins[0]);
+      await this.provider.estimatePredicates(request);
+
+      predicateGasUsed = (request.inputs[0] as CoinTransactionRequestInput).predicateGasUsed;
+    }
+
     while (remainingCoins.length > 1) {
       const request = new ScriptTransactionRequest();
 
@@ -821,7 +833,12 @@ export class Account extends AbstractAccount implements WithAddress {
         );
         maxInputsRequest.addResources(fakeCoins);
 
-        await this.provider.estimatePredicates(maxInputsRequest);
+        if (predicateGasUsed) {
+          maxInputsRequest.inputs.forEach((input) => {
+            // eslint-disable-next-line no-param-reassign
+            (input as CoinTransactionRequestInput).predicateGasUsed = predicateGasUsed;
+          });
+        }
 
         const { maxFee, gasLimit } = await this.provider.estimateTxGasAndFee({
           transactionRequest: maxInputsRequest,
@@ -852,7 +869,12 @@ export class Account extends AbstractAccount implements WithAddress {
         request.addCoinInput(coin);
       }
 
-      await this.provider.estimatePredicates(request);
+      if (predicateGasUsed) {
+        request.inputs.forEach((input) => {
+          // eslint-disable-next-line no-param-reassign
+          (input as CoinTransactionRequestInput).predicateGasUsed = predicateGasUsed;
+        });
+      }
 
       if (request.maxFee.eq(0)) {
         const { maxFee, gasLimit } = await this.provider.estimateTxGasAndFee({

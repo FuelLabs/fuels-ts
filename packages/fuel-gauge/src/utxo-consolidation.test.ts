@@ -9,7 +9,7 @@ import { PredicateTrue } from '../test/typegen';
  * @group browser
  */
 describe('utxo-consolidation', () => {
-  test("doesn't consolidate nor estimate - only one coin", async () => {
+  test("doesn't consolidate - only one coin", async () => {
     using launched = await launchTestNode({
       walletsConfig: {
         coinsPerAsset: 1,
@@ -300,9 +300,13 @@ describe('utxo-consolidation', () => {
     const { provider } = launched;
     predicate.provider = provider;
 
+    const estimatePredicatesSpy = vi.spyOn(provider, 'estimatePredicates');
+
     const originalCoins = await predicate.getAllCoins(await provider.getBaseAssetId());
 
     const { coins } = await predicate.consolidateCoins();
+
+    expect(estimatePredicatesSpy).toHaveBeenCalledTimes(1);
 
     const maxInputs = (await provider.getChain()).consensusParameters.txParameters.maxInputs;
     // using Math.floor because the leftover coins are not enough for one more tx
