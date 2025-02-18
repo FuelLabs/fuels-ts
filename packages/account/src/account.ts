@@ -884,6 +884,7 @@ export class Account extends AbstractAccount implements WithAddress {
 
       transactions.push(tx);
 
+      // There's only one coin output in the transaction so we can hardcode the output index
       resultingCoinIds.push(`${tx.id}0000`);
 
       remainingCoins = remainingCoins.filter(
