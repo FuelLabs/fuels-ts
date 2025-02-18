@@ -1,4 +1,4 @@
-import { sha256 } from '@fuel-ts/hasher';
+import { hashMessage, sha256 } from '@fuel-ts/hasher';
 import { arrayify } from '@fuel-ts/utils';
 
 import { Signer } from './signer';
@@ -15,7 +15,7 @@ describe('Signer', () => {
   const expectedMessage = 'my message';
   const expectedB256Address = '0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e';
   const expectedSignedMessage =
-    '0x8eeb238db1adea4152644f1cd827b552dfa9ab3f4939718bb45ca476d167c6512a656f4d4c7356bfb9561b14448c230c6e7e4bd781df5ee9e5999faa6495163d';
+    '0x435f61b60f56a624b080e0b0066b8412094ca22b886f3e69ec4fe536bc18b576fc9732aa0b19c624b070b0eaeff45386aab8c5211618c9292e224e4cee0cadff';
 
   it('Initialize publicKey and address for new signer instance', () => {
     const signer = new Signer(expectedPrivateKey);
@@ -35,9 +35,17 @@ describe('Signer', () => {
     expect(signer.address.toB256()).toEqual(expectedB256Address);
   });
 
-  it('Sign message', () => {
+  it('Sign message [string]', () => {
     const signer = new Signer(expectedPrivateKey);
-    const signedMessage = signer.sign(sha256(Buffer.from(expectedMessage)));
+    const signedMessage = signer.sign(hashMessage(expectedMessage));
+
+    expect(signedMessage).toEqual(expectedSignedMessage);
+  });
+
+  it('Sign message [arbitrary data]', () => {
+    const signer = new Signer(expectedPrivateKey);
+    const message = new TextEncoder().encode(expectedMessage);
+    const signedMessage = signer.sign(hashMessage(message));
 
     expect(signedMessage).toEqual(expectedSignedMessage);
   });
