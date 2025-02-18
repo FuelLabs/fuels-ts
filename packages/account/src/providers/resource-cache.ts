@@ -62,6 +62,9 @@ export class ResourceCache {
 
     expired.forEach(this.unset);
 
+    activeData.utxos.reverse();
+    activeData.messages.reverse();
+
     return activeData;
   }
 

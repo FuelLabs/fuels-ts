@@ -2,7 +2,7 @@ import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode } from '@fuel-ts/errors';
 import { safeExec, expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import { hexlify } from '@fuel-ts/utils';
+import { hexlify, sleep } from '@fuel-ts/utils';
 
 import { setupTestProviderAndWallets, TestMessage } from '../test-utils';
 import {
@@ -594,6 +594,46 @@ describe('Resource Cache', () => {
       ],
       excludedIds,
     });
+  });
+
+  it('should prioritize recent IDs entries', async () => {
+    using launched = await setupTestProviderAndWallets();
+
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+    const baseAssetId = await provider.getBaseAssetId();
+    const amount = 10;
+
+    const oldTxId = hexlify(randomBytes(32));
+    const oldUtxo = generateFakeRequestInputCoin({ owner: wallet.address.toB256() });
+    const newUtxo = generateFakeRequestInputCoin({ owner: wallet.address.toB256() });
+
+    const newTxId = hexlify(randomBytes(32));
+    const oldMessage = generateFakeRequestInputMessage({ recipient: wallet.address.toB256() });
+    const newMessage = generateFakeRequestInputMessage({ recipient: wallet.address.toB256() });
+
+    const oldInputs = [oldUtxo, oldMessage];
+    const newInputs = [newUtxo, newMessage];
+
+    const spy = vi.spyOn(provider.operations, 'getCoinsToSpend');
+
+    // caching inputs1 first (First TX)
+    provider.cache?.set(oldTxId, oldInputs);
+
+    // caching inputs2 later (Second TX)
+    provider.cache?.set(newTxId, newInputs);
+
+    await wallet.getResourcesToSpend([{ amount, assetId: baseAssetId }]);
+
+    const excludedIds = spy.mock.calls[0][0].excludedIds as Required<ExcludeResourcesOption>;
+
+    expect(excludedIds.utxos[0]).toEqual(newUtxo.id);
+    expect(excludedIds.utxos[1]).toEqual(oldUtxo.id);
+
+    expect(excludedIds.messages[0]).toEqual(newMessage.nonce);
+    expect(excludedIds.messages[1]).toEqual(oldMessage.nonce);
   });
 
   it("should consider user's given excluded IDs", async () => {
