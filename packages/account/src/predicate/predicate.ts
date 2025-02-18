@@ -16,7 +16,9 @@ import {
 import type {
   CallResult,
   CoinQuantityLike,
+  CursorPaginationArgs,
   ExcludeResourcesOption,
+  GetCoinsResponse,
   Provider,
   Resource,
   TransactionRequest,
@@ -225,6 +227,22 @@ export class Predicate<
       predicate: hexlify(this.bytes),
       predicateData: hexlify(this.getPredicateData()),
     }));
+  }
+
+  override async getCoins(
+    assetId?: BytesLike,
+    paginationArgs?: CursorPaginationArgs
+  ): Promise<GetCoinsResponse> {
+    const { coins, pageInfo } = await super.getCoins(assetId, paginationArgs);
+
+    return {
+      coins: coins.map((c) => ({
+        ...c,
+        predicate: hexlify(this.bytes),
+        predicateData: hexlify(this.getPredicateData()),
+      })),
+      pageInfo,
+    };
   }
 
   /**

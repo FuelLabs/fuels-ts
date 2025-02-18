@@ -31,6 +31,8 @@ import type {
   TransactionCostParams,
   TransactionResponse,
   ProviderSendTxParams,
+  TransactionResult,
+  CoinTransactionRequestInput,
 } from './providers';
 import {
   withdrawScript,
@@ -766,5 +768,132 @@ export class Account extends AbstractAccount implements WithAddress {
     }
 
     return request;
+  }
+
+  /**
+   * Retrieves all coins owned by the account.
+   *
+   * @param assetId - The asset ID of the coins to retrieve (optional).
+   * @returns A promise that resolves to an array of coins.
+   */
+  public async getAllCoins(assetId?: BytesLike): Promise<Coin[]> {
+    const coins: Coin[] = [];
+
+    let hasNextPage = true;
+    let after: string | undefined | null;
+    while (hasNextPage) {
+      const result = await this.getCoins(assetId, {
+        after,
+      });
+      coins.push(...result.coins);
+      hasNextPage = result.pageInfo.hasNextPage;
+      after = result.pageInfo.endCursor;
+    }
+
+    return coins;
+  }
+
+  /**
+   * Consolidates base asset coins owned by the account.
+   */
+  public async consolidateCoins(): Promise<{ coins: Coin[]; transactions: TransactionResult[] }> {
+    const maxInputs = (
+      await this.provider.getChain()
+    ).consensusParameters.txParameters.maxInputs.toNumber();
+
+    const baseAssetId = await this.provider.getBaseAssetId();
+
+    let remainingCoins = (await this.getAllCoins(baseAssetId)).sort((a, b) =>
+      a.amount.cmp(b.amount)
+    );
+    const resultingCoinIds: BytesLike[] = [];
+    const transactions: TransactionResult[] = [];
+
+    while (remainingCoins.length > 1) {
+      const request = new ScriptTransactionRequest();
+
+      const shouldFund = remainingCoins.length > maxInputs;
+
+      if (shouldFund) {
+        const maxInputsRequest = new ScriptTransactionRequest();
+        const fakeCoins = this.generateFakeResources(
+          new Array(maxInputs).fill({ assetId: baseAssetId })
+        );
+        maxInputsRequest.addResources(fakeCoins);
+
+        await this.provider.estimatePredicates(maxInputsRequest);
+
+        const { maxFee, gasLimit } = await this.provider.estimateTxGasAndFee({
+          transactionRequest: maxInputsRequest,
+        });
+
+        request.maxFee = maxFee;
+        request.gasLimit = gasLimit;
+
+        const resources = await this.getResourcesToSpend(
+          [{ amount: bn(maxFee), assetId: baseAssetId }],
+          {
+            utxos: resultingCoinIds,
+          }
+        );
+
+        request.addResources(resources);
+      }
+
+      for (const coin of remainingCoins) {
+        if (request.inputs.length === maxInputs) {
+          break;
+        }
+
+        if (request.inputs.some((x) => (x as CoinTransactionRequestInput).id === coin.id)) {
+          continue;
+        }
+
+        request.addCoinInput(coin);
+      }
+
+      await this.provider.estimatePredicates(request);
+
+      if (request.maxFee.eq(0)) {
+        const { maxFee, gasLimit } = await this.provider.estimateTxGasAndFee({
+          transactionRequest: request,
+        });
+
+        request.maxFee = maxFee;
+        request.gasLimit = gasLimit;
+      }
+
+      const amount = request.inputs.reduce(
+        (acc, coin) => acc.add((coin as CoinTransactionRequestInput).amount),
+        bn(0)
+      );
+
+      if (request.maxFee.gte(amount)) {
+        // TODO: to throw or not to throw, that's the question
+        // throw new FuelError(
+        //   ErrorCode.NOT_ENOUGH_FUNDS,
+        //   `The account(s) sending the transaction don't have enough funds to cover the transaction.`,
+        //   {}
+        // );
+        break;
+      }
+
+      const { waitForResult } = await this.sendTransaction(request);
+
+      const tx = await waitForResult();
+
+      transactions.push(tx);
+
+      resultingCoinIds.push(`${tx.id}0000`);
+
+      remainingCoins = remainingCoins.filter(
+        (coin) => !request.inputs.some((x) => (x as CoinTransactionRequestInput).id === coin.id)
+      );
+    }
+
+    return {
+      coins: await this.getAllCoins(baseAssetId),
+      transactions,
+    };
   }
 }

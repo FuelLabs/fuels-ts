@@ -1012,4 +1012,26 @@ describe('Account', () => {
       { code: ErrorCode.NUMBER_TOO_BIG }
     );
   });
+
+  test('can properly use getAllCoins', async () => {
+    const assets = 3;
+    const coinsPerAsset = 1000;
+    using launched = await setupTestProviderAndWallets({
+      walletsConfig: {
+        count: 1,
+        assets,
+        coinsPerAsset,
+      },
+    });
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const coins = await wallet.getAllCoins();
+    expect(coins.length).toBe(assets * coinsPerAsset);
+
+    const baseAssetCoins = await wallet.getAllCoins(await wallet.provider.getBaseAssetId());
+    expect(baseAssetCoins.length).toBe(coinsPerAsset);
+  });
 });
