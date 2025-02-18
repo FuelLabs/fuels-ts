@@ -1,7 +1,11 @@
-import { bufferFromString } from '@fuel-ts/crypto';
 import type { BytesLike } from '@fuel-ts/utils';
-import { arrayify, hexlify } from '@fuel-ts/utils';
+import { arrayify, concat, hexlify, toUtf8Bytes } from '@fuel-ts/utils';
 import { sha256 as sha256AsBytes } from '@noble/hashes/sha256';
+
+/**
+ * The prefix for the message to be hashed
+ */
+const MESSAGE_PREFIX = '\x19Fuel Signed Message:\n';
 
 /**
  * @param data - The data to be hashed
@@ -33,11 +37,17 @@ export function uint64ToBytesBE(value: number): Uint8Array {
 }
 
 /**
- * hash string messages with sha256
+ * Hashes a message based upon the [EIP-191](https://eips.ethereum.org/EIPS/eip-191) standard but for Fuel
  *
- * @param msg - The string message to be hashed
+ * Hash format:
+ * ```console
+ * 0x19 <0x46 (F)> <uel Signed Message:\n" + len(message)> <message>
+ * ```
+ *
+ * @param message - The string message to be hashed
  * @returns A sha256 hash of the message
  */
-export function hashMessage(msg: string) {
-  return hash(bufferFromString(msg, 'utf-8'));
+export function hashMessage(message: BytesLike) {
+  const payload: Uint8Array = typeof message === 'string' ? toUtf8Bytes(message) : message;
+  return hash(concat([toUtf8Bytes(MESSAGE_PREFIX), toUtf8Bytes(String(payload.length)), payload]));
 }
