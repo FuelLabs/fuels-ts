@@ -192,11 +192,11 @@ export class Predicate<
     }
 
     if (configurableConstants && Object.keys(configurableConstants).length) {
-      predicateBytes = Predicate.setConfigurableConstants(
-        predicateBytes,
-        configurableConstants,
-        abiInterface
-      );
+      const configurables = createConfigurables({
+        bytecode: predicateBytes,
+        abi: abiInterface,
+      });
+      predicateBytes = configurables.set(configurableConstants);
     }
 
     return {
@@ -240,35 +240,6 @@ export class Predicate<
       predicate: hexlify(this.bytes),
       predicateData: hexlify(this.getPredicateData()),
     }));
-  }
-
-  /**
-   * Sets the configurable constants for the predicate.
-   *
-   * @param bytes - The bytes of the predicate.
-   * @param configurableConstants - Configurable constants to be set.
-   * @param abiInterface - The ABI interface of the predicate.
-   * @returns The mutated bytes with the configurable constants set.
-   */
-  private static setConfigurableConstants(
-    bytecode: Uint8Array,
-    configurableConstants: { [name: string]: unknown },
-    abiInterface: Interface
-  ) {
-    try {
-      const configurables = createConfigurables({
-        bytecode,
-        abi: abiInterface,
-      });
-
-      const mutatedBytecode = configurables.set(configurableConstants);
-      return mutatedBytecode;
-    } catch (err) {
-      throw new FuelError(
-        ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
-        `Error setting configurable constants: ${(<Error>err).message}.`
-      );
-    }
   }
 
   /**
@@ -330,6 +301,7 @@ export class Predicate<
           abi: newAbi,
           provider: this.provider,
           data: this.predicateData,
+          configurableConstants: this.configurableConstants,
         }) as T,
     });
   }

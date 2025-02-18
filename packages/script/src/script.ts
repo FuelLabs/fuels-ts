@@ -7,7 +7,6 @@ import {
   type Account,
   type Provider,
 } from '@fuel-ts/account';
-import { FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import type { ScriptRequest } from '@fuel-ts/program';
 import type { BytesLike } from '@fuel-ts/utils';
@@ -94,19 +93,12 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
    * @returns This instance of the `Script`.
    */
   setConfigurableConstants(configurableValues: { [name: string]: unknown }) {
-    try {
-      const configurables = createConfigurables({
-        bytecode: this.bytes,
-        abi: this.interface,
-      });
+    const configurables = createConfigurables({
+      bytecode: this.bytes,
+      abi: this.interface,
+    });
 
-      this.bytes = configurables.set(configurableValues);
-    } catch (err) {
-      throw new FuelError(
-        FuelError.CODES.INVALID_CONFIGURABLE_CONSTANTS,
-        `Error setting configurable constants: ${(<Error>err).message}.`
-      );
-    }
+    this.bytes = configurables.set(configurableValues);
 
     return this;
   }

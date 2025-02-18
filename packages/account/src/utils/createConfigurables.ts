@@ -117,15 +117,38 @@ export const createConfigurables = (opts: { bytecode: Uint8Array; abi: Interface
      * @returns The mutated bytecode.
      */
     set: (configurableValues: { [name: string]: unknown }) => {
-      // TODO: add assertions for no configurables
+      try {
+        const configurableKeys = Object.keys(abi.configurables);
+        const providedKeys = Object.keys(configurableValues);
 
-      configurables
-        .sort((a, b) => b.offset - a.offset)
-        .filter((configurable) => Object.hasOwn(configurableValues, configurable.name))
-        .forEach((configurable) => {
-          const value = configurableValues[configurable.name];
-          write(configurable, value as InputValue);
-        });
+        if (!configurableKeys.length) {
+          throw new FuelError(
+            FuelError.CODES.INVALID_CONFIGURABLE_CONSTANTS,
+            `the program does not have configurable constants to be set.`
+          );
+        }
+
+        const unknownKeys = providedKeys.filter((key) => !configurableKeys.includes(key));
+        if (unknownKeys.length) {
+          throw new FuelError(
+            FuelError.CODES.INVALID_CONFIGURABLE_CONSTANTS,
+            `unknown keys supplied:\n${unknownKeys.map((key) => `- '${key}'`).join('\n')}`
+          );
+        }
+
+        configurables
+          .sort((a, b) => b.offset - a.offset)
+          .filter((configurable) => Object.hasOwn(configurableValues, configurable.name))
+          .forEach((configurable) => {
+            const value = configurableValues[configurable.name];
+            write(configurable, value as InputValue);
+          });
+      } catch (err) {
+        throw new FuelError(
+          FuelError.CODES.INVALID_CONFIGURABLE_CONSTANTS,
+          `Error setting configurable constants, ${(<Error>err).message}`
+        );
+      }
 
       return bytecode;
     },
