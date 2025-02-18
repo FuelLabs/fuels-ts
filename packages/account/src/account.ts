@@ -803,18 +803,18 @@ export class Account extends AbstractAccount implements WithAddress {
 
     const baseAssetId = await this.provider.getBaseAssetId();
 
-    let remainingCoins = (await this.getAllCoins(baseAssetId)).sort((a, b) =>
-      a.amount.cmp(b.amount)
-    );
+    let remainingCoins = await this.getAllCoins(baseAssetId);
+
     const resultingCoinIds: BytesLike[] = [];
     const transactions: TransactionResult[] = [];
 
     while (remainingCoins.length > 1) {
       const request = new ScriptTransactionRequest();
 
-      const shouldFund = remainingCoins.length > maxInputs;
-
-      if (shouldFund) {
+      // if there are more than maxInputs unconsolidated coins,
+      // leave the selection of coins that fund the transaction to the node
+      // and add additional inputs to the request afterwards until max inputs reached
+      if (remainingCoins.length > maxInputs) {
         const maxInputsRequest = new ScriptTransactionRequest();
         const fakeCoins = this.generateFakeResources(
           new Array(maxInputs).fill({ assetId: baseAssetId })
