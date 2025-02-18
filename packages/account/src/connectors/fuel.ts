@@ -370,6 +370,7 @@ export class Fuel extends FuelConnector implements FuelSdk {
     const { installed } = await this.fetchConnectorStatus(connector);
     if (installed) {
       this._currentConnector = connector;
+      this.usePrepareForSend = connector.usePrepareForSend;
       this.emit(this.events.currentConnector, connector);
       this.setupConnectorEvents(Object.values(FuelConnectorEventTypes));
       await this._storage?.setItem(Fuel.STORAGE_KEY, connector.name);

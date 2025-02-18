@@ -7,7 +7,13 @@ import { bn } from '@fuel-ts/math';
 import type { BytesLike } from '@fuel-ts/utils';
 import { EventEmitter } from 'events';
 
-import type { AccountSendTxParams, Network, ProviderOptions, SelectNetworkArguments } from '../src';
+import {
+  Account,
+  type AccountSendTxParams,
+  type Network,
+  type ProviderOptions,
+  type SelectNetworkArguments,
+} from '../src';
 import { TESTNET_NETWORK_URL } from '../src/configs';
 import { Fuel } from '../src/connectors/fuel';
 import { FuelConnectorEventType } from '../src/connectors/types';
@@ -16,6 +22,7 @@ import { setupTestProviderAndWallets, TestMessage } from '../src/test-utils';
 import { Wallet } from '../src/wallet';
 
 import { MockConnector } from './fixtures/mocked-connector';
+import { MockedPrepConnector } from './fixtures/mocked-prep-connector';
 import { promiseCallback } from './fixtures/promise-callback';
 
 /**
@@ -684,6 +691,7 @@ describe('Fuel Connector', () => {
     });
 
     const sendTransactionSpy = vi.spyOn(connectorWallet, 'sendTransaction');
+    const prepareForSendSpy = vi.spyOn(connector, 'prepareForSend');
 
     const request = new ScriptTransactionRequest();
     const resources = await connectorWallet.getResourcesToSpend([
@@ -702,6 +710,153 @@ describe('Fuel Connector', () => {
       params
     );
     expect(response).toBeDefined();
+    // transaction prepared and sent via connector
     expect(sendTransactionSpy).toHaveBeenCalledWith(request, params);
+    expect(prepareForSendSpy).not.toHaveBeenCalled();
+  });
+
+  it('should ensure prepareForSend works just fine', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider,
+      wallets: [connectorWallet],
+    } = launched;
+    const connector = new MockedPrepConnector({
+      wallets: [connectorWallet],
+    });
+    const fuel = await new Fuel({
+      connectors: [connector],
+    }).init();
+
+    const connectorPrepareForSendSpy = vi.spyOn(connector, 'prepareForSend');
+
+    const request = new ScriptTransactionRequest();
+    const resources = await connectorWallet.getResourcesToSpend([
+      { assetId: await provider.getBaseAssetId(), amount: 1000 },
+    ]);
+    request.addResources(resources);
+    await request.estimateAndFund(connectorWallet);
+
+    const address = connectorWallet.address.toString();
+
+    const params: AccountSendTxParams = {
+      onBeforeSend: vi.fn(),
+      skipCustomFee: true,
+    };
+
+    const tx = await fuel.prepareForSend(address, request, params);
+
+    expect(tx).toBeDefined();
+    expect(connectorPrepareForSendSpy).toHaveBeenCalledWith(address, request, params);
+  });
+
+  it('should ensure account send transaction with connector works just fine', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider,
+      wallets: [connectorWallet],
+    } = launched;
+    const connector = new MockedPrepConnector({
+      wallets: [connectorWallet],
+    });
+    const fuel = await new Fuel({
+      connectors: [connector],
+    }).init();
+
+    const account = new Account(connectorWallet.address.toString(), provider, fuel);
+
+    const providerSendTransactionSpy = vi.spyOn(provider, 'sendTransaction');
+    const connectorSendTransactionSpy = vi.spyOn(connectorWallet, 'sendTransaction');
+    const connectorPrepareForSendSpy = vi.spyOn(connector, 'prepareForSend');
+
+    const request = new ScriptTransactionRequest();
+    const resources = await connectorWallet.getResourcesToSpend([
+      { assetId: await provider.getBaseAssetId(), amount: 1000 },
+    ]);
+    request.addResources(resources);
+    await request.estimateAndFund(connectorWallet);
+
+    const address = connectorWallet.address.toString();
+    const params: AccountSendTxParams = {
+      onBeforeSend: vi.fn(),
+      skipCustomFee: true,
+    };
+
+    const tx = await account.sendTransaction(request, params);
+    expect(tx).toBeDefined();
+
+    // transaction prepared via connector and sent via provider
+    expect(connectorPrepareForSendSpy).toHaveBeenCalledWith(address, request, params);
+    expect(providerSendTransactionSpy).toHaveBeenCalled();
+    // not sent via connector
+    expect(connectorSendTransactionSpy).not.toHaveBeenCalled();
+  });
+
+  it('assembles tx result from connector account [w/o prepareForSend]', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider,
+      wallets: [connectorWallet, recipientWallet],
+    } = launched;
+    const connector = new MockConnector({
+      wallets: [connectorWallet],
+    });
+    const fuel = await new Fuel({
+      connectors: [connector],
+    }).init();
+
+    const connectorAccount = new Account(connectorWallet.address.toString(), provider, fuel);
+    const recipientAddress = recipientWallet.address.toString();
+
+    const submitAndAwaitStatusSpy = vi.spyOn(provider.operations, 'submitAndAwaitStatus');
+    const statusChangeSpy = vi.spyOn(provider.operations, 'statusChange');
+    const getTransactionWithReceiptsSpy = vi.spyOn(
+      provider.operations,
+      'getTransactionWithReceipts'
+    );
+
+    const tx = await connectorAccount.transfer(recipientAddress, 1000);
+    const result = await tx.waitForResult();
+
+    expect(result.isStatusSuccess).toBe(true);
+    expect(result.receipts.length).toBe(2);
+    expect(result.transaction.inputs).toBeDefined();
+    expect(submitAndAwaitStatusSpy).toHaveBeenCalled();
+    expect(statusChangeSpy).toHaveBeenCalled();
+    expect(getTransactionWithReceiptsSpy).toHaveBeenCalled();
+  });
+
+  it('assembles tx result from connector account [w/ prepareForSend]', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider,
+      wallets: [connectorWallet, recipientWallet],
+    } = launched;
+    const connector = new MockedPrepConnector({
+      wallets: [connectorWallet],
+    });
+    const fuel = await new Fuel({
+      connectors: [connector],
+    }).init();
+
+    const connectorAccount = new Account(connectorWallet.address.toString(), provider, fuel);
+    const recipientAddress = recipientWallet.address.toString();
+
+    const submitAndAwaitStatusSpy = vi.spyOn(provider.operations, 'submitAndAwaitStatus');
+    const statusChangeSpy = vi.spyOn(provider.operations, 'statusChange');
+    const getTransactionWithReceiptsSpy = vi.spyOn(
+      provider.operations,
+      'getTransactionWithReceipts'
+    );
+
+    const tx = await connectorAccount.transfer(recipientAddress, 1000);
+    const result = await tx.waitForResult();
+
+    expect(result.isStatusSuccess).toBe(true);
+    expect(result.receipts.length).toBe(2);
+    expect(result.transaction.inputs).toBeDefined();
+    expect(submitAndAwaitStatusSpy).toHaveBeenCalled();
+    expect(statusChangeSpy).not.toHaveBeenCalled();
+    expect(getTransactionWithReceiptsSpy).not.toHaveBeenCalled();
   });
 });
