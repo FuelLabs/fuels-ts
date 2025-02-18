@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/require-await */
 
+import type { BytesLike } from '@fuel-ts/utils';
 import { setTimeout } from 'timers/promises';
 
 import type {
@@ -98,7 +99,7 @@ export class MockConnector extends FuelConnector {
     return false;
   }
 
-  override async signMessage(_address: string, _message: string) {
+  override async signMessage(_address: string, _message: BytesLike) {
     const wallet = this._wallets.find((w) => w.address.toString() === _address);
     if (!wallet) {
       throw new Error('Wallet is not found!');

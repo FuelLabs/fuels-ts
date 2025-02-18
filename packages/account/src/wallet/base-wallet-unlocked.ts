@@ -67,7 +67,7 @@ export class BaseWalletUnlocked extends Account {
    * @param message - The message to sign.
    * @returns A promise that resolves to the signature as a ECDSA 64 bytes string.
    */
-  override async signMessage(message: string): Promise<string> {
+  override async signMessage(message: BytesLike): Promise<string> {
     const signedMessage = await this.signer().sign(hashMessage(message));
     return hexlify(signedMessage);
   }
