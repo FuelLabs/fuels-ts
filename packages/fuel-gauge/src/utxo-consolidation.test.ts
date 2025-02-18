@@ -4,6 +4,10 @@ import { launchTestNode } from 'fuels/test-utils';
 
 import { PredicateTrue } from '../test/typegen';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('utxo-consolidation', () => {
   test("doesn't consolidate nor estimate - only one coin", async () => {
     using launched = await launchTestNode({
