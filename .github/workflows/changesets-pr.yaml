@@ -11,6 +11,7 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   changesets-pr:
     runs-on: ubuntu-latest
+    environment: fuel-fuels-ts-bot
     permissions: write-all
     # First check ensures that the workflow runs only if the commit is NOT the changesets PR commit.
     # Second check ensures that the workflow runs only after a commit is pushed into the branch,
