@@ -26,7 +26,7 @@ describe('WalletUnlocked', () => {
   const expectedAddress = '0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e';
   const expectedMessage = 'my message';
   const expectedSignedMessage =
-    '0x435f61b60f56a624b080e0b0066b8412094ca22b886f3e69ec4fe536bc18b576fc9732aa0b19c624b070b0eaeff45386aab8c5211618c9292e224e4cee0cadff';
+    '0x9a16a5452ae96c13732716682600a6054661ba43994c9c335a4655caf31e68f0b1ec2e7c7ffe304a1b9d30734e24bb8ef3a5076edbc4510f0a3de3d9dcba9667';
 
   it('Instantiate a new wallet', async () => {
     using launched = await setupTestProviderAndWallets();

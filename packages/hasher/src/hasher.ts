@@ -1,3 +1,4 @@
+import { keccak256 } from '@fuel-ts/crypto';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, concat, hexlify, toUtf8Bytes } from '@fuel-ts/utils';
 import { sha256 as sha256AsBytes } from '@noble/hashes/sha256';
@@ -37,9 +38,9 @@ export function uint64ToBytesBE(value: number): Uint8Array {
 }
 
 /**
- * Hashes a message based upon the [EIP-191](https://eips.ethereum.org/EIPS/eip-191) standard but for Fuel
+ * Hashes a message using keccak256, based upon the [EIP-191](https://eips.ethereum.org/EIPS/eip-191) standard but for Fuel.
  *
- * Hash format:
+ * The message is hashed using the following format:
  * ```console
  * 0x19 <0x46 (F)> <uel Signed Message:\n" + len(message)> <message>
  * ```
@@ -48,6 +49,11 @@ export function uint64ToBytesBE(value: number): Uint8Array {
  * @returns A sha256 hash of the message
  */
 export function hashMessage(message: BytesLike) {
-  const payload: Uint8Array = typeof message === 'string' ? toUtf8Bytes(message) : message;
-  return hash(concat([toUtf8Bytes(MESSAGE_PREFIX), toUtf8Bytes(String(payload.length)), payload]));
+  const messageBytes: Uint8Array = typeof message === 'string' ? toUtf8Bytes(message) : message;
+  const payload = concat([
+    toUtf8Bytes(MESSAGE_PREFIX),
+    toUtf8Bytes(String(messageBytes.length)),
+    messageBytes,
+  ]);
+  return hexlify(keccak256(payload));
 }

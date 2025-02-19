@@ -29,13 +29,13 @@ describe('Hasher', () => {
   describe('hashMessage', () => {
     it('should hash a message', () => {
       const message: string = 'my message';
-      const hashedMessage = '0x615128eb1ecd44765ac3dae437fa144e58f934f01ba73260c1b84e30271cfb1e';
+      const hashedMessage = '0x62dc5b013ddc95260779961cf8325430e3be1caa62a75d999c14a7d807d68b3a';
       expect(hashMessage(message)).toEqual(hashedMessage);
     });
 
     it('should hash arbitrary data', () => {
       const data: Uint8Array = new TextEncoder().encode('my message');
-      const hashedMessage = '0x615128eb1ecd44765ac3dae437fa144e58f934f01ba73260c1b84e30271cfb1e';
+      const hashedMessage = '0x62dc5b013ddc95260779961cf8325430e3be1caa62a75d999c14a7d807d68b3a';
       expect(hashMessage(data)).toEqual(hashedMessage);
     });
   });
