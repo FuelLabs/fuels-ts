@@ -1,13 +1,9 @@
 // #region signing-1
-import { hashMessage, Provider, Signer, WalletUnlocked } from 'fuels';
+import { hashMessage, Signer, WalletUnlocked } from 'fuels';
 
-import { LOCAL_NETWORK_URL } from '../../../../env';
+const wallet = WalletUnlocked.generate();
 
-const provider = new Provider(LOCAL_NETWORK_URL);
-
-const wallet = WalletUnlocked.generate({ provider });
-
-const message = 'my-message';
+const message: string | Uint8Array = 'my-message';
 const signedMessage = await wallet.signMessage(message);
 // Example output: 0x277e1461cbb2e6a3250fa8c490221595efb3f4d66d43a4618d1013ca61ca56ba
 
