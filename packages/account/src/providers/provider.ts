@@ -1,7 +1,7 @@
 import type { AddressInput } from '@fuel-ts/address';
-import { Address } from '@fuel-ts/address';
+import { Address, isB256 } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { BN } from '@fuel-ts/math';
+import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import { InputType, InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
@@ -1619,7 +1619,7 @@ export default class Provider {
    * @param idOrHeight - ID or height of the block.
    * @returns A promise that resolves to the block or null.
    */
-  async getBlock(idOrHeight: string | number | 'latest'): Promise<Block | null> {
+  async getBlock(idOrHeight: BigNumberish | 'latest'): Promise<Block | null> {
     let block: GqlBlockFragment | undefined | null;
 
     if (idOrHeight === 'latest') {
@@ -1628,7 +1628,7 @@ export default class Provider {
       } = await this.operations.getLatestBlock();
       block = latestBlock;
     } else {
-      const isblockId = typeof idOrHeight === 'string' && idOrHeight.length === 66;
+      const isblockId = typeof idOrHeight === 'string' && isB256(idOrHeight);
       const variables = isblockId
         ? { blockId: idOrHeight }
         : { height: bn(idOrHeight).toString(10) };
@@ -1704,15 +1704,17 @@ export default class Provider {
    */
   async getBlockWithTransactions(
     /** ID or height of the block */
-    idOrHeight: string | number | 'latest'
+    idOrHeight: BigNumberish | 'latest'
   ): Promise<(Block & { transactions: Transaction[] }) | null> {
     let variables;
     if (typeof idOrHeight === 'number') {
       variables = { blockHeight: bn(idOrHeight).toString(10) };
     } else if (idOrHeight === 'latest') {
       variables = { blockHeight: (await this.getBlockNumber()).toString() };
-    } else {
+    } else if (typeof idOrHeight === 'string' && isB256(idOrHeight)) {
       variables = { blockId: idOrHeight };
+    } else {
+      variables = { blockHeight: bn(idOrHeight).toString() };
     }
 
     const { block } = await this.operations.getBlockWithTransactions(variables);
