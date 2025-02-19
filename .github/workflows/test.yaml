@@ -13,6 +13,8 @@ concurrency:
 jobs:
   environments:
     runs-on: ubuntu-latest
+    environment: fuel-fuels-ts-bot
+
     # name will be node@<version> or browser
     name: ${{ matrix.env.display-name }}
     strategy:
