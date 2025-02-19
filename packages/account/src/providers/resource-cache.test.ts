@@ -2,7 +2,7 @@ import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode } from '@fuel-ts/errors';
 import { safeExec, expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import { hexlify, sleep } from '@fuel-ts/utils';
+import { hexlify } from '@fuel-ts/utils';
 
 import { setupTestProviderAndWallets, TestMessage } from '../test-utils';
 import {
