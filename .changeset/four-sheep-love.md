@@ -3,4 +3,4 @@
 "@fuel-ts/hasher": patch
 ---
 
-feat: enable arbitrary data signing
+feat!: enable arbitrary data signing
