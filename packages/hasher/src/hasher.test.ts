@@ -27,16 +27,25 @@ describe('Hasher', () => {
   });
 
   describe('hashMessage', () => {
-    it('should hash a message', () => {
+    it('should hash a message [string]', () => {
       const message: string = 'my message';
-      const hashedMessage = '0x62dc5b013ddc95260779961cf8325430e3be1caa62a75d999c14a7d807d68b3a';
-      expect(hashMessage(message)).toEqual(hashedMessage);
+      const expectHashedMessage =
+        '0xea38e30f75767d7e6c21eba85b14016646a3b60ade426ca966dac940a5db1bab';
+      expect(hashMessage(message)).toEqual(expectHashedMessage);
     });
 
-    it('should hash arbitrary data', () => {
+    it('should hash a raw message [{ raw: string }]', () => {
+      const data: string = 'my message';
+      const expectHashedMessage =
+        '0x615128eb1ecd44765ac3dae437fa144e58f934f01ba73260c1b84e30271cfb1e';
+      expect(hashMessage({ raw: data })).toEqual(expectHashedMessage);
+    });
+
+    it('should hash a raw message [{ raw: Uint8Array }]', () => {
       const data: Uint8Array = new TextEncoder().encode('my message');
-      const hashedMessage = '0x62dc5b013ddc95260779961cf8325430e3be1caa62a75d999c14a7d807d68b3a';
-      expect(hashMessage(data)).toEqual(hashedMessage);
+      const expectHashedMessage =
+        '0x615128eb1ecd44765ac3dae437fa144e58f934f01ba73260c1b84e30271cfb1e';
+      expect(hashMessage({ raw: data })).toEqual(expectHashedMessage);
     });
   });
 });

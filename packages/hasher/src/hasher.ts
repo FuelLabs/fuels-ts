@@ -9,6 +9,16 @@ import { sha256 as sha256AsBytes } from '@noble/hashes/sha256';
 const MESSAGE_PREFIX = '\x19Fuel Signed Message:\n';
 
 /**
+ * When a string is provided, we hash as a UTF-8 string using SHA-256.
+ *
+ * When a `raw` object is provided, we hash using SHA-256 of the following format:
+ * ```console
+ * 0x19 <0x46 (F)> <uel Signed Message:\n" + len(message)> <message>
+ * ```
+ */
+export type HashableMessage = string | { raw: BytesLike };
+
+/**
  * @param data - The data to be hashed
  * @returns A sha256 hash of the data in hex format
  */
@@ -38,22 +48,22 @@ export function uint64ToBytesBE(value: number): Uint8Array {
 }
 
 /**
- * Hashes a message using keccak256, based upon the [EIP-191](https://eips.ethereum.org/EIPS/eip-191) standard but for Fuel.
+ * Hashes a message using SHA256.
  *
- * The message is hashed using the following format:
- * ```console
- * 0x19 <0x46 (F)> <uel Signed Message:\n" + len(message)> <message>
- * ```
- *
- * @param message - The string message to be hashed
+ * @param message - The message to be hashed @see {@link HashableMessage}
  * @returns A sha256 hash of the message
  */
-export function hashMessage(message: BytesLike) {
-  const messageBytes: Uint8Array = typeof message === 'string' ? toUtf8Bytes(message) : message;
+export function hashMessage(message: HashableMessage) {
+  if (typeof message === 'string') {
+    return sha256(toUtf8Bytes(message));
+  }
+
+  const { raw } = message;
+  const messageBytes: Uint8Array = typeof raw === 'string' ? toUtf8Bytes(raw) : raw;
   const payload = concat([
     toUtf8Bytes(MESSAGE_PREFIX),
     toUtf8Bytes(String(messageBytes.length)),
     messageBytes,
   ]);
-  return hexlify(keccak256(payload));
+  return hexlify(sha256(payload));
 }

@@ -3,7 +3,7 @@ predicate;
 use std::{b512::B512, ecr::ec_recover_address};
 
 fn extract_pulic_key_and_match(signature: B512, expected_public_key: b256) -> u64 {
-    let message_hash = 0x394184a41cc5ab496ee705a8012a992bfa0e8822479a773acfdf85b41fc6888c;
+    let message_hash = 0x6aed34e6bddff5e1d872b5d7d5698a7b73abd6f3b33402732edc73ab9ffb9c70;
     if let Result::Ok(pub_key_sig) = ec_recover_address(signature, message_hash)
     {
         if pub_key_sig.bits() == expected_public_key {
