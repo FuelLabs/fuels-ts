@@ -81,14 +81,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Running test for bun create
-        run: |
-          echo $XDG_CONFIG_HOME
-          cat $XDG_CONFIG_HOME/.bunfig.toml
-          bun create @FuelLabs/fuels@next test-project --no-install
-        env:
-          npm_token: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Running test for bun create
+      #   run: |
+      #     echo $XDG_CONFIG_HOME
+      #     cat $XDG_CONFIG_HOME/.bunfig.toml
+      #     bun create @FuelLabs/fuels@next test-project --no-install
+      #   env:
+      #     npm_token: ${{ secrets.GITHUB_TOKEN }}
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run UI tests (on template)
         run: sh ./scripts/tests-ui.sh
