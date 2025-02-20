@@ -1,4 +1,3 @@
-import { keccak256 } from '@fuel-ts/crypto';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, concat, hexlify, toUtf8Bytes } from '@fuel-ts/utils';
 import { sha256 as sha256AsBytes } from '@noble/hashes/sha256';
