@@ -3,12 +3,12 @@ import { hashMessage, Signer, WalletUnlocked } from 'fuels';
 
 const wallet = WalletUnlocked.generate();
 
-const message: string | Uint8Array = 'my-message';
+const message: string = 'my-message';
 const signedMessage = await wallet.signMessage(message);
 // Example output: 0x277e1461cbb2e6a3250fa8c490221595efb3f4d66d43a4618d1013ca61ca56ba
 
 const hashedMessage = hashMessage(message);
-// Example output: 0x3e37d250232a44f20cab6f2cf8c13cb30ea5272328f3570333eaaab8c57a0a82
+// Example output: 0x40436501b686546b7c660bb18791ac2ae35e77fbe2ac977fc061922b9ec83766
 
 const recoveredAddress = Signer.recoverAddress(hashedMessage, signedMessage);
 // Example output: Address {
@@ -24,7 +24,7 @@ console.log(
 console.log(
   'Hashed message should be consistent',
   hashedMessage ===
-    '0x3e37d250232a44f20cab6f2cf8c13cb30ea5272328f3570333eaaab8c57a0a82'
+    '0x40436501b686546b7c660bb18791ac2ae35e77fbe2ac977fc061922b9ec83766'
 );
 
 console.log(
