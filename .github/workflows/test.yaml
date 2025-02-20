@@ -117,20 +117,12 @@ jobs:
         env:
           PUBLISHED_NPM_TAG: ${{ env.NPM_DIST_TAG }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # HOME: ${{ github.workspace }}
-          # NPM_CONFIG_USERCONFIG: $HOME/.npmrc
-          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # BUN_CONFIG_REGISTRY: https://npm.pkg.github.com
 
       - name: Run UI tests (with published version)
         run: sh ./scripts/tests-ui-integration.sh
         env:
           PUBLISHED_NPM_TAG: ${{ env.NPM_DIST_TAG }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # HOME: ${{ github.workspace }}
-          # NPM_CONFIG_USERCONFIG: $HOME/.npmrc
-          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # BUN_CONFIG_REGISTRY: https://npm.pkg.github.com
 
   forc:
     runs-on: ubuntu-latest
