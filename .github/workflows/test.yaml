@@ -85,7 +85,6 @@ jobs:
       - name: Running test for bun create
         run: |
           echo $XDG_CONFIG_HOME
-          cat $XDG_CONFIG_HOME/.bunfig.toml
         env:
           npm_token: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
