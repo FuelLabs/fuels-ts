@@ -27425,7 +27425,7 @@ snapshots:
       debug: 4.4.0(supports-color@5.5.0)
       escape-string-regexp: 4.0.0
       eslint: 8.57.0
-      espree: 10.2.0
+      espree: 10.3.0
       esquery: 1.6.0
       parse-imports: 2.2.1
       semver: 7.6.3
@@ -29881,7 +29881,7 @@ snapshots:
   jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@5.0.10):
     dependencies:
       abab: 2.0.6
-      acorn: 8.13.0
+      acorn: 8.14.0
       acorn-globals: 6.0.0
       cssom: 0.4.4
       cssstyle: 2.3.0
@@ -29916,7 +29916,7 @@ snapshots:
   jsdom@16.7.0(bufferutil@4.0.9)(utf-8-validate@5.0.10):
     dependencies:
       abab: 2.0.6
-      acorn: 8.13.0
+      acorn: 8.14.0
       acorn-globals: 6.0.0
       cssom: 0.4.4
       cssstyle: 2.3.0
@@ -29950,7 +29950,7 @@ snapshots:
   jsdom@16.7.0(bufferutil@4.0.9)(utf-8-validate@6.0.4):
     dependencies:
       abab: 2.0.6
-      acorn: 8.13.0
+      acorn: 8.14.0
       acorn-globals: 6.0.0
       cssom: 0.4.4
       cssstyle: 2.3.0
@@ -30891,7 +30891,7 @@ snapshots:
 
   mlly@1.7.1:
     dependencies:
-      acorn: 8.13.0
+      acorn: 8.14.0
       pathe: 1.1.2
       pkg-types: 1.1.3
       ufo: 1.5.4
@@ -34168,14 +34168,14 @@ snapshots:
   terser@5.18.2:
     dependencies:
       '@jridgewell/source-map': 0.3.6
-      acorn: 8.13.0
+      acorn: 8.14.0
       commander: 2.20.3
       source-map-support: 0.5.21
 
   terser@5.34.1:
     dependencies:
       '@jridgewell/source-map': 0.3.6
-      acorn: 8.13.0
+      acorn: 8.14.0
       commander: 2.20.3
       source-map-support: 0.5.21
 
