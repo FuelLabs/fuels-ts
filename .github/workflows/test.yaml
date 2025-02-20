@@ -82,13 +82,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Running test for bun create
-        run: |
-          echo $XDG_CONFIG_HOME
-        env:
-          npm_token: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Run UI tests (on template)
         run: sh ./scripts/tests-ui.sh
 
