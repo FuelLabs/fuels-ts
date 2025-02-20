@@ -28,6 +28,10 @@ jobs:
         with:
           app-id: ${{ vars.FUEL_DOCS_BOT_APP_ID }}
           private-key: ${{ secrets.FUEL_DOCS_BOT_APP_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: |
+            docs-hub
+            migrations-and-disclosures
 
       - name: Checkout
         uses: actions/checkout@v4
