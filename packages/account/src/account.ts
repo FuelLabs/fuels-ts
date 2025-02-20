@@ -920,12 +920,13 @@ export class Account extends AbstractAccount implements WithAddress {
 
       if (request.maxFee.gte(amount)) {
         // TODO: to throw or not to throw, that's the question
-        // throw new FuelError(
-        //   ErrorCode.NOT_ENOUGH_FUNDS,
-        //   `The account(s) sending the transaction don't have enough funds to cover the transaction.`,
-        //   {}
-        // );
-        break;
+        throw new FuelError(
+          ErrorCode.NOT_ENOUGH_FUNDS,
+          `The account sending the transaction doesn't have enough funds to cover the transaction.`,
+          {
+            transactions,
+          }
+        );
       }
 
       const { waitForResult } = await this.sendTransaction(request);
