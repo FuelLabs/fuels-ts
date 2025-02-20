@@ -86,7 +86,6 @@ jobs:
         run: |
           echo $XDG_CONFIG_HOME
           cat $XDG_CONFIG_HOME/.bunfig.toml
-          # bun create @FuelLabs/fuels@$NPM_DIST_TAG test-project --no-install
         env:
           npm_token: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
