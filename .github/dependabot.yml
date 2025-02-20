@@ -24,6 +24,30 @@ updates:
         applies-to: "version-updates"
         update-types:
           - "patch"
+    ignore:
+      # As of v6.0, ora is ESM only
+      # https://github.com/sindresorhus/ora/releases/tag/v6.0.0
+      # Blocked by: https://github.com/FuelLabs/fuels-ts/issues/3447
+      - dependency-name: "ora"
+        update-types:
+          - "major"
+
+      # https://github.com/FuelLabs/fuels-ts/issues/2666
+      - dependency-name: "tsup"
+        update-types:
+          - "major"
+          - "minor"
+
+      # https://github.com/FuelLabs/fuels-ts/issues/3724
+      - dependency-name: "eslint"
+        update-types:
+          - "major"
+      - dependency-name: "@typescript-eslint/eslint-plugin"
+        update-types:
+          - "major"
+      - dependency-name: "@typescript-eslint/parser"
+        update-types:
+          - "major"
 
   - package-ecosystem: "github-actions"
     directory: "/"
