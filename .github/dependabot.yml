@@ -30,24 +30,24 @@ updates:
       # Blocked by: https://github.com/FuelLabs/fuels-ts/issues/3447
       - dependency-name: "ora"
         update-types:
-          - "semver-major"
+          - "version-update:semver-major"
 
       # https://github.com/FuelLabs/fuels-ts/issues/2666
       - dependency-name: "tsup"
         update-types:
-          - "semver-major"
-          - "semver-minor"
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
 
       # https://github.com/FuelLabs/fuels-ts/issues/3724
       - dependency-name: "eslint"
         update-types:
-          - "semver-major"
+          - "version-update:semver-major"
       - dependency-name: "@typescript-eslint/eslint-plugin"
         update-types:
-          - "semver-major"
+          - "version-update:semver-major"
       - dependency-name: "@typescript-eslint/parser"
         update-types:
-          - "semver-major"
+          - "version-update:semver-major"
 
   - package-ecosystem: "github-actions"
     directory: "/"
