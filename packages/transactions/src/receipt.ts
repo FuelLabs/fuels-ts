@@ -34,9 +34,9 @@ export type ReceiptCall = {
   assetId: string;
   /** Gas to forward, i.e. $rD (u64) */
   gas: BN;
-  /** First parameter (u64) */
+  /** Method name offset (u64) */
   param1: BN;
-  /** Second parameter (u64) */
+  /** Method args offset (u64) */
   param2: BN;
   /** Value of register $pc (u64) */
   pc: BN;

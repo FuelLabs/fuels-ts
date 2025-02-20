@@ -33,7 +33,7 @@ describe('Resource Cache', () => {
     );
   });
 
-  it('can validade if it is cached [UTXO]', () => {
+  it('can validate if it is cached [UTXO]', () => {
     const resourceCache = new ResourceCache(1000);
     const utxoId = randomValue();
 
@@ -45,7 +45,7 @@ describe('Resource Cache', () => {
     expect(resourceCache.isCached(utxoId)).toBeTruthy();
   });
 
-  it('can validade if it is cached [Message]', () => {
+  it('can validate if it is cached [Message]', () => {
     const resourceCache = new ResourceCache(1000);
     const messageNonce = randomValue();
 

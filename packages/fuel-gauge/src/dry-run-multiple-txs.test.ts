@@ -260,7 +260,7 @@ describe('dry-run-multiple-txs', () => {
       },
     });
 
-    // request 4 we dry run it 1 time because it has reveted
+    // request 4 we dry run it 1 time because it has reverted
     expect(estimatedRequests[3]).toStrictEqual<EstimateTxDependenciesReturns>({
       receipts: expect.any(Array<TransactionResultReceipt>),
       missingContractIds: [],

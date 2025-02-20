@@ -145,7 +145,7 @@ describe('Advanced Logging', () => {
     ]);
   });
 
-  describe('should properly decode all logs in a multicall with inter-contract calls', () => {
+  describe('should properly decode all logs in a multiCall with inter-contract calls', () => {
     const testStruct = {
       a: true,
       b: 100000,
@@ -161,7 +161,7 @@ describe('Advanced Logging', () => {
       'fuelfuel',
     ];
 
-    it('when using InvacationScope', async () => {
+    it('when using InvocationScope', async () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           { factory: AdvancedLoggingFactory },

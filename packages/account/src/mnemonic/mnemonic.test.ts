@@ -113,36 +113,36 @@ describe('Mnemonic', () => {
   });
 
   test('Validate a 12 complete Mnemonic phrase', () => {
-    const mnemonicphrase =
+    const mnemonicPhrase =
       'aware fringe excess tank asset quick suffer second cloth deliver file above';
-    const validation = Mnemonic.isMnemonicValid(mnemonicphrase);
+    const validation = Mnemonic.isMnemonicValid(mnemonicPhrase);
     expect(validation).toEqual(true);
   });
   test('Validate a 15 complete Mnemonic phrase', () => {
-    const mnemonicphrase =
+    const mnemonicPhrase =
       'lucky buzz drink topic lunar proud warfare pass silver police chef liberty soap about process';
-    const validation = Mnemonic.isMnemonicValid(mnemonicphrase);
+    const validation = Mnemonic.isMnemonicValid(mnemonicPhrase);
     expect(validation).toEqual(true);
   });
 
   test('Validate a 18 complete Mnemonic phrase', () => {
-    const mnemonicphrase =
+    const mnemonicPhrase =
       'aware fringe excess tank asset quick suffer second cloth deliver file above';
-    const validation = Mnemonic.isMnemonicValid(mnemonicphrase);
+    const validation = Mnemonic.isMnemonicValid(mnemonicPhrase);
     expect(validation).toEqual(true);
   });
 
   test('Validate a 21 complete Mnemonic phrase', () => {
-    const mnemonicphrase =
+    const mnemonicPhrase =
       'movie fold other broccoli deliver bleak rookie record walnut coin decline blossom wheat thing silk group library absorb';
-    const validation = Mnemonic.isMnemonicValid(mnemonicphrase);
+    const validation = Mnemonic.isMnemonicValid(mnemonicPhrase);
     expect(validation).toEqual(true);
   });
 
   test('Validate a 24 complete Mnemonic phrase', () => {
-    const mnemonicphrase =
+    const mnemonicPhrase =
       'trick modify monster anger volcano thrive jealous lens warm program milk flavor bike torch fish eye aspect cable loan little bachelor town office sound';
-    const validation = Mnemonic.isMnemonicValid(mnemonicphrase);
+    const validation = Mnemonic.isMnemonicValid(mnemonicPhrase);
     expect(validation).toEqual(true);
   });
 
