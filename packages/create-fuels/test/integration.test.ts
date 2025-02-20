@@ -57,10 +57,8 @@ describe('`create fuels` package integrity', () => {
         filterOriginalTemplateFiles(files).filter(filterForcBuildFiles)
       );
 
-      const cmd = `${createCommand} ${args}`;
-      log('cmd', cmd);
       const { error: createFuelsError } = await safeExec(() =>
-        execSync(cmd, {
+        execSync(`${createCommand} ${args}`, {
           stdio: 'inherit',
         })
       );
