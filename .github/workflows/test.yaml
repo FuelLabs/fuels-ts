@@ -58,7 +58,7 @@ jobs:
   integration:
     runs-on: ubuntu-latest
     timeout-minutes: 25
-    if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
+    # if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -70,26 +70,76 @@ jobs:
         with:
           should-install-bun: true
 
+      - name: Create .bunfig.toml
+        run: |
+          cat << EOF > "$XDG_CONFIG_HOME/.bunfig.toml"
+          [install.scopes]
+
+          # as an object with token
+          "@FuelLabs" = { token = "$npm_token", url = "https://npm.pkg.github.com/" }
+          EOF
+        env:
+          # HOME: ${{ github.workspace }}
+          npm_token: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Running test for bun create
+        run: |
+          echo $XDG_CONFIG_HOME
+          cat $XDG_CONFIG_HOME/.bunfig.toml
+          bun create @FuelLabs/fuels@next test-project --no-install
+        env:
+          npm_token: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # BUN_CONFIG_REGISTRY: https://npm.pkg.github.com
+          # NPM_CONFIG_REGISTRY: https://npm.pkg.github.com
+
+          # HOME: ${{ github.workspace }}
+          # npm_config_registry: https://npm.pkg.github.com
+          # BUN_CONFIG_REGISTRY: https://npm.pkg.github.com
+
+          # npm_config_token: ${{ secrets.GITHUB_TOKEN }}
+          # BUN_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Run UI tests (on template)
         run: sh ./scripts/tests-ui.sh
 
       - name: Wait for release to succeed
         uses: lewagon/wait-on-check-action@v1.3.4
         with:
-          ref: "refs/heads/master"
-          check-name: "Release"
+          ref: ${{ github.event.pull_request.head.ref }}
+          check-name: "publish-to-github-packages"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 30
+
+      - name: Create .npmrc
+        run: |
+          cat << EOF > "$HOME/.npmrc"
+            //npm.pkg.github.com/:_authToken=$GITHUB_TOKEN
+            @FuelLabs:registry=https://npm.pkg.github.com
+          EOF
+        env:
+          HOME: ${{ github.workspace }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run tests (with published version)
         run: pnpm test:integration
         env:
-          PUBLISHED_NPM_TAG: next
+          HOME: ${{ github.workspace }}
+          NPM_CONFIG_USERCONFIG: $HOME/.npmrc
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BUN_CONFIG_REGISTRY: https://npm.pkg.github.com
 
       - name: Run UI tests (with published version)
         run: sh ./scripts/tests-ui-integration.sh
         env:
-          PUBLISHED_NPM_TAG: next
+          HOME: ${{ github.workspace }}
+          NPM_CONFIG_USERCONFIG: $HOME/.npmrc
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BUN_CONFIG_REGISTRY: https://npm.pkg.github.com
 
   forc:
     runs-on: ubuntu-latest
