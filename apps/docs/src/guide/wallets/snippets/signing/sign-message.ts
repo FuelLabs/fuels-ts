@@ -26,8 +26,3 @@ console.log(
   hashedMessage ===
     '0x40436501b686546b7c660bb18791ac2ae35e77fbe2ac977fc061922b9ec83766'
 );
-
-console.log(
-  'Expect the recovered address to be the same as the original wallet address',
-  wallet.address.toB256() === recoveredAddress.toB256()
-);
