@@ -11,6 +11,7 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   changesets-pr:
     runs-on: ubuntu-latest
+    environment: fuel-fuels-ts-bot
     permissions: write-all
     # First check ensures that the workflow runs only if the commit is NOT the changesets PR commit.
     # Second check ensures that the workflow runs only after a commit is pushed into the branch,
@@ -21,6 +22,23 @@ jobs:
       github.event.before != '0000000000000000000000000000000000000000'
 
     steps:
+      - name: Create the Internal GitHub App Token
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_KEY }}
+
+      - name: Create Fuel Docs GitHub Token
+        uses: actions/create-github-app-token@v1
+        id: docs-token
+        with:
+          app-id: ${{ vars.FUEL_DOCS_BOT_APP_ID }}
+          private-key: ${{ secrets.FUEL_DOCS_BOT_APP_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: |
+            docs-hub
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -38,8 +56,6 @@ jobs:
           echo "FUEL_CORE_VERSION=$(cat ./internal/fuel-core/VERSION)" >> $GITHUB_ENV
           echo "FORC_VERSION=$(cat ./internal/forc/VERSION)" >> $GITHUB_ENV
           git reset --hard
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set branch name and changeset PR title
         run: |
@@ -55,24 +71,23 @@ jobs:
           commit: "ci(release): versioning packages and changesets"
           title: ${{ env.CHANGESET_PR_TITLE }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Prettify changelog
         run: pnpm changeset:update-changelog
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           REF_NAME: ${{ github.ref_name }}
           PUBLISHED: "false"
 
-      # # Commenting out as we require permissions to trigger across repos
-      # - name: Update docs
-      #   if: github.ref_name == 'master'
-      #   uses: benc-uk/workflow-dispatch@v1
-      #   with:
-      #     workflow: update-nightly.yml
-      #     ref: master
-      #     repo: FuelLabs/docs-hub
-      #     token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Update docs
+        if: github.ref_name == 'master'
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: update-nightly.yml
+          ref: master
+          repo: FuelLabs/docs-hub
+          token: ${{ steps.docs-token.outputs.token }}
 
       # Upload assets to S3
       - uses: unfor19/install-aws-cli-action@v1.0.7
