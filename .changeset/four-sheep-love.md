@@ -3,4 +3,4 @@
 "@fuel-ts/hasher": minor
 ---
 
-feat!: enable arbitrary data signing
+feat: enable arbitrary data signing
