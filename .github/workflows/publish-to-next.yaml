@@ -9,7 +9,9 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 env:
-  NPM_DIST_TAG: ${{ github.event_name == 'pull_request' && "pr-${{ github.event.pull_request.number }}" || 'next' }}
+  NEXT_DIST_TAG: next
+  PR_DIST_TAG: pr-${{ github.event.pull_request.number }}
+  NPM_DIST_TAG: ${{ github.event_name == 'pull_request' && env.PR_DIST_TAG || env.NEXT_DIST_TAG }}
 
 jobs:
   publish-to-github-packages:
