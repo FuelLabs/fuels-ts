@@ -14,6 +14,7 @@ import {
 
 const { log } = console;
 
+log(process.env);
 const PUBLISHED_FUEL_PACKAGE_NAME = process.env.PUBLISHED_FUEL_PACKAGE_NAME ?? '@FuelLabs/fuels';
 const PUBLISHED_NPM_TAG = process.env.PUBLISHED_NPM_TAG ?? 'next';
 
