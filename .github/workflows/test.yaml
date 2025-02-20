@@ -59,7 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
-      NPM_DIST_TAG: ${{ (github.event.pull_request.number && 'pr-${{ github.event.pull_request.number }}') || 'next' }}
+      NPM_DIST_TAG: ${{ github.event_name == 'pull_request' && "pr-${{ github.event.pull_request.number }}" || 'next' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
