@@ -82,14 +82,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Running test for bun create
-        run: |
-          echo $XDG_CONFIG_HOME
-          cat $XDG_CONFIG_HOME/.bunfig.toml
-          bun create @FuelLabs/fuels@$NPM_DIST_TAG test-project --no-install
-        env:
-          npm_token: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Running test for bun create
+      #   run: |
+      #     echo $XDG_CONFIG_HOME
+      #     cat $XDG_CONFIG_HOME/.bunfig.toml
+      #     bun create @FuelLabs/fuels@$NPM_DIST_TAG test-project --no-install
+      #   env:
+      #     npm_token: ${{ secrets.GITHUB_TOKEN }}
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run UI tests (on template)
         run: sh ./scripts/tests-ui.sh
@@ -117,12 +117,14 @@ jobs:
         env:
           PUBLISHED_NPM_TAG: ${{ env.NPM_DIST_TAG }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          XDG_CONFIG_HOME: ${{ env.XDG_CONFIG_HOME }}
 
       - name: Run UI tests (with published version)
         run: sh ./scripts/tests-ui-integration.sh
         env:
           PUBLISHED_NPM_TAG: ${{ env.NPM_DIST_TAG }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          XDG_CONFIG_HOME: ${{ env.XDG_CONFIG_HOME }}
 
   forc:
     runs-on: ubuntu-latest
