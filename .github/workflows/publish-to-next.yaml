@@ -9,8 +9,7 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 env:
-  # NPM_DIST_TAG: github.ref_name == 'master' ? 'next' : 'pr-${{ github.event.pull_request.number }}'
-  NPM_DIST_TAG: next
+  NPM_DIST_TAG: github.event.pull_request.number ? 'pr-${{ github.event.pull_request.number }}' : 'next'
 
 jobs:
   publish-to-github-packages:
@@ -42,6 +41,8 @@ jobs:
 
       - name: Publish `$NPM_DIST_TAG` tag on GitHub Packages
         run: |
+          echo "Publish to: $NPM_DIST_TAG"
+
           pnpm changeset:next
           pnpm changeset version --snapshot $NPM_DIST_TAG
           pnpm changeset publish --tag $NPM_DIST_TAG

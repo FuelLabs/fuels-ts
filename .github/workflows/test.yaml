@@ -58,7 +58,8 @@ jobs:
   integration:
     runs-on: ubuntu-latest
     timeout-minutes: 25
-    # if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
+    env:
+      NPM_DIST_TAG: github.event.pull_request.number ? 'pr-${{ github.event.pull_request.number }}' : 'next'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -114,6 +115,7 @@ jobs:
       - name: Run tests (with published version)
         run: pnpm test:integration
         env:
+          PUBLISHED_NPM_TAG: ${{ env.NPM_DIST_TAG }}
           HOME: ${{ github.workspace }}
           NPM_CONFIG_USERCONFIG: $HOME/.npmrc
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -123,6 +125,7 @@ jobs:
       - name: Run UI tests (with published version)
         run: sh ./scripts/tests-ui-integration.sh
         env:
+          PUBLISHED_NPM_TAG: ${{ env.NPM_DIST_TAG }}
           HOME: ${{ github.workspace }}
           NPM_CONFIG_USERCONFIG: $HOME/.npmrc
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
