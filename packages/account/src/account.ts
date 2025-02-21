@@ -825,12 +825,151 @@ export class Account extends AbstractAccount implements WithAddress {
   /**
    * Consolidates base asset coins owned by the account.
    */
-  public async consolidateCoins(): Promise<{ coins: Coin[]; transactions: TransactionResult[] }> {
+  private async consolidateBaseAssetCoins(): Promise<{
+    coins: Coin[];
+    transactions: TransactionResult[];
+  }> {
     const maxInputs = (
       await this.provider.getChain()
     ).consensusParameters.txParameters.maxInputs.toNumber();
 
     const baseAssetId = await this.provider.getBaseAssetId();
+
+    let remainingCoins = await this.getAllCoins(baseAssetId);
+
+    const resultingCoinIds: BytesLike[] = [];
+    const transactions: TransactionResult[] = [];
+
+    let predicateGasUsed: BigNumberish | undefined;
+    const isPredicate = 'predicateData' in this;
+
+    if (isPredicate) {
+      const request = new ScriptTransactionRequest();
+      request.addCoinInput(remainingCoins[0]);
+      await this.provider.estimatePredicates(request);
+
+      predicateGasUsed = (request.inputs[0] as CoinTransactionRequestInput).predicateGasUsed;
+    }
+
+    while (remainingCoins.length > 1) {
+      const request = new ScriptTransactionRequest();
+
+      // if there are more than maxInputs unconsolidated coins,
+      // leave the selection of coins that fund the transaction to the node
+      // and add additional inputs to the request afterwards until max inputs reached
+      if (remainingCoins.length > maxInputs) {
+        const maxInputsRequest = new ScriptTransactionRequest();
+        const fakeCoins = this.generateFakeResources(
+          new Array(maxInputs).fill({ assetId: baseAssetId })
+        );
+        maxInputsRequest.addResources(fakeCoins);
+
+        if (predicateGasUsed) {
+          maxInputsRequest.inputs.forEach((input) => {
+            // eslint-disable-next-line no-param-reassign
+            (input as CoinTransactionRequestInput).predicateGasUsed = predicateGasUsed;
+          });
+        }
+
+        const { maxFee, gasLimit } = await this.provider.estimateTxGasAndFee({
+          transactionRequest: maxInputsRequest,
+        });
+
+        request.maxFee = maxFee;
+        request.gasLimit = gasLimit;
+
+        const resources = await this.getResourcesToSpend(
+          [{ amount: bn(maxFee), assetId: baseAssetId }],
+          {
+            utxos: resultingCoinIds,
+          }
+        );
+
+        request.addResources(resources);
+      }
+
+      for (const coin of remainingCoins) {
+        if (request.inputs.length === maxInputs) {
+          break;
+        }
+
+        if (request.inputs.some((x) => (x as CoinTransactionRequestInput).id === coin.id)) {
+          continue;
+        }
+
+        request.addCoinInput(coin);
+      }
+
+      if (predicateGasUsed) {
+        request.inputs.forEach((input) => {
+          // eslint-disable-next-line no-param-reassign
+          (input as CoinTransactionRequestInput).predicateGasUsed = predicateGasUsed;
+        });
+      }
+
+      if (request.maxFee.eq(0)) {
+        const { maxFee, gasLimit } = await this.provider.estimateTxGasAndFee({
+          transactionRequest: request,
+        });
+
+        request.maxFee = maxFee;
+        request.gasLimit = gasLimit;
+      }
+
+      const amount = request.inputs.reduce(
+        (acc, coin) => acc.add((coin as CoinTransactionRequestInput).amount),
+        bn(0)
+      );
+
+      if (request.maxFee.gte(amount)) {
+        // TODO: to throw or not to throw, that's the question
+        throw new FuelError(
+          ErrorCode.NOT_ENOUGH_FUNDS,
+          `The account sending the transaction doesn't have enough funds to cover the transaction.`,
+          {
+            transactions,
+          }
+        );
+      }
+
+      const { waitForResult } = await this.sendTransaction(request);
+
+      const tx = await waitForResult();
+
+      transactions.push(tx);
+
+      // There's only one coin output in the transaction so we can hardcode the output index
+      resultingCoinIds.push(`${tx.id}0000`);
+
+      remainingCoins = remainingCoins.filter(
+        (coin) => !request.inputs.some((x) => (x as CoinTransactionRequestInput).id === coin.id)
+      );
+    }
+
+    return {
+      // we re-fetch the coins instead of combining the consolidation tx outputs and remaining coins
+      // because the outputs don't have `blockHeight` and `txIdx` set in the `TransactionResult`
+      coins: await this.getAllCoins(baseAssetId),
+      transactions,
+    };
+  }
+
+  /**
+   * Consolidates base asset coins owned by the account.
+   */
+  public async consolidateCoins({
+    assetId,
+  }: {
+    assetId: BytesLike;
+  }): Promise<{ coins: Coin[]; transactions: TransactionResult[] }> {
+    const baseAssetId = await this.provider.getBaseAssetId();
+    if (assetId === baseAssetId) {
+      return this.consolidateBaseAssetCoins();
+    }
+
+    const maxInputs = (
+      await this.provider.getChain()
+    ).consensusParameters.txParameters.maxInputs.toNumber();
 
     let remainingCoins = await this.getAllCoins(baseAssetId);
 
