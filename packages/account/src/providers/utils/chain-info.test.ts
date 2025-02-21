@@ -1,4 +1,4 @@
-import { setupTestProviderAndWallets } from '../test-utils';
+import { setupTestProviderAndWallets } from '../../test-utils';
 
 import { deserializeChain, serializeChain } from './chain-info';
 

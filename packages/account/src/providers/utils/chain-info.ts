@@ -1,6 +1,6 @@
 import { bn } from '@fuel-ts/math';
 
-import type { ChainInfo, SerializedChainInfo } from './provider';
+import type { ChainInfo, SerializedChainInfo } from '../provider';
 
 /** @hidden */
 export const deserializeChain = (chain: SerializedChainInfo): ChainInfo => {

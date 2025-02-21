@@ -32,7 +32,6 @@ import type {
   GqlBlockFragment,
   GqlEstimatePredicatesQuery,
 } from './__generated__/operations';
-import { deserializeChain } from './chain-info';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
@@ -66,6 +65,7 @@ import {
 } from './utils';
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
+import { deserializeChain } from './utils/chain-info';
 import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
