@@ -1,6 +1,6 @@
 import { bn } from '@fuel-ts/math';
 
-import type { ChainInfo, SerializedChainInfo } from '../provider';
+import type { ChainInfo, NodeInfo, SerializedChainInfo, SerializedNodeInfo } from '../provider';
 
 /** @hidden */
 export const deserializeChain = (chain: SerializedChainInfo): ChainInfo => {
@@ -117,5 +117,29 @@ export const serializeChain = (chain: ChainInfo): SerializedChainInfo => {
       },
       gasCosts,
     },
+  };
+};
+
+export const deserializeNodeInfo = (nodeInfo: SerializedNodeInfo): NodeInfo => {
+  const { maxDepth, maxTx, nodeVersion, utxoValidation, vmBacktrace } = nodeInfo;
+
+  return {
+    maxDepth: bn(maxDepth),
+    maxTx: bn(maxTx),
+    nodeVersion,
+    utxoValidation,
+    vmBacktrace,
+  };
+};
+
+export const serializeNodeInfo = (nodeInfo: NodeInfo): SerializedNodeInfo => {
+  const { maxDepth, maxTx, nodeVersion, utxoValidation, vmBacktrace } = nodeInfo;
+
+  return {
+    maxDepth: maxDepth.toString(),
+    maxTx: maxTx.toString(),
+    nodeVersion,
+    utxoValidation,
+    vmBacktrace,
   };
 };
