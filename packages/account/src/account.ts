@@ -46,6 +46,7 @@ import {
   isRequestInputResource,
 } from './providers/transaction-request/helpers';
 import { mergeQuantities } from './providers/utils/merge-quantities';
+import { serializeProviderCache } from './providers/utils/serialization';
 import { AbstractAccount } from './types';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
 
@@ -652,11 +653,21 @@ export class Account extends AbstractAccount implements WithAddress {
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true, onBeforeSend, skipCustomFee = false }: AccountSendTxParams = {}
+    { estimateTxDependencies = true, ...connectorOptions }: AccountSendTxParams = {}
   ): Promise<TransactionResponse> {
     // Check if the account is using a connector, and therefore we do not have direct access to the
     // private key.
     if (this._connector) {
+      const options: FuelConnectorSendTxParams = {
+        skipCustomFee: false,
+        ...connectorOptions,
+        provider: {
+          url: this.provider.url,
+          ...connectorOptions.provider,
+          cache: connectorOptions.provider?.cache ?? (await serializeProviderCache(this.provider)),
+        },
+      };
+
       // If the connector is using prepareForSend, the connector will prepare the transaction for the dapp,
       // and submission is owned by the dapp. This reduces network requests to submit and create the
       // summary for a tx.
@@ -664,10 +675,7 @@ export class Account extends AbstractAccount implements WithAddress {
         const preparedTransaction = await this._connector.prepareForSend(
           this.address.toString(),
           transactionRequestLike,
-          {
-            onBeforeSend,
-            skipCustomFee,
-          }
+          options
         );
         // Submit the prepared transaction using the provider.
         return this.provider.sendTransaction(preparedTransaction, {
@@ -680,10 +688,7 @@ export class Account extends AbstractAccount implements WithAddress {
       const txId = await this._connector.sendTransaction(
         this.address.toString(),
         transactionRequestLike,
-        {
-          onBeforeSend,
-          skipCustomFee,
-        }
+        options
       );
       // And return the transaction response for the returned tx id.
       return this.provider.getTransactionResponse(txId);

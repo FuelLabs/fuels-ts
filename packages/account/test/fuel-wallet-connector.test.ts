@@ -16,8 +16,10 @@ import {
 } from '../src';
 import { TESTNET_NETWORK_URL } from '../src/configs';
 import { Fuel } from '../src/connectors/fuel';
+import type { FuelConnectorSendTxParams } from '../src/connectors/types';
 import { FuelConnectorEventType } from '../src/connectors/types';
 import { Provider, ScriptTransactionRequest, TransactionStatus } from '../src/providers';
+import { serializeProviderCache } from '../src/providers/utils/serialization';
 import { setupTestProviderAndWallets, TestMessage } from '../src/test-utils';
 import { Wallet } from '../src/wallet';
 
@@ -677,6 +679,45 @@ describe('Fuel Connector', () => {
     );
   });
 
+  it('should ensure sendTransaction works just fine [defaults]', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider,
+      wallets: [connectorWallet],
+    } = launched;
+    const connector = new MockConnector({
+      wallets: [connectorWallet],
+    });
+    const fuel = await new Fuel({
+      connectors: [connector],
+    });
+
+    const account = new Account(connectorWallet.address.toString(), provider, fuel);
+
+    const sendTransactionSpy = vi.spyOn(connectorWallet, 'sendTransaction');
+    const prepareForSendSpy = vi.spyOn(connector, 'prepareForSend');
+
+    const request = new ScriptTransactionRequest();
+    const resources = await connectorWallet.getResourcesToSpend([
+      { assetId: await provider.getBaseAssetId(), amount: 1000 },
+    ]);
+    request.addResources(resources);
+    await request.estimateAndFund(connectorWallet);
+
+    const expectedParams: FuelConnectorSendTxParams = {
+      skipCustomFee: false,
+      provider: {
+        url: provider.url,
+        cache: await serializeProviderCache(provider),
+      },
+    };
+    const response = await account.sendTransaction(request);
+    expect(response).toBeDefined();
+    // transaction prepared and sent via connector
+    expect(sendTransactionSpy).toHaveBeenCalledWith(request, expectedParams);
+    expect(prepareForSendSpy).not.toHaveBeenCalled();
+  });
+
   it('should ensure sendTransaction works just fine', async () => {
     using launched = await setupTestProviderAndWallets();
     const {
@@ -703,6 +744,10 @@ describe('Fuel Connector', () => {
     const params: AccountSendTxParams = {
       onBeforeSend: vi.fn(),
       skipCustomFee: true,
+      provider: {
+        url: provider.url,
+        cache: await serializeProviderCache(provider),
+      },
     };
     const response = await fuel.sendTransaction(
       connectorWallet.address.toString(),
@@ -786,7 +831,14 @@ describe('Fuel Connector', () => {
     expect(tx).toBeDefined();
 
     // transaction prepared via connector and sent via provider
-    expect(connectorPrepareForSendSpy).toHaveBeenCalledWith(address, request, params);
+    const expectedParams: FuelConnectorSendTxParams = {
+      ...params,
+      provider: {
+        url: provider.url,
+        cache: await serializeProviderCache(provider),
+      },
+    };
+    expect(connectorPrepareForSendSpy).toHaveBeenCalledWith(address, request, expectedParams);
     expect(providerSendTransactionSpy).toHaveBeenCalled();
     // not sent via connector
     expect(connectorSendTransactionSpy).not.toHaveBeenCalled();
