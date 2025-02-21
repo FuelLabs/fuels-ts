@@ -192,6 +192,7 @@ export type NodeInfo = {
   nodeVersion: string;
 };
 
+/** @deprecated This type is no longer used. */
 export type NodeInfoAndConsensusParameters = {
   nodeVersion: string;
   gasPerByte: BN;
