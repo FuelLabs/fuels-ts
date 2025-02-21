@@ -10,6 +10,10 @@ import {
   deserializeProviderCache,
 } from './serialization';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('Serialization', () => {
   describe('ChainInfo', () => {
     it('should serialize and deserialize chain info', async () => {
