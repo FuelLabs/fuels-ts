@@ -1,6 +1,19 @@
 import { bn } from '@fuel-ts/math';
 
 import type { ChainInfo, NodeInfo, SerializedChainInfo, SerializedNodeInfo } from '../provider';
+import type Provider from '../provider';
+
+export interface ProviderCache {
+  consensusParametersTimestamp?: number;
+  chain: ChainInfo;
+  nodeInfo: NodeInfo;
+}
+
+export interface SerializedProviderCache {
+  consensusParametersTimestamp?: number;
+  chain: SerializedChainInfo;
+  nodeInfo: SerializedNodeInfo;
+}
 
 /** @hidden */
 export const deserializeChain = (chain: SerializedChainInfo): ChainInfo => {
@@ -143,3 +156,17 @@ export const serializeNodeInfo = (nodeInfo: NodeInfo): SerializedNodeInfo => {
     vmBacktrace,
   };
 };
+
+export const deserializeProviderCache = (cache: SerializedProviderCache): ProviderCache => ({
+  consensusParametersTimestamp: cache.consensusParametersTimestamp,
+  chain: deserializeChain(cache.chain),
+  nodeInfo: deserializeNodeInfo(cache.nodeInfo),
+});
+
+export const serializeProviderCache = async (
+  provider: Provider
+): Promise<SerializedProviderCache> => ({
+  consensusParametersTimestamp: provider.consensusParametersTimestamp,
+  chain: serializeChain(await provider.getChain()),
+  nodeInfo: serializeNodeInfo(await provider.getNode()),
+});

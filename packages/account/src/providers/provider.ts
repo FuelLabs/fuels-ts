@@ -67,7 +67,12 @@ import {
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
 import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
-import { deserializeChain, deserializeNodeInfo } from './utils/serialization';
+import type { SerializedProviderCache } from './utils/serialization';
+import {
+  deserializeChain,
+  deserializeNodeInfo,
+  deserializeProviderCache,
+} from './utils/serialization';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
 const MAX_RETRIES = 10;
@@ -281,7 +286,7 @@ export type ProviderOptions = {
   /**
    * The cache can be passed in to avoid re-fetching the chain + node info.
    */
-  cache?: ProviderCache;
+  cache?: SerializedProviderCache;
 };
 
 /**
@@ -468,10 +473,10 @@ export default class Provider {
      * Re-instantiate chain + node info from the passed in cache
      */
     if (cache) {
-      const { consensusParametersTimestamp, chain, nodeInfo } = cache;
+      const { consensusParametersTimestamp, chain, nodeInfo } = deserializeProviderCache(cache);
       this.consensusParametersTimestamp = consensusParametersTimestamp;
-      Provider.chainInfoCache[this.urlWithoutAuth] = deserializeChain(chain);
-      Provider.nodeInfoCache[this.urlWithoutAuth] = deserializeNodeInfo(nodeInfo);
+      Provider.chainInfoCache[this.urlWithoutAuth] = chain;
+      Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
     }
 
     /**
