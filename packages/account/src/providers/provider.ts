@@ -16,7 +16,7 @@ import { clone } from 'ramda';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
-  GqlChainInfoFragment,
+  GqlChainInfoFragment as SerializedChainInfo,
   GqlConsensusParametersVersion,
   GqlContractParameters as ContractParameters,
   GqlDryRunFailureStatusFragment,
@@ -32,6 +32,7 @@ import type {
   GqlBlockFragment,
   GqlEstimatePredicatesQuery,
 } from './__generated__/operations';
+import { deserializeChain } from './chain-info';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
@@ -150,6 +151,7 @@ type ModifyStringToBN<T> = {
 };
 
 export {
+  SerializedChainInfo,
   GasCosts,
   FeeParameters,
   ContractParameters,
@@ -215,64 +217,6 @@ export type TransactionCost = {
   updateMaxFee?: boolean;
 };
 // #endregion cost-estimation-1
-
-const processGqlChain = (chain: GqlChainInfoFragment): ChainInfo => {
-  const { name, daHeight, consensusParameters } = chain;
-
-  const {
-    contractParams,
-    feeParams,
-    predicateParams,
-    scriptParams,
-    txParams,
-    gasCosts,
-    baseAssetId,
-    chainId,
-    version,
-  } = consensusParameters;
-
-  return {
-    name,
-    baseChainHeight: bn(daHeight),
-    consensusParameters: {
-      version,
-      chainId: bn(chainId),
-      baseAssetId,
-      feeParameters: {
-        version: feeParams.version,
-        gasPerByte: bn(feeParams.gasPerByte),
-        gasPriceFactor: bn(feeParams.gasPriceFactor),
-      },
-      contractParameters: {
-        version: contractParams.version,
-        contractMaxSize: bn(contractParams.contractMaxSize),
-        maxStorageSlots: bn(contractParams.maxStorageSlots),
-      },
-      txParameters: {
-        version: txParams.version,
-        maxInputs: bn(txParams.maxInputs),
-        maxOutputs: bn(txParams.maxOutputs),
-        maxWitnesses: bn(txParams.maxWitnesses),
-        maxGasPerTx: bn(txParams.maxGasPerTx),
-        maxSize: bn(txParams.maxSize),
-        maxBytecodeSubsections: bn(txParams.maxBytecodeSubsections),
-      },
-      predicateParameters: {
-        version: predicateParams.version,
-        maxPredicateLength: bn(predicateParams.maxPredicateLength),
-        maxPredicateDataLength: bn(predicateParams.maxPredicateDataLength),
-        maxGasPerPredicate: bn(predicateParams.maxGasPerPredicate),
-        maxMessageDataLength: bn(predicateParams.maxMessageDataLength),
-      },
-      scriptParameters: {
-        version: scriptParams.version,
-        maxScriptLength: bn(scriptParams.maxScriptLength),
-        maxScriptDataLength: bn(scriptParams.maxScriptDataLength),
-      },
-      gasCosts,
-    },
-  };
-};
 
 /**
  * @hidden
@@ -640,7 +584,7 @@ export default class Provider {
 
       Provider.setIncompatibleNodeVersionMessage(nodeInfo);
 
-      chain = processGqlChain(data.chain);
+      chain = deserializeChain(data.chain);
 
       Provider.chainInfoCache[this.urlWithoutAuth] = chain;
       Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
@@ -795,7 +739,7 @@ export default class Provider {
   async fetchChain(): Promise<ChainInfo> {
     const { chain } = await this.operations.getChain();
 
-    const processedChain = processGqlChain(chain);
+    const processedChain = deserializeChain(chain);
 
     Provider.chainInfoCache[this.urlWithoutAuth] = processedChain;
 
