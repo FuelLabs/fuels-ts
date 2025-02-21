@@ -16,6 +16,7 @@ import { clone } from 'ramda';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
+  GqlNodeInfoFragment as SerializedNodeInfo,
   GqlChainInfoFragment as SerializedChainInfo,
   GqlConsensusParametersVersion,
   GqlContractParameters as ContractParameters,
@@ -67,6 +68,7 @@ import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
 import { deserializeChain } from './utils/chain-info';
 import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
+import { deserializeNodeInfo } from './utils/node-info';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
 const MAX_RETRIES = 10;
@@ -151,6 +153,7 @@ type ModifyStringToBN<T> = {
 };
 
 export {
+  SerializedNodeInfo,
   SerializedChainInfo,
   GasCosts,
   FeeParameters,
@@ -575,13 +578,7 @@ export default class Provider {
     } catch (_err) {
       const data = await this.operations.getChainAndNodeInfo();
 
-      nodeInfo = {
-        maxDepth: bn(data.nodeInfo.maxDepth),
-        maxTx: bn(data.nodeInfo.maxTx),
-        nodeVersion: data.nodeInfo.nodeVersion,
-        utxoValidation: data.nodeInfo.utxoValidation,
-        vmBacktrace: data.nodeInfo.vmBacktrace,
-      };
+      nodeInfo = deserializeNodeInfo(data.nodeInfo);
 
       Provider.setIncompatibleNodeVersionMessage(nodeInfo);
 
@@ -719,13 +716,7 @@ export default class Provider {
   async fetchNode(): Promise<NodeInfo> {
     const { nodeInfo } = await this.operations.getNodeInfo();
 
-    const processedNodeInfo: NodeInfo = {
-      maxDepth: bn(nodeInfo.maxDepth),
-      maxTx: bn(nodeInfo.maxTx),
-      nodeVersion: nodeInfo.nodeVersion,
-      utxoValidation: nodeInfo.utxoValidation,
-      vmBacktrace: nodeInfo.vmBacktrace,
-    };
+    const processedNodeInfo: NodeInfo = deserializeNodeInfo(nodeInfo);
 
     Provider.nodeInfoCache[this.urlWithoutAuth] = processedNodeInfo;
 
