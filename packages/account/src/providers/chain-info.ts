@@ -60,3 +60,62 @@ export const deserializeChain = (chain: SerializedChainInfo): ChainInfo => {
     },
   };
 };
+
+/** @hidden */
+export const serializeChain = (chain: ChainInfo): SerializedChainInfo => {
+  const { name, baseChainHeight, consensusParameters } = chain;
+
+  const {
+    contractParameters,
+    feeParameters,
+    predicateParameters,
+    scriptParameters,
+    txParameters,
+    gasCosts,
+    baseAssetId,
+    chainId,
+    version,
+  } = consensusParameters;
+
+  return {
+    name,
+    daHeight: baseChainHeight.toString(),
+    consensusParameters: {
+      version,
+      chainId: chainId.toString(),
+      baseAssetId,
+      feeParams: {
+        version: feeParameters.version,
+        gasPerByte: feeParameters.gasPerByte.toString(),
+        gasPriceFactor: feeParameters.gasPriceFactor.toString(),
+      },
+      contractParams: {
+        version: contractParameters.version,
+        contractMaxSize: contractParameters.contractMaxSize.toString(),
+        maxStorageSlots: contractParameters.maxStorageSlots.toString(),
+      },
+      txParams: {
+        version: txParameters.version,
+        maxInputs: txParameters.maxInputs.toString(),
+        maxOutputs: txParameters.maxOutputs.toString(),
+        maxWitnesses: txParameters.maxWitnesses.toString(),
+        maxGasPerTx: txParameters.maxGasPerTx.toString(),
+        maxSize: txParameters.maxSize.toString(),
+        maxBytecodeSubsections: txParameters.maxBytecodeSubsections.toString(),
+      },
+      predicateParams: {
+        version: predicateParameters.version,
+        maxPredicateLength: predicateParameters.maxPredicateLength.toString(),
+        maxPredicateDataLength: predicateParameters.maxPredicateDataLength.toString(),
+        maxGasPerPredicate: predicateParameters.maxGasPerPredicate.toString(),
+        maxMessageDataLength: predicateParameters.maxMessageDataLength.toString(),
+      },
+      scriptParams: {
+        version: scriptParameters.version,
+        maxScriptLength: scriptParameters.maxScriptLength.toString(),
+        maxScriptDataLength: scriptParameters.maxScriptDataLength.toString(),
+      },
+      gasCosts,
+    },
+  };
+};
