@@ -22,7 +22,7 @@ The `recoverAddress` method from the `Signer` class will take the hashed message
 
 ## Signing Personal Message
 
-We can also sign arbitrary data, not just strings. This is possible by passing an object containing the `raw` property to the `hashMessage` and `signMessage` methods:
+We can also sign arbitrary data, not just strings. This is possible by passing an object containing the `personalSign` property to the `hashMessage` and `signMessage` methods:
 
 <<< @./snippets/signing/sign-personal-message.ts#signing-personal-message{ts:line-numbers}
 

@@ -44,18 +44,18 @@ describe('Signer', () => {
     expect(signedMessage).toEqual(expectedSignedMessage);
   });
 
-  it('Sign raw message [{ raw: string }]', () => {
+  it('Sign raw message [{ personalSign: string }]', () => {
     const signer = new Signer(expectedPrivateKey);
     const message = new TextEncoder().encode(expectedMessage);
-    const signedMessage = signer.sign(hashMessage({ raw: message }));
+    const signedMessage = signer.sign(hashMessage({ personalSign: message }));
 
     expect(signedMessage).toEqual(expectedRawSignedMessage);
   });
 
-  it('Sign raw message [{ raw: Uint8Array }]', () => {
+  it('Sign raw message [{ personalSign: Uint8Array }]', () => {
     const signer = new Signer(expectedPrivateKey);
     const message = new TextEncoder().encode(expectedMessage);
-    const signedMessage = signer.sign(hashMessage({ raw: message }));
+    const signedMessage = signer.sign(hashMessage({ personalSign: message }));
 
     expect(signedMessage).toEqual(expectedRawSignedMessage);
   });

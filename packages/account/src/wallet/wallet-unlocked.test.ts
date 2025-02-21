@@ -52,27 +52,33 @@ describe('WalletUnlocked', () => {
     expect(signedMessage).toEqual(expectedSignedMessage);
   });
 
-  it('Sign a raw message using wallet instance [{ raw: string }]', async () => {
+  it('Sign a raw message using wallet instance [{ personalSign: string }]', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
     const wallet = new WalletUnlocked(expectedPrivateKey, provider);
     const message = expectedMessage;
-    const signedMessage = await wallet.signMessage({ raw: message });
-    const verifiedAddress = Signer.recoverAddress(hashMessage({ raw: message }), signedMessage);
+    const signedMessage = await wallet.signMessage({ personalSign: message });
+    const verifiedAddress = Signer.recoverAddress(
+      hashMessage({ personalSign: message }),
+      signedMessage
+    );
 
     expect(verifiedAddress).toEqual(wallet.address);
     expect(signedMessage).toEqual(expectedRawSignedMessage);
   });
 
-  it('Sign a raw message using wallet instance [{ raw: Uint8Array }]', async () => {
+  it('Sign a raw message using wallet instance [{ personalSign: Uint8Array }]', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
     const wallet = new WalletUnlocked(expectedPrivateKey, provider);
     const message = new TextEncoder().encode(expectedMessage);
-    const signedMessage = await wallet.signMessage({ raw: message });
-    const verifiedAddress = Signer.recoverAddress(hashMessage({ raw: message }), signedMessage);
+    const signedMessage = await wallet.signMessage({ personalSign: message });
+    const verifiedAddress = Signer.recoverAddress(
+      hashMessage({ personalSign: message }),
+      signedMessage
+    );
 
     expect(verifiedAddress).toEqual(wallet.address);
     expect(signedMessage).toEqual(expectedRawSignedMessage);

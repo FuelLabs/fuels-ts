@@ -8,14 +8,16 @@ import { sha256 as sha256AsBytes } from '@noble/hashes/sha256';
 const MESSAGE_PREFIX = '\x19Fuel Signed Message:\n';
 
 /**
- * When a string is provided, we hash as a UTF-8 string using SHA-256.
+ * - When a string is provided, we hash as a UTF-8 string using SHA-256.
  *
- * When a `raw` object is provided, we hash using SHA-256 of the following format:
+ * - When an object with `personalSign` property is provided, we hash using SHA-256 of the following format:
  * ```console
  * 0x19 <0x46 (F)> <uel Signed Message:\n" + len(message)> <message>
  * ```
+ *
+ * Following a similar approach to that of [EIP-191](https://eips.ethereum.org/EIPS/eip-191).
  */
-export type HashableMessage = string | { raw: BytesLike };
+export type HashableMessage = string | { personalSign: BytesLike };
 
 /**
  * @param data - The data to be hashed
@@ -49,6 +51,15 @@ export function uint64ToBytesBE(value: number): Uint8Array {
 /**
  * Hashes a message using SHA256.
  *
+ * - When a `message` string is provided, we hash as a UTF-8 string using SHA-256.
+ *
+ * - When a `message` object with `personalSign` property is provided, we hash using SHA-256 of the following format:
+ * ```console
+ * 0x19 <0x46 (F)> <uel Signed Message:\n" + len(message)> <message>
+ * ```
+ *
+ * Following a similar approach to that of [EIP-191](https://eips.ethereum.org/EIPS/eip-191).
+ *
  * @param message - The message to be hashed @see {@link HashableMessage}
  * @returns A sha256 hash of the message
  */
@@ -57,8 +68,9 @@ export function hashMessage(message: HashableMessage) {
     return sha256(toUtf8Bytes(message));
   }
 
-  const { raw } = message;
-  const messageBytes: Uint8Array = typeof raw === 'string' ? toUtf8Bytes(raw) : raw;
+  const { personalSign } = message;
+  const messageBytes: Uint8Array =
+    typeof personalSign === 'string' ? toUtf8Bytes(personalSign) : personalSign;
   const payload = concat([
     toUtf8Bytes(MESSAGE_PREFIX),
     toUtf8Bytes(String(messageBytes.length)),
