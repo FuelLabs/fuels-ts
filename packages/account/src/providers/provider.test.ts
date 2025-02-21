@@ -27,7 +27,7 @@ import { setupTestProviderAndWallets, launchNode, TestMessage } from '../test-ut
 import type { Coin } from './coin';
 import { coinQuantityfy } from './coin-quantity';
 import type { Message } from './message';
-import type { Block, ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
+import type { Block, ChainInfo, CursorPaginationArgs, NodeInfo, ProviderCache } from './provider';
 import Provider, {
   BLOCKS_PAGE_SIZE_LIMIT,
   DEFAULT_RESOURCE_CACHE_TTL,
@@ -43,7 +43,9 @@ import type {
 import { CreateTransactionRequest, ScriptTransactionRequest } from './transaction-request';
 import { TransactionResponse } from './transaction-response';
 import type { SubmittedStatus } from './transaction-summary/types';
+import { serializeChain } from './utils/chain-info';
 import * as gasMod from './utils/gas';
+import { serializeNodeInfo } from './utils/node-info';
 
 const getCustomFetch =
   (expectedOperationName: string, expectedResponse: object) =>
@@ -2613,5 +2615,40 @@ describe('Provider', () => {
     expect(keys.includes('edges')).toBeTruthy();
 
     expect(keys.includes('pageInfo')).toBeFalsy();
+  });
+
+  it('should fetch chain or node info if the cache is not provided', async () => {
+    // Given: we clear any pre-existing cache
+    using launched = await setupTestProviderAndWallets();
+    const { provider: sourceProvider } = launched;
+
+    Provider.clearChainAndNodeCaches();
+
+    // When: we create a new provider with the same url
+    const fetch = vi.spyOn(global, 'fetch');
+    await new Provider(sourceProvider.url, { cache: undefined }).init();
+
+    // Then: we should fetch the chain and node info
+    expect(fetch).toHaveBeenCalled();
+  });
+
+  it('should not refetch chain or node info if cache is provided', async () => {
+    // Given: we clear any pre-existing cache
+    using launched = await setupTestProviderAndWallets();
+    const { provider: sourceProvider } = launched;
+
+    const cache: ProviderCache = {
+      consensusParametersTimestamp: sourceProvider.consensusParametersTimestamp,
+      chain: serializeChain(await sourceProvider.getChain()),
+      nodeInfo: serializeNodeInfo(await sourceProvider.getNode()),
+    };
+    Provider.clearChainAndNodeCaches();
+
+    // When: we create a new provider with the same url, but with a cache
+    const fetch = vi.spyOn(global, 'fetch');
+    await new Provider(launched.provider.url, { cache }).init();
+
+    // Then: we should not perform any fetch requests
+    expect(fetch).not.toHaveBeenCalled();
   });
 });

@@ -240,6 +240,12 @@ export type CursorPaginationArgs = {
   before?: string | null;
 };
 
+export type ProviderCache = {
+  consensusParametersTimestamp?: number;
+  chain: SerializedChainInfo;
+  nodeInfo: SerializedNodeInfo;
+};
+
 /*
  * Provider initialization options
  */
@@ -273,6 +279,10 @@ export type ProviderOptions = {
    * This can be used to add headers, modify the body, etc.
    */
   requestMiddleware?: (request: RequestInit) => RequestInit | Promise<RequestInit>;
+  /**
+   * The cache can be passed in to avoid re-fetching the chain + node info.
+   */
+  cache?: ProviderCache;
 };
 
 /**
@@ -401,6 +411,7 @@ export default class Provider {
     fetch: undefined,
     retryOptions: undefined,
     headers: undefined,
+    cache: undefined,
   };
 
   /**
@@ -452,7 +463,21 @@ export default class Provider {
     };
 
     this.operations = this.createOperations();
-    const { resourceCacheTTL } = this.options;
+    const { resourceCacheTTL, cache } = this.options;
+
+    /**
+     * Re-instantiate chain + node info from the passed in cache
+     */
+    if (cache) {
+      const { consensusParametersTimestamp, chain, nodeInfo } = cache;
+      this.consensusParametersTimestamp = consensusParametersTimestamp;
+      Provider.chainInfoCache[this.urlWithoutAuth] = deserializeChain(chain);
+      Provider.nodeInfoCache[this.urlWithoutAuth] = deserializeNodeInfo(nodeInfo);
+    }
+
+    /**
+     * Instantiate the resource cache (for UTXO's + messages)
+     */
     if (isDefined(resourceCacheTTL)) {
       if (resourceCacheTTL !== -1) {
         this.cache = new ResourceCache(resourceCacheTTL);
