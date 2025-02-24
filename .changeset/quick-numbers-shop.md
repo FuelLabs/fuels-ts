@@ -2,4 +2,4 @@
 "@fuel-ts/account": patch
 ---
 
-feat: status flags for the transaction request
+feat: added the state to the transaction request
