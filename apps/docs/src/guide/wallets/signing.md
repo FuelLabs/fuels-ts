@@ -2,15 +2,39 @@
 
 ## Signing Messages
 
-Signing messages with a wallet is a fundamental security practice in a blockchain environment. It verifies ownership and ensures the integrity of data. Here's how to use the `wallet.signMessage` method to sign messages:
+Signing messages with a wallet is a fundamental security practice in a blockchain environment. It can be used to verify ownership and ensure the integrity of data.
+
+Here's how to use the `wallet.signMessage` method to sign messages (as string):
 
 <<< @./snippets/signing/sign-message.ts#signing-1{ts:line-numbers}
 
-The `wallet.signMessage` method internally hashes the message using the SHA-256 algorithm, then signs the hashed message, returning the signature as a hex string.
+The `signMessage` method internally:
 
-The `hashMessage` helper gives us the hash of the original message. This is crucial to ensure that the hash used during signing matches the one used during the address recovery process.
+- Hashes the message (via `hashMessage`)
+- Signs the hashed message using the wallet's private key
+- Returns the signature as a hex string
 
-The `recoverAddress` method from the `Signer` class takes the hashed message and the signature to recover the signer's address. This confirms that the signature was created by the holder of the private key associated with that address, ensuring the authenticity and integrity of the signed message.
+The `hashMessage` helper will:
+
+- Performs a SHA-256 hash on the UTF-8 encoded message.
+
+The `recoverAddress` method from the `Signer` class will take the hashed message and the signature to recover the signer's address. This confirms that the signature was created by the holder of the private key associated with that address, ensuring the authenticity and integrity of the signed message.
+
+## Signing Personal Message
+
+We can also sign arbitrary data, not just strings. This is possible by passing an object containing the `personalSign` property to the `hashMessage` and `signMessage` methods:
+
+<<< @./snippets/signing/sign-personal-message.ts#signing-personal-message{ts:line-numbers}
+
+The primary difference between this [personal message signing](#signing-personal-message) and [message signing](#signing-messages) is the underlying hashing format.
+
+To format the message, we use a similar approach to a [EIP-191](https://eips.ethereum.org/EIPS/eip-191):
+
+```console
+\x19Fuel Signed Message:\n<message length><message>
+```
+
+> **Note**: We still hash using `SHA-256`, unlike Ethereum's [EIP-191](https://eips.ethereum.org/EIPS/eip-191) which uses `Keccak-256`.
 
 ## Signing Transactions
 
