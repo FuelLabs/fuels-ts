@@ -786,7 +786,8 @@ describe('Fuel Connector', () => {
     expect(tx).toBeDefined();
 
     // transaction prepared via connector and sent via provider
-    expect(connectorPrepareForSendSpy).toHaveBeenCalledWith(address, request, params);
+    const expectedParams = { ...params, state: 'signed' };
+    expect(connectorPrepareForSendSpy).toHaveBeenCalledWith(address, request, expectedParams);
     expect(providerSendTransactionSpy).toHaveBeenCalled();
     // not sent via connector
     expect(connectorSendTransactionSpy).not.toHaveBeenCalled();
