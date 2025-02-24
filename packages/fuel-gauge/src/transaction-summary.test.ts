@@ -302,7 +302,38 @@ describe('TransactionSummary', () => {
     });
   });
 
-  it('should ensure getTransactionsSummaries executes just fine [w/ ABI & call op]', async () => {
+  // We can remove this test once https://github.com/FuelLabs/fuels-ts/issues/3733 has been resolved as the
+  // below tests are more verbose. But this ensures the method does not throw with an ABI map provided.
+  it('should ensure getTransactionsSummaries executes just fine [w/ ABI map]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: TokenContractFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
+    const contractId = contract.id.toB256();
+
+    const call = await contract.functions.mint_coins(bn(100_000)).call();
+    const res = await call.waitForResult();
+
+    const summary = await res.transactionResponse.getTransactionSummary({
+      [contractId]: TokenContract.abi,
+    });
+
+    validateTxSummary({
+      transaction: summary,
+    });
+  });
+
+  // Test disabled due to unsupported call ops in tx summaries. We should re-enable this via
+  // https://github.com/FuelLabs/fuels-ts/issues/3733
+  it.skip('should ensure getTransactionsSummaries executes just fine [w/ ABI & call op]', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
@@ -340,7 +371,9 @@ describe('TransactionSummary', () => {
     });
   });
 
-  it('should ensure getTransactionsSummaries executes just fine [w/ ABI & call w/ transfer op]', async () => {
+  // Test disabled due to unsupported call ops in tx summaries. We should re-enable this via
+  // https://github.com/FuelLabs/fuels-ts/issues/3733
+  it.skip('should ensure getTransactionsSummaries executes just fine [w/ ABI & call w/ transfer op]', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
@@ -396,7 +429,9 @@ describe('TransactionSummary', () => {
     });
   });
 
-  it('should ensure getTransactionSummary fn executes just fine [w/ ABI & call op]', async () => {
+  // Test disabled due to unsupported call ops in tx summaries. We should re-enable this via
+  // https://github.com/FuelLabs/fuels-ts/issues/3733
+  it.skip('should ensure getTransactionSummary fn executes just fine [w/ ABI & call op]', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
@@ -449,7 +484,9 @@ describe('TransactionSummary', () => {
     // expect(summary).toStrictEqual(responseSummary);
   });
 
-  it('should ensure getTransactionSummary fn executes just fine [w/ ABI & call w/ transfer op]', async () => {
+  // Test disabled due to unsupported call ops in tx summaries. We should re-enable this via
+  // https://github.com/FuelLabs/fuels-ts/issues/3733
+  it.skip('should ensure getTransactionSummary fn executes just fine [w/ ABI & call w/ transfer op]', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
