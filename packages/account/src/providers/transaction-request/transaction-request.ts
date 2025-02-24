@@ -99,10 +99,10 @@ type ToBaseTransactionResponse = Pick<
   | 'policyTypes'
 >;
 
-export type TransactionStatusFlag =
-  | { status: undefined; transactionId: undefined }
+export type TransactionStateFlag =
+  | { state: undefined; transactionId: undefined }
   | {
-      status: 'funded' | 'signed';
+      state: 'funded' | 'signed';
       transactionId: string;
     };
 
@@ -132,7 +132,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    *
    * The current status of the transaction
    */
-  flags: TransactionStatusFlag = { status: undefined, transactionId: undefined };
+  flag: TransactionStateFlag = { state: undefined, transactionId: undefined };
 
   /**
    * Constructor for initializing a base transaction request.
@@ -723,17 +723,17 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   /**
    * @hidden
    *
-   * Used internally to update the status flags of a transaction request.
+   * Used internally to update the state of a transaction request.
    *
-   * @param flags - The flags to update.
+   * @param state - The state to update.
    */
-  public updateFlags(chainId: number, status?: TransactionStatusFlag['status']) {
-    if (!status) {
-      this.flags = { status: undefined, transactionId: undefined };
+  public updateState(chainId: number, state?: TransactionStateFlag['state']) {
+    if (!state) {
+      this.flag = { state: undefined, transactionId: undefined };
       return;
     }
 
     const transactionId = this.getTransactionId(chainId);
-    this.flags = { status, transactionId };
+    this.flag = { state, transactionId };
   }
 }
