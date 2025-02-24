@@ -663,7 +663,7 @@ export class Account extends AbstractAccount implements WithAddress {
     // Check if the account is using a connector, and therefore we do not have direct access to the
     // private key.
     if (this._connector) {
-      const { request, state } = await this.validateTransactionStatus(transactionRequest, {
+      const { request, state } = await this.validateTransactionState(transactionRequest, {
         onBeforeSend,
         skipCustomFee,
       });
@@ -739,7 +739,7 @@ export class Account extends AbstractAccount implements WithAddress {
     }));
   }
 
-  private async validateTransactionStatus<T extends TransactionRequest>(
+  private async validateTransactionState<T extends TransactionRequest>(
     request: T,
     params: FuelConnectorSendTxParams = {}
   ): Promise<{ request: T; state: FuelConnectorSendTxParams['state'] }> {
