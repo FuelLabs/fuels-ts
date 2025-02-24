@@ -1,9 +1,16 @@
+import { calculateVmTxMemory, SCRIPT_FIXED_SIZE, WORD_SIZE } from '@fuel-ts/abi-coder';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
-import type { InputContract, Output, OutputChange, Input } from '@fuel-ts/transactions';
+import type {
+  InputContract,
+  Output,
+  OutputChange,
+  Input,
+  ReceiptCall,
+} from '@fuel-ts/transactions';
 
 import type {
   TransactionResultReceipt,
@@ -276,7 +283,8 @@ function getContractCalls(
   abiMap: AbiMap | undefined,
   receipt: TransactionResultCallReceipt,
   rawPayload: string,
-  maxInputs: BN
+  maxInputs: BN,
+  callScriptOffset: number
 ): FunctionCall[] {
   const abi = abiMap?.[contractInput.contractID];
   if (!abi) {
@@ -289,6 +297,7 @@ function getContractCalls(
       receipt,
       rawPayload,
       maxInputs,
+      callScriptOffset,
     }),
   ];
 }
@@ -313,7 +322,8 @@ function processCallReceipt(
   abiMap: AbiMap | undefined,
   rawPayload: string,
   maxInputs: BN,
-  baseAssetId: string
+  baseAssetId: string,
+  callScriptOffset: number
 ): Operation[] {
   const assetId = receipt.assetId === ZeroBytes32 ? baseAssetId : receipt.assetId;
   const input = getInputFromAssetId(inputs, assetId, assetId === baseAssetId);
@@ -322,7 +332,14 @@ function processCallReceipt(
   }
 
   const inputAddress = getInputAccountAddress(input);
-  const calls = getContractCalls(contractInput, abiMap, receipt, rawPayload, maxInputs);
+  const calls = getContractCalls(
+    contractInput,
+    abiMap,
+    receipt,
+    rawPayload,
+    maxInputs,
+    callScriptOffset
+  );
 
   return [
     {
@@ -341,6 +358,49 @@ function processCallReceipt(
     },
   ];
 }
+
+/**
+ * Calculates the size of the contract call script based off.
+ *
+ * This is a hardcoded implementation of the contract call script size calculation, validated
+ * by an ASM implemenation of the same logic in `operations.test.ts`.
+ *
+ * @param calls - The contract call receipts to calculate the size of.
+ * @returns The size of the contract call script.
+ */
+export const calculateScriptVariableSize = (calls: ReceiptCall[]): number => {
+  // Calculate the length of the call script for each call and sum
+  const offset = calls.reduce(
+    (total) => {
+      let callOffset = total;
+      // Call Data Offset - asm.movi(0x10, 0)
+      const callDataOffset = new Uint8Array([114, 64, 0, 0]);
+      callOffset += callDataOffset.byteLength;
+      // Amount Offset - asm.movi(0x11, 0)
+      const amountOffset = new Uint8Array([114, 68, 0, 0]);
+      callOffset += amountOffset.byteLength;
+      // Load Asset ID- asm.lw(0x11, 0x11, 0)
+      const assetIdOffset = new Uint8Array([93, 69, 16, 0]);
+      callOffset += assetIdOffset.byteLength;
+      // Asset ID - asm.movi(0x12, 0)
+      const loadBytes = new Uint8Array([114, 72, 0, 0]);
+      callOffset += loadBytes.byteLength;
+      // Gas Offset - asm.call(0x10, 0x11, 0x12, asm.RegId.cgas().to_u8())
+      const gasOffset = new Uint8Array([45, 65, 20, 138]);
+      callOffset += gasOffset.byteLength;
+
+      return callOffset;
+    },
+    // RET instruction size
+    4
+  );
+
+  // Add padding
+  const paddingLength = (WORD_SIZE - (offset % WORD_SIZE)) % WORD_SIZE;
+  const paddedInstructionsLength = offset + paddingLength;
+
+  return paddedInstructionsLength;
+};
 
 /** @hidden */
 export function getContractCallOperations({
@@ -364,9 +424,20 @@ export function getContractCallOperations({
       return [];
     }
 
-    return contractCallReceipts
-      .filter((receipt) => receipt.to === contractInput.contractID)
-      .flatMap((receipt) =>
+    const callReceiptsForContract = contractCallReceipts.filter(
+      (receipt) => receipt.to === contractInput.contractID
+    );
+
+    // Potential weakness here for legacy transactions, if the script data was generated
+    // with a different max inputs value, the offset will be incorrect and therefore decoding
+    // will fail. In this scenario we won't return the operations.
+    try {
+      const callScriptBaseOffset =
+        SCRIPT_FIXED_SIZE +
+        calculateScriptVariableSize(callReceiptsForContract) +
+        calculateVmTxMemory({ maxInputs: maxInputs.toNumber() });
+
+      const operations = callReceiptsForContract.flatMap((receipt) =>
         processCallReceipt(
           receipt,
           contractInput,
@@ -374,9 +445,15 @@ export function getContractCallOperations({
           abiMap,
           rawPayload as string,
           maxInputs,
-          baseAssetId
+          baseAssetId,
+          callScriptBaseOffset
         )
       );
+
+      return operations;
+    } catch (error) {
+      return [];
+    }
   });
 }
 
