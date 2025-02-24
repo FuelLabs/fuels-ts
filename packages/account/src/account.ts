@@ -3,6 +3,7 @@ import type { AddressInput, WithAddress } from '@fuel-ts/address';
 import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import type { HashableMessage } from '@fuel-ts/hasher';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { InputType } from '@fuel-ts/transactions';
@@ -623,7 +624,7 @@ export class Account extends AbstractAccount implements WithAddress {
    *
    * @hidden
    */
-  async signMessage(message: string): Promise<string> {
+  async signMessage(message: HashableMessage): Promise<string> {
     if (!this._connector) {
       throw new FuelError(ErrorCode.MISSING_CONNECTOR, 'A connector is required to sign messages.');
     }
@@ -658,22 +659,47 @@ export class Account extends AbstractAccount implements WithAddress {
     { estimateTxDependencies = true, onBeforeSend, skipCustomFee = false }: AccountSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+
+    // Check if the account is using a connector, and therefore we do not have direct access to the
+    // private key.
     if (this._connector) {
       const { request, state } = await this.validateTransactionStatus(transactionRequest, {
+        onBeforeSend,
         skipCustomFee,
       });
 
-      return this.provider.getTransactionResponse(
-        await this._connector.sendTransaction(this.address.toString(), request, {
-          onBeforeSend,
-          skipCustomFee,
-          state,
-        })
-      );
+      const params: FuelConnectorSendTxParams = {
+        onBeforeSend,
+        skipCustomFee,
+        state,
+      };
+
+      // If the connector is using prepareForSend, the connector will prepare the transaction for the dapp,
+      // and submission is owned by the dapp. This reduces network requests to submit and create the
+      // summary for a tx.
+      if (this._connector.usePrepareForSend) {
+        const preparedTransaction = await this._connector.prepareForSend(
+          this.address.toString(),
+          request,
+          params
+        );
+        // Submit the prepared transaction using the provider.
+        return this.provider.sendTransaction(preparedTransaction, {
+          estimateTxDependencies: false,
+        });
+      }
+
+      // Otherwise, the connector itself will submit the transaction, and the app will use
+      // the tx id to create the summary, requiring multiple network requests.
+      const txId = await this._connector.sendTransaction(this.address.toString(), request, params);
+      // And return the transaction response for the returned tx id.
+      return this.provider.getTransactionResponse(txId);
     }
+
     if (estimateTxDependencies) {
       await this.provider.estimateTxDependencies(transactionRequest);
     }
+
     return this.provider.sendTransaction(transactionRequest, {
       estimateTxDependencies: false,
     });

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/require-await */
 import { FuelError } from '@fuel-ts/errors';
+import type { HashableMessage } from '@fuel-ts/hasher';
 import { EventEmitter } from 'events';
 
 import type { Asset } from '../assets/types';
@@ -37,7 +38,7 @@ interface Connector {
   disconnect(): Promise<boolean>;
   // #endregion fuel-connector-method-disconnect
   // #region fuel-connector-method-signMessage
-  signMessage(address: string, message: string): Promise<string>;
+  signMessage(address: string, message: HashableMessage): Promise<string>;
   // #endregion fuel-connector-method-signMessage
   // #region fuel-connector-method-signTransaction
   signTransaction(address: string, transaction: TransactionRequestLike): Promise<string>;
@@ -49,6 +50,12 @@ interface Connector {
     params?: FuelConnectorSendTxParams
   ): Promise<string>;
   // #endregion fuel-connector-method-sendTransaction
+  // #region fuel-connector-method-prepareForSend
+  prepareForSend(
+    address: string,
+    transaction: TransactionRequestLike
+  ): Promise<TransactionRequestLike>;
+  // #endregion fuel-connector-method-prepareForSend
   // #region fuel-connector-method-currentAccount
   currentAccount(): Promise<string | null>;
   // #endregion fuel-connector-method-currentAccount
@@ -97,6 +104,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
   installed: boolean = false;
   external: boolean = true;
   events = FuelConnectorEventTypes;
+  usePrepareForSend: boolean = false;
 
   /**
    * Should return true if the connector is loaded
@@ -171,7 +179,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    *
    * @returns Message signature
    */
-  async signMessage(_address: string, _message: string): Promise<string> {
+  async signMessage(_address: string, _message: HashableMessage): Promise<string> {
     throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
@@ -206,6 +214,25 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
     _transaction: TransactionRequestLike,
     _params?: FuelConnectorSendTxParams
   ): Promise<string> {
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
+  }
+
+  /**
+   * Should perform all necessary operations (i.e estimation,
+   * funding, signing) to prepare a tx so it can be submitted
+   * at the app level.
+   *
+   * @param address - The address to sign the tx
+   * @param transaction - The tx to prepare
+   * @param params - Optional parameters to send the transactions
+   *
+   * @returns The prepared tx request
+   */
+  async prepareForSend(
+    _address: string,
+    _transaction: TransactionRequestLike,
+    _params?: FuelConnectorSendTxParams
+  ): Promise<TransactionRequestLike> {
     throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
