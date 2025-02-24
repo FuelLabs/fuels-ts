@@ -47,6 +47,7 @@ import {
   isRequestInputResource,
 } from './providers/transaction-request/helpers';
 import { mergeQuantities } from './providers/utils/merge-quantities';
+import { serializeProviderCache } from './providers/utils/serialization';
 import { AbstractAccount } from './types';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
 
@@ -656,13 +657,15 @@ export class Account extends AbstractAccount implements WithAddress {
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true, onBeforeSend, skipCustomFee = false }: AccountSendTxParams = {}
+    { estimateTxDependencies = true, ...connectorOptions }: AccountSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
 
     // Check if the account is using a connector, and therefore we do not have direct access to the
     // private key.
     if (this._connector) {
+      const { onBeforeSend, skipCustomFee = false } = connectorOptions;
+
       const { request, state } = await this.validateTransactionState(transactionRequest, {
         onBeforeSend,
         skipCustomFee,
@@ -671,6 +674,10 @@ export class Account extends AbstractAccount implements WithAddress {
       const params: FuelConnectorSendTxParams = {
         onBeforeSend,
         skipCustomFee,
+        provider: {
+          url: this.provider.url,
+          cache: await serializeProviderCache(this.provider),
+        },
         state,
       };
 

@@ -16,7 +16,8 @@ import { clone } from 'ramda';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
-  GqlChainInfoFragment,
+  GqlNodeInfoFragment as SerializedNodeInfo,
+  GqlChainInfoFragment as SerializedChainInfo,
   GqlConsensusParametersVersion,
   GqlContractParameters as ContractParameters,
   GqlDryRunFailureStatusFragment,
@@ -66,6 +67,12 @@ import {
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
 import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
+import type { SerializedProviderCache } from './utils/serialization';
+import {
+  deserializeChain,
+  deserializeNodeInfo,
+  deserializeProviderCache,
+} from './utils/serialization';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
 const MAX_RETRIES = 10;
@@ -150,6 +157,8 @@ type ModifyStringToBN<T> = {
 };
 
 export {
+  SerializedNodeInfo,
+  SerializedChainInfo,
   GasCosts,
   FeeParameters,
   ContractParameters,
@@ -190,6 +199,7 @@ export type NodeInfo = {
   nodeVersion: string;
 };
 
+/** @deprecated This type is no longer used. */
 export type NodeInfoAndConsensusParameters = {
   nodeVersion: string;
   gasPerByte: BN;
@@ -216,64 +226,6 @@ export type TransactionCost = {
 };
 // #endregion cost-estimation-1
 
-const processGqlChain = (chain: GqlChainInfoFragment): ChainInfo => {
-  const { name, daHeight, consensusParameters } = chain;
-
-  const {
-    contractParams,
-    feeParams,
-    predicateParams,
-    scriptParams,
-    txParams,
-    gasCosts,
-    baseAssetId,
-    chainId,
-    version,
-  } = consensusParameters;
-
-  return {
-    name,
-    baseChainHeight: bn(daHeight),
-    consensusParameters: {
-      version,
-      chainId: bn(chainId),
-      baseAssetId,
-      feeParameters: {
-        version: feeParams.version,
-        gasPerByte: bn(feeParams.gasPerByte),
-        gasPriceFactor: bn(feeParams.gasPriceFactor),
-      },
-      contractParameters: {
-        version: contractParams.version,
-        contractMaxSize: bn(contractParams.contractMaxSize),
-        maxStorageSlots: bn(contractParams.maxStorageSlots),
-      },
-      txParameters: {
-        version: txParams.version,
-        maxInputs: bn(txParams.maxInputs),
-        maxOutputs: bn(txParams.maxOutputs),
-        maxWitnesses: bn(txParams.maxWitnesses),
-        maxGasPerTx: bn(txParams.maxGasPerTx),
-        maxSize: bn(txParams.maxSize),
-        maxBytecodeSubsections: bn(txParams.maxBytecodeSubsections),
-      },
-      predicateParameters: {
-        version: predicateParams.version,
-        maxPredicateLength: bn(predicateParams.maxPredicateLength),
-        maxPredicateDataLength: bn(predicateParams.maxPredicateDataLength),
-        maxGasPerPredicate: bn(predicateParams.maxGasPerPredicate),
-        maxMessageDataLength: bn(predicateParams.maxMessageDataLength),
-      },
-      scriptParameters: {
-        version: scriptParams.version,
-        maxScriptLength: bn(scriptParams.maxScriptLength),
-        maxScriptDataLength: bn(scriptParams.maxScriptDataLength),
-      },
-      gasCosts,
-    },
-  };
-};
-
 /**
  * @hidden
  *
@@ -290,6 +242,12 @@ export type CursorPaginationArgs = {
   last?: number | null;
   /** Backward pagination cursor */
   before?: string | null;
+};
+
+export type ProviderCache = {
+  consensusParametersTimestamp?: number;
+  chain: SerializedChainInfo;
+  nodeInfo: SerializedNodeInfo;
 };
 
 /*
@@ -325,6 +283,10 @@ export type ProviderOptions = {
    * This can be used to add headers, modify the body, etc.
    */
   requestMiddleware?: (request: RequestInit) => RequestInit | Promise<RequestInit>;
+  /**
+   * The cache can be passed in to avoid re-fetching the chain + node info.
+   */
+  cache?: SerializedProviderCache;
 };
 
 /**
@@ -453,6 +415,7 @@ export default class Provider {
     fetch: undefined,
     retryOptions: undefined,
     headers: undefined,
+    cache: undefined,
   };
 
   /**
@@ -504,7 +467,21 @@ export default class Provider {
     };
 
     this.operations = this.createOperations();
-    const { resourceCacheTTL } = this.options;
+    const { resourceCacheTTL, cache } = this.options;
+
+    /**
+     * Re-instantiate chain + node info from the passed in cache
+     */
+    if (cache) {
+      const { consensusParametersTimestamp, chain, nodeInfo } = deserializeProviderCache(cache);
+      this.consensusParametersTimestamp = consensusParametersTimestamp;
+      Provider.chainInfoCache[this.urlWithoutAuth] = chain;
+      Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
+    }
+
+    /**
+     * Instantiate the resource cache (for UTXO's + messages)
+     */
     if (isDefined(resourceCacheTTL)) {
       if (resourceCacheTTL !== -1) {
         this.cache = new ResourceCache(resourceCacheTTL);
@@ -630,17 +607,11 @@ export default class Provider {
     } catch (_err) {
       const data = await this.operations.getChainAndNodeInfo();
 
-      nodeInfo = {
-        maxDepth: bn(data.nodeInfo.maxDepth),
-        maxTx: bn(data.nodeInfo.maxTx),
-        nodeVersion: data.nodeInfo.nodeVersion,
-        utxoValidation: data.nodeInfo.utxoValidation,
-        vmBacktrace: data.nodeInfo.vmBacktrace,
-      };
+      nodeInfo = deserializeNodeInfo(data.nodeInfo);
 
       Provider.setIncompatibleNodeVersionMessage(nodeInfo);
 
-      chain = processGqlChain(data.chain);
+      chain = deserializeChain(data.chain);
 
       Provider.chainInfoCache[this.urlWithoutAuth] = chain;
       Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
@@ -774,13 +745,7 @@ export default class Provider {
   async fetchNode(): Promise<NodeInfo> {
     const { nodeInfo } = await this.operations.getNodeInfo();
 
-    const processedNodeInfo: NodeInfo = {
-      maxDepth: bn(nodeInfo.maxDepth),
-      maxTx: bn(nodeInfo.maxTx),
-      nodeVersion: nodeInfo.nodeVersion,
-      utxoValidation: nodeInfo.utxoValidation,
-      vmBacktrace: nodeInfo.vmBacktrace,
-    };
+    const processedNodeInfo: NodeInfo = deserializeNodeInfo(nodeInfo);
 
     Provider.nodeInfoCache[this.urlWithoutAuth] = processedNodeInfo;
 
@@ -795,7 +760,7 @@ export default class Provider {
   async fetchChain(): Promise<ChainInfo> {
     const { chain } = await this.operations.getChain();
 
-    const processedChain = processGqlChain(chain);
+    const processedChain = deserializeChain(chain);
 
     Provider.chainInfoCache[this.urlWithoutAuth] = processedChain;
 
