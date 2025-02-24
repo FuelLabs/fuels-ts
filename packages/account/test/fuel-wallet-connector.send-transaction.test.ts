@@ -67,7 +67,6 @@ describe('Fuel Connector', () => {
     const {
       account,
       connector,
-      fuel,
       wallets: [sender],
     } = launched;
 
@@ -103,7 +102,6 @@ describe('Fuel Connector', () => {
     const {
       account,
       connector,
-      fuel,
       wallets: [sender],
     } = launched;
 
