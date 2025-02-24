@@ -2,4 +2,4 @@
 "@fuel-ts/account": patch
 ---
 
-feat: added the state to the transaction request
+feat: enhance the communication between SDK and wallet
