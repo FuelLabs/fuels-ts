@@ -18,7 +18,7 @@ const PUBLISHED_FUEL_PACKAGE_NAME = process.env.PUBLISHED_FUEL_PACKAGE_NAME ?? '
 const PUBLISHED_NPM_TAG = process.env.PUBLISHED_NPM_TAG ?? 'next';
 
 const packageManagerCreateCommands: [PackageManager, string][] = [
-  ['pnpm', `pnpm create ${PUBLISHED_FUEL_PACKAGE_NAME}@${PUBLISHED_NPM_TAG}`],
+  ['pnpm', `pnpm --ignore-workspace create ${PUBLISHED_FUEL_PACKAGE_NAME}@${PUBLISHED_NPM_TAG}`],
   ['bun', `bun create ${PUBLISHED_FUEL_PACKAGE_NAME}@${PUBLISHED_NPM_TAG}`],
   ['npm', `npm create ${PUBLISHED_FUEL_PACKAGE_NAME}@${PUBLISHED_NPM_TAG}`],
 ];
