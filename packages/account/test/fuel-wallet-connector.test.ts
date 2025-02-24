@@ -705,11 +705,13 @@ describe('Fuel Connector', () => {
     await request.estimateAndFund(connectorWallet);
 
     const expectedParams: FuelConnectorSendTxParams = {
+      onBeforeSend: undefined,
       skipCustomFee: false,
       provider: {
         url: provider.url,
         cache: await serializeProviderCache(provider),
       },
+      state: 'funded',
     };
     const response = await account.sendTransaction(request);
     expect(response).toBeDefined();
@@ -795,6 +797,7 @@ describe('Fuel Connector', () => {
     expect(connectorPrepareForSendSpy).toHaveBeenCalledWith(address, request, params);
   });
 
+  //
   it('should ensure account send transaction with connector works just fine', async () => {
     using launched = await setupTestProviderAndWallets();
     const {
@@ -837,6 +840,7 @@ describe('Fuel Connector', () => {
         url: provider.url,
         cache: await serializeProviderCache(provider),
       },
+      state: 'signed',
     };
     expect(connectorPrepareForSendSpy).toHaveBeenCalledWith(address, request, expectedParams);
     expect(providerSendTransactionSpy).toHaveBeenCalled();

@@ -3,6 +3,7 @@ import type { AddressInput, WithAddress } from '@fuel-ts/address';
 import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import type { HashableMessage } from '@fuel-ts/hasher';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { InputType } from '@fuel-ts/transactions';
@@ -311,6 +312,9 @@ export class Account extends AbstractAccount implements WithAddress {
         `The account ${this.address} does not have enough base asset funds to cover the transaction execution.`
       );
     }
+
+    const chainId = await this.provider.getChainId();
+    request.updateState(chainId, 'funded');
 
     await this.provider.validateTransaction(request);
 
@@ -621,7 +625,7 @@ export class Account extends AbstractAccount implements WithAddress {
    *
    * @hidden
    */
-  async signMessage(message: string): Promise<string> {
+  async signMessage(message: HashableMessage): Promise<string> {
     if (!this._connector) {
       throw new FuelError(ErrorCode.MISSING_CONNECTOR, 'A connector is required to sign messages.');
     }
@@ -655,17 +659,26 @@ export class Account extends AbstractAccount implements WithAddress {
     transactionRequestLike: TransactionRequestLike,
     { estimateTxDependencies = true, ...connectorOptions }: AccountSendTxParams = {}
   ): Promise<TransactionResponse> {
+    const transactionRequest = transactionRequestify(transactionRequestLike);
+
     // Check if the account is using a connector, and therefore we do not have direct access to the
     // private key.
     if (this._connector) {
-      const options: FuelConnectorSendTxParams = {
-        skipCustomFee: false,
-        ...connectorOptions,
+      const { onBeforeSend, skipCustomFee = false } = connectorOptions;
+
+      const { request, state } = await this.validateTransactionState(transactionRequest, {
+        onBeforeSend,
+        skipCustomFee,
+      });
+
+      const params: FuelConnectorSendTxParams = {
+        onBeforeSend,
+        skipCustomFee,
         provider: {
           url: this.provider.url,
-          ...connectorOptions.provider,
-          cache: connectorOptions.provider?.cache ?? (await serializeProviderCache(this.provider)),
+          cache: await serializeProviderCache(this.provider),
         },
+        state,
       };
 
       // If the connector is using prepareForSend, the connector will prepare the transaction for the dapp,
@@ -674,8 +687,8 @@ export class Account extends AbstractAccount implements WithAddress {
       if (this._connector.usePrepareForSend) {
         const preparedTransaction = await this._connector.prepareForSend(
           this.address.toString(),
-          transactionRequestLike,
-          options
+          request,
+          params
         );
         // Submit the prepared transaction using the provider.
         return this.provider.sendTransaction(preparedTransaction, {
@@ -685,16 +698,10 @@ export class Account extends AbstractAccount implements WithAddress {
 
       // Otherwise, the connector itself will submit the transaction, and the app will use
       // the tx id to create the summary, requiring multiple network requests.
-      const txId = await this._connector.sendTransaction(
-        this.address.toString(),
-        transactionRequestLike,
-        options
-      );
+      const txId = await this._connector.sendTransaction(this.address.toString(), request, params);
       // And return the transaction response for the returned tx id.
       return this.provider.getTransactionResponse(txId);
     }
-
-    const transactionRequest = transactionRequestify(transactionRequestLike);
 
     if (estimateTxDependencies) {
       await this.provider.estimateTxDependencies(transactionRequest);
@@ -737,6 +744,36 @@ export class Account extends AbstractAccount implements WithAddress {
       txCreatedIdx: bn(1),
       ...coin,
     }));
+  }
+
+  private async validateTransactionState<T extends TransactionRequest>(
+    request: T,
+    params: FuelConnectorSendTxParams = {}
+  ): Promise<{ request: T; state: FuelConnectorSendTxParams['state'] }> {
+    if (params.skipCustomFee) {
+      const chainId = await this.provider.getChainId();
+      request.updateState(chainId, 'signed');
+      return { request, state: 'signed' };
+    }
+
+    const { state, transactionId } = request.flag;
+
+    // If there is no transaction id, then no status is set.
+    if (!isDefined(transactionId)) {
+      return { request, state: undefined };
+    }
+
+    const chainId = await this.provider.getChainId();
+    const calculatedTransactionId = request.getTransactionId(chainId);
+
+    // If the transaction id does not match the transaction id on the request.
+    // Then we need to invalidate the transaction status
+    if (transactionId !== calculatedTransactionId) {
+      request.updateState(chainId);
+      return { request, state: undefined };
+    }
+
+    return { request, state };
   }
 
   /** @hidden * */
