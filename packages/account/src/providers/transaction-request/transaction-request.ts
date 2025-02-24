@@ -99,11 +99,12 @@ type ToBaseTransactionResponse = Pick<
   | 'policyTypes'
 >;
 
-export type TransactionStatusFlags = {
-  isEstimated: string | false;
-  isFunded: string | false;
-  isSigned: string | false;
-};
+export type TransactionStatusFlag =
+  | { status: undefined; transactionId: undefined }
+  | {
+      status: 'funded' | 'signed';
+      transactionId: string;
+    };
 
 /**
  * Abstract class to define the functionalities of a transaction request transaction request.
@@ -131,11 +132,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    *
    * The current status of the transaction
    */
-  flags: TransactionStatusFlags = {
-    isEstimated: false,
-    isFunded: false,
-    isSigned: false,
-  };
+  flags: TransactionStatusFlag = { status: undefined, transactionId: undefined };
 
   /**
    * Constructor for initializing a base transaction request.
@@ -271,8 +268,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    */
   addEmptyWitness(): number {
     // Push a dummy witness with same byte size as a real witness signature
-    this.witnesses.push(concat([ZeroBytes32, ZeroBytes32]));
-    return this.witnesses.length - 1;
+    return this.addWitness(concat([ZeroBytes32, ZeroBytes32]));
   }
 
   /**
@@ -731,21 +727,13 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    *
    * @param flags - The flags to update.
    */
-  public updateFlags(flags: Partial<{ [keys in keyof TransactionStatusFlags]: boolean }>) {
-    const CHAIN_ID = 0;
-    const transactionId = this.getTransactionId(CHAIN_ID);
+  public updateFlags(chainId: number, status?: TransactionStatusFlag['status']) {
+    if (!status) {
+      this.flags = { status: undefined, transactionId: undefined };
+      return;
+    }
 
-    // Helper function to update the flags
-    const updateFlag = (flag: keyof TransactionStatusFlags, value?: boolean) => {
-      if (value === undefined) {
-        return;
-      }
-      this.flags[flag] = value ? transactionId : false;
-    };
-
-    const { isEstimated, isFunded, isSigned } = flags;
-    updateFlag('isEstimated', isEstimated);
-    updateFlag('isFunded', isFunded);
-    updateFlag('isSigned', isSigned);
+    const transactionId = this.getTransactionId(chainId);
+    this.flags = { status, transactionId };
   }
 }

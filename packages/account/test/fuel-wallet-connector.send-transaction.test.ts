@@ -1,3 +1,4 @@
+import { Account } from '../src/account';
 import { Fuel } from '../src/connectors/fuel';
 import { ScriptTransactionRequest } from '../src/providers';
 import { setupTestProviderAndWallets } from '../src/test-utils';
@@ -17,9 +18,12 @@ async function setupConnector() {
     ],
   }).init();
 
+  const account = new Account(connector.address, connector.provider, fuel);
+
   return {
     ...launched,
     [Symbol.dispose]: () => launched.cleanup(),
+    account,
     connector,
     fuel,
   };
@@ -30,11 +34,11 @@ async function setupConnector() {
  * @group browser
  */
 describe('Fuel Connector', () => {
-  it('should ensure sendTransaction [estimated and funded, signed]', async () => {
+  it('should ensure sendTransaction [not funded, not signed]', async () => {
     using launched = await setupConnector();
     const {
+      account,
       connector,
-      fuel,
       wallets: [sender],
     } = launched;
 
@@ -44,32 +48,24 @@ describe('Fuel Connector', () => {
     const resources = await sender.getResourcesToSpend([{ assetId: baseAssetId, amount: 1000 }]);
     request.addResources(resources);
 
-    // Esimate and fund
-    await request.estimateAndFund(sender);
-
-    // Sign the transaction
-    const signature = await sender.signTransaction(request);
-    await request.updateWitnessByOwner(sender.address, signature);
-
     const estimateSpy = vi.spyOn(connector, 'getTransactionCost');
     const fundSpy = vi.spyOn(connector, 'fund');
     const signSpy = vi.spyOn(connector, 'signTransaction');
 
     // Send our transaction
-    const transactionId = await fuel.sendTransaction(connector.address.toString(), request, {
-      skipCustomFee: true, // Signed
-    });
+    const transactionId = await account.sendTransaction(request);
 
     // Ensure that the connector doesn't use the estimate, fund or sign methods
     expect(transactionId).toBeDefined();
-    expect(estimateSpy).toHaveBeenCalledTimes(0);
-    expect(fundSpy).toHaveBeenCalledTimes(0);
-    expect(signSpy).toHaveBeenCalledTimes(0);
+    expect(estimateSpy).toHaveBeenCalledTimes(1);
+    expect(fundSpy).toHaveBeenCalledTimes(1);
+    expect(signSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('should ensure sendTransaction [estimated and funded, not signed]', async () => {
+  it('should ensure sendTransaction [funded, not signed]', async () => {
     using launched = await setupConnector();
     const {
+      account,
       connector,
       fuel,
       wallets: [sender],
@@ -84,23 +80,28 @@ describe('Fuel Connector', () => {
     // Estimate and fund
     await request.estimateAndFund(sender);
 
+    // // Sign the transaction
+    // const signature = await sender.signTransaction(request);
+    // await request.updateWitnessByOwner(sender.address, signature);
+
     const estimateSpy = vi.spyOn(connector, 'getTransactionCost');
     const fundSpy = vi.spyOn(connector, 'fund');
     const signSpy = vi.spyOn(connector, 'signTransaction');
 
     // Send our transaction
-    const transactionId = await fuel.sendTransaction(connector.address.toString(), request);
+    const transactionId = await account.sendTransaction(request);
 
-    // Ensure that the connector doesn't use the estimate, fund or sign methods
+    // Ensure that the connector signs the transaction
     expect(transactionId).toBeDefined();
     expect(estimateSpy).toHaveBeenCalledTimes(0);
     expect(fundSpy).toHaveBeenCalledTimes(0);
     expect(signSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('should ensure sendTransaction [not estimated and funded, signed]', async () => {
+  it('should ensure sendTransaction [funded, signed]', async () => {
     using launched = await setupConnector();
     const {
+      account,
       connector,
       fuel,
       wallets: [sender],
@@ -111,6 +112,9 @@ describe('Fuel Connector', () => {
     const baseAssetId = await sender.provider.getBaseAssetId();
     const resources = await sender.getResourcesToSpend([{ assetId: baseAssetId, amount: 1000 }]);
     request.addResources(resources);
+
+    // Estimate and fund
+    await request.estimateAndFund(sender);
 
     // Sign the transaction
     const signature = await sender.signTransaction(request);
@@ -121,47 +125,44 @@ describe('Fuel Connector', () => {
     const signSpy = vi.spyOn(connector, 'signTransaction');
 
     // Send our transaction
-    const transactionId = await fuel.sendTransaction(connector.address.toString(), request, {
+    const transactionId = await account.sendTransaction(request, {
       skipCustomFee: true, // Signed
-      onBeforeSend: async (tx) => {
-        const newSignature = await sender.signTransaction(tx);
-        await tx.updateWitnessByOwner(sender.address, newSignature);
-        return tx;
-      },
     });
 
     // Ensure that the connector doesn't use the estimate, fund or sign methods
     expect(transactionId).toBeDefined();
-    expect(estimateSpy).toHaveBeenCalledTimes(1);
-    expect(fundSpy).toHaveBeenCalledTimes(1);
-    expect(signSpy).toHaveBeenCalledTimes(1); // We need to resign after estimate and fund
+    expect(estimateSpy).toHaveBeenCalledTimes(0);
+    expect(fundSpy).toHaveBeenCalledTimes(0);
+    expect(signSpy).toHaveBeenCalledTimes(0);
   });
 
-  it('should ensure sendTransaction [not estimated and funded, not signed]', async () => {
+  it('should invalidate transaction status', async () => {
     using launched = await setupConnector();
     const {
+      account,
       connector,
-      fuel,
-      wallets: [sender],
+      wallets: [sender, receiver],
     } = launched;
 
-    // Create the request
     const request = new ScriptTransactionRequest();
     const baseAssetId = await sender.provider.getBaseAssetId();
     const resources = await sender.getResourcesToSpend([{ assetId: baseAssetId, amount: 1000 }]);
     request.addResources(resources);
 
+    // Estimate and fund
+    await request.estimateAndFund(sender);
+
+    // Invalidate the estimate and fund
+    request.addCoinOutput(receiver.address, 1000, baseAssetId);
+
     const estimateSpy = vi.spyOn(connector, 'getTransactionCost');
     const fundSpy = vi.spyOn(connector, 'fund');
-    const signSpy = vi.spyOn(connector, 'signTransaction');
 
     // Send our transaction
-    const transactionId = await fuel.sendTransaction(connector.address.toString(), request);
+    await account.sendTransaction(request);
 
-    // Ensure that the connector doesn't use the estimate, fund or sign methods
-    expect(transactionId).toBeDefined();
+    // Should estimate and fund
     expect(estimateSpy).toHaveBeenCalledTimes(1);
     expect(fundSpy).toHaveBeenCalledTimes(1);
-    expect(signSpy).toHaveBeenCalledTimes(1);
   });
 });

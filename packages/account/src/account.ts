@@ -311,6 +311,9 @@ export class Account extends AbstractAccount implements WithAddress {
       );
     }
 
+    const chainId = await this.provider.getChainId();
+    request.updateFlags(chainId, 'funded');
+
     await this.provider.validateTransaction(request);
 
     request.updatePredicateGasUsed(estimatedPredicates);
@@ -655,15 +658,16 @@ export class Account extends AbstractAccount implements WithAddress {
     { estimateTxDependencies = true, onBeforeSend, skipCustomFee = false }: AccountSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    if (skipCustomFee) {
-      transactionRequest.updateFlags({ isSigned: true });
-    }
-
     if (this._connector) {
+      const { request, status } = await this.validateTransactionStatus(transactionRequest, {
+        skipCustomFee,
+      });
+
       return this.provider.getTransactionResponse(
-        await this._connector.sendTransaction(this.address.toString(), transactionRequest, {
+        await this._connector.sendTransaction(this.address.toString(), request, {
           onBeforeSend,
           skipCustomFee,
+          status,
         })
       );
     }
@@ -707,6 +711,33 @@ export class Account extends AbstractAccount implements WithAddress {
       txCreatedIdx: bn(1),
       ...coin,
     }));
+  }
+
+  private async validateTransactionStatus<T extends TransactionRequest>(
+    request: T,
+    params: FuelConnectorSendTxParams = {}
+  ): Promise<{ request: T; status: FuelConnectorSendTxParams['status'] }> {
+    if (params.skipCustomFee) {
+      const chainId = await this.provider.getChainId();
+      request.updateFlags(chainId, 'signed');
+      return { request, status: 'signed' };
+    }
+
+    // If there is no transaction id, then no status is set.
+    if (!isDefined(request.flags.transactionId)) {
+      return { request, status: undefined };
+    }
+
+    const chainId = await this.provider.getChainId();
+    const transactionId = request.getTransactionId(chainId);
+
+    // If the transaction id does not match the transaction id on the request.
+    // Then we need to invalidate the transaction status
+    if (request.flags.transactionId !== transactionId) {
+      request.updateFlags(chainId);
+    }
+
+    return { request, status: request.flags.status };
   }
 
   /** @hidden * */

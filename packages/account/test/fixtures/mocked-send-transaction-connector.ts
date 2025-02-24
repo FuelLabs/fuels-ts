@@ -3,6 +3,7 @@ import type {
   TransactionRequestLike,
   AccountSendTxParams,
   ScriptTransactionRequest,
+  TransactionStatusFlag,
 } from '../../src';
 
 import { MockConnector } from './mocked-connector';
@@ -19,26 +20,17 @@ export class MockSendTransactionConnector extends MockConnector {
     }
 
     const transaction = transactionRequestify(_transaction) as ScriptTransactionRequest;
-    const { skipCustomFee = false, onBeforeSend } = _params ?? {};
-    if (skipCustomFee) {
-      transaction.updateFlags({ isSigned: true });
-    }
-
-    const { isEstimated = false, isFunded = false, isSigned = false } = transaction.flags ?? {};
+    const flags: TransactionStatusFlag = transaction.flags;
 
     // Fund
-    if (isEstimated === false || isFunded === false) {
+    if (flags.status !== 'funded' && flags.status !== 'signed') {
       await transaction.estimateAndFund(wallet);
     }
 
     // Sign
-    if (isSigned === false) {
+    if (flags.status !== 'signed') {
       const signature = await wallet.signTransaction(transaction);
       await transaction.updateWitnessByOwner(wallet.address, signature);
-    }
-
-    if (onBeforeSend) {
-      await onBeforeSend(transaction);
     }
 
     // Send transaction
