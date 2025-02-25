@@ -97,6 +97,7 @@ export type CallResult = {
 export type EstimateTxDependenciesReturns = CallResult & {
   outputVariables: number;
   missingContractIds: string[];
+  rawReceipts: SerializedTransactionReceipt[];
 };
 
 /**
@@ -217,6 +218,7 @@ export type TransactionCost = {
   minFee: BN;
   maxFee: BN;
   maxGas: BN;
+  rawReceipts: SerializedTransactionReceipt[];
   receipts: TransactionResultReceipt[];
   outputVariables: number;
   missingContractIds: string[];
@@ -1004,12 +1006,14 @@ export default class Provider {
   ): Promise<EstimateTxDependenciesReturns> {
     if (isTransactionTypeCreate(transactionRequest)) {
       return {
+        rawReceipts: [],
         receipts: [],
         outputVariables: 0,
         missingContractIds: [],
       };
     }
 
+    let rawReceipts: SerializedTransactionReceipt[] = [];
     let receipts: TransactionResultReceipt[] = [];
     const missingContractIds: string[] = [];
     let outputVariables = 0;
@@ -1021,14 +1025,15 @@ export default class Provider {
 
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
       const {
-        dryRun: [{ receipts: rawReceipts, status }],
+        dryRun: [{ receipts: serializedReceipts, status }],
       } = await this.operations.dryRun({
         encodedTransactions: [hexlify(transactionRequest.toTransactionBytes())],
         utxoValidation: false,
         gasPrice: gasPrice.toString(),
       });
 
-      receipts = rawReceipts.map(deserializeReceipt);
+      rawReceipts = serializedReceipts;
+      receipts = serializedReceipts.map(deserializeReceipt);
       dryRunStatus = status;
 
       const { missingOutputVariables, missingOutputContractIds } =
@@ -1058,6 +1063,7 @@ export default class Provider {
     }
 
     return {
+      rawReceipts,
       receipts,
       outputVariables,
       missingContractIds,
@@ -1079,6 +1085,7 @@ export default class Provider {
     transactionRequests: TransactionRequest[]
   ): Promise<EstimateTxDependenciesReturns[]> {
     const results: EstimateTxDependenciesReturns[] = transactionRequests.map(() => ({
+      rawReceipts: [],
       receipts: [],
       outputVariables: 0,
       missingContractIds: [],
@@ -1375,6 +1382,7 @@ export default class Provider {
       gasPrice,
     });
 
+    let rawReceipts: SerializedTransactionReceipt[] = [];
     let receipts: TransactionResultReceipt[] = [];
     let dryRunStatus: DryRunStatus | undefined;
     let missingContractIds: string[] = [];
@@ -1388,7 +1396,7 @@ export default class Provider {
         await signatureCallback(txRequestClone);
       }
 
-      ({ receipts, missingContractIds, outputVariables, dryRunStatus } =
+      ({ rawReceipts, receipts, missingContractIds, outputVariables, dryRunStatus } =
         await this.estimateTxDependencies(txRequestClone, { gasPrice }));
 
       if (dryRunStatus && 'reason' in dryRunStatus) {
@@ -1408,6 +1416,7 @@ export default class Provider {
     }
 
     return {
+      rawReceipts,
       receipts,
       gasUsed,
       gasPrice,

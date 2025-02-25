@@ -1,10 +1,11 @@
+import { ContractFactory, Wallet } from 'fuels';
 import type {
   CallResult,
   DryRunStatus,
   EstimateTxDependenciesReturns,
   TransactionResultReceipt,
+  SerializedTransactionReceipt,
 } from 'fuels';
-import { ContractFactory, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
@@ -228,6 +229,7 @@ describe('dry-run-multiple-txs', () => {
 
     // request 1 for create transaction request, we do not dry run
     expect(estimatedRequests[0]).toStrictEqual<EstimateTxDependenciesReturns>({
+      rawReceipts: [],
       receipts: [],
       missingContractIds: [],
       outputVariables: 0,
@@ -236,6 +238,7 @@ describe('dry-run-multiple-txs', () => {
 
     // request 2 we dry run it 4 times to add the 3 output variables
     expect(estimatedRequests[1]).toStrictEqual<EstimateTxDependenciesReturns>({
+      rawReceipts: expect.any(Array<SerializedTransactionReceipt>),
       receipts: expect.any(Array<TransactionResultReceipt>),
       missingContractIds: [],
       outputVariables: 3,
@@ -249,6 +252,7 @@ describe('dry-run-multiple-txs', () => {
 
     // request 3 we dry run it 3 times to add the 2 output variables (1 was already present)
     expect(estimatedRequests[2]).toStrictEqual<EstimateTxDependenciesReturns>({
+      rawReceipts: expect.any(Array<SerializedTransactionReceipt>),
       receipts: expect.any(Array<TransactionResultReceipt>),
       missingContractIds: [],
       outputVariables: 2,
@@ -262,6 +266,7 @@ describe('dry-run-multiple-txs', () => {
 
     // request 4 we dry run it 1 time because it has reverted
     expect(estimatedRequests[3]).toStrictEqual<EstimateTxDependenciesReturns>({
+      rawReceipts: expect.any(Array<SerializedTransactionReceipt>),
       receipts: expect.any(Array<TransactionResultReceipt>),
       missingContractIds: [],
       outputVariables: 0,
@@ -276,6 +281,7 @@ describe('dry-run-multiple-txs', () => {
 
     // request 5 we dry run it 2 times because to add the missing output contract
     expect(estimatedRequests[4]).toStrictEqual<EstimateTxDependenciesReturns>({
+      rawReceipts: expect.any(Array<TransactionResultReceipt>),
       receipts: expect.any(Array<TransactionResultReceipt>),
       missingContractIds: [logOtherContract.id.toB256()],
       outputVariables: 0,
