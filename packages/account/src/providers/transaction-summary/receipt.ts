@@ -2,13 +2,14 @@ import { ReceiptType } from '@fuel-ts/transactions';
 
 import type { SerializedTransactionReceipt } from '../provider';
 import type { TransactionResultReceipt } from '../transaction-response';
-import { assembleReceiptByType } from '../utils';
+import { deserializeReceipt } from '../utils/serialization';
 
 import type { BurnedAsset, MintedAsset } from './types';
 
+/** @deprecated Use `deserializeReceipt` instead. */
 export const processGqlReceipt = (
   gqlReceipt: SerializedTransactionReceipt
-): TransactionResultReceipt => assembleReceiptByType(gqlReceipt);
+): TransactionResultReceipt => deserializeReceipt(gqlReceipt);
 
 export const extractMintedAssetsFromReceipts = (
   receipts: Array<TransactionResultReceipt>

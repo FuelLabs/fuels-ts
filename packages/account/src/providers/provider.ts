@@ -58,7 +58,6 @@ import {
 } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse, getDecodedLogs } from './transaction-response';
-import { processGqlReceipt } from './transaction-summary/receipt';
 import {
   calculateGasFee,
   extractTxError,
@@ -73,6 +72,7 @@ import {
   deserializeChain,
   deserializeNodeInfo,
   deserializeProviderCache,
+  deserializeReceipt,
 } from './utils/serialization';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
@@ -910,7 +910,7 @@ export default class Provider {
       utxoValidation: utxoValidation || false,
     });
     const [{ receipts: rawReceipts, status: dryRunStatus }] = dryRunStatuses;
-    const receipts = rawReceipts.map(processGqlReceipt);
+    const receipts = rawReceipts.map(deserializeReceipt);
 
     return { receipts, dryRunStatus };
   }
@@ -1028,7 +1028,7 @@ export default class Provider {
         gasPrice: gasPrice.toString(),
       });
 
-      receipts = rawReceipts.map(processGqlReceipt);
+      receipts = rawReceipts.map(deserializeReceipt);
       dryRunStatus = status;
 
       const { missingOutputVariables, missingOutputContractIds } =
@@ -1116,7 +1116,7 @@ export default class Provider {
         const requestIdx = transactionsToProcess[i];
         const { receipts: rawReceipts, status } = dryRunResults.dryRun[i];
         const result = results[requestIdx];
-        result.receipts = rawReceipts.map(processGqlReceipt);
+        result.receipts = rawReceipts.map(deserializeReceipt);
         result.dryRunStatus = status;
         const { missingOutputVariables, missingOutputContractIds } = getReceiptsWithMissingData(
           result.receipts
@@ -1170,7 +1170,7 @@ export default class Provider {
     });
 
     const results = dryRunStatuses.map(({ receipts: rawReceipts, status }) => {
-      const receipts = rawReceipts.map(processGqlReceipt);
+      const receipts = rawReceipts.map(deserializeReceipt);
       return { receipts, dryRunStatus: status };
     });
 
@@ -1313,7 +1313,7 @@ export default class Provider {
     const callResult = dryRunStatuses.map((dryRunStatus) => {
       const { id, receipts, status } = dryRunStatus;
 
-      const processedReceipts = receipts.map(processGqlReceipt);
+      const processedReceipts = receipts.map(deserializeReceipt);
 
       return { id, receipts: processedReceipts, status };
     });

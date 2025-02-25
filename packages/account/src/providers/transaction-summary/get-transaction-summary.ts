@@ -9,10 +9,10 @@ import type Provider from '../provider';
 import type { SerializedTransactionReceipt, PageInfo } from '../provider';
 import type { TransactionRequest } from '../transaction-request';
 import type { TransactionResult } from '../transaction-response';
+import { deserializeReceipt } from '../utils/serialization';
 import { validatePaginationArgs } from '../utils/validate-pagination-args';
 
 import { assembleTransactionSummary } from './assemble-transaction-summary';
-import { processGqlReceipt } from './receipt';
 import { getTotalFeeFromStatus } from './status';
 import type { AbiMap, TransactionSummary } from './types';
 /** @hidden */
@@ -49,7 +49,7 @@ export async function getTransactionSummary<TTransactionType = void>(
     txReceipts = gqlTransaction.status.receipts;
   }
 
-  const receipts = txReceipts.map(processGqlReceipt);
+  const receipts = txReceipts.map(deserializeReceipt);
 
   const {
     consensusParameters: {
@@ -187,7 +187,7 @@ export async function getTransactionsSummaries(
       txReceipts = gqlTransaction.status.receipts;
     }
 
-    const receipts = txReceipts.map(processGqlReceipt);
+    const receipts = txReceipts.map(deserializeReceipt);
 
     const transactionSummary = assembleTransactionSummary({
       id,

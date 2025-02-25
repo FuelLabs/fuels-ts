@@ -35,10 +35,10 @@ import type {
 import type Provider from '../provider';
 import type { JsonAbisFromAllCalls, TransactionRequest } from '../transaction-request';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
-import { processGqlReceipt } from '../transaction-summary/receipt';
 import { getTotalFeeFromStatus } from '../transaction-summary/status';
 import type { TransactionSummary, GqlTransaction, AbiMap } from '../transaction-summary/types';
 import { extractTxError } from '../utils';
+import { deserializeReceipt } from '../utils/serialization';
 
 import { getDecodedLogs } from './getDecodedLogs';
 
@@ -238,7 +238,7 @@ export class TransactionResponse {
     switch (status?.type) {
       case 'SuccessStatus':
       case 'FailureStatus':
-        return status.receipts.map(processGqlReceipt);
+        return status.receipts.map(deserializeReceipt);
       default:
         return [];
     }
