@@ -18,12 +18,8 @@ import { TESTNET_NETWORK_URL } from '../src/configs';
 import { Fuel } from '../src/connectors/fuel';
 import type { FuelConnectorSendTxParams } from '../src/connectors/types';
 import { FuelConnectorEventType } from '../src/connectors/types';
-import {
-  assembleTransactionSummary,
-  Provider,
-  ScriptTransactionRequest,
-  TransactionStatus,
-} from '../src/providers';
+import { Provider, ScriptTransactionRequest, TransactionStatus } from '../src/providers';
+import type { SerializedTransactionSummary } from '../src/providers/utils/serialization';
 import { serializeProviderCache } from '../src/providers/utils/serialization';
 import { setupTestProviderAndWallets, TestMessage } from '../src/test-utils';
 import { Wallet } from '../src/wallet';
@@ -757,28 +753,12 @@ describe('Fuel Connector', () => {
 
     // Create summary
     const chainId = await provider.getChainId();
-    const {
-      consensusParameters: {
-        baseAssetId,
-        txParameters: { maxInputs, maxGasPerTx },
-        feeParameters: { gasPriceFactor, gasPerByte },
-        gasCosts,
-      },
-    } = await provider.getChain();
-
-    const transactionSummary = assembleTransactionSummary({
+    const transactionSummary: SerializedTransactionSummary = {
       id: request.getTransactionId(chainId),
-      gasPerByte,
-      gasPriceFactor,
-      transaction: request.toTransaction(),
       transactionBytes: request.toTransactionBytes(),
-      baseAssetId,
-      receipts: txCost.receipts,
-      maxInputs,
-      gasCosts,
-      maxGasPerTx,
-      gasPrice: txCost.gasPrice,
-    });
+      receipts: txCost.rawReceipts,
+      gasPrice: txCost.gasPrice.toString(),
+    };
 
     const expectedParams: FuelConnectorSendTxParams = {
       onBeforeSend: undefined,
@@ -960,28 +940,12 @@ describe('Fuel Connector', () => {
 
     // Create summary
     const chainId = await provider.getChainId();
-    const {
-      consensusParameters: {
-        baseAssetId,
-        txParameters: { maxInputs, maxGasPerTx },
-        feeParameters: { gasPriceFactor, gasPerByte },
-        gasCosts,
-      },
-    } = await provider.getChain();
-
-    const transactionSummary = assembleTransactionSummary({
+    const transactionSummary: SerializedTransactionSummary = {
       id: request.getTransactionId(chainId),
-      gasPerByte,
-      gasPriceFactor,
-      transaction: request.toTransaction(),
       transactionBytes: request.toTransactionBytes(),
-      baseAssetId,
-      receipts: txCost.receipts,
-      maxInputs,
-      gasCosts,
-      maxGasPerTx,
-      gasPrice: txCost.gasPrice,
-    });
+      receipts: txCost.rawReceipts,
+      gasPrice: txCost.gasPrice.toString(),
+    };
 
     const expectedParams: FuelConnectorSendTxParams = {
       onBeforeSend: undefined,
