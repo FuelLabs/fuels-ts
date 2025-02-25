@@ -6,6 +6,10 @@ import type { SerializedTransactionSummary } from '../utils/serialization';
 import { assembleTransactionSummary } from './assemble-transaction-summary';
 import { assembleTransactionSummaryFromSerialized } from './assemble-transaction-summary-from-serialized';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('assembleTransactionSummaryFromSerialized', () => {
   it('should assemble transaction summary from serialized', async () => {
     using launched = await setupTestProviderAndWallets();
