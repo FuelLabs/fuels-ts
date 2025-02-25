@@ -761,14 +761,15 @@ describe('Fuel Connector', () => {
       consensusParameters: {
         baseAssetId,
         txParameters: { maxInputs, maxGasPerTx },
+        feeParameters: { gasPriceFactor, gasPerByte },
         gasCosts,
       },
     } = await provider.getChain();
 
     const transactionSummary = assembleTransactionSummary({
       id: request.getTransactionId(chainId),
-      gasPerByte: txCost.gasPrice,
-      gasPriceFactor: txCost.gasPrice,
+      gasPerByte,
+      gasPriceFactor,
       transaction: request.toTransaction(),
       transactionBytes: request.toTransactionBytes(),
       baseAssetId,
@@ -963,14 +964,15 @@ describe('Fuel Connector', () => {
       consensusParameters: {
         baseAssetId,
         txParameters: { maxInputs, maxGasPerTx },
+        feeParameters: { gasPriceFactor, gasPerByte },
         gasCosts,
       },
     } = await provider.getChain();
 
     const transactionSummary = assembleTransactionSummary({
       id: request.getTransactionId(chainId),
-      gasPerByte: txCost.gasPrice,
-      gasPriceFactor: txCost.gasPrice,
+      gasPerByte,
+      gasPriceFactor,
       transaction: request.toTransaction(),
       transactionBytes: request.toTransactionBytes(),
       baseAssetId,
