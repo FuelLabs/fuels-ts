@@ -57,7 +57,7 @@ export type FuelConnectorSendTxParams = {
     cache?: SerializedProviderCache;
   };
   data?: {
-    summary?: TransactionSummary;
+    transactionSummary?: TransactionSummary;
     estimatedGasPrice?: string;
     latestGasPrice?: string;
   };

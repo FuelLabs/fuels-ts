@@ -765,7 +765,7 @@ describe('Fuel Connector', () => {
       },
     } = await provider.getChain();
 
-    const summary = assembleTransactionSummary({
+    const transactionSummary = assembleTransactionSummary({
       id: request.getTransactionId(chainId),
       gasPerByte: txCost.gasPrice,
       gasPriceFactor: txCost.gasPrice,
@@ -786,11 +786,11 @@ describe('Fuel Connector', () => {
         url: provider.url,
         cache: await serializeProviderCache(provider),
       },
-      data: { summary },
+      data: { transactionSummary },
       state: 'funded',
     };
     const response = await account.sendTransaction(request, {
-      data: { summary },
+      data: { transactionSummary },
     });
     expect(response).toBeDefined();
     // transaction prepared and sent via connector
@@ -967,7 +967,7 @@ describe('Fuel Connector', () => {
       },
     } = await provider.getChain();
 
-    const summary = assembleTransactionSummary({
+    const transactionSummary = assembleTransactionSummary({
       id: request.getTransactionId(chainId),
       gasPerByte: txCost.gasPrice,
       gasPriceFactor: txCost.gasPrice,
@@ -988,11 +988,11 @@ describe('Fuel Connector', () => {
         url: provider.url,
         cache: await serializeProviderCache(provider),
       },
-      data: { summary },
+      data: { transactionSummary },
       state: 'funded',
     };
     const response = await account.sendTransaction(request, {
-      data: { summary },
+      data: { transactionSummary },
     });
     expect(response).toBeDefined();
     expect(prepareForSendSpy).toHaveBeenCalledWith(
