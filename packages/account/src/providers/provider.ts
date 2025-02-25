@@ -467,7 +467,7 @@ export default class Provider {
   /**
    * @hidden
    */
-  private getFetchFn(options: ProviderOptions): NonNullable<ProviderOptions['fetch']> {
+  private static getFetchFn(options: ProviderOptions): NonNullable<ProviderOptions['fetch']> {
     const { retryOptions, timeout, headers } = options;
 
     return autoRetryFetch(async (...args) => {
@@ -480,12 +480,6 @@ export default class Provider {
         signal,
         headers: { ...request?.headers, ...headers },
       };
-
-      const requestBody = JSON.parse(fullRequest.body as string);
-      if (isBlockSensitiveOperation(requestBody.operationName)) {
-        requestBody.extensions = { required_fuel_block_height: this.currentBlockHeight };
-        fullRequest.body = JSON.stringify(requestBody);
-      }
 
       if (options.requestMiddleware) {
         fullRequest = await options.requestMiddleware(fullRequest);
@@ -705,10 +699,18 @@ export default class Provider {
    * @hidden
    */
   private createOperations(): SdkOperations {
-    const fetchFn = this.getFetchFn(this.options);
+    const fetchFn = Provider.getFetchFn(this.options);
     const gqlClient = new GraphQLClient(this.urlWithoutAuth, {
-      fetch: (input: RequestInfo | URL, requestInit?: RequestInit) =>
-        fetchFn(input.toString(), requestInit || {}, this.options),
+      fetch: (input: RequestInfo | URL, requestInit?: RequestInit) => {
+        const request = requestInit || {};
+        const requestBody = JSON.parse(request?.body as string);
+        if (isBlockSensitiveOperation(requestBody.operationName)) {
+          requestBody.extensions = { required_fuel_block_height: this.currentBlockHeight };
+          request.body = JSON.stringify(requestBody);
+        }
+
+        return fetchFn(input.toString(), requestInit || {}, this.options);
+      },
       responseMiddleware: (response: GraphQLClientResponse<unknown> | Error) => {
         this.setCurrentBlockHeight(response as { extensions: unknown });
         if ('response' in response) {
