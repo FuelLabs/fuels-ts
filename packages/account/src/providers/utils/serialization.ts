@@ -133,6 +133,7 @@ export const serializeChain = (chain: ChainInfo): SerializedChainInfo => {
   };
 };
 
+/** @hidden */
 export const deserializeNodeInfo = (nodeInfo: SerializedNodeInfo): NodeInfo => {
   const { maxDepth, maxTx, nodeVersion, utxoValidation, vmBacktrace } = nodeInfo;
 
@@ -145,6 +146,7 @@ export const deserializeNodeInfo = (nodeInfo: SerializedNodeInfo): NodeInfo => {
   };
 };
 
+/** @hidden */
 export const serializeNodeInfo = (nodeInfo: NodeInfo): SerializedNodeInfo => {
   const { maxDepth, maxTx, nodeVersion, utxoValidation, vmBacktrace } = nodeInfo;
 
@@ -157,12 +159,14 @@ export const serializeNodeInfo = (nodeInfo: NodeInfo): SerializedNodeInfo => {
   };
 };
 
+/** @hidden */
 export const deserializeProviderCache = (cache: SerializedProviderCache): ProviderCache => ({
   consensusParametersTimestamp: cache.consensusParametersTimestamp,
   chain: deserializeChain(cache.chain),
   nodeInfo: deserializeNodeInfo(cache.nodeInfo),
 });
 
+/** @hidden */
 export const serializeProviderCache = async (
   provider: Provider
 ): Promise<SerializedProviderCache> => ({
