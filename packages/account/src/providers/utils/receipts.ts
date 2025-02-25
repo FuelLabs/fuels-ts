@@ -20,8 +20,8 @@ import { getMintedAssetId, InputMessageCoder, ReceiptType } from '@fuel-ts/trans
 import { FAILED_TRANSFER_TO_ADDRESS_SIGNAL } from '@fuel-ts/transactions/configs';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 
-import type { GqlReceiptFragment } from '../__generated__/operations';
 import { GqlReceiptType } from '../__generated__/operations';
+import type { SerializedTransactionReceipt } from '../provider';
 import type { TransactionResultReceipt } from '../transaction-response';
 
 /** @hidden */
@@ -61,7 +61,7 @@ export const getReceiptsWithMissingData = (receipts: Array<TransactionResultRece
 
 const hexOrZero = (hex?: string | null) => hex || ZeroBytes32;
 
-export function assembleReceiptByType(receipt: GqlReceiptFragment) {
+export function assembleReceiptByType(receipt: SerializedTransactionReceipt) {
   const { receiptType } = receipt;
 
   switch (receiptType) {

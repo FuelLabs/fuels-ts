@@ -16,6 +16,7 @@ import { clone } from 'ramda';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
+  GqlReceiptFragment as SerializedTransactionReceipt,
   GqlNodeInfoFragment as SerializedNodeInfo,
   GqlChainInfoFragment as SerializedChainInfo,
   GqlConsensusParametersVersion,
@@ -157,6 +158,7 @@ type ModifyStringToBN<T> = {
 };
 
 export {
+  SerializedTransactionReceipt,
   SerializedNodeInfo,
   SerializedChainInfo,
   GasCosts,

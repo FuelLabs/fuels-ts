@@ -3,12 +3,10 @@ import { bn } from '@fuel-ts/math';
 import { TransactionCoder } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
 
-import type {
-  GqlGetTransactionsByOwnerQueryVariables,
-  GqlReceiptFragment,
-} from '../__generated__/operations';
+import type { GqlGetTransactionsByOwnerQueryVariables } from '../__generated__/operations';
+import { TRANSACTIONS_PAGE_SIZE_LIMIT } from '../provider';
 import type Provider from '../provider';
-import { TRANSACTIONS_PAGE_SIZE_LIMIT, type PageInfo } from '../provider';
+import type { SerializedTransactionReceipt, PageInfo } from '../provider';
 import type { TransactionRequest } from '../transaction-request';
 import type { TransactionResult } from '../transaction-response';
 import { validatePaginationArgs } from '../utils/validate-pagination-args';
@@ -45,7 +43,7 @@ export async function getTransactionSummary<TTransactionType = void>(
     0
   );
 
-  let txReceipts: GqlReceiptFragment[] = [];
+  let txReceipts: SerializedTransactionReceipt[] = [];
 
   if (gqlTransaction?.status && 'receipts' in gqlTransaction.status) {
     txReceipts = gqlTransaction.status.receipts;
@@ -183,7 +181,7 @@ export async function getTransactionsSummaries(
 
     const [decodedTransaction] = new TransactionCoder().decode(arrayify(rawPayload), 0);
 
-    let txReceipts: GqlReceiptFragment[] = [];
+    let txReceipts: SerializedTransactionReceipt[] = [];
 
     if (gqlTransaction?.status && 'receipts' in gqlTransaction.status) {
       txReceipts = gqlTransaction.status.receipts;
