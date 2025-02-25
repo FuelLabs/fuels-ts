@@ -664,7 +664,7 @@ export class Account extends AbstractAccount implements WithAddress {
     // Check if the account is using a connector, and therefore we do not have direct access to the
     // private key.
     if (this._connector) {
-      const { onBeforeSend, skipCustomFee = false } = connectorOptions;
+      const { onBeforeSend, skipCustomFee = false, data } = connectorOptions;
 
       const { request, state } = await this.validateTransactionState(transactionRequest, {
         onBeforeSend,
@@ -678,6 +678,7 @@ export class Account extends AbstractAccount implements WithAddress {
           url: this.provider.url,
           cache: await serializeProviderCache(this.provider),
         },
+        data,
         state,
       };
 

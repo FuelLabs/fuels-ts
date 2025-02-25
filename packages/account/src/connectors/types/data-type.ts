@@ -1,7 +1,7 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import type { RequireAtLeastOne } from 'type-fest';
 
-import type { TransactionRequest, TransactionStateFlag } from '../../providers';
+import type { TransactionRequest, TransactionStateFlag, TransactionSummary } from '../../providers';
 import type { SerializedProviderCache } from '../../providers/utils/serialization';
 
 /**
@@ -55,6 +55,9 @@ export type FuelConnectorSendTxParams = {
   provider?: {
     url: string;
     cache?: SerializedProviderCache;
+  };
+  data?: {
+    summary?: TransactionSummary;
   };
   state?: TransactionStateFlag['state'];
 };
