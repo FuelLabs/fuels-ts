@@ -20,7 +20,9 @@ const formatPackageJsonContents = (contents: { name: string }) => ({
 /**
  * Gather all the package.json files to be published
  */
-const packages = globSync("**/package.json")
+const packages = globSync("**/package.json", {
+  ignore: ["**/dist/**", "**/node_modules/**"],
+})
   // Read in the package.json file
   .map((fileName) => {
     const packageJson = JSON.parse(readFileSync(fileName, "utf-8"));
@@ -77,8 +79,11 @@ globSync(".changeset/*.md")
   });
 
 /**
- * Add a changeset for the next `fuels` version
+ * Add a changeset to bump all package versions
  */
-const output = `---\n"${GITHUB_ORGANIZATION_SCOPE}/fuels": patch\n---\n\nincremental\n`;
+const packagesToBump = packages
+  .map((pkg) => formatPackageName(pkg.contents.name))
+  .map((packageWithScope) => `"${packageWithScope}": patch`);
+const output = `---\n${packagesToBump.join("\n")}\n---\n\nincremental\n`;
 writeFileSync(".changeset/fuel-labs-ci.md", output);
 execSync(`git add .changeset/fuel-labs-ci.md`);
