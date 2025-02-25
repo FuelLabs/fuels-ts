@@ -21,6 +21,12 @@ export interface FunctionCall {
   argumentsProvided: Record<string, unknown> | undefined;
 }
 
+/**
+ * Builds a FunctionCall object from a call receipt.
+ *
+ * Currently only supports the first function call, multicall is not supported.
+ * This should be https://github.com/FuelLabs/fuels-ts/issues/3733.
+ */
 export const getFunctionCall = ({
   abi,
   receipt,
