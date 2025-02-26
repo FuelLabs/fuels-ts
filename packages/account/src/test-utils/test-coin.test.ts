@@ -3,7 +3,7 @@ import { type Coin } from '@fuel-ts/account';
 import { bn, type BN } from '@fuel-ts/math';
 import { getRandomB256 } from '@fuel-ts/address';
 
-import { TestCoin } from './TestCoin';
+import { TestCoin } from './test-coin';
 
 /**
  * @group node
@@ -19,7 +19,8 @@ describe('TestCoin', () => {
     expect(coin.owner).toMatch(/^0x[a-f0-9]{64}$/);
     expect(coin.amount).toBeDefined();
     expect(coin.amount.toString()).toBe('1000000');
-    expect(coin.type).toBe(0);
+    expect(coin.assetId).toBeDefined();
+    expect(coin.assetId).toMatch(/^0x[a-f0-9]{64}$/);
   });
 
   test('constructor accepts custom values', () => {
@@ -27,7 +28,7 @@ describe('TestCoin', () => {
       id: getRandomB256(),
       owner: getRandomB256(),
       amount: bn(500),
-      type: 1,
+      assetId: getRandomB256(),
     };
 
     const testCoin = new TestCoin(customParams);
@@ -36,7 +37,7 @@ describe('TestCoin', () => {
     expect(coin.id).toBe(customParams.id);
     expect(coin.owner).toBe(customParams.owner);
     expect(coin.amount).toBe(customParams.amount);
-    expect(coin.type).toBe(customParams.type);
+    expect(coin.assetId).toBe(customParams.assetId);
   });
 
   test('many() creates specified number of coins', () => {
@@ -52,16 +53,16 @@ describe('TestCoin', () => {
     const baseParams = {
       owner: getRandomB256(),
       amount: bn(1000),
-      type: 2,
+      assetId: getRandomB256(),
     };
 
     const coins = TestCoin.many(baseParams, 2);
 
     expect(coins[0].owner).toBe(baseParams.owner);
     expect(coins[0].amount).toBe(baseParams.amount);
-    expect(coins[0].type).toBe(baseParams.type);
+    expect(coins[0].assetId).toBe(baseParams.assetId);
     expect(coins[1].owner).toBe(baseParams.owner);
     expect(coins[1].amount).toBe(baseParams.amount);
-    expect(coins[1].type).toBe(baseParams.type);
+    expect(coins[1].assetId).toBe(baseParams.assetId);
   });
 });
