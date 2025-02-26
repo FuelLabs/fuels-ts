@@ -34,11 +34,9 @@ jobs:
             --query authorizationToken \
             --output text)
 
-          cat << EOF > "$HOME/.npmrc"
-          //fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/npm/:always-auth=true
-          //fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/$/:_authToken=${TOKEN}
-          @FuelLabs:registry=https://fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/npm/
-          EOF
+          echo "//fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/npm/:always-auth=true" >> .npmrc
+          echo "//fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/npm/:_authToken=${TOKEN}" >> .npmrc
+          echo "@FuelLabs:registry=https://fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/npm/" >> .npmrc
         env:
           HOME: ${{ github.workspace }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
