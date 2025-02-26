@@ -2,19 +2,18 @@ import { Coin } from '@fuel-ts/account';
 import { bn, type BN } from '@fuel-ts/math';
 import { getRandomB256 } from '@fuel-ts/address';
 
-
 interface TestCoinSpecs {
   id: string;
   owner: string;
   amount: BN;
-  type: number;
+  assetId: string;
 }
 
 export class TestCoin {
   public readonly id: string;
   public readonly owner: string;
   public readonly amount: BN;
-  public readonly type: number;
+  public readonly assetId: string;
 
   /**
    * A helper class to create coins for testing purposes.
@@ -23,12 +22,12 @@ export class TestCoin {
     id = getRandomB256(),
     owner = getRandomB256(),
     amount = bn(1000000),
-    type = 0,
+    assetId = getRandomB256(),
   }: Partial<TestCoinSpecs> = {}) {
     this.id = id;
     this.owner = owner;
     this.amount = amount;
-    this.type = type;
+    this.assetId = assetId;
   }
 
   /**
@@ -39,7 +38,7 @@ export class TestCoin {
       id: this.id,
       owner: this.owner,
       amount: this.amount,
-      type: this.type,
+      assetId: this.assetId,
     };
   }
 
