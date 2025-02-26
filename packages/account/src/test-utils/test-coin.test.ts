@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { type Coin } from '@fuel-ts/account';
 import { bn, type BN } from '@fuel-ts/math';
-import { getRandomB256 } from '@fuel-ts/crypto';
+import { getRandomB256 } from '@fuel-ts/address';
 
 import { TestCoin } from './TestCoin';
 
