@@ -1,5 +1,22 @@
 # Change Log
 
+## 0.99.0
+
+### Patch Changes
+
+- 56adcc5: chore: fix version resolutions
+- Updated dependencies [86b8e94]
+- Updated dependencies [69e1ba8]
+- Updated dependencies [d1825c9]
+- Updated dependencies [56adcc5]
+- Updated dependencies [b3bb765]
+  - @fuel-ts/address@0.99.0
+  - @fuel-ts/abi-coder@0.99.0
+  - @fuel-ts/utils@0.99.0
+  - @fuel-ts/errors@0.99.0
+  - @fuel-ts/math@0.99.0
+  - @fuel-ts/hasher@0.99.0
+
 ## 0.98.0
 
 ### Minor Changes

@@ -14,8 +14,21 @@ export default defineConfig({
       md.use(snippetPlugin);
       md.use(codeInContextPlugin);
       md.block.ruler.disable('snippet');
+      md.core.ruler.before('normalize', 'replace-docs-api-url', (state) => {
+        const apiUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:5174' : '/api';
+        state.src = state.src.replace(/DOCS_API_URL/g, apiUrl);
+      });
     },
   },
+  transformHtml: (code) => {
+    // make the API links open in a new tab
+    // because opening in the same tab doesn't work in the preview
+    return code.replace(/(<a\s+[^>]*href="\/api\/[^"]*")/g, '$1 target="_blank" rel="noreferrer"');
+  },
+  // Finds dead DOCS_API_URL links and fails,
+  // but they get replaced later in the markdown transformer.
+  // We have the md link checker workflow which covers this.
+  ignoreDeadLinks: true,
   head: [
     ['link', { rel: 'icon', href: '/fuels-ts/favicon.ico', type: 'image/png' }],
     ['meta', { property: 'og:type', content: 'website' }],
@@ -389,6 +402,10 @@ export default defineConfig({
               {
                 text: 'Using assets',
                 link: '/guide/utilities/using-assets',
+              },
+              {
+                text: 'Asset API',
+                link: '/guide/utilities/asset-api',
               },
             ],
           },

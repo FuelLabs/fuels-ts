@@ -14,7 +14,6 @@ import type {
 } from '../transaction-response';
 
 import type { FunctionCall } from './call';
-import { getFunctionCall } from './call';
 import {
   getInputFromAssetId,
   getInputAccountAddress,
@@ -196,6 +195,10 @@ function mergeOperations(existing: Operation, toAdd: Operation): Operation {
     ...existing,
     assetsSent: mergeAssetsSent(existing, toAdd),
     calls: mergeCalls(existing, toAdd),
+    receipts: [
+      ...(existing.receipts || []),
+      ...(toAdd.receipts?.filter((r) => !existing.receipts?.some((er) => er === r)) || []),
+    ],
   };
 }
 
@@ -252,6 +255,7 @@ export function getWithdrawFromFuelOperations({
               assetId: baseAssetId,
             },
           ],
+          receipts: [receipt],
         });
 
         return newWithdrawFromFuelOps;
@@ -269,23 +273,20 @@ export function getWithdrawFromFuelOperations({
 function getContractCalls(
   contractInput: InputContract,
   abiMap: AbiMap | undefined,
-  receipt: TransactionResultCallReceipt,
-  rawPayload: string,
-  maxInputs: BN
+  _receipt: TransactionResultCallReceipt,
+  _rawPayload: string,
+  _maxInputs: BN
 ): FunctionCall[] {
   const abi = abiMap?.[contractInput.contractID];
   if (!abi) {
     return [];
   }
 
-  return [
-    getFunctionCall({
-      abi,
-      receipt,
-      rawPayload,
-      maxInputs,
-    }),
-  ];
+  // Until we can successfully decode all operations, including multicall we
+  // will just return an empty. This should then be reintroduced in
+  // https://github.com/FuelLabs/fuels-ts/issues/3733
+  return [];
+  // return [ getFunctionCall({ abi, receipt, rawPayload, maxInputs }) ];
 }
 
 /** @hidden */
@@ -332,6 +333,7 @@ function processCallReceipt(
       },
       assetsSent: getAssetsSent(receipt),
       calls,
+      receipts: [receipt],
     },
   ];
 }
@@ -421,6 +423,7 @@ function extractTransferOperationFromReceipt(
         amount,
       },
     ],
+    receipts: [receipt],
   };
 }
 

@@ -1,0 +1,54 @@
+name: "Publish to `pr` or `next` tag"
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+env:
+  NPM_DIST_TAG: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'next' }}
+
+jobs:
+  publish-to-github-packages:
+    runs-on: ubuntu-latest
+    permissions: write-all
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Build
+        run: pnpm build
+
+      - name: Create .npmrc
+        run: |
+          cat << EOF > "$HOME/.npmrc"
+            //npm.pkg.github.com/:_authToken=$GITHUB_TOKEN
+            @FuelLabs:registry=https://npm.pkg.github.com
+          EOF
+        env:
+          HOME: ${{ github.workspace }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish `$NPM_DIST_TAG` tag on GitHub Packages
+        run: |
+          echo "Publish to: $NPM_DIST_TAG"
+
+          pnpm changeset:next
+          pnpm changeset version --snapshot $NPM_DIST_TAG
+          pnpm changeset publish --tag $NPM_DIST_TAG
+        env:
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HOME: ${{ github.workspace }}
+          npm_config_registry: "https://npm.pkg.github.com"

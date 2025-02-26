@@ -1,5 +1,18 @@
 # create-fuels
 
+## 0.99.0
+
+### Patch Changes
+
+- ab56ded: chore: bump `forc` to `0.66.6`
+- 13064a7: feat: add `forc` tests to create fuels
+- 71691a2: chore: changed Tailwind config from JS to TS
+- Updated dependencies [ab56ded]
+- Updated dependencies [b3bb765]
+- Updated dependencies [45cc32e]
+  - @fuel-ts/versions@0.99.0
+  - @fuel-ts/errors@0.99.0
+
 ## 0.98.0
 
 ### Minor Changes

@@ -1,5 +1,36 @@
 # Change Log
 
+## 0.99.0
+
+### Patch Changes
+
+- 68e4b5a: chore: prevent naming collisions on typegen
+- Updated dependencies [edefe59]
+- Updated dependencies [4428556]
+- Updated dependencies [f3d5240]
+- Updated dependencies [86b8e94]
+- Updated dependencies [e5251e2]
+- Updated dependencies [f986891]
+- Updated dependencies [d35ccb7]
+- Updated dependencies [69e1ba8]
+- Updated dependencies [ec84b8a]
+- Updated dependencies [d1825c9]
+- Updated dependencies [f7f0f0a]
+- Updated dependencies [d591df0]
+- Updated dependencies [baab80c]
+- Updated dependencies [8030180]
+- Updated dependencies [68e4b5a]
+- Updated dependencies [56adcc5]
+- Updated dependencies [45cc32e]
+  - @fuel-ts/account@0.99.0
+  - @fuel-ts/address@0.99.0
+  - @fuel-ts/program@0.99.0
+  - @fuel-ts/abi-coder@0.99.0
+  - @fuel-ts/utils@0.99.0
+  - @fuel-ts/contract@0.99.0
+  - @fuel-ts/abi-typegen@0.99.0
+  - @fuel-ts/transactions@0.99.0
+
 ## 0.98.0
 
 ### Minor Changes

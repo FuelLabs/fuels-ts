@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/utils",
-  "version": "0.98.0",
+  "version": "0.99.0",
   "description": "Utilities (and test utilities) collection",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -53,6 +53,6 @@
     "fflate": "0.8.2"
   },
   "peerDependencies": {
-    "vitest": "2.0.5"
+    "vitest": "3.0.5"
   }
 }

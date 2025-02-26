@@ -20,7 +20,7 @@ apps/docs/src/api
 apps/docs/src/typegend
 apps/docs/src/**/*.test.ts
 packages/fuels/test/fixtures/project
-packages/account/src/providers/assets
+packages/account/src/assets
 
 __generated__
 out

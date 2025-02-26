@@ -31,7 +31,7 @@ import {
   TestMessage,
 } from 'fuels/test-utils';
 
-import { MultiTokenContractFactory, TokenContractFactory } from '../test/typegen';
+import { MultiTokenContractFactory, TokenContractFactory, TokenContract } from '../test/typegen';
 import type { ContractIdInput, TransferParamsInput } from '../test/typegen/contracts/TokenContract';
 
 function convertBnsToHex(value: unknown): unknown {
@@ -299,6 +299,335 @@ describe('TransactionSummary', () => {
     expect(transactions).toHaveLength(length);
     transactions.forEach((transaction) => {
       expect(transaction.blockId).toBeUndefined();
+    });
+  });
+
+  // We can remove this test once https://github.com/FuelLabs/fuels-ts/issues/3733 has been resolved as the
+  // below tests are more verbose. But this ensures the method does not throw with an ABI map provided.
+  it('should ensure getTransactionsSummaries executes just fine [w/ ABI map]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: TokenContractFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
+    const contractId = contract.id.toB256();
+
+    const call = await contract.functions.mint_coins(bn(100_000)).call();
+    const res = await call.waitForResult();
+
+    const summary = await res.transactionResponse.getTransactionSummary({
+      [contractId]: TokenContract.abi,
+    });
+
+    validateTxSummary({
+      transaction: summary,
+    });
+  });
+
+  // Test disabled due to unsupported call ops in tx summaries. We should re-enable this via
+  // https://github.com/FuelLabs/fuels-ts/issues/3733
+  it.skip('should ensure getTransactionsSummaries executes just fine [w/ ABI & call op]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: TokenContractFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
+    const contractId = contract.id.toB256();
+
+    const call = await contract.functions.mint_coins(bn(100_000)).call();
+    const res = await call.waitForResult();
+
+    const summary = await res.transactionResponse.getTransactionSummary({
+      [contractId]: TokenContract.abi,
+    });
+
+    validateTxSummary({
+      transaction: summary,
+    });
+
+    const { operations } = summary;
+    const callOperation = operations[0];
+
+    expect(callOperation.name).toBe(OperationName.contractCall);
+    expect(callOperation.to?.address).toBe(contractId);
+    expect(callOperation.calls?.[0].functionName).toBe('mint_coins');
+    expect(callOperation.calls?.[0].functionSignature).toBe('mint_coins(u64)');
+    expect(callOperation.calls?.[0].argumentsProvided).toStrictEqual({
+      mint_amount: bn(100_000).toHex(),
+    });
+  });
+
+  // Test disabled due to unsupported call ops in tx summaries. We should re-enable this via
+  // https://github.com/FuelLabs/fuels-ts/issues/3733
+  it.skip('should ensure getTransactionsSummaries executes just fine [w/ ABI & call w/ transfer op]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: TokenContractFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+      provider,
+    } = launched;
+
+    const contractId = contract.id.toB256();
+    const recipient = Wallet.generate({ provider });
+
+    const setupCall = await contract.functions.mint_coins(100000).call();
+    const setupRes = await setupCall.waitForResult();
+    const { assetId } = setupRes.transactionResult.mintedAssets[0];
+
+    const call = await contract.functions
+      .transfer_to_address({ bits: recipient.address.toB256() }, { bits: assetId }, 1000)
+      .call();
+    const res = await call.waitForResult();
+
+    const summary = await res.transactionResponse.getTransactionSummary({
+      [contractId]: TokenContract.abi,
+    });
+
+    validateTxSummary({
+      transaction: summary,
+    });
+
+    const { operations } = summary;
+    const transferOperation = operations[0];
+    const callOperation = operations[1];
+
+    expect(transferOperation.name).toBe(OperationName.transfer);
+    expect(transferOperation.to?.address).toBe(recipient.address.toB256());
+    expect(transferOperation.assetsSent?.[0].assetId).toBe(assetId);
+    expect(transferOperation.assetsSent?.[0].amount).toStrictEqual(bn(1000));
+
+    expect(callOperation.name).toBe(OperationName.contractCall);
+    expect(callOperation.to?.address).toBe(contractId);
+    expect(callOperation.calls?.[0].functionName).toBe('transfer_to_address');
+    expect(callOperation.calls?.[0].functionSignature).toBe(
+      'transfer_to_address(s(b256),s(b256),u64)'
+    );
+    expect(callOperation.calls?.[0].argumentsProvided).toStrictEqual({
+      recipient: { bits: recipient.address.toB256() },
+      asset_id: { bits: assetId },
+      amount: bn(1000).toHex(),
+    });
+  });
+
+  // Test disabled due to unsupported call ops in tx summaries. We should re-enable this via
+  // https://github.com/FuelLabs/fuels-ts/issues/3733
+  it.skip('should ensure getTransactionSummary fn executes just fine [w/ ABI & call op]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: TokenContractFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+      provider,
+    } = launched;
+
+    const contractId = contract.id.toB256();
+
+    const call = await contract.functions.mint_coins(bn(100_000)).call();
+    const res = await call.waitForResult();
+
+    const summary = await getTransactionSummary({
+      id: res.transactionResponse.id,
+      provider,
+      abiMap: {
+        [contractId]: TokenContract.abi,
+      },
+    });
+
+    validateTxSummary({
+      transaction: summary,
+    });
+
+    const { operations } = summary;
+    const callOperation = operations[0];
+
+    expect(callOperation.name).toBe(OperationName.contractCall);
+    expect(callOperation.to?.address).toBe(contractId);
+    expect(callOperation.calls?.[0].functionName).toBe('mint_coins');
+    expect(callOperation.calls?.[0].functionSignature).toBe('mint_coins(u64)');
+    expect(callOperation.calls?.[0].argumentsProvided).toStrictEqual({
+      mint_amount: bn(100_000).toHex(),
+    });
+
+    const responseSummary = await res.transactionResponse.getTransactionSummary({
+      [contractId]: TokenContract.abi,
+    });
+
+    expect(summary.operations).toStrictEqual(responseSummary.operations);
+
+    // TODO: Contract txId not set correctly in`transactionResponse.getTransactionSummary`
+    // https://github.com/FuelLabs/fuels-ts/issues/3708
+    // expect(summary).toStrictEqual(responseSummary);
+  });
+
+  // Test disabled due to unsupported call ops in tx summaries. We should re-enable this via
+  // https://github.com/FuelLabs/fuels-ts/issues/3733
+  it.skip('should ensure getTransactionSummary fn executes just fine [w/ ABI & call w/ transfer op]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: TokenContractFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+      provider,
+    } = launched;
+
+    const contractId = contract.id.toB256();
+    const recipient = Wallet.generate({ provider });
+
+    const setupCall = await contract.functions.mint_coins(100000).call();
+    const setupRes = await setupCall.waitForResult();
+    const { assetId } = setupRes.transactionResult.mintedAssets[0];
+
+    const call = await contract.functions
+      .transfer_to_address({ bits: recipient.address.toB256() }, { bits: assetId }, 1000)
+      .call();
+    const res = await call.waitForResult();
+
+    const summary = await getTransactionSummary({
+      id: res.transactionResponse.id,
+      provider,
+      abiMap: {
+        [contractId]: TokenContract.abi,
+      },
+    });
+
+    validateTxSummary({
+      transaction: summary,
+    });
+
+    const { operations } = summary;
+    const transferOperation = operations[0];
+    const callOperation = operations[1];
+
+    expect(transferOperation.name).toBe(OperationName.transfer);
+    expect(transferOperation.to?.address).toBe(recipient.address.toB256());
+    expect(transferOperation.assetsSent?.[0].assetId).toBe(assetId);
+    expect(transferOperation.assetsSent?.[0].amount).toStrictEqual(bn(1000));
+
+    expect(callOperation.name).toBe(OperationName.contractCall);
+    expect(callOperation.to?.address).toBe(contractId);
+    expect(callOperation.calls?.[0].functionName).toBe('transfer_to_address');
+    expect(callOperation.calls?.[0].functionSignature).toBe(
+      'transfer_to_address(s(b256),s(b256),u64)'
+    );
+    expect(callOperation.calls?.[0].argumentsProvided).toStrictEqual({
+      recipient: { bits: recipient.address.toB256() },
+      asset_id: { bits: assetId },
+      amount: bn(1000).toHex(),
+    });
+
+    const responseSummary = await res.transactionResponse.getTransactionSummary({
+      [contractId]: TokenContract.abi,
+    });
+
+    expect(summary.operations).toStrictEqual(responseSummary.operations);
+
+    // TODO: Contract txId not set correctly in`transactionResponse.getTransactionSummary`
+    // https://github.com/FuelLabs/fuels-ts/issues/3708
+    // expect(summary).toStrictEqual(responseSummary);
+  });
+
+  // Tx summary with multicall does not set contract operations correctly
+  // https://github.com/FuelLabs/fuels-ts/issues/3706
+  it.skip('should ensure getTransactionsSummaries executes just fine [w/ ABI & multicall]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: TokenContractFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+      provider,
+    } = launched;
+
+    const contractId = contract.id.toB256();
+    const recipient = Wallet.generate({ provider });
+
+    const setupCall = await contract.functions.mint_coins(100000).call();
+    const setupRes = await setupCall.waitForResult();
+    const { assetId } = setupRes.transactionResult.mintedAssets[0];
+
+    const calls = [
+      contract.functions.mint_coins(100000),
+      contract.functions.transfer_to_address(
+        { bits: recipient.address.toB256() },
+        { bits: assetId },
+        1000
+      ),
+    ];
+
+    const multiCall = await contract.multiCall(calls).call();
+    const res = await multiCall.waitForResult();
+
+    const summary = await res.transactionResponse.getTransactionSummary({
+      [contractId]: TokenContract.abi,
+    });
+
+    validateTxSummary({
+      transaction: summary,
+    });
+
+    const { operations } = summary;
+    const transferOperation = operations[0];
+    const callOperation = operations[1];
+    const callOperation2 = operations[2];
+
+    expect(transferOperation.name).toBe(OperationName.transfer);
+    expect(transferOperation.to?.address).toBe(recipient.address.toB256());
+    expect(transferOperation.assetsSent?.[0].assetId).toBe(assetId);
+    expect(transferOperation.assetsSent?.[0].amount).toStrictEqual(bn(1000));
+
+    expect(callOperation.name).toBe(OperationName.contractCall);
+    expect(callOperation.to?.address).toBe(contractId);
+    expect(callOperation.calls?.[0].functionName).toBe('mint_coins');
+    expect(callOperation.calls?.[0].functionSignature).toBe('mint_coins(u64)');
+    expect(callOperation.calls?.[0].argumentsProvided).toStrictEqual({
+      mint_amount: bn(100000).toHex(),
+    });
+
+    // Second contract operation (multicall not set correctly)
+    expect(callOperation2.name).toBe(OperationName.contractCall);
+    expect(callOperation2.to?.address).toBe(contractId);
+    expect(callOperation2.calls?.[0].functionName).toBe('transfer_to_address');
+    expect(callOperation2.calls?.[0].functionSignature).toBe(
+      'transfer_to_address(s(b256),s(b256),u64)'
+    );
+    expect(callOperation2.calls?.[0].argumentsProvided).toStrictEqual({
+      recipient: { bits: recipient.address.toB256() },
+      asset_id: { bits: assetId },
+      amount: bn(1000).toHex(),
     });
   });
 

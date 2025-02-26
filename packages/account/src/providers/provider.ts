@@ -1,13 +1,13 @@
 import type { AddressInput } from '@fuel-ts/address';
-import { Address } from '@fuel-ts/address';
+import { Address, isB256 } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { BN, bn } from '@fuel-ts/math';
+import type { BigNumberish, BN } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import { InputType, InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility, versions } from '@fuel-ts/versions';
-import { equalBytes } from '@noble/curves/abstract/utils';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import type { GraphQLClientResponse, GraphQLResponse } from 'graphql-request/src/types';
@@ -30,6 +30,7 @@ import type {
   GqlRelayedTransactionFailed,
   Requester,
   GqlBlockFragment,
+  GqlEstimatePredicatesQuery,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -47,6 +48,7 @@ import type {
   ScriptTransactionRequest,
 } from './transaction-request';
 import {
+  isPredicate,
   isTransactionTypeCreate,
   isTransactionTypeScript,
   transactionRequestify,
@@ -947,46 +949,76 @@ export default class Provider {
   }
 
   /**
-   * Verifies whether enough gas is available to complete transaction.
+   * Estimates the gas usage for predicates in a transaction request.
    *
    * @template T - The type of the transaction request object.
    *
-   * @param transactionRequest - The transaction request object.
-   * @returns A promise that resolves to the estimated transaction request object.
+   * @param transactionRequest - The transaction request to estimate predicates for.
+   * @returns A promise that resolves to the updated transaction request with estimated gas usage for predicates.
    */
   async estimatePredicates<T extends TransactionRequest>(transactionRequest: T): Promise<T> {
-    const shouldEstimatePredicates = Boolean(
-      transactionRequest.inputs.find(
-        (input) =>
-          'predicate' in input &&
-          input.predicate &&
-          !equalBytes(arrayify(input.predicate), arrayify('0x')) &&
-          new BN(input.predicateGasUsed).isZero()
-      )
+    const shouldEstimatePredicates = transactionRequest.inputs.some(
+      (input) => isPredicate(input) && bn(input.predicateGasUsed).isZero()
     );
+
     if (!shouldEstimatePredicates) {
       return transactionRequest;
     }
+
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
+
     const response = await this.operations.estimatePredicates({
       encodedTransaction,
     });
 
-    const {
-      estimatePredicates: { inputs },
-    } = response;
+    const { estimatePredicates } = response;
 
-    if (inputs) {
-      inputs.forEach((input, index) => {
-        if ('predicateGasUsed' in input && bn(input.predicateGasUsed).gt(0)) {
-          // eslint-disable-next-line no-param-reassign
-          (<CoinTransactionRequestInput>transactionRequest.inputs[index]).predicateGasUsed =
-            input.predicateGasUsed;
-        }
-      });
-    }
+    // eslint-disable-next-line no-param-reassign
+    transactionRequest = this.parseEstimatePredicatesResponse(
+      transactionRequest,
+      estimatePredicates
+    );
 
     return transactionRequest;
+  }
+
+  /**
+   * Estimates the gas price and predicates for a given transaction request and block horizon.
+   *
+   * @param transactionRequest - The transaction request to estimate predicates and gas price for.
+   * @param blockHorizon - The block horizon to use for gas price estimation.
+   * @returns A promise that resolves to an object containing the updated transaction
+   * request and the estimated gas price.
+   */
+  async estimatePredicatesAndGasPrice<T extends TransactionRequest>(
+    transactionRequest: T,
+    blockHorizon: number
+  ) {
+    const shouldEstimatePredicates = transactionRequest.inputs.some(
+      (input) => isPredicate(input) && bn(input.predicateGasUsed).isZero()
+    );
+
+    if (!shouldEstimatePredicates) {
+      const gasPrice = await this.estimateGasPrice(blockHorizon);
+
+      return { transactionRequest, gasPrice };
+    }
+
+    const {
+      estimateGasPrice: { gasPrice },
+      estimatePredicates,
+    } = await this.operations.estimatePredicatesAndGasPrice({
+      blockHorizon: String(blockHorizon),
+      encodedTransaction: hexlify(transactionRequest.toTransactionBytes()),
+    });
+
+    // eslint-disable-next-line no-param-reassign
+    transactionRequest = this.parseEstimatePredicatesResponse(
+      transactionRequest,
+      estimatePredicates
+    );
+
+    return { transactionRequest, gasPrice: bn(gasPrice) };
   }
 
   /**
@@ -1355,10 +1387,16 @@ export default class Provider {
       addedSignatures = signedRequest.witnesses.length - lengthBefore;
     }
 
-    await this.estimatePredicates(signedRequest);
-    txRequestClone.updatePredicateGasUsed(signedRequest.inputs);
+    let gasPrice: BN;
 
-    const gasPrice = gasPriceParam ?? (await this.estimateGasPrice(10));
+    if (gasPriceParam) {
+      gasPrice = gasPriceParam;
+      await this.estimatePredicates(signedRequest);
+    } else {
+      ({ gasPrice } = await this.estimatePredicatesAndGasPrice(signedRequest, 10));
+    }
+
+    txRequestClone.updatePredicateGasUsed(signedRequest.inputs);
 
     /**
      * Calculate minGas and maxGas based on the real transaction
@@ -1554,7 +1592,7 @@ export default class Provider {
    * @param idOrHeight - ID or height of the block.
    * @returns A promise that resolves to the block or null.
    */
-  async getBlock(idOrHeight: string | number | 'latest'): Promise<Block | null> {
+  async getBlock(idOrHeight: BigNumberish | 'latest'): Promise<Block | null> {
     let block: GqlBlockFragment | undefined | null;
 
     if (idOrHeight === 'latest') {
@@ -1563,7 +1601,7 @@ export default class Provider {
       } = await this.operations.getLatestBlock();
       block = latestBlock;
     } else {
-      const isblockId = typeof idOrHeight === 'string' && idOrHeight.length === 66;
+      const isblockId = typeof idOrHeight === 'string' && isB256(idOrHeight);
       const variables = isblockId
         ? { blockId: idOrHeight }
         : { height: bn(idOrHeight).toString(10) };
@@ -1639,15 +1677,17 @@ export default class Provider {
    */
   async getBlockWithTransactions(
     /** ID or height of the block */
-    idOrHeight: string | number | 'latest'
+    idOrHeight: BigNumberish | 'latest'
   ): Promise<(Block & { transactions: Transaction[] }) | null> {
     let variables;
     if (typeof idOrHeight === 'number') {
       variables = { blockHeight: bn(idOrHeight).toString(10) };
     } else if (idOrHeight === 'latest') {
       variables = { blockHeight: (await this.getBlockNumber()).toString() };
-    } else {
+    } else if (typeof idOrHeight === 'string' && isB256(idOrHeight)) {
       variables = { blockId: idOrHeight };
+    } else {
+      variables = { blockHeight: bn(idOrHeight).toString() };
     }
 
     const { block } = await this.operations.getBlockWithTransactions(variables);
@@ -1927,8 +1967,8 @@ export default class Provider {
     if (commitBlockHeight) {
       inputObject = {
         ...inputObject,
-        // Conver BN into a number string required on the query
-        // This should problably be fixed on the fuel client side
+        // Convert BN into a number string required on the query
+        // This should probably be fixed on the fuel client side
         commitBlockHeight: commitBlockHeight.toNumber().toString(),
       };
     }
@@ -2175,5 +2215,25 @@ export default class Provider {
       receipts,
       statusReason: status.reason,
     });
+  }
+
+  /**
+   * @hidden
+   */
+  private parseEstimatePredicatesResponse<T extends TransactionRequest>(
+    transactionRequest: T,
+    { inputs }: GqlEstimatePredicatesQuery['estimatePredicates']
+  ): T {
+    if (inputs) {
+      inputs.forEach((input, i) => {
+        if (input && 'predicateGasUsed' in input && bn(input.predicateGasUsed).gt(0)) {
+          // eslint-disable-next-line no-param-reassign
+          (<CoinTransactionRequestInput>transactionRequest.inputs[i]).predicateGasUsed =
+            input.predicateGasUsed;
+        }
+      });
+    }
+
+    return transactionRequest;
   }
 }

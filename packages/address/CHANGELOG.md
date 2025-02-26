@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.99.0
+
+### Patch Changes
+
+- 86b8e94: chore: `Address` constructor now accepts a range of inputs.
+- Updated dependencies [d1825c9]
+- Updated dependencies [b3bb765]
+  - @fuel-ts/utils@0.99.0
+  - @fuel-ts/errors@0.99.0
+  - @fuel-ts/crypto@0.99.0
+
 ## 0.98.0
 
 ### Minor Changes
