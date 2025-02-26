@@ -34,8 +34,8 @@ jobs:
             --query authorizationToken \
             --output text)
 
-          echo "//fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/npm/:always-auth=true" >> .npmrc
-          echo "//fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/npm/:_authToken=${TOKEN}" >> .npmrc
+          echo "//fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/npm/:always-auth=true" >> $HOME/.npmrc
+          echo "//fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/npm/:_authToken=${TOKEN}" >> $HOME/.npmrc
         env:
           HOME: ${{ github.workspace }}
 
@@ -53,7 +53,7 @@ jobs:
           echo "published_version=$published_version" >> $GITHUB_OUTPUT
         env:
           HOME: ${{ github.workspace }}
-          npm_config_registry: "https://fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/npm"
+          npm_config_registry: "https://fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/npm/"
 
       - uses: mshick/add-pr-comment@v2
         with:
