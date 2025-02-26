@@ -6,7 +6,7 @@ import { bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import { InputType, InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
-import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
+import { arrayify, hexlify, DateTime, isDefined, sleep } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility, versions } from '@fuel-ts/versions';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
@@ -64,7 +64,7 @@ import {
   getReceiptsWithMissingData,
 } from './utils';
 import type { RetryOptions } from './utils/auto-retry-fetch';
-import { autoRetryFetch } from './utils/auto-retry-fetch';
+import { autoRetryFetch, getWaitDelay } from './utils/auto-retry-fetch';
 import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
@@ -442,6 +442,8 @@ export default class Provider {
   /** @hidden */
   private static nodeInfoCache: NodeInfoCache = {};
   /** @hidden */
+  private static currentBlockHeight: Record<string, number> = {};
+  /** @hidden */
   private static incompatibleNodeVersionMessage: string = '';
 
   /** @hidden */
@@ -476,7 +478,48 @@ export default class Provider {
         fullRequest = await options.requestMiddleware(fullRequest);
       }
 
-      return options.fetch ? options.fetch(url, fullRequest, options) : fetch(url, fullRequest);
+      fullRequest.body = fullRequest.body
+        ?.toString()
+        .replace(
+          /}$/,
+          `,"extensions":{"required_fuel_block_height":${this.currentBlockHeight[url] ?? 0}}}`
+        );
+
+      let fuelBlockHeightPreconditionFailed = false;
+      let response: Response;
+
+      const blockHeightRetryOptions: RetryOptions = {
+        backoff: 'fixed',
+        maxRetries: 100,
+        baseDelay: 1000,
+      };
+
+      let blockHeightRetryAttempt = 0;
+
+      do {
+        response = await (options.fetch
+          ? options.fetch(url, fullRequest, options)
+          : fetch(url, fullRequest));
+
+        const body = await response.clone().json();
+        if (body.extensions?.current_fuel_block_height) {
+          this.currentBlockHeight = {
+            ...this.currentBlockHeight,
+            [url]: body.extensions.current_fuel_block_height as number,
+          };
+        }
+
+        fuelBlockHeightPreconditionFailed =
+          !!body.extensions?.fuel_block_height_precondition_failed;
+
+        if (fuelBlockHeightPreconditionFailed) {
+          ++blockHeightRetryAttempt;
+          const sleepTime = getWaitDelay(blockHeightRetryOptions, blockHeightRetryAttempt);
+          await sleep(sleepTime);
+        }
+      } while (fuelBlockHeightPreconditionFailed);
+
+      return response;
     }, retryOptions);
   }
 
