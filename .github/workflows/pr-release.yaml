@@ -20,11 +20,24 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/ci-setup
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_S3_REGION }}
+
       - name: Create .npmrc
         run: |
+          TOKEN=$(aws codeartifact get-authorization-token \
+            --domain fuel \
+            --domain-owner 024848458133 \
+            --query authorizationToken \
+            --output text)
+
           cat << EOF > "$HOME/.npmrc"
-            //npm.pkg.github.com/:_authToken=$GITHUB_TOKEN
-            @FuelLabs:registry=https://npm.pkg.github.com
+          //fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/npm/:always-auth=true
+          //fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/$/:_authToken=${TOKEN}
+          @FuelLabs:registry=https://fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/npm/
           EOF
         env:
           HOME: ${{ github.workspace }}
