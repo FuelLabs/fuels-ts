@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
 import type {
@@ -16,8 +15,8 @@ import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import { InputType, TransactionType } from '@fuel-ts/transactions';
-import { isDefined } from '@fuel-ts/utils';
+import { OutputType, TransactionType } from '@fuel-ts/transactions';
+import { hexlify, isDefined } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
 import { clone } from 'ramda';
 
@@ -245,26 +244,59 @@ export class BaseInvocationScope<TReturn = any> {
     let transactionRequest = await this.getTransactionRequest();
     transactionRequest = clone(transactionRequest);
 
-    const txCost = await this.getTransactionCost();
-    const { gasUsed, missingContractIds, outputVariables, maxFee } = txCost;
-    this.setDefaultTxParams(transactionRequest, gasUsed, maxFee);
-    // Clean coin inputs before add new coins to the request
-    transactionRequest.inputs = transactionRequest.inputs.filter((i) => i.type !== InputType.Coin);
+    const setGasLimit = transactionRequest.gasLimit;
+    const setMaxFee = transactionRequest.maxFee;
 
-    // Adding missing contract ids
-    missingContractIds.forEach((contractId) => {
-      transactionRequest.addContractInputAndOutput(new Address(contractId));
+    const provider = this.getProvider();
+    const account: AbstractAccount =
+      this.program.account ?? Wallet.generate({ provider: this.getProvider() });
+
+    const requiredCoins = this.requiredCoins;
+
+    transactionRequest.outputs.forEach((output) => {
+      if (output.type === OutputType.Coin) {
+        requiredCoins.push({
+          assetId: hexlify(output.assetId),
+          amount: bn(output.amount),
+        });
+      }
     });
 
-    // Adding required number of OutputVariables
-    transactionRequest.addVariableOutputs(outputVariables);
+    const requiredBalances = requiredCoins.map(({ assetId, amount }) => ({
+      assetId,
+      amount,
+      account: account.address.b256Address,
+    }));
 
-    await this.program.account?.fund(transactionRequest, txCost);
-
-    if (this.addSignersCallback) {
-      await this.addSignersCallback(transactionRequest);
+    if (!requiredBalances.length) {
+      requiredBalances.push({
+        assetId: await provider.getBaseAssetId(),
+        amount: bn(0),
+        account: account.address.b256Address,
+      });
     }
-    return transactionRequest;
+
+    // eslint-disable-next-line prefer-const
+    let { transactionRequest: assembledRequest, gasPrice } = await provider.assembleTX({
+      blockHorizon: 10,
+      feeAddressIndex: 0,
+      transactionRequest,
+      estimatePredicates: true,
+      requiredBalances,
+    });
+
+    assembledRequest = assembledRequest as ScriptTransactionRequest;
+
+    await this.setAndValidateGasAndFee(
+      setGasLimit,
+      setMaxFee,
+      assembledRequest.gasLimit,
+      assembledRequest.maxFee,
+      assembledRequest,
+      gasPrice
+    );
+
+    return assembledRequest;
   }
 
   /**
@@ -472,32 +504,49 @@ export class BaseInvocationScope<TReturn = any> {
   /**
    * In case the gasLimit is *not* set by the user, this method sets a default value.
    */
-  private setDefaultTxParams(
+  private async setAndValidateGasAndFee(
+    setGasLimit: BN,
+    setMaxFee: BN,
+    estimatedGasUsed: BN,
+    estimatedMaxFee: BN,
     transactionRequest: ScriptTransactionRequest,
-    gasUsed: BN,
-    maxFee: BN
+    gasPrice: BN
   ) {
     const gasLimitSpecified = isDefined(this.txParameters?.gasLimit) || this.hasCallParamsGasLimit;
     const maxFeeSpecified = isDefined(this.txParameters?.maxFee);
 
-    const { gasLimit: setGasLimit, maxFee: setMaxFee } = transactionRequest;
+    if (gasLimitSpecified) {
+      if (setGasLimit.lt(estimatedGasUsed)) {
+        throw new FuelError(
+          ErrorCode.GAS_LIMIT_TOO_LOW,
+          `Gas limit '${setGasLimit}' is lower than the required: '${estimatedGasUsed}'.`
+        );
+      }
 
-    if (!gasLimitSpecified) {
-      transactionRequest.gasLimit = gasUsed;
-    } else if (setGasLimit.lt(gasUsed)) {
-      throw new FuelError(
-        ErrorCode.GAS_LIMIT_TOO_LOW,
-        `Gas limit '${setGasLimit}' is lower than the required: '${gasUsed}'.`
-      );
+      // eslint-disable-next-line no-param-reassign
+      transactionRequest.gasLimit = setGasLimit;
     }
 
-    if (!maxFeeSpecified) {
-      transactionRequest.maxFee = maxFee;
-    } else if (maxFee.gt(setMaxFee)) {
-      throw new FuelError(
-        ErrorCode.MAX_FEE_TOO_LOW,
-        `Max fee '${setMaxFee}' is lower than the required: '${maxFee}'.`
-      );
+    if (maxFeeSpecified) {
+      if (setMaxFee.lt(estimatedMaxFee)) {
+        throw new FuelError(
+          ErrorCode.MAX_FEE_TOO_LOW,
+          `Max fee '${setMaxFee}' is lower than the required: '${estimatedMaxFee}'.`
+        );
+      }
+
+      // eslint-disable-next-line no-param-reassign
+      transactionRequest.maxFee = setMaxFee;
+    }
+
+    if (gasLimitSpecified && !maxFeeSpecified) {
+      const { maxFee: feeForGasPrice } = await this.getProvider().estimateTxGasAndFee({
+        transactionRequest,
+        gasPrice,
+      });
+
+      // eslint-disable-next-line no-param-reassign
+      transactionRequest.maxFee = feeForGasPrice;
     }
   }
 }
