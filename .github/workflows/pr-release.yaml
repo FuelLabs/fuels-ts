@@ -53,6 +53,7 @@ jobs:
           echo "published_version=$published_version" >> $GITHUB_OUTPUT
         env:
           HOME: ${{ github.workspace }}
+          npm_config_registry: "https://fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/npm"
 
       - uses: mshick/add-pr-comment@v2
         with:
