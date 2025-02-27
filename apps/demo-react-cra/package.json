@@ -5,9 +5,9 @@
   "dependencies": {
     "@fuels/vm-asm": "0.58.2",
     "@testing-library/react": "16.2.0",
-    "@types/node": "22.13.1",
-    "@types/react": "19.0.8",
-    "@types/react-dom": "19.0.3",
+    "@types/node": "22.13.5",
+    "@types/react": "19.0.10",
+    "@types/react-dom": "19.0.4",
     "eslint-config-react-app": "7.0.1",
     "fuels": "workspace:*",
     "react": "19.0.0",
