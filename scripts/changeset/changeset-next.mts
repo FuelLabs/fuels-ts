@@ -16,8 +16,8 @@ const packages = globSync("**/package.json", {
       contents: packageJson,
     };
   })
-  // Filter out private packages
-  .filter((pkg) => !pkg.contents.private);
+  // Filter out private packages (expect templates)
+  .filter((pkg) => !pkg.contents.private || pkg.path.includes("templates"));
 
 /**
  * Add a changeset to bump all package versions
