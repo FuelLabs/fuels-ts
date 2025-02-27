@@ -73,7 +73,7 @@
     "@changesets/cli": "2.28.1",
     "@changesets/get-github-info": "0.6.0",
     "@changesets/read": "0.6.2",
-    "@changesets/types": "6.0.0",
+    "@changesets/types": "6.1.0",
     "@fuel-ts/utils": "workspace:*",
     "@internal/forc": "workspace:*",
     "@internal/fuel-core": "workspace:*",
