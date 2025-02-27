@@ -40,17 +40,19 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
     });
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const [backgroundReader, resultReader] = response.body!.tee().map((x) => x.getReader());
+    const [backgroundStream, resultStream] = response.body!.tee();
 
     // eslint-disable-next-line no-void
-    void this.readInBackground(backgroundReader);
+    void this.readInBackground(backgroundStream.getReader());
+
+    const [errorReader, resultReader] = resultStream.tee().map((stream) => stream.getReader());
 
     /**
      * If the node threw an error, read it and throw it to the user
      * Else just discard the response and return the subscriber below,
      * which will have that same response via `resultReader`
      */
-    // await new FuelGraphqlSubscriber(errorReader).next();
+    await new FuelGraphqlSubscriber(errorReader).next();
 
     return new FuelGraphqlSubscriber(resultReader);
   }

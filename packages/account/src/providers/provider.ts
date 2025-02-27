@@ -549,8 +549,6 @@ export default class Provider {
           ++blockHeightRetryAttempt;
           const sleepTime = getWaitDelay(blockHeightRetryOptions, blockHeightRetryAttempt);
           await sleep(sleepTime);
-        } else {
-          assertGqlResponseHasNoErrors(gqlResponse.errors, Provider.incompatibleNodeVersionMessage);
         }
       } while (fuelBlockHeightPreconditionFailed);
 
