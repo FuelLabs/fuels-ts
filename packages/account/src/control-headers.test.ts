@@ -222,18 +222,6 @@ describe('control headers', () => {
     expect(+newBlockHeight).toBeGreaterThanOrEqual(expectedHeight);
   });
 
-  // test('transfer stuff', async () => {
-  //   using launched = await setupTestProviderAndWallets();
-
-  //   const {
-  //     wallets: [wallet],
-  //   } = launched;
-
-  //   const { waitForResult } = await wallet.transfer(wallet.address, 10);
-
-  //   await waitForResult();
-  // });
-
   test.only('new subscription events update block height', async () => {
     using launched = await setupTestProviderAndWallets({
       nodeOptions: {
@@ -319,6 +307,4 @@ describe('control headers', () => {
 
   test(`Node with lower block height doesn't override higher block height`, async () => {});
   test(`Clearing cache sets block height to 0`, async () => {});
-
-  test('subscriptions update current block height after they are done (a successful sub changes block height)', async () => {});
 });
