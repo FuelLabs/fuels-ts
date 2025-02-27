@@ -9,7 +9,7 @@ import type { Coin } from './coin';
 import type { CoinQuantity } from './coin-quantity';
 import type Provider from './provider';
 import type { DryRunStatus } from './provider';
-import { type ExcludeResourcesOption } from './resource';
+import { isCoin, type ExcludeResourcesOption } from './resource';
 import {
   getRequestInputResourceOwner,
   isPredicate,
@@ -21,8 +21,12 @@ import type { ScriptTransactionRequest, TransactionRequest } from './transaction
 import type { TransactionResultReceipt } from './transaction-response';
 import { getGasUsedFromReceipts } from './utils';
 
-type MimicAccount = string;
-type MimicPredicate = { predicateAddress: string; predicate: BytesLike; predicateData: BytesLike };
+export type MimicAccount = string;
+export type MimicPredicate = {
+  predicateAddress: string;
+  predicate: BytesLike;
+  predicateData: BytesLike;
+};
 
 export type MimicRequiredBalances = {
   assetId: string;
@@ -267,6 +271,23 @@ const mimicFunding = async (params: {
   for (const [owner, amountsToFetch] of Object.entries(ownersToFetch)) {
     // TODO: Consider excludedIds
     const resources = await provider.getResourcesToSpend(owner, amountsToFetch);
+
+    // Populating predicate resources with predicate bytes and data
+    resources.forEach((resource) => {
+      const resourceOwner = isCoin(resource) ? resource.owner : resource.recipient;
+      const predicateBalance = requiredBalances.find(
+        (balance) =>
+          typeof balance.account !== 'string' &&
+          balance.account.predicateAddress === resourceOwner.b256Address
+      );
+
+      if (predicateBalance) {
+        // eslint-disable-next-line no-param-reassign
+        resource.predicate = (predicateBalance.account as MimicPredicate).predicate;
+        // eslint-disable-next-line no-param-reassign
+        resource.predicateData = (predicateBalance.account as MimicPredicate).predicateData;
+      }
+    });
 
     transactionRequest.addResources(resources);
   }
