@@ -1,4 +1,4 @@
-name: Release to @pr-<number> tag on GitHub Packages
+name: Release to @pr-<number> tag
 on:
   pull_request:
   workflow_dispatch:
@@ -42,7 +42,7 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Release to @pr-${{ github.event.pull_REQUEST.NUMBER }} tag on GitHub Packages
+      - name: Release to @pr-${{ github.event.pull_REQUEST.NUMBER }} tag on AWS CodeArtifact
         id: release
         shell: bash
         run: |
@@ -58,7 +58,7 @@ jobs:
       - uses: mshick/add-pr-comment@v2
         with:
           message: |
-            This PR is published in GitHub Packages with version **${{ steps.release.outputs.published_version }}**
+            This PR is published in AWS CodeArtifact with version **${{ steps.release.outputs.published_version }}**
 
             Install using the following command:
 
