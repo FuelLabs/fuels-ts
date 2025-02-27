@@ -21,6 +21,13 @@ const packages = globSync("**/package.json", {
   // Filter out private packages (expect templates)
   .filter((pkg) => !pkg.contents.private || pkg.path.includes("templates"));
 
+// Update all "private" `package.json` files to be public
+const privatePackages = packages.filter((pkg) => pkg.contents.private)
+privatePackages.forEach((pkg) => {
+  const contents = { ...pkg.contents, private: false };
+  writeFileSync(pkg.path, JSON.stringify(contents, null, 2));
+  execSync(`git add ${pkg.path}`);
+});
 
 /**
  * Update the changeset config to include the FuelLabs organization scope
