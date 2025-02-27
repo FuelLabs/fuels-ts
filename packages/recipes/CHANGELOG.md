@@ -1,5 +1,31 @@
 # Change Log
 
+## 0.99.1
+
+### Patch Changes
+
+- 6f32228: fix: favour `.ts` over `.d.ts` files in `@fuel-ts/abi-typegen`
+- Updated dependencies [6668336]
+- Updated dependencies [1277ae6]
+- Updated dependencies [f254f3a]
+- Updated dependencies [dcec508]
+- Updated dependencies [fc18871]
+- Updated dependencies [6eb113c]
+- Updated dependencies [da33ca5]
+- Updated dependencies [e48b0e9]
+- Updated dependencies [6d3cafb]
+- Updated dependencies [75d7f39]
+- Updated dependencies [6f32228]
+- Updated dependencies [194e31f]
+  - @fuel-ts/account@0.99.1
+  - @fuel-ts/utils@0.99.1
+  - @fuel-ts/abi-typegen@0.99.1
+  - @fuel-ts/abi-coder@0.99.1
+  - @fuel-ts/address@0.99.1
+  - @fuel-ts/contract@0.99.1
+  - @fuel-ts/program@0.99.1
+  - @fuel-ts/transactions@0.99.1
+
 ## 0.99.0
 
 ### Patch Changes

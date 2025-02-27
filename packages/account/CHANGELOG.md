@@ -1,5 +1,34 @@
 # Change Log
 
+## 0.99.1
+
+### Patch Changes
+
+- 6668336: chore: merge gas price and predicate estimation requests
+- dcec508: feat: inverted submission flow
+- fc18871: feat: enable arbitrary data signing
+- 6eb113c: chore: upgrade NPM package versions
+- da33ca5: chore: remove call ops in tx summary
+- e48b0e9: feat: add receipts with the operations summary
+- 6d3cafb: chore: support BN input in block fetch methods
+- 75d7f39: fix: ignored subscriptions not being read
+- 194e31f: fix: contract operations in transaction summary
+- Updated dependencies [1277ae6]
+- Updated dependencies [fc18871]
+- Updated dependencies [6eb113c]
+- Updated dependencies [ff97a6e]
+- Updated dependencies [194e31f]
+  - @fuel-ts/utils@0.99.1
+  - @fuel-ts/hasher@0.99.1
+  - @fuel-ts/abi-coder@0.99.1
+  - @fuel-ts/address@0.99.1
+  - @fuel-ts/crypto@0.99.1
+  - @fuel-ts/versions@0.99.1
+  - @fuel-ts/transactions@0.99.1
+  - @fuel-ts/merkle@0.99.1
+  - @fuel-ts/errors@0.99.1
+  - @fuel-ts/math@0.99.1
+
 ## 0.99.0
 
 ### Minor Changes

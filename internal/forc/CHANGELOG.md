@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.89.7
+
+### Patch Changes
+
+- ff97a6e: chore: upgrade `forc` to `0.66.7`
+
 ## 0.89.6
 
 ### Patch Changes

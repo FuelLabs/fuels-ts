@@ -1,5 +1,20 @@
 # Change Log
 
+## 0.99.1
+
+### Patch Changes
+
+- 6eb113c: chore: upgrade NPM package versions
+- 194e31f: fix: contract operations in transaction summary
+- Updated dependencies [1277ae6]
+- Updated dependencies [fc18871]
+- Updated dependencies [6eb113c]
+  - @fuel-ts/utils@0.99.1
+  - @fuel-ts/hasher@0.99.1
+  - @fuel-ts/crypto@0.99.1
+  - @fuel-ts/errors@0.99.1
+  - @fuel-ts/math@0.99.1
+
 ## 0.99.0
 
 ### Patch Changes

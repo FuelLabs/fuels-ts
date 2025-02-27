@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.99.1
+
+### Patch Changes
+
+- fc18871: feat: enable arbitrary data signing
+- 6eb113c: chore: upgrade NPM package versions
+- Updated dependencies [1277ae6]
+- Updated dependencies [6eb113c]
+  - @fuel-ts/utils@0.99.1
+  - @fuel-ts/crypto@0.99.1
+
 ## 0.99.0
 
 ### Patch Changes

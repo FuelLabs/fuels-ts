@@ -1,5 +1,16 @@
 # @fuel-ts/utils
 
+## 0.99.1
+
+### Patch Changes
+
+- 1277ae6: chore: upgrade `vite` related dependencies
+- 6eb113c: chore: upgrade NPM package versions
+- Updated dependencies [ff97a6e]
+  - @fuel-ts/versions@0.99.1
+  - @fuel-ts/errors@0.99.1
+  - @fuel-ts/math@0.99.1
+
 ## 0.99.0
 
 ### Patch Changes
