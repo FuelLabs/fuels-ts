@@ -258,7 +258,7 @@ importers:
         version: 6.1.1(@types/node@22.13.5)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0)
       vitest:
         specifier: 3.0.5
-        version: 3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(@vitest/browser@3.0.6)(jiti@2.4.2)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(lightningcss@1.29.1)(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.3))(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0)
+        version: 3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(@vitest/browser@3.0.5)(jiti@2.4.2)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(lightningcss@1.29.1)(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.3))(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0)
 
   apps/demo-bun-fuels:
     dependencies:
@@ -1120,7 +1120,7 @@ importers:
         version: 0.8.2
       vitest:
         specifier: 3.0.5
-        version: 3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(@vitest/browser@3.0.6)(jiti@2.4.2)(jsdom@16.7.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.29.1)(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.3))(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0)
+        version: 3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(@vitest/browser@3.0.5)(jiti@2.4.2)(jsdom@16.7.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.29.1)(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.3))(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0)
 
   packages/versions:
     dependencies:
@@ -1146,6 +1146,9 @@ importers:
       '@tanstack/react-query':
         specifier: 5.66.9
         version: 5.66.9(react@19.0.0)
+      '@wagmi/connectors':
+        specifier: 5.1.14
+        version: 5.1.14(@types/react@19.0.10)(@wagmi/core@2.13.9(@tanstack/query-core@5.66.4)(@types/react@19.0.10)(immer@9.0.21)(react@19.0.0)(typescript@5.7.3)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8)))(bufferutil@4.0.9)(react-dom@19.0.0(react@19.0.0))(react-native@0.74.1(@babel/core@7.26.9)(@babel/preset-env@7.22.5(@babel/core@7.26.9))(@types/react@19.0.10)(bufferutil@4.0.9)(react@19.0.0)(utf-8-validate@5.0.10))(react@19.0.0)(rollup@4.34.6)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8)
       clsx:
         specifier: 2.1.1
         version: 2.1.1
@@ -1203,7 +1206,7 @@ importers:
         version: 5.7.3
       vitest:
         specifier: 3.0.5
-        version: 3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(@vitest/browser@3.0.6)(jiti@2.4.2)(jsdom@16.7.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.29.1)(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.3))(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0)
+        version: 3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(@vitest/browser@3.0.5)(jiti@2.4.2)(jsdom@16.7.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.29.1)(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.3))(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0)
 
   templates/vite:
     dependencies:
@@ -1216,6 +1219,9 @@ importers:
       '@tanstack/react-query':
         specifier: 5.66.9
         version: 5.66.9(react@19.0.0)
+      '@wagmi/connectors':
+        specifier: 5.1.14
+        version: 5.1.14(@types/react@19.0.10)(@wagmi/core@2.13.9(@tanstack/query-core@5.66.4)(@types/react@19.0.10)(immer@9.0.21)(react@19.0.0)(typescript@5.7.3)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8)))(bufferutil@4.0.9)(react-dom@19.0.0(react@19.0.0))(react-native@0.74.1(@babel/core@7.26.9)(@babel/preset-env@7.22.5(@babel/core@7.26.9))(@types/react@19.0.10)(bufferutil@4.0.9)(react@19.0.0)(utf-8-validate@5.0.10))(react@19.0.0)(rollup@4.34.6)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8)
       clsx:
         specifier: 2.1.1
         version: 2.1.1
@@ -1285,7 +1291,7 @@ importers:
         version: 6.1.1(@types/node@22.13.5)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0)
       vitest:
         specifier: 3.0.5
-        version: 3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(@vitest/browser@3.0.6)(jiti@2.4.2)(jsdom@16.7.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.29.1)(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.3))(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0)
+        version: 3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(@vitest/browser@3.0.5)(jiti@2.4.2)(jsdom@16.7.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.29.1)(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.3))(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0)
 
 packages:
 
@@ -6253,6 +6259,21 @@ packages:
       vite: ^5.0.0 || ^6.0.0
       vue: ^3.2.25
 
+  '@vitest/browser@3.0.5':
+    resolution: {integrity: sha512-5WAWJoucuWcGYU5t0HPBY03k9uogbUEIu4pDmZHoB4Dt+6pXqzDbzEmxGjejZSitSYA3k/udYfuotKNxETVA3A==}
+    peerDependencies:
+      playwright: '*'
+      safaridriver: '*'
+      vitest: 3.0.5
+      webdriverio: '*'
+    peerDependenciesMeta:
+      playwright:
+        optional: true
+      safaridriver:
+        optional: true
+      webdriverio:
+        optional: true
+
   '@vitest/browser@3.0.6':
     resolution: {integrity: sha512-FqKwCAkALZfNzGNx4YvRJa6HCWM2USWTjOdNO2egI/s6+3WkIl4xAlYISOARLJLDAI3yCXcpTtuUUF39K8TQgw==}
     peerDependencies:
@@ -7362,9 +7383,6 @@ packages:
 
   bluebird@3.7.2:
     resolution: {integrity: sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==}
-
-  bn.js@4.12.0:
-    resolution: {integrity: sha512-c98Bf3tPniI+scsdk237ku1Dc3ujXQTSgyiPUDEOe7tRkhrqridvh8klBv0HCEso1OLOYcHuCv/cS6DNxKH+ZA==}
 
   bn.js@4.12.1:
     resolution: {integrity: sha512-k8TVBiPkPJT9uHLdOKfFpqcfprwBFOAAXXozRubr7R7PfIuKvQlzcI4M0pALeqXN09vdaMbUdUj+pass+uULAg==}
@@ -8584,9 +8602,6 @@ packages:
 
   electron-to-chromium@1.5.29:
     resolution: {integrity: sha512-PF8n2AlIhCKXQ+gTpiJi0VhcHDb69kYX4MtCiivctc2QD3XuNZ/XIOlbGzt7WAjjEev0TtaH6Cu3arZExm5DOw==}
-
-  elliptic@6.5.7:
-    resolution: {integrity: sha512-ESVCtTwiA+XhY3wyh24QqRGBoP3rEdDUl3EDUUo9tft074fi19IrdpH7hLCMMP3CIj7jb3W96rn8lt/BqIlt5Q==}
 
   elliptic@6.6.1:
     resolution: {integrity: sha512-RaddvvMatK2LJHqFJ+YA4WysVN5Ita9E35botqIYspQ4TkRAlCicdzKOjlyv/1Za5RyTNn7di//eEV0uTAfe3g==}
@@ -11030,7 +11045,6 @@ packages:
 
   lodash.isequal@4.5.0:
     resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
-    deprecated: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
 
   lodash.memoize@4.1.2:
     resolution: {integrity: sha512-t7j+NzmgnQzTAYXcsHYLgimltOV1MXHtlOWf6GjL9Kj8GK5FInw5JotxvbOs+IvV1/Dzo04/fCGfLVs7aXb4Ag==}
@@ -11577,10 +11591,6 @@ packages:
   node-forge@1.3.1:
     resolution: {integrity: sha512-dPEtOeMvF9VMcYV/1Wb8CPoVAXtp6MKMlcbAt4ddqmGqUJ6fQZFXkNZNkNlfevtNkGtaSoXf/vNNNSvgrdXwtA==}
     engines: {node: '>= 6.13.0'}
-
-  node-gyp-build@4.8.2:
-    resolution: {integrity: sha512-IRUxE4BVsHWXkV/SFOut4qTlagw2aM8T5/vnTsmrHJvVoKueJHRc/JaFND7QDDc61kLYUJ6qlZM3sqTSyx2dTw==}
-    hasBin: true
 
   node-gyp-build@4.8.4:
     resolution: {integrity: sha512-LA4ZjwlnUblHVgq0oBF3Jl/6h/Nvs5fzBLwdEF4nuxnFdsfajde4WfxtJr3CaiH+F6ewcIB/q4jQ4UzPyid+CQ==}
@@ -12735,7 +12745,6 @@ packages:
     engines: {node: '>=0.6.0', teleport: '>=0.2.0'}
     deprecated: |-
       You or someone you depend on is using Q, the JavaScript Promise library that gave JavaScript developers strong feelings about promises. They can almost certainly migrate to the native JavaScript promise now. Thank you literally everyone for joining me in this bet against the odds. Be excellent to each other.
-
       (For a CapTP with native promises, see @endo/eventual-send and @endo/captp)
 
   qr-code-styling@1.9.1:
@@ -20897,7 +20906,7 @@ snapshots:
       '@motionone/easing': 10.18.0
       '@motionone/types': 10.17.1
       '@motionone/utils': 10.18.0
-      tslib: 2.8.0
+      tslib: 2.8.1
 
   '@motionone/dom@10.18.0':
     dependencies:
@@ -20906,23 +20915,23 @@ snapshots:
       '@motionone/types': 10.17.1
       '@motionone/utils': 10.18.0
       hey-listen: 1.0.8
-      tslib: 2.8.0
+      tslib: 2.8.1
 
   '@motionone/easing@10.18.0':
     dependencies:
       '@motionone/utils': 10.18.0
-      tslib: 2.8.0
+      tslib: 2.8.1
 
   '@motionone/generators@10.18.0':
     dependencies:
       '@motionone/types': 10.17.1
       '@motionone/utils': 10.18.0
-      tslib: 2.8.0
+      tslib: 2.8.1
 
   '@motionone/svelte@10.16.4':
     dependencies:
       '@motionone/dom': 10.18.0
-      tslib: 2.8.0
+      tslib: 2.8.1
 
   '@motionone/types@10.17.1': {}
 
@@ -20930,12 +20939,12 @@ snapshots:
     dependencies:
       '@motionone/types': 10.17.1
       hey-listen: 1.0.8
-      tslib: 2.8.0
+      tslib: 2.8.1
 
   '@motionone/vue@10.16.4':
     dependencies:
       '@motionone/dom': 10.18.0
-      tslib: 2.8.0
+      tslib: 2.8.1
 
   '@mswjs/interceptors@0.37.6':
     dependencies:
@@ -22689,7 +22698,7 @@ snapshots:
 
   '@swc/helpers@0.5.12':
     dependencies:
-      tslib: 2.8.0
+      tslib: 2.8.1
 
   '@swc/helpers@0.5.15':
     dependencies:
@@ -23491,6 +23500,52 @@ snapshots:
     dependencies:
       vite: 5.4.14(@types/node@22.13.5)(lightningcss@1.29.1)(terser@5.39.0)
       vue: 3.5.13(typescript@5.7.3)
+
+  '@vitest/browser@3.0.5(@types/node@22.13.5)(bufferutil@4.0.8)(playwright@1.50.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(vite@6.1.1(@types/node@22.13.5)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))(vitest@3.0.5)(webdriverio@9.0.9(bufferutil@4.0.8)(utf-8-validate@5.0.10))':
+    dependencies:
+      '@testing-library/dom': 10.4.0
+      '@testing-library/user-event': 14.6.1(@testing-library/dom@10.4.0)
+      '@vitest/mocker': 3.0.5(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.3))(vite@6.1.1(@types/node@22.13.5)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))
+      '@vitest/utils': 3.0.5
+      magic-string: 0.30.17
+      msw: 2.7.0(@types/node@22.13.5)(typescript@5.7.3)
+      sirv: 3.0.1
+      tinyrainbow: 2.0.0
+      vitest: 3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(@vitest/browser@3.0.5)(jiti@2.4.2)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(lightningcss@1.29.1)(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.3))(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0)
+      ws: 8.18.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+    optionalDependencies:
+      playwright: 1.50.1
+      webdriverio: 9.0.9(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+    transitivePeerDependencies:
+      - '@types/node'
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - vite
+    optional: true
+
+  '@vitest/browser@3.0.5(@types/node@22.13.5)(bufferutil@4.0.9)(playwright@1.50.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(vite@6.1.1(@types/node@22.13.5)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))(vitest@3.0.5)(webdriverio@9.0.9(bufferutil@4.0.9)(utf-8-validate@5.0.10))':
+    dependencies:
+      '@testing-library/dom': 10.4.0
+      '@testing-library/user-event': 14.6.1(@testing-library/dom@10.4.0)
+      '@vitest/mocker': 3.0.5(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.3))(vite@6.1.1(@types/node@22.13.5)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))
+      '@vitest/utils': 3.0.5
+      magic-string: 0.30.17
+      msw: 2.7.0(@types/node@22.13.5)(typescript@5.7.3)
+      sirv: 3.0.1
+      tinyrainbow: 2.0.0
+      vitest: 3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(@vitest/browser@3.0.5)(jiti@2.4.2)(jsdom@16.7.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.29.1)(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.3))(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0)
+      ws: 8.18.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+    optionalDependencies:
+      playwright: 1.50.1
+      webdriverio: 9.0.9(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+    transitivePeerDependencies:
+      - '@types/node'
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - vite
+    optional: true
 
   '@vitest/browser@3.0.6(@types/node@22.13.5)(bufferutil@4.0.9)(playwright@1.50.1)(typescript@5.7.3)(utf-8-validate@6.0.4)(vite@6.1.1(@types/node@22.13.5)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))(vitest@3.0.5)(webdriverio@9.0.9(bufferutil@4.0.9)(utf-8-validate@6.0.4))':
     dependencies:
@@ -24925,7 +24980,7 @@ snapshots:
       '@walletconnect/window-getters': 1.0.1
       '@walletconnect/window-metadata': 1.0.1
       detect-browser: 5.3.0
-      elliptic: 6.5.7
+      elliptic: 6.6.1
       query-string: 7.1.3
       uint8arrays: 3.1.0
     transitivePeerDependencies:
@@ -25768,7 +25823,7 @@ snapshots:
 
   asn1.js@5.4.1:
     dependencies:
-      bn.js: 4.12.0
+      bn.js: 4.12.1
       inherits: 2.0.4
       minimalistic-assert: 1.0.1
       safer-buffer: 2.1.2
@@ -25787,7 +25842,7 @@ snapshots:
 
   ast-types@0.13.4:
     dependencies:
-      tslib: 2.8.0
+      tslib: 2.8.1
 
   ast-types@0.15.2:
     dependencies:
@@ -26234,8 +26289,6 @@ snapshots:
 
   bluebird@3.7.2: {}
 
-  bn.js@4.12.0: {}
-
   bn.js@4.12.1: {}
 
   bn.js@5.2.1: {}
@@ -26328,7 +26381,7 @@ snapshots:
       browserify-rsa: 4.1.0
       create-hash: 1.2.0
       create-hmac: 1.1.7
-      elliptic: 6.5.7
+      elliptic: 6.6.1
       inherits: 2.0.4
       parse-asn1: 5.1.6
       readable-stream: 3.6.2
@@ -26402,7 +26455,7 @@ snapshots:
 
   bufferutil@4.0.8:
     dependencies:
-      node-gyp-build: 4.8.2
+      node-gyp-build: 4.8.4
     optional: true
 
   bufferutil@4.0.9:
@@ -26520,7 +26573,7 @@ snapshots:
   capital-case@1.0.4:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.8.0
+      tslib: 2.8.1
       upper-case-first: 2.0.2
 
   case-sensitive-paths-webpack-plugin@2.4.0: {}
@@ -26880,7 +26933,7 @@ snapshots:
   constant-case@3.0.4:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.8.0
+      tslib: 2.8.1
       upper-case: 2.0.2
 
   constants-browserify@1.0.0: {}
@@ -26985,8 +27038,8 @@ snapshots:
 
   create-ecdh@4.0.4:
     dependencies:
-      bn.js: 4.12.0
-      elliptic: 6.5.7
+      bn.js: 4.12.1
+      elliptic: 6.6.1
 
   create-hash@1.2.0:
     dependencies:
@@ -27432,7 +27485,7 @@ snapshots:
 
   diffie-hellman@5.0.3:
     dependencies:
-      bn.js: 4.12.0
+      bn.js: 4.12.1
       miller-rabin: 4.0.1
       randombytes: 2.1.0
 
@@ -27519,7 +27572,7 @@ snapshots:
   dot-case@3.0.4:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.8.0
+      tslib: 2.8.1
 
   dotenv-expand@5.1.0: {}
 
@@ -27587,16 +27640,6 @@ snapshots:
   electron-to-chromium@1.5.103: {}
 
   electron-to-chromium@1.5.29: {}
-
-  elliptic@6.5.7:
-    dependencies:
-      bn.js: 4.12.0
-      brorand: 1.1.0
-      hash.js: 1.1.7
-      hmac-drbg: 1.0.1
-      inherits: 2.0.4
-      minimalistic-assert: 1.0.1
-      minimalistic-crypto-utils: 1.0.1
 
   elliptic@6.6.1:
     dependencies:
@@ -28134,7 +28177,7 @@ snapshots:
       debug: 4.4.0(supports-color@5.5.0)
       enhanced-resolve: 5.18.1
       eslint: 8.57.0
-      eslint-module-utils: 2.12.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
+      eslint-module-utils: 2.12.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.31.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
       eslint-plugin-import: 2.31.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
       fast-glob: 3.3.3
       get-tsconfig: 4.7.6
@@ -28156,7 +28199,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.12.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0):
+  eslint-module-utils@2.12.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.31.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
@@ -28219,7 +28262,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 8.57.0
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.12.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
+      eslint-module-utils: 2.12.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.31.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
       hasown: 2.0.2
       is-core-module: 2.15.1
       is-glob: 4.0.3
@@ -29387,7 +29430,7 @@ snapshots:
   header-case@2.0.4:
     dependencies:
       capital-case: 1.0.4
-      tslib: 2.8.0
+      tslib: 2.8.1
 
   headers-polyfill@4.0.3: {}
 
@@ -31675,7 +31718,7 @@ snapshots:
 
   miller-rabin@4.0.1:
     dependencies:
-      bn.js: 4.12.0
+      bn.js: 4.12.1
       brorand: 1.1.0
 
   mime-db@1.52.0: {}
@@ -31863,7 +31906,7 @@ snapshots:
   no-case@3.0.4:
     dependencies:
       lower-case: 2.0.2
-      tslib: 2.8.0
+      tslib: 2.8.1
 
   nocache@3.0.4: {}
 
@@ -31899,8 +31942,6 @@ snapshots:
       formdata-polyfill: 4.0.10
 
   node-forge@1.3.1: {}
-
-  node-gyp-build@4.8.2: {}
 
   node-gyp-build@4.8.4: {}
 
@@ -32411,14 +32452,14 @@ snapshots:
   pascal-case@3.1.2:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.8.0
+      tslib: 2.8.1
 
   path-browserify@1.0.1: {}
 
   path-case@3.0.4:
     dependencies:
       dot-case: 3.0.4
-      tslib: 2.8.0
+      tslib: 2.8.1
 
   path-exists@3.0.0: {}
 
@@ -33145,7 +33186,7 @@ snapshots:
 
   public-encrypt@4.0.3:
     dependencies:
-      bn.js: 4.12.0
+      bn.js: 4.12.1
       browserify-rsa: 4.1.0
       create-hash: 1.2.0
       parse-asn1: 5.1.6
@@ -33758,7 +33799,7 @@ snapshots:
 
   relay-runtime@12.0.0:
     dependencies:
-      '@babel/runtime': 7.25.7
+      '@babel/runtime': 7.26.9
       fbjs: 3.0.5
       invariant: 2.2.4
     transitivePeerDependencies:
@@ -34150,7 +34191,7 @@ snapshots:
   sentence-case@3.0.4:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.8.0
+      tslib: 2.8.1
       upper-case-first: 2.0.2
 
   serialize-error@11.0.3:
@@ -34395,7 +34436,7 @@ snapshots:
   snake-case@3.0.4:
     dependencies:
       dot-case: 3.0.4
-      tslib: 2.8.0
+      tslib: 2.8.1
 
   socket.io-client@4.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10):
     dependencies:
@@ -35630,7 +35671,7 @@ snapshots:
 
   utf-8-validate@5.0.10:
     dependencies:
-      node-gyp-build: 4.8.2
+      node-gyp-build: 4.8.4
 
   utf-8-validate@6.0.4:
     dependencies:
@@ -35651,8 +35692,8 @@ snapshots:
       inherits: 2.0.4
       is-arguments: 1.1.1
       is-generator-function: 1.0.10
-      is-typed-array: 1.1.13
-      which-typed-array: 1.1.15
+      is-typed-array: 1.1.15
+      which-typed-array: 1.1.18
 
   utila@0.4.0: {}
 
@@ -35899,7 +35940,7 @@ snapshots:
       - typescript
       - universal-cookie
 
-  vitest@3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(@vitest/browser@3.0.6)(jiti@2.4.2)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(lightningcss@1.29.1)(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.3))(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0):
+  vitest@3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(@vitest/browser@3.0.5)(jiti@2.4.2)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(lightningcss@1.29.1)(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.3))(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0):
     dependencies:
       '@vitest/expect': 3.0.5
       '@vitest/mocker': 3.0.5(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.3))(vite@6.1.1(@types/node@22.13.5)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))
@@ -35924,7 +35965,7 @@ snapshots:
     optionalDependencies:
       '@types/debug': 4.1.12
       '@types/node': 22.13.5
-      '@vitest/browser': 3.0.6(@types/node@22.13.5)(bufferutil@4.0.9)(playwright@1.50.1)(typescript@5.7.3)(utf-8-validate@6.0.4)(vite@6.1.1(@types/node@22.13.5)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))(vitest@3.0.5)(webdriverio@9.0.9(bufferutil@4.0.9)(utf-8-validate@6.0.4))
+      '@vitest/browser': 3.0.5(@types/node@22.13.5)(bufferutil@4.0.8)(playwright@1.50.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(vite@6.1.1(@types/node@22.13.5)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))(vitest@3.0.5)(webdriverio@9.0.9(bufferutil@4.0.8)(utf-8-validate@5.0.10))
       jsdom: 16.7.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - jiti
@@ -35940,7 +35981,7 @@ snapshots:
       - tsx
       - yaml
 
-  vitest@3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(@vitest/browser@3.0.6)(jiti@2.4.2)(jsdom@16.7.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.29.1)(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.3))(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0):
+  vitest@3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(@vitest/browser@3.0.5)(jiti@2.4.2)(jsdom@16.7.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.29.1)(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.3))(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0):
     dependencies:
       '@vitest/expect': 3.0.5
       '@vitest/mocker': 3.0.5(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.3))(vite@6.1.1(@types/node@22.13.5)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))
@@ -35965,7 +36006,7 @@ snapshots:
     optionalDependencies:
       '@types/debug': 4.1.12
       '@types/node': 22.13.5
-      '@vitest/browser': 3.0.6(@types/node@22.13.5)(bufferutil@4.0.9)(playwright@1.50.1)(typescript@5.7.3)(utf-8-validate@6.0.4)(vite@6.1.1(@types/node@22.13.5)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))(vitest@3.0.5)(webdriverio@9.0.9(bufferutil@4.0.9)(utf-8-validate@6.0.4))
+      '@vitest/browser': 3.0.5(@types/node@22.13.5)(bufferutil@4.0.9)(playwright@1.50.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(vite@6.1.1(@types/node@22.13.5)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))(vitest@3.0.5)(webdriverio@9.0.9(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       jsdom: 16.7.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - jiti
@@ -36079,6 +36120,42 @@ snapshots:
       '@noble/curves': 1.8.1
       '@noble/hashes': 1.7.1
 
+  webdriver@9.0.8(bufferutil@4.0.8)(utf-8-validate@5.0.10):
+    dependencies:
+      '@types/node': 20.17.19
+      '@types/ws': 8.5.14
+      '@wdio/config': 9.0.8
+      '@wdio/logger': 9.0.8
+      '@wdio/protocols': 9.0.8
+      '@wdio/types': 9.0.8
+      '@wdio/utils': 9.0.8
+      deepmerge-ts: 7.1.5
+      ws: 8.18.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+    transitivePeerDependencies:
+      - bare-buffer
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    optional: true
+
+  webdriver@9.0.8(bufferutil@4.0.9)(utf-8-validate@5.0.10):
+    dependencies:
+      '@types/node': 20.17.19
+      '@types/ws': 8.5.14
+      '@wdio/config': 9.0.8
+      '@wdio/logger': 9.0.8
+      '@wdio/protocols': 9.0.8
+      '@wdio/types': 9.0.8
+      '@wdio/utils': 9.0.8
+      deepmerge-ts: 7.1.5
+      ws: 8.18.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+    transitivePeerDependencies:
+      - bare-buffer
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    optional: true
+
   webdriver@9.0.8(bufferutil@4.0.9)(utf-8-validate@6.0.4):
     dependencies:
       '@types/node': 20.17.19
@@ -36090,6 +36167,78 @@ snapshots:
       '@wdio/utils': 9.0.8
       deepmerge-ts: 7.1.5
       ws: 8.18.1(bufferutil@4.0.9)(utf-8-validate@6.0.4)
+    transitivePeerDependencies:
+      - bare-buffer
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    optional: true
+
+  webdriverio@9.0.9(bufferutil@4.0.8)(utf-8-validate@5.0.10):
+    dependencies:
+      '@types/node': 20.17.19
+      '@types/sinonjs__fake-timers': 8.1.5
+      '@wdio/config': 9.0.8
+      '@wdio/logger': 9.0.8
+      '@wdio/protocols': 9.0.8
+      '@wdio/repl': 9.0.8
+      '@wdio/types': 9.0.8
+      '@wdio/utils': 9.0.8
+      archiver: 7.0.1
+      aria-query: 5.3.2
+      cheerio: 1.0.0
+      css-shorthand-properties: 1.1.2
+      css-value: 0.0.1
+      grapheme-splitter: 1.0.4
+      htmlfy: 0.2.1
+      import-meta-resolve: 4.1.0
+      is-plain-obj: 4.1.0
+      jszip: 3.10.1
+      lodash.clonedeep: 4.5.0
+      lodash.zip: 4.2.0
+      minimatch: 9.0.5
+      query-selector-shadow-dom: 1.0.1
+      resq: 1.11.0
+      rgb2hex: 0.2.5
+      serialize-error: 11.0.3
+      urlpattern-polyfill: 10.0.0
+      webdriver: 9.0.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+    transitivePeerDependencies:
+      - bare-buffer
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    optional: true
+
+  webdriverio@9.0.9(bufferutil@4.0.9)(utf-8-validate@5.0.10):
+    dependencies:
+      '@types/node': 20.17.19
+      '@types/sinonjs__fake-timers': 8.1.5
+      '@wdio/config': 9.0.8
+      '@wdio/logger': 9.0.8
+      '@wdio/protocols': 9.0.8
+      '@wdio/repl': 9.0.8
+      '@wdio/types': 9.0.8
+      '@wdio/utils': 9.0.8
+      archiver: 7.0.1
+      aria-query: 5.3.2
+      cheerio: 1.0.0
+      css-shorthand-properties: 1.1.2
+      css-value: 0.0.1
+      grapheme-splitter: 1.0.4
+      htmlfy: 0.2.1
+      import-meta-resolve: 4.1.0
+      is-plain-obj: 4.1.0
+      jszip: 3.10.1
+      lodash.clonedeep: 4.5.0
+      lodash.zip: 4.2.0
+      minimatch: 9.0.5
+      query-selector-shadow-dom: 1.0.1
+      resq: 1.11.0
+      rgb2hex: 0.2.5
+      serialize-error: 11.0.3
+      urlpattern-polyfill: 10.0.0
+      webdriver: 9.0.8(bufferutil@4.0.9)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - bare-buffer
       - bufferutil
@@ -36581,6 +36730,18 @@ snapshots:
     optionalDependencies:
       bufferutil: 4.0.9
       utf-8-validate: 5.0.10
+
+  ws@8.18.1(bufferutil@4.0.8)(utf-8-validate@5.0.10):
+    optionalDependencies:
+      bufferutil: 4.0.8
+      utf-8-validate: 5.0.10
+    optional: true
+
+  ws@8.18.1(bufferutil@4.0.9)(utf-8-validate@5.0.10):
+    optionalDependencies:
+      bufferutil: 4.0.9
+      utf-8-validate: 5.0.10
+    optional: true
 
   ws@8.18.1(bufferutil@4.0.9)(utf-8-validate@6.0.4):
     optionalDependencies:
