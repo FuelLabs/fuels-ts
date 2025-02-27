@@ -63,15 +63,29 @@ jobs:
             Install using the following command:
 
             ```bash
-            pnpm add @fuellabs/fuels@${{ steps.release.outputs.published_version }}
+            # PNPM
+            pnpm config set registry https://npm-packages.fuel.network/ --global
+            pnpm install fuels@${{ steps.release.outputs.published_version }}
+
+            # NPM
+            npm --registry=https://npm-packages.fuel.network/ install fuels@${{ steps.release.outputs.published_version }}
+
+            # Bun
+            npm_config_registry=https://npm-packages.fuel.network/ bun install fuels@${{ steps.release.outputs.published_version }}
             ```
 
-            Or update your package.json:
+            Or using `create-fuels`:
 
-            ```json
-            "dependencies": {
-              "@fuellabs/fuels": "${{ steps.release.outputs.published_version }}"
-            }
+            ```bash
+            # PNPM
+            pnpm config set registry https://npm-packages.fuel.network/ --global
+            pnpm create fuels@${{ steps.release.outputs.published_version }}
+
+            # NPM
+            npm --registry=https://npm-packages.fuel.network/ create fuels@${{ steps.release.outputs.published_version }}
+
+            # Bun
+            npm_config_registry=https://npm-packages.fuel.network/ bun create fuels@${{ steps.release.outputs.published_version }}
             ```
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
