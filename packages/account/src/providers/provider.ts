@@ -535,11 +535,13 @@ export default class Provider {
         }
 
         const extensions = gqlResponse.extensions as Record<string, unknown> | undefined;
+        console.log(extensions);
 
         if (extensions?.current_fuel_block_height) {
+          console.log('setting to', extensions.current_fuel_block_height);
           this.currentBlockHeight = {
             ...this.currentBlockHeight,
-            [url]: extensions.current_fuel_block_height as number,
+            [url.replace(/-sub$/, '')]: extensions.current_fuel_block_height as number,
           };
         }
 

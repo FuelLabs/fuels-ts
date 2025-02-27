@@ -234,9 +234,86 @@ describe('control headers', () => {
   //   await waitForResult();
   // });
 
-  test('subscriptions set current block height', async () => {});
+  test.only('new subscription events update block height', async () => {
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        // args: ['--poa-instant', 'false', '--poa-interval-period', '50ms'],
+      },
+    });
 
-  test('the -sub suffix is removed when url is parsed from subscription response', () => {});
+    const {
+      provider: launchedProvider,
+      wallets: [wallet],
+    } = launched;
+
+    const baseAssetId = await launchedProvider.getBaseAssetId();
+
+    Provider.clearChainAndNodeCaches();
+
+    // allow for block production
+    await sleep(250);
+
+    const provider = new Provider(launchedProvider.url);
+
+    const fetchSpy = vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
+      const event1 = {
+        data: {
+          submitAndAwaitStatus: {
+            type: 'SubmittedStatus',
+          },
+        },
+        extensions: {
+          current_fuel_block_height: 100,
+        },
+      };
+      const event2 = {
+        data: {
+          submitAndAwaitStatus: {
+            type: 'SuccessStatus',
+          },
+        },
+        extensions: {
+          current_fuel_block_height: 150,
+        },
+      };
+      const encoder = new TextEncoder();
+
+      const streamedResponse = new Uint8Array([
+        ...encoder.encode(`data:${JSON.stringify(event1)}\n\n`),
+        ...encoder.encode(`data:${JSON.stringify(event2)}\n\n`),
+      ]);
+      return Promise.resolve(
+        new Response(
+          new ReadableStream({
+            start: (controller) => {
+              controller.enqueue(streamedResponse);
+              controller.close();
+            },
+          })
+        )
+      );
+    });
+
+    await provider.operations.submitAndAwaitStatus({ encodedTransaction: '' });
+
+    // allow for background processing
+    await sleep(250);
+
+    await provider.operations.getCoinsToSpend({
+      owner: wallet.address.toB256(),
+      queryPerAsset: { amount: '10', assetId: baseAssetId },
+    });
+
+    fetchSpy.mock.calls.forEach((call) => {
+      console.log(JSON.parse(call[1]?.body?.toString() as string));
+    });
+
+    const body = JSON.parse(fetchSpy.mock.calls[1][1]?.body?.toString() as string);
+
+    expect(body).toMatchObject({
+      extensions: { required_fuel_block_height: 150 },
+    });
+  });
 
   test('Current block height is tied to node url', async () => {});
 
