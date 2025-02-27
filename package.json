@@ -70,7 +70,7 @@
   "devDependencies": {
     "@actions/core": "1.11.1",
     "@actions/github": "6.0.0",
-    "@changesets/cli": "2.27.12",
+    "@changesets/cli": "2.28.1",
     "@changesets/get-github-info": "0.6.0",
     "@changesets/read": "0.6.2",
     "@changesets/types": "6.0.0",
