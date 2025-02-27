@@ -222,7 +222,7 @@ describe('control headers', () => {
     expect(+newBlockHeight).toBeGreaterThanOrEqual(expectedHeight);
   });
 
-  test.only('new subscription events update block height', async () => {
+  test('new subscription events update block height', async () => {
     using launched = await setupTestProviderAndWallets({
       nodeOptions: {
         // args: ['--poa-instant', 'false', '--poa-interval-period', '50ms'],
