@@ -17,28 +17,28 @@
   "dependencies": {
     "@fuels/connectors": "0.36.1",
     "@fuels/react": "0.36.1",
-    "@tanstack/react-query": "5.66.0",
+    "@tanstack/react-query": "5.66.9",
     "clsx": "2.1.1",
     "dotenv": "16.4.7",
     "fuels": "workspace:*",
-    "next": "15.1.6",
+    "next": "15.1.7",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-toastify": "11.0.3"
   },
   "devDependencies": {
-    "@types/node": "22.13.1",
+    "@types/node": "22.13.5",
     "@playwright/test": "1.50.1",
-    "@tailwindcss/postcss": "4.0.6",
-    "@types/react": "19.0.8",
-    "@types/react-dom": "19.0.3",
+    "@tailwindcss/postcss": "4.0.8",
+    "@types/react": "19.0.10",
+    "@types/react-dom": "19.0.4",
     "autoprefixer": "10.4.20",
     "eslint": "8.57.0",
     "eslint-config-next": "15.1.6",
     "postcss": "8.5.3",
-    "tailwindcss": "4.0.5",
+    "tailwindcss": "4.0.8",
     "typescript": "5.7.3",
-    "vitest": "3.0.5"
+    "vitest": "3.0.6"
   },
   "overrides": {
     "whatwg-url": "14.1.0"
