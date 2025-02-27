@@ -1,5 +1,11 @@
 # @fuel-ts/versions
 
+## 0.99.1
+
+### Patch Changes
+
+- ff97a6e: chore: upgrade `forc` to `0.66.7`
+
 ## 0.99.0
 
 ### Patch Changes
