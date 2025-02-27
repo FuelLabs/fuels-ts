@@ -14,7 +14,7 @@ import {
 
 const { log } = console;
 
-const PUBLISHED_FUEL_PACKAGE_NAME = process.env.PUBLISHED_FUEL_PACKAGE_NAME ?? '@FuelLabs/fuels';
+const PUBLISHED_FUEL_PACKAGE_NAME = process.env.PUBLISHED_FUEL_PACKAGE_NAME ?? 'fuels';
 const PUBLISHED_NPM_TAG = process.env.PUBLISHED_NPM_TAG ?? 'next';
 
 const packageManagerCreateCommands: [PackageManager, string][] = [

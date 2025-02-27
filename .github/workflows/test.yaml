@@ -74,13 +74,10 @@ jobs:
       - name: Create .bunfig.toml
         run: |
           cat << EOF > "$XDG_CONFIG_HOME/.bunfig.toml"
-          [install.scopes]
+          [install]
 
-          # as an object with token
-          "@FuelLabs" = { token = "$GITHUB_TOKEN", url = "https://npm.pkg.github.com/" }
+          registry = "https://npm-packages.fuel.network/"
           EOF
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run UI tests (on template)
         run: sh ./scripts/tests-ui.sh
@@ -88,32 +85,28 @@ jobs:
       - name: Wait for release to succeed
         uses: lewagon/wait-on-check-action@v1.3.4
         with:
-          ref: ${{ github.head_ref }}
-          check-name: "publish-to-github-packages"
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          check-name: "publish-pr-or-next"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 30
 
       - name: Create .npmrc
         run: |
           cat << EOF > "$HOME/.npmrc"
-            //npm.pkg.github.com/:_authToken=$GITHUB_TOKEN
-            @FuelLabs:registry=https://npm.pkg.github.com
+            registry="https://npm-packages.fuel.network/"
           EOF
         env:
           HOME: ${{ github.workspace }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run tests (with published version)
         run: pnpm test:integration
         env:
           PUBLISHED_NPM_TAG: ${{ env.NPM_DIST_TAG }}
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run UI tests (with published version)
         run: sh ./scripts/tests-ui-integration.sh
         env:
           PUBLISHED_NPM_TAG: ${{ env.NPM_DIST_TAG }}
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   forc:
     runs-on: ubuntu-latest
