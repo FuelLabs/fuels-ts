@@ -34,7 +34,7 @@ export function renderMainTemplate(params: { abi: Abi; versions: BinaryVersions 
   const { structs } = formatStructs({ types });
   const { imports } = formatImports({
     types,
-    baseMembers: ['Script', 'Account', 'decompressBytecode'],
+    baseMembers: ['Script as __Script', 'Account', 'decompressBytecode'],
   });
 
   const { prefixedInputs: inputs, output } = func.attributes;

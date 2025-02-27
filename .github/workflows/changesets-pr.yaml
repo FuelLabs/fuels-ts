@@ -1,0 +1,112 @@
+name: "Changesets PR"
+
+on:
+  push:
+    branches:
+      - master
+      - release/*
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  changesets-pr:
+    runs-on: ubuntu-latest
+    environment: fuel-fuels-ts-bot
+    permissions: write-all
+    # First check ensures that the workflow runs only if the commit is NOT the changesets PR commit.
+    # Second check ensures that the workflow runs only after a commit is pushed into the branch,
+    # and not when the branch is created.
+    # This is to avoid running the workflow when a release/* branch is created.
+    if: |
+      github.event.head_commit.message != 'ci(release): versioning packages and changesets' &&
+      github.event.before != '0000000000000000000000000000000000000000'
+
+    steps:
+      - name: Create the Internal GitHub App Token
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_KEY }}
+
+      - name: Create Fuel Docs GitHub Token
+        uses: actions/create-github-app-token@v1
+        id: docs-token
+        with:
+          app-id: ${{ vars.FUEL_DOCS_BOT_APP_ID }}
+          private-key: ${{ secrets.FUEL_DOCS_BOT_APP_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: |
+            docs-hub
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      # if there are changesets present, package.json will be bumped
+      - name: Bump and Collect Versions
+        run: |
+          pnpm changeset version
+          echo "RELEASE_VERSION=v$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
+          echo "FUEL_CORE_VERSION=$(cat ./internal/fuel-core/VERSION)" >> $GITHUB_ENV
+          echo "FORC_VERSION=$(cat ./internal/forc/VERSION)" >> $GITHUB_ENV
+          git reset --hard
+
+      - name: Set branch name and changeset PR title
+        run: |
+          echo "CHANGESET_PR_TITLE=$(echo "ci(release): \`${{ env.RELEASE_VERSION }}\` @ \`${{ github.ref_name }}\`")" >> $GITHUB_ENV
+
+      - name: Build
+        run: pnpm build
+
+      - name: Create Release Pull Request
+        uses: FuelLabs/changesets-action@main
+        with:
+          version: pnpm changeset:version-with-docs
+          commit: "ci(release): versioning packages and changesets"
+          title: ${{ env.CHANGESET_PR_TITLE }}
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+
+      - name: Prettify changelog
+        run: pnpm changeset:update-changelog
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          REF_NAME: ${{ github.ref_name }}
+          PUBLISHED: "false"
+
+      - name: Update docs
+        if: github.ref_name == 'master'
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: update-nightly.yml
+          ref: master
+          repo: FuelLabs/docs-hub
+          token: ${{ steps.docs-token.outputs.token }}
+
+      # Upload assets to S3
+      - uses: unfor19/install-aws-cli-action@v1.0.7
+        if: github.ref_name == 'master'
+        with:
+          version: 2
+          verbose: false
+          arch: amd64
+          rootdir: ""
+          workdir: ""
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        if: github.ref_name == 'master'
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_S3_REGION }}
+
+      - name: Upload assets to s3
+        if: github.ref_name == 'master'
+        run: |
+          aws s3 cp ./packages/account/src/assets/images/ s3://${{ vars.AWS_S3_BUCKET }}/providers/ --recursive

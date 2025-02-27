@@ -2,8 +2,9 @@ import type { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 import { InputType, OutputType } from '@fuel-ts/transactions';
+import { hexlify } from '@fuel-ts/utils';
 
-import type { ExcludeResourcesOption } from '../resource';
+import { type ExcludeResourcesOption } from '../resource';
 
 import type {
   TransactionRequestInput,
@@ -43,6 +44,19 @@ export const isRequestInputResourceFromOwner = (
   input: CoinTransactionRequestInput | MessageTransactionRequestInput,
   owner: Address
 ) => getRequestInputResourceOwner(input) === owner.toB256();
+
+/**
+ * @hidden
+ *
+ * Checks if the given `TransactionRequestInput` is a predicate.
+ *
+ * @param input - The `TransactionRequestInput` to check.
+ * @returns `true` if the input is a predicate, otherwise `false`.
+ */
+export const isPredicate = (
+  input: TransactionRequestInput
+): input is Required<CoinTransactionRequestInput | MessageTransactionRequestInput> =>
+  isRequestInputCoinOrMessage(input) && !!input.predicate && hexlify(input.predicate) !== '0x';
 
 export const getAssetAmountInRequestInputs = (
   inputs: TransactionRequestInput[],

@@ -10,7 +10,7 @@
   Fuel-Core version: 33.33.33
 */
 
-import { Contract, Interface } from "fuels";
+import { Contract as __Contract, Interface } from "fuels";
 import type {
   Provider,
   Account,
@@ -1199,7 +1199,7 @@ export class MyContractInterface extends Interface {
   };
 }
 
-export class MyContract extends Contract {
+export class MyContract extends __Contract {
   static readonly abi = abi;
   static readonly storageSlots = storageSlots;
 

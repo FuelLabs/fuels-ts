@@ -76,9 +76,9 @@ describe('Transaction', () => {
 
     await request.estimateAndFund(fundedWallet);
 
-    const tx = await fundedWallet.sendTransaction(request);
+    const { waitForResult } = await fundedWallet.sendTransaction(request);
 
-    const { isStatusSuccess } = await tx.waitForResult();
+    const { isStatusSuccess } = await waitForResult();
 
     // Wait for message status to update
     await sleep(1000);
@@ -127,9 +127,9 @@ describe('Transaction', () => {
 
     await request.estimateAndFund(fundedWallet);
 
-    const tx = await fundedWallet.sendTransaction(request);
+    const { waitForResult } = await fundedWallet.sendTransaction(request);
 
-    const { isStatusSuccess } = await tx.waitForResult();
+    const { isStatusSuccess } = await waitForResult();
 
     // Wait for message status to update
     await sleep(1000);
@@ -166,10 +166,10 @@ describe('Transaction', () => {
 
     await request.estimateAndFund(sender);
 
-    const tx = await sender.sendTransaction(request, {
+    const { waitForResult } = await sender.sendTransaction(request, {
       enableAssetBurn: true,
     });
-    const { isStatusSuccess } = await tx.waitForResult();
+    const { isStatusSuccess } = await waitForResult();
     expect(isStatusSuccess).toEqual(true);
     expect(request.outputs).to.not.contain(
       expect.objectContaining({
@@ -254,10 +254,10 @@ describe('Transaction', () => {
 
     await request.estimateAndFund(owner);
 
-    const tx = await owner.sendTransaction(request, {
+    const { waitForResult } = await owner.sendTransaction(request, {
       enableAssetBurn: true,
     });
-    const { isStatusSuccess } = await tx.waitForResult();
+    const { isStatusSuccess } = await waitForResult();
     expect(isStatusSuccess).toEqual(true);
     expect(request.outputs).to.not.contain(
       expect.objectContaining({

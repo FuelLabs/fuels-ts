@@ -14,7 +14,6 @@ import { WalletManager } from './wallet-manager';
  */
 describe('Wallet Manager', () => {
   const setupWallet = async (config: VaultConfig) => {
-    // #region wallet-manager-mnemonic
     const walletManager = new WalletManager();
     const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
 
@@ -22,8 +21,6 @@ describe('Wallet Manager', () => {
 
     // Add a vault of type mnemonic
     await walletManager.addVault(config);
-
-    // #endregion wallet-manager-mnemonic
 
     return {
       walletManager,

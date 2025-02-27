@@ -1,5 +1,11 @@
 # @internal/fuel-core
 
+## 0.89.8
+
+### Patch Changes
+
+- 45cc32e: chore: upgrade `fuel-core` to `0.40.4`
+
 ## 0.89.7
 
 ### Patch Changes

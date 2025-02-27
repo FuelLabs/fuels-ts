@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/require-await */
 
+import type { HashableMessage } from '@fuel-ts/hasher';
 import { setTimeout } from 'timers/promises';
 
 import type {
@@ -11,9 +12,9 @@ import type {
   SelectNetworkArguments,
   AccountSendTxParams,
 } from '../../src';
+import type { Asset } from '../../src/assets/types';
 import { FuelConnector } from '../../src/connectors/fuel-connector';
 import { FuelConnectorEventTypes } from '../../src/connectors/types';
-import type { Asset } from '../../src/providers/assets/types';
 
 import { generateAccounts } from './generate-accounts';
 
@@ -98,7 +99,7 @@ export class MockConnector extends FuelConnector {
     return false;
   }
 
-  override async signMessage(_address: string, _message: string) {
+  override async signMessage(_address: string, _message: HashableMessage) {
     const wallet = this._wallets.find((w) => w.address.toString() === _address);
     if (!wallet) {
       throw new Error('Wallet is not found!');

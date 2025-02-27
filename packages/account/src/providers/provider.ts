@@ -1,12 +1,13 @@
-import { Address } from '@fuel-ts/address';
+import type { AddressInput } from '@fuel-ts/address';
+import { Address, isB256 } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { BN, bn } from '@fuel-ts/math';
+import type { BigNumberish, BN } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import { InputType, InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility, gte, versions } from '@fuel-ts/versions';
-import { equalBytes } from '@noble/curves/abstract/utils';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import type { GraphQLClientResponse, GraphQLResponse } from 'graphql-request/src/types';
@@ -29,6 +30,7 @@ import type {
   GqlRelayedTransactionFailed,
   Requester,
   GqlBlockFragment,
+  GqlEstimatePredicatesQuery,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -46,6 +48,7 @@ import type {
   ScriptTransactionRequest,
 } from './transaction-request';
 import {
+  isPredicate,
   isTransactionTypeCreate,
   isTransactionTypeScript,
   transactionRequestify,
@@ -996,46 +999,76 @@ export default class Provider {
   }
 
   /**
-   * Verifies whether enough gas is available to complete transaction.
+   * Estimates the gas usage for predicates in a transaction request.
    *
    * @template T - The type of the transaction request object.
    *
-   * @param transactionRequest - The transaction request object.
-   * @returns A promise that resolves to the estimated transaction request object.
+   * @param transactionRequest - The transaction request to estimate predicates for.
+   * @returns A promise that resolves to the updated transaction request with estimated gas usage for predicates.
    */
   async estimatePredicates<T extends TransactionRequest>(transactionRequest: T): Promise<T> {
-    const shouldEstimatePredicates = Boolean(
-      transactionRequest.inputs.find(
-        (input) =>
-          'predicate' in input &&
-          input.predicate &&
-          !equalBytes(arrayify(input.predicate), arrayify('0x')) &&
-          new BN(input.predicateGasUsed).isZero()
-      )
+    const shouldEstimatePredicates = transactionRequest.inputs.some(
+      (input) => isPredicate(input) && bn(input.predicateGasUsed).isZero()
     );
+
     if (!shouldEstimatePredicates) {
       return transactionRequest;
     }
+
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
+
     const response = await this.operations.estimatePredicates({
       encodedTransaction,
     });
 
-    const {
-      estimatePredicates: { inputs },
-    } = response;
+    const { estimatePredicates } = response;
 
-    if (inputs) {
-      inputs.forEach((input, index) => {
-        if ('predicateGasUsed' in input && bn(input.predicateGasUsed).gt(0)) {
-          // eslint-disable-next-line no-param-reassign
-          (<CoinTransactionRequestInput>transactionRequest.inputs[index]).predicateGasUsed =
-            input.predicateGasUsed;
-        }
-      });
-    }
+    // eslint-disable-next-line no-param-reassign
+    transactionRequest = this.parseEstimatePredicatesResponse(
+      transactionRequest,
+      estimatePredicates
+    );
 
     return transactionRequest;
+  }
+
+  /**
+   * Estimates the gas price and predicates for a given transaction request and block horizon.
+   *
+   * @param transactionRequest - The transaction request to estimate predicates and gas price for.
+   * @param blockHorizon - The block horizon to use for gas price estimation.
+   * @returns A promise that resolves to an object containing the updated transaction
+   * request and the estimated gas price.
+   */
+  async estimatePredicatesAndGasPrice<T extends TransactionRequest>(
+    transactionRequest: T,
+    blockHorizon: number
+  ) {
+    const shouldEstimatePredicates = transactionRequest.inputs.some(
+      (input) => isPredicate(input) && bn(input.predicateGasUsed).isZero()
+    );
+
+    if (!shouldEstimatePredicates) {
+      const gasPrice = await this.estimateGasPrice(blockHorizon);
+
+      return { transactionRequest, gasPrice };
+    }
+
+    const {
+      estimateGasPrice: { gasPrice },
+      estimatePredicates,
+    } = await this.operations.estimatePredicatesAndGasPrice({
+      blockHorizon: String(blockHorizon),
+      encodedTransaction: hexlify(transactionRequest.toTransactionBytes()),
+    });
+
+    // eslint-disable-next-line no-param-reassign
+    transactionRequest = this.parseEstimatePredicatesResponse(
+      transactionRequest,
+      estimatePredicates
+    );
+
+    return { transactionRequest, gasPrice: bn(gasPrice) };
   }
 
   /**
@@ -1091,7 +1124,7 @@ export default class Provider {
         outputVariables += missingOutputVariables.length;
         transactionRequest.addVariableOutputs(missingOutputVariables.length);
         missingOutputContractIds.forEach(({ contractId }) => {
-          transactionRequest.addContractInputAndOutput(Address.fromString(contractId));
+          transactionRequest.addContractInputAndOutput(new Address(contractId));
           missingContractIds.push(contractId);
         });
 
@@ -1178,7 +1211,7 @@ export default class Provider {
           result.outputVariables += missingOutputVariables.length;
           request.addVariableOutputs(missingOutputVariables.length);
           missingOutputContractIds.forEach(({ contractId }) => {
-            request.addContractInputAndOutput(Address.fromString(contractId));
+            request.addContractInputAndOutput(new Address(contractId));
             result.missingContractIds.push(contractId);
           });
           const { maxFee } = await this.estimateTxGasAndFee({
@@ -1404,10 +1437,16 @@ export default class Provider {
       addedSignatures = signedRequest.witnesses.length - lengthBefore;
     }
 
-    await this.estimatePredicates(signedRequest);
-    txRequestClone.updatePredicateGasUsed(signedRequest.inputs);
+    let gasPrice: BN;
 
-    const gasPrice = gasPriceParam ?? (await this.estimateGasPrice(10));
+    if (gasPriceParam) {
+      gasPrice = gasPriceParam;
+      await this.estimatePredicates(signedRequest);
+    } else {
+      ({ gasPrice } = await this.estimatePredicatesAndGasPrice(signedRequest, 10));
+    }
+
+    txRequestClone.updatePredicateGasUsed(signedRequest.inputs);
 
     /**
      * Calculate minGas and maxGas based on the real transaction
@@ -1478,11 +1517,11 @@ export default class Provider {
    * @returns A promise that resolves to the coins.
    */
   async getCoins(
-    owner: string | Address,
+    owner: AddressInput,
     assetId?: BytesLike,
     paginationArgs?: CursorPaginationArgs
   ): Promise<GetCoinsResponse> {
-    const ownerAddress = Address.fromAddressOrString(owner);
+    const ownerAddress = new Address(owner);
     const {
       coins: { edges, pageInfo },
     } = await this.operations.getCoins({
@@ -1517,11 +1556,11 @@ export default class Provider {
    * @returns A promise that resolves to the resources.
    */
   async getResourcesToSpend(
-    owner: string | Address,
+    owner: AddressInput,
     quantities: CoinQuantityLike[],
     excludedIds?: ExcludeResourcesOption
   ): Promise<Resource[]> {
-    const ownerAddress = Address.fromAddressOrString(owner);
+    const ownerAddress = new Address(owner);
     const excludeInput = {
       messages: excludedIds?.messages?.map((nonce) => hexlify(nonce)) || [],
       utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
@@ -1556,8 +1595,8 @@ export default class Provider {
               amount: bn(coin.amount),
               assetId: coin.assetId,
               daHeight: bn(coin.daHeight),
-              sender: Address.fromAddressOrString(coin.sender),
-              recipient: Address.fromAddressOrString(coin.recipient),
+              sender: new Address(coin.sender),
+              recipient: new Address(coin.recipient),
               nonce: coin.nonce,
             } as MessageCoin;
           case 'Coin':
@@ -1603,7 +1642,7 @@ export default class Provider {
    * @param idOrHeight - ID or height of the block.
    * @returns A promise that resolves to the block or null.
    */
-  async getBlock(idOrHeight: string | number | 'latest'): Promise<Block | null> {
+  async getBlock(idOrHeight: BigNumberish | 'latest'): Promise<Block | null> {
     let block: GqlBlockFragment | undefined | null;
 
     if (idOrHeight === 'latest') {
@@ -1612,7 +1651,7 @@ export default class Provider {
       } = await this.operations.getLatestBlock();
       block = latestBlock;
     } else {
-      const isblockId = typeof idOrHeight === 'string' && idOrHeight.length === 66;
+      const isblockId = typeof idOrHeight === 'string' && isB256(idOrHeight);
       const variables = isblockId
         ? { blockId: idOrHeight }
         : { height: bn(idOrHeight).toString(10) };
@@ -1688,15 +1727,17 @@ export default class Provider {
    */
   async getBlockWithTransactions(
     /** ID or height of the block */
-    idOrHeight: string | number | 'latest'
+    idOrHeight: BigNumberish | 'latest'
   ): Promise<(Block & { transactions: Transaction[] }) | null> {
     let variables;
     if (typeof idOrHeight === 'number') {
       variables = { blockHeight: bn(idOrHeight).toString(10) };
     } else if (idOrHeight === 'latest') {
       variables = { blockHeight: (await this.getBlockNumber()).toString() };
-    } else {
+    } else if (typeof idOrHeight === 'string' && isB256(idOrHeight)) {
       variables = { blockId: idOrHeight };
+    } else {
+      variables = { blockHeight: bn(idOrHeight).toString() };
     }
 
     const { block } = await this.operations.getBlockWithTransactions(variables);
@@ -1757,24 +1798,6 @@ export default class Provider {
   }
 
   /**
-   * Fetches a compressed block at the specified height.
-   *
-   * @param height - The height of the block to fetch.
-   * @returns The compressed block if available, otherwise `null`.
-   */
-  async daCompressedBlock(height: string) {
-    const { daCompressedBlock } = await this.operations.daCompressedBlock({
-      height,
-    });
-
-    if (!daCompressedBlock) {
-      return null;
-    }
-
-    return daCompressedBlock;
-  }
-
-  /**
    * Retrieves transactions based on the provided pagination arguments.
    * @param paginationArgs - The pagination arguments for retrieving transactions.
    * @returns A promise that resolves to an object containing the retrieved transactions and pagination information.
@@ -1809,6 +1832,24 @@ export default class Provider {
   }
 
   /**
+   * Fetches a compressed block at the specified height.
+   *
+   * @param height - The height of the block to fetch.
+   * @returns The compressed block if available, otherwise `null`.
+   */
+  async daCompressedBlock(height: string) {
+    const { daCompressedBlock } = await this.operations.daCompressedBlock({
+      height,
+    });
+
+    if (!daCompressedBlock) {
+      return null;
+    }
+
+    return daCompressedBlock;
+  }
+
+  /**
    * Get deployed contract with the given ID.
    *
    * @param contractId - ID of the contract.
@@ -1836,7 +1877,7 @@ export default class Provider {
     assetId: BytesLike
   ): Promise<BN> {
     const { contractBalance } = await this.operations.getContractBalance({
-      contract: Address.fromAddressOrString(contractId).toB256(),
+      contract: new Address(contractId).toB256(),
       asset: hexlify(assetId),
     });
     return bn(contractBalance.amount, 10);
@@ -1851,11 +1892,11 @@ export default class Provider {
    */
   async getBalance(
     /** The address to get coins for */
-    owner: string | Address,
+    owner: AddressInput,
     /** The asset ID of coins to get */
     assetId: BytesLike
   ): Promise<BN> {
-    const ownerStr = Address.fromAddressOrString(owner).toB256();
+    const ownerStr = new Address(owner).toB256();
     const assetIdStr = hexlify(assetId);
 
     if (!this.features.amount128) {
@@ -1906,7 +1947,7 @@ export default class Provider {
        * but the current Fuel-Core implementation does not support pagination yet.
        */
       first: 10000,
-      filter: { owner: Address.fromAddressOrString(owner).toB256() },
+      filter: { owner: new Address(owner).toB256() },
     });
 
     const balances = edges.map(({ node }) => ({
@@ -1931,7 +1972,7 @@ export default class Provider {
         inputArgs: paginationArgs,
         paginationLimit: BALANCES_PAGE_SIZE_LIMIT,
       }),
-      filter: { owner: Address.fromAddressOrString(owner).toB256() },
+      filter: { owner: new Address(owner).toB256() },
     });
 
     const balances = edges.map(({ node }) => ({
@@ -1950,7 +1991,7 @@ export default class Provider {
    * @returns A promise that resolves to the messages.
    */
   async getMessages(
-    address: string | Address,
+    address: AddressInput,
     paginationArgs?: CursorPaginationArgs
   ): Promise<GetMessagesResponse> {
     const {
@@ -1960,7 +2001,7 @@ export default class Provider {
         inputArgs: paginationArgs,
         paginationLimit: RESOURCES_PAGE_SIZE_LIMIT,
       }),
-      owner: Address.fromAddressOrString(address).toB256(),
+      owner: new Address(address).toB256(),
     });
 
     const messages = edges.map(({ node }) => ({
@@ -1971,8 +2012,8 @@ export default class Provider {
         amount: bn(node.amount),
         data: node.data,
       }),
-      sender: Address.fromAddressOrString(node.sender),
-      recipient: Address.fromAddressOrString(node.recipient),
+      sender: new Address(node.sender),
+      recipient: new Address(node.recipient),
       nonce: node.nonce,
       amount: bn(node.amount),
       data: InputMessageCoder.decodeData(node.data),
@@ -2029,8 +2070,8 @@ export default class Provider {
     if (commitBlockHeight) {
       inputObject = {
         ...inputObject,
-        // Conver BN into a number string required on the query
-        // This should problably be fixed on the fuel client side
+        // Convert BN into a number string required on the query
+        // This should probably be fixed on the fuel client side
         commitBlockHeight: commitBlockHeight.toNumber().toString(),
       };
     }
@@ -2087,8 +2128,8 @@ export default class Provider {
         eventInboxRoot: commitBlockHeader.eventInboxRoot,
         stateTransitionBytecodeVersion: Number(commitBlockHeader.stateTransitionBytecodeVersion),
       },
-      sender: Address.fromAddressOrString(sender),
-      recipient: Address.fromAddressOrString(recipient),
+      sender: new Address(sender),
+      recipient: new Address(recipient),
       nonce,
       amount: bn(amount),
       data,
@@ -2225,8 +2266,8 @@ export default class Provider {
         amount: bn(rawMessage.amount),
         data: rawMessage.data,
       }),
-      sender: Address.fromAddressOrString(rawMessage.sender),
-      recipient: Address.fromAddressOrString(rawMessage.recipient),
+      sender: new Address(rawMessage.sender),
+      recipient: new Address(rawMessage.recipient),
       nonce,
       amount: bn(rawMessage.amount),
       data: InputMessageCoder.decodeData(rawMessage.data),
@@ -2279,5 +2320,25 @@ export default class Provider {
       receipts,
       statusReason: status.reason,
     });
+  }
+
+  /**
+   * @hidden
+   */
+  private parseEstimatePredicatesResponse<T extends TransactionRequest>(
+    transactionRequest: T,
+    { inputs }: GqlEstimatePredicatesQuery['estimatePredicates']
+  ): T {
+    if (inputs) {
+      inputs.forEach((input, i) => {
+        if (input && 'predicateGasUsed' in input && bn(input.predicateGasUsed).gt(0)) {
+          // eslint-disable-next-line no-param-reassign
+          (<CoinTransactionRequestInput>transactionRequest.inputs[i]).predicateGasUsed =
+            input.predicateGasUsed;
+        }
+      });
+    }
+
+    return transactionRequest;
   }
 }

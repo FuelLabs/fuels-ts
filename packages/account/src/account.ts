@@ -1,8 +1,9 @@
 import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
-import type { WithAddress } from '@fuel-ts/address';
+import type { AddressInput, WithAddress } from '@fuel-ts/address';
 import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import type { HashableMessage } from '@fuel-ts/hasher';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { InputType } from '@fuel-ts/transactions';
@@ -102,11 +103,11 @@ export class Account extends AbstractAccount implements WithAddress {
    * @param provider - A Provider instance  (optional).
    * @param connector - A FuelConnector instance (optional).
    */
-  constructor(address: string | Address, provider?: Provider, connector?: FuelConnector) {
+  constructor(address: AddressInput, provider?: Provider, connector?: FuelConnector) {
     super();
     this._provider = provider;
     this._connector = connector;
-    this.address = Address.fromDynamicInput(address);
+    this.address = new Address(address);
   }
 
   /**
@@ -408,7 +409,7 @@ export class Account extends AbstractAccount implements WithAddress {
   addTransfer(request: ScriptTransactionRequest, transferParams: TransferParams) {
     const { destination, amount, assetId } = transferParams;
     this.validateTransferAmount(amount);
-    request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetId);
+    request.addCoinOutput(new Address(destination), amount, assetId);
     return request;
   }
 
@@ -462,7 +463,7 @@ export class Account extends AbstractAccount implements WithAddress {
 
     const transferParams = contractTransferParams.map((transferParam) => {
       const amount = bn(transferParam.amount);
-      const contractAddress = Address.fromAddressOrString(transferParam.contractId);
+      const contractAddress = new Address(transferParam.contractId);
 
       const assetId = transferParam.assetId ? hexlify(transferParam.assetId) : defaultAssetId;
 
@@ -502,11 +503,11 @@ export class Account extends AbstractAccount implements WithAddress {
    * @returns A promise that resolves to the transaction response.
    */
   async withdrawToBaseLayer(
-    recipient: string | Address,
+    recipient: AddressInput,
     amount: BigNumberish,
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    const recipientAddress = Address.fromAddressOrString(recipient);
+    const recipientAddress = new Address(recipient);
     // add recipient and amount to the transaction script code
     const recipientDataArray = arrayify(
       '0x'.concat(recipientAddress.toHexString().substring(2).padStart(64, '0'))
@@ -620,7 +621,7 @@ export class Account extends AbstractAccount implements WithAddress {
    *
    * @hidden
    */
-  async signMessage(message: string): Promise<string> {
+  async signMessage(message: HashableMessage): Promise<string> {
     if (!this._connector) {
       throw new FuelError(ErrorCode.MISSING_CONNECTOR, 'A connector is required to sign messages.');
     }
@@ -654,18 +655,47 @@ export class Account extends AbstractAccount implements WithAddress {
     transactionRequestLike: TransactionRequestLike,
     { estimateTxDependencies = true, onBeforeSend, skipCustomFee = false }: AccountSendTxParams = {}
   ): Promise<TransactionResponse> {
+    // Check if the account is using a connector, and therefore we do not have direct access to the
+    // private key.
     if (this._connector) {
-      return this.provider.getTransactionResponse(
-        await this._connector.sendTransaction(this.address.toString(), transactionRequestLike, {
+      // If the connector is using prepareForSend, the connector will prepare the transaction for the dapp,
+      // and submission is owned by the dapp. This reduces network requests to submit and create the
+      // summary for a tx.
+      if (this._connector.usePrepareForSend) {
+        const preparedTransaction = await this._connector.prepareForSend(
+          this.address.toString(),
+          transactionRequestLike,
+          {
+            onBeforeSend,
+            skipCustomFee,
+          }
+        );
+        // Submit the prepared transaction using the provider.
+        return this.provider.sendTransaction(preparedTransaction, {
+          estimateTxDependencies: false,
+        });
+      }
+
+      // Otherwise, the connector itself will submit the transaction, and the app will use
+      // the tx id to create the summary, requiring multiple network requests.
+      const txId = await this._connector.sendTransaction(
+        this.address.toString(),
+        transactionRequestLike,
+        {
           onBeforeSend,
           skipCustomFee,
-        })
+        }
       );
+      // And return the transaction response for the returned tx id.
+      return this.provider.getTransactionResponse(txId);
     }
+
     const transactionRequest = transactionRequestify(transactionRequestLike);
+
     if (estimateTxDependencies) {
       await this.provider.estimateTxDependencies(transactionRequest);
     }
+
     return this.provider.sendTransaction(transactionRequest, {
       estimateTxDependencies: false,
     });

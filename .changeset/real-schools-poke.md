@@ -10,4 +10,4 @@
 "@fuel-ts/utils": minor
 ---
 
-chore!: upgrade `fuel-core` to `0.41.0`
+chore!: upgrade `fuel-core` to `0.41.7`

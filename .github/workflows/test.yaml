@@ -58,7 +58,8 @@ jobs:
   integration:
     runs-on: ubuntu-latest
     timeout-minutes: 25
-    if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
+    env:
+      NPM_DIST_TAG: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'next' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -70,26 +71,68 @@ jobs:
         with:
           should-install-bun: true
 
+      - name: Create .bunfig.toml
+        run: |
+          cat << EOF > "$XDG_CONFIG_HOME/.bunfig.toml"
+          [install.scopes]
+
+          # as an object with token
+          "@FuelLabs" = { token = "$GITHUB_TOKEN", url = "https://npm.pkg.github.com/" }
+          EOF
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Run UI tests (on template)
         run: sh ./scripts/tests-ui.sh
 
       - name: Wait for release to succeed
         uses: lewagon/wait-on-check-action@v1.3.4
         with:
-          ref: "refs/heads/master"
-          check-name: "Release"
+          ref: ${{ github.head_ref }}
+          check-name: "publish-to-github-packages"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 30
+
+      - name: Create .npmrc
+        run: |
+          cat << EOF > "$HOME/.npmrc"
+            //npm.pkg.github.com/:_authToken=$GITHUB_TOKEN
+            @FuelLabs:registry=https://npm.pkg.github.com
+          EOF
+        env:
+          HOME: ${{ github.workspace }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run tests (with published version)
         run: pnpm test:integration
         env:
-          PUBLISHED_NPM_TAG: next
+          PUBLISHED_NPM_TAG: ${{ env.NPM_DIST_TAG }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run UI tests (with published version)
         run: sh ./scripts/tests-ui-integration.sh
         env:
-          PUBLISHED_NPM_TAG: next
+          PUBLISHED_NPM_TAG: ${{ env.NPM_DIST_TAG }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  forc:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Test Setup
+        uses: ./.github/actions/test-setup
+
+      - name: Setup forc and fuel-core paths
+        shell: bash
+        run: |
+          echo "$PWD/internal/forc/forc-binaries" >> $GITHUB_PATH
+          echo "$PWD/internal/fuel-core/fuel-core-binaries" >> $GITHUB_PATH
+
+      - name: Run Tests
+        run: pnpm test:forc
 
   e2e:
     runs-on: ubuntu-latest
@@ -155,7 +198,7 @@ jobs:
           path: coverage/report
 
       - name: Download Master Coverage Artifact
-        uses: dawidd6/action-download-artifact@v7
+        uses: dawidd6/action-download-artifact@v8
         if: ${{ steps.findPr.outputs.number }}
         with:
           workflow: test.yaml

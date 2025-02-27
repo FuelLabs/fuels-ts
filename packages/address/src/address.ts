@@ -2,14 +2,14 @@ import { FuelError } from '@fuel-ts/errors';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 import { sha256 } from '@noble/hashes/sha256';
 
-import type { B256Address, EvmAddress, AssetId, ChecksumAddress } from './types';
+import type { B256Address, EvmAddress, AssetId, ChecksumAddress, AddressInput } from './types';
 import {
   getRandomB256,
-  isPublicKey,
   isB256,
   isEvmAddress,
-  padFirst12BytesOfEvmAddress,
   toB256AddressEvm,
+  fromPublicKeyToB256,
+  fromDynamicInputToB256,
   normalizeB256,
 } from './utils';
 
@@ -23,17 +23,11 @@ export class Address {
   // #endregion address-2
 
   /**
-   * @param address - A B256 address
+   * @param address - A B256 address, public key, EVM address, or Address instance
    */
-  constructor(address: B256Address) {
-    if (!isB256(address)) {
-      throw new FuelError(
-        FuelError.CODES.INVALID_B256_ADDRESS,
-        `Invalid B256 Address: ${address}.`
-      );
-    }
-
-    this.b256Address = normalizeB256(address);
+  constructor(address: AddressInput) {
+    const b256Address = fromDynamicInputToB256(address);
+    this.b256Address = normalizeB256(b256Address);
   }
 
   /**
@@ -140,13 +134,11 @@ export class Address {
    *
    * @param publicKey - A wallets public key
    * @returns A new `Address` instance
+   *
+   * @deprecated Use `new Address` instead
    */
   static fromPublicKey(publicKey: string): Address {
-    if (!isPublicKey(publicKey)) {
-      throw new FuelError(FuelError.CODES.INVALID_PUBLIC_KEY, `Invalid Public Key: ${publicKey}.`);
-    }
-
-    const b256Address = hexlify(sha256(arrayify(publicKey)));
+    const b256Address = fromPublicKeyToB256(publicKey);
     return new Address(b256Address);
   }
 
@@ -155,6 +147,8 @@ export class Address {
    *
    * @param b256Address - A b256 hash
    * @returns A new `Address` instance
+   *
+   * @deprecated Use `new Address` instead
    */
   static fromB256(b256Address: string): Address {
     if (!isB256(b256Address)) {
@@ -173,7 +167,7 @@ export class Address {
    * @returns A new `Address` instance
    */
   static fromRandom(): Address {
-    return this.fromB256(getRandomB256());
+    return new Address(getRandomB256());
   }
 
   /**
@@ -181,56 +175,43 @@ export class Address {
    *
    * @param address - An ambiguous string
    * @returns A new `Address` instance
+   *
+   * @deprecated Use `new Address` instead
    */
   static fromString(address: string): Address {
-    return this.fromB256(address);
+    return new Address(address);
   }
 
   /**
    * Takes an ambiguous string or address and creates an `Address`
    *
    * @returns a new `Address` instance
+   *
+   * @deprecated Use `new Address` instead
    */
   static fromAddressOrString(address: string | Address): Address {
-    return typeof address === 'string' ? this.fromString(address) : address;
+    return new Address(address);
   }
 
   /**
    * Takes a dynamic string or `Address` and creates an `Address`
    *
    * @param addressId - A string containing B256, or Public Key
-   * @throws Error - Unknown address if the format is not recognised
+   * @throws Error - Unknown address if the format is not recognized
    * @returns A new `Address` instance
+   *
+   * @deprecated Use `new Address` instead
    */
   static fromDynamicInput(address: string | Address): Address {
-    // If address is a object than we assume it's a Address
-    // we don't check by instanceof because it's possible to
-    // the host app to have a different reference to this same class type
-    if (typeof address !== 'string' && 'toB256' in address) {
-      return Address.fromB256(address.toB256());
-    }
-    if (isPublicKey(address)) {
-      return Address.fromPublicKey(address);
-    }
-
-    if (isB256(address)) {
-      return Address.fromB256(address);
-    }
-
-    if (isEvmAddress(address)) {
-      return Address.fromEvmAddress(address);
-    }
-
-    throw new FuelError(
-      FuelError.CODES.PARSE_FAILED,
-      `Unknown address format: only 'B256', or 'Public Key (512)' are supported.`
-    );
+    return new Address(address);
   }
 
   /**
    * Takes an Evm Address and returns back an `Address`
    *
    * @returns A new `Address` instance
+   *
+   * @deprecated Use `new Address` instead
    */
   static fromEvmAddress(evmAddress: string): Address {
     if (!isEvmAddress(evmAddress)) {
@@ -240,8 +221,7 @@ export class Address {
       );
     }
 
-    const paddedAddress = padFirst12BytesOfEvmAddress(evmAddress);
-    return new Address(paddedAddress);
+    return new Address(evmAddress);
   }
 
   /**

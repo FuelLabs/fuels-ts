@@ -117,7 +117,7 @@ export class BaseInvocationScope<TReturn = any> {
       }
       if (c.externalContractsAbis) {
         Object.keys(c.externalContractsAbis).forEach((contractId) =>
-          this.transactionRequest.addContractInputAndOutput(Address.fromB256(contractId))
+          this.transactionRequest.addContractInputAndOutput(new Address(contractId))
         );
       }
     });
@@ -253,7 +253,7 @@ export class BaseInvocationScope<TReturn = any> {
 
     // Adding missing contract ids
     missingContractIds.forEach((contractId) => {
-      transactionRequest.addContractInputAndOutput(Address.fromString(contractId));
+      transactionRequest.addContractInputAndOutput(new Address(contractId));
     });
 
     // Adding required number of OutputVariables
@@ -312,7 +312,7 @@ export class BaseInvocationScope<TReturn = any> {
   addTransfer(transferParams: TransferParams) {
     const { amount, destination, assetId } = transferParams;
     this.transactionRequest = this.transactionRequest.addCoinOutput(
-      Address.fromAddressOrString(destination),
+      new Address(destination),
       amount,
       assetId
     );
@@ -329,7 +329,7 @@ export class BaseInvocationScope<TReturn = any> {
   addBatchTransfer(transferParams: TransferParams[]) {
     transferParams.forEach(({ destination, amount, assetId }) => {
       this.transactionRequest = this.transactionRequest.addCoinOutput(
-        Address.fromAddressOrString(destination),
+        new Address(destination),
         amount,
         assetId
       );
