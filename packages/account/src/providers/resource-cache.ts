@@ -1,15 +1,21 @@
-import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { hexlify } from '@fuel-ts/utils';
 
-import type { ExcludeResourcesOption } from './resource';
+import { isRequestInputCoin, isRequestInputCoinOrMessage } from './transaction-request';
+import type {
+  CoinTransactionRequestInput,
+  MessageTransactionRequestInput,
+  TransactionRequestInput,
+} from './transaction-request';
 
-interface CachedResource {
-  utxos: Set<string>;
-  messages: Set<string>;
+type ResourcesOwnersMap = Map<string, { utxos: Set<string>; messages: Set<string> }>;
+
+interface TransactionResourcesCache {
+  owners: ResourcesOwnersMap;
   timestamp: number;
 }
 
-const cache = new Map<string, CachedResource>();
+const cache = new Map<string, TransactionResourcesCache>();
 
 export class ResourceCache {
   readonly ttl: number;
@@ -26,54 +32,99 @@ export class ResourceCache {
   }
 
   // Add resources to the cache
-  set(transactionId: string, resources: Required<ExcludeResourcesOption>): void {
-    const currentTime = Date.now();
-    const existingResources = cache.get(transactionId) || {
-      utxos: new Set<string>(),
-      messages: new Set<string>(),
-      timestamp: currentTime,
-    };
-
-    resources.utxos.forEach((utxo) => existingResources.utxos.add(hexlify(utxo)));
-    resources.messages.forEach((message) => existingResources.messages.add(hexlify(message)));
-
-    cache.set(transactionId, existingResources);
+  set(transactionId: string, inputs: TransactionRequestInput[]): void {
+    const transactionResourceCache = this.setupResourcesCache(inputs);
+    cache.set(transactionId, transactionResourceCache);
   }
 
-  // Remove resources from the cache for a given transaction ID
   unset(transactionId: string): void {
     cache.delete(transactionId);
   }
 
-  // Get all cached resources and remove expired ones
-  getActiveData() {
-    const allResources: { utxos: string[]; messages: string[] } = { utxos: [], messages: [] };
+  getActiveData(owner: string) {
+    const activeData: { utxos: string[]; messages: string[] } = { utxos: [], messages: [] };
     const currentTime = Date.now();
+    const expired: string[] = [];
+
     cache.forEach((resource, transactionId) => {
-      if (currentTime - resource.timestamp < this.ttl) {
-        allResources.utxos.push(...resource.utxos);
-        allResources.messages.push(...resource.messages);
+      const isActive = currentTime - resource.timestamp < this.ttl;
+
+      if (isActive) {
+        const resourcesFromOwner = resource.owners.get(owner);
+        if (resourcesFromOwner) {
+          activeData.utxos.push(...resourcesFromOwner.utxos);
+          activeData.messages.push(...resourcesFromOwner.messages);
+        }
       } else {
-        cache.delete(transactionId);
+        expired.push(transactionId);
       }
     });
-    return allResources;
+
+    expired.forEach(this.unset);
+
+    activeData.utxos.reverse();
+    activeData.messages.reverse();
+
+    return activeData;
   }
 
-  // Check if a UTXO ID or message nonce is already cached and not expired
-  isCached(key: string): boolean {
+  isCached(owner: string, key: string): boolean {
     const currentTime = Date.now();
+    let cached = false;
+    const expired: string[] = [];
+
     for (const [transactionId, resourceData] of cache.entries()) {
-      if (currentTime - resourceData.timestamp > this.ttl) {
-        cache.delete(transactionId);
-      } else if (resourceData.utxos.has(key) || resourceData.messages.has(key)) {
-        return true;
+      const isActive = currentTime - resourceData.timestamp < this.ttl;
+      if (isActive) {
+        const resourcesFromOwner = resourceData.owners.get(owner);
+
+        if (resourcesFromOwner?.utxos.has(key) || resourcesFromOwner?.messages.has(key)) {
+          cached = true;
+          break;
+        }
+      } else {
+        expired.push(transactionId);
       }
     }
-    return false;
+
+    expired.forEach(this.unset);
+
+    return cached;
   }
 
   clear() {
     cache.clear();
+  }
+
+  private setupResourcesCache(inputs: TransactionRequestInput[]) {
+    const currentTime = Date.now();
+
+    const transactionResourcesCache: TransactionResourcesCache = {
+      owners: new Map() as ResourcesOwnersMap,
+      timestamp: currentTime,
+    };
+
+    inputs.filter(isRequestInputCoinOrMessage).forEach((input) => {
+      const { owner, key, type } = this.extractResourceData(input);
+
+      if (!transactionResourcesCache.owners.has(owner)) {
+        transactionResourcesCache.owners.set(owner, { utxos: new Set(), messages: new Set() });
+      }
+
+      if (type === 'utxo') {
+        transactionResourcesCache.owners.get(owner)?.utxos.add(key);
+      } else {
+        transactionResourcesCache.owners.get(owner)?.messages.add(key);
+      }
+    });
+
+    return transactionResourcesCache;
+  }
+
+  private extractResourceData(input: CoinTransactionRequestInput | MessageTransactionRequestInput) {
+    if (isRequestInputCoin(input)) {
+      return { owner: hexlify(input.owner), key: hexlify(input.id), type: 'utxo' as const };
+    }
+    return { owner: hexlify(input.recipient), key: hexlify(input.nonce), type: 'message' as const };
   }
 }
