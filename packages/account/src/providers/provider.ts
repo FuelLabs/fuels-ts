@@ -37,6 +37,8 @@ import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
 import { FuelGraphqlSubscriber } from './fuel-graphql-subscriber';
 import type { Message, MessageCoin, MessageProof, MessageStatus } from './message';
+import type { MimicAssembleTxParams } from './mimic-assemble-tx';
+import { mimicAssembleTxRequest } from './mimic-assemble-tx';
 import type { ExcludeResourcesOption, Resource } from './resource';
 import { ResourceCache } from './resource-cache';
 import type {
@@ -1457,6 +1459,12 @@ export default class Provider {
     };
   }
 
+  async assembleTX(params: MimicAssembleTxParams) {
+    const response = await mimicAssembleTxRequest(this, params);
+
+    return response;
+  }
+
   /**
    * Returns coins for the given owner.
    *
@@ -2195,7 +2203,7 @@ export default class Provider {
   /**
    * @hidden
    */
-  private extractDryRunError(
+  public extractDryRunError(
     transactionRequest: ScriptTransactionRequest,
     receipts: TransactionResultReceipt[],
     dryRunStatus: DryRunStatus
