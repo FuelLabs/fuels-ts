@@ -77,7 +77,10 @@ describe('control headers', () => {
             },
           },
         };
-        return Promise.resolve(new Response(JSON.stringify(responseObject)));
+        const streamedResponse = new TextEncoder().encode(
+          `data:${JSON.stringify(responseObject)}\n\n`
+        );
+        return Promise.resolve(new Response(streamedResponse));
       });
 
       await provider.operations.submitAndAwaitStatus({ encodedTransaction: '' });
@@ -219,7 +222,21 @@ describe('control headers', () => {
     expect(+newBlockHeight).toBeGreaterThanOrEqual(expectedHeight);
   });
 
+  // test('transfer stuff', async () => {
+  //   using launched = await setupTestProviderAndWallets();
+
+  //   const {
+  //     wallets: [wallet],
+  //   } = launched;
+
+  //   const { waitForResult } = await wallet.transfer(wallet.address, 10);
+
+  //   await waitForResult();
+  // });
+
   test('subscriptions set current block height', async () => {});
+
+  test('the -sub suffix is removed when url is parsed from subscription response', () => {});
 
   test('Current block height is tied to node url', async () => {});
 

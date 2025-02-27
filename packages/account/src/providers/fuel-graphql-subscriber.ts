@@ -9,7 +9,14 @@ type FuelGraphQLSubscriberOptions = {
   query: DocumentNode;
   variables?: Record<string, unknown>;
   fetchFn: typeof fetch;
+  operationName: string;
 };
+
+export interface FuelGraphqlSubscriberEvent {
+  data: unknown;
+  errors?: { message: string }[];
+  extensions?: Record<string, unknown>;
+}
 
 export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
   public static incompatibleNodeVersionMessage: string | false = false;
@@ -18,12 +25,13 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
   private constructor(private stream: ReadableStreamDefaultReader<Uint8Array>) {}
 
   public static async create(options: FuelGraphQLSubscriberOptions) {
-    const { url, query, variables, fetchFn } = options;
+    const { url, query, variables, fetchFn, operationName } = options;
     const response = await fetchFn(`${url}-sub`, {
       method: 'POST',
       body: JSON.stringify({
         query: print(query),
         variables,
+        operationName,
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -32,21 +40,73 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
     });
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const [backgroundStream, resultStream] = response.body!.tee();
+    const [backgroundReader, resultReader] = response.body!.tee().map((x) => x.getReader());
 
     // eslint-disable-next-line no-void
-    void this.readInBackground(backgroundStream.getReader());
-
-    const [errorReader, resultReader] = resultStream.tee().map((stream) => stream.getReader());
+    void this.readInBackground(backgroundReader);
 
     /**
      * If the node threw an error, read it and throw it to the user
      * Else just discard the response and return the subscriber below,
      * which will have that same response via `resultReader`
      */
-    await new FuelGraphqlSubscriber(errorReader).next();
+    // await new FuelGraphqlSubscriber(errorReader).next();
 
     return new FuelGraphqlSubscriber(resultReader);
+  }
+
+  public static async readEvent(
+    reader: ReadableStreamDefaultReader<Uint8Array>,
+    parsingLeftover: string = ''
+  ): Promise<{
+    event: FuelGraphqlSubscriberEvent | undefined;
+    done: boolean;
+    parsingLeftover: string;
+  }> {
+    let text = parsingLeftover;
+    const regex = /data:.*\n\n/g;
+
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      const matches = [...text.matchAll(regex)].flatMap((match) => match);
+
+      if (matches.length > 0) {
+        try {
+          const event = JSON.parse(matches[0].replace(/^data:/, ''));
+
+          return {
+            event,
+            done: false,
+            parsingLeftover: text.replace(matches[0], ''),
+          };
+        } catch (e) {
+          throw new FuelError(
+            ErrorCode.STREAM_PARSING_ERROR,
+            `Error while parsing stream data response: ${text}`
+          );
+        }
+      }
+
+      const { value, done } = await reader.read();
+
+      if (done) {
+        return { event: undefined, done, parsingLeftover: '' };
+      }
+
+      /**
+       * We don't care about keep-alive messages.
+       * The only responses that I came across from the node are either 200 responses with "data:.*" or keep-alive messages.
+       * You can find the keep-alive message in the fuel-core codebase (latest permalink as of writing):
+       * https://github.com/FuelLabs/fuel-core/blob/e1e631902f762081d2124d9c457ddfe13ac366dc/crates/fuel-core/src/graphql_api/service.rs#L247
+       * To get the actual latest info you need to check out the master branch (might change):
+       * https://github.com/FuelLabs/fuel-core/blob/master/crates/fuel-core/src/graphql_api/service.rs#L247
+       * */
+      const decoded = FuelGraphqlSubscriber.textDecoder
+        .decode(value)
+        .replace(':keep-alive-text\n\n', '');
+
+      text += decoded;
+    }
   }
 
   /**
@@ -67,7 +127,8 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
     }
   }
 
-  private events: Array<{ data: unknown; errors?: { message: string }[] }> = [];
+  private events: Array<FuelGraphqlSubscriberEvent> = [];
+
   private parsingLeftover = '';
 
   async next(): Promise<IteratorResult<unknown, unknown>> {
@@ -79,44 +140,19 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
         assertGqlResponseHasNoErrors(errors, FuelGraphqlSubscriber.incompatibleNodeVersionMessage);
         return { value: data, done: false };
       }
-      const { value, done } = await this.stream.read();
+
+      const { event, done, parsingLeftover } = await FuelGraphqlSubscriber.readEvent(
+        this.stream,
+        this.parsingLeftover
+      );
+
+      this.parsingLeftover = parsingLeftover;
+
+      this.events.push(event as FuelGraphqlSubscriberEvent);
+
       if (done) {
-        return { value, done };
+        return { value: undefined, done: true };
       }
-
-      /**
-       * We don't care about keep-alive messages.
-       * The only responses that I came across from the node are either 200 responses with "data:.*" or keep-alive messages.
-       * You can find the keep-alive message in the fuel-core codebase (latest permalink as of writing):
-       * https://github.com/FuelLabs/fuel-core/blob/e1e631902f762081d2124d9c457ddfe13ac366dc/crates/fuel-core/src/graphql_api/service.rs#L247
-       * To get the actual latest info you need to check out the master branch (might change):
-       * https://github.com/FuelLabs/fuel-core/blob/master/crates/fuel-core/src/graphql_api/service.rs#L247
-       * */
-      const decoded = FuelGraphqlSubscriber.textDecoder
-        .decode(value)
-        .replace(':keep-alive-text\n\n', '');
-
-      if (decoded === '') {
-        continue;
-      }
-
-      const text = `${this.parsingLeftover}${decoded}`;
-      const regex = /data:.*\n\n/g;
-
-      const matches = [...text.matchAll(regex)].flatMap((match) => match);
-
-      matches.forEach((match) => {
-        try {
-          this.events.push(JSON.parse(match.replace(/^data:/, '')));
-        } catch (e) {
-          throw new FuelError(
-            ErrorCode.STREAM_PARSING_ERROR,
-            `Error while parsing stream data response: ${text}`
-          );
-        }
-      });
-
-      this.parsingLeftover = text.replace(matches.join(), '');
     }
   }
 

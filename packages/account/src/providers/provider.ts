@@ -478,12 +478,11 @@ export default class Provider {
         fullRequest = await options.requestMiddleware(fullRequest);
       }
 
+      const currentBlockHeight = this.currentBlockHeight[url.replace(/-sub$/, '')] ?? 0;
+
       fullRequest.body = fullRequest.body
         ?.toString()
-        .replace(
-          /}$/,
-          `,"extensions":{"required_fuel_block_height":${this.currentBlockHeight[url] ?? 0}}}`
-        );
+        .replace(/}$/, `,"extensions":{"required_fuel_block_height":${currentBlockHeight}}}`);
 
       let fuelBlockHeightPreconditionFailed = false;
       let response: Response;
@@ -501,21 +500,39 @@ export default class Provider {
           ? options.fetch(url, fullRequest, options)
           : fetch(url, fullRequest));
 
-        const body = await response.clone().json();
-        if (body.extensions?.current_fuel_block_height) {
+        const responseClone = response.clone();
+
+        let gqlResponse: { extensions?: Record<string, unknown>; errors?: { message: string }[] };
+
+        if (url.endsWith('-sub')) {
+          const reader = responseClone.body?.getReader();
+          const { event } = await FuelGraphqlSubscriber.readEvent(
+            reader as ReadableStreamDefaultReader<Uint8Array>
+          );
+
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          gqlResponse = event!;
+        } else {
+          gqlResponse = await responseClone.json();
+        }
+
+        const extensions = gqlResponse.extensions as Record<string, unknown> | undefined;
+
+        if (extensions?.current_fuel_block_height) {
           this.currentBlockHeight = {
             ...this.currentBlockHeight,
-            [url]: body.extensions.current_fuel_block_height as number,
+            [url]: extensions.current_fuel_block_height as number,
           };
         }
 
-        fuelBlockHeightPreconditionFailed =
-          !!body.extensions?.fuel_block_height_precondition_failed;
+        fuelBlockHeightPreconditionFailed = !!extensions?.fuel_block_height_precondition_failed;
 
         if (fuelBlockHeightPreconditionFailed) {
           ++blockHeightRetryAttempt;
           const sleepTime = getWaitDelay(blockHeightRetryOptions, blockHeightRetryAttempt);
           await sleep(sleepTime);
+        } else {
+          assertGqlResponseHasNoErrors(gqlResponse.errors, Provider.incompatibleNodeVersionMessage);
         }
       } while (fuelBlockHeightPreconditionFailed);
 
@@ -740,6 +757,7 @@ export default class Provider {
     const executeQuery = (query: DocumentNode, vars: Record<string, unknown>) => {
       const opDefinition = query.definitions.find((x) => x.kind === 'OperationDefinition') as {
         operation: string;
+        name: { kind: 'Name'; value: string };
       };
       const isSubscription = opDefinition?.operation === 'subscription';
 
@@ -749,6 +767,7 @@ export default class Provider {
           query,
           fetchFn: (url, requestInit) => fetchFn(url as string, requestInit, this.options),
           variables: vars,
+          operationName: opDefinition.name.value,
         });
       }
       return gqlClient.request(query, vars);
