@@ -9,8 +9,13 @@ import type {
   TransactionResponse,
   TransactionCost,
   AbstractAccount,
+  Predicate,
 } from '@fuel-ts/account';
 import { ScriptTransactionRequest, Wallet } from '@fuel-ts/account';
+import type {
+  MimicAccount,
+  MimicPredicate,
+} from '@fuel-ts/account/dist/providers/mimic-assemble-tx';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
@@ -262,17 +267,29 @@ export class BaseInvocationScope<TReturn = any> {
       }
     });
 
+    let requiredBalanceAccount: MimicAccount | MimicPredicate;
+
+    if (this.isConnectedAccountPredicate(account)) {
+      requiredBalanceAccount = {
+        predicate: hexlify(account.bytes),
+        predicateAddress: account.address.b256Address,
+        predicateData: hexlify(account.getPredicateData()),
+      };
+    } else {
+      requiredBalanceAccount = account.address.b256Address;
+    }
+
     const requiredBalances = requiredCoins.map(({ assetId, amount }) => ({
       assetId,
       amount,
-      account: account.address.b256Address,
+      account: requiredBalanceAccount,
     }));
 
     if (!requiredBalances.length) {
       requiredBalances.push({
         assetId: await provider.getBaseAssetId(),
         amount: bn(0),
-        account: account.address.b256Address,
+        account: requiredBalanceAccount,
       });
     }
 
@@ -548,5 +565,9 @@ export class BaseInvocationScope<TReturn = any> {
       // eslint-disable-next-line no-param-reassign
       transactionRequest.maxFee = feeForGasPrice;
     }
+  }
+
+  private isConnectedAccountPredicate(account: AbstractAccount): account is Predicate {
+    return 'bytes' in account && 'predicateData' in account;
   }
 }
