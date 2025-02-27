@@ -49,7 +49,7 @@
     "@fuel-ts/program": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
-    "@fuels/vm-asm": "0.58.2",
+    "@fuels/vm-asm": "0.59.1",
     "ramda": "0.30.1"
   },
   "devDependencies": {

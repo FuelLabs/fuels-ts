@@ -18,6 +18,7 @@ const transactionRequest = new ScriptTransactionRequest({
   tip: bn(10),
   witnessLimit: 900,
   maxFee: bn(2000),
+  expiration: 200,
 });
 
 // Set the script main function arguments

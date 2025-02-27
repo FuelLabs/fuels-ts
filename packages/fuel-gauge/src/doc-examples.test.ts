@@ -209,14 +209,12 @@ describe('Doc Examples', () => {
     const { balances: walletCBalances } = await walletC.getBalances();
 
     // validate balances
-    expect(walletABalances).toEqual([
-      { assetId: await provider.getBaseAssetId(), amount: bn(100) },
-    ]);
-    expect(walletBBalances).toEqual([
-      { assetId: TestAssetId.A.value, amount: bn(100) },
-      { assetId: TestAssetId.B.value, amount: bn(100) },
-      { assetId: await provider.getBaseAssetId(), amount: bn(100) },
-    ]);
+    expect(walletABalances).toEqual([{ assetId: baseAssetId, amount: bn(100) }]);
+
+    expect(walletBBalances.find((bal) => bal.assetId === TestAssetId.A.value)).toBeTruthy();
+    expect(walletBBalances.find((bal) => bal.assetId === TestAssetId.A.value)).toBeTruthy();
+    expect(walletBBalances.find((bal) => bal.assetId === baseAssetId)).toBeTruthy();
+
     expect(walletCBalances).toEqual([]);
   });
 

@@ -25,7 +25,7 @@ const { error } = await safeExec(async () =>
 );
 
 // #region send-and-spend-funds-from-predicates-6
-const errorMessage = `The account(s) sending the transaction don't have enough funds to cover the transaction.`;
+const errorMessage = `Insufficient funds or too many small value coins. Consider combining UTXOs.`;
 // #endregion send-and-spend-funds-from-predicates-6
 
 const actualErrorMessage = (<Error>error).message;

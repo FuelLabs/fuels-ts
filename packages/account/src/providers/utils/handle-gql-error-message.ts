@@ -1,32 +1,33 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { GraphQLError } from 'graphql';
 
-export enum GqlErrorMessage {
-  NOT_ENOUGH_COINS = 'not enough coins to fit the target',
-  MAX_COINS_REACHED = 'max number of coins is reached while trying to fit the target',
+enum GqlErrorMessage {
+  NOT_ENOUGH_COINS_MAX_COINS = 'the target cannot be met due to no coins available or exceeding the \\d+ coin limit.',
+  ASSET_NOT_FOUND = 'resource was not found in table',
 }
 
 type GqlError = { message: string } | GraphQLError;
 
 const mapGqlErrorMessage = (error: GqlError): FuelError => {
-  switch (error.message) {
-    case GqlErrorMessage.NOT_ENOUGH_COINS:
-      return new FuelError(
-        ErrorCode.NOT_ENOUGH_FUNDS,
-        `The account(s) sending the transaction don't have enough funds to cover the transaction.`,
-        {},
-        error
-      );
-    case GqlErrorMessage.MAX_COINS_REACHED:
-      return new FuelError(
-        ErrorCode.MAX_COINS_REACHED,
-        'The account retrieving coins has exceeded the maximum number of coins per asset. Please consider combining your coins into a single UTXO.',
-        {},
-        error
-      );
-    default:
-      return new FuelError(ErrorCode.INVALID_REQUEST, error.message, {}, error);
+  if (new RegExp(GqlErrorMessage.NOT_ENOUGH_COINS_MAX_COINS).test(error.message)) {
+    return new FuelError(
+      ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
+      `Insufficient funds or too many small value coins. Consider combining UTXOs.`,
+      {},
+      error
+    );
   }
+
+  if (new RegExp(GqlErrorMessage.ASSET_NOT_FOUND).test(error.message)) {
+    return new FuelError(
+      ErrorCode.ASSET_NOT_FOUND,
+      `Asset not found for given asset id.`,
+      {},
+      error
+    );
+  }
+
+  return new FuelError(ErrorCode.INVALID_REQUEST, error.message, {}, error);
 };
 
 const mapGqlErrorWithIncompatibleNodeVersion = (

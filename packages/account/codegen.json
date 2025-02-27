@@ -27,7 +27,9 @@
           "U16": "string",
           "U32": "string",
           "U64": "string",
-          "UtxoId": "string"
+          "U128": "string",
+          "UtxoId": "string",
+          "SubId": "string"
         },
         "useTypeImports": true,
         "dedupeOperationSuffix": true,
