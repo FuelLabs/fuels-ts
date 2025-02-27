@@ -13,7 +13,7 @@ const deploy = await CounterFactory.deploy(wallet);
 
 const { contract } = await deploy.waitForResult();
 
-// #region transaction-parameters-6
+// #region transaction-parameters-7
 const txParams: TxParams = {
   // #region transaction-parameters-1
   gasLimit: bn(70935),
@@ -30,17 +30,20 @@ const txParams: TxParams = {
   // #region transaction-parameters-5
   witnessLimit: bn(5000),
   // #endregion transaction-parameters-5
+  // #region transaction-parameters-6
+  expiration: 200,
+  // #endregion transaction-parameters-6
 };
-// #endregion transaction-parameters-6
+// #endregion transaction-parameters-7
 
-// #region transaction-parameters-7
+// #region transaction-parameters-8
 const transactionRequest = new ScriptTransactionRequest({
   script: ScriptSum.bytecode,
   gasLimit: 100,
 });
-// #endregion transaction-parameters-7
+// #endregion transaction-parameters-8
 
-// #region transaction-parameters-8
+// #region transaction-parameters-9
 const { waitForResult } = await contract.functions
   .increment_count(15) //
   .txParams(txParams)
@@ -55,5 +58,5 @@ console.log('Transaction request', transactionRequest);
 console.log('Transaction status', isStatusSuccess);
 console.log('Transaction value', value);
 
-// #endregion transaction-parameters-8
+// #endregion transaction-parameters-9
 // #endregion full
