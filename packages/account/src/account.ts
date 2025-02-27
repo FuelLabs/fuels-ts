@@ -3,6 +3,7 @@ import type { AddressInput, WithAddress } from '@fuel-ts/address';
 import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import type { HashableMessage } from '@fuel-ts/hasher';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { InputType } from '@fuel-ts/transactions';
@@ -620,7 +621,7 @@ export class Account extends AbstractAccount implements WithAddress {
    *
    * @hidden
    */
-  async signMessage(message: string): Promise<string> {
+  async signMessage(message: HashableMessage): Promise<string> {
     if (!this._connector) {
       throw new FuelError(ErrorCode.MISSING_CONNECTOR, 'A connector is required to sign messages.');
     }
