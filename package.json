@@ -86,7 +86,7 @@
     "@typescript-eslint/eslint-plugin": "6.9.1",
     "@typescript-eslint/parser": "6.21.0",
     "@vitest/browser": "3.0.6",
-    "@vitest/coverage-istanbul": "3.0.6",
+    "@vitest/coverage-istanbul": "3.0.5",
     "compare-versions": "6.1.1",
     "coverage-diff": "3.2.0",
     "eslint": "8.57.0",
@@ -121,7 +121,7 @@
     "vite-plugin-json5": "1.1.6",
     "vite-plugin-node-polyfills": "0.23.0",
     "vite-plugin-plain-text": "1.4.2",
-    "vitest": "3.0.6"
+    "vitest": "3.0.5"
   },
   "pnpm": {
     "overrides": {
