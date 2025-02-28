@@ -3,6 +3,10 @@ import { sleep } from '@fuel-ts/utils';
 import { Provider } from './providers';
 import { setupTestProviderAndWallets } from './test-utils';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('control headers', () => {
   afterEach(() => {
     vi.restoreAllMocks();
