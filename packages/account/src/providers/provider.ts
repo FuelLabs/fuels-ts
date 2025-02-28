@@ -159,9 +159,9 @@ type ModifyStringToBN<T> = {
 };
 
 export {
-  TransactionReceiptJson as TransactionReceiptJson,
-  NodeInfoJson as NodeInfoJson,
-  ChainInfoJson as ChainInfoJson,
+  TransactionReceiptJson,
+  NodeInfoJson,
+  ChainInfoJson,
   GasCosts,
   FeeParameters,
   ContractParameters,
