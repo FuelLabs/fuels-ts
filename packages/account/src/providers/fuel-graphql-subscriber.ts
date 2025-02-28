@@ -9,7 +9,15 @@ type FuelGraphQLSubscriberOptions = {
   query: DocumentNode;
   variables?: Record<string, unknown>;
   fetchFn: typeof fetch;
+  operationName: string;
+  onEvent?: (event: FuelGraphqlSubscriberEvent) => void;
 };
+
+export interface FuelGraphqlSubscriberEvent {
+  data: unknown;
+  errors?: { message: string }[];
+  extensions?: Record<string, unknown>;
+}
 
 export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
   public static incompatibleNodeVersionMessage: string | false = false;
@@ -18,12 +26,13 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
   private constructor(private stream: ReadableStreamDefaultReader<Uint8Array>) {}
 
   public static async create(options: FuelGraphQLSubscriberOptions) {
-    const { url, query, variables, fetchFn } = options;
+    const { url, query, variables, fetchFn, operationName, onEvent } = options;
     const response = await fetchFn(`${url}-sub`, {
       method: 'POST',
       body: JSON.stringify({
         query: print(query),
         variables,
+        operationName,
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -35,7 +44,7 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
     const [backgroundStream, resultStream] = response.body!.tee();
 
     // eslint-disable-next-line no-void
-    void this.readInBackground(backgroundStream.getReader());
+    void this.readInBackground(backgroundStream.getReader(), onEvent);
 
     const [errorReader, resultReader] = resultStream.tee().map((stream) => stream.getReader());
 
@@ -49,39 +58,42 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
     return new FuelGraphqlSubscriber(resultReader);
   }
 
-  /**
-   * Reads the stream in the background,
-   * thereby preventing the stream from not being read
-   * if the user ignores the subscription.
-   * Even though the read data is ignored in this function,
-   * it is still available in the other streams
-   * via internal mechanisms related to teeing.
-   */
-  private static async readInBackground(reader: ReadableStreamDefaultReader<Uint8Array>) {
+  public static async readEvent(
+    reader: ReadableStreamDefaultReader<Uint8Array>,
+    parsingLeftover: string = ''
+  ): Promise<{
+    event: FuelGraphqlSubscriberEvent | undefined;
+    done: boolean;
+    parsingLeftover: string;
+  }> {
+    let text = parsingLeftover;
+    const regex = /data:.*\n\n/g;
+
     // eslint-disable-next-line no-constant-condition
     while (true) {
-      const { done } = await reader.read();
-      if (done) {
-        return;
-      }
-    }
-  }
+      const matches = [...text.matchAll(regex)].flatMap((match) => match);
 
-  private events: Array<{ data: unknown; errors?: { message: string }[] }> = [];
-  private parsingLeftover = '';
+      if (matches.length > 0) {
+        try {
+          const event = JSON.parse(matches[0].replace(/^data:/, ''));
 
-  async next(): Promise<IteratorResult<unknown, unknown>> {
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      if (this.events.length > 0) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const { data, errors } = this.events.shift()!;
-        assertGqlResponseHasNoErrors(errors, FuelGraphqlSubscriber.incompatibleNodeVersionMessage);
-        return { value: data, done: false };
+          return {
+            event,
+            done: false,
+            parsingLeftover: text.replace(matches[0], ''),
+          };
+        } catch (e) {
+          throw new FuelError(
+            ErrorCode.STREAM_PARSING_ERROR,
+            `Error while parsing stream data response: ${text}`
+          );
+        }
       }
-      const { value, done } = await this.stream.read();
+
+      const { value, done } = await reader.read();
+
       if (done) {
-        return { value, done };
+        return { event: undefined, done, parsingLeftover: '' };
       }
 
       /**
@@ -96,27 +108,64 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
         .decode(value)
         .replace(':keep-alive-text\n\n', '');
 
-      if (decoded === '') {
-        continue;
+      text += decoded;
+    }
+  }
+
+  /**
+   * Reads the stream in the background,
+   * thereby preventing the stream from not being read
+   * if the user ignores the subscription.
+   * Even though the read data is ignored in this function,
+   * it is still available in the other streams
+   * via internal mechanisms related to teeing.
+   */
+  private static async readInBackground(
+    reader: ReadableStreamDefaultReader<Uint8Array>,
+    onEvent?: (event: FuelGraphqlSubscriberEvent) => void
+  ) {
+    let leftoverText = '';
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      const { event, done, parsingLeftover } = await FuelGraphqlSubscriber.readEvent(
+        reader,
+        leftoverText
+      );
+
+      if (done) {
+        return;
       }
 
-      const text = `${this.parsingLeftover}${decoded}`;
-      const regex = /data:.*\n\n/g;
+      onEvent?.(event as FuelGraphqlSubscriberEvent);
+      leftoverText = parsingLeftover;
+    }
+  }
 
-      const matches = [...text.matchAll(regex)].flatMap((match) => match);
+  private events: Array<FuelGraphqlSubscriberEvent> = [];
 
-      matches.forEach((match) => {
-        try {
-          this.events.push(JSON.parse(match.replace(/^data:/, '')));
-        } catch (e) {
-          throw new FuelError(
-            ErrorCode.STREAM_PARSING_ERROR,
-            `Error while parsing stream data response: ${text}`
-          );
-        }
-      });
+  private parsingLeftover = '';
 
-      this.parsingLeftover = text.replace(matches.join(), '');
+  async next(): Promise<IteratorResult<unknown, unknown>> {
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      if (this.events.length > 0) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const { data, errors } = this.events.shift()!;
+        assertGqlResponseHasNoErrors(errors, FuelGraphqlSubscriber.incompatibleNodeVersionMessage);
+        return { value: data, done: false };
+      }
+
+      const { event, done, parsingLeftover } = await FuelGraphqlSubscriber.readEvent(
+        this.stream,
+        this.parsingLeftover
+      );
+
+      this.parsingLeftover = parsingLeftover;
+
+      if (done) {
+        return { value: undefined, done: true };
+      }
+      this.events.push(event as FuelGraphqlSubscriberEvent);
     }
   }
 

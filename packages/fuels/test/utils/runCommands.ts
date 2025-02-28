@@ -112,6 +112,7 @@ export type InitParams = BaseParams & {
   build?: boolean;
   privateKey?: string;
   fuelCorePort?: string;
+  providerUrl?: string;
 };
 
 export type BuildParams = BaseParams & {
@@ -128,6 +129,7 @@ export async function runInit(params: InitParams) {
     workspace,
     privateKey,
     fuelCorePort,
+    providerUrl,
   } = params;
 
   const flag = (
@@ -163,7 +165,8 @@ export async function runInit(params: InitParams) {
     const config = readFileSync(configPath, 'utf-8');
 
     const search = /(^.*fuelCorePath:.*$)/m;
-    const replace = `$1\n  privateKey: '${privateKey}',`;
+    const providerUrlField = providerUrl ? `  providerUrl: '${providerUrl}',` : '';
+    const replace = `$1\n  privateKey: '${privateKey}',\n${providerUrlField}`;
 
     writeFileSync(configPath, config.replace(search, replace));
   }

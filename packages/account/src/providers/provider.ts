@@ -5,14 +5,13 @@ import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import { InputType, InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
-import type { BytesLike } from '@fuel-ts/utils';
-import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
-import { checkFuelCoreVersionCompatibility, gte, versions } from '@fuel-ts/versions';
+import { arrayify, DateTime, hexlify, isDefined, sleep, type BytesLike } from '@fuel-ts/utils';
+import { checkFuelCoreVersionCompatibility, versions } from '@fuel-ts/versions';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import type { GraphQLClientResponse, GraphQLResponse } from 'graphql-request/src/types';
 import gql from 'graphql-tag';
-import { clone } from 'ramda';
+import { clone, gte } from 'ramda';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
@@ -64,7 +63,7 @@ import {
   getReceiptsWithMissingData,
 } from './utils';
 import type { RetryOptions } from './utils/auto-retry-fetch';
-import { autoRetryFetch } from './utils/auto-retry-fetch';
+import { autoRetryFetch, getWaitDelay } from './utils/auto-retry-fetch';
 import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
@@ -444,6 +443,7 @@ export default class Provider {
   static clearChainAndNodeCaches() {
     Provider.nodeInfoCache = {};
     Provider.chainInfoCache = {};
+    Provider.currentBlockHeightCache = {};
   }
 
   /** @hidden */
@@ -460,6 +460,8 @@ export default class Provider {
   private static chainInfoCache: ChainInfoCache = {};
   /** @hidden */
   private static nodeInfoCache: NodeInfoCache = {};
+  /** @hidden */
+  private static currentBlockHeightCache: Record<string, number> = {};
   /** @hidden */
   private static incompatibleNodeVersionMessage: string = '';
 
@@ -495,8 +497,76 @@ export default class Provider {
         fullRequest = await options.requestMiddleware(fullRequest);
       }
 
-      return options.fetch ? options.fetch(url, fullRequest, options) : fetch(url, fullRequest);
+      const currentBlockHeight = this.currentBlockHeightCache[url.replace(/-sub$/, '')] ?? 0;
+
+      fullRequest.body = fullRequest.body
+        ?.toString()
+        .replace(/}$/, `,"extensions":{"required_fuel_block_height":${currentBlockHeight}}}`);
+
+      let fuelBlockHeightPreconditionFailed = false;
+      let response: Response;
+
+      const blockHeightRetryOptions: RetryOptions = {
+        backoff: 'fixed',
+        maxRetries: 100,
+        baseDelay: 1000,
+      };
+
+      let blockHeightRetryAttempt = 0;
+
+      do {
+        response = await (options.fetch
+          ? options.fetch(url, fullRequest, options)
+          : fetch(url, fullRequest));
+
+        const responseClone = response.clone();
+
+        let gqlResponse: { extensions?: Record<string, unknown>; errors?: { message: string }[] };
+
+        if (url.endsWith('-sub')) {
+          const reader = responseClone.body?.getReader();
+          const { event } = await FuelGraphqlSubscriber.readEvent(
+            reader as ReadableStreamDefaultReader<Uint8Array>
+          );
+
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          gqlResponse = event!;
+        } else {
+          gqlResponse = await responseClone.json();
+        }
+
+        const extensions = gqlResponse.extensions as Record<string, unknown> | undefined;
+
+        if (extensions?.current_fuel_block_height) {
+          Provider.setCurrentBlockHeight(
+            url.replace(/-sub$/, ''),
+            extensions.current_fuel_block_height as number
+          );
+        }
+
+        fuelBlockHeightPreconditionFailed = !!extensions?.fuel_block_height_precondition_failed;
+
+        if (fuelBlockHeightPreconditionFailed) {
+          ++blockHeightRetryAttempt;
+          const sleepTime = getWaitDelay(blockHeightRetryOptions, blockHeightRetryAttempt);
+          await sleep(sleepTime);
+        }
+      } while (fuelBlockHeightPreconditionFailed);
+
+      return response;
     }, retryOptions);
+  }
+
+  private static setCurrentBlockHeight(url: string, height: number | undefined) {
+    if (!height) {
+      return;
+    }
+
+    const currentBlockHeight = this.currentBlockHeightCache[url] ?? 0;
+    if (height <= currentBlockHeight) {
+      return;
+    }
+    this.currentBlockHeightCache[url] = height;
   }
 
   /**
@@ -717,6 +787,7 @@ export default class Provider {
     const executeQuery = (query: DocumentNode, vars: Record<string, unknown>) => {
       const opDefinition = query.definitions.find((x) => x.kind === 'OperationDefinition') as {
         operation: string;
+        name: { kind: 'Name'; value: string };
       };
       const isSubscription = opDefinition?.operation === 'subscription';
 
@@ -726,6 +797,13 @@ export default class Provider {
           query,
           fetchFn: (url, requestInit) => fetchFn(url as string, requestInit, this.options),
           variables: vars,
+          operationName: opDefinition.name.value,
+          onEvent: (event) => {
+            Provider.setCurrentBlockHeight(
+              this.urlWithoutAuth,
+              event.extensions?.current_fuel_block_height as number
+            );
+          },
         });
       }
       return gqlClient.request(query, vars);
