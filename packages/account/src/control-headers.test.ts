@@ -4,6 +4,9 @@ import { Provider } from './providers';
 import { setupTestProviderAndWallets } from './test-utils';
 
 describe('control headers', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   describe('Block-sensitive operations have the current block height included in request', () => {
     test('getCoinsToSpend', async () => {
       using launched = await setupTestProviderAndWallets({
@@ -45,14 +48,14 @@ describe('control headers', () => {
     test('submitAndAwaitStatus', async () => {
       using launched = await setupTestProviderAndWallets({
         nodeOptions: {
-          args: ['--poa-instant', 'false', '--poa-interval-period', '50ms'],
+          args: ['--poa-instant', 'false', '--poa-interval-period', '100ms'],
         },
       });
 
       const { provider } = launched;
 
       // allow for block production
-      await sleep(250);
+      await sleep(200);
 
       const {
         chain: {
@@ -263,6 +266,7 @@ describe('control headers', () => {
 
     fetchSpy.mockClear();
 
+    // need to mock, otherwise fuel_block_height_precondition_failed will be true
     fetchSpy.mockImplementationOnce(() =>
       Promise.resolve(
         new Response(
@@ -332,7 +336,7 @@ describe('control headers', () => {
     });
   });
 
-  test.only('Current block height is tied to node url', async () => {
+  test('Current block height is tied to node url', async () => {
     using launched1 = await setupTestProviderAndWallets({
       nodeOptions: {
         args: ['--poa-instant', 'false', '--poa-interval-period', '50ms'],
@@ -384,5 +388,60 @@ describe('control headers', () => {
     expect(height1).toBeGreaterThan(height2);
   });
 
-  test(`lower block height doesn't override higher block height`, async () => {});
+  test(`lower block height doesn't override higher block height`, async () => {
+    using launched = await setupTestProviderAndWallets();
+
+    const { provider } = launched;
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    const mockedFuelBlockHeight = {
+      value: 100,
+    };
+
+    fetchSpy.mockImplementation(() =>
+      Promise.resolve(
+        new Response(
+          JSON.stringify({
+            data: {
+              coinsToSpend: [],
+            },
+            extensions: {
+              current_fuel_block_height: mockedFuelBlockHeight.value,
+            },
+          }),
+          { headers: { 'Content-Type': 'application/json' } }
+        )
+      )
+    );
+
+    // call to set internal cache of block height to 100
+    await provider.operations.getCoinsToSpend({
+      owner: '0x1',
+      queryPerAsset: [],
+    });
+
+    mockedFuelBlockHeight.value = 50;
+
+    // call which shouldn't set block height to 50
+    // because it's lower than the current block height
+    await provider.operations.getCoinsToSpend({
+      owner: '0x1',
+      queryPerAsset: [],
+    });
+
+    // we're not interested in the first two calls so we clear them
+    fetchSpy.mockClear();
+
+    await provider.operations.getCoinsToSpend({
+      owner: '0x1',
+      queryPerAsset: [],
+    });
+
+    const {
+      extensions: { required_fuel_block_height: height },
+    } = JSON.parse(fetchSpy.mock.calls[0][1]?.body?.toString() as string);
+
+    expect(+height).toEqual(100);
+  });
 });
