@@ -136,8 +136,7 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
         return;
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      onEvent?.(event!);
+      onEvent?.(event as FuelGraphqlSubscriberEvent);
       leftoverText = parsingLeftover;
     }
   }

@@ -443,7 +443,7 @@ export default class Provider {
   static clearChainAndNodeCaches() {
     Provider.nodeInfoCache = {};
     Provider.chainInfoCache = {};
-    Provider.currentBlockHeight = {};
+    Provider.currentBlockHeightCache = {};
   }
 
   /** @hidden */
@@ -461,7 +461,7 @@ export default class Provider {
   /** @hidden */
   private static nodeInfoCache: NodeInfoCache = {};
   /** @hidden */
-  private static currentBlockHeight: Record<string, number> = {};
+  private static currentBlockHeightCache: Record<string, number> = {};
   /** @hidden */
   private static incompatibleNodeVersionMessage: string = '';
 
@@ -497,7 +497,7 @@ export default class Provider {
         fullRequest = await options.requestMiddleware(fullRequest);
       }
 
-      const currentBlockHeight = this.currentBlockHeight[url.replace(/-sub$/, '')] ?? 0;
+      const currentBlockHeight = this.currentBlockHeightCache[url.replace(/-sub$/, '')] ?? 0;
 
       fullRequest.body = fullRequest.body
         ?.toString()
@@ -562,11 +562,11 @@ export default class Provider {
       return;
     }
 
-    const currentBlockHeight = this.currentBlockHeight[url] ?? 0;
+    const currentBlockHeight = this.currentBlockHeightCache[url] ?? 0;
     if (height <= currentBlockHeight) {
       return;
     }
-    this.currentBlockHeight[url] = height;
+    this.currentBlockHeightCache[url] = height;
   }
 
   /**
