@@ -666,7 +666,7 @@ export class Account extends AbstractAccount implements WithAddress {
     if (this._connector) {
       const { onBeforeSend, skipCustomFee = false, data } = connectorOptions;
 
-      const { request, state } = await this.validateTransactionState(transactionRequest, {
+      const request = await this.validateTransactionState(transactionRequest, {
         onBeforeSend,
         skipCustomFee,
       });
@@ -679,7 +679,7 @@ export class Account extends AbstractAccount implements WithAddress {
           cache: await serializeProviderCache(this.provider),
         },
         data,
-        state,
+        state: request.flag.state,
       };
 
       // If the connector is using prepareForSend, the connector will prepare the transaction for the dapp,
@@ -747,34 +747,32 @@ export class Account extends AbstractAccount implements WithAddress {
     }));
   }
 
-  private async validateTransactionState<T extends TransactionRequest>(
-    request: T,
+  private async validateTransactionState(
+    request: TransactionRequest,
     params: FuelConnectorSendTxParams = {}
-  ): Promise<{ request: T; state: FuelConnectorSendTxParams['state'] }> {
+  ): Promise<TransactionRequest> {
     if (params.skipCustomFee) {
       const chainId = await this.provider.getChainId();
       request.updateState(chainId, 'signed');
-      return { request, state: 'signed' };
+      return request;
     }
 
-    const { state, transactionId } = request.flag;
+    const { transactionId } = request.flag;
 
     // If there is no transaction id, then no status is set.
     if (!isDefined(transactionId)) {
-      return { request, state: undefined };
+      return request;
     }
 
     const chainId = await this.provider.getChainId();
-    const calculatedTransactionId = request.getTransactionId(chainId);
+    const currentTransactionId = request.getTransactionId(chainId);
 
     // If the transaction id does not match the transaction id on the request.
     // Then we need to invalidate the transaction status
-    if (transactionId !== calculatedTransactionId) {
+    if (transactionId !== currentTransactionId) {
       request.updateState(chainId);
-      return { request, state: undefined };
     }
-
-    return { request, state };
+    return request;
   }
 
   /** @hidden * */
