@@ -15,7 +15,7 @@ describe('control headers', () => {
     test('getCoinsToSpend', async () => {
       using launched = await setupTestProviderAndWallets({
         nodeOptions: {
-          args: ['--poa-instant', 'false', '--poa-interval-period', '50ms'],
+          args: ['--poa-instant', 'false', '--poa-interval-period', '100ms'],
         },
       });
 
@@ -27,7 +27,7 @@ describe('control headers', () => {
       const baseAssetId = await provider.getBaseAssetId();
 
       // allow for block production
-      await sleep(250);
+      await sleep(210);
 
       const {
         chain: {
@@ -59,7 +59,7 @@ describe('control headers', () => {
       const { provider } = launched;
 
       // allow for block production
-      await sleep(200);
+      await sleep(210);
 
       const {
         chain: {
