@@ -666,7 +666,7 @@ export class Account extends AbstractAccount implements WithAddress {
     if (this._connector) {
       const { onBeforeSend, skipCustomFee = false, data } = connectorOptions;
 
-      const request = await this.validateTransactionState(transactionRequest, {
+      const request = await this.prepareTransactionForSend(transactionRequest, {
         onBeforeSend,
         skipCustomFee,
       });
@@ -747,7 +747,8 @@ export class Account extends AbstractAccount implements WithAddress {
     }));
   }
 
-  private async validateTransactionState(
+  /** @hidden */
+  private async prepareTransactionForSend(
     request: TransactionRequest,
     params: FuelConnectorSendTxParams = {}
   ): Promise<TransactionRequest> {
