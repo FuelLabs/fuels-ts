@@ -4,7 +4,7 @@ import type { BN, BNInput } from '@fuel-ts/math';
 import type { Input, Output, Transaction, TransactionType } from '@fuel-ts/transactions';
 
 import type { GqlSuccessStatusFragment } from '../__generated__/operations';
-import type { SerializedTransactionReceipt } from '../provider';
+import type { TransactionReceiptJson } from '../provider';
 import type { TransactionResultReceipt } from '../transaction-response';
 
 export type SubmittedStatus = {
@@ -19,7 +19,7 @@ export type SuccessStatus = {
   block?: {
     id: string;
   };
-  receipts: SerializedTransactionReceipt[];
+  receipts: TransactionReceiptJson[];
   totalGas: string;
   totalFee: string;
 };
@@ -31,7 +31,7 @@ export type FailureStatus = {
   block?: {
     id: string;
   };
-  receipts: SerializedTransactionReceipt[];
+  receipts: TransactionReceiptJson[];
   totalGas: string;
   totalFee: string;
 };

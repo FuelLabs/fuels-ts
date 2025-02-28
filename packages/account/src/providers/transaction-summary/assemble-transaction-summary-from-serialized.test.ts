@@ -1,17 +1,17 @@
 import { setupTestProviderAndWallets } from '../../test-utils';
 import { ScriptTransactionRequest } from '../transaction-request';
 import { normalizeJSON } from '../utils';
-import type { SerializedTransactionSummary } from '../utils/serialization';
+import type { TransactionSummaryJson } from '../utils/serialization';
 
 import { assembleTransactionSummary } from './assemble-transaction-summary';
-import { assembleTransactionSummaryFromSerialized } from './assemble-transaction-summary-from-serialized';
+import { assembleTransactionSummaryFromJson } from './assemble-transaction-summary-from-serialized';
 
 /**
  * @group node
  * @group browser
  */
-describe('assembleTransactionSummaryFromSerialized', () => {
-  it('should assemble transaction summary from serialized', async () => {
+describe('assembleTransactionSummaryFromJson', () => {
+  it('should assemble transaction summary from JSON', async () => {
     using launched = await setupTestProviderAndWallets();
     const {
       provider,
@@ -56,13 +56,13 @@ describe('assembleTransactionSummaryFromSerialized', () => {
     });
 
     // Assembled the summary from the serialized data
-    const serializedSummary: SerializedTransactionSummary = {
+    const serializedSummary: TransactionSummaryJson = {
       id: request.getTransactionId(chainId),
       transactionBytes: request.toTransactionBytes(),
       gasPrice: txCost.gasPrice.toString(),
       receipts: txCost.rawReceipts,
     };
-    const assembledSummary = await assembleTransactionSummaryFromSerialized({
+    const assembledSummary = await assembleTransactionSummaryFromJson({
       provider,
       transactionSummary: serializedSummary,
     });

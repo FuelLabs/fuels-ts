@@ -45,7 +45,7 @@ import { TransactionResponse } from './transaction-response';
 import type { SubmittedStatus } from './transaction-summary/types';
 import * as gasMod from './utils/gas';
 import { serializeProviderCache } from './utils/serialization';
-import type { SerializedProviderCache } from './utils/serialization';
+import type { ProviderCacheJson } from './utils/serialization';
 
 const getCustomFetch =
   (expectedOperationName: string, expectedResponse: object) =>
@@ -2637,7 +2637,7 @@ describe('Provider', () => {
     using launched = await setupTestProviderAndWallets();
     const { provider: sourceProvider } = launched;
 
-    const cache: SerializedProviderCache = await serializeProviderCache(sourceProvider);
+    const cache: ProviderCacheJson = await serializeProviderCache(sourceProvider);
     Provider.clearChainAndNodeCaches();
 
     // When: we create a new provider with the same url, but with a cache

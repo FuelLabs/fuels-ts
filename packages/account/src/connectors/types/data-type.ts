@@ -3,8 +3,8 @@ import type { RequireAtLeastOne } from 'type-fest';
 
 import type { TransactionRequest, TransactionStateFlag } from '../../providers';
 import type {
-  SerializedProviderCache,
-  SerializedTransactionSummary,
+  ProviderCacheJson,
+  TransactionSummaryJson,
 } from '../../providers/utils/serialization';
 
 /**
@@ -57,10 +57,10 @@ export type FuelConnectorSendTxParams = {
   onBeforeSend?: (txRequest: TransactionRequest) => Promise<TransactionRequest>;
   provider?: {
     url: string;
-    cache?: SerializedProviderCache;
+    cache?: ProviderCacheJson;
   };
   data?: {
-    transactionSummary?: SerializedTransactionSummary;
+    transactionSummary?: TransactionSummaryJson;
     estimatedGasPrice?: string;
     latestGasPrice?: string;
   };

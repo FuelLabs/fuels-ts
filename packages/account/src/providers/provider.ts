@@ -16,9 +16,9 @@ import { clone } from 'ramda';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
-  GqlReceiptFragment as SerializedTransactionReceipt,
-  GqlNodeInfoFragment as SerializedNodeInfo,
-  GqlChainInfoFragment as SerializedChainInfo,
+  GqlReceiptFragment as TransactionReceiptJson,
+  GqlNodeInfoFragment as NodeInfoJson,
+  GqlChainInfoFragment as ChainInfoJson,
   GqlConsensusParametersVersion,
   GqlContractParameters as ContractParameters,
   GqlDryRunFailureStatusFragment,
@@ -67,7 +67,7 @@ import {
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
 import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
-import type { SerializedProviderCache } from './utils/serialization';
+import type { ProviderCacheJson } from './utils/serialization';
 import {
   deserializeChain,
   deserializeNodeInfo,
@@ -97,7 +97,7 @@ export type CallResult = {
 export type EstimateTxDependenciesReturns = CallResult & {
   outputVariables: number;
   missingContractIds: string[];
-  rawReceipts: SerializedTransactionReceipt[];
+  rawReceipts: TransactionReceiptJson[];
 };
 
 /**
@@ -159,9 +159,9 @@ type ModifyStringToBN<T> = {
 };
 
 export {
-  SerializedTransactionReceipt,
-  SerializedNodeInfo,
-  SerializedChainInfo,
+  TransactionReceiptJson as TransactionReceiptJson,
+  NodeInfoJson as NodeInfoJson,
+  ChainInfoJson as ChainInfoJson,
   GasCosts,
   FeeParameters,
   ContractParameters,
@@ -218,7 +218,7 @@ export type TransactionCost = {
   minFee: BN;
   maxFee: BN;
   maxGas: BN;
-  rawReceipts: SerializedTransactionReceipt[];
+  rawReceipts: TransactionReceiptJson[];
   receipts: TransactionResultReceipt[];
   outputVariables: number;
   missingContractIds: string[];
@@ -250,8 +250,8 @@ export type CursorPaginationArgs = {
 
 export type ProviderCache = {
   consensusParametersTimestamp?: number;
-  chain: SerializedChainInfo;
-  nodeInfo: SerializedNodeInfo;
+  chain: ChainInfoJson;
+  nodeInfo: NodeInfoJson;
 };
 
 /*
@@ -290,7 +290,7 @@ export type ProviderOptions = {
   /**
    * The cache can be passed in to avoid re-fetching the chain + node info.
    */
-  cache?: SerializedProviderCache;
+  cache?: ProviderCacheJson;
 };
 
 /**
@@ -1013,7 +1013,7 @@ export default class Provider {
       };
     }
 
-    let rawReceipts: SerializedTransactionReceipt[] = [];
+    let rawReceipts: TransactionReceiptJson[] = [];
     let receipts: TransactionResultReceipt[] = [];
     const missingContractIds: string[] = [];
     let outputVariables = 0;
@@ -1382,7 +1382,7 @@ export default class Provider {
       gasPrice,
     });
 
-    let rawReceipts: SerializedTransactionReceipt[] = [];
+    let rawReceipts: TransactionReceiptJson[] = [];
     let receipts: TransactionResultReceipt[] = [];
     let dryRunStatus: DryRunStatus | undefined;
     let missingContractIds: string[] = [];

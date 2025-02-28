@@ -4,7 +4,7 @@ import type {
   DryRunStatus,
   EstimateTxDependenciesReturns,
   TransactionResultReceipt,
-  SerializedTransactionReceipt,
+  TransactionReceiptJson,
 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
@@ -238,7 +238,7 @@ describe('dry-run-multiple-txs', () => {
 
     // request 2 we dry run it 4 times to add the 3 output variables
     expect(estimatedRequests[1]).toStrictEqual<EstimateTxDependenciesReturns>({
-      rawReceipts: expect.any(Array<SerializedTransactionReceipt>),
+      rawReceipts: expect.any(Array<TransactionReceiptJson>),
       receipts: expect.any(Array<TransactionResultReceipt>),
       missingContractIds: [],
       outputVariables: 3,
@@ -252,7 +252,7 @@ describe('dry-run-multiple-txs', () => {
 
     // request 3 we dry run it 3 times to add the 2 output variables (1 was already present)
     expect(estimatedRequests[2]).toStrictEqual<EstimateTxDependenciesReturns>({
-      rawReceipts: expect.any(Array<SerializedTransactionReceipt>),
+      rawReceipts: expect.any(Array<TransactionReceiptJson>),
       receipts: expect.any(Array<TransactionResultReceipt>),
       missingContractIds: [],
       outputVariables: 2,
@@ -266,7 +266,7 @@ describe('dry-run-multiple-txs', () => {
 
     // request 4 we dry run it 1 time because it has reverted
     expect(estimatedRequests[3]).toStrictEqual<EstimateTxDependenciesReturns>({
-      rawReceipts: expect.any(Array<SerializedTransactionReceipt>),
+      rawReceipts: expect.any(Array<TransactionReceiptJson>),
       receipts: expect.any(Array<TransactionResultReceipt>),
       missingContractIds: [],
       outputVariables: 0,

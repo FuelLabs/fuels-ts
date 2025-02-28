@@ -2,7 +2,7 @@ import type { ReceiptPanic, ReceiptRevert } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
 import { FAILED_TRANSFER_TO_ADDRESS_SIGNAL } from '@fuel-ts/transactions/configs';
 
-import type { SerializedTransactionReceipt } from '../provider';
+import type { TransactionReceiptJson } from '../provider';
 import type { TransactionResultReceipt } from '../transaction-response';
 
 import { deserializeReceipt } from './serialization';
@@ -44,5 +44,5 @@ export const getReceiptsWithMissingData = (receipts: Array<TransactionResultRece
 
 /** @deprecated Use `deserializeReceipt` instead. */
 export const assembleReceiptByType = (
-  gqlReceipt: SerializedTransactionReceipt
+  gqlReceipt: TransactionReceiptJson
 ): TransactionResultReceipt => deserializeReceipt(gqlReceipt);

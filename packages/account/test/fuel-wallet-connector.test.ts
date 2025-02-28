@@ -19,7 +19,7 @@ import { Fuel } from '../src/connectors/fuel';
 import type { FuelConnectorSendTxParams } from '../src/connectors/types';
 import { FuelConnectorEventType } from '../src/connectors/types';
 import { Provider, ScriptTransactionRequest, TransactionStatus } from '../src/providers';
-import type { SerializedTransactionSummary } from '../src/providers/utils/serialization';
+import type { TransactionSummaryJson } from '../src/providers/utils/serialization';
 import { serializeProviderCache } from '../src/providers/utils/serialization';
 import { setupTestProviderAndWallets, TestMessage } from '../src/test-utils';
 import { Wallet } from '../src/wallet';
@@ -753,7 +753,7 @@ describe('Fuel Connector', () => {
 
     // Create summary
     const chainId = await provider.getChainId();
-    const transactionSummary: SerializedTransactionSummary = {
+    const transactionSummary: TransactionSummaryJson = {
       id: request.getTransactionId(chainId),
       transactionBytes: request.toTransactionBytes(),
       receipts: txCost.rawReceipts,
@@ -940,7 +940,7 @@ describe('Fuel Connector', () => {
 
     // Create summary
     const chainId = await provider.getChainId();
-    const transactionSummary: SerializedTransactionSummary = {
+    const transactionSummary: TransactionSummaryJson = {
       id: request.getTransactionId(chainId),
       transactionBytes: request.toTransactionBytes(),
       receipts: txCost.rawReceipts,

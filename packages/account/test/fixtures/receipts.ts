@@ -1,7 +1,7 @@
 import { GqlReceiptType } from '../../src/providers/__generated__/operations';
-import type { SerializedTransactionReceipt } from '../../src/providers/provider';
+import type { TransactionReceiptJson } from '../../src/providers/provider';
 
-export const MOCK_GQL_RECEIPT_FRAGMENT: SerializedTransactionReceipt = {
+export const MOCK_GQL_RECEIPT_FRAGMENT: TransactionReceiptJson = {
   receiptType: GqlReceiptType.Call,
   pc: '15488',
   is: '15488',
@@ -31,7 +31,7 @@ export const MOCK_GQL_RECEIPT_FRAGMENT: SerializedTransactionReceipt = {
   subId: '0x0000000000000000000000000000000000000000000000000000000000000000',
 };
 
-export const MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS: SerializedTransactionReceipt = {
+export const MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS: TransactionReceiptJson = {
   ...MOCK_GQL_RECEIPT_FRAGMENT,
   to: null,
   toAddress: '0xfc69a2f25c26312fbecc7fce531eca80a2d315482c03fbc00d36b5cf065a0ac3',

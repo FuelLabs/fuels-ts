@@ -2,13 +2,13 @@ import { bn } from '@fuel-ts/math';
 import { TransactionCoder } from '@fuel-ts/transactions';
 
 import type { Provider } from '../..';
-import { deserializeReceipt, type SerializedTransactionSummary } from '../utils/serialization';
+import { deserializeReceipt, type TransactionSummaryJson } from '../utils/serialization';
 
 import { assembleTransactionSummary } from './assemble-transaction-summary';
 
-export const assembleTransactionSummaryFromSerialized = async (opts: {
+export const assembleTransactionSummaryFromJson = async (opts: {
   provider: Provider;
-  transactionSummary: SerializedTransactionSummary;
+  transactionSummary: TransactionSummaryJson;
 }) => {
   const { provider, transactionSummary } = opts;
   const { id, transactionBytes, gasPrice, receipts } = transactionSummary;

@@ -23,9 +23,9 @@ import { GqlReceiptType } from '../__generated__/operations';
 import type {
   ChainInfo,
   NodeInfo,
-  SerializedChainInfo,
-  SerializedNodeInfo,
-  SerializedTransactionReceipt,
+  ChainInfoJson,
+  NodeInfoJson,
+  TransactionReceiptJson,
 } from '../provider';
 import type Provider from '../provider';
 import type { TransactionResultReceipt } from '../transaction-response';
@@ -36,21 +36,21 @@ export interface ProviderCache {
   nodeInfo: NodeInfo;
 }
 
-export interface SerializedProviderCache {
+export interface ProviderCacheJson {
   consensusParametersTimestamp?: number;
-  chain: SerializedChainInfo;
-  nodeInfo: SerializedNodeInfo;
+  chain: ChainInfoJson;
+  nodeInfo: NodeInfoJson;
 }
 
-export interface SerializedTransactionSummary {
+export interface TransactionSummaryJson {
   id: string;
   transactionBytes: Uint8Array;
-  receipts: SerializedTransactionReceipt[];
+  receipts: TransactionReceiptJson[];
   gasPrice: string;
 }
 
 /** @hidden */
-export const deserializeChain = (chain: SerializedChainInfo): ChainInfo => {
+export const deserializeChain = (chain: ChainInfoJson): ChainInfo => {
   const { name, daHeight, consensusParameters } = chain;
 
   const {
@@ -109,7 +109,7 @@ export const deserializeChain = (chain: SerializedChainInfo): ChainInfo => {
 };
 
 /** @hidden */
-export const serializeChain = (chain: ChainInfo): SerializedChainInfo => {
+export const serializeChain = (chain: ChainInfo): ChainInfoJson => {
   const { name, baseChainHeight, consensusParameters } = chain;
 
   const {
@@ -168,7 +168,7 @@ export const serializeChain = (chain: ChainInfo): SerializedChainInfo => {
 };
 
 /** @hidden */
-export const deserializeNodeInfo = (nodeInfo: SerializedNodeInfo): NodeInfo => {
+export const deserializeNodeInfo = (nodeInfo: NodeInfoJson): NodeInfo => {
   const { maxDepth, maxTx, nodeVersion, utxoValidation, vmBacktrace } = nodeInfo;
 
   return {
@@ -181,7 +181,7 @@ export const deserializeNodeInfo = (nodeInfo: SerializedNodeInfo): NodeInfo => {
 };
 
 /** @hidden */
-export const serializeNodeInfo = (nodeInfo: NodeInfo): SerializedNodeInfo => {
+export const serializeNodeInfo = (nodeInfo: NodeInfo): NodeInfoJson => {
   const { maxDepth, maxTx, nodeVersion, utxoValidation, vmBacktrace } = nodeInfo;
 
   return {
@@ -194,16 +194,14 @@ export const serializeNodeInfo = (nodeInfo: NodeInfo): SerializedNodeInfo => {
 };
 
 /** @hidden */
-export const deserializeProviderCache = (cache: SerializedProviderCache): ProviderCache => ({
+export const deserializeProviderCache = (cache: ProviderCacheJson): ProviderCache => ({
   consensusParametersTimestamp: cache.consensusParametersTimestamp,
   chain: deserializeChain(cache.chain),
   nodeInfo: deserializeNodeInfo(cache.nodeInfo),
 });
 
 /** @hidden */
-export const serializeProviderCache = async (
-  provider: Provider
-): Promise<SerializedProviderCache> => ({
+export const serializeProviderCache = async (provider: Provider): Promise<ProviderCacheJson> => ({
   consensusParametersTimestamp: provider.consensusParametersTimestamp,
   chain: serializeChain(await provider.getChain()),
   nodeInfo: serializeNodeInfo(await provider.getNode()),
@@ -212,9 +210,7 @@ export const serializeProviderCache = async (
 const hexOrZero = (hex?: string | null) => hex || ZeroBytes32;
 
 /** @hidden */
-export const deserializeReceipt = (
-  receipt: SerializedTransactionReceipt
-): TransactionResultReceipt => {
+export const deserializeReceipt = (receipt: TransactionReceiptJson): TransactionResultReceipt => {
   const { receiptType } = receipt;
 
   switch (receiptType) {
