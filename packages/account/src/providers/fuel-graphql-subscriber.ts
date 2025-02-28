@@ -10,6 +10,7 @@ type FuelGraphQLSubscriberOptions = {
   variables?: Record<string, unknown>;
   fetchFn: typeof fetch;
   operationName: string;
+  onEvent?: (event: FuelGraphqlSubscriberEvent) => void;
 };
 
 export interface FuelGraphqlSubscriberEvent {
@@ -25,7 +26,7 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
   private constructor(private stream: ReadableStreamDefaultReader<Uint8Array>) {}
 
   public static async create(options: FuelGraphQLSubscriberOptions) {
-    const { url, query, variables, fetchFn, operationName } = options;
+    const { url, query, variables, fetchFn, operationName, onEvent } = options;
     const response = await fetchFn(`${url}-sub`, {
       method: 'POST',
       body: JSON.stringify({
@@ -43,7 +44,7 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
     const [backgroundStream, resultStream] = response.body!.tee();
 
     // eslint-disable-next-line no-void
-    void this.readInBackground(backgroundStream.getReader());
+    void this.readInBackground(backgroundStream.getReader(), onEvent);
 
     const [errorReader, resultReader] = resultStream.tee().map((stream) => stream.getReader());
 
@@ -119,13 +120,25 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
    * it is still available in the other streams
    * via internal mechanisms related to teeing.
    */
-  private static async readInBackground(reader: ReadableStreamDefaultReader<Uint8Array>) {
+  private static async readInBackground(
+    reader: ReadableStreamDefaultReader<Uint8Array>,
+    onEvent?: (event: FuelGraphqlSubscriberEvent) => void
+  ) {
+    let leftoverText = '';
     // eslint-disable-next-line no-constant-condition
     while (true) {
-      const { done } = await reader.read();
+      const { event, done, parsingLeftover } = await FuelGraphqlSubscriber.readEvent(
+        reader,
+        leftoverText
+      );
+
       if (done) {
         return;
       }
+
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      onEvent?.(event!);
+      leftoverText = parsingLeftover;
     }
   }
 
@@ -150,11 +163,10 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
 
       this.parsingLeftover = parsingLeftover;
 
-      this.events.push(event as FuelGraphqlSubscriberEvent);
-
       if (done) {
         return { value: undefined, done: true };
       }
+      this.events.push(event as FuelGraphqlSubscriberEvent);
     }
   }
 

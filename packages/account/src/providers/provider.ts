@@ -443,6 +443,7 @@ export default class Provider {
   static clearChainAndNodeCaches() {
     Provider.nodeInfoCache = {};
     Provider.chainInfoCache = {};
+    Provider.currentBlockHeight = {};
   }
 
   /** @hidden */
@@ -535,14 +536,12 @@ export default class Provider {
         }
 
         const extensions = gqlResponse.extensions as Record<string, unknown> | undefined;
-        console.log(extensions);
 
         if (extensions?.current_fuel_block_height) {
-          console.log('setting to', extensions.current_fuel_block_height);
-          this.currentBlockHeight = {
-            ...this.currentBlockHeight,
-            [url.replace(/-sub$/, '')]: extensions.current_fuel_block_height as number,
-          };
+          Provider.setCurrentBlockHeight(
+            url.replace(/-sub$/, ''),
+            extensions.current_fuel_block_height as number
+          );
         }
 
         fuelBlockHeightPreconditionFailed = !!extensions?.fuel_block_height_precondition_failed;
@@ -556,6 +555,18 @@ export default class Provider {
 
       return response;
     }, retryOptions);
+  }
+
+  private static setCurrentBlockHeight(url: string, height: number | undefined) {
+    if (!height) {
+      return;
+    }
+
+    const currentBlockHeight = this.currentBlockHeight[url] ?? 0;
+    if (height <= currentBlockHeight) {
+      return;
+    }
+    this.currentBlockHeight[url] = height;
   }
 
   /**
@@ -787,6 +798,12 @@ export default class Provider {
           fetchFn: (url, requestInit) => fetchFn(url as string, requestInit, this.options),
           variables: vars,
           operationName: opDefinition.name.value,
+          onEvent: (event) => {
+            Provider.setCurrentBlockHeight(
+              this.urlWithoutAuth,
+              event.extensions?.current_fuel_block_height as number
+            );
+          },
         });
       }
       return gqlClient.request(query, vars);
