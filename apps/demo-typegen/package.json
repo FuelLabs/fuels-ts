@@ -4,6 +4,7 @@
   "description": "Simple demo using Typegen generated types",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
+    "pretest": "run-s build:forc build:types",
     "build:forc": "run-p forc:*",
     "forc:contract": "pnpm fuels-forc build -p demo-contract --release",
     "forc:script": "pnpm fuels-forc build -p demo-script --release",
