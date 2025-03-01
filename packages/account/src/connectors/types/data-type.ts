@@ -61,8 +61,6 @@ export type FuelConnectorSendTxParams = {
   };
   data?: {
     transactionSummary?: TransactionSummaryJson;
-    estimatedGasPrice?: string;
-    latestGasPrice?: string;
   };
   state?: TransactionStateFlag['state'];
 };
