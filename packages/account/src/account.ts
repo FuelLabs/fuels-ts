@@ -666,10 +666,7 @@ export class Account extends AbstractAccount implements WithAddress {
     if (this._connector) {
       const { onBeforeSend, skipCustomFee = false, data } = connectorOptions;
 
-      transactionRequest = await this.prepareTransactionForSend(transactionRequest, {
-        onBeforeSend,
-        skipCustomFee,
-      });
+      transactionRequest = await this.prepareTransactionForSend(transactionRequest);
 
       const params: FuelConnectorSendTxParams = {
         onBeforeSend,
@@ -748,16 +745,7 @@ export class Account extends AbstractAccount implements WithAddress {
   }
 
   /** @hidden */
-  private async prepareTransactionForSend(
-    request: TransactionRequest,
-    params: FuelConnectorSendTxParams = {}
-  ): Promise<TransactionRequest> {
-    if (params.skipCustomFee) {
-      const chainId = await this.provider.getChainId();
-      request.updateState(chainId, 'signed');
-      return request;
-    }
-
+  private async prepareTransactionForSend(request: TransactionRequest): Promise<TransactionRequest> {
     const { transactionId } = request.flag;
 
     // If there is no transaction id, then no status is set.

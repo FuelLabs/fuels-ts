@@ -34,7 +34,7 @@ async function setupConnector() {
  * @group browser
  */
 describe('Fuel Connector', () => {
-  it('should ensure sendTransaction [not funded, not signed]', async () => {
+  it('should ensure sendTransaction [not funded]', async () => {
     using launched = await setupConnector();
     const {
       account,
@@ -62,7 +62,7 @@ describe('Fuel Connector', () => {
     expect(signSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('should ensure sendTransaction [funded, not signed]', async () => {
+  it('should ensure sendTransaction [funded]', async () => {
     using launched = await setupConnector();
     const {
       account,
@@ -95,43 +95,6 @@ describe('Fuel Connector', () => {
     expect(estimateSpy).toHaveBeenCalledTimes(0);
     expect(fundSpy).toHaveBeenCalledTimes(0);
     expect(signSpy).toHaveBeenCalledTimes(1);
-  });
-
-  it('should ensure sendTransaction [funded, signed]', async () => {
-    using launched = await setupConnector();
-    const {
-      account,
-      connector,
-      wallets: [sender],
-    } = launched;
-
-    // Create the request
-    const request = new ScriptTransactionRequest();
-    const baseAssetId = await sender.provider.getBaseAssetId();
-    const resources = await sender.getResourcesToSpend([{ assetId: baseAssetId, amount: 1000 }]);
-    request.addResources(resources);
-
-    // Estimate and fund
-    await request.estimateAndFund(sender);
-
-    // Sign the transaction
-    const signature = await sender.signTransaction(request);
-    await request.updateWitnessByOwner(sender.address, signature);
-
-    const estimateSpy = vi.spyOn(connector, 'getTransactionCost');
-    const fundSpy = vi.spyOn(connector, 'fund');
-    const signSpy = vi.spyOn(connector, 'signTransaction');
-
-    // Send our transaction
-    const transactionId = await account.sendTransaction(request, {
-      skipCustomFee: true, // Signed
-    });
-
-    // Ensure that the connector doesn't use the estimate, fund or sign methods
-    expect(transactionId).toBeDefined();
-    expect(estimateSpy).toHaveBeenCalledTimes(0);
-    expect(fundSpy).toHaveBeenCalledTimes(0);
-    expect(signSpy).toHaveBeenCalledTimes(0);
   });
 
   it('should invalidate transaction status', async () => {

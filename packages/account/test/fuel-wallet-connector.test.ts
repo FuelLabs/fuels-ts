@@ -958,7 +958,8 @@ describe('Fuel Connector', () => {
         url: provider.url,
         cache: await serializeProviderCache(provider),
       },
-      state: 'signed',
+      state: 'funded',
+      data: undefined,
     };
     expect(connectorPrepareForSendSpy).toHaveBeenCalledWith(address, request, expectedParams);
     expect(providerSendTransactionSpy).toHaveBeenCalled();

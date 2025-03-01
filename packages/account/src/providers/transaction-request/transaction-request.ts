@@ -102,7 +102,7 @@ type ToBaseTransactionResponse = Pick<
 export type TransactionStateFlag =
   | { state: undefined; transactionId: undefined }
   | {
-      state: 'funded' | 'signed';
+      state: 'funded';
       transactionId: string;
     };
 

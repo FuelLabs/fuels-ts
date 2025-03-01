@@ -4,6 +4,7 @@ import type {
   AccountSendTxParams,
   ScriptTransactionRequest,
   TransactionStateFlag,
+  TransactionResponse,
 } from '../../src';
 
 import { MockConnector } from './mocked-connector';
@@ -13,7 +14,7 @@ export class MockSendTransactionConnector extends MockConnector {
     _address: string,
     _transaction: TransactionRequestLike,
     _params: AccountSendTxParams
-  ) {
+  ): Promise<string | TransactionResponse> {
     const wallet = this._wallets.find((w) => w.address.toString() === _address);
     if (!wallet) {
       throw new Error('Wallet is not found!');
@@ -23,12 +24,12 @@ export class MockSendTransactionConnector extends MockConnector {
     const flags: TransactionStateFlag = transaction.flag;
 
     // Fund
-    if (flags.state !== 'funded' && flags.state !== 'signed') {
+    if (flags.state !== 'funded') {
       await transaction.estimateAndFund(wallet);
     }
 
     // Sign
-    if (flags.state !== 'signed') {
+    if (!_params.skipCustomFee) {
       const signature = await wallet.signTransaction(transaction);
       await transaction.updateWitnessByOwner(wallet.address, signature);
     }
