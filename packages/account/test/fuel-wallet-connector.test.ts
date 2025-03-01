@@ -18,7 +18,7 @@ import { TESTNET_NETWORK_URL } from '../src/configs';
 import { Fuel } from '../src/connectors/fuel';
 import type { FuelConnectorSendTxParams } from '../src/connectors/types';
 import { FuelConnectorEventType } from '../src/connectors/types';
-import { Provider, ScriptTransactionRequest, TransactionStatus } from '../src/providers';
+import { Provider, ScriptTransactionRequest, TransactionResponse, TransactionStatus } from '../src/providers';
 import type { TransactionSummaryJson } from '../src/providers/utils/serialization';
 import { serializeProviderCache } from '../src/providers/utils/serialization';
 import { setupTestProviderAndWallets, TestMessage } from '../src/test-utils';
@@ -1063,6 +1063,7 @@ describe('Fuel Connector', () => {
 
     const tx = await account.sendTransaction(request, params);
     expect(tx).toBeDefined();
+    expect(tx).toBeInstanceOf(TransactionResponse);
 
     // transaction prepared via connector and sent via provider
     const expectedParams: FuelConnectorSendTxParams = {
@@ -1076,7 +1077,7 @@ describe('Fuel Connector', () => {
     expect(connectorPrepareForSendSpy).toHaveBeenCalledWith(address, request, expectedParams);
     expect(providerSendTransactionSpy).toHaveBeenCalled();
     // not sent via connector
-    expect(connectorSendTransactionSpy).not.toHaveBeenCalled();
+    expect(connectorSendTransactionSpy).toHaveBeenCalled();
   });
 
   it('assembles tx result from connector account [w/o prepareForSend]', async () => {

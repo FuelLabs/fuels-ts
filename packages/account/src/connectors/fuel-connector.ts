@@ -4,7 +4,7 @@ import type { HashableMessage } from '@fuel-ts/hasher';
 import { EventEmitter } from 'events';
 
 import type { Asset } from '../assets/types';
-import type { TransactionRequestLike } from '../providers';
+import type { TransactionRequest, TransactionRequestLike, TransactionResponse } from '../providers';
 
 import { FuelConnectorEventTypes } from './types';
 import type {
@@ -48,13 +48,14 @@ interface Connector {
     address: string,
     transaction: TransactionRequestLike,
     params?: FuelConnectorSendTxParams
-  ): Promise<string>;
+  ): Promise<string | TransactionResponse>;
   // #endregion fuel-connector-method-sendTransaction
   // #region fuel-connector-method-prepareForSend
   prepareForSend(
     address: string,
-    transaction: TransactionRequestLike
-  ): Promise<TransactionRequestLike>;
+    transaction: TransactionRequestLike,
+    params?: FuelConnectorSendTxParams
+  ): Promise<TransactionRequest>;
   // #endregion fuel-connector-method-prepareForSend
   // #region fuel-connector-method-currentAccount
   currentAccount(): Promise<string | null>;
@@ -207,13 +208,13 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @param address - The address to sign the transaction
    * @param transaction - The transaction to send
    * @param params - Optional parameters to send the transaction
-   * @returns The transaction id
+   * @returns The transaction id or transaction response
    */
   async sendTransaction(
     _address: string,
     _transaction: TransactionRequestLike,
     _params?: FuelConnectorSendTxParams
-  ): Promise<string> {
+  ): Promise<string | TransactionResponse> {
     throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
@@ -232,7 +233,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
     _address: string,
     _transaction: TransactionRequestLike,
     _params?: FuelConnectorSendTxParams
-  ): Promise<TransactionRequestLike> {
+  ): Promise<TransactionRequest> {
     throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 

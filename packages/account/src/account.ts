@@ -659,14 +659,14 @@ export class Account extends AbstractAccount implements WithAddress {
     transactionRequestLike: TransactionRequestLike,
     { estimateTxDependencies = true, ...connectorOptions }: AccountSendTxParams = {}
   ): Promise<TransactionResponse> {
-    const transactionRequest = transactionRequestify(transactionRequestLike);
+    let transactionRequest = transactionRequestify(transactionRequestLike);
 
     // Check if the account is using a connector, and therefore we do not have direct access to the
     // private key.
     if (this._connector) {
       const { onBeforeSend, skipCustomFee = false, data } = connectorOptions;
 
-      const request = await this.prepareTransactionForSend(transactionRequest, {
+      transactionRequest = await this.prepareTransactionForSend(transactionRequest, {
         onBeforeSend,
         skipCustomFee,
       });
@@ -679,29 +679,29 @@ export class Account extends AbstractAccount implements WithAddress {
           cache: await serializeProviderCache(this.provider),
         },
         data,
-        state: request.flag.state,
+        state: transactionRequest.flag.state,
       };
 
       // If the connector is using prepareForSend, the connector will prepare the transaction for the dapp,
       // and submission is owned by the dapp. This reduces network requests to submit and create the
       // summary for a tx.
       if (this._connector.usePrepareForSend) {
-        const preparedTransaction = await this._connector.prepareForSend(
+        transactionRequest = await this._connector.prepareForSend(
           this.address.toString(),
-          request,
+          transactionRequest,
           params
         );
-        // Submit the prepared transaction using the provider.
-        return this.provider.sendTransaction(preparedTransaction, {
-          estimateTxDependencies: false,
-        });
       }
 
-      // Otherwise, the connector itself will submit the transaction, and the app will use
-      // the tx id to create the summary, requiring multiple network requests.
-      const txId = await this._connector.sendTransaction(this.address.toString(), request, params);
-      // And return the transaction response for the returned tx id.
-      return this.provider.getTransactionResponse(txId);
+      const transaction: string | TransactionResponse = await this._connector.sendTransaction(
+        this.address.toString(),
+        transactionRequest,
+        params
+      );
+
+      return typeof transaction === 'string'
+        ? this.provider.getTransactionResponse(transaction)
+        : transaction;
     }
 
     if (estimateTxDependencies) {
