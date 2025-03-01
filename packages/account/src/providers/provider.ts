@@ -16,7 +16,9 @@ import { clone } from 'ramda';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
-  GqlChainInfoFragment,
+  GqlReceiptFragment as TransactionReceiptJson,
+  GqlNodeInfoFragment as NodeInfoJson,
+  GqlChainInfoFragment as ChainInfoJson,
   GqlConsensusParametersVersion,
   GqlContractParameters as ContractParameters,
   GqlDryRunFailureStatusFragment,
@@ -58,7 +60,6 @@ import {
 } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse, getDecodedLogs } from './transaction-response';
-import { processGqlReceipt } from './transaction-summary/receipt';
 import {
   calculateGasFee,
   extractTxError,
@@ -68,6 +69,13 @@ import {
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
 import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
+import type { ProviderCacheJson } from './utils/serialization';
+import {
+  deserializeChain,
+  deserializeNodeInfo,
+  deserializeProviderCache,
+  deserializeReceipt,
+} from './utils/serialization';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
 const MAX_RETRIES = 10;
@@ -91,6 +99,7 @@ export type CallResult = {
 export type EstimateTxDependenciesReturns = CallResult & {
   outputVariables: number;
   missingContractIds: string[];
+  rawReceipts: TransactionReceiptJson[];
 };
 
 /**
@@ -152,6 +161,9 @@ type ModifyStringToBN<T> = {
 };
 
 export {
+  TransactionReceiptJson,
+  NodeInfoJson,
+  ChainInfoJson,
   GasCosts,
   FeeParameters,
   ContractParameters,
@@ -192,6 +204,7 @@ export type NodeInfo = {
   nodeVersion: string;
 };
 
+/** @deprecated This type is no longer used. */
 export type NodeInfoAndConsensusParameters = {
   nodeVersion: string;
   gasPerByte: BN;
@@ -207,6 +220,7 @@ export type TransactionCost = {
   minFee: BN;
   maxFee: BN;
   maxGas: BN;
+  rawReceipts: TransactionReceiptJson[];
   receipts: TransactionResultReceipt[];
   outputVariables: number;
   missingContractIds: string[];
@@ -217,64 +231,6 @@ export type TransactionCost = {
   updateMaxFee?: boolean;
 };
 // #endregion cost-estimation-1
-
-const processGqlChain = (chain: GqlChainInfoFragment): ChainInfo => {
-  const { name, daHeight, consensusParameters } = chain;
-
-  const {
-    contractParams,
-    feeParams,
-    predicateParams,
-    scriptParams,
-    txParams,
-    gasCosts,
-    baseAssetId,
-    chainId,
-    version,
-  } = consensusParameters;
-
-  return {
-    name,
-    baseChainHeight: bn(daHeight),
-    consensusParameters: {
-      version,
-      chainId: bn(chainId),
-      baseAssetId,
-      feeParameters: {
-        version: feeParams.version,
-        gasPerByte: bn(feeParams.gasPerByte),
-        gasPriceFactor: bn(feeParams.gasPriceFactor),
-      },
-      contractParameters: {
-        version: contractParams.version,
-        contractMaxSize: bn(contractParams.contractMaxSize),
-        maxStorageSlots: bn(contractParams.maxStorageSlots),
-      },
-      txParameters: {
-        version: txParams.version,
-        maxInputs: bn(txParams.maxInputs),
-        maxOutputs: bn(txParams.maxOutputs),
-        maxWitnesses: bn(txParams.maxWitnesses),
-        maxGasPerTx: bn(txParams.maxGasPerTx),
-        maxSize: bn(txParams.maxSize),
-        maxBytecodeSubsections: bn(txParams.maxBytecodeSubsections),
-      },
-      predicateParameters: {
-        version: predicateParams.version,
-        maxPredicateLength: bn(predicateParams.maxPredicateLength),
-        maxPredicateDataLength: bn(predicateParams.maxPredicateDataLength),
-        maxGasPerPredicate: bn(predicateParams.maxGasPerPredicate),
-        maxMessageDataLength: bn(predicateParams.maxMessageDataLength),
-      },
-      scriptParameters: {
-        version: scriptParams.version,
-        maxScriptLength: bn(scriptParams.maxScriptLength),
-        maxScriptDataLength: bn(scriptParams.maxScriptDataLength),
-      },
-      gasCosts,
-    },
-  };
-};
 
 /**
  * @hidden
@@ -292,6 +248,12 @@ export type CursorPaginationArgs = {
   last?: number | null;
   /** Backward pagination cursor */
   before?: string | null;
+};
+
+export type ProviderCache = {
+  consensusParametersTimestamp?: number;
+  chain: ChainInfoJson;
+  nodeInfo: NodeInfoJson;
 };
 
 /*
@@ -327,6 +289,10 @@ export type ProviderOptions = {
    * This can be used to add headers, modify the body, etc.
    */
   requestMiddleware?: (request: RequestInit) => RequestInit | Promise<RequestInit>;
+  /**
+   * The cache can be passed in to avoid re-fetching the chain + node info.
+   */
+  cache?: ProviderCacheJson;
 };
 
 /**
@@ -455,6 +421,7 @@ export default class Provider {
     fetch: undefined,
     retryOptions: undefined,
     headers: undefined,
+    cache: undefined,
   };
 
   /**
@@ -506,7 +473,21 @@ export default class Provider {
     };
 
     this.operations = this.createOperations();
-    const { resourceCacheTTL } = this.options;
+    const { resourceCacheTTL, cache } = this.options;
+
+    /**
+     * Re-instantiate chain + node info from the passed in cache
+     */
+    if (cache) {
+      const { consensusParametersTimestamp, chain, nodeInfo } = deserializeProviderCache(cache);
+      this.consensusParametersTimestamp = consensusParametersTimestamp;
+      Provider.chainInfoCache[this.urlWithoutAuth] = chain;
+      Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
+    }
+
+    /**
+     * Instantiate the resource cache (for UTXO's + messages)
+     */
     if (isDefined(resourceCacheTTL)) {
       if (resourceCacheTTL !== -1) {
         this.cache = new ResourceCache(resourceCacheTTL);
@@ -632,17 +613,11 @@ export default class Provider {
     } catch (_err) {
       const data = await this.operations.getChainAndNodeInfo();
 
-      nodeInfo = {
-        maxDepth: bn(data.nodeInfo.maxDepth),
-        maxTx: bn(data.nodeInfo.maxTx),
-        nodeVersion: data.nodeInfo.nodeVersion,
-        utxoValidation: data.nodeInfo.utxoValidation,
-        vmBacktrace: data.nodeInfo.vmBacktrace,
-      };
+      nodeInfo = deserializeNodeInfo(data.nodeInfo);
 
       Provider.setIncompatibleNodeVersionMessage(nodeInfo);
 
-      chain = processGqlChain(data.chain);
+      chain = deserializeChain(data.chain);
 
       Provider.chainInfoCache[this.urlWithoutAuth] = chain;
       Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
@@ -776,13 +751,7 @@ export default class Provider {
   async fetchNode(): Promise<NodeInfo> {
     const { nodeInfo } = await this.operations.getNodeInfo();
 
-    const processedNodeInfo: NodeInfo = {
-      maxDepth: bn(nodeInfo.maxDepth),
-      maxTx: bn(nodeInfo.maxTx),
-      nodeVersion: nodeInfo.nodeVersion,
-      utxoValidation: nodeInfo.utxoValidation,
-      vmBacktrace: nodeInfo.vmBacktrace,
-    };
+    const processedNodeInfo: NodeInfo = deserializeNodeInfo(nodeInfo);
 
     Provider.nodeInfoCache[this.urlWithoutAuth] = processedNodeInfo;
 
@@ -797,7 +766,7 @@ export default class Provider {
   async fetchChain(): Promise<ChainInfo> {
     const { chain } = await this.operations.getChain();
 
-    const processedChain = processGqlChain(chain);
+    const processedChain = deserializeChain(chain);
 
     Provider.chainInfoCache[this.urlWithoutAuth] = processedChain;
 
@@ -945,7 +914,7 @@ export default class Provider {
       utxoValidation: utxoValidation || false,
     });
     const [{ receipts: rawReceipts, status: dryRunStatus }] = dryRunStatuses;
-    const receipts = rawReceipts.map(processGqlReceipt);
+    const receipts = rawReceipts.map(deserializeReceipt);
 
     return { receipts, dryRunStatus };
   }
@@ -1039,12 +1008,14 @@ export default class Provider {
   ): Promise<EstimateTxDependenciesReturns> {
     if (isTransactionTypeCreate(transactionRequest)) {
       return {
+        rawReceipts: [],
         receipts: [],
         outputVariables: 0,
         missingContractIds: [],
       };
     }
 
+    let rawReceipts: TransactionReceiptJson[] = [];
     let receipts: TransactionResultReceipt[] = [];
     const missingContractIds: string[] = [];
     let outputVariables = 0;
@@ -1056,14 +1027,15 @@ export default class Provider {
 
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
       const {
-        dryRun: [{ receipts: rawReceipts, status }],
+        dryRun: [{ receipts: serializedReceipts, status }],
       } = await this.operations.dryRun({
         encodedTransactions: [hexlify(transactionRequest.toTransactionBytes())],
         utxoValidation: false,
         gasPrice: gasPrice.toString(),
       });
 
-      receipts = rawReceipts.map(processGqlReceipt);
+      rawReceipts = serializedReceipts;
+      receipts = serializedReceipts.map(deserializeReceipt);
       dryRunStatus = status;
 
       const { missingOutputVariables, missingOutputContractIds } =
@@ -1093,6 +1065,7 @@ export default class Provider {
     }
 
     return {
+      rawReceipts,
       receipts,
       outputVariables,
       missingContractIds,
@@ -1114,6 +1087,7 @@ export default class Provider {
     transactionRequests: TransactionRequest[]
   ): Promise<EstimateTxDependenciesReturns[]> {
     const results: EstimateTxDependenciesReturns[] = transactionRequests.map(() => ({
+      rawReceipts: [],
       receipts: [],
       outputVariables: 0,
       missingContractIds: [],
@@ -1151,7 +1125,7 @@ export default class Provider {
         const requestIdx = transactionsToProcess[i];
         const { receipts: rawReceipts, status } = dryRunResults.dryRun[i];
         const result = results[requestIdx];
-        result.receipts = rawReceipts.map(processGqlReceipt);
+        result.receipts = rawReceipts.map(deserializeReceipt);
         result.dryRunStatus = status;
         const { missingOutputVariables, missingOutputContractIds } = getReceiptsWithMissingData(
           result.receipts
@@ -1205,7 +1179,7 @@ export default class Provider {
     });
 
     const results = dryRunStatuses.map(({ receipts: rawReceipts, status }) => {
-      const receipts = rawReceipts.map(processGqlReceipt);
+      const receipts = rawReceipts.map(deserializeReceipt);
       return { receipts, dryRunStatus: status };
     });
 
@@ -1348,7 +1322,7 @@ export default class Provider {
     const callResult = dryRunStatuses.map((dryRunStatus) => {
       const { id, receipts, status } = dryRunStatus;
 
-      const processedReceipts = receipts.map(processGqlReceipt);
+      const processedReceipts = receipts.map(deserializeReceipt);
 
       return { id, receipts: processedReceipts, status };
     });
@@ -1410,6 +1384,7 @@ export default class Provider {
       gasPrice,
     });
 
+    let rawReceipts: TransactionReceiptJson[] = [];
     let receipts: TransactionResultReceipt[] = [];
     let dryRunStatus: DryRunStatus | undefined;
     let missingContractIds: string[] = [];
@@ -1423,7 +1398,7 @@ export default class Provider {
         await signatureCallback(txRequestClone);
       }
 
-      ({ receipts, missingContractIds, outputVariables, dryRunStatus } =
+      ({ rawReceipts, receipts, missingContractIds, outputVariables, dryRunStatus } =
         await this.estimateTxDependencies(txRequestClone, { gasPrice }));
 
       if (dryRunStatus && 'reason' in dryRunStatus) {
@@ -1443,6 +1418,7 @@ export default class Provider {
     }
 
     return {
+      rawReceipts,
       receipts,
       gasUsed,
       gasPrice,
