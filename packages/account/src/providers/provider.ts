@@ -540,29 +540,26 @@ export default class Provider {
 
       const responseClone = response.clone();
 
-      let gqlResponse: {
-        extensions?: {
-          current_fuel_block_height?: number;
-          fuel_block_height_precondition_failed: boolean;
-        };
+      let extensions: {
+        current_fuel_block_height?: number;
+        fuel_block_height_precondition_failed: boolean;
       };
 
       if (url.endsWith('-sub')) {
         const reader = responseClone.body?.getReader() as ReadableStreamDefaultReader<Uint8Array>;
         const { event } = await FuelGraphqlSubscriber.readEvent(reader);
 
-        gqlResponse = event as typeof gqlResponse;
+        extensions = event?.extensions as typeof extensions;
       } else {
-        gqlResponse = await responseClone.json();
+        extensions = (await responseClone.json()).extensions;
       }
 
       Provider.setCurrentBlockHeight(
         url.replace(/-sub$/, ''),
-        gqlResponse.extensions?.current_fuel_block_height
+        extensions?.current_fuel_block_height
       );
 
-      blockHeightPreconditionFailed =
-        !!gqlResponse.extensions?.fuel_block_height_precondition_failed;
+      blockHeightPreconditionFailed = !!extensions?.fuel_block_height_precondition_failed;
 
       if (blockHeightPreconditionFailed && retryAttempt < retryOptions.maxRetries) {
         ++retryAttempt;
