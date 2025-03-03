@@ -613,10 +613,16 @@ type Header {
   Hash of the application header.
   """
   applicationHash: Bytes32!
+
+  """
+  Transaction ID Commitment
+  """
+  txIdCommitment: Bytes32
 }
 
 enum HeaderVersion {
   V1
+  V2
 }
 
 type HeavyOperation {
@@ -817,6 +823,7 @@ type Mutation {
     txs: [HexString!]!
     utxoValidation: Boolean
     gasPrice: U64
+    blockHeight: U32
   ): [DryRunTransactionExecutionStatus!]!
 
   """
@@ -1032,6 +1039,16 @@ type Query {
   Estimate the predicate gas for the provided transaction
   """
   estimatePredicates(tx: HexString!): Transaction!
+
+  """
+  Returns all possible receipts for test purposes.
+  """
+  allReceipts: [Receipt!]!
+
+  """
+  Get execution trace for an already-executed block.
+  """
+  storageReadReplay(height: U32!): [StorageReadReplayEvent!]!
 
   """
   Returns true when the GraphQL API is serving requests.
@@ -1278,6 +1295,12 @@ type StateTransitionBytecode {
 
 type StateTransitionPurpose {
   root: Bytes32!
+}
+
+type StorageReadReplayEvent {
+  column: U32!
+  key: HexString!
+  value: HexString
 }
 
 scalar SubId
