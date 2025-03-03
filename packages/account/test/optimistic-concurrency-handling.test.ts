@@ -1,101 +1,44 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { sleep } from '@fuel-ts/utils';
 
-import { Provider } from './providers';
-import { setupTestProviderAndWallets } from './test-utils';
+import { Provider } from '../src/providers';
+import { setupTestProviderAndWallets } from '../src/test-utils';
 
 /**
  * @group node
  * @group browser
  */
-describe('control headers', () => {
+describe('optimistic concurrency handling via block height', () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
-  describe('Block-sensitive operations have the current block height included in request', () => {
-    test('getCoinsToSpend', async () => {
-      using launched = await setupTestProviderAndWallets({
-        nodeOptions: {
-          args: ['--poa-instant', 'false', '--poa-interval-period', '100ms'],
-        },
-      });
 
-      const {
-        provider,
-        wallets: [wallet],
-      } = launched;
+  test(`operations that aren't block-sensitive don't include the required block in request`, async () => {
+    using launched = await setupTestProviderAndWallets();
 
-      const baseAssetId = await provider.getBaseAssetId();
+    const { provider } = launched;
 
-      // allow for block production
-      await sleep(210);
+    const fetchSpy = vi.spyOn(global, 'fetch');
 
-      const {
-        chain: {
-          latestBlock: { height },
-        },
-      } = await provider.operations.getLatestBlockHeight();
+    await provider.operations.getChain();
 
-      const fetchSpy = vi.spyOn(global, 'fetch');
+    const body = JSON.parse(fetchSpy.mock.calls[0][1]?.body?.toString() as string);
 
-      await provider.operations.getCoinsToSpend({
-        owner: wallet.address.toB256(),
-        queryPerAsset: { amount: '10', assetId: baseAssetId },
-      });
-
-      const body = JSON.parse(fetchSpy.mock.calls[0][1]?.body?.toString() as string);
-
-      expect(body).toMatchObject({
-        extensions: { required_fuel_block_height: +height },
-      });
-    });
-
-    test('submitAndAwaitStatus', async () => {
-      using launched = await setupTestProviderAndWallets({
-        nodeOptions: {
-          args: ['--poa-instant', 'false', '--poa-interval-period', '100ms'],
-        },
-      });
-
-      const { provider } = launched;
-
-      // allow for block production
-      await sleep(210);
-
-      const {
-        chain: {
-          latestBlock: { height },
-        },
-      } = await provider.operations.getLatestBlockHeight();
-
-      const fetchSpy = vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
-        const responseObject = {
-          data: {
-            submitAndAwaitStatus: {
-              type: 'SuccessStatus',
-              time: 'data: 4611686020137152060',
-            },
-          },
-        };
-        const streamedResponse = new TextEncoder().encode(
-          `data:${JSON.stringify(responseObject)}\n\n`
-        );
-        return Promise.resolve(new Response(streamedResponse));
-      });
-
-      await provider.operations.submitAndAwaitStatus({ encodedTransaction: '' });
-
-      const body = JSON.parse(fetchSpy.mock.calls[0][1]?.body?.toString() as string);
-
-      expect(body).toMatchObject({
-        extensions: { required_fuel_block_height: +height },
-      });
-    });
+    expect(body.extensions?.required_fuel_block_height).toBeUndefined();
   });
 
-  test('waits when current block height is higher than actual', async () => {
+  test(`waits when current block height is higher than actual and within node's tolerance`, async () => {
     using launched = await setupTestProviderAndWallets({
       nodeOptions: {
-        args: ['--poa-instant', 'false', '--poa-interval-period', '50ms'],
+        args: [
+          '--poa-instant',
+          'false',
+          '--poa-interval-period',
+          '50ms',
+          '--graphql-required-block-height-tolerance',
+          '10', // this is the default value but we're setting it explicitly for clarity
+        ],
       },
     });
 
@@ -138,12 +81,6 @@ describe('control headers', () => {
       queryPerAsset: { amount: '10', assetId: baseAssetId },
     });
 
-    const body = JSON.parse(fetchSpy.mock.calls[0][1]?.body?.toString() as string);
-
-    expect(body).toMatchObject({
-      extensions: { required_fuel_block_height: expectedHeight },
-    });
-
     const {
       chain: {
         latestBlock: { height: newBlockHeight },
@@ -153,7 +90,7 @@ describe('control headers', () => {
     expect(+newBlockHeight).toBeGreaterThanOrEqual(expectedHeight);
   });
 
-  test('waits when current block height is higher than actual and node rejects block height', async () => {
+  test(`waits when current block height is higher than actual and outside node's tolerance`, async () => {
     using launched = await setupTestProviderAndWallets({
       nodeOptions: {
         args: [
@@ -202,12 +139,6 @@ describe('control headers', () => {
       queryPerAsset: { amount: '10', assetId: baseAssetId },
     });
 
-    const body = JSON.parse(fetchSpy.mock.calls[0][1]?.body?.toString() as string);
-
-    expect(body).toMatchObject({
-      extensions: { required_fuel_block_height: expectedHeight },
-    });
-
     const {
       chain: {
         latestBlock: { height: newBlockHeight },
@@ -216,6 +147,63 @@ describe('control headers', () => {
 
     expect(+newBlockHeight).toBeGreaterThanOrEqual(expectedHeight);
   });
+
+  test('throws when retries are exceeded', async () => {
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: [
+          '--poa-instant',
+          'false',
+          '--poa-interval-period',
+          `100s`,
+          '--graphql-required-block-height-tolerance',
+          '0',
+        ],
+      },
+    });
+
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const baseAssetId = await provider.getBaseAssetId();
+
+    const {
+      chain: {
+        latestBlock: { height },
+      },
+    } = await provider.operations.getLatestBlockHeight();
+
+    const expectedHeight = +height + 10_000;
+
+    const fetchSpy = vi.spyOn(global, 'fetch').mockImplementationOnce((url, request) => {
+      // we're mocking it to modify the required_fuel_block_height
+      // but we still want the real fetch to be called
+      // hence why we reset immediately and return the real fetch call in the end
+      fetchSpy.mockReset();
+
+      const body = JSON.parse(request?.body?.toString() as string);
+      body.extensions.required_fuel_block_height = expectedHeight;
+
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      request!.body = JSON.stringify(body);
+
+      return fetch(url, request);
+    });
+
+    await expectToThrowFuelError(
+      () =>
+        provider.operations.getCoinsToSpend({
+          owner: wallet.address.toB256(),
+          queryPerAsset: { amount: '10', assetId: baseAssetId },
+        }),
+      new FuelError(
+        ErrorCode.INVALID_REQUEST,
+        `The required fuel block height is higher than the current block height. Required: ${expectedHeight}, Current: 0`
+      )
+    );
+  }, 20_000);
 
   test('new subscription events update block height', async () => {
     using launched = await setupTestProviderAndWallets();
@@ -266,7 +254,7 @@ describe('control headers', () => {
     await provider.operations.submitAndAwaitStatus({ encodedTransaction: '' });
 
     // allow for background processing
-    await sleep(250);
+    await sleep(150);
 
     fetchSpy.mockClear();
 
@@ -302,7 +290,7 @@ describe('control headers', () => {
   test(`Clearing cache sets block height to 0`, async () => {
     using launched = await setupTestProviderAndWallets({
       nodeOptions: {
-        args: ['--poa-instant', 'false', '--poa-interval-period', '50ms'],
+        args: ['--poa-instant', 'false', '--poa-interval-period', '100ms'],
       },
     });
 
@@ -313,8 +301,8 @@ describe('control headers', () => {
 
     const baseAssetId = await provider.getBaseAssetId();
 
-    // allow for block height to increase
-    await sleep(250);
+    // allow for block production
+    await sleep(210);
 
     const {
       chain: {
@@ -399,8 +387,10 @@ describe('control headers', () => {
 
     const fetchSpy = vi.spyOn(global, 'fetch');
 
+    const expectedBlockHeight = 100;
+
     const mockedFuelBlockHeight = {
-      value: 100,
+      value: expectedBlockHeight,
     };
 
     fetchSpy.mockImplementation(() =>
@@ -434,9 +424,6 @@ describe('control headers', () => {
       queryPerAsset: [],
     });
 
-    // we're not interested in the first two calls so we clear them
-    fetchSpy.mockClear();
-
     await provider.operations.getCoinsToSpend({
       owner: '0x1',
       queryPerAsset: [],
@@ -444,8 +431,8 @@ describe('control headers', () => {
 
     const {
       extensions: { required_fuel_block_height: height },
-    } = JSON.parse(fetchSpy.mock.calls[0][1]?.body?.toString() as string);
+    } = JSON.parse(fetchSpy.mock.calls[2][1]?.body?.toString() as string);
 
-    expect(+height).toEqual(100);
+    expect(+height).toEqual(expectedBlockHeight);
   });
 });

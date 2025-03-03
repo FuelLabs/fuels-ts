@@ -432,6 +432,13 @@ type SdkOperations = Omit<Operations, 'statusChange' | 'submitAndAwaitStatus'> &
   getBlobs: (variables: { blobIds: string[] }) => Promise<{ blob: { id: string } | null }[]>;
 };
 
+const BLOCK_HEIGHT_SENSITIVE_OPERATIONS: Array<keyof SdkOperations> = [
+  'submit',
+  'statusChange',
+  'getCoinsToSpend',
+  'submitAndAwaitStatus',
+];
+
 /**
  * A provider for connecting to a node
  */
@@ -497,64 +504,76 @@ export default class Provider {
         fullRequest = await options.requestMiddleware(fullRequest);
       }
 
-      const currentBlockHeight = this.currentBlockHeightCache[url.replace(/-sub$/, '')] ?? 0;
-
-      fullRequest.body = fullRequest.body
+      const operationName = fullRequest.body
         ?.toString()
-        .replace(/}$/, `,"extensions":{"required_fuel_block_height":${currentBlockHeight}}}`);
+        .match(/"operationName":"(.+)"/)?.[1] as keyof SdkOperations;
 
-      let fuelBlockHeightPreconditionFailed = false;
-      let response: Response;
+      if (BLOCK_HEIGHT_SENSITIVE_OPERATIONS.includes(operationName)) {
+        const currentBlockHeight = this.currentBlockHeightCache[url.replace(/-sub$/, '')] ?? 0;
 
-      const blockHeightRetryOptions: RetryOptions = {
-        backoff: 'fixed',
-        maxRetries: 100,
-        baseDelay: 1000,
+        fullRequest.body = fullRequest.body
+          ?.toString()
+          .replace(/}$/, `,"extensions":{"required_fuel_block_height":${currentBlockHeight}}}`);
+      }
+
+      return Provider.fetchAndProcessBlockHeight(url, fullRequest, options);
+    }, retryOptions);
+  }
+
+  private static async fetchAndProcessBlockHeight(
+    url: string,
+    request: RequestInit,
+    options: ProviderOptions
+  ): Promise<Response> {
+    let response: Response;
+    let blockHeightPreconditionFailed = false;
+
+    const retryOptions: RetryOptions = {
+      maxRetries: 5,
+      baseDelay: 500,
+    };
+
+    let retryAttempt = 0;
+
+    do {
+      response = await (options.fetch ? options.fetch(url, request, options) : fetch(url, request));
+
+      const responseClone = response.clone();
+
+      let gqlResponse: {
+        extensions?: {
+          current_fuel_block_height?: number;
+          fuel_block_height_precondition_failed: boolean;
+        };
       };
 
-      let blockHeightRetryAttempt = 0;
+      if (url.endsWith('-sub')) {
+        const reader = responseClone.body?.getReader() as ReadableStreamDefaultReader<Uint8Array>;
+        const { event } = await FuelGraphqlSubscriber.readEvent(reader);
 
-      do {
-        response = await (options.fetch
-          ? options.fetch(url, fullRequest, options)
-          : fetch(url, fullRequest));
+        gqlResponse = event as typeof gqlResponse;
+      } else {
+        gqlResponse = await responseClone.json();
+      }
 
-        const responseClone = response.clone();
+      Provider.setCurrentBlockHeight(
+        url.replace(/-sub$/, ''),
+        gqlResponse.extensions?.current_fuel_block_height
+      );
 
-        let gqlResponse: { extensions?: Record<string, unknown>; errors?: { message: string }[] };
+      blockHeightPreconditionFailed =
+        !!gqlResponse.extensions?.fuel_block_height_precondition_failed;
 
-        if (url.endsWith('-sub')) {
-          const reader = responseClone.body?.getReader();
-          const { event } = await FuelGraphqlSubscriber.readEvent(
-            reader as ReadableStreamDefaultReader<Uint8Array>
-          );
+      if (blockHeightPreconditionFailed && retryAttempt < retryOptions.maxRetries) {
+        ++retryAttempt;
+        const sleepTime = getWaitDelay(retryOptions, retryAttempt);
+        await sleep(sleepTime);
+      } else {
+        break;
+      }
+    } while (blockHeightPreconditionFailed);
 
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          gqlResponse = event!;
-        } else {
-          gqlResponse = await responseClone.json();
-        }
-
-        const extensions = gqlResponse.extensions as Record<string, unknown> | undefined;
-
-        if (extensions?.current_fuel_block_height) {
-          Provider.setCurrentBlockHeight(
-            url.replace(/-sub$/, ''),
-            extensions.current_fuel_block_height as number
-          );
-        }
-
-        fuelBlockHeightPreconditionFailed = !!extensions?.fuel_block_height_precondition_failed;
-
-        if (fuelBlockHeightPreconditionFailed) {
-          ++blockHeightRetryAttempt;
-          const sleepTime = getWaitDelay(blockHeightRetryOptions, blockHeightRetryAttempt);
-          await sleep(sleepTime);
-        }
-      } while (fuelBlockHeightPreconditionFailed);
-
-      return response;
-    }, retryOptions);
+    return response;
   }
 
   private static setCurrentBlockHeight(url: string, height: number | undefined) {
