@@ -514,21 +514,27 @@ export default class Provider {
         fullRequest = await options.requestMiddleware(fullRequest);
       }
 
-      const operationName = fullRequest.body
-        ?.toString()
-        .match(/"operationName":"(.+)"/)?.[1] as keyof SdkOperations;
-
-      if (BLOCK_HEIGHT_SENSITIVE_OPERATIONS.includes(operationName)) {
-        const normalizedUrl = url.replace(/-sub$/, '');
-        const currentBlockHeight = this.currentBlockHeightCache[normalizedUrl] ?? 0;
-
-        fullRequest.body = fullRequest.body
-          ?.toString()
-          .replace(/}$/, `,"extensions":{"required_fuel_block_height":${currentBlockHeight}}}`);
-      }
+      Provider.applyBlockHeight(fullRequest, url);
 
       return Provider.fetchAndProcessBlockHeight(url, fullRequest, options);
     }, retryOptions);
+  }
+
+  private static applyBlockHeight(request: RequestInit, url: string) {
+    const operationName = request.body
+      ?.toString()
+      .match(/"operationName":"(.+)"/)?.[1] as keyof SdkOperations;
+
+    if (!BLOCK_HEIGHT_SENSITIVE_OPERATIONS.includes(operationName)) {
+      return;
+    }
+
+    const normalizedUrl = url.replace(/-sub$/, '');
+    const currentBlockHeight = this.currentBlockHeightCache[normalizedUrl] ?? 0;
+
+    request.body = request.body
+      ?.toString()
+      .replace(/}$/, `,"extensions":{"required_fuel_block_height":${currentBlockHeight}}}`);
   }
 
   private static async fetchAndProcessBlockHeight(
