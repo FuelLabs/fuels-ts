@@ -501,4 +501,54 @@ export class BaseInvocationScope<TReturn = any> {
       );
     }
   }
+
+  /**
+   * In case the gasLimit is *not* set by the user, this method sets a default value.
+   */
+  private async setAndValidateGasAndFee(
+    setGasLimit: BN,
+    setMaxFee: BN,
+    estimatedGasUsed: BN,
+    estimatedMaxFee: BN,
+    transactionRequest: ScriptTransactionRequest,
+    gasPrice: BN
+  ) {
+    const gasLimitSpecified = isDefined(this.txParameters?.gasLimit) || this.hasCallParamsGasLimit;
+    const maxFeeSpecified = isDefined(this.txParameters?.maxFee);
+
+    if (gasLimitSpecified) {
+      if (setGasLimit.lt(estimatedGasUsed)) {
+        throw new FuelError(
+          ErrorCode.GAS_LIMIT_TOO_LOW,
+          `Gas limit '${setGasLimit}' is lower than the required: '${estimatedGasUsed}'.`
+        );
+      }
+
+      transactionRequest.gasLimit = setGasLimit;
+    }
+
+    if (maxFeeSpecified) {
+      if (setMaxFee.lt(estimatedMaxFee)) {
+        throw new FuelError(
+          ErrorCode.MAX_FEE_TOO_LOW,
+          `Max fee '${setMaxFee}' is lower than the required: '${estimatedMaxFee}'.`
+        );
+      }
+
+      transactionRequest.maxFee = setMaxFee;
+    }
+
+    if (gasLimitSpecified && !maxFeeSpecified) {
+      const { maxFee: feeForGasPrice } = await this.getProvider().estimateTxGasAndFee({
+        transactionRequest,
+        gasPrice,
+      });
+
+      transactionRequest.maxFee = feeForGasPrice;
+    }
+  }
+
+  private isAccountPredicate(account?: AbstractAccount | null): account is Predicate {
+    return !!account && 'bytes' in account;
+  }
 }
