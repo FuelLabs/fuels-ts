@@ -1198,7 +1198,7 @@ describe('Provider', () => {
     expect(spyOperation).toHaveBeenCalledTimes(1);
   });
 
-  test.only('clearing cache based on URL only clears the cache for that URL', async () => {
+  test('clearing cache based on URL only clears the cache for that URL', async () => {
     using launched1 = await setupTestProviderAndWallets({
       nodeOptions: {
         args: ['--poa-instant', 'false', '--poa-interval-period', '10ms'],
