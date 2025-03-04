@@ -955,8 +955,6 @@ query assembleTx(
     status {
       ...dryRunTransactionStatusFragment
     }
-  }
-  estimateGasPrice(blockHorizon: $blockHorizon) {
     gasPrice
   }
 }

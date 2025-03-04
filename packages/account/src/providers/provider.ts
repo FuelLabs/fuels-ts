@@ -1567,8 +1567,7 @@ export default class Provider {
     const request = params.transactionRequest;
 
     const {
-      assembleTx: { status, transaction: gqlTransaction },
-      estimateGasPrice: { gasPrice },
+      assembleTx: { status, transaction: gqlTransaction, gasPrice },
     } = await this.operations.assembleTx({
       tx: hexlify(request.toTransactionBytes()),
       blockHorizon: String(params.blockHorizon),
