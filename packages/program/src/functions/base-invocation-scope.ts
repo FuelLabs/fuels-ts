@@ -10,14 +10,17 @@ import type {
   TransactionResponse,
   TransactionCost,
   AbstractAccount,
+  Predicate,
+  AssembleTxAccount,
+  AssembleTxRequiredBalances,
 } from '@fuel-ts/account';
 import { ScriptTransactionRequest, Wallet } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import { InputType, TransactionType } from '@fuel-ts/transactions';
-import { isDefined } from '@fuel-ts/utils';
+import { InputType, OutputType, TransactionType } from '@fuel-ts/transactions';
+import { hexlify, isDefined } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
 import { clone } from 'ramda';
 
@@ -268,6 +271,88 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
+   * Costs and funds the underlying transaction request.
+   *
+   * @returns The invocation scope as a funded transaction request.
+   */
+  async assembleTx(): Promise<ScriptTransactionRequest> {
+    let transactionRequest = await this.getTransactionRequest();
+    transactionRequest = clone(transactionRequest);
+
+    const { gasLimit: setGasLimit, maxFee: setMaxFee } = transactionRequest;
+
+    transactionRequest.maxFee = bn(0);
+    transactionRequest.gasLimit = bn(0);
+
+    // Clean coin inputs before add new coins to the request
+    transactionRequest.inputs = transactionRequest.inputs.filter((i) => i.type !== InputType.Coin);
+
+    const provider = this.getProvider();
+    const account: AbstractAccount =
+      this.program.account ?? Wallet.generate({ provider: this.getProvider() });
+
+    const requiredBalanceAccount: AssembleTxAccount = {
+      address: account.address.b256Address,
+    };
+
+    if (this.isAccountPredicate(this.program?.account)) {
+      const predicate = this.program.account;
+      requiredBalanceAccount.predicate = {
+        predicateAddress: predicate.address.b256Address,
+        predicate: hexlify(predicate.bytes),
+        predicateData: hexlify(predicate.getPredicateData()),
+      };
+    }
+
+    const transfers: CoinQuantity[] = transactionRequest.outputs
+      .filter((output) => output.type === OutputType.Coin)
+      .map((output) => ({
+        assetId: String(output.assetId),
+        amount: bn(output.amount),
+      }));
+
+    const requiredBalances: AssembleTxRequiredBalances[] = this.requiredCoins
+      .concat(transfers)
+      .map(({ assetId, amount }) => ({
+        assetId,
+        amount,
+        account: requiredBalanceAccount,
+        changePolicy: { change: requiredBalanceAccount.address },
+      }));
+
+    if (!requiredBalances.length) {
+      requiredBalances.push({
+        assetId: await provider.getBaseAssetId(),
+        amount: bn(0),
+        account: requiredBalanceAccount,
+        changePolicy: { change: requiredBalanceAccount.address },
+      });
+    }
+
+    // eslint-disable-next-line prefer-const
+    let { transactionRequest: assembledRequest, gasPrice } = await provider.assembleTX({
+      blockHorizon: 10,
+      feeAddressIndex: 0,
+      transactionRequest,
+      estimatePredicates: true,
+      requiredBalances,
+    });
+
+    assembledRequest = assembledRequest as ScriptTransactionRequest;
+
+    await this.setAndValidateGasAndFee(
+      setGasLimit,
+      setMaxFee,
+      assembledRequest.gasLimit,
+      assembledRequest.maxFee,
+      assembledRequest,
+      gasPrice
+    );
+
+    return assembledRequest;
+  }
+
+  /**
    * Sets the transaction parameters.
    *
    * @param txParams - The transaction parameters to set.
@@ -371,7 +456,7 @@ export class BaseInvocationScope<TReturn = any> {
   }> {
     assert(this.program.account, 'Wallet is required!');
 
-    const transactionRequest = await this.fundWithRequiredCoins();
+    const transactionRequest = await this.assembleTx();
 
     const response = (await this.program.account.sendTransaction(transactionRequest, {
       estimateTxDependencies: false,
