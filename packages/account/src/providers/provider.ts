@@ -1581,7 +1581,7 @@ export default class Provider {
           amount: amount.toString(10),
           max: maxPerAsset ? maxPerAsset.toString(10) : undefined,
         })),
-      excludedIds: excludeInput,
+      excludeInput,
     };
 
     const result = await this.operations.getCoinsToSpend(coinsQuery);
