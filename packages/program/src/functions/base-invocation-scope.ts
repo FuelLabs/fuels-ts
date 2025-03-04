@@ -290,18 +290,19 @@ export class BaseInvocationScope<TReturn = any> {
     const provider = this.getProvider();
     const account: AbstractAccount =
       this.program.account ?? Wallet.generate({ provider: this.getProvider() });
+    const address = account.address.b256Address;
 
-    const requiredBalanceAccount: AssembleTxAccount = {
-      address: account.address.b256Address,
-    };
+    const requiredBalanceAccount: AssembleTxAccount = {};
 
     if (this.isAccountPredicate(this.program?.account)) {
       const predicate = this.program.account;
       requiredBalanceAccount.predicate = {
-        predicateAddress: predicate.address.b256Address,
+        predicateAddress: address,
         predicate: hexlify(predicate.bytes),
         predicateData: hexlify(predicate.getPredicateData()),
       };
+    } else {
+      requiredBalanceAccount.address = address;
     }
 
     const transfers: CoinQuantity[] = transactionRequest.outputs
@@ -317,7 +318,7 @@ export class BaseInvocationScope<TReturn = any> {
         assetId,
         amount,
         account: requiredBalanceAccount,
-        changePolicy: { change: requiredBalanceAccount.address },
+        changePolicy: { change: address },
       }));
 
     if (!requiredBalances.length) {
@@ -325,7 +326,7 @@ export class BaseInvocationScope<TReturn = any> {
         assetId: await provider.getBaseAssetId(),
         amount: bn(0),
         account: requiredBalanceAccount,
-        changePolicy: { change: requiredBalanceAccount.address },
+        changePolicy: { change: address },
       });
     }
 

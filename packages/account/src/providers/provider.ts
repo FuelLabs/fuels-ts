@@ -133,7 +133,7 @@ export type AssembleTxPredicate = {
 };
 
 export type AssembleTxAccount = {
-  address: string;
+  address?: string;
   predicate?: AssembleTxPredicate;
 };
 
@@ -723,15 +723,15 @@ export default class Provider {
     const { isMajorSupported, isMinorSupported, supportedVersion } =
       checkFuelCoreVersionCompatibility(nodeInfo.nodeVersion);
 
-    if (!isMajorSupported || !isMinorSupported) {
-      Provider.incompatibleNodeVersionMessage = [
-        `The Fuel Node that you are trying to connect to is using fuel-core version ${nodeInfo.nodeVersion}.`,
-        `The TS SDK currently supports fuel-core version ${supportedVersion}.`,
-        `Things may not work as expected.`,
-      ].join('\n');
-      FuelGraphqlSubscriber.incompatibleNodeVersionMessage =
-        Provider.incompatibleNodeVersionMessage;
-    }
+    // if (!isMajorSupported || !isMinorSupported) {
+    //   Provider.incompatibleNodeVersionMessage = [
+    //     `The Fuel Node that you are trying to connect to is using fuel-core version ${nodeInfo.nodeVersion}.`,
+    //     `The TS SDK currently supports fuel-core version ${supportedVersion}.`,
+    //     `Things may not work as expected.`,
+    //   ].join('\n');
+    //   FuelGraphqlSubscriber.incompatibleNodeVersionMessage =
+    //     Provider.incompatibleNodeVersionMessage;
+    // }
   }
 
   /**
