@@ -4,7 +4,12 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
-import { InputType, InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
+import {
+  InputType,
+  InputMessageCoder,
+  TransactionCoder,
+  TransactionType,
+} from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility, gte, versions } from '@fuel-ts/versions';
@@ -31,6 +36,9 @@ import type {
   Requester,
   GqlBlockFragment,
   GqlEstimatePredicatesQuery,
+  GqlRequiredBalance,
+  GqlAccount,
+  GqlDestroy,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -43,9 +51,9 @@ import type {
   TransactionRequestLike,
   TransactionRequest,
   TransactionRequestInput,
-  CoinTransactionRequestInput,
   JsonAbisFromAllCalls,
   ScriptTransactionRequest,
+  CoinTransactionRequestInput,
 } from './transaction-request';
 import {
   isPredicate,
@@ -66,6 +74,7 @@ import {
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
 import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
+import { parseRawInput, parseRawOutput } from './utils/parsers';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
 const MAX_RETRIES = 10;
@@ -115,6 +124,37 @@ export type Block = {
     prevRoot: string;
     applicationHash: string;
   };
+};
+
+export type AssembleTxPredicate = {
+  predicateAddress: string;
+  predicate: BytesLike;
+  predicateData: BytesLike;
+};
+
+export type AssembleTxAccount = {
+  address: string;
+  predicate?: AssembleTxPredicate;
+};
+
+export type AssembleTxRequiredBalances = {
+  assetId: string;
+  amount: BN;
+  account: AssembleTxAccount;
+  changePolicy: {
+    change?: string;
+    destroy?: GqlDestroy;
+  };
+};
+
+export type AssembleTxParams = {
+  transactionRequest: TransactionRequest;
+  blockHorizon: number;
+  requiredBalances: AssembleTxRequiredBalances[];
+  feeAddressIndex: number;
+  excludeInput?: ExcludeResourcesOption;
+  estimatePredicates?: boolean;
+  reserveGas?: number;
 };
 
 export type PageInfo = GqlPageInfo;
@@ -1505,6 +1545,58 @@ export default class Provider {
       dryRunStatus,
       updateMaxFee,
     };
+  }
+
+  async assembleTX(params: AssembleTxParams) {
+    const parsed: GqlRequiredBalance[] = params.requiredBalances.map((balance) => {
+      const { assetId, amount, account, changePolicy } = balance;
+
+      if (account.predicate) {
+        account.predicate.predicateData = hexlify(account.predicate.predicateData);
+        account.predicate.predicateAddress = hexlify(account.predicate.predicateAddress);
+      }
+
+      return {
+        assetId,
+        amount: amount.toString(10),
+        account: account as GqlAccount,
+        changePolicy,
+      };
+    });
+
+    const request = params.transactionRequest;
+
+    const {
+      assembleTx: { status, transaction: gqlTransaction },
+      estimateGasPrice: { gasPrice },
+    } = await this.operations.assembleTx({
+      tx: hexlify(request.toTransactionBytes()),
+      blockHorizon: String(params.blockHorizon),
+      feeAddressIndex: String(params.feeAddressIndex),
+      requiredBalances: parsed,
+      estimatePredicates: params.estimatePredicates,
+    });
+
+    if (status.type === 'DryRunFailureStatus') {
+      const parsedReceipts = status.receipts.map(processGqlReceipt);
+
+      throw this.extractDryRunError(request, parsedReceipts, status);
+    }
+
+    request.witnesses = gqlTransaction.witnesses || request.witnesses;
+
+    request.inputs = gqlTransaction.inputs?.map(parseRawInput) || request.inputs;
+    request.outputs = gqlTransaction.outputs?.map(parseRawOutput) || request.outputs;
+
+    if (gqlTransaction.policies?.maxFee) {
+      request.maxFee = bn(gqlTransaction.policies.maxFee);
+    }
+
+    if (gqlTransaction.scriptGasLimit) {
+      (request as ScriptTransactionRequest).gasLimit = bn(gqlTransaction.scriptGasLimit);
+    }
+
+    return { transactionRequest: request, gasPrice: bn(gasPrice) };
   }
 
   /**
