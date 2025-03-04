@@ -247,6 +247,21 @@ fragment dryRunSuccessStatusFragment on DryRunSuccessStatus {
   }
 }
 
+fragment dryRunFailureAssembleTxFragment on DryRunFailureStatus {
+  type: __typename
+  reason
+  receipts {
+    ...receiptFragment
+  }
+}
+
+fragment dryRunSuccessAssembleTxFragment on DryRunSuccessStatus {
+  type: __typename
+  receipts {
+    ...receiptFragment
+  }
+}
+
 fragment receiptFragment on Receipt {
   id
   pc
@@ -947,7 +962,13 @@ query assembleTx(
       scriptGasLimit
     }
     status {
-      ...dryRunTransactionStatusFragment
+      ... on DryRunFailureStatus {
+        ...dryRunFailureAssembleTxFragment
+      }
+
+      ... on DryRunSuccessStatus {
+        ...dryRunSuccessAssembleTxFragment
+      }
     }
     gasPrice
   }
