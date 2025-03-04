@@ -11,7 +11,7 @@ fragment InputCoinFragment on InputCoin {
   amount
   assetId
   txPointer
-  witnessIndex
+  coinWitnessIndex: witnessIndex
   predicateGasUsed
   predicate
   predicateData
@@ -23,7 +23,7 @@ fragment InputMessageFragment on InputMessage {
   recipient
   amount
   nonce
-  witnessIndex
+  messageWitnessIndex: witnessIndex
   predicateGasUsed
   data
   predicate
