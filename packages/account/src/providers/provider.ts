@@ -2300,14 +2300,14 @@ export default class Provider {
   /**
    * @hidden
    */
-  private extractDryRunError(
-    transactionRequest: ScriptTransactionRequest,
+  public extractDryRunError(
+    transactionRequest: TransactionRequest,
     receipts: TransactionResultReceipt[],
     dryRunStatus: DryRunStatus
   ): FuelError {
     const status = dryRunStatus as DryRunFailureStatusFragment;
     let logs: unknown[] = [];
-    if (transactionRequest.abis) {
+    if (transactionRequest.type === TransactionType.Script && transactionRequest.abis) {
       logs = getDecodedLogs(
         receipts,
         transactionRequest.abis.main,
