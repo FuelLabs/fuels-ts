@@ -1515,7 +1515,7 @@ export default class Provider {
         await this.estimateTxDependencies(txRequestClone, { gasPrice }));
 
       if (dryRunStatus && 'reason' in dryRunStatus) {
-        throw this.extractDryRunError(txRequestClone, receipts, dryRunStatus);
+        throw this.extractDryRunError(txRequestClone, receipts, dryRunStatus.reason);
       }
 
       const { maxGasPerTx } = await this.getGasConfig();
@@ -1579,7 +1579,7 @@ export default class Provider {
     if (status.type === 'DryRunFailureStatus') {
       const parsedReceipts = status.receipts.map(processGqlReceipt);
 
-      throw this.extractDryRunError(request, parsedReceipts, status);
+      throw this.extractDryRunError(request, parsedReceipts, status.reason);
     }
 
     request.witnesses = gqlTransaction.witnesses || request.witnesses;
@@ -2394,9 +2394,8 @@ export default class Provider {
   public extractDryRunError(
     transactionRequest: TransactionRequest,
     receipts: TransactionResultReceipt[],
-    dryRunStatus: DryRunStatus
+    reason: string
   ): FuelError {
-    const status = dryRunStatus as DryRunFailureStatusFragment;
     let logs: unknown[] = [];
     if (transactionRequest.type === TransactionType.Script && transactionRequest.abis) {
       logs = getDecodedLogs(
@@ -2409,7 +2408,7 @@ export default class Provider {
     return extractTxError({
       logs,
       receipts,
-      statusReason: status.reason,
+      statusReason: reason,
     });
   }
 
