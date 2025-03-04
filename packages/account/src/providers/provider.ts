@@ -519,7 +519,8 @@ export default class Provider {
         .match(/"operationName":"(.+)"/)?.[1] as keyof SdkOperations;
 
       if (BLOCK_HEIGHT_SENSITIVE_OPERATIONS.includes(operationName)) {
-        const currentBlockHeight = this.currentBlockHeightCache[url.replace(/-sub$/, '')] ?? 0;
+        const normalizedUrl = url.replace(/-sub$/, '');
+        const currentBlockHeight = this.currentBlockHeightCache[normalizedUrl] ?? 0;
 
         fullRequest.body = fullRequest.body
           ?.toString()
@@ -564,10 +565,7 @@ export default class Provider {
         extensions = (await responseClone.json()).extensions;
       }
 
-      Provider.setCurrentBlockHeight(
-        url.replace(/-sub$/, ''),
-        extensions?.current_fuel_block_height
-      );
+      Provider.setCurrentBlockHeight(url, extensions?.current_fuel_block_height);
 
       blockHeightPreconditionFailed = !!extensions?.fuel_block_height_precondition_failed;
 
@@ -588,10 +586,12 @@ export default class Provider {
       return;
     }
 
-    const currentBlockHeight: number | undefined = this.currentBlockHeightCache[url];
+    const normalizedUrl = url.replace(/-sub$/, '');
+
+    const currentBlockHeight: number | undefined = this.currentBlockHeightCache[normalizedUrl];
 
     if (currentBlockHeight === undefined || height > currentBlockHeight) {
-      this.currentBlockHeightCache[url] = height;
+      this.currentBlockHeightCache[normalizedUrl] = height;
     }
   }
 
