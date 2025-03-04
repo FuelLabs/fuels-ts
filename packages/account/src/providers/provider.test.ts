@@ -1217,13 +1217,13 @@ describe('Provider', () => {
     // allow for block production
     await sleep(200);
 
+    // update block height cache for both providers
     await provider1.getLatestGasPrice();
     await provider2.getLatestGasPrice();
 
     Provider.clearChainAndNodeCaches(provider1.url);
 
-    // verify current block height cache got reset correctly
-
+    // verify block height cache got reset correctly
     const fetchSpy = vi.spyOn(global, 'fetch');
 
     try {
@@ -1248,7 +1248,6 @@ describe('Provider', () => {
     expect(cache2BlockHeight).toBeGreaterThan(0);
 
     // verify nodeInfo and chainInfo caches got reset correctly
-
     const getChainAndNodeInfoSpy1 = vi.spyOn(provider1.operations, 'getChainAndNodeInfo');
     const getChainAndNodeInfoSpy2 = vi.spyOn(provider2.operations, 'getChainAndNodeInfo');
 
