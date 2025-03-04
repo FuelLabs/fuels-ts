@@ -447,7 +447,17 @@ export default class Provider {
   cache?: ResourceCache;
 
   /** @hidden */
-  static clearChainAndNodeCaches() {
+  /**
+   *
+   * @param url If provided, clears cache only for given url
+   */
+  static clearChainAndNodeCaches(url?: string) {
+    if (url) {
+      delete Provider.chainInfoCache[url];
+      delete Provider.nodeInfoCache[url];
+      delete Provider.currentBlockHeightCache[url];
+      return;
+    }
     Provider.nodeInfoCache = {};
     Provider.chainInfoCache = {};
     Provider.currentBlockHeightCache = {};
@@ -574,15 +584,15 @@ export default class Provider {
   }
 
   private static setCurrentBlockHeight(url: string, height: number | undefined) {
-    if (!height) {
+    if (height === undefined) {
       return;
     }
 
-    const currentBlockHeight = this.currentBlockHeightCache[url] ?? 0;
-    if (height <= currentBlockHeight) {
-      return;
+    const currentBlockHeight: number | undefined = this.currentBlockHeightCache[url];
+
+    if (currentBlockHeight === undefined || height > currentBlockHeight) {
+      this.currentBlockHeightCache[url] = height;
     }
-    this.currentBlockHeightCache[url] = height;
   }
 
   /**

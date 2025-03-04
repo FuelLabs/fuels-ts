@@ -25,7 +25,7 @@ import {
 import { mockIncompatibleVersions } from '../../test/utils/mockIncompabileVersions';
 import { setupTestProviderAndWallets, launchNode, TestMessage } from '../test-utils';
 
-import type { GqlPageInfo } from './__generated__/operations';
+import type { GqlPageInfo, GqlSubmitMutation } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { Message } from './message';
 import type { Block, ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
@@ -1196,6 +1196,67 @@ describe('Provider', () => {
     await provider.fetchChainAndNodeInfo();
 
     expect(spyOperation).toHaveBeenCalledTimes(1);
+  });
+
+  test.only('clearing cache based on URL only clears the cache for that URL', async () => {
+    using launched1 = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '10ms'],
+        loggingEnabled: false,
+      },
+    });
+    using launched2 = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '10ms'],
+        loggingEnabled: false,
+      },
+    });
+    const { provider: provider1 } = launched1;
+    const { provider: provider2 } = launched2;
+
+    // allow for block production
+    await sleep(200);
+
+    await provider1.getLatestGasPrice();
+    await provider2.getLatestGasPrice();
+
+    Provider.clearChainAndNodeCaches(provider1.url);
+
+    // verify current block height cache got reset correctly
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    try {
+      await provider1.operations.submit({ encodedTransaction: '0x123' });
+    } catch (error) {
+      //
+    }
+    try {
+      await provider2.operations.submit({ encodedTransaction: '0x123' });
+    } catch (error) {
+      //
+    }
+
+    const {
+      extensions: { required_fuel_block_height: cache1BlockHeight },
+    } = JSON.parse(fetchSpy.mock.calls[0][1]?.body as string);
+    const {
+      extensions: { required_fuel_block_height: cache2BlockHeight },
+    } = JSON.parse(fetchSpy.mock.calls[1][1]?.body as string);
+
+    expect(cache1BlockHeight).toEqual(0);
+    expect(cache2BlockHeight).toBeGreaterThan(0);
+
+    // verify nodeInfo and chainInfo caches got reset correctly
+
+    const getChainAndNodeInfoSpy1 = vi.spyOn(provider1.operations, 'getChainAndNodeInfo');
+    const getChainAndNodeInfoSpy2 = vi.spyOn(provider2.operations, 'getChainAndNodeInfo');
+
+    await provider1.fetchChainAndNodeInfo();
+    await provider2.fetchChainAndNodeInfo();
+
+    expect(getChainAndNodeInfoSpy1).toHaveBeenCalledTimes(1);
+    expect(getChainAndNodeInfoSpy2).toHaveBeenCalledTimes(0);
   });
 
   it('should ensure getGasConfig return essential gas related data', async () => {
