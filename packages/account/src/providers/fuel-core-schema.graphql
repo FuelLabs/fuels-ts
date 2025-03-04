@@ -14,7 +14,17 @@ directive @specifiedBy(
   url: String!
 ) on SCALAR
 
+input Account {
+  address: Address
+  predicate: Predicate
+}
+
 scalar Address
+
+type AssembleTransactionResult {
+  transaction: Transaction!
+  status: DryRunTransactionStatus!
+}
 
 scalar AssetId
 
@@ -147,6 +157,19 @@ type ChangeOutput {
   to: Address!
   amount: U64!
   assetId: AssetId!
+}
+
+input ChangePolicy {
+  """
+  Adds `Output::Change` to the transaction if it is not already present.
+  Sending remaining assets to the provided address.
+  """
+  change: Address
+
+  """
+  Destroys the remaining assets by the transaction for provided address.
+  """
+  destroy: Destroy
 }
 
 type Coin {
@@ -326,6 +349,10 @@ type DaCompressedBlock {
 }
 
 union DependentCost = LightOperation | HeavyOperation
+
+enum Destroy {
+  DESTROY
+}
 
 type DryRunFailureStatus {
   programState: ProgramState
@@ -613,10 +640,16 @@ type Header {
   Hash of the application header.
   """
   applicationHash: Bytes32!
+
+  """
+  Transaction ID Commitment
+  """
+  txIdCommitment: Bytes32
 }
 
 enum HeaderVersion {
   V1
+  V2
 }
 
 type HeavyOperation {
@@ -817,6 +850,7 @@ type Mutation {
     txs: [HexString!]!
     utxoValidation: Boolean
     gasPrice: U64
+    blockHeight: U32
   ): [DryRunTransactionExecutionStatus!]!
 
   """
@@ -937,6 +971,12 @@ type Policies {
   maxFee: U64
 }
 
+input Predicate {
+  predicateAddress: Address!
+  predicate: HexString!
+  predicateData: HexString!
+}
+
 type PredicateParameters {
   version: PredicateParametersVersion!
   maxPredicateLength: U64!
@@ -1029,9 +1069,87 @@ type Query {
   ): TransactionConnection!
 
   """
+  Assembles the transaction based on the provided requirements.
+  The return transaction contains:
+  - Input coins to cover `required_balances`
+  - Input coins to cover the fee of the transaction based on the gas price from `block_horizon`
+  - `Change` or `Destroy` outputs for all assets from the inputs
+  - `Variable` outputs in the case they are required during the execution
+  - `Contract` inputs and outputs in the case they are required during the execution
+  - Reserved witness slots for signed coins filled with `64` zeroes
+  - Set script gas limit(unless `script` is empty)
+  - Estimated predicates, if `estimate_predicates == true`
+
+  Returns an error if:
+  - The number of required balances exceeds the maximum number of inputs allowed.
+  - The fee address index is out of bounds.
+  - The same asset has multiple change policies(either the receiver of
+  the change is different, or one of the policies states about the destruction
+  of the token while the other does not). The `Change` output from the transaction
+  also count as a `ChangePolicy`.
+  - The number of excluded coin IDs exceeds the maximum number of inputs allowed.
+  - Required assets have multiple entries.
+  - If accounts don't have sufficient amounts to cover the transaction requirements in assets.
+  - If a constructed transaction breaks the rules defined by consensus parameters.
+  """
+  assembleTx(
+    """
+    The original transaction that contains application level logic only
+    """
+    tx: HexString!
+
+    """
+    Number of blocks into the future to estimate the gas price for
+    """
+    blockHorizon: U32!
+
+    """
+    The list of required balances for the transaction to include as inputs. The
+    list should be created based on the application-required assets. The base
+    asset requirement should not require assets to cover the transaction fee,
+    which will be calculated and added automatically at the end of the assembly process.
+    """
+    requiredBalances: [RequiredBalance!]!
+
+    """
+    The index from the `required_balances` list that points to the address who
+    pays fee for the transaction. If you only want to cover the fee of
+    transaction, you can set the required balance to 0, set base asset and point
+    to this required address.
+    """
+    feeAddressIndex: U16!
+
+    """
+    The list of resources to exclude from the selection for the inputs
+    """
+    excludeInput: ExcludeInput
+
+    """
+    Perform the estimation of the predicates before cover fee of the transaction
+    """
+    estimatePredicates: Boolean
+
+    """
+    During the phase of the fee calculation, adds `reserve_gas` to the total gas
+    used by the transaction and fetch assets to cover the fee.
+    """
+    reserveGas: U64
+  ): AssembleTransactionResult!
+
+  """
   Estimate the predicate gas for the provided transaction
   """
   estimatePredicates(tx: HexString!): Transaction!
+
+  """
+  Returns all possible receipts for test purposes.
+  """
+  allReceipts: [Receipt!]!
+
+  """
+  Get execution trace for an already-executed block.
+  """
+  storageReadReplay(height: U32!): [StorageReadReplayEvent!]!
 
   """
   Returns true when the GraphQL API is serving requests.
@@ -1212,6 +1330,13 @@ scalar RelayedTransactionId
 
 union RelayedTransactionStatus = RelayedTransactionFailed
 
+input RequiredBalance {
+  assetId: AssetId!
+  amount: U64!
+  account: Account!
+  changePolicy: ChangePolicy!
+}
+
 enum ReturnType {
   RETURN
   RETURN_DATA
@@ -1259,12 +1384,12 @@ input SpendQueryElementInput {
   """
   Target amount for the query.
   """
-  amount: U64!
+  amount: U128!
 
   """
   The maximum number of currencies for selection.
   """
-  max: U32
+  max: U16
 }
 
 type SqueezedOutStatus {
@@ -1278,6 +1403,12 @@ type StateTransitionBytecode {
 
 type StateTransitionPurpose {
   root: Bytes32!
+}
+
+type StorageReadReplayEvent {
+  column: U32!
+  key: HexString!
+  value: HexString
 }
 
 scalar SubId
