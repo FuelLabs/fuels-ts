@@ -231,9 +231,6 @@ fragment dryRunFailureStatusFragment on DryRunFailureStatus {
   totalGas
   totalFee
   reason
-  receipts {
-    ...receiptFragment
-  }
   programState {
     returnType
     data
@@ -244,9 +241,6 @@ fragment dryRunSuccessStatusFragment on DryRunSuccessStatus {
   type: __typename
   totalGas
   totalFee
-  receipts {
-    ...receiptFragment
-  }
   programState {
     returnType
     data
