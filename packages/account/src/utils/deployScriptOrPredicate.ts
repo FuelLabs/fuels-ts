@@ -4,7 +4,7 @@ import { bn } from '@fuel-ts/math';
 import { arrayify } from '@fuel-ts/utils';
 
 import type { Account } from '../account';
-import { BlobTransactionRequest, calculateGasFee, TransactionStatus } from '../providers';
+import { BlobTransactionRequest, resolveAccount, TransactionStatus } from '../providers';
 
 import {
   getBytecodeConfigurableOffset,
@@ -13,31 +13,31 @@ import {
 } from './predicate-script-loader-instructions';
 
 async function fundBlobTx(deployer: Account, blobTxRequest: BlobTransactionRequest) {
-  // Check the account can afford to deploy all chunks and loader
-  let totalCost = bn(0);
-  const chainInfo = await deployer.provider.getChain();
-  const gasPrice = await deployer.provider.estimateGasPrice(10);
-  const priceFactor = chainInfo.consensusParameters.feeParameters.gasPriceFactor;
+  const baseAssetId = await deployer.provider.getBaseAssetId();
 
-  const minGas = blobTxRequest.calculateMinGas(chainInfo);
+  const { transactionRequest } = await deployer.provider.assembleTX({
+    transactionRequest: blobTxRequest,
+    estimatePredicates: true,
+    requiredBalances: [
+      {
+        account: resolveAccount(deployer),
+        amount: bn(0),
+        assetId: baseAssetId,
+        changePolicy: {
+          change: deployer.address.b256Address,
+        },
+      },
+    ],
+    blockHorizon: 10,
+    feeAddressIndex: 0,
+  });
 
-  const minFee = calculateGasFee({
-    gasPrice,
-    gas: minGas,
-    priceFactor,
-    tip: blobTxRequest.tip,
-  }).add(1);
+  return transactionRequest;
 
-  totalCost = totalCost.add(minFee);
-
-  if (totalCost.gt(await deployer.getBalance())) {
-    throw new FuelError(ErrorCode.FUNDS_TOO_LOW, 'Insufficient balance to deploy predicate.');
-  }
-
-  const txCost = await deployer.getTransactionCost(blobTxRequest);
-  // eslint-disable-next-line no-param-reassign
-  blobTxRequest.maxFee = txCost.maxFee;
-  return deployer.fund(blobTxRequest, txCost);
+  // TODO: Consider using a try/catch here to identify not enough funds error and throw the following error
+  // if (totalCost.gt(await deployer.getBalance())) {
+  //   throw new FuelError(ErrorCode.FUNDS_TOO_LOW, 'Insufficient balance to deploy predicate.');
+  // }
 }
 
 function adjustConfigurableOffsets(jsonAbi: JsonAbi, configurableOffsetDiff: number) {
