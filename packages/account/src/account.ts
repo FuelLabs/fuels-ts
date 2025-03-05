@@ -39,6 +39,8 @@ import {
   ScriptTransactionRequest,
   transactionRequestify,
   addAmountToCoinQuantities,
+  resolveAccount,
+  setAndValidateGasAndFee,
 } from './providers';
 import {
   cacheRequestInputsResourcesFromOwner,
@@ -47,7 +49,6 @@ import {
   isRequestInputMessageWithoutData,
   isRequestInputResource,
 } from './providers/transaction-request/helpers';
-import { resolveAccount, setAndValidateGasAndFee } from './providers/utils/assemble-tx-helpers';
 import { mergeQuantities } from './providers/utils/merge-quantities';
 import { AbstractAccount } from './types';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';

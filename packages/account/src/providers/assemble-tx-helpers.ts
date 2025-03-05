@@ -1,13 +1,15 @@
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 import type { BigNumberish, BN } from '@fuel-ts/math';
+import { TransactionType } from '@fuel-ts/transactions';
 import { hexlify, isDefined } from '@fuel-ts/utils';
 
-import type { Account } from '../../account';
-import type { Predicate } from '../../predicate';
-import type { AssembleTxAccount } from '../provider';
-import type Provider from '../provider';
-import { TransactionType, type TransactionRequest } from '../transaction-request';
+import type { Account } from '../account';
+import type { Predicate } from '../predicate';
+
+import type { AssembleTxAccount } from './provider';
+import type Provider from './provider';
+import type { TransactionRequest } from './transaction-request';
 
 export const resolveAccount = (account: Account): AssembleTxAccount => {
   const assembleTxAccount: AssembleTxAccount = {};
