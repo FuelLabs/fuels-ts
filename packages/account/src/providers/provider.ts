@@ -151,6 +151,8 @@ export type GetBlocksResponse = {
   pageInfo: PageInfo;
 };
 
+export type GetAddressTypeResponse = 'Account' | 'Contract' | 'Transaction' | 'Blob' | 'Asset';
+
 /**
  * Deployed Contract bytecode and contract id
  */
@@ -2192,19 +2194,17 @@ export default class Provider {
    * @returns A promise that resolves to the result of the check.
    */
   async isUserAccount(id: string): Promise<boolean> {
-    const { contract, blob, transaction } = await this.operations.isUserAccount({
-      blobId: id,
-      contractId: id,
-      transactionId: id,
-    });
-
-    if (contract || blob || transaction) {
-      return false;
-    }
-    return true;
+    const type = await this.getAddressType(id);
+    return type === 'Account';
   }
 
-  async getAddressType(id: string): Promise<'Account' | 'Contract' | 'Transaction' | 'Blob'> {
+  /**
+   * Determines the type of address based on the provided ID.
+   *
+   * @param id - The ID to be checked.
+   * @returns A promise that resolves to a string indicating the type of address.
+   */
+  async getAddressType(id: string): Promise<GetAddressTypeResponse> {
     const { contract, blob, transaction } = await this.operations.isUserAccount({
       blobId: id,
       contractId: id,
@@ -2220,6 +2220,14 @@ export default class Provider {
     if (transaction) {
       return 'Transaction';
     }
+
+    try {
+      // Unlike the previous queries this one will throw if the ID is not an assetId
+      const asset = await this.getAssetDetails(id);
+      if (asset) {
+        return 'Asset';
+      }
+    } catch (e) {}
 
     return 'Account';
   }
