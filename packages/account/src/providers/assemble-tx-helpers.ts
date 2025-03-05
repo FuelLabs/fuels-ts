@@ -4,14 +4,14 @@ import type { BigNumberish, BN } from '@fuel-ts/math';
 import { TransactionType } from '@fuel-ts/transactions';
 import { hexlify, isDefined } from '@fuel-ts/utils';
 
-import type { Account } from '../account';
 import type { Predicate } from '../predicate';
+import type { AbstractAccount } from '../types';
 
 import type { AssembleTxAccount } from './provider';
 import type Provider from './provider';
 import type { TransactionRequest } from './transaction-request';
 
-export const resolveAccount = (account: Account): AssembleTxAccount => {
+export const resolveAccount = (account: AbstractAccount): AssembleTxAccount => {
   const assembleTxAccount: AssembleTxAccount = {};
   const accountIsPredicate = !!account && 'bytes' in account;
 

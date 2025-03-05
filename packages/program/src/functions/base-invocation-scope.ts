@@ -11,16 +11,15 @@ import type {
   TransactionCost,
   AbstractAccount,
   Predicate,
-  AssembleTxAccount,
   AssembleTxRequiredBalances,
 } from '@fuel-ts/account';
-import { ScriptTransactionRequest, Wallet } from '@fuel-ts/account';
+import { resolveAccount, ScriptTransactionRequest, Wallet } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { InputType, OutputType, TransactionType } from '@fuel-ts/transactions';
-import { hexlify, isDefined } from '@fuel-ts/utils';
+import { isDefined } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
 import { clone } from 'ramda';
 
@@ -288,47 +287,38 @@ export class BaseInvocationScope<TReturn = any> {
     transactionRequest.inputs = transactionRequest.inputs.filter((i) => i.type !== InputType.Coin);
 
     const provider = this.getProvider();
-    const account: AbstractAccount =
-      this.program.account ?? Wallet.generate({ provider: this.getProvider() });
-    const address = account.address.b256Address;
+    const account: AbstractAccount = this.program.account ?? Wallet.generate({ provider });
+    const baseAssetId = await provider.getBaseAssetId();
 
-    const requiredBalanceAccount: AssembleTxAccount = {};
+    const requiredBalancesIndex: Record<string, AssembleTxRequiredBalances> = {};
+    const requiredBalanceAccount = resolveAccount(account);
 
-    if (this.isAccountPredicate(this.program?.account)) {
-      const predicate = this.program.account;
-      requiredBalanceAccount.predicate = {
-        predicateAddress: address,
-        predicate: hexlify(predicate.bytes),
-        predicateData: hexlify(predicate.getPredicateData()),
-      };
-    } else {
-      requiredBalanceAccount.address = address;
+    const allQuantities = transactionRequest.outputs
+      .filter((o) => o.type === OutputType.Coin)
+      .map(({ amount, assetId }) => ({ assetId, amount }))
+      .concat(this.requiredCoins);
+
+    if (!allQuantities.length) {
+      allQuantities.push({ assetId: baseAssetId, amount: bn(0) });
     }
 
-    const transfers: CoinQuantity[] = transactionRequest.outputs
-      .filter((output) => output.type === OutputType.Coin)
-      .map((output) => ({
-        assetId: String(output.assetId),
-        amount: bn(output.amount),
-      }));
+    allQuantities.forEach((quantity) => {
+      const assetId = String(quantity.assetId);
+      const amount = bn(quantity.amount);
 
-    const requiredBalances: AssembleTxRequiredBalances[] = this.requiredCoins
-      .concat(transfers)
-      .map(({ assetId, amount }) => ({
-        assetId,
-        amount,
+      const entry = requiredBalancesIndex[assetId] || {
         account: requiredBalanceAccount,
-        changePolicy: { change: address },
-      }));
-
-    if (!requiredBalances.length) {
-      requiredBalances.push({
-        assetId: await provider.getBaseAssetId(),
         amount: bn(0),
-        account: requiredBalanceAccount,
-        changePolicy: { change: address },
-      });
-    }
+        assetId,
+        changePolicy: {
+          change: account.address.b256Address,
+        },
+      };
+
+      entry.amount = entry.amount.add(amount);
+
+      requiredBalancesIndex[assetId] = entry;
+    });
 
     // eslint-disable-next-line prefer-const
     let { transactionRequest: assembledRequest, gasPrice } = await provider.assembleTX({
@@ -336,7 +326,7 @@ export class BaseInvocationScope<TReturn = any> {
       feeAddressIndex: 0,
       transactionRequest,
       estimatePredicates: true,
-      requiredBalances,
+      requiredBalances: Object.values(requiredBalancesIndex),
     });
 
     assembledRequest = assembledRequest as ScriptTransactionRequest;
