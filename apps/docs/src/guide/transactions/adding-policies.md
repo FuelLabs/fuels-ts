@@ -18,6 +18,10 @@ The number of blocks that must pass before the transaction can be included in a 
 
 The maximum amount you're willing to pay for the transaction using the base asset.
 
+### Expiration
+
+Block number after which the transaction can no longer be included in the blockchain.
+
 ## Setting Transaction Policies
 
 The following snippet shows which transaction parameters correspond to which policies:

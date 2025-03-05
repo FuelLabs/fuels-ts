@@ -282,6 +282,7 @@ export class BaseInvocationScope<TReturn = any> {
     request.maxFee = txParams.maxFee ? bn(txParams.maxFee) : request.maxFee;
     request.witnessLimit = txParams.witnessLimit ? bn(txParams.witnessLimit) : request.witnessLimit;
     request.maturity = txParams.maturity || request.maturity;
+    request.expiration = txParams.expiration || request.expiration;
 
     request.addVariableOutputs(this.txParameters?.variableOutputs || 0);
 
