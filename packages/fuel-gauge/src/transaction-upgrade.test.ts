@@ -9,6 +9,8 @@ import {
   UploadTransactionRequest,
   sleep,
   Provider,
+  resolveAccount,
+  bn,
 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
@@ -54,13 +56,27 @@ const setupTestNode = async () => {
 
 const upgradeConsensusParameters = async (wallet: WalletUnlocked, bytecode: BytesLike) => {
   const request = new UpgradeTransactionRequest();
+
   request.addConsensusParametersUpgradePurpose(bytecode);
 
-  const cost = await wallet.getTransactionCost(request);
-  request.maxFee = cost.maxFee;
-  await wallet.fund(request, cost);
+  const { transactionRequest } = await wallet.provider.assembleTX({
+    blockHorizon: 10,
+    feeAddressIndex: 0,
+    transactionRequest: request,
+    estimatePredicates: false,
+    requiredBalances: [
+      {
+        account: resolveAccount(wallet),
+        amount: bn(0),
+        assetId: baseAssetId,
+        changePolicy: {
+          change: wallet.address.b256Address,
+        },
+      },
+    ],
+  });
 
-  const response = await wallet.sendTransaction(request);
+  const response = await wallet.sendTransaction(transactionRequest);
   return response.waitForResult();
 };
 
@@ -160,14 +176,25 @@ describe('Transaction upgrade state transition', () => {
       return request;
     });
 
-    const cost = await privileged.getTransactionCost(requests[0]);
-
     // Upload the subsections
     for (const request of requests) {
-      request.maxFee = cost.maxFee;
-      await privileged.fund(request, cost);
-      request.maxFee = cost.maxFee.add(1);
-      const response = await privileged.sendTransaction(request);
+      const { transactionRequest } = await privileged.provider.assembleTX({
+        transactionRequest: request,
+        blockHorizon: 10,
+        feeAddressIndex: 0,
+        requiredBalances: [
+          {
+            account: resolveAccount(privileged),
+            amount: bn(0),
+            assetId: baseAssetId,
+            changePolicy: {
+              change: privileged.address.b256Address,
+            },
+          },
+        ],
+      });
+
+      const response = await privileged.sendTransaction(transactionRequest);
       const { isTypeUpload, isStatusSuccess } = await response.waitForResult();
       expect(isTypeUpload).toBeTruthy();
       expect(isStatusSuccess).toBeTruthy();
@@ -183,11 +210,23 @@ describe('Transaction upgrade state transition', () => {
     const request = new UpgradeTransactionRequest();
     request.addStateTransitionUpgradePurpose(merkleRoot);
 
-    const cost = await privileged.getTransactionCost(request);
-    request.maxFee = cost.maxFee;
-    await privileged.fund(request, cost);
+    const { transactionRequest } = await privileged.provider.assembleTX({
+      transactionRequest: request,
+      blockHorizon: 10,
+      feeAddressIndex: 0,
+      requiredBalances: [
+        {
+          account: resolveAccount(privileged),
+          amount: bn(0),
+          assetId: baseAssetId,
+          changePolicy: {
+            change: privileged.address.b256Address,
+          },
+        },
+      ],
+    });
 
-    const response = await privileged.sendTransaction(request);
+    const response = await privileged.sendTransaction(transactionRequest);
     const { isTypeUpgrade, isStatusSuccess, blockId } = await response.waitForResult();
     expect(isTypeUpgrade).toBeTruthy();
     expect(isStatusSuccess).toBeTruthy();
