@@ -589,8 +589,8 @@ describe('Account', () => {
     await expectToThrowFuelError(
       () => user.getResourcesToSpend([[1, ASSET_A, 500_000]], { utxos: [assetAUTXO.id] }),
       new FuelError(
-        ErrorCode.NOT_ENOUGH_FUNDS,
-        `The account(s) sending the transaction don't have enough funds to cover the transaction.`
+        ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
+        `Insufficient funds or too many small value coins. Consider combining UTXOs.`
       )
     );
   });
@@ -967,9 +967,8 @@ describe('Account', () => {
     request.addCoinOutput(wallet.address, 30_000, await provider.getBaseAssetId());
 
     await expectToThrowFuelError(() => request.estimateAndFund(wallet), {
-      code: ErrorCode.MAX_COINS_REACHED,
-      message:
-        'The account retrieving coins has exceeded the maximum number of coins per asset. Please consider combining your coins into a single UTXO.',
+      code: ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
+      message: 'Insufficient funds or too many small value coins. Consider combining UTXOs.',
     });
   });
 

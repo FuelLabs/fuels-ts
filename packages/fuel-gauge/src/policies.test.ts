@@ -23,6 +23,7 @@ describe('Policies', () => {
     tip?: BigNumberish;
     maxFee?: BigNumberish;
     witnessLimit?: BigNumberish;
+    expiration?: number;
   };
 
   const randomNumber = (minNumber: number, maxNumber: number) => {
@@ -43,6 +44,8 @@ describe('Policies', () => {
     expect(bn(transaction.policies?.[1].data).eq(bn(params.witnessLimit))).toBeTruthy();
     expect(transaction.policies?.[2].type).toBe(PolicyType.MaxFee);
     expect(bn(transaction.policies?.[2]?.data).lte(bn(params.maxFee))).toBeTruthy();
+    expect(transaction.policies?.[3].type).toBe(PolicyType.Expiration);
+    expect(transaction.policies?.[3]?.data).toBe(params.expiration);
   };
 
   it('should ensure optional TX policies are not set when not informed', () => {
@@ -119,6 +122,7 @@ describe('Policies', () => {
 
     const txParams: CustomTxParams = {
       tip: 10,
+      expiration: 10000,
       witnessLimit: randomNumber(800, 900),
       maxFee: 1000,
     };
@@ -133,8 +137,8 @@ describe('Policies', () => {
 
     const { transaction } = await tx.waitForResult();
 
-    expect(transaction.policyTypes).toBe(11);
-    expect(transaction.policies?.length).toBe(3);
+    expect(transaction.policyTypes).toBe(27);
+    expect(transaction.policies?.length).toBe(4);
 
     validatePolicies({
       transaction,
@@ -152,6 +156,7 @@ describe('Policies', () => {
     const txParams: CustomTxParams = {
       tip: 11,
       witnessLimit: 2000,
+      expiration: 10000,
       maxFee: 70_000,
     };
 
@@ -194,7 +199,7 @@ describe('Policies', () => {
 
     const callScope = contract.functions.payable().txParams({
       tip: 5,
-
+      expiration: 10000,
       witnessLimit: randomNumber(800, 900),
       maxFee: 70_000,
     });
@@ -228,7 +233,7 @@ describe('Policies', () => {
 
     const callScope = scriptInstance.functions.main(33).txParams({
       tip: 2,
-
+      expiration: 10000,
       witnessLimit: randomNumber(800, 900),
       maxFee: 70_000,
     });
@@ -259,7 +264,7 @@ describe('Policies', () => {
 
     const txParams: CustomTxParams = {
       tip: 4,
-
+      expiration: 5000,
       witnessLimit: randomNumber(800, 900),
       maxFee: 70_000,
     };
@@ -296,7 +301,7 @@ describe('Policies', () => {
 
     const txParams: CustomTxParams = {
       tip: 1,
-
+      expiration: 5000,
       witnessLimit: randomNumber(800, 900),
       maxFee: 70_000,
     };
@@ -340,6 +345,34 @@ describe('Policies', () => {
 
       await pendingTx.waitForResult();
     }).rejects.toThrow(/TransactionWitnessLimitExceeded/);
+  });
+
+  it('should ensure TX expiration policy limits tx execution as expected', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const receiver = Wallet.generate({ provider });
+
+    const txParams: CustomTxParams = {
+      expiration: 1,
+    };
+
+    await expect(async () => {
+      const tx1 = await wallet.transfer(receiver.address, 500, await provider.getBaseAssetId());
+      await tx1.waitForResult();
+
+      const tx2 = await wallet.transfer(
+        receiver.address,
+        500,
+        await provider.getBaseAssetId(),
+        txParams
+      );
+      await tx2.waitForResult();
+    }).rejects.toThrow(/TransactionExpiration/);
   });
 
   describe('should ensure TX maxFee policy limits TX execution as expected', () => {
