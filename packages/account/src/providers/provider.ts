@@ -516,7 +516,9 @@ export default class Provider {
 
       Provider.applyBlockHeight(fullRequest, url);
 
-      return Provider.fetchAndProcessBlockHeight(url, fullRequest, options);
+      return Provider.fetchAndProcessBlockHeight(() =>
+        options.fetch ? options.fetch(url, request, options) : fetch(url, request)
+      );
     }, retryOptions);
   }
 
@@ -538,23 +540,17 @@ export default class Provider {
   }
 
   private static async fetchAndProcessBlockHeight(
-    url: string,
-    request: RequestInit,
-    options: ProviderOptions
+    fetchFn: () => Promise<Response>
   ): Promise<Response> {
-    let response: Response;
-    let blockHeightPreconditionFailed = false;
+    let response: Response = await fetchFn();
+    const url = response.url;
 
     const retryOptions: RetryOptions = {
       maxRetries: 5,
       baseDelay: 500,
     };
 
-    let retryAttempt = 0;
-
-    do {
-      response = await (options.fetch ? options.fetch(url, request, options) : fetch(url, request));
-
+    for (let retriesLeft = retryOptions.maxRetries; retriesLeft > 0; --retriesLeft) {
       const responseClone = response.clone();
 
       let extensions: {
@@ -573,16 +569,16 @@ export default class Provider {
 
       Provider.setCurrentBlockHeight(url, extensions?.current_fuel_block_height);
 
-      blockHeightPreconditionFailed = !!extensions?.fuel_block_height_precondition_failed;
-
-      if (blockHeightPreconditionFailed && retryAttempt < retryOptions.maxRetries) {
-        ++retryAttempt;
-        const sleepTime = getWaitDelay(retryOptions, retryAttempt);
-        await sleep(sleepTime);
-      } else {
+      if (!extensions?.fuel_block_height_precondition_failed) {
         break;
       }
-    } while (blockHeightPreconditionFailed);
+
+      const retryAttempt = retryOptions.maxRetries - retriesLeft + 1;
+      const sleepTime = getWaitDelay(retryOptions, retryAttempt);
+      await sleep(sleepTime);
+
+      response = await fetchFn();
+    }
 
     return response;
   }
