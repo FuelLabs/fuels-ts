@@ -661,7 +661,7 @@ export class Account extends AbstractAccount implements WithAddress {
       // If the connector is using prepareForSend, the connector will prepare the transaction for the dapp,
       // and submission is owned by the dapp. This reduces network requests to submit and create the
       // summary for a tx.
-      if (this._connector.usePrepareForSend) {
+      if (await this._connector.hasPrepareForSend()) {
         const preparedTransaction = await this._connector.prepareForSend(
           this.address.toString(),
           transactionRequestLike,

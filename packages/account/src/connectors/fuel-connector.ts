@@ -4,7 +4,7 @@ import type { HashableMessage } from '@fuel-ts/hasher';
 import { EventEmitter } from 'events';
 
 import type { Asset } from '../assets/types';
-import type { TransactionRequestLike } from '../providers';
+import { ScriptTransactionRequest, type TransactionRequestLike } from '../providers';
 
 import { FuelConnectorEventTypes } from './types';
 import type {
@@ -53,7 +53,8 @@ interface Connector {
   // #region fuel-connector-method-prepareForSend
   prepareForSend(
     address: string,
-    transaction: TransactionRequestLike
+    transaction: TransactionRequestLike,
+    params?: FuelConnectorSendTxParams
   ): Promise<TransactionRequestLike>;
   // #endregion fuel-connector-method-prepareForSend
   // #region fuel-connector-method-currentAccount
@@ -104,7 +105,6 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
   installed: boolean = false;
   external: boolean = true;
   events = FuelConnectorEventTypes;
-  usePrepareForSend: boolean = false;
 
   /**
    * Should return true if the connector is loaded
@@ -358,6 +358,23 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    */
   async hasABI(_id: string): Promise<boolean> {
     throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
+  }
+
+  /**
+   * Checks the presence of a correct implementation of the prepareForSend method on
+   * the current connector instance.
+   *
+   * @returns boolean representing the validity of the prep method.
+   */
+  async hasPrepareForSend(): Promise<boolean> {
+    try {
+      await this.prepareForSend('', new ScriptTransactionRequest());
+    } catch (error) {
+      if (error instanceof FuelError && error.code === FuelError.CODES.NOT_IMPLEMENTED) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /**

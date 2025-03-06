@@ -192,7 +192,7 @@ Providing the message signing flow is successful, it will return the message sig
 
 #### `sendTransaction`
 
-The `signTransaction` method initiates the send transaction flow for the current connection.
+The `sendTransaction` method initiates the send transaction flow for the current connection.
 
 It requires two arguments:
 
@@ -216,13 +216,7 @@ It will return the prepared transaction (as a [`TransactionRequestLike`](DOCS_AP
 
 <<< @/../../../packages/account/src/connectors/fuel-connector.ts#fuel-connector-method-prepareForSend{ts:line-numbers}
 
-It can be used in tandem with `Account.sendTransaction` to prepare and send a transaction in one go.
-
-This is enabled by setting the `usePrepareForSend` property to `true` on the connector.
-
-<<< @./snippets/connectors.ts#fuel-connector-method-usePrepareForSend{ts:line-numbers}
-
-This can be beneficial for performance and user experience, as it reduces the number of round trips between the dApp and the network.
+When used in conjunction with `Account.sendTransaction`, this can be beneficial for performance and user experience, as it reduces the number of round trips between the dApp and the network.
 
 #### `assets`
 
