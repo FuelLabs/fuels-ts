@@ -3,7 +3,13 @@ import type { B256Address } from '@fuel-ts/address';
 import type { BN, BNInput } from '@fuel-ts/math';
 import type { Input, Output, Transaction, TransactionType } from '@fuel-ts/transactions';
 
-import type { GqlReceiptFragment, GqlSuccessStatusFragment } from '../__generated__/operations';
+import type {
+  GqlPreconfirmationFailureStatusFragment,
+  GqlPreconfirmationSqueezedOutStatusFragment,
+  GqlPreconfirmationSuccessStatusFragment,
+  GqlReceiptFragment,
+  GqlSuccessStatusFragment,
+} from '../__generated__/operations';
 import type { TransactionResultReceipt } from '../transaction-response';
 
 export type SubmittedStatus = {
@@ -45,6 +51,9 @@ export type GraphqlTransactionStatus =
   | SuccessStatus
   | FailureStatus
   | SqueezedOutStatus
+  | GqlPreconfirmationSuccessStatusFragment
+  | GqlPreconfirmationFailureStatusFragment
+  | GqlPreconfirmationSqueezedOutStatusFragment
   | null;
 
 export type GqlTransaction = {
@@ -83,11 +92,7 @@ export enum TransactionStatus {
 /**
  * @hidden
  */
-export type GqlTransactionStatusesNames =
-  | 'FailureStatus'
-  | 'SubmittedStatus'
-  | 'SuccessStatus'
-  | 'SqueezedOutStatus';
+export type GqlTransactionStatusesNames = NonNullable<GraphqlTransactionStatus>['type'];
 
 /**
  * @hidden
