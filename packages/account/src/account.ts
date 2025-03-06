@@ -47,6 +47,7 @@ import {
   isRequestInputResource,
 } from './providers/transaction-request/helpers';
 import { mergeQuantities } from './providers/utils/merge-quantities';
+import { serializeProviderCache } from './providers/utils/serialization';
 import { AbstractAccount } from './types';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
 
@@ -311,6 +312,9 @@ export class Account extends AbstractAccount implements WithAddress {
         `The account ${this.address} does not have enough base asset funds to cover the transaction execution.`
       );
     }
+
+    const chainId = await this.provider.getChainId();
+    request.updateState(chainId, 'funded');
 
     await this.provider.validateTransaction(request);
 
@@ -653,44 +657,49 @@ export class Account extends AbstractAccount implements WithAddress {
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true, onBeforeSend, skipCustomFee = false }: AccountSendTxParams = {}
+    { estimateTxDependencies = true, ...connectorOptions }: AccountSendTxParams = {}
   ): Promise<TransactionResponse> {
+    let transactionRequest = transactionRequestify(transactionRequestLike);
+
     // Check if the account is using a connector, and therefore we do not have direct access to the
     // private key.
     if (this._connector) {
+      const { onBeforeSend, skipCustomFee = false, data } = connectorOptions;
+
+      transactionRequest = await this.prepareTransactionForSend(transactionRequest);
+
+      const params: FuelConnectorSendTxParams = {
+        onBeforeSend,
+        skipCustomFee,
+        provider: {
+          url: this.provider.url,
+          cache: await serializeProviderCache(this.provider),
+        },
+        data,
+        state: transactionRequest.flag.state,
+      };
+
       // If the connector is using prepareForSend, the connector will prepare the transaction for the dapp,
       // and submission is owned by the dapp. This reduces network requests to submit and create the
       // summary for a tx.
       if (this._connector.usePrepareForSend) {
-        const preparedTransaction = await this._connector.prepareForSend(
+        transactionRequest = await this._connector.prepareForSend(
           this.address.toString(),
-          transactionRequestLike,
-          {
-            onBeforeSend,
-            skipCustomFee,
-          }
+          transactionRequest,
+          params
         );
-        // Submit the prepared transaction using the provider.
-        return this.provider.sendTransaction(preparedTransaction, {
-          estimateTxDependencies: false,
-        });
       }
 
-      // Otherwise, the connector itself will submit the transaction, and the app will use
-      // the tx id to create the summary, requiring multiple network requests.
-      const txId = await this._connector.sendTransaction(
+      const transaction: string | TransactionResponse = await this._connector.sendTransaction(
         this.address.toString(),
-        transactionRequestLike,
-        {
-          onBeforeSend,
-          skipCustomFee,
-        }
+        transactionRequest,
+        params
       );
-      // And return the transaction response for the returned tx id.
-      return this.provider.getTransactionResponse(txId);
-    }
 
-    const transactionRequest = transactionRequestify(transactionRequestLike);
+      return typeof transaction === 'string'
+        ? this.provider.getTransactionResponse(transaction)
+        : transaction;
+    }
 
     if (estimateTxDependencies) {
       await this.provider.estimateTxDependencies(transactionRequest);
@@ -733,6 +742,26 @@ export class Account extends AbstractAccount implements WithAddress {
       txCreatedIdx: bn(1),
       ...coin,
     }));
+  }
+
+  /** @hidden */
+  private async prepareTransactionForSend(request: TransactionRequest): Promise<TransactionRequest> {
+    const { transactionId } = request.flag;
+
+    // If there is no transaction id, then no status is set.
+    if (!isDefined(transactionId)) {
+      return request;
+    }
+
+    const chainId = await this.provider.getChainId();
+    const currentTransactionId = request.getTransactionId(chainId);
+
+    // If the transaction id does not match the transaction id on the request.
+    // Then we need to invalidate the transaction status
+    if (transactionId !== currentTransactionId) {
+      request.updateState(chainId);
+    }
+    return request;
   }
 
   /** @hidden * */

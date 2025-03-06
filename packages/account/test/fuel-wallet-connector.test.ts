@@ -16,8 +16,11 @@ import {
 } from '../src';
 import { TESTNET_NETWORK_URL } from '../src/configs';
 import { Fuel } from '../src/connectors/fuel';
+import type { FuelConnectorSendTxParams } from '../src/connectors/types';
 import { FuelConnectorEventType } from '../src/connectors/types';
-import { Provider, ScriptTransactionRequest, TransactionStatus } from '../src/providers';
+import { Provider, ScriptTransactionRequest, TransactionResponse, TransactionStatus } from '../src/providers';
+import type { TransactionSummaryJson } from '../src/providers/utils/serialization';
+import { serializeProviderCache } from '../src/providers/utils/serialization';
 import { setupTestProviderAndWallets, TestMessage } from '../src/test-utils';
 import { Wallet } from '../src/wallet';
 
@@ -677,6 +680,105 @@ describe('Fuel Connector', () => {
     );
   });
 
+  it('should ensure sendTransaction works just fine [defaults]', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider,
+      wallets: [connectorWallet],
+    } = launched;
+    const connector = new MockConnector({
+      wallets: [connectorWallet],
+    });
+    const fuel = await new Fuel({
+      connectors: [connector],
+    });
+
+    const account = new Account(connectorWallet.address.toString(), provider, fuel);
+
+    const sendTransactionSpy = vi.spyOn(connectorWallet, 'sendTransaction');
+    const prepareForSendSpy = vi.spyOn(connector, 'prepareForSend');
+
+    const request = new ScriptTransactionRequest();
+    const resources = await connectorWallet.getResourcesToSpend([
+      { assetId: await provider.getBaseAssetId(), amount: 1000 },
+    ]);
+    request.addResources(resources);
+    await request.estimateAndFund(connectorWallet);
+
+    const expectedParams: FuelConnectorSendTxParams = {
+      onBeforeSend: undefined,
+      skipCustomFee: false,
+      provider: {
+        url: provider.url,
+        cache: await serializeProviderCache(provider),
+      },
+      state: 'funded',
+    };
+    const response = await account.sendTransaction(request);
+    expect(response).toBeDefined();
+    // transaction prepared and sent via connector
+    expect(sendTransactionSpy).toHaveBeenCalledWith(request, expectedParams);
+    expect(prepareForSendSpy).not.toHaveBeenCalled();
+  });
+
+  it('should ensure sendTransaction works [w/ transaction summary]', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider,
+      wallets: [connectorWallet],
+    } = launched;
+    const connector = new MockConnector({
+      wallets: [connectorWallet],
+    });
+    const fuel = await new Fuel({
+      connectors: [connector],
+    });
+
+    const account = new Account(connectorWallet.address.toString(), provider, fuel);
+
+    const sendTransactionSpy = vi.spyOn(connectorWallet, 'sendTransaction');
+    const prepareForSendSpy = vi.spyOn(connector, 'prepareForSend');
+
+    const request = new ScriptTransactionRequest();
+    const resources = await connectorWallet.getResourcesToSpend([
+      { assetId: await provider.getBaseAssetId(), amount: 1000 },
+    ]);
+    request.addResources(resources);
+
+    // Estimate and fund
+    const txCost = await account.getTransactionCost(request);
+    request.maxFee = txCost.maxFee;
+    request.gasLimit = txCost.gasUsed;
+    await account.fund(request, txCost);
+
+    // Create summary
+    const chainId = await provider.getChainId();
+    const transactionSummary: TransactionSummaryJson = {
+      id: request.getTransactionId(chainId),
+      transactionBytes: request.toTransactionBytes(),
+      receipts: txCost.rawReceipts,
+      gasPrice: txCost.gasPrice.toString(),
+    };
+
+    const expectedParams: FuelConnectorSendTxParams = {
+      onBeforeSend: undefined,
+      skipCustomFee: false,
+      provider: {
+        url: provider.url,
+        cache: await serializeProviderCache(provider),
+      },
+      data: { transactionSummary },
+      state: 'funded',
+    };
+    const response = await account.sendTransaction(request, {
+      data: { transactionSummary },
+    });
+    expect(response).toBeDefined();
+    // transaction prepared and sent via connector
+    expect(sendTransactionSpy).toHaveBeenCalledWith(request, expectedParams);
+    expect(prepareForSendSpy).not.toHaveBeenCalled();
+  });
+
   it('should ensure sendTransaction works just fine', async () => {
     using launched = await setupTestProviderAndWallets();
     const {
@@ -703,6 +805,10 @@ describe('Fuel Connector', () => {
     const params: AccountSendTxParams = {
       onBeforeSend: vi.fn(),
       skipCustomFee: true,
+      provider: {
+        url: provider.url,
+        cache: await serializeProviderCache(provider),
+      },
     };
     const response = await fuel.sendTransaction(
       connectorWallet.address.toString(),
@@ -750,6 +856,65 @@ describe('Fuel Connector', () => {
     expect(connectorPrepareForSendSpy).toHaveBeenCalledWith(address, request, params);
   });
 
+  it('should ensure prepareForSend works [w/ transaction summary]', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider,
+      wallets: [connectorWallet],
+    } = launched;
+    const connector = new MockedPrepConnector({
+      wallets: [connectorWallet],
+    });
+    const fuel = await new Fuel({
+      connectors: [connector],
+    }).init();
+
+    const account = new Account(connectorWallet.address.toString(), provider, fuel);
+
+    const prepareForSendSpy = vi.spyOn(connector, 'prepareForSend');
+
+    const request = new ScriptTransactionRequest();
+    const resources = await connectorWallet.getResourcesToSpend([
+      { assetId: await provider.getBaseAssetId(), amount: 1000 },
+    ]);
+    request.addResources(resources);
+
+    // Estimate and fund
+    const txCost = await account.getTransactionCost(request);
+    request.maxFee = txCost.maxFee;
+    request.gasLimit = txCost.gasUsed;
+    await account.fund(request, txCost);
+
+    // Create summary
+    const chainId = await provider.getChainId();
+    const transactionSummary: TransactionSummaryJson = {
+      id: request.getTransactionId(chainId),
+      transactionBytes: request.toTransactionBytes(),
+      receipts: txCost.rawReceipts,
+      gasPrice: txCost.gasPrice.toString(),
+    };
+
+    const expectedParams: FuelConnectorSendTxParams = {
+      onBeforeSend: undefined,
+      skipCustomFee: false,
+      provider: {
+        url: provider.url,
+        cache: await serializeProviderCache(provider),
+      },
+      data: { transactionSummary },
+      state: 'funded',
+    };
+    const response = await account.sendTransaction(request, {
+      data: { transactionSummary },
+    });
+    expect(response).toBeDefined();
+    expect(prepareForSendSpy).toHaveBeenCalledWith(
+      connectorWallet.address.toString(),
+      request,
+      expectedParams
+    );
+  });
+
   it('should ensure account send transaction with connector works just fine', async () => {
     using launched = await setupTestProviderAndWallets();
     const {
@@ -784,12 +949,22 @@ describe('Fuel Connector', () => {
 
     const tx = await account.sendTransaction(request, params);
     expect(tx).toBeDefined();
+    expect(tx).toBeInstanceOf(TransactionResponse);
 
     // transaction prepared via connector and sent via provider
-    expect(connectorPrepareForSendSpy).toHaveBeenCalledWith(address, request, params);
+    const expectedParams: FuelConnectorSendTxParams = {
+      ...params,
+      provider: {
+        url: provider.url,
+        cache: await serializeProviderCache(provider),
+      },
+      state: 'funded',
+      data: undefined,
+    };
+    expect(connectorPrepareForSendSpy).toHaveBeenCalledWith(address, request, expectedParams);
     expect(providerSendTransactionSpy).toHaveBeenCalled();
     // not sent via connector
-    expect(connectorSendTransactionSpy).not.toHaveBeenCalled();
+    expect(connectorSendTransactionSpy).toHaveBeenCalled();
   });
 
   it('assembles tx result from connector account [w/o prepareForSend]', async () => {
