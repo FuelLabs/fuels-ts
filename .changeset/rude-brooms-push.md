@@ -2,4 +2,4 @@
 "@fuel-ts/account": patch
 ---
 
-fix: revert error name
+fix: correct revert error name
