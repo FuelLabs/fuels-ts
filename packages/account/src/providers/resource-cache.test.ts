@@ -1,19 +1,64 @@
+import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
-import { hexlify, sleep } from '@fuel-ts/utils';
+import { ErrorCode } from '@fuel-ts/errors';
+import { safeExec, expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+import { hexlify } from '@fuel-ts/utils';
 
+import { setupTestProviderAndWallets, TestMessage } from '../test-utils';
+import {
+  generateFakeRequestInputCoin,
+  generateFakeRequestInputMessage,
+} from '../test-utils/transactionRequest';
+
+import type { Coin } from './coin';
+import type { Message } from './message';
+import type Provider from './provider';
+import { DEFAULT_RESOURCE_CACHE_TTL } from './provider';
+import { isCoin, type ExcludeResourcesOption } from './resource';
 import { ResourceCache } from './resource-cache';
+import type {
+  CoinTransactionRequestInput,
+  MessageTransactionRequestInput,
+} from './transaction-request';
+import {
+  isRequestInputCoin,
+  isRequestInputMessage,
+  ScriptTransactionRequest,
+} from './transaction-request';
 
 /**
  * @group node
  * @group browser
  */
 describe('Resource Cache', () => {
-  const randomValue = () => hexlify(randomBytes(32));
+  const randomTxId = () => hexlify(randomBytes(32));
+
+  const inputsToExcludeResourcesOption = (
+    inputs: Array<CoinTransactionRequestInput | MessageTransactionRequestInput>
+  ): ExcludeResourcesOption =>
+    inputs.reduce(
+      (acc, input) => {
+        isRequestInputCoin(input) ? acc.utxos.push(input.id) : acc.messages.push(input.nonce);
+        return acc;
+      },
+      { utxos: [], messages: [] } as Required<ExcludeResourcesOption>
+    );
+
+  const extractBaseAssetAndMaxInputs = async (provider: Provider) => {
+    const baseAssetId = await provider.getBaseAssetId();
+    const {
+      consensusParameters: {
+        txParameters: { maxInputs },
+      },
+    } = await provider.getChain();
+    return { baseAssetId, maxInputs: maxInputs.toNumber() };
+  };
 
   afterEach(() => {
     // Reset the cache after each test
     const resourceCache = new ResourceCache(1000);
     resourceCache.clear();
+    vi.restoreAllMocks();
   });
 
   it('can instantiate [valid numerical ttl]', () => {
@@ -35,89 +80,146 @@ describe('Resource Cache', () => {
 
   it('can validate if it is cached [UTXO]', () => {
     const resourceCache = new ResourceCache(1000);
-    const utxoId = randomValue();
+    const owner = Address.fromRandom().b256Address;
+    const utxo = generateFakeRequestInputCoin({ owner });
+    const utxoId = String(utxo.id);
 
-    expect(resourceCache.isCached(utxoId)).toBeFalsy();
+    expect(resourceCache.isCached(owner, utxoId)).toBeFalsy();
 
-    const txID = randomValue();
-    resourceCache.set(txID, { utxos: [utxoId], messages: [] });
+    const txID = randomTxId();
+    resourceCache.set(txID, [utxo]);
 
-    expect(resourceCache.isCached(utxoId)).toBeTruthy();
+    expect(resourceCache.isCached(owner, utxoId)).toBeTruthy();
   });
 
   it('can validate if it is cached [Message]', () => {
     const resourceCache = new ResourceCache(1000);
-    const messageNonce = randomValue();
+    const owner = Address.fromRandom().b256Address;
+    const message = generateFakeRequestInputMessage({ recipient: owner });
+    const messageNonce = String(message.nonce);
 
-    expect(resourceCache.isCached(messageNonce)).toBeFalsy();
+    expect(resourceCache.isCached(owner, messageNonce)).toBeFalsy();
 
-    const txID = randomValue();
-    resourceCache.set(txID, { utxos: [], messages: [messageNonce] });
+    const txID = randomTxId();
+    resourceCache.set(txID, [message]);
 
-    expect(resourceCache.isCached(messageNonce)).toBeTruthy();
+    expect(resourceCache.isCached(owner, messageNonce)).toBeTruthy();
   });
 
-  it('can get active [no data]', async () => {
-    const EXPECTED = { utxos: [], messages: [] };
-    const resourceCache = new ResourceCache(1);
+  it('can get active [no data]', () => {
+    const expected = { utxos: [], messages: [] };
+    const resourceCache = new ResourceCache(1000);
+    const owner = Address.fromRandom().b256Address;
 
-    await sleep(1);
-
-    expect(resourceCache.getActiveData()).toStrictEqual(EXPECTED);
+    expect(resourceCache.getActiveData(owner)).toStrictEqual(expected);
   });
 
   it('can get active', () => {
-    const EXPECTED = {
-      utxos: [randomValue(), randomValue()],
-      messages: [randomValue(), randomValue(), randomValue()],
-    };
+    const owner = Address.fromRandom().b256Address;
+
+    const inputs = [
+      generateFakeRequestInputCoin({ owner }),
+      generateFakeRequestInputCoin({ owner }),
+      generateFakeRequestInputMessage({ recipient: owner }),
+      generateFakeRequestInputMessage({ recipient: owner }),
+      generateFakeRequestInputMessage({ recipient: owner }),
+    ];
+
     const resourceCache = new ResourceCache(1000);
 
-    const txId = randomValue();
-    resourceCache.set(txId, EXPECTED);
+    const txId = randomTxId();
+    resourceCache.set(txId, inputs);
 
-    const activeData = resourceCache.getActiveData();
+    const activeData = resourceCache.getActiveData(owner);
 
-    expect(activeData.messages).containSubset(EXPECTED.messages);
-    expect(activeData.utxos).containSubset(EXPECTED.utxos);
+    const expected = inputsToExcludeResourcesOption(inputs);
+
+    expect(activeData.messages).containSubset(expected.messages);
+    expect(activeData.utxos).containSubset(expected.utxos);
+  });
+
+  it('should ensure active data is owner specific', () => {
+    const owner1 = Address.fromRandom().b256Address;
+    const owner2 = Address.fromRandom().b256Address;
+
+    // Owner 1 inputs
+    const owner1Inputs = [
+      generateFakeRequestInputCoin({ owner: owner1 }),
+      generateFakeRequestInputCoin({ owner: owner1 }),
+      generateFakeRequestInputMessage({ recipient: owner1 }),
+    ];
+
+    // Owner 2 inputs
+    const owner2Inputs = [
+      generateFakeRequestInputCoin({ owner: owner2 }),
+      generateFakeRequestInputCoin({ owner: owner2 }),
+      generateFakeRequestInputMessage({ recipient: owner2 }),
+    ];
+
+    const resourceCache = new ResourceCache(1000);
+
+    const txId1 = randomTxId();
+    const txId2 = randomTxId();
+
+    resourceCache.set(txId1, owner1Inputs);
+    resourceCache.set(txId2, owner2Inputs);
+
+    const activeData = resourceCache.getActiveData(owner1);
+
+    const owner1Expected = inputsToExcludeResourcesOption(owner1Inputs);
+    const owner2Expected = inputsToExcludeResourcesOption(owner2Inputs);
+
+    expect(activeData.messages).containSubset(owner1Expected.messages);
+    expect(activeData.utxos).containSubset(owner1Expected.utxos);
+
+    expect(activeData.messages).not.containSubset(owner2Expected.messages);
+    expect(activeData.utxos).not.containSubset(owner2Expected.utxos);
   });
 
   it('should remove expired when getting active data', () => {
     const ttl = 500;
     const resourceCache = new ResourceCache(ttl);
 
-    const utxos = [randomValue(), randomValue()];
-    const messages = [randomValue()];
+    const owner = Address.fromRandom().b256Address;
 
-    const txId1 = randomValue();
-    const txId1Resources = {
-      utxos,
-      messages,
-    };
+    const inputs = [
+      generateFakeRequestInputCoin({ owner }),
+      generateFakeRequestInputCoin({ owner }),
+      generateFakeRequestInputMessage({ recipient: owner }),
+    ];
 
+    const txId1 = randomTxId();
     const originalTimeStamp = 946684800;
     let dateSpy = vi.spyOn(Date, 'now').mockImplementation(() => originalTimeStamp);
 
-    resourceCache.set(txId1, txId1Resources);
-    const oldActiveData = resourceCache.getActiveData();
+    resourceCache.set(txId1, inputs);
+    const oldActiveData = resourceCache.getActiveData(owner);
 
     expect(dateSpy).toHaveBeenCalled();
 
-    expect(oldActiveData.utxos).containSubset(txId1Resources.utxos);
-    expect(oldActiveData.messages).containSubset(txId1Resources.messages);
-    expect(oldActiveData.messages).containSubset(txId1Resources.messages);
+    oldActiveData.utxos.forEach((utxo) => {
+      const match = inputs.filter(isRequestInputCoin).find((input) => input.id === utxo);
+      expect(match).toBeDefined();
+    });
+
+    oldActiveData.messages.forEach((nonce) => {
+      const match = inputs.filter(isRequestInputMessage).find((input) => input.nonce === nonce);
+      expect(match).toBeDefined();
+    });
 
     const expiredTimeStamp = originalTimeStamp + ttl;
     dateSpy = vi.spyOn(Date, 'now').mockImplementation(() => expiredTimeStamp);
 
-    const newActiveData = resourceCache.getActiveData();
+    const newActiveData = resourceCache.getActiveData(owner);
 
-    txId1Resources.utxos.forEach((utxo) => {
-      expect(newActiveData.utxos).not.includes(utxo);
+    newActiveData.utxos.forEach((utxo) => {
+      const match = inputs.filter(isRequestInputCoin).find((input) => input.id === utxo);
+      expect(match).toBeUndefined();
     });
 
-    txId1Resources.messages.forEach((message) => {
-      expect(newActiveData.utxos).not.includes(message);
+    newActiveData.messages.forEach((nonce) => {
+      const match = inputs.filter(isRequestInputMessage).find((input) => input.nonce === nonce);
+      expect(match).toBeUndefined();
     });
 
     vi.restoreAllMocks();
@@ -127,97 +229,567 @@ describe('Resource Cache', () => {
     // use long ttl to avoid cache expiration
     const ttl = 10_000;
     const resourceCache = new ResourceCache(ttl);
+    const owner = Address.fromRandom().b256Address;
 
-    const txId1 = randomValue();
-    const txId2 = randomValue();
+    const txId1 = randomTxId();
+    const txId2 = randomTxId();
 
-    const txId1Resources = {
-      utxos: [randomValue()],
-      messages: [randomValue(), randomValue()],
-    };
+    const utxo1 = generateFakeRequestInputCoin({ owner });
+    const utxo2 = generateFakeRequestInputCoin({ owner });
+    const utxo3 = generateFakeRequestInputCoin({ owner });
 
-    const txId2Resources = {
-      utxos: [randomValue(), randomValue()],
-      messages: [randomValue()],
-    };
+    const message1 = generateFakeRequestInputMessage({ recipient: owner });
+    const message2 = generateFakeRequestInputMessage({ recipient: owner });
+    const message3 = generateFakeRequestInputMessage({ recipient: owner });
 
-    resourceCache.set(txId1, txId1Resources);
-    resourceCache.set(txId2, txId2Resources);
+    const tx1Inputs = [utxo1, message1, message2];
+    const tx2Inputs = [utxo2, utxo3, message3];
 
-    let activeData = resourceCache.getActiveData();
+    resourceCache.set(txId1, tx1Inputs);
+    resourceCache.set(txId2, tx2Inputs);
 
-    expect(activeData.utxos).containSubset([...txId1Resources.utxos, ...txId2Resources.utxos]);
-    expect(activeData.messages).containSubset([
-      ...txId1Resources.messages,
-      ...txId2Resources.messages,
-    ]);
+    let activeData = resourceCache.getActiveData(owner);
+
+    expect(activeData.utxos).containSubset([utxo1.id, utxo2.id, utxo3.id]);
+    expect(activeData.messages).containSubset([message1.nonce, message2.nonce, message3.nonce]);
 
     resourceCache.unset(txId1);
 
-    activeData = resourceCache.getActiveData();
+    activeData = resourceCache.getActiveData(owner);
 
-    expect(activeData.utxos).not.containSubset(txId1Resources.utxos);
-    expect(activeData.messages).not.containSubset(txId1Resources.messages);
+    expect(activeData.utxos).not.containSubset([utxo1.id]);
+    expect(activeData.utxos).containSubset([utxo2.id, utxo3.id]);
 
-    expect(activeData.utxos).containSubset(txId2Resources.utxos);
-    expect(activeData.messages).containSubset(txId2Resources.messages);
+    expect(activeData.messages).not.containSubset([message1.nonce, message2.nonce]);
+    expect(activeData.messages).containSubset([message3.nonce]);
   });
 
   it('can clear cache', () => {
     // use long ttl to avoid cache expiration
     const resourceCache = new ResourceCache(10_000);
+    const owner1 = Address.fromRandom().b256Address;
+    const owner2 = Address.fromRandom().b256Address;
 
-    const txId1 = randomValue();
-    const txId2 = randomValue();
+    const txId1 = randomTxId();
+    const txId2 = randomTxId();
 
-    const txId1Resources = {
-      utxos: [randomValue()],
-      messages: [randomValue(), randomValue()],
-    };
+    const tx1Inputs = [
+      generateFakeRequestInputCoin({ owner: owner1 }),
+      generateFakeRequestInputMessage({ recipient: owner1 }),
+      generateFakeRequestInputMessage({ recipient: owner1 }),
+    ];
 
-    const txId2Resources = {
-      utxos: [randomValue(), randomValue()],
-      messages: [randomValue()],
-    };
+    const tx2Inputs = [
+      generateFakeRequestInputMessage({ recipient: owner2 }),
+      generateFakeRequestInputMessage({ recipient: owner2 }),
+      generateFakeRequestInputCoin({ owner: owner2 }),
+    ];
 
-    resourceCache.set(txId1, txId1Resources);
-    resourceCache.set(txId2, txId2Resources);
+    resourceCache.set(txId1, tx1Inputs);
+    resourceCache.set(txId2, tx2Inputs);
 
-    const activeData = resourceCache.getActiveData();
+    // Verifies that cached resources from owner 1 is correct
+    const owner1Cached = resourceCache.getActiveData(owner1);
 
-    expect(activeData.utxos).containSubset([...txId1Resources.utxos, ...txId2Resources.utxos]);
-    expect(activeData.messages).containSubset([
-      ...txId1Resources.messages,
-      ...txId2Resources.messages,
-    ]);
+    const owner1Expected = inputsToExcludeResourcesOption(tx1Inputs);
+
+    expect(owner1Cached.utxos).containSubset(owner1Expected.utxos);
+    expect(owner1Cached.messages).containSubset(owner1Expected.messages);
+
+    // Verifies that cached resources from owner 2 is correct
+    const owner2Cached = resourceCache.getActiveData(owner2);
+
+    const owner2Expected = inputsToExcludeResourcesOption(tx2Inputs);
+
+    expect(owner2Cached.utxos).containSubset(owner2Expected.utxos);
+    expect(owner2Cached.messages).containSubset(owner2Expected.messages);
 
     resourceCache.clear();
 
-    expect(resourceCache.getActiveData()).toStrictEqual({ utxos: [], messages: [] });
+    // All cache was cleared
+    expect(resourceCache.getActiveData(owner1)).toStrictEqual({ utxos: [], messages: [] });
+    expect(resourceCache.getActiveData(owner2)).toStrictEqual({ utxos: [], messages: [] });
   });
 
   it('should validate that ResourceCache uses a global cache', () => {
-    const oldTxId = randomValue();
-    const oldCache = {
-      utxos: [randomValue(), randomValue()],
-      messages: [randomValue()],
-    };
+    const oldTxId = randomTxId();
+    const owner = Address.fromRandom().b256Address;
+    const oldInputs = [
+      generateFakeRequestInputCoin({ owner }),
+      generateFakeRequestInputCoin({ owner }),
+      generateFakeRequestInputMessage({ recipient: owner }),
+    ];
 
     const oldInstance = new ResourceCache(800);
-    oldInstance.set(oldTxId, oldCache);
+    oldInstance.set(oldTxId, oldInputs);
 
-    const newTxId = randomValue();
-    const newCache = {
-      utxos: [randomValue()],
-      messages: [randomValue(), randomValue()],
-    };
+    const newTxId = randomTxId();
+
+    const newInputs = [
+      generateFakeRequestInputMessage({ recipient: owner }),
+      generateFakeRequestInputMessage({ recipient: owner }),
+      generateFakeRequestInputCoin({ owner }),
+    ];
 
     const newInstance = new ResourceCache(300);
-    newInstance.set(newTxId, newCache);
+    newInstance.set(newTxId, newInputs);
 
-    const activeData = newInstance.getActiveData();
+    const activeData = newInstance.getActiveData(owner);
 
-    expect(activeData.utxos).containSubset([...oldCache.utxos, ...newCache.utxos]);
-    expect(activeData.messages).containSubset([...oldCache.messages, ...newCache.messages]);
+    const allCached = inputsToExcludeResourcesOption([...oldInputs, ...newInputs]);
+
+    expect(activeData.utxos).containSubset(allCached.utxos);
+    expect(activeData.messages).containSubset(allCached.messages);
+  });
+
+  it('can set cache ttl', async () => {
+    const ttl = 10000;
+    using launched = await setupTestProviderAndWallets({
+      providerOptions: {
+        resourceCacheTTL: ttl,
+      },
+    });
+    const { provider } = launched;
+
+    expect(provider.cache?.ttl).toEqual(ttl);
+  });
+
+  it('should use resource cache by default', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    expect(provider.cache?.ttl).toEqual(DEFAULT_RESOURCE_CACHE_TTL);
+  });
+
+  it('should validate resource cache value [invalid numerical]', async () => {
+    const { error } = await safeExec(async () => {
+      await setupTestProviderAndWallets({ providerOptions: { resourceCacheTTL: -500 } });
+    });
+    expect(error?.message).toMatch(/Invalid TTL: -500\. Use a value greater than zero/);
+  });
+
+  it('should be possible to disable the cache by using -1', async () => {
+    using launched = await setupTestProviderAndWallets({
+      providerOptions: {
+        resourceCacheTTL: -1,
+      },
+    });
+    const { provider } = launched;
+
+    expect(provider.cache).toBeUndefined();
+  });
+
+  it('should cache resources only when TX is successfully submitted', async () => {
+    const resourceAmount = 5_000;
+    const utxosAmount = 2;
+
+    const testMessage = new TestMessage({ amount: resourceAmount });
+
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+      // 3 resources with a total of 15_000
+      walletsConfig: {
+        coinsPerAsset: utxosAmount,
+        amountPerCoin: resourceAmount,
+        messages: [testMessage],
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet, receiver],
+    } = launched;
+
+    const baseAssetId = await provider.getBaseAssetId();
+    const { coins } = await wallet.getCoins(baseAssetId);
+
+    expect(coins.length).toBe(utxosAmount);
+
+    // Tx will cost 10_000 for the transfer + 1 for fee. All resources will be used
+    const EXPECTED = {
+      utxos: coins.map((coin) => coin.id),
+      messages: [testMessage.nonce],
+    };
+
+    await wallet.transfer(receiver.address, 10_000);
+
+    const cachedResources = provider.cache?.getActiveData(wallet.address.toB256());
+    expect(new Set(cachedResources?.utxos)).toEqual(new Set(EXPECTED.utxos));
+    expect(new Set(cachedResources?.messages)).toEqual(new Set(EXPECTED.messages));
+  });
+
+  it('should NOT cache resources when TX submission fails', async () => {
+    const message = new TestMessage({ amount: 100_000 });
+
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+      walletsConfig: {
+        coinsPerAsset: 2,
+        amountPerCoin: 20_000,
+        messages: [message],
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet, receiver],
+    } = launched;
+
+    const baseAssetId = await provider.getBaseAssetId();
+    const transferAmount = 10_000;
+
+    const { coins } = await wallet.getCoins(baseAssetId);
+    const utxos = coins.map((c) => c.id);
+    const messages = [message.nonce];
+
+    // No enough funds to pay for the TX fee
+    const resources = await wallet.getResourcesToSpend([[transferAmount, baseAssetId]]);
+
+    const request = new ScriptTransactionRequest({
+      maxFee: 0,
+    });
+
+    request.addCoinOutput(receiver.address, transferAmount, baseAssetId);
+    request.addResources(resources);
+
+    await expectToThrowFuelError(
+      () => wallet.sendTransaction(request, { estimateTxDependencies: false }),
+      { code: ErrorCode.INVALID_REQUEST }
+    );
+
+    // No resources were cached since the TX submission failed
+    [...utxos, ...messages].forEach((key) => {
+      expect(provider.cache?.isCached(wallet.address.toB256(), key)).toBeFalsy();
+    });
+  });
+
+  it('should unset cached resources when TX execution fails', async () => {
+    const message = new TestMessage({ amount: 100_000 });
+
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+      walletsConfig: {
+        coinsPerAsset: 1,
+        amountPerCoin: 100_000,
+        messages: [message],
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet, receiver],
+    } = launched;
+
+    const baseAssetId = await provider.getBaseAssetId();
+    const maxFee = 100_000;
+    const transferAmount = 10_000;
+
+    const { coins } = await wallet.getCoins(baseAssetId);
+    const utxos = coins.map((c) => c.id);
+    const messages = [message.nonce];
+
+    // Should fetch resources enough to pay for the TX fee and transfer amount
+    const resources = await wallet.getResourcesToSpend([[maxFee + transferAmount, baseAssetId]]);
+
+    const request = new ScriptTransactionRequest({
+      maxFee,
+      // No enough gas to execute the TX
+      gasLimit: 0,
+    });
+
+    request.addCoinOutput(receiver.address, transferAmount, baseAssetId);
+    request.addResources(resources);
+
+    // TX submission will succeed
+    const submitted = await wallet.sendTransaction(request, { estimateTxDependencies: false });
+
+    // Resources were cached since the TX submission succeeded
+    [...utxos, ...messages].forEach((key) => {
+      expect(provider.cache?.isCached(wallet.address.toB256(), key)).toBeTruthy();
+    });
+
+    // TX execution will fail
+    await expectToThrowFuelError(() => submitted.waitForResult(), {
+      code: ErrorCode.SCRIPT_REVERTED,
+    });
+
+    // Ensure user's resources were unset from the cache
+    [...utxos, ...messages].forEach((key) => {
+      expect(provider.cache?.isCached(wallet.address.toB256(), key)).toBeFalsy();
+    });
+  });
+
+  it('should ensure cached resources are not being queried', async () => {
+    // Fund the wallet with 2 resources
+    const testMessage = new TestMessage({ amount: 100_000_000_000 });
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+      walletsConfig: {
+        coinsPerAsset: 1,
+        amountPerCoin: 100_000_000_000,
+        messages: [testMessage],
+      },
+    });
+
+    const {
+      provider,
+      wallets: [wallet, receiver],
+    } = launched;
+    const baseAssetId = await provider.getBaseAssetId();
+    const transferAmount = 10_000;
+
+    const {
+      coins: [coin],
+    } = await wallet.getCoins(baseAssetId);
+
+    const {
+      messages: [message],
+    } = await wallet.getMessages();
+
+    const owner = wallet.address.toB256();
+
+    // One of the resources will be cached as the TX submission was successful
+    await wallet.transfer(receiver.address, transferAmount);
+
+    // Determine the used and unused resource
+    const cachedResource = provider.cache?.isCached(owner, coin.id) ? coin : message;
+    const uncachedResource = provider.cache?.isCached(owner, coin.id) ? message : coin;
+
+    expect(cachedResource).toBeDefined();
+    expect(uncachedResource).toBeDefined();
+
+    // Spy on the getCoinsToSpend method to ensure the cached resource is not being queried
+    const resourcesToSpendSpy = vi.spyOn(provider.operations, 'getCoinsToSpend');
+    const fetchedResources = await wallet.getResourcesToSpend([[transferAmount, baseAssetId]]);
+
+    // Only one resource is available as the other one was cached
+    expect(fetchedResources.length).toBe(1);
+
+    // Ensure the returned resource is the non-cached one
+    const excludedIds: Required<ExcludeResourcesOption> = { messages: [], utxos: [] };
+    if (isCoin(fetchedResources[0])) {
+      excludedIds.messages = expect.arrayContaining([(<Message>cachedResource).nonce]);
+      excludedIds.utxos = expect.arrayContaining([]);
+      expect(fetchedResources[0].id).toEqual((<Coin>uncachedResource).id);
+    } else {
+      excludedIds.utxos = expect.arrayContaining([(<Coin>cachedResource).id]);
+      excludedIds.messages = expect.arrayContaining([]);
+      expect(fetchedResources[0].nonce).toEqual((<Message>uncachedResource).nonce);
+    }
+
+    // Ensure the getCoinsToSpend query was called excluding the cached resource
+    expect(resourcesToSpendSpy).toHaveBeenCalledWith({
+      owner,
+      queryPerAsset: [
+        {
+          assetId: baseAssetId,
+          amount: String(transferAmount),
+          max: undefined,
+        },
+      ],
+      excludedIds,
+    });
+  });
+
+  it('should prioritize recent IDs entries', async () => {
+    using launched = await setupTestProviderAndWallets();
+
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+    const baseAssetId = await provider.getBaseAssetId();
+    const amount = 10;
+
+    const oldTxId = hexlify(randomBytes(32));
+    const oldUtxo = generateFakeRequestInputCoin({ owner: wallet.address.toB256() });
+    const newUtxo = generateFakeRequestInputCoin({ owner: wallet.address.toB256() });
+
+    const newTxId = hexlify(randomBytes(32));
+    const oldMessage = generateFakeRequestInputMessage({ recipient: wallet.address.toB256() });
+    const newMessage = generateFakeRequestInputMessage({ recipient: wallet.address.toB256() });
+
+    const oldInputs = [oldUtxo, oldMessage];
+    const newInputs = [newUtxo, newMessage];
+
+    const spy = vi.spyOn(provider.operations, 'getCoinsToSpend');
+
+    // caching inputs1 first (First TX)
+    provider.cache?.set(oldTxId, oldInputs);
+
+    // caching inputs2 later (Second TX)
+    provider.cache?.set(newTxId, newInputs);
+
+    await wallet.getResourcesToSpend([{ amount, assetId: baseAssetId }]);
+
+    const excludedIds = spy.mock.calls[0][0].excludedIds as Required<ExcludeResourcesOption>;
+
+    expect(excludedIds.utxos[0]).toEqual(newUtxo.id);
+    expect(excludedIds.utxos[1]).toEqual(oldUtxo.id);
+
+    expect(excludedIds.messages[0]).toEqual(newMessage.nonce);
+    expect(excludedIds.messages[1]).toEqual(oldMessage.nonce);
+  });
+
+  it("should consider user's given excluded IDs", async () => {
+    using launched = await setupTestProviderAndWallets();
+
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+    const baseAssetId = await provider.getBaseAssetId();
+    const amount = 10;
+
+    const userInput: ExcludeResourcesOption = {
+      utxos: [hexlify(randomBytes(34)), hexlify(randomBytes(34))],
+      messages: [hexlify(randomBytes(32))],
+    };
+
+    const spy = vi.spyOn(provider.operations, 'getCoinsToSpend');
+
+    await wallet.getResourcesToSpend([{ amount, assetId: baseAssetId }], userInput);
+
+    expect(spy).toHaveBeenCalledWith({
+      owner: wallet.address.toB256(),
+      queryPerAsset: [
+        {
+          assetId: baseAssetId,
+          amount: String(amount),
+          max: undefined,
+        },
+      ],
+      excludedIds: userInput,
+    });
+  });
+
+  it("should not add cached IDs when user's input exceeds max_inputs", async () => {
+    using launched = await setupTestProviderAndWallets();
+
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const owner = wallet.address.toB256();
+    const amount = 10;
+    const { baseAssetId, maxInputs } = await extractBaseAssetAndMaxInputs(provider);
+
+    // Generating inputs to be cached
+    const fakeInputs = Array.from({ length: 10 }, (_, i) =>
+      i % 2 === 0
+        ? generateFakeRequestInputCoin({ owner })
+        : generateFakeRequestInputMessage({ recipient: owner })
+    );
+
+    // Caching inputs
+    provider.cache?.set(owner, fakeInputs);
+
+    const activeData = provider.cache?.getActiveData(owner);
+
+    expect(activeData?.utxos.length).toBeGreaterThan(0);
+    expect(activeData?.messages.length).toBeGreaterThan(0);
+
+    const spy = vi.spyOn(provider.operations, 'getCoinsToSpend');
+
+    const userInput: ExcludeResourcesOption = {
+      utxos: Array.from({ length: maxInputs }, () => hexlify(randomBytes(34))),
+      messages: Array.from({ length: maxInputs }, () => hexlify(randomBytes(32))),
+    };
+
+    await expectToThrowFuelError(
+      () => wallet.getResourcesToSpend([{ amount, assetId: baseAssetId }], userInput),
+      { code: ErrorCode.INVALID_REQUEST }
+    );
+
+    expect(spy).toHaveBeenCalledWith({
+      owner,
+      queryPerAsset: [
+        {
+          assetId: baseAssetId,
+          amount: String(amount),
+          max: undefined,
+        },
+      ],
+      excludedIds: userInput,
+    });
+  });
+
+  it('should ensure that excluded IDs do not exceed max_inputs [W/O USER INPUT]', async () => {
+    using launched = await setupTestProviderAndWallets();
+
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const { baseAssetId, maxInputs } = await extractBaseAssetAndMaxInputs(provider);
+    const owner = wallet.address.toB256();
+
+    const fakeInputs = Array.from({ length: maxInputs + 1 }, (_, i) =>
+      i % 2 === 0
+        ? generateFakeRequestInputCoin({ owner })
+        : generateFakeRequestInputMessage({ recipient: owner })
+    );
+
+    provider.cache?.set(owner, fakeInputs);
+    const activeData = provider.cache?.getActiveData(owner) as Required<ExcludeResourcesOption>;
+    const totalCached = activeData.utxos.length + activeData.messages.length;
+
+    expect(totalCached).toBeGreaterThan(maxInputs);
+
+    const spy = vi.spyOn(provider.operations, 'getCoinsToSpend');
+
+    await wallet.getResourcesToSpend([{ amount: 1, assetId: baseAssetId }]);
+    const excludedIds = spy.mock.calls[0][0].excludedIds as Required<ExcludeResourcesOption>;
+
+    const totalUsed = excludedIds.utxos.length + excludedIds.messages.length;
+    expect(totalUsed).toBe(maxInputs);
+  });
+
+  it('should ensure that excluded IDs do not exceed max_inputs [W/ USER INPUT]', async () => {
+    using launched = await setupTestProviderAndWallets();
+
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+    const { baseAssetId, maxInputs } = await extractBaseAssetAndMaxInputs(provider);
+    const owner = wallet.address.toB256();
+
+    const cachedInputs = Array.from({ length: maxInputs + 1 }, (_, i) =>
+      i % 2 === 0
+        ? generateFakeRequestInputCoin({ owner })
+        : generateFakeRequestInputMessage({ recipient: owner })
+    );
+
+    provider.cache?.set(owner, cachedInputs);
+    const activeData = provider.cache?.getActiveData(owner) as Required<ExcludeResourcesOption>;
+    const totalCached = activeData.utxos.length + activeData.messages.length;
+
+    expect(totalCached).toBeGreaterThan(maxInputs);
+
+    const userInput: ExcludeResourcesOption = {
+      utxos: Array.from({ length: maxInputs / 3 }, () => hexlify(randomBytes(34))),
+      messages: Array.from({ length: maxInputs / 3 }, () => hexlify(randomBytes(32))),
+    };
+
+    const spy = vi.spyOn(provider.operations, 'getCoinsToSpend');
+
+    await wallet.getResourcesToSpend([{ amount: 1, assetId: baseAssetId }], userInput);
+
+    const excludedIds = spy.mock.calls[0][0].excludedIds as Required<ExcludeResourcesOption>;
+
+    // User input should be considered first
+    expect(excludedIds?.utxos).containSubset(userInput.utxos);
+    expect(excludedIds?.messages).containSubset(userInput.messages);
+
+    const totalUsed = excludedIds.utxos.length + excludedIds.messages.length;
+    expect(totalUsed).toBe(maxInputs);
   });
 });

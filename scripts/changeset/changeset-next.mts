@@ -3,19 +3,6 @@ import { readFileSync, writeFileSync } from "fs";
 import { globSync } from "glob";
 
 const CHANGESET_CONFIG_PATH = ".changeset/config.json";
-const GITHUB_ORGANIZATION_SCOPE = "@FuelLabs";
-
-const formatPackageName = (name: string) =>
-  `${GITHUB_ORGANIZATION_SCOPE}/${name.replace("@fuel-ts/", "")}`;
-
-const formatPackageJsonContents = (contents: { name: string }) => ({
-  ...contents,
-  // We need to add the GitHub organization name to the scope to publish to GitHub
-  // We also need to strip off and prefixes (e.g. '@fuel-ts/' -> '')
-  name: formatPackageName(contents.name),
-  // We also need a repository field to publish to GitHub
-  repository: "https://github.com/FuelLabs/fuels-ts",
-});
 
 /**
  * Gather all the package.json files to be published
@@ -31,59 +18,37 @@ const packages = globSync("**/package.json", {
       contents: packageJson,
     };
   })
-  // Filter out private packages
-  .filter((pkg) => !pkg.contents.private);
+  // Filter out private packages (expect templates)
+  .filter((pkg) => !pkg.contents.private || pkg.path.includes("templates"));
 
-// Format the package contents to be used to publish to GitHub
-packages
-  .map((pkg) => ({
-    path: pkg.path,
-    contents: formatPackageJsonContents(pkg.contents),
-  }))
-  .forEach((pkg) => {
-    // Write the formatted package.json files
-    writeFileSync(pkg.path, JSON.stringify(pkg.contents, null, 2));
-    // Add the formatted package.json files to the git index
-    execSync(`git add ${pkg.path}`);
-  });
+// Update all "private" `package.json` files to be public
+const privatePackages = packages.filter((pkg) => pkg.contents.private)
+privatePackages.forEach((pkg) => {
+  const contents = { ...pkg.contents, private: false };
+  writeFileSync(pkg.path, JSON.stringify(contents, null, 2));
+  execSync(`git add ${pkg.path}`);
+});
 
 /**
  * Update the changeset config to include the FuelLabs organization scope
  */
+const packageNames = packages.map((pkg) => pkg.contents.name);
 const changesetConfigContents = JSON.parse(
   readFileSync(CHANGESET_CONFIG_PATH, "utf-8"),
 );
 const changesetConfig = {
   ...changesetConfigContents,
-  fixed: [[`${GITHUB_ORGANIZATION_SCOPE}/*`]],
+  ignore: [
+    ...changesetConfigContents.ignore.filter(ignorePackageName => !packageNames.includes(ignorePackageName)),
+  ]
 };
 writeFileSync(CHANGESET_CONFIG_PATH, JSON.stringify(changesetConfig, null, 2));
 execSync(`git add ${CHANGESET_CONFIG_PATH}`);
 
 /**
- * Update all pre-existing changeset package scopes
- */
-const packageNames = packages.map((pkg) => pkg.contents.name).join("|");
-const regex = new RegExp(packageNames, "g");
-globSync(".changeset/*.md")
-  .map((fileName) => {
-    const contents = readFileSync(fileName, "utf-8");
-    return {
-      path: fileName,
-      contents,
-    };
-  })
-  .forEach((pkg) => {
-    writeFileSync(pkg.path, pkg.contents.replace(regex, formatPackageName));
-    execSync(`git add ${pkg.path}`);
-  });
-
-/**
  * Add a changeset to bump all package versions
  */
-const packagesToBump = packages
-  .map((pkg) => formatPackageName(pkg.contents.name))
-  .map((packageWithScope) => `"${packageWithScope}": patch`);
+const packagesToBump = packages.map((pkg) => `"${pkg.contents.name}": patch`);
 const output = `---\n${packagesToBump.join("\n")}\n---\n\nincremental\n`;
 writeFileSync(".changeset/fuel-labs-ci.md", output);
 execSync(`git add .changeset/fuel-labs-ci.md`);

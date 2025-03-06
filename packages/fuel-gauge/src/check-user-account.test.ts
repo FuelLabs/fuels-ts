@@ -1,5 +1,6 @@
 import { launchTestNode } from 'fuels/test-utils';
 
+import { TokenContractFactory } from '../test/typegen';
 import { AdvancedLoggingFactory } from '../test/typegen/contracts/AdvancedLoggingFactory';
 import { ScriptMainArgBool } from '../test/typegen/scripts';
 
@@ -66,14 +67,60 @@ describe('User account tests', () => {
     expect(await provider.isUserAccount(tx.id)).toBe(false);
   });
 
+  it('should return false for a Asset ID', async () => {
+    using launch = await launchTestNode({
+      contractsConfigs: [{ factory: TokenContractFactory }],
+    });
+
+    const {
+      provider,
+      contracts: [tokenContract],
+    } = launch;
+
+    const call = await tokenContract.functions.mint_coins(1).call();
+    const {
+      transactionResult: { mintedAssets },
+    } = await call.waitForResult();
+
+    const [{ assetId }] = mintedAssets;
+
+    expect(await provider.isUserAccount(assetId)).toBe(false);
+  });
+
   it('should return the correct address type', async () => {
-    using launch = await launchTestNode();
+    using launch = await launchTestNode({
+      contractsConfigs: [{ factory: TokenContractFactory }],
+    });
 
     const {
       provider,
       wallets: [wallet],
+      contracts: [tokenContract],
     } = launch;
 
-    expect(await provider.getAddressType(wallet.address.toB256())).toBe('Account');
+    const script = new ScriptMainArgBool(wallet);
+    const { blobId, waitForResult } = await script.deploy(wallet);
+    await waitForResult();
+
+    const call = await tokenContract.functions.mint_coins(1000000).call();
+    const {
+      transactionResult: { mintedAssets, id },
+    } = await call.waitForResult();
+    const [{ assetId }] = mintedAssets;
+
+    let type = await provider.getAddressType(assetId);
+    expect(type).toBe('Asset');
+
+    type = await provider.getAddressType(id);
+    expect(type).toBe('Transaction');
+
+    type = await provider.getAddressType(blobId);
+    expect(type).toBe('Blob');
+
+    type = await provider.getAddressType(tokenContract.id.toB256());
+    expect(type).toBe('Contract');
+
+    type = await provider.getAddressType(wallet.address.toB256());
+    expect(type).toBe('Account');
   });
 });
