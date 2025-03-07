@@ -658,7 +658,7 @@ export class Account extends AbstractAccount implements WithAddress {
     // Tx Response will usually be a TransactionResponse, but it could be a string
     // where the connector returns the tx id, and we must build the `TransactionResponse` ourselves.
     let response: TransactionResponse | string;
-    let txRequest = transactionRequestLike;
+    let request = transactionRequestLike;
 
     // Check if the account is using a connector, and therefore we do not have direct access to the
     // private key.
@@ -666,7 +666,7 @@ export class Account extends AbstractAccount implements WithAddress {
       // Attempt to use the prepareForSend flow if the connector supports it. Wrapped in a try/catch
       // to handle the case where the child connector is using the base implementation of prepareForSend.
       try {
-        txRequest = await this._connector.prepareForSend(
+        request = await this._connector.prepareForSend(
           this.address.toString(),
           transactionRequestLike,
           {
@@ -676,7 +676,7 @@ export class Account extends AbstractAccount implements WithAddress {
         );
 
         // If we have a prepared request, we can send it directly from the SDK level provider.
-        response = await this.provider.sendTransaction(txRequest, {
+        response = await this.provider.sendTransaction(request, {
           estimateTxDependencies: false,
         });
       } catch (error) {
@@ -684,7 +684,7 @@ export class Account extends AbstractAccount implements WithAddress {
         // of prepareForSend.
         if ((<FuelError>error).code === ErrorCode.NOT_IMPLEMENTED) {
           // In that case, attempt to send from the connector's sendTransaction method.
-          response = await this._connector.sendTransaction(this.address.toString(), txRequest, {
+          response = await this._connector.sendTransaction(this.address.toString(), request, {
             onBeforeSend,
             skipCustomFee,
           });
@@ -695,9 +695,9 @@ export class Account extends AbstractAccount implements WithAddress {
       }
     } else {
       // If we're not dealing with a connector, we can just send the transaction directly from the SDK.
-
+      const txRequest = transactionRequestify(request);
       if (estimateTxDependencies) {
-        await this.provider.estimateTxDependencies(transactionRequestify(transactionRequestLike));
+        await this.provider.estimateTxDependencies(txRequest);
       }
 
       response = await this.provider.sendTransaction(txRequest, {
