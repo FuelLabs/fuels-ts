@@ -1532,8 +1532,14 @@ export default class Provider {
   }
 
   async assembleTX(params: AssembleTxParams) {
+    const { excludeInput } = params;
+
+    const allAddresses = new Set<string>();
+
     const parsed: GqlRequiredBalance[] = params.requiredBalances.map((balance) => {
       const { assetId, amount, account, changePolicy } = balance;
+
+      allAddresses.add((account.address || account.predicate?.predicateAddress) as string);
 
       if (account.predicate) {
         account.predicate.predicateData = hexlify(account.predicate.predicateData);
@@ -1548,6 +1554,11 @@ export default class Provider {
       };
     });
 
+    const idsToExclude = await this.adjustExcludeResourcesForAddress(
+      Array.from(allAddresses),
+      excludeInput
+    );
+
     const request = params.transactionRequest;
 
     const {
@@ -1558,6 +1569,7 @@ export default class Provider {
       feeAddressIndex: String(params.feeAddressIndex),
       requiredBalances: parsed,
       estimatePredicates: params.estimatePredicates,
+      excludeInput: idsToExclude,
     });
 
     if (status.type === 'DryRunFailureStatus') {
