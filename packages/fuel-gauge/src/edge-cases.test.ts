@@ -63,7 +63,8 @@ describe('Edge Cases', () => {
     } = launched;
 
     const predicate = new PredicateFalse({ provider: launched.provider });
-    await funder.transfer(predicate.address, 1_000_000);
+    const res = await funder.transfer(predicate.address, 1_000_000);
+    await res.waitForResult();
 
     const transferTx = await predicate.createTransfer(WalletUnlocked.generate().address, 1);
 

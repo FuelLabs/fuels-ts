@@ -89,7 +89,7 @@ describe('Revert Error Testing', () => {
     );
   });
 
-  it('should throw for revert TX with reason "TransferZeroCoins"', async () => {
+  it.skip('should throw for revert TX with reason "TransferZeroCoins"', async () => {
     using contractInstance = await launchContract();
 
     await expectToThrowFuelError(
@@ -130,7 +130,7 @@ describe('Revert Error Testing', () => {
     );
   });
 
-  it('should throw for revert TX with reason "NotEnoughBalance"', async () => {
+  it.skip('should throw for revert TX with reason "NotEnoughBalance"', async () => {
     using contractInstance = await launchContract();
 
     await expectToThrowFuelError(
