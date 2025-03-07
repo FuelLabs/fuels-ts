@@ -10,7 +10,7 @@ describe('getBuiltinVersions.js', () => {
     const versions = getBuiltinVersions();
     const versionsFromFiles = readVersionsFromFiles();
 
-    const workingWithGitBranch = Object.values(versions).some((v) => v.startsWith('git:'));
+    const workingWithGitBranch = Object.values(versionsFromFiles).some((v) => v.startsWith('git:'));
     if (workingWithGitBranch) {
       return;
     }
