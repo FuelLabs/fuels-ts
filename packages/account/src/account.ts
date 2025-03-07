@@ -655,7 +655,7 @@ export class Account extends AbstractAccount implements WithAddress {
     transactionRequestLike: TransactionRequestLike,
     { estimateTxDependencies = true, onBeforeSend, skipCustomFee = false }: AccountSendTxParams = {}
   ): Promise<TransactionResponse> {
-    // Tx Response will usually be the TransactionResponse object, but it could be a string
+    // Tx Response will usually be a TransactionResponse, but it could be a string
     // where the connector returns the tx id, and we must build the `TransactionResponse` ourselves.
     let response: TransactionResponse | string;
     let txRequest = transactionRequestLike;
@@ -705,7 +705,7 @@ export class Account extends AbstractAccount implements WithAddress {
       });
     }
 
-    // Return the response as a TransactionResponse object.
+    // Return the response as a TransactionResponse.
     return typeof response === 'string' ? this.provider.getTransactionResponse(response) : response;
   }
 
