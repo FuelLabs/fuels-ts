@@ -238,6 +238,9 @@ importers:
       eslint-plugin-react-refresh:
         specifier: 0.4.19
         version: 0.4.19(eslint@8.57.0)
+      globals:
+        specifier: 16.0.0
+        version: 16.0.0
       postcss:
         specifier: 8.5.3
         version: 8.5.3
@@ -1268,6 +1271,9 @@ importers:
       eslint-plugin-react-refresh:
         specifier: 0.4.19
         version: 0.4.19(eslint@8.57.0)
+      globals:
+        specifier: 16.0.0
+        version: 16.0.0
       postcss:
         specifier: 8.5.3
         version: 8.5.3
@@ -9587,6 +9593,10 @@ packages:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
     engines: {node: '>=18'}
 
+  globals@16.0.0:
+    resolution: {integrity: sha512-iInW14XItCXET01CQFqudPOWP2jYMl7T+QRQT+UNcR/iQncN/F0UNpgd76iFkBPgNQb4+X3LV9tLJYzwh+Gl3A==}
+    engines: {node: '>=18'}
+
   globalthis@1.0.4:
     resolution: {integrity: sha512-DpLKbNU4WylpxJykQujfCcwYWiV/Jhm50Goo0wrVILAv5jOr9d+H+UR3PhSCD2rCCEIg0uc+G+muBTwD54JhDQ==}
     engines: {node: '>= 0.4'}
@@ -11087,9 +11097,6 @@ packages:
 
   magic-string@0.25.9:
     resolution: {integrity: sha512-RmF0AsMzgt25qzqqLc1+MbHmhdx0ojF2Fvs4XnOqz2ZOBXzzkEwc/dJQZCYHAn7v1jbVOjAZfK8msRn4BxO4VQ==}
-
-  magic-string@0.30.11:
-    resolution: {integrity: sha512-+Wri9p0QHMy+545hKww7YAu5NyzF8iomPL/RQazugQ9+Ez4Ic3mERMd8ZTX5rfK944j+560ZJi8iAwgak1Ac7A==}
 
   magic-string@0.30.17:
     resolution: {integrity: sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA==}
@@ -15707,7 +15714,7 @@ snapshots:
 
   '@babel/helper-builder-binary-assignment-operator-visitor@7.22.5':
     dependencies:
-      '@babel/types': 7.26.8
+      '@babel/types': 7.26.9
 
   '@babel/helper-compilation-targets@7.22.5(@babel/core@7.22.5)':
     dependencies:
@@ -15918,7 +15925,7 @@ snapshots:
 
   '@babel/helper-hoist-variables@7.22.5':
     dependencies:
-      '@babel/types': 7.26.8
+      '@babel/types': 7.26.9
 
   '@babel/helper-member-expression-to-functions@7.22.5':
     dependencies:
@@ -16376,21 +16383,21 @@ snapshots:
 
   '@babel/plugin-proposal-object-rest-spread@7.20.7(@babel/core@7.26.8)':
     dependencies:
-      '@babel/compat-data': 7.25.8
+      '@babel/compat-data': 7.26.8
       '@babel/core': 7.26.8
-      '@babel/helper-compilation-targets': 7.25.7
+      '@babel/helper-compilation-targets': 7.26.5
       '@babel/helper-plugin-utils': 7.26.5
       '@babel/plugin-syntax-object-rest-spread': 7.8.3(@babel/core@7.26.8)
-      '@babel/plugin-transform-parameters': 7.25.7(@babel/core@7.26.8)
+      '@babel/plugin-transform-parameters': 7.25.9(@babel/core@7.26.8)
 
   '@babel/plugin-proposal-object-rest-spread@7.20.7(@babel/core@7.26.9)':
     dependencies:
-      '@babel/compat-data': 7.25.8
+      '@babel/compat-data': 7.26.8
       '@babel/core': 7.26.9
-      '@babel/helper-compilation-targets': 7.25.7
+      '@babel/helper-compilation-targets': 7.26.5
       '@babel/helper-plugin-utils': 7.26.5
       '@babel/plugin-syntax-object-rest-spread': 7.8.3(@babel/core@7.26.9)
-      '@babel/plugin-transform-parameters': 7.25.7(@babel/core@7.26.9)
+      '@babel/plugin-transform-parameters': 7.25.9(@babel/core@7.26.9)
 
   '@babel/plugin-proposal-optional-catch-binding@7.18.6(@babel/core@7.26.8)':
     dependencies:
@@ -17818,11 +17825,6 @@ snapshots:
   '@babel/plugin-transform-parameters@7.25.7(@babel/core@7.26.8)':
     dependencies:
       '@babel/core': 7.26.8
-      '@babel/helper-plugin-utils': 7.26.5
-
-  '@babel/plugin-transform-parameters@7.25.7(@babel/core@7.26.9)':
-    dependencies:
-      '@babel/core': 7.26.9
       '@babel/helper-plugin-utils': 7.26.5
 
   '@babel/plugin-transform-parameters@7.25.9(@babel/core@7.26.8)':
@@ -20556,7 +20558,7 @@ snapshots:
 
   '@jridgewell/source-map@0.3.6':
     dependencies:
-      '@jridgewell/gen-mapping': 0.3.5
+      '@jridgewell/gen-mapping': 0.3.8
       '@jridgewell/trace-mapping': 0.3.25
 
   '@jridgewell/sourcemap-codec@1.5.0': {}
@@ -23589,7 +23591,7 @@ snapshots:
 
   '@vue/compiler-core@3.5.13':
     dependencies:
-      '@babel/parser': 7.26.8
+      '@babel/parser': 7.26.9
       '@vue/shared': 3.5.13
       entities: 4.5.0
       estree-walker: 2.0.2
@@ -23602,13 +23604,13 @@ snapshots:
 
   '@vue/compiler-sfc@3.5.13':
     dependencies:
-      '@babel/parser': 7.25.8
+      '@babel/parser': 7.26.9
       '@vue/compiler-core': 3.5.13
       '@vue/compiler-dom': 3.5.13
       '@vue/compiler-ssr': 3.5.13
       '@vue/shared': 3.5.13
       estree-walker: 2.0.2
-      magic-string: 0.30.11
+      magic-string: 0.30.17
       postcss: 8.5.3
       source-map-js: 1.2.1
 
@@ -28639,7 +28641,7 @@ snapshots:
 
   execa@5.1.1:
     dependencies:
-      cross-spawn: 7.0.3
+      cross-spawn: 7.0.6
       get-stream: 6.0.1
       human-signals: 2.1.0
       is-stream: 2.0.1
@@ -29243,6 +29245,8 @@ snapshots:
       type-fest: 0.20.2
 
   globals@14.0.0: {}
+
+  globals@16.0.0: {}
 
   globalthis@1.0.4:
     dependencies:
@@ -31284,10 +31288,6 @@ snapshots:
   magic-string@0.25.9:
     dependencies:
       sourcemap-codec: 1.4.8
-
-  magic-string@0.30.11:
-    dependencies:
-      '@jridgewell/sourcemap-codec': 1.5.0
 
   magic-string@0.30.17:
     dependencies:
@@ -33722,7 +33722,7 @@ snapshots:
 
   regenerator-transform@0.15.1:
     dependencies:
-      '@babel/runtime': 7.25.7
+      '@babel/runtime': 7.26.9
 
   regex-parser@2.2.11: {}
 
