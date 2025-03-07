@@ -55,6 +55,9 @@ interface Connector {
     address: string,
     transaction: TransactionRequestLike
   ): Promise<TransactionRequestLike>;
+
+  baseTransaction(transaction: TransactionRequestLike): Promise<TransactionRequestLike>;
+
   // #endregion fuel-connector-method-prepareForSend
   // #region fuel-connector-method-currentAccount
   currentAccount(): Promise<string | null>;
@@ -233,6 +236,16 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
     _params?: FuelConnectorSendTxParams
   ): Promise<TransactionRequestLike> {
     throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
+  }
+
+  /**
+   * Should return the base transaction request.
+   *
+   * @param transaction - The transaction to base the request on.
+   * @returns The base transaction request.
+   */
+  async baseTransaction(transaction: TransactionRequestLike): Promise<TransactionRequestLike> {
+    return Promise.resolve(transaction);
   }
 
   /**

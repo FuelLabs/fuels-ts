@@ -24,6 +24,7 @@ import { Wallet } from '../src/wallet';
 import { MockConnector } from './fixtures/mocked-connector';
 import { MockedPrepConnector } from './fixtures/mocked-prep-connector';
 import { promiseCallback } from './fixtures/promise-callback';
+import { MockedAwareConnector } from './fixtures/mocked-aware-connector';
 
 /**
  * @group node
@@ -858,5 +859,25 @@ describe('Fuel Connector', () => {
     expect(submitAndAwaitStatusSpy).toHaveBeenCalled();
     expect(statusChangeSpy).not.toHaveBeenCalled();
     expect(getTransactionWithReceiptsSpy).not.toHaveBeenCalled();
+  });
+
+  it('sends transaction with base transaction', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider,
+      wallets: [connectorWallet, recipientWallet],
+    } = launched;
+    const connector = new MockedAwareConnector({
+      wallets: [connectorWallet],
+    });
+    const fuel = await new Fuel({
+      connectors: [connector],
+    }).init();
+    const connectorAccount = new Account(connectorWallet.address.toString(), provider, fuel);
+
+    const tx = await connectorAccount.transfer(recipientWallet.address, 1000);
+    const result = await tx.waitForResult();
+
+    expect(result.isStatusSuccess).toBe(true);
   });
 });
