@@ -1638,7 +1638,7 @@ export default class Provider {
     const ownerAddress = new Address(owner);
 
     const idsToExclude = await this.adjustExcludeResourcesForAddress(
-      ownerAddress.b256Address,
+      [ownerAddress.b256Address],
       excludedIds
     );
 
@@ -2415,30 +2415,44 @@ export default class Provider {
    * @hidden
    */
   private async adjustExcludeResourcesForAddress(
-    address: string,
+    addresses: string[],
     excludedIds?: ExcludeResourcesOption
   ) {
-    let idsToExclude = {
+    const final = {
       messages: excludedIds?.messages?.map((nonce) => hexlify(nonce)) || [],
       utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
     };
 
     if (this.cache) {
-      const cached = this.cache.getActiveData(address);
-      if (cached.utxos.length || cached.messages.length) {
-        const {
-          consensusParameters: {
-            txParameters: { maxInputs },
-          },
-        } = await this.getChain();
-        idsToExclude = adjustResourcesToExclude({
-          userInput: idsToExclude,
-          cached,
-          maxInputs: maxInputs.toNumber(),
-        });
+      const cache = this.cache;
+      const allCached = addresses.map((address) => cache.getActiveData(address));
+
+      const {
+        consensusParameters: {
+          txParameters: { maxInputs: maxInputsBn },
+        },
+      } = await this.getChain();
+
+      const maxInputs = maxInputsBn.toNumber();
+
+      for (let i = 0; i < allCached.length; i++) {
+        let total = final.utxos.length + final.messages.length;
+        if (total >= maxInputs) {
+          break;
+        }
+
+        final.utxos = [...final.utxos, ...allCached[i].utxos.slice(0, maxInputs - total)];
+
+        total = final.utxos.length + final.messages.length;
+
+        if (total >= maxInputs) {
+          break;
+        }
+
+        final.messages = [...final.messages, ...allCached[i].messages.slice(0, maxInputs - total)];
       }
     }
 
-    return idsToExclude;
+    return final;
   }
 }
