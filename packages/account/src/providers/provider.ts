@@ -4,12 +4,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
-import {
-  InputType,
-  InputMessageCoder,
-  TransactionCoder,
-  TransactionType,
-} from '@fuel-ts/transactions';
+import { InputMessageCoder, TransactionCoder, TransactionType } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility, gte, versions } from '@fuel-ts/versions';
@@ -1641,26 +1636,11 @@ export default class Provider {
     excludedIds?: ExcludeResourcesOption
   ): Promise<Resource[]> {
     const ownerAddress = new Address(owner);
-    let idsToExclude = {
-      messages: excludedIds?.messages?.map((nonce) => hexlify(nonce)) || [],
-      utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
-    };
 
-    if (this.cache) {
-      const cached = this.cache.getActiveData(ownerAddress.toB256());
-      if (cached.utxos.length || cached.messages.length) {
-        const {
-          consensusParameters: {
-            txParameters: { maxInputs },
-          },
-        } = await this.getChain();
-        idsToExclude = adjustResourcesToExclude({
-          userInput: idsToExclude,
-          cached,
-          maxInputs: maxInputs.toNumber(),
-        });
-      }
-    }
+    const idsToExclude = await this.adjustExcludeResourcesForAddress(
+      ownerAddress.b256Address,
+      excludedIds
+    );
 
     const coinsQuery = {
       owner: ownerAddress.toB256(),
@@ -2429,5 +2409,36 @@ export default class Provider {
     }
 
     return transactionRequest;
+  }
+
+  /**
+   * @hidden
+   */
+  private async adjustExcludeResourcesForAddress(
+    address: string,
+    excludedIds?: ExcludeResourcesOption
+  ) {
+    let idsToExclude = {
+      messages: excludedIds?.messages?.map((nonce) => hexlify(nonce)) || [],
+      utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
+    };
+
+    if (this.cache) {
+      const cached = this.cache.getActiveData(address);
+      if (cached.utxos.length || cached.messages.length) {
+        const {
+          consensusParameters: {
+            txParameters: { maxInputs },
+          },
+        } = await this.getChain();
+        idsToExclude = adjustResourcesToExclude({
+          userInput: idsToExclude,
+          cached,
+          maxInputs: maxInputs.toNumber(),
+        });
+      }
+    }
+
+    return idsToExclude;
   }
 }
