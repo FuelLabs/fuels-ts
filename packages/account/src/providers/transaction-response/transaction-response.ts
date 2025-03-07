@@ -329,7 +329,7 @@ export class TransactionResponse {
     return transactionSummary;
   }
 
-  private async waitForStatusChange() {
+  private async waitForStatusChange(waitUntil: 'pre-confirmation' | 'block-inclusion') {
     const status = this.gqlTransaction?.status?.type;
     if (status && status !== 'SubmittedStatus') {
       return;
@@ -344,15 +344,25 @@ export class TransactionResponse {
     for await (const sub of subscription) {
       const statusChange = 'statusChange' in sub ? sub.statusChange : sub.submitAndAwaitStatus;
       this.status = statusChange;
-      if (statusChange.type === 'SqueezedOutStatus') {
-        this.unsetResourceCache();
-        throw new FuelError(
-          ErrorCode.TRANSACTION_SQUEEZED_OUT,
-          `Transaction Squeezed Out with reason: ${statusChange.reason}`
-        );
-      }
-      if (statusChange.type !== 'SubmittedStatus') {
-        break;
+
+      switch (statusChange.type) {
+        case 'SubmittedStatus':
+          continue;
+        case 'SqueezedOutStatus':
+        case 'PreconfirmationSqueezedOutStatus':
+          this.unsetResourceCache();
+          throw new FuelError(
+            ErrorCode.TRANSACTION_SQUEEZED_OUT,
+            `Transaction Squeezed Out with reason: ${statusChange.reason}`
+          );
+        case 'PreconfirmationSuccessStatus':
+          if (waitUntil === 'pre-confirmation') {
+            break;
+          } else {
+            continue;
+          }
+        default:
+          break;
       }
     }
   }
@@ -410,10 +420,13 @@ export class TransactionResponse {
    *
    * @returns The completed transaction result
    */
-  async waitForResult<TTransactionType = void>(
-    contractsAbiMap?: AbiMap
-  ): Promise<TransactionResult<TTransactionType>> {
-    await this.waitForStatusChange();
+  async waitForResult<TTransactionType = void>({
+    waitUntil = 'block-inclusion',
+    ...contractsAbiMap
+  }: AbiMap & { waitUntil?: 'pre-confirmation' | 'block-inclusion' } = {}): Promise<
+    TransactionResult<TTransactionType>
+  > {
+    await this.waitForStatusChange(waitUntil);
     this.unsetResourceCache();
     return this.assembleResult<TTransactionType>(contractsAbiMap);
   }
@@ -424,7 +437,7 @@ export class TransactionResponse {
    * @param contractsAbiMap - The contracts ABI map.
    */
   async wait<TTransactionType = void>(
-    contractsAbiMap?: AbiMap
+    contractsAbiMap?: AbiMap & { waitUntil?: 'pre-confirmation' | 'block-inclusion' }
   ): Promise<TransactionResult<TTransactionType>> {
     return this.waitForResult<TTransactionType>(contractsAbiMap);
   }
