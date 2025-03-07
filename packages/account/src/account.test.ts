@@ -9,7 +9,7 @@ import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import type { FakeResources, TransferParams } from './account';
 import { Account } from './account';
 import type { CoinQuantity, Resource } from './providers';
-import { ScriptTransactionRequest, Provider } from './providers';
+import { ScriptTransactionRequest, Provider, TransactionResponse } from './providers';
 import * as providersMod from './providers';
 import { TestAssetId, setupTestProviderAndWallets } from './test-utils';
 import { Wallet } from './wallet';
@@ -298,13 +298,13 @@ describe('Account', () => {
 
   it('should execute sendTransaction just fine', async () => {
     using provider = await setupTestProvider();
+    const chainId = await provider.getChainId();
 
     const transactionRequestLike: providersMod.TransactionRequestLike = {
       type: providersMod.TransactionType.Script,
     };
     const transactionRequest = new ScriptTransactionRequest();
-    const transactionResponse =
-      'transactionResponse' as unknown as providersMod.TransactionResponse;
+    const transactionResponse = new TransactionResponse('0x01', provider, chainId);
 
     const transactionRequestify = vi.spyOn(providersMod, 'transactionRequestify');
 
@@ -325,7 +325,7 @@ describe('Account', () => {
 
     const result = await account.sendTransaction(transactionRequestLike);
 
-    expect(result).toEqual(transactionResponse);
+    expect(result).toStrictEqual(transactionResponse);
 
     expect(transactionRequestify.mock.calls.length).toEqual(1);
     expect(transactionRequestify.mock.calls[0][0]).toEqual(transactionRequestLike);
