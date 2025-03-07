@@ -60,6 +60,7 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'tsdoc/syntax': 'warn',
     'require-await': 'off',
+    'no-empty': ['error', { allowEmptyCatch: true }],
     '@typescript-eslint/require-await': 'error',
     '@typescript-eslint/no-floating-promises': 'error',
     '@typescript-eslint/no-unused-vars': [
