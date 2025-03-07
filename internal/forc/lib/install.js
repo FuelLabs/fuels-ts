@@ -16,6 +16,11 @@ import {
 } from './shared.js';
 
 (async () => {
+  // used in vercel docs
+  if (process.env.SKIP_INSTALL_FORC) {
+    return;
+  }
+
   const { info } = console;
 
   const pkgPlatform = getPkgPlatform();
