@@ -218,10 +218,6 @@ It will return the prepared transaction (as a [`TransactionRequestLike`](DOCS_AP
 
 It can be used in tandem with `Account.sendTransaction` to prepare and send a transaction in one go.
 
-This is enabled by setting the `usePrepareForSend` property to `true` on the connector.
-
-<<< @./snippets/connectors.ts#fuel-connector-method-usePrepareForSend{ts:line-numbers}
-
 This can be beneficial for performance and user experience, as it reduces the number of round trips between the dApp and the network.
 
 #### `assets`

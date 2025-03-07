@@ -45,10 +45,6 @@ class WalletConnector extends FuelConnector {
   };
   // #endregion fuel-connector-metadata
 
-  // #region fuel-connector-method-usePrepareForSend
-  public override usePrepareForSend = true;
-  // #endregion fuel-connector-method-usePrepareForSend
-
   private eventsConnectorEvents(): void {
     // #region fuel-connector-events-accounts
     const accounts: Array<string> = ['0x1234567890abcdef'];

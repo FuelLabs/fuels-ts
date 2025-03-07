@@ -104,7 +104,6 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
   installed: boolean = false;
   external: boolean = true;
   events = FuelConnectorEventTypes;
-  usePrepareForSend: boolean = false;
 
   /**
    * Should return true if the connector is loaded

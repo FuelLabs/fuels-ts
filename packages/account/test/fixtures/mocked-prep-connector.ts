@@ -3,8 +3,6 @@ import { transactionRequestify, type TransactionRequestLike } from '../../src';
 import { MockConnector } from './mocked-connector';
 
 export class MockedPrepConnector extends MockConnector {
-  override usePrepareForSend = true;
-
   override async prepareForSend(
     address: string,
     transaction: TransactionRequestLike

@@ -655,14 +655,18 @@ export class Account extends AbstractAccount implements WithAddress {
     transactionRequestLike: TransactionRequestLike,
     { estimateTxDependencies = true, onBeforeSend, skipCustomFee = false }: AccountSendTxParams = {}
   ): Promise<TransactionResponse> {
+    // Tx Response will usually be the TransactionResponse object, but it could be a string
+    // where the connector returns the tx id, and we must build the `TransactionResponse` ourselves.
+    let response: TransactionResponse | string;
+    let txRequest = transactionRequestLike;
+
     // Check if the account is using a connector, and therefore we do not have direct access to the
     // private key.
     if (this._connector) {
-      // If the connector is using prepareForSend, the connector will prepare the transaction for the dapp,
-      // and submission is owned by the dapp. This reduces network requests to submit and create the
-      // summary for a tx.
-      if (this._connector.usePrepareForSend) {
-        const preparedTransaction = await this._connector.prepareForSend(
+      // Attempt to use the prepareForSend flow if the connector supports it. Wrapped in a try/catch
+      // to handle the case where the child connector is using the base implementation of prepareForSend.
+      try {
+        txRequest = await this._connector.prepareForSend(
           this.address.toString(),
           transactionRequestLike,
           {
@@ -670,35 +674,39 @@ export class Account extends AbstractAccount implements WithAddress {
             skipCustomFee,
           }
         );
-        // Submit the prepared transaction using the provider.
-        return this.provider.sendTransaction(preparedTransaction, {
+
+        // If we have a prepared request, we can send it directly from the SDK level provider.
+        response = await this.provider.sendTransaction(txRequest, {
           estimateTxDependencies: false,
         });
+      } catch (error) {
+        // If the above has thrown, it may be because the child connector is using the base implementation
+        // of prepareForSend.
+        if ((<FuelError>error).code === ErrorCode.NOT_IMPLEMENTED) {
+          // In that case, attempt to send from the connector's sendTransaction method.
+          response = await this._connector.sendTransaction(this.address.toString(), txRequest, {
+            onBeforeSend,
+            skipCustomFee,
+          });
+        } else {
+          // If it's a different error (e.g. tx validation), we need to throw it.
+          throw error;
+        }
+      }
+    } else {
+      // If we're not dealing with a connector, we can just send the transaction directly from the SDK.
+
+      if (estimateTxDependencies) {
+        await this.provider.estimateTxDependencies(transactionRequestify(transactionRequestLike));
       }
 
-      // Otherwise, the connector itself will submit the transaction, and the app will use
-      // the tx id to create the summary, requiring multiple network requests.
-      const txId = await this._connector.sendTransaction(
-        this.address.toString(),
-        transactionRequestLike,
-        {
-          onBeforeSend,
-          skipCustomFee,
-        }
-      );
-      // And return the transaction response for the returned tx id.
-      return this.provider.getTransactionResponse(txId);
+      response = await this.provider.sendTransaction(txRequest, {
+        estimateTxDependencies: false,
+      });
     }
 
-    const transactionRequest = transactionRequestify(transactionRequestLike);
-
-    if (estimateTxDependencies) {
-      await this.provider.estimateTxDependencies(transactionRequest);
-    }
-
-    return this.provider.sendTransaction(transactionRequest, {
-      estimateTxDependencies: false,
-    });
+    // Return the response as a TransactionResponse object.
+    return typeof response === 'string' ? this.provider.getTransactionResponse(response) : response;
   }
 
   /**
