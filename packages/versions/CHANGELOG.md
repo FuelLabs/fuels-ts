@@ -1,5 +1,15 @@
 # @fuel-ts/versions
 
+## 0.100.0
+
+### Minor Changes
+
+- f41887f: chore!: upgrade `fuel-core` to `0.41.7`
+
+### Patch Changes
+
+- ff97a6e: chore: upgrade `forc` to `0.66.7`
+
 ## 0.99.0
 
 ### Patch Changes
