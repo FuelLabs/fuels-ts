@@ -6,9 +6,14 @@ import { getBuiltinVersions } from './getBuiltinVersions';
  * @group node
  */
 describe('getBuiltinVersions.js', () => {
-  test.skip('should return received version of default', () => {
+  test('should return received version of default', () => {
     const versions = getBuiltinVersions();
     const versionsFromFiles = readVersionsFromFiles();
+
+    const workingWithGitBranch = Object.values(versions).some((v) => v.startsWith('git:'));
+    if (workingWithGitBranch) {
+      return;
+    }
 
     expect(versions.FORC).toEqual(versionsFromFiles.FORC);
     expect(versions.FUEL_CORE).toEqual(versionsFromFiles.FUEL_CORE);

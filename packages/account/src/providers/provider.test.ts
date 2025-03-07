@@ -316,6 +316,10 @@ describe('Provider', () => {
   });
 
   it('can getVersion()', async () => {
+    if (versions.FUEL_CORE.startsWith('git:')) {
+      return;
+    }
+
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
@@ -946,17 +950,19 @@ describe('Provider', () => {
   });
 
   it('Prepend a warning to an error with version mismatch [major]', async () => {
-    const { current, supported } = mockIncompatibleVersions({
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    Provider.clearChainAndNodeCaches();
+
+    const { current, supported } = await mockIncompatibleVersions({
       isMajorMismatch: true,
       isMinorMismatch: false,
+      provider,
     });
 
-    using launched = await setupTestProviderAndWallets();
-    const {
-      provider: { url },
-    } = launched;
+    await provider.init();
 
-    const provider = await new Provider(url).init();
     const sender = Wallet.generate({ provider });
     const receiver = Wallet.generate({ provider });
 
@@ -973,17 +979,19 @@ describe('Provider', () => {
   });
 
   it('Prepend a warning to an error with version mismatch [minor]', async () => {
-    const { current, supported } = mockIncompatibleVersions({
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    Provider.clearChainAndNodeCaches();
+
+    const { current, supported } = await mockIncompatibleVersions({
       isMajorMismatch: false,
       isMinorMismatch: true,
+      provider,
     });
 
-    using launched = await setupTestProviderAndWallets();
-    const {
-      provider: { url },
-    } = launched;
+    await provider.init();
 
-    const provider = await new Provider(url).init();
     const sender = Wallet.generate({ provider });
     const receiver = Wallet.generate({ provider });
 
@@ -1000,13 +1008,18 @@ describe('Provider', () => {
   });
 
   it('Prepend a warning to a subscription error with version mismatch [major]', async () => {
-    const { current, supported } = mockIncompatibleVersions({
-      isMajorMismatch: true,
-      isMinorMismatch: false,
-    });
-
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
+
+    Provider.clearChainAndNodeCaches();
+
+    const { current, supported } = await mockIncompatibleVersions({
+      isMajorMismatch: true,
+      isMinorMismatch: false,
+      provider,
+    });
+
+    await provider.init();
 
     await expectToThrowFuelError(
       async () => {
@@ -1037,13 +1050,18 @@ describe('Provider', () => {
   });
 
   it('Prepend a warning to a subscription error with version mismatch [minor]', async () => {
-    const { current, supported } = mockIncompatibleVersions({
-      isMajorMismatch: false,
-      isMinorMismatch: true,
-    });
-
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
+
+    Provider.clearChainAndNodeCaches();
+
+    const { current, supported } = await mockIncompatibleVersions({
+      isMajorMismatch: false,
+      isMinorMismatch: true,
+      provider,
+    });
+
+    await provider.init();
 
     await expectToThrowFuelError(
       async () => {

@@ -1,14 +1,16 @@
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
-import { versions } from '@fuel-ts/versions';
 
-export const mockIncompatibleVersions = (opts: {
+import type { Provider } from '../../src';
+
+export const mockIncompatibleVersions = async (opts: {
   isMajorMismatch: boolean;
   isMinorMismatch: boolean;
+  provider: Provider;
 }) => {
   const mismatch = (current: string) => (current === '0' ? 1 : parseInt(current, 10) - 1);
 
-  const { isMajorMismatch, isMinorMismatch } = opts;
-  const { FUEL_CORE } = versions;
+  const { isMajorMismatch, isMinorMismatch, provider } = opts;
+  const FUEL_CORE = (await provider.operations.getVersion()).nodeInfo.nodeVersion;
   const [currentMajor, currentMinor, currentPatch] = FUEL_CORE.split('.');
   const [major, minor, patch] = [
     isMajorMismatch ? mismatch(currentMajor) : currentMajor,

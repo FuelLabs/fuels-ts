@@ -1,5 +1,5 @@
 ---
-"@fuel-ts/versions": minor
+"@fuel-ts/versions": patch
 "@fuel-ts/account": patch
 ---
 
