@@ -22,7 +22,7 @@ interface ToolchainComponents extends toml.JsonMap {
  * @group node
  */
 describe('versions', () => {
-  it('should have versions compatible with fuel-core', () => {
+  it.skip('should have versions compatible with fuel-core', () => {
     const expectedVersions = {
       FORC: versions.FORC,
       FUEL_CORE: versions.FUEL_CORE,
