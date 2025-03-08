@@ -69,7 +69,7 @@ export const buildFromGitBranch = (branchName) => {
     execSync(`cd ${swayRepoDir} && cargo build --release`, stdioOpts);
   } else {
     execSync(`git clone --branch ${branchName} ${swayRepoUrl} ${swayRepoDir}`, stdioOpts);
-    execSync(`cd ${swayRepoDir} && cargo build --release --bin forc`, stdioOpts);
+    execSync(`cd ${swayRepoDir} && cargo build --release`, stdioOpts);
   }
 
   const [from, to] = [swayRepoReleaseDir, forcBinDirPath];
