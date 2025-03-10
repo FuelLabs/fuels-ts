@@ -481,9 +481,7 @@ describe('TransactionSummary', () => {
 
     expect(summary.operations).toStrictEqual(responseSummary.operations);
 
-    // TODO: Contract txId not set correctly in`transactionResponse.getTransactionSummary`
-    // https://github.com/FuelLabs/fuels-ts/issues/3708
-    // expect(summary).toStrictEqual(responseSummary);
+    expect(summary).toStrictEqual(responseSummary);
   });
 
   // Test disabled due to unsupported call ops in tx summaries. We should re-enable this via
@@ -553,9 +551,7 @@ describe('TransactionSummary', () => {
 
     expect(summary.operations).toStrictEqual(responseSummary.operations);
 
-    // TODO: Contract txId not set correctly in`transactionResponse.getTransactionSummary`
-    // https://github.com/FuelLabs/fuels-ts/issues/3708
-    // expect(summary).toStrictEqual(responseSummary);
+    expect(summary).toStrictEqual(responseSummary);
   });
 
   // Tx summary with multicall does not set contract operations correctly
@@ -633,7 +629,7 @@ describe('TransactionSummary', () => {
     });
   });
 
-  it('creates a transaction summary with updated txIds', async () => {
+  it('should ensure getTransactionSummary updates txIds', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
