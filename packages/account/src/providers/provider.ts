@@ -6,8 +6,8 @@ import { bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import { InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
-import { arrayify, DateTime, hexlify, isDefined, sleep } from '@fuel-ts/utils';
-import { checkFuelCoreVersionCompatibility, versions, gte } from '@fuel-ts/versions';
+import { arrayify, hexlify, DateTime, isDefined, sleep } from '@fuel-ts/utils';
+import { checkFuelCoreVersionCompatibility, gte, versions } from '@fuel-ts/versions';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import type { GraphQLClientResponse, GraphQLResponse } from 'graphql-request/src/types';
@@ -521,7 +521,7 @@ export default class Provider {
       Provider.applyBlockHeight(fullRequest, url);
 
       return Provider.fetchAndProcessBlockHeight(() =>
-        options.fetch ? options.fetch(url, request, options) : fetch(url, request)
+        options.fetch ? options.fetch(url, fullRequest, options) : fetch(url, fullRequest)
       );
     }, retryOptions);
   }
