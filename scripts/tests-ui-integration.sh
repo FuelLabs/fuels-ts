@@ -16,7 +16,7 @@ if [ -d "$PROJECT_DIR" ]; then
   echo "Removing existing project directory '$PROJECT_DIR'"
   rm -rf "$PROJECT_DIR"
 fi
-NPM_CONFIG_REGISTRY="https://npm-packages.fuel.network" pnpm create "$PUBLISHED_FUEL_PACKAGE_NAME"@"$PUBLISHED_NPM_TAG" "$PROJECT_DIR"
+NPM_CONFIG_REGISTRY="https://npm-packages.fuel.network" VITEST="to-not-install-fuelup" pnpm create "$PUBLISHED_FUEL_PACKAGE_NAME"@"$PUBLISHED_NPM_TAG" "$PROJECT_DIR"
 
 echo "2. Running UI tests"
 cd "$REPO_DIR"
