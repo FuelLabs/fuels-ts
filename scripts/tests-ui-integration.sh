@@ -8,7 +8,7 @@ REPO_DIR=$(pwd)
 PATH="${REPO_DIR}/internal/fuel-core/fuel-core-binaries:${PATH}"
 PATH="${REPO_DIR}/internal/forc/forc-binaries:${PATH}"
 
-PROJECT_DIR="$(mktemp -d -t "fuel.XXXXX")/integration-test-project"
+PROJECT_DIR="$(mktemp -d)/integration-test-project"
 echo "$PROJECT_DIR"
 
 echo "1. Scaffold a new project with '$PUBLISHED_FUEL_PACKAGE_NAME@$PUBLISHED_NPM_TAG'"
