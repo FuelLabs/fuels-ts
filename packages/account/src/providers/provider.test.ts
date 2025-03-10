@@ -25,9 +25,7 @@ import {
 import { mockIncompatibleVersions } from '../../test/utils/mockIncompabileVersions';
 import { setupTestProviderAndWallets, launchNode, TestMessage } from '../test-utils';
 
-import type { GqlPageInfo, GqlSubmitMutation } from './__generated__/operations';
-import type { Coin } from './coin';
-import type { Message } from './message';
+import type { GqlPageInfo } from './__generated__/operations';
 import type { Block, ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
 import Provider, {
   BALANCES_PAGE_SIZE_LIMIT,
