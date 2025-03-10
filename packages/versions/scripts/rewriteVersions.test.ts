@@ -91,7 +91,7 @@ describe('rewriteVersions.js', () => {
     expect(versions.FUELS).toEqual(versionsFromFiles.FUELS);
   });
 
-  test.skip('should rewrite files', () => {
+  test('should rewrite files', () => {
     // mocking
     const writeFileSync = vi.spyOn(fsMod, 'writeFileSync').mockImplementation(() => []);
 

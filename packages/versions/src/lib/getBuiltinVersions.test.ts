@@ -6,7 +6,7 @@ import { getBuiltinVersions } from './getBuiltinVersions';
  * @group node
  */
 describe('getBuiltinVersions.js', () => {
-  test.skip('should return received version of default', () => {
+  test('should return received version of default', () => {
     const versions = getBuiltinVersions();
     const versionsFromFiles = readVersionsFromFiles();
 

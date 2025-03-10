@@ -89,11 +89,12 @@ describe('Revert Error Testing', () => {
     );
   });
 
-  it.skip('should throw for revert TX with reason "TransferZeroCoins"', async () => {
+  it('should throw for revert TX with reason "TransferZeroCoins"', async () => {
     using contractInstance = await launchContract();
 
     await expectToThrowFuelError(
-      () => contractInstance.functions.failed_transfer_revert().call(),
+      () =>
+        contractInstance.functions.failed_transfer_revert().txParams({ variableOutputs: 1 }).call(),
       new FuelError(
         ErrorCode.SCRIPT_REVERTED,
         'The transaction reverted with reason: "TransferZeroCoins".\n\nYou can read more about this error at:\n\nhttps://docs.rs/fuel-asm/latest/fuel_asm/enum.PanicReason.html#variant.TransferZeroCoins',
@@ -130,11 +131,11 @@ describe('Revert Error Testing', () => {
     );
   });
 
-  it.skip('should throw for revert TX with reason "NotEnoughBalance"', async () => {
+  it('should throw for revert TX with reason "NotEnoughBalance"', async () => {
     using contractInstance = await launchContract();
 
     await expectToThrowFuelError(
-      () => contractInstance.functions.failed_transfer().call(),
+      () => contractInstance.functions.failed_transfer().txParams({ variableOutputs: 1 }).call(),
       new FuelError(
         ErrorCode.SCRIPT_REVERTED,
         'The transaction reverted with reason: "NotEnoughBalance".\n\nYou can read more about this error at:\n\nhttps://docs.rs/fuel-asm/latest/fuel_asm/enum.PanicReason.html#variant.NotEnoughBalance',
