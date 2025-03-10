@@ -514,15 +514,58 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   async get<T = TReturn>(): Promise<DryRunResult<T>> {
-    const { receipts } = await this.getTransactionCost();
+    let transactionRequest = await this.getTransactionRequest();
+    transactionRequest = clone(transactionRequest);
 
-    const callResult: CallResult = {
-      receipts,
-    };
+    transactionRequest.maxFee = bn(0);
+    transactionRequest.gasLimit = bn(0);
+
+    transactionRequest.inputs = transactionRequest.inputs.filter((i) => i.type !== InputType.Coin);
+
+    const provider = this.getProvider();
+    const account = (this.program.account ?? Wallet.generate({ provider })) as Account;
+    const baseAssetId = await provider.getBaseAssetId();
+
+    const allQuantities = transactionRequest.outputs
+      .filter((o) => o.type === OutputType.Coin)
+      .map(({ amount, assetId }) => ({ assetId: String(assetId), amount: bn(amount) }))
+      .concat(this.requiredCoins);
+
+    const resources = account.generateFakeResources(allQuantities);
+
+    const utxoForBaseAssetId = resources.find((utxo) => utxo.assetId === baseAssetId);
+
+    if (!utxoForBaseAssetId) {
+      const [baseAssetResource] = account.generateFakeResources([
+        { assetId: baseAssetId, amount: bn('1000000000000000') },
+      ]);
+      resources.push(baseAssetResource);
+    } else {
+      utxoForBaseAssetId.amount = utxoForBaseAssetId.amount.add(bn('1000000000000000'));
+    }
+
+    transactionRequest.addResources(resources);
+
+    const { receipts } = await provider.assembleTX({
+      blockHorizon: 10,
+      feeAddressIndex: 0,
+      transactionRequest,
+      estimatePredicates: true,
+      requiredBalances: [
+        {
+          account: resolveAccount(account),
+          amount: bn(0),
+          assetId: baseAssetId,
+          changePolicy: {
+            change: account.address.b256Address,
+          },
+        },
+      ],
+    });
 
     return buildDryRunResult<T>({
       funcScopes: this.functionInvocationScopes,
-      callResult,
+      callResult: { receipts },
       isMultiCall: this.isMultiCall,
     });
   }
