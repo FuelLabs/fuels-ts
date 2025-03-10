@@ -7,7 +7,13 @@ import { bn } from '@fuel-ts/math';
 import type { BytesLike } from '@fuel-ts/utils';
 import { EventEmitter } from 'events';
 
-import { Account, type AccountSendTxParams, type Network, type ProviderOptions, type SelectNetworkArguments } from '../src';
+import {
+  Account,
+  type AccountSendTxParams,
+  type Network,
+  type ProviderOptions,
+  type SelectNetworkArguments,
+} from '../src';
 import { TESTNET_NETWORK_URL } from '../src/configs';
 import { Fuel } from '../src/connectors/fuel';
 import type { FuelConnectorSendTxParams } from '../src/connectors/types';

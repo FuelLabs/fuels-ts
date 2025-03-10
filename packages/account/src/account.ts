@@ -733,7 +733,9 @@ export class Account extends AbstractAccount implements WithAddress {
   }
 
   /** @hidden */
-  private async prepareTransactionForSend(request: TransactionRequest): Promise<TransactionRequest> {
+  private async prepareTransactionForSend(
+    request: TransactionRequest
+  ): Promise<TransactionRequest> {
     const { transactionId } = request.flag;
 
     // If there is no transaction id, then no status is set.
