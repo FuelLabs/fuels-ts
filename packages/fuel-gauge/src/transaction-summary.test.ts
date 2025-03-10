@@ -23,7 +23,6 @@ import {
   TRANSACTIONS_PAGE_SIZE_LIMIT,
   FuelError,
   ErrorCode,
-  InputType,
 } from 'fuels';
 import {
   ASSET_A,

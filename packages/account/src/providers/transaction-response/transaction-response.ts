@@ -33,12 +33,7 @@ import type {
   GqlSubmitAndAwaitStatusSubscription,
 } from '../__generated__/operations';
 import type Provider from '../provider';
-import type {
-  ContractTransactionRequestInput,
-  JsonAbisFromAllCalls,
-  TransactionRequest,
-  TransactionRequestInput,
-} from '../transaction-request';
+import type { JsonAbisFromAllCalls, TransactionRequest } from '../transaction-request';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
 import { processGqlReceipt } from '../transaction-summary/receipt';
 import { getTotalFeeFromStatus } from '../transaction-summary/status';
@@ -46,7 +41,6 @@ import type { TransactionSummary, GqlTransaction, AbiMap } from '../transaction-
 import { extractTxError } from '../utils';
 
 import { getDecodedLogs } from './getDecodedLogs';
-import { getInputsContract } from '../transaction-summary';
 
 /** @hidden */
 export type TransactionResultCallReceipt = ReceiptCall;
@@ -231,6 +225,7 @@ export class TransactionResponse {
 
     tx.inputs.forEach((input) => {
       if (input.type === InputType.Contract) {
+        // eslint-disable-next-line no-param-reassign
         input.txID = this.id;
       }
     });
