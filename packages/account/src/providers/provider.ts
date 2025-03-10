@@ -264,12 +264,6 @@ export type CursorPaginationArgs = {
   before?: string | null;
 };
 
-export type ProviderCache = {
-  consensusParametersTimestamp?: number;
-  chain: ChainInfoJson;
-  nodeInfo: NodeInfoJson;
-};
-
 /*
  * Provider initialization options
  */
