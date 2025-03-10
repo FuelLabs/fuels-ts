@@ -453,7 +453,7 @@ export default class Provider {
   /** @hidden */
   /**
    *
-   * @param url If provided, clears cache only for given url
+   * @param url - If provided, clears cache only for given url
    */
   static clearChainAndNodeCaches(url?: string) {
     if (url) {
