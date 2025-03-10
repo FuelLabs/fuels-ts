@@ -3,4 +3,4 @@
 "@fuel-ts/versions": patch
 ---
 
-chore: bump `fuel-core` to `0.41.8`
+chore: bump `fuel-core` to `0.41.9`
