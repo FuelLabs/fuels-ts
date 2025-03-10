@@ -4,6 +4,7 @@ import type {
   TransactionSummary,
   TransactionResult,
   OutputChange,
+  InputContract,
 } from 'fuels';
 import {
   Address,
@@ -479,9 +480,7 @@ describe('TransactionSummary', () => {
 
     expect(summary.operations).toStrictEqual(responseSummary.operations);
 
-    // TODO: Contract txId not set correctly in`transactionResponse.getTransactionSummary`
-    // https://github.com/FuelLabs/fuels-ts/issues/3708
-    // expect(summary).toStrictEqual(responseSummary);
+    expect(summary).toStrictEqual(responseSummary);
   });
 
   // Test disabled due to unsupported call ops in tx summaries. We should re-enable this via
@@ -551,9 +550,7 @@ describe('TransactionSummary', () => {
 
     expect(summary.operations).toStrictEqual(responseSummary.operations);
 
-    // TODO: Contract txId not set correctly in`transactionResponse.getTransactionSummary`
-    // https://github.com/FuelLabs/fuels-ts/issues/3708
-    // expect(summary).toStrictEqual(responseSummary);
+    expect(summary).toStrictEqual(responseSummary);
   });
 
   // Tx summary with multicall does not set contract operations correctly
@@ -629,6 +626,36 @@ describe('TransactionSummary', () => {
       asset_id: { bits: assetId },
       amount: bn(1000).toHex(),
     });
+  });
+
+  it('should ensure getTransactionSummary updates txIds', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: TokenContractFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
+    const contractId = contract.id.toB256();
+
+    const call = await contract.functions.mint_coins(bn(100_000)).call();
+    const res = await call.waitForResult();
+
+    const summary = await res.transactionResponse.getTransactionSummary({
+      [contractId]: TokenContract.abi,
+    });
+
+    validateTxSummary({
+      transaction: summary,
+    });
+
+    expect(summary.id).toBe(res.transactionId);
+    expect((summary.transaction?.inputs?.[0] as InputContract).txID).toBe(res.transactionId);
   });
 
   describe('Transfer Operations', () => {
