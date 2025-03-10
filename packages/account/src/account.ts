@@ -679,17 +679,6 @@ export class Account extends AbstractAccount implements WithAddress {
         state: transactionRequest.flag.state,
       };
 
-      // If the connector is using prepareForSend, the connector will prepare the transaction for the dapp,
-      // and submission is owned by the dapp. This reduces network requests to submit and create the
-      // summary for a tx.
-      if (this._connector.usePrepareForSend) {
-        transactionRequest = await this._connector.prepareForSend(
-          this.address.toString(),
-          transactionRequest,
-          params
-        );
-      }
-
       const transaction: string | TransactionResponse = await this._connector.sendTransaction(
         this.address.toString(),
         transactionRequest,
@@ -704,7 +693,6 @@ export class Account extends AbstractAccount implements WithAddress {
     if (estimateTxDependencies) {
       await this.provider.estimateTxDependencies(transactionRequest);
     }
-
     return this.provider.sendTransaction(transactionRequest, {
       estimateTxDependencies: false,
     });

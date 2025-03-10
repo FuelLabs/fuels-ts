@@ -4,7 +4,7 @@ import type { HashableMessage } from '@fuel-ts/hasher';
 import { EventEmitter } from 'events';
 
 import type { Asset } from '../assets/types';
-import type { TransactionRequest, TransactionRequestLike, TransactionResponse } from '../providers';
+import type { TransactionRequestLike, TransactionResponse } from '../providers';
 
 import { FuelConnectorEventTypes } from './types';
 import type {
@@ -50,13 +50,6 @@ interface Connector {
     params?: FuelConnectorSendTxParams
   ): Promise<string | TransactionResponse>;
   // #endregion fuel-connector-method-sendTransaction
-  // #region fuel-connector-method-prepareForSend
-  prepareForSend(
-    address: string,
-    transaction: TransactionRequestLike,
-    params?: FuelConnectorSendTxParams
-  ): Promise<TransactionRequest>;
-  // #endregion fuel-connector-method-prepareForSend
   // #region fuel-connector-method-currentAccount
   currentAccount(): Promise<string | null>;
   // #endregion fuel-connector-method-currentAccount
@@ -105,7 +98,6 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
   installed: boolean = false;
   external: boolean = true;
   events = FuelConnectorEventTypes;
-  usePrepareForSend: boolean = false;
 
   /**
    * Should return true if the connector is loaded
@@ -215,25 +207,6 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
     _transaction: TransactionRequestLike,
     _params?: FuelConnectorSendTxParams
   ): Promise<string | TransactionResponse> {
-    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
-  }
-
-  /**
-   * Should perform all necessary operations (i.e estimation,
-   * funding, signing) to prepare a tx so it can be submitted
-   * at the app level.
-   *
-   * @param address - The address to sign the tx
-   * @param transaction - The tx to prepare
-   * @param params - Optional parameters to send the transactions
-   *
-   * @returns The prepared tx request
-   */
-  async prepareForSend(
-    _address: string,
-    _transaction: TransactionRequestLike,
-    _params?: FuelConnectorSendTxParams
-  ): Promise<TransactionRequest> {
     throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 

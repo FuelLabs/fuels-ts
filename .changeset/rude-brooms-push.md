@@ -2,4 +2,4 @@
 "@fuel-ts/account": patch
 ---
 
-feat: inverted submission flow
+fix: correct revert error name

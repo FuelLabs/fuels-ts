@@ -4,7 +4,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
-import { InputType, InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
+import { InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility, gte, versions } from '@fuel-ts/versions';
@@ -67,6 +67,7 @@ import {
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
 import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
+import { adjustResourcesToExclude } from './utils/helpers';
 import type { ProviderCacheJson } from './utils/serialization';
 import {
   deserializeChain,
@@ -854,19 +855,7 @@ export default class Provider {
       return;
     }
 
-    const inputsToCache = inputs.reduce(
-      (acc, input) => {
-        if (input.type === InputType.Coin) {
-          acc.utxos.push(input.id);
-        } else if (input.type === InputType.Message) {
-          acc.messages.push(input.nonce);
-        }
-        return acc;
-      },
-      { utxos: [], messages: [] } as Required<ExcludeResourcesOption>
-    );
-
-    this.cache.set(transactionId, inputsToCache);
+    this.cache.set(transactionId, inputs);
   }
 
   /**
@@ -1537,15 +1526,25 @@ export default class Provider {
     excludedIds?: ExcludeResourcesOption
   ): Promise<Resource[]> {
     const ownerAddress = new Address(owner);
-    const excludeInput = {
+    let idsToExclude = {
       messages: excludedIds?.messages?.map((nonce) => hexlify(nonce)) || [],
       utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
     };
 
     if (this.cache) {
-      const cached = this.cache.getActiveData();
-      excludeInput.messages.push(...cached.messages);
-      excludeInput.utxos.push(...cached.utxos);
+      const cached = this.cache.getActiveData(ownerAddress.toB256());
+      if (cached.utxos.length || cached.messages.length) {
+        const {
+          consensusParameters: {
+            txParameters: { maxInputs },
+          },
+        } = await this.getChain();
+        idsToExclude = adjustResourcesToExclude({
+          userInput: idsToExclude,
+          cached,
+          maxInputs: maxInputs.toNumber(),
+        });
+      }
     }
 
     const coinsQuery = {
@@ -1557,7 +1556,7 @@ export default class Provider {
           amount: amount.toString(10),
           max: maxPerAsset ? maxPerAsset.toString(10) : undefined,
         })),
-      excludedIds: excludeInput,
+      excludedIds: idsToExclude,
     };
 
     const result = await this.operations.getCoinsToSpend(coinsQuery);

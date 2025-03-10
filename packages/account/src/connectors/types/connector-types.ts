@@ -12,7 +12,6 @@ export enum FuelConnectorMethods {
   // Signature methods
   signMessage = 'signMessage',
   sendTransaction = 'sendTransaction',
-  prepareForSend = 'prepareForSend',
   // Assets metadata methods
   assets = 'assets',
   addAsset = 'addAsset',

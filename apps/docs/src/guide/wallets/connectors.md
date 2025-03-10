@@ -203,27 +203,6 @@ It will return the transaction signature (as a `string`) if it is successfully s
 
 <<< @/../../../packages/account/src/connectors/fuel-connector.ts#fuel-connector-method-sendTransaction{ts:line-numbers}
 
-#### `prepareForSend`
-
-The `prepareForSend` method prepares a transaction for sending. Here the connector should perform all required actions to prepare the transaction i.e additional funding and signing.
-
-The function itself requires two arguments:
-
-- `address` (`string`)
-- `transaction` ([`TransactionRequestLike`](DOCS_API_URL/types/_fuel_ts_account.TransactionRequestLike.html))
-
-It will return the prepared transaction (as a [`TransactionRequestLike`](DOCS_API_URL/types/_fuel_ts_account.TransactionRequestLike.html)).
-
-<<< @/../../../packages/account/src/connectors/fuel-connector.ts#fuel-connector-method-prepareForSend{ts:line-numbers}
-
-It can be used in tandem with `Account.sendTransaction` to prepare and send a transaction in one go.
-
-This is enabled by setting the `usePrepareForSend` property to `true` on the connector.
-
-<<< @./snippets/connectors.ts#fuel-connector-method-usePrepareForSend{ts:line-numbers}
-
-This can be beneficial for performance and user experience, as it reduces the number of round trips between the dApp and the network.
-
 #### `assets`
 
 The `assets` method returns a list of all the assets available for the current connection.
