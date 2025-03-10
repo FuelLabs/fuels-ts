@@ -4,6 +4,7 @@ import type {
   TransactionSummary,
   TransactionResult,
   OutputChange,
+  InputContract,
 } from 'fuels';
 import {
   Address,
@@ -22,6 +23,7 @@ import {
   TRANSACTIONS_PAGE_SIZE_LIMIT,
   FuelError,
   ErrorCode,
+  InputType,
 } from 'fuels';
 import {
   ASSET_A,
@@ -629,6 +631,36 @@ describe('TransactionSummary', () => {
       asset_id: { bits: assetId },
       amount: bn(1000).toHex(),
     });
+  });
+
+  it('creates a transaction summary with updated txIds', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: TokenContractFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
+    const contractId = contract.id.toB256();
+
+    const call = await contract.functions.mint_coins(bn(100_000)).call();
+    const res = await call.waitForResult();
+
+    const summary = await res.transactionResponse.getTransactionSummary({
+      [contractId]: TokenContract.abi,
+    });
+
+    validateTxSummary({
+      transaction: summary,
+    });
+
+    expect(summary.id).toBe(res.transactionId);
+    expect((summary.transaction?.inputs?.[0] as InputContract).txID).toBe(res.transactionId);
   });
 
   describe('Transfer Operations', () => {

@@ -24,7 +24,7 @@ import type {
   Output,
   TransactionType,
 } from '@fuel-ts/transactions';
-import { OutputType, TransactionCoder, TxPointerCoder } from '@fuel-ts/transactions';
+import { InputType, OutputType, TransactionCoder, TxPointerCoder } from '@fuel-ts/transactions';
 import { arrayify, assertUnreachable } from '@fuel-ts/utils';
 
 import type {
@@ -33,7 +33,12 @@ import type {
   GqlSubmitAndAwaitStatusSubscription,
 } from '../__generated__/operations';
 import type Provider from '../provider';
-import type { JsonAbisFromAllCalls, TransactionRequest } from '../transaction-request';
+import type {
+  ContractTransactionRequestInput,
+  JsonAbisFromAllCalls,
+  TransactionRequest,
+  TransactionRequestInput,
+} from '../transaction-request';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
 import { processGqlReceipt } from '../transaction-summary/receipt';
 import { getTotalFeeFromStatus } from '../transaction-summary/status';
@@ -41,6 +46,7 @@ import type { TransactionSummary, GqlTransaction, AbiMap } from '../transaction-
 import { extractTxError } from '../utils';
 
 import { getDecodedLogs } from './getDecodedLogs';
+import { getInputsContract } from '../transaction-summary';
 
 /** @hidden */
 export type TransactionResultCallReceipt = ReceiptCall;
@@ -212,6 +218,24 @@ export class TransactionResponse {
     }
   }
 
+  /**
+   * When a response has been built from an unfetched tx request, it's possible that the tx id
+   * for inputs are not set. This method updates the tx ids for these inputs.
+   *
+   * @param tx - the request to update.
+   */
+  private updateTxIds<TTransactionType = void>(transaction: Transaction<TTransactionType>) {
+    const tx = transaction as Transaction<
+      TransactionType.Script | TransactionType.Create | TransactionType.Blob
+    >;
+
+    tx.inputs.forEach((input) => {
+      if (input.type === InputType.Contract) {
+        input.txID = this.id;
+      }
+    });
+  }
+
   private async getTransaction<TTransactionType = void>(): Promise<{
     tx: Transaction<TTransactionType>;
     bytes: Uint8Array;
@@ -219,6 +243,8 @@ export class TransactionResponse {
     if (this.request) {
       const tx = this.request.toTransaction() as Transaction<TTransactionType>;
       this.applyMalleableSubscriptionFields(tx);
+      this.updateTxIds(tx);
+
       return {
         tx,
         bytes: this.request.toTransactionBytes(),
