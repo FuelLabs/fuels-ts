@@ -1,5 +1,5 @@
-import type { BigNumberish, Account } from 'fuels';
-import { ScriptTransactionRequest, BN } from 'fuels';
+import type { BigNumberish, Account, AssembleTxRequiredBalances } from 'fuels';
+import { ScriptTransactionRequest, BN, OutputType, bn, resolveAccount } from 'fuels';
 
 export const fundAccount = async (
   fundedAccount: Account,
@@ -14,9 +14,37 @@ export const fundAccount = async (
     request.addCoinOutput(accountToBeFunded.address, new BN(amount).div(utxosAmount), baseAssetId);
   }
 
-  await request.estimateAndFund(fundedAccount);
+  const requiredBalancesIndex: Record<string, AssembleTxRequiredBalances> = {};
 
-  const submit = await fundedAccount.sendTransaction(request);
+  request.outputs
+    .filter((o) => o.type === OutputType.Coin)
+    .forEach((o) => {
+      const assetId = String(o.assetId);
+      const outputAmount = bn(o.amount);
+
+      const entry = requiredBalancesIndex[assetId] || {
+        account: resolveAccount(fundedAccount),
+        amount: bn(0),
+        assetId,
+        changePolicy: {
+          change: fundedAccount.address.b256Address,
+        },
+      };
+
+      entry.amount = entry.amount.add(outputAmount);
+
+      requiredBalancesIndex[assetId] = entry;
+    });
+
+  const { transactionRequest } = await fundedAccount.provider.assembleTX({
+    blockHorizon: 10,
+    feeAddressIndex: 0,
+    requiredBalances: Object.values(requiredBalancesIndex),
+    transactionRequest: request,
+    estimatePredicates: true,
+  });
+
+  const submit = await fundedAccount.sendTransaction(transactionRequest);
   await submit.waitForResult();
 
   return accountToBeFunded.getBalance();

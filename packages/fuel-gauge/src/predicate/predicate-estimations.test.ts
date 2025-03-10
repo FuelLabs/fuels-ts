@@ -223,11 +223,13 @@ describe('Predicate', () => {
       const dryRunSpy = vi.spyOn(provider.operations, 'dryRun');
       const estimatePredicatesSpy = vi.spyOn(provider.operations, 'estimatePredicatesAndGasPrice');
 
-      const response = await predicateValidateTransfer.transfer(
-        receiverWallet.address.toB256(),
-        1,
-        await provider.getBaseAssetId()
-      );
+      const request = new ScriptTransactionRequest();
+
+      request.addCoinOutput(receiverWallet.address, 1, await provider.getBaseAssetId());
+
+      await request.estimateAndFund(predicateValidateTransfer);
+
+      const response = await predicateValidateTransfer.sendTransaction(request);
 
       const { isStatusSuccess } = await response.waitForResult();
       expect(isStatusSuccess).toBeTruthy();
