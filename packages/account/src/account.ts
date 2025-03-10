@@ -676,7 +676,7 @@ export class Account extends AbstractAccount implements WithAddress {
           cache: await serializeProviderCache(this.provider),
         },
         data,
-        state: transactionRequest.flag.state,
+        transactionState: transactionRequest.flag.state,
       };
 
       const transaction: string | TransactionResponse = await this._connector.sendTransaction(

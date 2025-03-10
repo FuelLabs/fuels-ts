@@ -710,7 +710,7 @@ describe('Fuel Connector', () => {
         url: provider.url,
         cache: await serializeProviderCache(provider),
       },
-      state: 'funded',
+      transactionState: 'funded',
     };
     const response = await account.sendTransaction(request);
     expect(response).toBeDefined();
@@ -764,7 +764,7 @@ describe('Fuel Connector', () => {
         cache: await serializeProviderCache(provider),
       },
       data: { transactionSummary },
-      state: 'funded',
+      transactionState: 'funded',
     };
     const response = await account.sendTransaction(request, {
       data: { transactionSummary },

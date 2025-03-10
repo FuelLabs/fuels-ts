@@ -62,5 +62,5 @@ export type FuelConnectorSendTxParams = {
   data?: {
     transactionSummary?: TransactionSummaryJson;
   };
-  state?: TransactionStateFlag['state'];
+  transactionState?: TransactionStateFlag['state'];
 };
