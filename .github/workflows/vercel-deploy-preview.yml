@@ -1,0 +1,45 @@
+name: Vercel Preview Deployment
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+on:
+  push:
+
+jobs:
+  Deploy-Preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Install Vercel CLI
+        run: pnpm install --global vercel@latest
+
+      # - name: Deploy docs
+      #   env:
+      #     VERCEL_PROJECT_ID: ${{ secrets.VERCEL_TS_DOCS_PROJECT_ID }}
+      #   run: |
+      #     vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+      #     vercel build --token=${{ secrets.VERCEL_TOKEN }}
+      #     vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy docs api
+        env:
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_TS_DOCS_API_PROJECT_ID }}
+        run: |
+          vercel pull --yes --environment=test-nedim --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build --token=${{ secrets.VERCEL_TOKEN }}
+          vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+
+      # - name: Deploy fuels template
+      #   env:
+      #     VERCEL_PROJECT_ID: ${{ secrets.VERCEL_TS_FUELS_TEMPLATE_PROJECT_ID }}
+      #   run: |
+      #     vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+      #     vercel build --token=${{ secrets.VERCEL_TOKEN }}
+      #     vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
