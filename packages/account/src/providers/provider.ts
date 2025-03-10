@@ -4,14 +4,15 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
-import { InputType, InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
-import { arrayify, DateTime, hexlify, isDefined, sleep, type BytesLike } from '@fuel-ts/utils';
-import { checkFuelCoreVersionCompatibility, versions } from '@fuel-ts/versions';
+import { InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
+import type { BytesLike } from '@fuel-ts/utils';
+import { arrayify, DateTime, hexlify, isDefined, sleep } from '@fuel-ts/utils';
+import { checkFuelCoreVersionCompatibility, versions, gte } from '@fuel-ts/versions';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import type { GraphQLClientResponse, GraphQLResponse } from 'graphql-request/src/types';
 import gql from 'graphql-tag';
-import { clone, gte } from 'ramda';
+import { clone } from 'ramda';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
@@ -65,6 +66,7 @@ import {
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch, getWaitDelay } from './utils/auto-retry-fetch';
 import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
+import { adjustResourcesToExclude } from './utils/helpers';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
 const MAX_RETRIES = 10;
@@ -148,6 +150,8 @@ export type GetBlocksResponse = {
   blocks: Block[];
   pageInfo: PageInfo;
 };
+
+export type GetAddressTypeResponse = 'Account' | 'Contract' | 'Transaction' | 'Blob' | 'Asset';
 
 /**
  * Deployed Contract bytecode and contract id
@@ -989,19 +993,7 @@ export default class Provider {
       return;
     }
 
-    const inputsToCache = inputs.reduce(
-      (acc, input) => {
-        if (input.type === InputType.Coin) {
-          acc.utxos.push(input.id);
-        } else if (input.type === InputType.Message) {
-          acc.messages.push(input.nonce);
-        }
-        return acc;
-      },
-      { utxos: [], messages: [] } as Required<ExcludeResourcesOption>
-    );
-
-    this.cache.set(transactionId, inputsToCache);
+    this.cache.set(transactionId, inputs);
   }
 
   /**
@@ -1665,15 +1657,25 @@ export default class Provider {
     excludedIds?: ExcludeResourcesOption
   ): Promise<Resource[]> {
     const ownerAddress = new Address(owner);
-    const excludeInput = {
+    let idsToExclude = {
       messages: excludedIds?.messages?.map((nonce) => hexlify(nonce)) || [],
       utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
     };
 
     if (this.cache) {
-      const cached = this.cache.getActiveData();
-      excludeInput.messages.push(...cached.messages);
-      excludeInput.utxos.push(...cached.utxos);
+      const cached = this.cache.getActiveData(ownerAddress.toB256());
+      if (cached.utxos.length || cached.messages.length) {
+        const {
+          consensusParameters: {
+            txParameters: { maxInputs },
+          },
+        } = await this.getChain();
+        idsToExclude = adjustResourcesToExclude({
+          userInput: idsToExclude,
+          cached,
+          maxInputs: maxInputs.toNumber(),
+        });
+      }
     }
 
     const coinsQuery = {
@@ -1685,7 +1687,7 @@ export default class Provider {
           amount: amount.toString(10),
           max: maxPerAsset ? maxPerAsset.toString(10) : undefined,
         })),
-      excludedIds: excludeInput,
+      excludedIds: idsToExclude,
     };
 
     const result = await this.operations.getCoinsToSpend(coinsQuery);
@@ -2299,19 +2301,17 @@ export default class Provider {
    * @returns A promise that resolves to the result of the check.
    */
   async isUserAccount(id: string): Promise<boolean> {
-    const { contract, blob, transaction } = await this.operations.isUserAccount({
-      blobId: id,
-      contractId: id,
-      transactionId: id,
-    });
-
-    if (contract || blob || transaction) {
-      return false;
-    }
-    return true;
+    const type = await this.getAddressType(id);
+    return type === 'Account';
   }
 
-  async getAddressType(id: string): Promise<'Account' | 'Contract' | 'Transaction' | 'Blob'> {
+  /**
+   * Determines the type of address based on the provided ID.
+   *
+   * @param id - The ID to be checked.
+   * @returns A promise that resolves to a string indicating the type of address.
+   */
+  async getAddressType(id: string): Promise<GetAddressTypeResponse> {
     const { contract, blob, transaction } = await this.operations.isUserAccount({
       blobId: id,
       contractId: id,
@@ -2327,6 +2327,14 @@ export default class Provider {
     if (transaction) {
       return 'Transaction';
     }
+
+    try {
+      // Unlike the previous queries this one will throw if the ID is not an assetId
+      const asset = await this.getAssetDetails(id);
+      if (asset) {
+        return 'Asset';
+      }
+    } catch (e) {}
 
     return 'Account';
   }
