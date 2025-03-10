@@ -520,9 +520,7 @@ export default class Provider {
 
       Provider.applyBlockHeight(fullRequest, url);
 
-      return Provider.fetchAndProcessBlockHeight(() =>
-        options.fetch ? options.fetch(url, fullRequest, options) : fetch(url, fullRequest)
-      );
+      return Provider.fetchAndProcessBlockHeight(url, fullRequest, options);
     }, retryOptions);
   }
 
@@ -544,10 +542,14 @@ export default class Provider {
   }
 
   private static async fetchAndProcessBlockHeight(
-    fetchFn: () => Promise<Response>
+    url: string,
+    request: RequestInit,
+    options: ProviderOptions
   ): Promise<Response> {
+    const fetchFn = () =>
+      options.fetch ? options.fetch(url, request, options) : fetch(url, request);
+
     let response: Response = await fetchFn();
-    const url = response.url;
 
     const retryOptions: RetryOptions = {
       maxRetries: 5,
