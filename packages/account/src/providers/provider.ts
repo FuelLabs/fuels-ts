@@ -1590,7 +1590,11 @@ export default class Provider {
       (request as ScriptTransactionRequest).gasLimit = bn(gqlTransaction.scriptGasLimit);
     }
 
-    return { transactionRequest: request, gasPrice: bn(gasPrice) };
+    return {
+      transactionRequest: request,
+      gasPrice: bn(gasPrice),
+      receipts: status.receipts.map(processGqlReceipt),
+    };
   }
 
   /**
