@@ -69,7 +69,6 @@ import {
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
 import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
-import { adjustResourcesToExclude } from './utils/helpers';
 import { parseRawInput, parseRawOutput } from './utils/parsers';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
