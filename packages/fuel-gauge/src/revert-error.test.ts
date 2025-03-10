@@ -187,7 +187,7 @@ describe('Revert Error Testing', () => {
     );
   });
 
-  it('should throw for a missing OutputChange', async () => {
+  it('should throw for a missing OutputVariable', async () => {
     using launched = await launchTestNode();
 
     const {
@@ -221,13 +221,13 @@ describe('Revert Error Testing', () => {
       () => tx.wait(),
       new FuelError(
         ErrorCode.SCRIPT_REVERTED,
-        `The transaction reverted because it's missing an "OutputChange".`,
+        `The transaction reverted because it's missing an "OutputVariable".`,
         {
           logs: [],
           receipts: expect.any(Array<TransactionResultReceipt>),
           panic: false,
           revert: true,
-          reason: 'MissingOutputChange',
+          reason: 'MissingOutputVariable',
         }
       )
     );

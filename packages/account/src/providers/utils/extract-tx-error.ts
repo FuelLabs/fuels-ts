@@ -96,8 +96,8 @@ export const assembleRevertError = (
         break;
 
       case FAILED_TRANSFER_TO_ADDRESS_SIGNAL:
-        reason = 'MissingOutputChange';
-        errorMessage = `The transaction reverted because it's missing an "OutputChange".`;
+        reason = 'MissingOutputVariable';
+        errorMessage = `The transaction reverted because it's missing an "OutputVariable".`;
         break;
 
       default:
