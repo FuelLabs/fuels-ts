@@ -22,9 +22,6 @@ fragment SuccessStatusFragment on SuccessStatus {
   }
   totalGas
   totalFee
-  receiptsAdded: receipts {
-    ...receiptFragment
-  }
 }
 
 fragment SuccessStatusWithBlockIdFragment on SuccessStatus {
@@ -59,9 +56,6 @@ fragment SqueezedOutStatusFragment on SqueezedOutStatus {
 
 fragment PreconfirmationSuccessStatusFragment on PreconfirmationSuccessStatus {
   type: __typename
-  receiptsMaybe: receipts {
-    ...receiptFragment
-  }
 }
 
 fragment PreconfirmationFailureStatusFragment on PreconfirmationFailureStatus {
