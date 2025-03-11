@@ -108,6 +108,9 @@ export const parseRawOutput = (output: RawOutput) => {
     default:
       parsedOutput = {
         type: OutputType.Variable,
+        amount: bn(output.amount),
+        assetId: output.assetId,
+        to: output.to,
       };
   }
 

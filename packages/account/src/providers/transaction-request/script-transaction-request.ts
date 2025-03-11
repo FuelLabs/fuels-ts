@@ -174,6 +174,22 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
   }
 
   /**
+   * Adds a variable output to the transaction request.
+   *
+   * @param to - The recipient address as a BytesLike object. Defaults to ZeroBytes32 if not provided.
+   * @param amount - The amount to be transferred as a BigNumberish object. Defaults to 0 if not provided.
+   * @param assetId - The asset ID as a BytesLike object. Defaults to ZeroBytes32 if not provided.
+   */
+  addVariableOutput(to?: BytesLike, amount?: BigNumberish, assetId?: BytesLike) {
+    this.pushOutput({
+      type: OutputType.Variable,
+      to,
+      amount,
+      assetId,
+    });
+  }
+
+  /**
    * Calculates the maximum gas for the transaction.
    *
    * @param chainInfo - The chain information.
