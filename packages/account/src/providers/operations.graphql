@@ -679,6 +679,12 @@ query getBalance($owner: Address!, $assetId: AssetId!) {
   }
 }
 
+query getBalanceV2($owner: Address!, $assetId: AssetId!) {
+  balance(owner: $owner, assetId: $assetId) {
+    amountU128
+  }
+}
+
 query getLatestGasPrice {
   latestGasPrice {
     gasPrice
@@ -709,6 +715,32 @@ query getBalances(
       node {
         assetId
         amount
+      }
+    }
+  }
+}
+
+query getBalancesV2(
+  $filter: BalanceFilterInput!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+) {
+  balances(
+    filter: $filter
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+  ) {
+    pageInfo {
+      ...pageInfoFragment
+    }
+    edges {
+      node {
+        assetId
+        amountU128
       }
     }
   }
@@ -772,6 +804,20 @@ query getRelayedTransactionStatus(
 ) {
   relayedTransactionStatus(id: $relayedTransactionId) {
     ...relayedTransactionStatusFragment
+  }
+}
+
+query getAssetDetails($assetId: AssetId!) {
+  assetDetails(id: $assetId) {
+    subId
+    contractId
+    totalSupply
+  }
+}
+
+query daCompressedBlock($height: U32!) {
+  daCompressedBlock(height: $height) {
+    bytes
   }
 }
 

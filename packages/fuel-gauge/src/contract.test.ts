@@ -35,6 +35,7 @@ import {
   SmoContractFactory,
   StorageTestContract,
   StorageTestContractFactory,
+  TokenContractFactory,
   VoidFactory,
 } from '../test/typegen/contracts';
 import { PredicateTrue } from '../test/typegen/predicates/PredicateTrue';
@@ -1109,8 +1110,8 @@ describe('Contract', () => {
           })
           .simulate(),
       new FuelError(
-        ErrorCode.NOT_ENOUGH_FUNDS,
-        `The account(s) sending the transaction don't have enough funds to cover the transaction.`
+        ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
+        `Insufficient funds or too many small value coins. Consider combining UTXOs.`
       )
     );
   });
@@ -1269,6 +1270,44 @@ describe('Contract', () => {
 
     expect(scriptGasLimit?.toNumber()).toBe(gasLimit);
     expect(bn(maxFeePolicy?.data).toNumber()).toBe(maxFee);
+  });
+
+  it('can get asset details just fine', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: TokenContractFactory,
+        },
+      ],
+    });
+    const {
+      contracts: [tokenContract],
+      provider,
+    } = launched;
+
+    const totalSupply = 100_000_000;
+    const { waitForResult } = await tokenContract.functions.mint_coins(totalSupply).call();
+
+    const {
+      transactionResult: { mintedAssets },
+    } = await waitForResult();
+
+    const { subId, contractId } = mintedAssets[0];
+
+    const assetDetails = await provider.getAssetDetails(mintedAssets[0].assetId);
+
+    expect(assetDetails.contractId).toBe(contractId);
+    expect(assetDetails.subId).toBe(subId);
+    expect(assetDetails.totalSupply.toNumber()).toBe(totalSupply);
+  });
+
+  it('should throw an error if asset details are not found', async () => {
+    using launched = await launchTestNode();
+    const { provider } = launched;
+
+    await expectToThrowFuelError(() => provider.getAssetDetails(getRandomB256()), {
+      code: ErrorCode.ASSET_NOT_FOUND,
+    });
   });
 
   it('should ensure "maxFee" and "gasLimit" can be set on a multi-call', async () => {

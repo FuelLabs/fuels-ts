@@ -4,10 +4,10 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
-import { InputType, InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
+import { InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
-import { checkFuelCoreVersionCompatibility, versions } from '@fuel-ts/versions';
+import { checkFuelCoreVersionCompatibility, gte, versions } from '@fuel-ts/versions';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import type { GraphQLClientResponse, GraphQLResponse } from 'graphql-request/src/types';
@@ -66,15 +66,22 @@ import {
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
 import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
+import { adjustResourcesToExclude } from './utils/helpers';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
 const MAX_RETRIES = 10;
 
 export const RESOURCES_PAGE_SIZE_LIMIT = 512;
 export const TRANSACTIONS_PAGE_SIZE_LIMIT = 60;
+export const BALANCES_PAGE_SIZE_LIMIT = 100;
 export const BLOCKS_PAGE_SIZE_LIMIT = 5;
 export const DEFAULT_RESOURCE_CACHE_TTL = 20_000; // 20 seconds
 export const GAS_USED_MODIFIER = 1.2;
+
+export type Features = {
+  balancePagination: boolean;
+  amount128: boolean;
+};
 
 export type DryRunFailureStatusFragment = GqlDryRunFailureStatusFragment;
 export type DryRunSuccessStatusFragment = GqlDryRunSuccessStatusFragment;
@@ -125,6 +132,7 @@ export type GetMessagesResponse = {
 
 export type GetBalancesResponse = {
   balances: CoinQuantity[];
+  pageInfo?: PageInfo;
 };
 
 export type GetTransactionsResponse = {
@@ -132,10 +140,18 @@ export type GetTransactionsResponse = {
   pageInfo: PageInfo;
 };
 
+export type GetAssetDetailsResponse = {
+  subId: string;
+  contractId: string;
+  totalSupply: BN;
+};
+
 export type GetBlocksResponse = {
   blocks: Block[];
   pageInfo: PageInfo;
 };
+
+export type GetAddressTypeResponse = 'Account' | 'Contract' | 'Transaction' | 'Blob' | 'Asset';
 
 /**
  * Deployed Contract bytecode and contract id
@@ -438,6 +454,12 @@ export default class Provider {
   /** @hidden */
   private urlWithoutAuth: string;
   /** @hidden */
+  private features: Features = {
+    balancePagination: false,
+    amount128: false,
+  };
+
+  /** @hidden */
   private static chainInfoCache: ChainInfoCache = {};
   /** @hidden */
   private static nodeInfoCache: NodeInfoCache = {};
@@ -546,7 +568,8 @@ export default class Provider {
    * Initialize Provider async stuff
    */
   async init(): Promise<Provider> {
-    await this.fetchChainAndNodeInfo();
+    const { nodeInfo } = await this.fetchChainAndNodeInfo();
+    this.setupFeatures(nodeInfo.nodeVersion);
     return this;
   }
 
@@ -741,6 +764,16 @@ export default class Provider {
   }
 
   /**
+   * @hidden
+   */
+  private setupFeatures(nodeVersion: string) {
+    if (gte(nodeVersion, '0.41.0')) {
+      this.features.balancePagination = true;
+      this.features.amount128 = true;
+    }
+  }
+
+  /**
    * Returns the version of the connected node.
    *
    * @returns A promise that resolves to the version string.
@@ -828,6 +861,24 @@ export default class Provider {
   }
 
   /**
+   * Retrieves the details of an asset given its ID.
+   *
+   * @param assetId - The unique identifier of the asset.
+   * @returns A promise that resolves to an object containing the asset details.
+   */
+  async getAssetDetails(assetId: string): Promise<GetAssetDetailsResponse> {
+    const { assetDetails } = await this.operations.getAssetDetails({ assetId });
+
+    const { contractId, subId, totalSupply } = assetDetails;
+
+    return {
+      subId,
+      contractId,
+      totalSupply: bn(totalSupply),
+    };
+  }
+
+  /**
    * @hidden
    */
   #cacheInputs(inputs: TransactionRequestInput[], transactionId: string): void {
@@ -835,19 +886,7 @@ export default class Provider {
       return;
     }
 
-    const inputsToCache = inputs.reduce(
-      (acc, input) => {
-        if (input.type === InputType.Coin) {
-          acc.utxos.push(input.id);
-        } else if (input.type === InputType.Message) {
-          acc.messages.push(input.nonce);
-        }
-        return acc;
-      },
-      { utxos: [], messages: [] } as Required<ExcludeResourcesOption>
-    );
-
-    this.cache.set(transactionId, inputsToCache);
+    this.cache.set(transactionId, inputs);
   }
 
   /**
@@ -1511,15 +1550,25 @@ export default class Provider {
     excludedIds?: ExcludeResourcesOption
   ): Promise<Resource[]> {
     const ownerAddress = new Address(owner);
-    const excludeInput = {
+    let idsToExclude = {
       messages: excludedIds?.messages?.map((nonce) => hexlify(nonce)) || [],
       utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
     };
 
     if (this.cache) {
-      const cached = this.cache.getActiveData();
-      excludeInput.messages.push(...cached.messages);
-      excludeInput.utxos.push(...cached.utxos);
+      const cached = this.cache.getActiveData(ownerAddress.toB256());
+      if (cached.utxos.length || cached.messages.length) {
+        const {
+          consensusParameters: {
+            txParameters: { maxInputs },
+          },
+        } = await this.getChain();
+        idsToExclude = adjustResourcesToExclude({
+          userInput: idsToExclude,
+          cached,
+          maxInputs: maxInputs.toNumber(),
+        });
+      }
     }
 
     const coinsQuery = {
@@ -1531,7 +1580,7 @@ export default class Provider {
           amount: amount.toString(10),
           max: maxPerAsset ? maxPerAsset.toString(10) : undefined,
         })),
-      excludedIds: excludeInput,
+      excludedIds: idsToExclude,
     };
 
     const result = await this.operations.getCoinsToSpend(coinsQuery);
@@ -1846,11 +1895,22 @@ export default class Provider {
     /** The asset ID of coins to get */
     assetId: BytesLike
   ): Promise<BN> {
-    const { balance } = await this.operations.getBalance({
-      owner: new Address(owner).toB256(),
-      assetId: hexlify(assetId),
+    const ownerStr = new Address(owner).toB256();
+    const assetIdStr = hexlify(assetId);
+
+    if (!this.features.amount128) {
+      const { balance } = await this.operations.getBalance({
+        owner: ownerStr,
+        assetId: assetIdStr,
+      });
+      return bn(balance.amount, 10);
+    }
+
+    const { balance } = await this.operations.getBalanceV2({
+      owner: ownerStr,
+      assetId: assetIdStr,
     });
-    return bn(balance.amount, 10);
+    return bn(balance.amountU128, 10);
   }
 
   /**
@@ -1860,7 +1920,24 @@ export default class Provider {
    * @param paginationArgs - Pagination arguments (optional).
    * @returns A promise that resolves to the balances.
    */
-  async getBalances(owner: AddressInput): Promise<GetBalancesResponse> {
+  async getBalances(
+    owner: string | Address,
+    paginationArgs?: CursorPaginationArgs
+  ): Promise<GetBalancesResponse> {
+    if (!this.features.balancePagination) {
+      return this.getBalancesV1(owner, paginationArgs);
+    }
+
+    return this.getBalancesV2(owner, paginationArgs);
+  }
+
+  /**
+   * @hidden
+   */
+  private async getBalancesV1(
+    owner: string | Address,
+    _paginationArgs?: CursorPaginationArgs
+  ): Promise<GetBalancesResponse> {
     const {
       balances: { edges },
     } = await this.operations.getBalances({
@@ -1878,6 +1955,31 @@ export default class Provider {
     }));
 
     return { balances };
+  }
+
+  /**
+   * @hidden
+   */
+  private async getBalancesV2(
+    owner: string | Address,
+    paginationArgs?: CursorPaginationArgs
+  ): Promise<GetBalancesResponse> {
+    const {
+      balances: { edges, pageInfo },
+    } = await this.operations.getBalancesV2({
+      ...validatePaginationArgs({
+        inputArgs: paginationArgs,
+        paginationLimit: BALANCES_PAGE_SIZE_LIMIT,
+      }),
+      filter: { owner: new Address(owner).toB256() },
+    });
+
+    const balances = edges.map(({ node }) => ({
+      assetId: node.assetId,
+      amount: bn(node.amountU128),
+    }));
+
+    return { balances, pageInfo };
   }
 
   /**
@@ -1937,7 +2039,7 @@ export default class Provider {
     nonce: string,
     commitBlockId?: string,
     commitBlockHeight?: BN
-  ): Promise<MessageProof | null> {
+  ): Promise<MessageProof> {
     let inputObject: {
       /** The transaction to get message from */
       transactionId: string;
@@ -1974,10 +2076,6 @@ export default class Provider {
     }
 
     const result = await this.operations.getMessageProof(inputObject);
-
-    if (!result.messageProof) {
-      return null;
-    }
 
     const {
       messageProof,
@@ -2096,19 +2194,17 @@ export default class Provider {
    * @returns A promise that resolves to the result of the check.
    */
   async isUserAccount(id: string): Promise<boolean> {
-    const { contract, blob, transaction } = await this.operations.isUserAccount({
-      blobId: id,
-      contractId: id,
-      transactionId: id,
-    });
-
-    if (contract || blob || transaction) {
-      return false;
-    }
-    return true;
+    const type = await this.getAddressType(id);
+    return type === 'Account';
   }
 
-  async getAddressType(id: string): Promise<'Account' | 'Contract' | 'Transaction' | 'Blob'> {
+  /**
+   * Determines the type of address based on the provided ID.
+   *
+   * @param id - The ID to be checked.
+   * @returns A promise that resolves to a string indicating the type of address.
+   */
+  async getAddressType(id: string): Promise<GetAddressTypeResponse> {
     const { contract, blob, transaction } = await this.operations.isUserAccount({
       blobId: id,
       contractId: id,
@@ -2124,6 +2220,14 @@ export default class Provider {
     if (transaction) {
       return 'Transaction';
     }
+
+    try {
+      // Unlike the previous queries this one will throw if the ID is not an assetId
+      const asset = await this.getAssetDetails(id);
+      if (asset) {
+        return 'Asset';
+      }
+    } catch (e) {}
 
     return 'Account';
   }

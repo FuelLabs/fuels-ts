@@ -1,4 +1,4 @@
-name: Release to @pr-<number> tag on GitHub Packages
+name: Release to @pr-<number> tag
 on:
   pull_request:
   workflow_dispatch:
@@ -20,20 +20,29 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/ci-setup
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_S3_REGION }}
+
       - name: Create .npmrc
         run: |
-          cat << EOF > "$HOME/.npmrc"
-            //npm.pkg.github.com/:_authToken=$GITHUB_TOKEN
-            @FuelLabs:registry=https://npm.pkg.github.com
-          EOF
+          TOKEN=$(aws codeartifact get-authorization-token \
+            --domain fuel \
+            --domain-owner 024848458133 \
+            --query authorizationToken \
+            --output text)
+
+          echo "//fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/npm/:always-auth=true" >> $HOME/.npmrc
+          echo "//fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/npm/:_authToken=${TOKEN}" >> $HOME/.npmrc
         env:
           HOME: ${{ github.workspace }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build
         run: pnpm build
 
-      - name: Release to @pr-${{ github.event.pull_REQUEST.NUMBER }} tag on GitHub Packages
+      - name: Release to @pr-${{ github.event.pull_REQUEST.NUMBER }} tag on AWS CodeArtifact
         id: release
         shell: bash
         run: |
@@ -43,29 +52,40 @@ jobs:
           published_version=$(echo "$changetsets" | grep -oP '@\K([0-9]+\.){2}[0-9]+-pr-${{ github.event.pull_REQUEST.NUMBER }}-\d+' | head -1)
           echo "published_version=$published_version" >> $GITHUB_OUTPUT
         env:
-          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HOME: ${{ github.workspace }}
-          npm_config_registry: "https://npm.pkg.github.com"
+          npm_config_registry: "https://fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/npm/"
 
       - uses: mshick/add-pr-comment@v2
         with:
           message: |
-            This PR is published in GitHub Packages with version **${{ steps.release.outputs.published_version }}**
+            This PR is published in AWS CodeArtifact with version **${{ steps.release.outputs.published_version }}**
 
             Install using the following command:
 
             ```bash
-            pnpm add @fuellabs/fuels@${{ steps.release.outputs.published_version }}
+            # PNPM
+            pnpm config set registry https://npm-packages.fuel.network/ --global
+            pnpm install fuels@${{ steps.release.outputs.published_version }}
+
+            # NPM
+            npm --registry=https://npm-packages.fuel.network/ install fuels@${{ steps.release.outputs.published_version }}
+
+            # Bun
+            npm_config_registry=https://npm-packages.fuel.network/ bun install fuels@${{ steps.release.outputs.published_version }}
             ```
 
-            Or update your package.json:
+            Or using `create-fuels`:
 
-            ```json
-            "dependencies": {
-              "@fuellabs/fuels": "${{ steps.release.outputs.published_version }}"
-            }
+            ```bash
+            # PNPM
+            pnpm config set registry https://npm-packages.fuel.network/ --global
+            pnpm create fuels@${{ steps.release.outputs.published_version }}
+
+            # NPM
+            npm --registry=https://npm-packages.fuel.network/ create fuels@${{ steps.release.outputs.published_version }}
+
+            # Bun
+            npm_config_registry=https://npm-packages.fuel.network/ bun create fuels@${{ steps.release.outputs.published_version }}
             ```
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -57,6 +57,7 @@ export type TxParams = Partial<{
   tip: BigNumberish;
   gasLimit: BigNumberish;
   maturity?: number;
+  expiration?: number;
   maxFee?: BigNumberish;
   witnessLimit?: BigNumberish;
   variableOutputs: number;

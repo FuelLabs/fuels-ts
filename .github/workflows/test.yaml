@@ -58,7 +58,8 @@ jobs:
   integration:
     runs-on: ubuntu-latest
     timeout-minutes: 25
-    if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
+    env:
+      NPM_DIST_TAG: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'next' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -70,26 +71,42 @@ jobs:
         with:
           should-install-bun: true
 
+      - name: Create .bunfig.toml
+        run: |
+          cat << EOF > "$XDG_CONFIG_HOME/.bunfig.toml"
+          [install]
+
+          registry = "https://npm-packages.fuel.network/"
+          EOF
+
       - name: Run UI tests (on template)
         run: sh ./scripts/tests-ui.sh
 
       - name: Wait for release to succeed
         uses: lewagon/wait-on-check-action@v1.3.4
         with:
-          ref: "refs/heads/master"
-          check-name: "Release"
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          check-name: "publish-pr-or-next"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 30
+
+      - name: Create .npmrc
+        run: |
+          cat << EOF > "$HOME/.npmrc"
+            registry="https://npm-packages.fuel.network/"
+          EOF
+        env:
+          HOME: ${{ github.workspace }}
 
       - name: Run tests (with published version)
         run: pnpm test:integration
         env:
-          PUBLISHED_NPM_TAG: next
+          PUBLISHED_NPM_TAG: ${{ env.NPM_DIST_TAG }}
 
       - name: Run UI tests (with published version)
         run: sh ./scripts/tests-ui-integration.sh
         env:
-          PUBLISHED_NPM_TAG: next
+          PUBLISHED_NPM_TAG: ${{ env.NPM_DIST_TAG }}
 
   forc:
     runs-on: ubuntu-latest
@@ -174,7 +191,7 @@ jobs:
           path: coverage/report
 
       - name: Download Master Coverage Artifact
-        uses: dawidd6/action-download-artifact@v8
+        uses: dawidd6/action-download-artifact@v9
         if: ${{ steps.findPr.outputs.number }}
         with:
           workflow: test.yaml
