@@ -243,7 +243,7 @@ export type TransactionCost = {
   addedSignatures: number;
   dryRunStatus?: DryRunStatus;
   updateMaxFee?: boolean;
-  transactionSummary: TransactionSummaryJsonPartial;
+  transactionSummary?: TransactionSummaryJsonPartial;
 };
 // #endregion cost-estimation-1
 
