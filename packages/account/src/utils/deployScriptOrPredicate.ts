@@ -15,29 +15,32 @@ import {
 async function fundBlobTx(deployer: Account, blobTxRequest: BlobTransactionRequest) {
   const baseAssetId = await deployer.provider.getBaseAssetId();
 
-  const { transactionRequest } = await deployer.provider.assembleTx({
-    transactionRequest: blobTxRequest,
-    estimatePredicates: true,
-    requiredBalances: [
-      {
-        account: resolveAccount(deployer),
-        amount: bn(0),
-        assetId: baseAssetId,
-        changePolicy: {
-          change: deployer.address.b256Address,
+  try {
+    const { transactionRequest } = await deployer.provider.assembleTx({
+      transactionRequest: blobTxRequest,
+      estimatePredicates: true,
+      requiredBalances: [
+        {
+          account: resolveAccount(deployer),
+          amount: bn(0),
+          assetId: baseAssetId,
+          changePolicy: {
+            change: deployer.address.b256Address,
+          },
         },
-      },
-    ],
-    blockHorizon: 10,
-    feeAddressIndex: 0,
-  });
+      ],
+      blockHorizon: 10,
+      feeAddressIndex: 0,
+    });
 
-  return transactionRequest;
+    return transactionRequest;
+  } catch (error) {
+    if ((error as FuelError).code === ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS) {
+      throw new FuelError(ErrorCode.FUNDS_TOO_LOW, 'Insufficient balance to deploy predicate.');
+    }
 
-  // TODO: Consider using a try/catch here to identify not enough funds error and throw the following error
-  // if (totalCost.gt(await deployer.getBalance())) {
-  //   throw new FuelError(ErrorCode.FUNDS_TOO_LOW, 'Insufficient balance to deploy predicate.');
-  // }
+    throw error;
+  }
 }
 
 function adjustConfigurableOffsets(jsonAbi: JsonAbi, configurableOffsetDiff: number) {
