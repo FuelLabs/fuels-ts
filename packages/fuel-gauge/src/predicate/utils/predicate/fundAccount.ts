@@ -36,7 +36,7 @@ export const fundAccount = async (
       requiredBalancesIndex[assetId] = entry;
     });
 
-  const { transactionRequest } = await fundedAccount.provider.assembleTX({
+  const { transactionRequest } = await fundedAccount.provider.assembleTx({
     blockHorizon: 10,
     feeAddressIndex: 0,
     requiredBalances: Object.values(requiredBalancesIndex),

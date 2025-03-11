@@ -214,7 +214,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
 
     request.maxFee = bn(0);
 
-    const { gasPrice, transactionRequest } = await account.provider.assembleTX({
+    const { gasPrice, transactionRequest } = await account.provider.assembleTx({
       blockHorizon: 10,
       feeAddressIndex: 0,
       requiredBalances: [requiredBalance],

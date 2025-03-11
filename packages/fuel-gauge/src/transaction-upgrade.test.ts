@@ -59,7 +59,7 @@ const upgradeConsensusParameters = async (wallet: WalletUnlocked, bytecode: Byte
 
   request.addConsensusParametersUpgradePurpose(bytecode);
 
-  const { transactionRequest } = await wallet.provider.assembleTX({
+  const { transactionRequest } = await wallet.provider.assembleTx({
     blockHorizon: 10,
     feeAddressIndex: 0,
     transactionRequest: request,
@@ -178,7 +178,7 @@ describe('Transaction upgrade state transition', () => {
 
     // Upload the subsections
     for (const request of requests) {
-      const { transactionRequest } = await privileged.provider.assembleTX({
+      const { transactionRequest } = await privileged.provider.assembleTx({
         transactionRequest: request,
         blockHorizon: 10,
         feeAddressIndex: 0,
@@ -210,7 +210,7 @@ describe('Transaction upgrade state transition', () => {
     const request = new UpgradeTransactionRequest();
     request.addStateTransitionUpgradePurpose(merkleRoot);
 
-    const { transactionRequest } = await privileged.provider.assembleTX({
+    const { transactionRequest } = await privileged.provider.assembleTx({
       transactionRequest: request,
       blockHorizon: 10,
       feeAddressIndex: 0,

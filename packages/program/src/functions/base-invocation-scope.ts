@@ -321,7 +321,7 @@ export class BaseInvocationScope<TReturn = any> {
     });
 
     // eslint-disable-next-line prefer-const
-    let { transactionRequest: assembledRequest, gasPrice } = await provider.assembleTX({
+    let { transactionRequest: assembledRequest, gasPrice } = await provider.assembleTx({
       blockHorizon: 10,
       feeAddressIndex: 0,
       transactionRequest,
@@ -546,7 +546,7 @@ export class BaseInvocationScope<TReturn = any> {
 
     transactionRequest.addResources(resources);
 
-    const { receipts } = await provider.assembleTX({
+    const { receipts } = await provider.assembleTx({
       blockHorizon: 10,
       feeAddressIndex: 0,
       transactionRequest,
