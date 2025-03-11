@@ -40,7 +40,7 @@ import {
   transactionRequestify,
   addAmountToCoinQuantities,
   resolveAccountForAssembleTxParams,
-  setAndValidateGasAndFee,
+  setAndValidateGasAndFeeForAssembledTx,
 } from './providers';
 import {
   cacheRequestInputsResourcesFromOwner,
@@ -366,11 +366,9 @@ export class Account extends AbstractAccount implements WithAddress {
 
     const { gasPrice, transactionRequest } = await this.assembleTx(request);
 
-    request = await setAndValidateGasAndFee({
+    request = await setAndValidateGasAndFeeForAssembledTx({
       gasPrice,
       provider: this.provider,
-      requiredMaxFee: transactionRequest.maxFee,
-      requiredGasLimit: transactionRequest.gasLimit,
       transactionRequest,
       setGasLimit: txParams?.gasLimit,
       setMaxFee: txParams?.maxFee,
@@ -417,11 +415,9 @@ export class Account extends AbstractAccount implements WithAddress {
 
     const { gasPrice, transactionRequest } = await this.assembleTx(request);
 
-    request = await setAndValidateGasAndFee({
+    request = await setAndValidateGasAndFeeForAssembledTx({
       gasPrice,
       provider: this.provider,
-      requiredMaxFee: transactionRequest.maxFee,
-      requiredGasLimit: transactionRequest.gasLimit,
       transactionRequest,
       setGasLimit: txParams?.gasLimit,
       setMaxFee: txParams?.maxFee,
@@ -524,11 +520,9 @@ export class Account extends AbstractAccount implements WithAddress {
 
     const { gasPrice, transactionRequest } = await this.assembleTx(request, quantities);
 
-    request = await setAndValidateGasAndFee({
+    request = await setAndValidateGasAndFeeForAssembledTx({
       gasPrice,
       provider: this.provider,
-      requiredMaxFee: transactionRequest.maxFee,
-      requiredGasLimit: transactionRequest.gasLimit,
       transactionRequest,
       setGasLimit: txParams?.gasLimit,
       setMaxFee: txParams?.maxFee,
@@ -575,11 +569,9 @@ export class Account extends AbstractAccount implements WithAddress {
 
     const { gasPrice, transactionRequest } = await this.assembleTx(request, quantities);
 
-    request = await setAndValidateGasAndFee({
+    request = await setAndValidateGasAndFeeForAssembledTx({
       gasPrice,
       provider: this.provider,
-      requiredMaxFee: transactionRequest.maxFee,
-      requiredGasLimit: transactionRequest.gasLimit,
       transactionRequest,
       setGasLimit: txParams?.gasLimit,
       setMaxFee: txParams?.maxFee,

@@ -28,30 +28,21 @@ export const resolveAccountForAssembleTxParams = (account: AbstractAccount): Ass
   return assembleTxAccount;
 };
 
-export const setAndValidateGasAndFee = async <T extends TransactionRequest>(params: {
-  provider: Provider;
+export const setAndValidateGasAndFeeForAssembledTx = async <T extends TransactionRequest>(params: {
   transactionRequest: T;
+  provider: Provider;
   gasPrice: BN;
-  requiredGasLimit?: BN;
-  requiredMaxFee: BN;
   setGasLimit?: BigNumberish;
   setMaxFee?: BigNumberish;
 }): Promise<T> => {
-  const {
-    gasPrice,
-    requiredMaxFee,
-    transactionRequest,
-    requiredGasLimit,
-    setGasLimit,
-    setMaxFee,
-    provider,
-  } = params;
+  const { gasPrice, transactionRequest, setGasLimit, setMaxFee, provider } = params;
 
   const gasLimitSpecified = isDefined(setGasLimit);
   const maxFeeSpecified = isDefined(setMaxFee);
   const isScriptTx = transactionRequest.type === TransactionType.Script;
 
   if (gasLimitSpecified && isScriptTx) {
+    const requiredGasLimit = transactionRequest.gasLimit;
     if (bn(setGasLimit).lt(bn(requiredGasLimit))) {
       throw new FuelError(
         ErrorCode.GAS_LIMIT_TOO_LOW,
@@ -63,6 +54,7 @@ export const setAndValidateGasAndFee = async <T extends TransactionRequest>(para
   }
 
   if (maxFeeSpecified) {
+    const requiredMaxFee = transactionRequest.maxFee;
     if (bn(setMaxFee).lt(requiredMaxFee)) {
       throw new FuelError(
         ErrorCode.MAX_FEE_TOO_LOW,

@@ -15,7 +15,7 @@ import {
   TransactionStatus,
   calculateGasFee,
   resolveAccountForAssembleTxParams,
-  setAndValidateGasAndFee,
+  setAndValidateGasAndFeeForAssembledTx,
 } from '@fuel-ts/account';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -223,10 +223,9 @@ export default class ContractFactory<TContract extends Contract = Contract> {
     });
 
     // eslint-disable-next-line no-param-reassign
-    request = await setAndValidateGasAndFee({
+    request = await setAndValidateGasAndFeeForAssembledTx({
       gasPrice,
       provider: account.provider,
-      requiredMaxFee: transactionRequest.maxFee,
       transactionRequest,
       setMaxFee,
     });
