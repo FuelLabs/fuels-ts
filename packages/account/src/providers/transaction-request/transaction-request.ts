@@ -32,7 +32,8 @@ import { isMessageCoin, type Message, type MessageCoin } from '../message';
 import type { ChainInfo, GasCosts } from '../provider';
 import type { Resource } from '../resource';
 import { isCoin } from '../resource';
-import { normalizeJSON, TransactionSummaryJsonPartial } from '../utils';
+import type { TransactionSummaryJsonPartial } from '../utils';
+import { normalizeJSON } from '../utils';
 import { getMaxGas, getMinGas } from '../utils/gas';
 
 import { NoWitnessAtIndexError } from './errors';
