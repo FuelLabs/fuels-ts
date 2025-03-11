@@ -13,7 +13,7 @@ import type { TransactionRequest } from './transaction-request';
 
 export const resolveAccountForAssembleTxParams = (account: AbstractAccount): AssembleTxAccount => {
   const assembleTxAccount: AssembleTxAccount = {};
-  const accountIsPredicate = !!account && 'bytes' in account;
+  const accountIsPredicate = 'bytes' in account;
 
   if (accountIsPredicate) {
     assembleTxAccount.predicate = {
