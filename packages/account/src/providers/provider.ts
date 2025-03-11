@@ -68,7 +68,7 @@ import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
 import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
 import { adjustResourcesToExclude } from './utils/helpers';
-import type { ProviderCacheJson } from './utils/serialization';
+import type { ProviderCacheJson, TransactionSummaryJsonPartial } from './utils/serialization';
 import {
   deserializeChain,
   deserializeNodeInfo,
@@ -243,6 +243,7 @@ export type TransactionCost = {
   addedSignatures: number;
   dryRunStatus?: DryRunStatus;
   updateMaxFee?: boolean;
+  transactionSummary?: TransactionSummaryJsonPartial;
 };
 // #endregion cost-estimation-1
 
@@ -1448,6 +1449,11 @@ export default class Provider {
       }));
     }
 
+    const transactionSummary: TransactionSummaryJsonPartial = {
+      gasPrice: gasPrice.toString(),
+      receipts: rawReceipts,
+    };
+
     return {
       rawReceipts,
       receipts,
@@ -1463,6 +1469,7 @@ export default class Provider {
       estimatedPredicates: txRequestClone.inputs,
       dryRunStatus,
       updateMaxFee,
+      transactionSummary,
     };
   }
 

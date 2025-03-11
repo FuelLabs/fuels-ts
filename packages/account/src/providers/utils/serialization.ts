@@ -49,6 +49,8 @@ export interface TransactionSummaryJson {
   gasPrice: string;
 }
 
+export type TransactionSummaryJsonPartial = Omit<TransactionSummaryJson, 'id' | 'transactionBytes'>;
+
 /** @hidden */
 export const deserializeChain = (chain: ChainInfoJson): ChainInfo => {
   const { name, daHeight, consensusParameters } = chain;

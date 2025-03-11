@@ -32,6 +32,7 @@ import type {
   TransactionCostParams,
   TransactionResponse,
   ProviderSendTxParams,
+  TransactionSummaryJson,
 } from './providers';
 import {
   withdrawScript,
@@ -72,7 +73,12 @@ export type AccountSendTxParams = ProviderSendTxParams & FuelConnectorSendTxPara
 
 export type EstimatedTxParams = Pick<
   TransactionCost,
-  'estimatedPredicates' | 'addedSignatures' | 'requiredQuantities' | 'updateMaxFee' | 'gasPrice'
+  | 'estimatedPredicates'
+  | 'addedSignatures'
+  | 'requiredQuantities'
+  | 'updateMaxFee'
+  | 'gasPrice'
+  | 'transactionSummary'
 >;
 const MAX_FUNDING_ATTEMPTS = 5;
 
@@ -212,8 +218,16 @@ export class Account extends AbstractAccount implements WithAddress {
    * @returns A promise that resolves to the funded transaction request.
    */
   async fund<T extends TransactionRequest>(request: T, params: EstimatedTxParams): Promise<T> {
-    const { addedSignatures, estimatedPredicates, requiredQuantities, updateMaxFee, gasPrice } =
-      params;
+    const {
+      addedSignatures,
+      estimatedPredicates,
+      requiredQuantities,
+      updateMaxFee,
+      gasPrice,
+      transactionSummary,
+    } = params;
+
+    const chainId = await this.provider.getChainId();
 
     const fee = request.maxFee;
     const baseAssetId = await this.provider.getBaseAssetId();
@@ -313,8 +327,7 @@ export class Account extends AbstractAccount implements WithAddress {
       );
     }
 
-    const chainId = await this.provider.getChainId();
-    request.updateState(chainId, 'funded');
+    request.updateState(chainId, 'funded', transactionSummary);
 
     await this.provider.validateTransaction(request);
 
@@ -664,7 +677,7 @@ export class Account extends AbstractAccount implements WithAddress {
     // Check if the account is using a connector, and therefore we do not have direct access to the
     // private key.
     if (this._connector) {
-      const { onBeforeSend, skipCustomFee = false, data } = connectorOptions;
+      const { onBeforeSend, skipCustomFee = false } = connectorOptions;
 
       transactionRequest = await this.prepareTransactionForSend(transactionRequest);
 
@@ -675,8 +688,8 @@ export class Account extends AbstractAccount implements WithAddress {
           url: this.provider.url,
           cache: await serializeProviderCache(this.provider),
         },
-        data,
         transactionState: transactionRequest.flag.state,
+        transactionSummary: await this.prepareTransactionSummary(transactionRequest),
       };
 
       const transaction: string | TransactionResponse = await this._connector.sendTransaction(
@@ -752,6 +765,21 @@ export class Account extends AbstractAccount implements WithAddress {
       request.updateState(chainId);
     }
     return request;
+  }
+
+  /** @hidden */
+  private async prepareTransactionSummary(
+    request: TransactionRequest
+  ): Promise<TransactionSummaryJson | undefined> {
+    const chainId = await this.provider.getChainId();
+
+    return isDefined(request.flag.summary)
+      ? {
+          ...request.flag.summary,
+          id: request.getTransactionId(chainId),
+          transactionBytes: request.toTransactionBytes(),
+        }
+      : undefined;
   }
 
   /** @hidden * */

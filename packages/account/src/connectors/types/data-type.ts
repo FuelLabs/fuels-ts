@@ -59,8 +59,6 @@ export type FuelConnectorSendTxParams = {
     url: string;
     cache?: ProviderCacheJson;
   };
-  data?: {
-    transactionSummary?: TransactionSummaryJson;
-  };
   transactionState?: TransactionStateFlag['state'];
+  transactionSummary?: TransactionSummaryJson;
 };
