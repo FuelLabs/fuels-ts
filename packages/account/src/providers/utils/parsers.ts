@@ -1,5 +1,6 @@
 import { bn } from '@fuel-ts/math';
 import { InputType, OutputType } from '@fuel-ts/transactions';
+import { arrayify, hexlify } from '@fuel-ts/utils';
 
 import type {
   GqlInputCoinFragment,
@@ -63,6 +64,7 @@ export const parseRawInput = (input: RawInput) => {
         type: InputType.Contract,
         contractId: input.contractId,
         txPointer: `0x${input.txPointer}`,
+        txID: hexlify(arrayify(input.utxoId).slice(0, 32)),
       };
   }
 
