@@ -10,7 +10,6 @@ import type {
   TransactionResponse,
   TransactionCost,
   AbstractAccount,
-  Predicate,
   AssembleTxRequiredBalance,
 } from '@fuel-ts/account';
 import {
@@ -670,9 +669,5 @@ export class BaseInvocationScope<TReturn = any> {
 
       transactionRequest.maxFee = feeForGasPrice;
     }
-  }
-
-  private isAccountPredicate(account?: AbstractAccount | null): account is Predicate {
-    return !!account && 'bytes' in account;
   }
 }
