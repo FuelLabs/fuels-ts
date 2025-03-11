@@ -538,14 +538,15 @@ export class BaseInvocationScope<TReturn = any> {
     const resources = account.generateFakeResources(allQuantities);
 
     const utxoForBaseAssetId = resources.find((utxo) => utxo.assetId === baseAssetId);
+    const amountForFee = bn('1000000000000000');
 
     if (!utxoForBaseAssetId) {
       const [baseAssetResource] = account.generateFakeResources([
-        { assetId: baseAssetId, amount: bn('1000000000000000') },
+        { assetId: baseAssetId, amount: amountForFee },
       ]);
       resources.push(baseAssetResource);
     } else {
-      utxoForBaseAssetId.amount = utxoForBaseAssetId.amount.add(bn('1000000000000000'));
+      utxoForBaseAssetId.amount = utxoForBaseAssetId.amount.add(amountForFee);
     }
 
     transactionRequest.addResources(resources);
