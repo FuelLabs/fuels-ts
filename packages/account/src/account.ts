@@ -896,7 +896,7 @@ export class Account extends AbstractAccount implements WithAddress {
       if (request.maxFee.gte(amount)) {
         // TODO: to throw or not to throw, that's the question
         throw new FuelError(
-          ErrorCode.NOT_ENOUGH_FUNDS,
+          ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
           `The account sending the transaction doesn't have enough funds to cover the transaction.`,
           {
             transactions,
@@ -1032,7 +1032,7 @@ export class Account extends AbstractAccount implements WithAddress {
       if (request.maxFee.gte(amount)) {
         // TODO: to throw or not to throw, that's the question
         throw new FuelError(
-          ErrorCode.NOT_ENOUGH_FUNDS,
+          ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
           `The account sending the transaction doesn't have enough funds to cover the transaction.`,
           {
             transactions,

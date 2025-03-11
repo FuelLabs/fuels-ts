@@ -52,7 +52,7 @@ describe('utxo-consolidation', () => {
       await expectToThrowFuelError(
         () => wallet.consolidateCoins({ assetId: baseAssetId }),
         new FuelError(
-          ErrorCode.NOT_ENOUGH_FUNDS,
+          ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
           `The account sending the transaction doesn't have enough funds to cover the transaction.`
         )
       );
@@ -75,7 +75,7 @@ describe('utxo-consolidation', () => {
       await expectToThrowFuelError(
         () => wallet.consolidateCoins({ assetId: baseAssetId }),
         new FuelError(
-          ErrorCode.NOT_ENOUGH_FUNDS,
+          ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
           `The account sending the transaction doesn't have enough funds to cover the transaction.`
         )
       );
@@ -160,7 +160,7 @@ describe('utxo-consolidation', () => {
       const error = await expectToThrowFuelError(
         () => wallet.consolidateCoins({ assetId: baseAssetId }),
         new FuelError(
-          ErrorCode.NOT_ENOUGH_FUNDS,
+          ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
           `The account sending the transaction doesn't have enough funds to cover the transaction.`
         )
       );
@@ -252,7 +252,7 @@ describe('utxo-consolidation', () => {
       const error = await expectToThrowFuelError(
         () => wallet.consolidateCoins({ assetId: baseAssetId }),
         new FuelError(
-          ErrorCode.NOT_ENOUGH_FUNDS,
+          ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
           `The account sending the transaction doesn't have enough funds to cover the transaction.`
         )
       );
@@ -331,7 +331,7 @@ describe('utxo-consolidation', () => {
       const error = await expectToThrowFuelError(
         () => predicate.consolidateCoins({ assetId: baseAssetId }),
         new FuelError(
-          ErrorCode.NOT_ENOUGH_FUNDS,
+          ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
           `The account sending the transaction doesn't have enough funds to cover the transaction.`
         )
       );
