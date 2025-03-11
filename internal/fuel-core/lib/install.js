@@ -2,7 +2,7 @@
 
 import { spawnSync } from 'child_process';
 import { error } from 'console';
-import { existsSync, rmSync, writeFileSync, renameSync } from 'fs';
+import { existsSync, rmSync, writeFileSync, renameSync, readFileSync, exists } from 'fs';
 import fetch from 'node-fetch';
 import { join } from 'path';
 
@@ -30,18 +30,28 @@ import {
   const binDir = join(rootDir, 'fuel-core-binaries');
 
   const binPath = join(binDir, 'fuel-core');
-  let versionMatches = false;
+  const madeFromGitPath = join(binDir, 'MADE-FROM-GIT');
+
+  const versionMatches = false;
 
   if (existsSync(binPath)) {
-    const binRawVersion = spawnSync(binPath, ['--version'], { encoding: 'utf8' }).stdout.trim();
-    const binVersion = binRawVersion.match(/([.0-9]+)/)?.[0];
+    if (existsSync(madeFromGitPath)) {
+      const madeFromGit = readFileSync(madeFromGitPath, 'utf8').trim();
+      info({
+        expected: fuelCoreVersion,
+        received: madeFromGit,
+        isGitBranch: isGitBranch(fuelCoreVersion),
+      });
+    } else {
+      const binRawVersion = spawnSync(binPath, ['--version'], { encoding: 'utf8' }).stdout.trim();
+      const binVersion = binRawVersion.match(/([.0-9]+)/)?.[0];
 
-    versionMatches = binVersion === fuelCoreVersion;
-    info({
-      expected: fuelCoreVersion,
-      received: binVersion,
-      isGitBranch: isGitBranch(fuelCoreVersion),
-    });
+      info({
+        expected: fuelCoreVersion,
+        received: binVersion,
+        isGitBranch: isGitBranch(fuelCoreVersion),
+      });
+    }
   }
 
   if (versionMatches) {
@@ -79,5 +89,6 @@ import {
       force: true,
     });
     rmSync(pkgPath);
+    rmSync(madeFromGitPath, { force: true });
   }
 })().catch((e) => error(e));

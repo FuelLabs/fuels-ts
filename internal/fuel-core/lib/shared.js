@@ -73,4 +73,5 @@ export const buildFromGitBranch = (branchName) => {
   mkdirSync(to, { recursive: true });
 
   cpSync(join(from, 'fuel-core'), join(to, 'fuel-core'));
+  writeFileSync(join(to, 'MADE-FROM-GIT'), branchName);
 };

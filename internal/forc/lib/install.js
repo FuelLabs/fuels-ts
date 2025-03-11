@@ -2,7 +2,7 @@
 
 import { execSync } from 'child_process';
 import { error } from 'console';
-import { existsSync, rmSync, writeFileSync } from 'fs';
+import { existsSync, rmSync, readFileSync, writeFileSync } from 'fs';
 import fetch from 'node-fetch';
 import { join } from 'path';
 
@@ -28,8 +28,29 @@ import {
   const binDir = join(__dirname, '../');
 
   const binPath = join(binDir, 'forc-binaries', 'forc');
+  const madeFromGitPath = join(binDir, 'MADE-FROM-GIT');
 
   let versionMatches = false;
+
+  if (existsSync(binPath)) {
+    if (existsSync(madeFromGitPath)) {
+      const madeFromGit = readFileSync(madeFromGitPath, 'utf8').trim();
+      info({
+        expected: forcVersion,
+        received: madeFromGit,
+        isGitBranch: isGitBranch(forcVersion),
+      });
+    } else {
+      const binRawVersion = execSync(binPath, ['--version'], { encoding: 'utf8' }).stdout.trim();
+      const binVersion = binRawVersion.match(/([.0-9]+)/)?.[0];
+
+      info({
+        expected: forcVersion,
+        received: binVersion,
+        isGitBranch: isGitBranch(forcVersion),
+      });
+    }
+  }
 
   if (existsSync(binPath)) {
     const binRawVersion = execSync(`${binPath} --version`).toString().trim();
@@ -69,5 +90,6 @@ import {
 
     // Cleanup
     rmSync(pkgPath);
+    rmSync(madeFromGitPath, { force: true });
   }
 })().catch((e) => error(e));

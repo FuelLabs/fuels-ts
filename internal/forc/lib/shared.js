@@ -85,4 +85,6 @@ export const buildFromGitBranch = (branchName) => {
   cpSync(join(from, 'forc-run'), join(to, 'forc-run'));
   cpSync(join(from, 'forc-submit'), join(to, 'forc-submit'));
   cpSync(join(from, 'forc-tx'), join(to, 'forc-tx'));
+
+  writeFileSync(join(to, 'MADE-FROM-GIT'), branchName);
 };
