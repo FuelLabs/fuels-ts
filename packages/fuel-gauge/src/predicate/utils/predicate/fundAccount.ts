@@ -1,4 +1,4 @@
-import type { BigNumberish, Account, AssembleTxRequiredBalances } from 'fuels';
+import type { BigNumberish, Account, AssembleTxRequiredBalance } from 'fuels';
 import {
   ScriptTransactionRequest,
   BN,
@@ -20,7 +20,7 @@ export const fundAccount = async (
     request.addCoinOutput(accountToBeFunded.address, new BN(amount).div(utxosAmount), baseAssetId);
   }
 
-  const requiredBalancesIndex: Record<string, AssembleTxRequiredBalances> = {};
+  const requiredBalancesIndex: Record<string, AssembleTxRequiredBalance> = {};
 
   request.outputs
     .filter((o) => o.type === OutputType.Coin)

@@ -11,7 +11,7 @@ import type {
   TransactionCost,
   AbstractAccount,
   Predicate,
-  AssembleTxRequiredBalances,
+  AssembleTxRequiredBalance,
 } from '@fuel-ts/account';
 import {
   resolveAccountForAssembleTxParams,
@@ -294,7 +294,7 @@ export class BaseInvocationScope<TReturn = any> {
     const account: AbstractAccount = this.program.account ?? Wallet.generate({ provider });
     const baseAssetId = await provider.getBaseAssetId();
 
-    const requiredBalancesIndex: Record<string, AssembleTxRequiredBalances> = {};
+    const requiredBalancesIndex: Record<string, AssembleTxRequiredBalance> = {};
     const requiredBalanceAccount = resolveAccountForAssembleTxParams(account);
 
     const allQuantities = transactionRequest.outputs

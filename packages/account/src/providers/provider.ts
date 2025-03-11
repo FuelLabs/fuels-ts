@@ -132,7 +132,7 @@ export type AssembleTxAccount = {
   predicate?: AssembleTxPredicate;
 };
 
-export type AssembleTxRequiredBalances = {
+export type AssembleTxRequiredBalance = {
   assetId: string;
   amount: BN;
   account: AssembleTxAccount;
@@ -145,7 +145,7 @@ export type AssembleTxRequiredBalances = {
 export type AssembleTxParams = {
   transactionRequest: TransactionRequest;
   blockHorizon: number;
-  requiredBalances: AssembleTxRequiredBalances[];
+  requiredBalances: AssembleTxRequiredBalance[];
   feeAddressIndex: number;
   excludeInput?: ExcludeResourcesOption;
   estimatePredicates?: boolean;

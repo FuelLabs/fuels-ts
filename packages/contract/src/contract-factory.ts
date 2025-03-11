@@ -2,7 +2,7 @@ import { Interface, WORD_SIZE } from '@fuel-ts/abi-coder';
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import type {
   Account,
-  AssembleTxRequiredBalances,
+  AssembleTxRequiredBalance,
   CreateTransactionRequestLike,
   Provider,
   TransactionRequest,
@@ -203,7 +203,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
 
     const { maxFee: setMaxFee } = options;
 
-    const requiredBalance: AssembleTxRequiredBalances = {
+    const requiredBalance: AssembleTxRequiredBalance = {
       account: assembleTxAccount,
       amount: bn(0),
       assetId: baseAssetId,

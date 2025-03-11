@@ -32,7 +32,7 @@ import type {
   TransactionCostParams,
   TransactionResponse,
   ProviderSendTxParams,
-  AssembleTxRequiredBalances,
+  AssembleTxRequiredBalance,
 } from './providers';
 import {
   withdrawScript,
@@ -758,7 +758,7 @@ export class Account extends AbstractAccount implements WithAddress {
     transactionRequest: ScriptTransactionRequest,
     quantities: CoinQuantity[] = []
   ): Promise<{ transactionRequest: ScriptTransactionRequest; gasPrice: BN }> {
-    const requiredBalancesIndex: Record<string, AssembleTxRequiredBalances> = {};
+    const requiredBalancesIndex: Record<string, AssembleTxRequiredBalance> = {};
     const account = resolveAccountForAssembleTxParams(this);
 
     transactionRequest.outputs
