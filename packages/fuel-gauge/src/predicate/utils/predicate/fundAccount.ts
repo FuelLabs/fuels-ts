@@ -1,5 +1,11 @@
 import type { BigNumberish, Account, AssembleTxRequiredBalances } from 'fuels';
-import { ScriptTransactionRequest, BN, OutputType, bn, resolveAccount } from 'fuels';
+import {
+  ScriptTransactionRequest,
+  BN,
+  OutputType,
+  bn,
+  resolveAccountForAssembleTxParams,
+} from 'fuels';
 
 export const fundAccount = async (
   fundedAccount: Account,
@@ -23,7 +29,7 @@ export const fundAccount = async (
       const outputAmount = bn(o.amount);
 
       const entry = requiredBalancesIndex[assetId] || {
-        account: resolveAccount(fundedAccount),
+        account: resolveAccountForAssembleTxParams(fundedAccount),
         amount: bn(0),
         assetId,
         changePolicy: {

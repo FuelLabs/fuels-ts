@@ -4,7 +4,11 @@ import { bn } from '@fuel-ts/math';
 import { arrayify } from '@fuel-ts/utils';
 
 import type { Account } from '../account';
-import { BlobTransactionRequest, resolveAccount, TransactionStatus } from '../providers';
+import {
+  BlobTransactionRequest,
+  resolveAccountForAssembleTxParams,
+  TransactionStatus,
+} from '../providers';
 
 import {
   getBytecodeConfigurableOffset,
@@ -21,7 +25,7 @@ async function fundBlobTx(deployer: Account, blobTxRequest: BlobTransactionReque
       estimatePredicates: true,
       requiredBalances: [
         {
-          account: resolveAccount(deployer),
+          account: resolveAccountForAssembleTxParams(deployer),
           amount: bn(0),
           assetId: baseAssetId,
           changePolicy: {

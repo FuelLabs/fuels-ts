@@ -13,7 +13,11 @@ import type {
   Predicate,
   AssembleTxRequiredBalances,
 } from '@fuel-ts/account';
-import { resolveAccount, ScriptTransactionRequest, Wallet } from '@fuel-ts/account';
+import {
+  resolveAccountForAssembleTxParams,
+  ScriptTransactionRequest,
+  Wallet,
+} from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
@@ -291,7 +295,7 @@ export class BaseInvocationScope<TReturn = any> {
     const baseAssetId = await provider.getBaseAssetId();
 
     const requiredBalancesIndex: Record<string, AssembleTxRequiredBalances> = {};
-    const requiredBalanceAccount = resolveAccount(account);
+    const requiredBalanceAccount = resolveAccountForAssembleTxParams(account);
 
     const allQuantities = transactionRequest.outputs
       .filter((o) => o.type === OutputType.Coin)
@@ -553,7 +557,7 @@ export class BaseInvocationScope<TReturn = any> {
       estimatePredicates: true,
       requiredBalances: [
         {
-          account: resolveAccount(account),
+          account: resolveAccountForAssembleTxParams(account),
           amount: bn(0),
           assetId: baseAssetId,
           changePolicy: {

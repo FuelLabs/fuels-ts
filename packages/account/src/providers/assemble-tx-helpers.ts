@@ -11,7 +11,7 @@ import type { AssembleTxAccount } from './provider';
 import type Provider from './provider';
 import type { TransactionRequest } from './transaction-request';
 
-export const resolveAccount = (account: AbstractAccount): AssembleTxAccount => {
+export const resolveAccountForAssembleTxParams = (account: AbstractAccount): AssembleTxAccount => {
   const assembleTxAccount: AssembleTxAccount = {};
   const accountIsPredicate = !!account && 'bytes' in account;
 

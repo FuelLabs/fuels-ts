@@ -14,7 +14,7 @@ import {
   BlobTransactionRequest,
   TransactionStatus,
   calculateGasFee,
-  resolveAccount,
+  resolveAccountForAssembleTxParams,
   setAndValidateGasAndFee,
 } from '@fuel-ts/account';
 import { randomBytes } from '@fuel-ts/crypto';
@@ -197,7 +197,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
 
   private async assembleTx(request: TransactionRequest, options: DeployContractOptions = {}) {
     const account = this.getAccount();
-    const assembleTxAccount = resolveAccount(account);
+    const assembleTxAccount = resolveAccountForAssembleTxParams(account);
 
     const baseAssetId = await account.provider.getBaseAssetId();
 

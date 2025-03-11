@@ -39,7 +39,7 @@ import {
   ScriptTransactionRequest,
   transactionRequestify,
   addAmountToCoinQuantities,
-  resolveAccount,
+  resolveAccountForAssembleTxParams,
   setAndValidateGasAndFee,
 } from './providers';
 import {
@@ -759,7 +759,7 @@ export class Account extends AbstractAccount implements WithAddress {
     quantities: CoinQuantity[] = []
   ): Promise<{ transactionRequest: ScriptTransactionRequest; gasPrice: BN }> {
     const requiredBalancesIndex: Record<string, AssembleTxRequiredBalances> = {};
-    const account = resolveAccount(this);
+    const account = resolveAccountForAssembleTxParams(this);
 
     transactionRequest.outputs
       .filter((o) => o.type === OutputType.Coin)

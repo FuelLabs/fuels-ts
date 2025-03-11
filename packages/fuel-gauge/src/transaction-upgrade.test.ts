@@ -9,7 +9,7 @@ import {
   UploadTransactionRequest,
   sleep,
   Provider,
-  resolveAccount,
+  resolveAccountForAssembleTxParams,
   bn,
 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
@@ -66,7 +66,7 @@ const upgradeConsensusParameters = async (wallet: WalletUnlocked, bytecode: Byte
     estimatePredicates: false,
     requiredBalances: [
       {
-        account: resolveAccount(wallet),
+        account: resolveAccountForAssembleTxParams(wallet),
         amount: bn(0),
         assetId: baseAssetId,
         changePolicy: {
@@ -184,7 +184,7 @@ describe('Transaction upgrade state transition', () => {
         feeAddressIndex: 0,
         requiredBalances: [
           {
-            account: resolveAccount(privileged),
+            account: resolveAccountForAssembleTxParams(privileged),
             amount: bn(0),
             assetId: baseAssetId,
             changePolicy: {
@@ -216,7 +216,7 @@ describe('Transaction upgrade state transition', () => {
       feeAddressIndex: 0,
       requiredBalances: [
         {
-          account: resolveAccount(privileged),
+          account: resolveAccountForAssembleTxParams(privileged),
           amount: bn(0),
           assetId: baseAssetId,
           changePolicy: {
