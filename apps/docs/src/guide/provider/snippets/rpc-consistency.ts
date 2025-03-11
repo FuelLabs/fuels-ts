@@ -1,5 +1,5 @@
 // #region full
 import { Provider } from 'fuels';
 
-Provider.ENSURE_BLOCK_HEIGHT = false;
+Provider.ENSURE_RPC_CONSISTENCY = false;
 // #endregion full
