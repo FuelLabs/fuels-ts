@@ -17,12 +17,12 @@ export const resolveAccountForAssembleTxParams = (account: AbstractAccount): Ass
 
   if (accountIsPredicate) {
     assembleTxAccount.predicate = {
-      predicateAddress: account.address.b256Address,
+      predicateAddress: account.address.toB256(),
       predicate: hexlify((account as Predicate).bytes),
       predicateData: hexlify((account as Predicate).getPredicateData()),
     };
   } else {
-    assembleTxAccount.address = account.address.b256Address;
+    assembleTxAccount.address = account.address.toB256();
   }
 
   return assembleTxAccount;
