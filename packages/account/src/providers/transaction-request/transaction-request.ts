@@ -32,7 +32,7 @@ import { isMessageCoin, type Message, type MessageCoin } from '../message';
 import type { ChainInfo, GasCosts } from '../provider';
 import type { Resource } from '../resource';
 import { isCoin } from '../resource';
-import { normalizeJSON } from '../utils';
+import { normalizeJSON, TransactionSummaryJsonPartial } from '../utils';
 import { getMaxGas, getMinGas } from '../utils/gas';
 
 import { NoWitnessAtIndexError } from './errors';
@@ -102,10 +102,11 @@ type ToBaseTransactionResponse = Pick<
 >;
 
 export type TransactionStateFlag =
-  | { state: undefined; transactionId: undefined }
+  | { state: undefined; transactionId: undefined; summary: undefined }
   | {
       state: 'funded';
       transactionId: string;
+      summary: TransactionSummaryJsonPartial | undefined;
     };
 
 /**
@@ -136,7 +137,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    *
    * The current status of the transaction
    */
-  flag: TransactionStateFlag = { state: undefined, transactionId: undefined };
+  flag: TransactionStateFlag = { state: undefined, transactionId: undefined, summary: undefined };
 
   /**
    * Constructor for initializing a base transaction request.
@@ -738,13 +739,17 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    *
    * @param state - The state to update.
    */
-  public updateState(chainId: number, state?: TransactionStateFlag['state']) {
+  public updateState(
+    chainId: number,
+    state?: TransactionStateFlag['state'],
+    summary?: TransactionSummaryJsonPartial
+  ) {
     if (!state) {
-      this.flag = { state: undefined, transactionId: undefined };
+      this.flag = { state: undefined, transactionId: undefined, summary: undefined };
       return;
     }
 
     const transactionId = this.getTransactionId(chainId);
-    this.flag = { state, transactionId };
+    this.flag = { state, transactionId, summary };
   }
 }
