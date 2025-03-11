@@ -15,7 +15,7 @@ import {
 async function fundBlobTx(deployer: Account, blobTxRequest: BlobTransactionRequest) {
   const baseAssetId = await deployer.provider.getBaseAssetId();
 
-  const { transactionRequest } = await deployer.provider.assembleTX({
+  const { transactionRequest } = await deployer.provider.assembleTx({
     transactionRequest: blobTxRequest,
     estimatePredicates: true,
     requiredBalances: [

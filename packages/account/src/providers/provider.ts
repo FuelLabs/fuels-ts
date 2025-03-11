@@ -1530,7 +1530,7 @@ export default class Provider {
     };
   }
 
-  async assembleTX(params: AssembleTxParams) {
+  async assembleTx(params: AssembleTxParams) {
     const { excludeInput } = params;
 
     const allAddresses = new Set<string>();

@@ -783,7 +783,7 @@ export class Account extends AbstractAccount implements WithAddress {
         requiredBalancesIndex[assetId] = entry;
       });
 
-    const { transactionRequest: assembledRequest, gasPrice } = await this.provider.assembleTX({
+    const { transactionRequest: assembledRequest, gasPrice } = await this.provider.assembleTx({
       blockHorizon: 10,
       feeAddressIndex: 0,
       requiredBalances: Object.values(requiredBalancesIndex),
