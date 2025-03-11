@@ -450,7 +450,13 @@ export class BaseInvocationScope<TReturn = any> {
   }> {
     assert(this.program.account, 'Wallet is required!');
 
-    const transactionRequest = await this.assembleTx();
+    let transactionRequest: ScriptTransactionRequest;
+
+    if (this.addSignersCallback) {
+      transactionRequest = await this.fundWithRequiredCoins();
+    } else {
+      transactionRequest = await this.assembleTx();
+    }
 
     const response = (await this.program.account.sendTransaction(transactionRequest, {
       estimateTxDependencies: false,
