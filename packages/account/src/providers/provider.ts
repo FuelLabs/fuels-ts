@@ -477,6 +477,16 @@ export default class Provider {
     amount128: false,
   };
 
+  /**
+   * Governs whether to include the required block height in the request body
+   * for block-sensitive operations like when submitting a transaction.
+   *
+   * This ensures that the operation is executed at the correct block height,
+   * regardless of which node in the network the request is routed to.
+   *
+   * `true` by default.
+   */
+  public static ENSURE_RPC_CONSISTENCY: boolean = true;
   /** @hidden */
   private static chainInfoCache: ChainInfoCache = {};
   /** @hidden */
@@ -518,7 +528,9 @@ export default class Provider {
         fullRequest = await options.requestMiddleware(fullRequest);
       }
 
-      Provider.applyBlockHeight(fullRequest, url);
+      if (Provider.ENSURE_RPC_CONSISTENCY) {
+        Provider.applyBlockHeight(fullRequest, url);
+      }
 
       return Provider.fetchAndProcessBlockHeight(url, fullRequest, options);
     }, retryOptions);

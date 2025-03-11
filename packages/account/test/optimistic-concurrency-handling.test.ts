@@ -14,7 +14,7 @@ describe('optimistic concurrency handling via block height', () => {
     vi.restoreAllMocks();
   });
 
-  test(`operations that aren't block-sensitive don't include the required block in request`, async () => {
+  test(`operations that aren't block-sensitive don't include the required block height in request`, async () => {
     using launched = await setupTestProviderAndWallets();
 
     const { provider } = launched;
