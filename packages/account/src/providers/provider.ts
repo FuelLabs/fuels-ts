@@ -14,6 +14,8 @@ import type { GraphQLClientResponse, GraphQLResponse } from 'graphql-request/src
 import gql from 'graphql-tag';
 import { clone } from 'ramda';
 
+import type { Account } from '../account';
+
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
   GqlChainInfoFragment,
@@ -31,10 +33,8 @@ import type {
   Requester,
   GqlBlockFragment,
   GqlEstimatePredicatesQuery,
-  GqlRequiredBalance,
-  GqlAccount,
-  GqlDestroy,
 } from './__generated__/operations';
+import { resolveAccountForAssembleTxParams } from './assemble-tx-helpers';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
@@ -121,32 +121,18 @@ export type Block = {
   };
 };
 
-export type AssembleTxPredicate = {
-  predicateAddress: string;
-  predicate: BytesLike;
-  predicateData: BytesLike;
-};
-
-export type AssembleTxAccount = {
-  address?: string;
-  predicate?: AssembleTxPredicate;
-};
-
-export type AssembleTxRequiredBalance = {
+export type AccountCoinQuantity = {
   assetId: string;
-  amount: BN;
-  account: AssembleTxAccount;
-  changePolicy: {
-    change?: string;
-    destroy?: GqlDestroy;
-  };
+  amount: BigNumberish;
+  account?: Account;
+  changeOutputAccount?: Account;
 };
 
 export type AssembleTxParams = {
   request: TransactionRequest;
   blockHorizon?: number;
-  requiredBalances: AssembleTxRequiredBalance[];
-  feeAddressIndex: number;
+  accountCoinQuantities: AccountCoinQuantity[];
+  feePayerAccount: Account;
   excludeInput?: ExcludeResourcesOption;
   estimatePredicates?: boolean;
   reserveGas?: number;
@@ -1532,34 +1518,68 @@ export default class Provider {
 
   async assembleTx(params: AssembleTxParams) {
     const {
-      request,
+      accountCoinQuantities,
+      feePayerAccount,
       excludeInput,
-      feeAddressIndex,
+      reserveGas,
       blockHorizon = 10,
       estimatePredicates = true,
-      requiredBalances,
-      reserveGas,
     } = params;
 
+    const { request } = params;
+
     const allAddresses = new Set<string>();
+    const baseAssetId = await this.getBaseAssetId();
 
-    const parsed: GqlRequiredBalance[] = requiredBalances.map((balance) => {
-      const { assetId, amount, account, changePolicy } = balance;
+    let feePayerIndex = -1;
+    let baseAssetChange;
 
-      allAddresses.add((account.address || account.predicate?.predicateAddress) as string);
+    const requiredBalances = accountCoinQuantities.map((quantity, index) => {
+      const { amount, assetId, account = feePayerAccount } = quantity;
+      let { changeOutputAccount } = quantity;
 
-      if (account.predicate) {
-        account.predicate.predicateData = hexlify(account.predicate.predicateData);
-        account.predicate.predicateAddress = hexlify(account.predicate.predicateAddress);
+      if (!changeOutputAccount) {
+        changeOutputAccount = account;
       }
 
-      return {
+      allAddresses.add(account.address.toB256());
+
+      const changePolicy = {
+        change: changeOutputAccount.address.toB256(),
+      };
+
+      if (assetId === baseAssetId) {
+        baseAssetChange = changePolicy.change;
+      }
+
+      if (account.address.equals(feePayerAccount.address)) {
+        feePayerIndex = index;
+      }
+
+      const requiredBalance = {
+        account: resolveAccountForAssembleTxParams(account),
+        amount: bn(amount).toString(10),
         assetId,
-        amount: amount.toString(10),
-        account: account as GqlAccount,
         changePolicy,
       };
+
+      return requiredBalance;
     });
+
+    if (feePayerIndex === -1) {
+      allAddresses.add(feePayerAccount.address.toB256());
+
+      const newLength = requiredBalances.push({
+        account: resolveAccountForAssembleTxParams(feePayerAccount),
+        amount: bn(0).toString(10),
+        assetId: baseAssetId,
+        changePolicy: {
+          change: baseAssetChange || feePayerAccount.address.toB256(),
+        },
+      });
+
+      feePayerIndex = newLength - 1;
+    }
 
     const idsToExclude = await this.adjustExcludeResourcesForAddress(
       Array.from(allAddresses),
@@ -1571,11 +1591,11 @@ export default class Provider {
     } = await this.operations.assembleTx({
       tx: hexlify(request.toTransactionBytes()),
       blockHorizon: String(blockHorizon),
-      feeAddressIndex: String(feeAddressIndex),
-      requiredBalances: parsed,
+      feeAddressIndex: String(feePayerIndex),
+      requiredBalances,
       estimatePredicates,
       excludeInput: idsToExclude,
-      reserveGas: reserveGas ? String(reserveGas) : undefined,
+      reserveGas: reserveGas ? reserveGas.toString(10) : undefined,
     });
 
     if (status.type === 'DryRunFailureStatus') {
