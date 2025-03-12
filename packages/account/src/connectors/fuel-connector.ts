@@ -4,7 +4,12 @@ import type { HashableMessage } from '@fuel-ts/hasher';
 import { EventEmitter } from 'events';
 
 import type { Asset } from '../assets/types';
-import type { TransactionRequestLike, TransactionResponse } from '../providers';
+import {
+  transactionRequestify,
+  type TransactionRequest,
+  type TransactionRequestLike,
+  type TransactionResponse,
+} from '../providers';
 
 import { FuelConnectorEventTypes } from './types';
 import type {
@@ -49,6 +54,9 @@ interface Connector {
     transaction: TransactionRequestLike,
     params?: FuelConnectorSendTxParams
   ): Promise<string | TransactionResponse>;
+
+  onBeforeEstimation(transaction: TransactionRequestLike): Promise<TransactionRequest>;
+
   // #endregion fuel-connector-method-sendTransaction
   // #region fuel-connector-method-currentAccount
   currentAccount(): Promise<string | null>;
@@ -208,6 +216,17 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
     _params?: FuelConnectorSendTxParams
   ): Promise<string | TransactionResponse> {
     throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
+  }
+
+  /**
+   * A hook that can be used to modify the transaction before it is estimated. Useful for any
+   * connector specific logic e.g. predicates for non-native accounts.
+   *
+   * @param transaction - The transaction to modify.
+   * @returns The modified transaction.
+   */
+  async onBeforeEstimation(_transaction: TransactionRequestLike): Promise<TransactionRequest> {
+    return transactionRequestify(_transaction);
   }
 
   /**

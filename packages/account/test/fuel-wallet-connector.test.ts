@@ -19,6 +19,7 @@ import { Wallet } from '../src/wallet';
 
 import { MockConnector } from './fixtures/mocked-connector';
 import { promiseCallback } from './fixtures/promise-callback';
+import { MockedPredicateConnector } from './fixtures/mocked-predicate-connector';
 
 /**
  * @group node
@@ -759,5 +760,26 @@ describe('Fuel Connector', () => {
     };
 
     expect(sendTransactionSpy).toHaveBeenCalledWith(request, expectedParams);
+  });
+
+  it('should ensure onBeforeEstimation works just fine', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider,
+      wallets: [connectorWallet, receiverWallet],
+    } = launched;
+    const connector = new MockedPredicateConnector({
+      wallets: [connectorWallet],
+    });
+    const fuel = await new Fuel({
+      connectors: [connector],
+    }).init();
+
+    const account = new Account(connectorWallet.address.toString(), provider, fuel);
+    const tx = await account.transfer(receiverWallet.address, 1000);
+    const result = await tx.waitForResult();
+
+    expect(result.isStatusSuccess).toBe(true);
+    expect(JSON.stringify(result.tip)).toBe(JSON.stringify(bn(1)));
   });
 });
