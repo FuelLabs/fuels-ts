@@ -2,7 +2,7 @@
 
 import { execSync } from 'child_process';
 import { error } from 'console';
-import { existsSync, rmSync, readFileSync, writeFileSync, copyFileSync, cpSync } from 'fs';
+import { existsSync, rmSync, readFileSync, writeFileSync, cpSync } from 'fs';
 import fetch from 'node-fetch';
 import { join } from 'path';
 
@@ -34,7 +34,8 @@ import {
   const pkgUrl = `https://github.com/FuelLabs/sway/releases/download/v${forcVersion}/${pkgName}`;
 
   const pkgPath = join(__dirname, pkgName);
-  const binDir = join(__dirname, '../');
+  const rootDir = join(__dirname, '..');
+  const binDir = join(rootDir, 'forc-binaries');
 
   const binVersionPath = join(binDir, 'VERSION');
 
