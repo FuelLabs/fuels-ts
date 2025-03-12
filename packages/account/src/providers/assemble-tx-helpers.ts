@@ -7,12 +7,12 @@ import { hexlify, isDefined } from '@fuel-ts/utils';
 import type { Predicate } from '../predicate';
 import type { AbstractAccount } from '../types';
 
-import type { AssembleTxAccount } from './provider';
+import type { GqlAccount } from './__generated__/operations';
 import type Provider from './provider';
 import type { TransactionRequest } from './transaction-request';
 
-export const resolveAccountForAssembleTxParams = (account: AbstractAccount): AssembleTxAccount => {
-  const assembleTxAccount: AssembleTxAccount = {};
+export const resolveAccountForAssembleTxParams = (account: AbstractAccount): GqlAccount => {
+  const assembleTxAccount: GqlAccount = {};
   const accountIsPredicate = 'bytes' in account;
 
   if (accountIsPredicate) {
