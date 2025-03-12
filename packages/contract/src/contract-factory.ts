@@ -214,11 +214,11 @@ export default class ContractFactory<TContract extends Contract = Contract> {
 
     request.maxFee = bn(0);
 
-    const { gasPrice, transactionRequest } = await account.provider.assembleTx({
+    const { gasPrice, assembledRequest } = await account.provider.assembleTx({
       blockHorizon: 10,
       feeAddressIndex: 0,
       requiredBalances: [requiredBalance],
-      transactionRequest: request,
+      request,
       estimatePredicates: true,
     });
 
@@ -226,7 +226,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
     request = await setAndValidateGasAndFeeForAssembledTx({
       gasPrice,
       provider: account.provider,
-      transactionRequest,
+      transactionRequest: assembledRequest,
       setMaxFee,
     });
 

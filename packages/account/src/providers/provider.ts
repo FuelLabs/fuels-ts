@@ -143,8 +143,8 @@ export type AssembleTxRequiredBalance = {
 };
 
 export type AssembleTxParams = {
-  transactionRequest: TransactionRequest;
-  blockHorizon: number;
+  request: TransactionRequest;
+  blockHorizon?: number;
   requiredBalances: AssembleTxRequiredBalance[];
   feeAddressIndex: number;
   excludeInput?: ExcludeResourcesOption;
@@ -1531,11 +1531,19 @@ export default class Provider {
   }
 
   async assembleTx(params: AssembleTxParams) {
-    const { excludeInput } = params;
+    const {
+      request,
+      excludeInput,
+      feeAddressIndex,
+      blockHorizon = 10,
+      estimatePredicates = true,
+      requiredBalances,
+      reserveGas,
+    } = params;
 
     const allAddresses = new Set<string>();
 
-    const parsed: GqlRequiredBalance[] = params.requiredBalances.map((balance) => {
+    const parsed: GqlRequiredBalance[] = requiredBalances.map((balance) => {
       const { assetId, amount, account, changePolicy } = balance;
 
       allAddresses.add((account.address || account.predicate?.predicateAddress) as string);
@@ -1558,17 +1566,16 @@ export default class Provider {
       excludeInput
     );
 
-    const request = params.transactionRequest;
-
     const {
       assembleTx: { status, transaction: gqlTransaction, gasPrice },
     } = await this.operations.assembleTx({
       tx: hexlify(request.toTransactionBytes()),
-      blockHorizon: String(params.blockHorizon),
-      feeAddressIndex: String(params.feeAddressIndex),
+      blockHorizon: String(blockHorizon),
+      feeAddressIndex: String(feeAddressIndex),
       requiredBalances: parsed,
-      estimatePredicates: params.estimatePredicates,
+      estimatePredicates,
       excludeInput: idsToExclude,
+      reserveGas: reserveGas ? String(reserveGas) : undefined,
     });
 
     if (status.type === 'DryRunFailureStatus') {
@@ -1591,7 +1598,7 @@ export default class Provider {
     }
 
     return {
-      transactionRequest: request,
+      assembledRequest: request,
       gasPrice: bn(gasPrice),
       receipts: status.receipts.map(processGqlReceipt),
     };

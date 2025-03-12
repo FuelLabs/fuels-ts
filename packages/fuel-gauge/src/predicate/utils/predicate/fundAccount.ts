@@ -42,15 +42,13 @@ export const fundAccount = async (
       requiredBalancesIndex[assetId] = entry;
     });
 
-  const { transactionRequest } = await fundedAccount.provider.assembleTx({
-    blockHorizon: 10,
+  const { assembledRequest } = await fundedAccount.provider.assembleTx({
+    request,
     feeAddressIndex: 0,
     requiredBalances: Object.values(requiredBalancesIndex),
-    transactionRequest: request,
-    estimatePredicates: true,
   });
 
-  const submit = await fundedAccount.sendTransaction(transactionRequest);
+  const submit = await fundedAccount.sendTransaction(assembledRequest);
   await submit.waitForResult();
 
   return accountToBeFunded.getBalance();

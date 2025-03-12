@@ -775,12 +775,10 @@ export class Account extends AbstractAccount implements WithAddress {
         requiredBalancesIndex[assetId] = entry;
       });
 
-    const { transactionRequest: assembledRequest, gasPrice } = await this.provider.assembleTx({
-      blockHorizon: 10,
+    const { assembledRequest, gasPrice } = await this.provider.assembleTx({
       feeAddressIndex: 0,
       requiredBalances: Object.values(requiredBalancesIndex),
-      transactionRequest,
-      estimatePredicates: true,
+      request: transactionRequest,
     });
 
     return { transactionRequest: assembledRequest as ScriptTransactionRequest, gasPrice };

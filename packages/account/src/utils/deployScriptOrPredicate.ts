@@ -20,9 +20,8 @@ async function fundBlobTx(deployer: Account, blobTxRequest: BlobTransactionReque
   const baseAssetId = await deployer.provider.getBaseAssetId();
 
   try {
-    const { transactionRequest } = await deployer.provider.assembleTx({
-      transactionRequest: blobTxRequest,
-      estimatePredicates: true,
+    const { assembledRequest } = await deployer.provider.assembleTx({
+      request: blobTxRequest,
       requiredBalances: [
         {
           account: resolveAccountForAssembleTxParams(deployer),
@@ -33,11 +32,10 @@ async function fundBlobTx(deployer: Account, blobTxRequest: BlobTransactionReque
           },
         },
       ],
-      blockHorizon: 10,
       feeAddressIndex: 0,
     });
 
-    return transactionRequest;
+    return assembledRequest;
   } catch (error) {
     if ((error as FuelError).code === ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS) {
       throw new FuelError(ErrorCode.FUNDS_TOO_LOW, 'Insufficient balance to deploy predicate.');

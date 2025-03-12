@@ -59,10 +59,10 @@ const upgradeConsensusParameters = async (wallet: WalletUnlocked, bytecode: Byte
 
   request.addConsensusParametersUpgradePurpose(bytecode);
 
-  const { transactionRequest } = await wallet.provider.assembleTx({
+  const { assembledRequest } = await wallet.provider.assembleTx({
     blockHorizon: 10,
     feeAddressIndex: 0,
-    transactionRequest: request,
+    request,
     estimatePredicates: false,
     requiredBalances: [
       {
@@ -76,7 +76,7 @@ const upgradeConsensusParameters = async (wallet: WalletUnlocked, bytecode: Byte
     ],
   });
 
-  const response = await wallet.sendTransaction(transactionRequest);
+  const response = await wallet.sendTransaction(assembledRequest);
   return response.waitForResult();
 };
 
@@ -178,8 +178,8 @@ describe('Transaction upgrade state transition', () => {
 
     // Upload the subsections
     for (const request of requests) {
-      const { transactionRequest } = await privileged.provider.assembleTx({
-        transactionRequest: request,
+      const { assembledRequest } = await privileged.provider.assembleTx({
+        request,
         blockHorizon: 10,
         feeAddressIndex: 0,
         requiredBalances: [
@@ -194,7 +194,7 @@ describe('Transaction upgrade state transition', () => {
         ],
       });
 
-      const response = await privileged.sendTransaction(transactionRequest);
+      const response = await privileged.sendTransaction(assembledRequest);
       const { isTypeUpload, isStatusSuccess } = await response.waitForResult();
       expect(isTypeUpload).toBeTruthy();
       expect(isStatusSuccess).toBeTruthy();
@@ -210,9 +210,8 @@ describe('Transaction upgrade state transition', () => {
     const request = new UpgradeTransactionRequest();
     request.addStateTransitionUpgradePurpose(merkleRoot);
 
-    const { transactionRequest } = await privileged.provider.assembleTx({
-      transactionRequest: request,
-      blockHorizon: 10,
+    const { assembledRequest } = await privileged.provider.assembleTx({
+      request,
       feeAddressIndex: 0,
       requiredBalances: [
         {
@@ -226,7 +225,7 @@ describe('Transaction upgrade state transition', () => {
       ],
     });
 
-    const response = await privileged.sendTransaction(transactionRequest);
+    const response = await privileged.sendTransaction(assembledRequest);
     const { isTypeUpgrade, isStatusSuccess, blockId } = await response.waitForResult();
     expect(isTypeUpgrade).toBeTruthy();
     expect(isStatusSuccess).toBeTruthy();

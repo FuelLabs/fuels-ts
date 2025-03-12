@@ -278,16 +278,16 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The invocation scope as a funded transaction request.
    */
   async assembleTx(): Promise<ScriptTransactionRequest> {
-    let transactionRequest = await this.getTransactionRequest();
-    transactionRequest = clone(transactionRequest);
+    let request = await this.getTransactionRequest();
+    request = clone(request);
 
-    const { gasLimit: setGasLimit, maxFee: setMaxFee } = transactionRequest;
+    const { gasLimit: setGasLimit, maxFee: setMaxFee } = request;
 
-    transactionRequest.maxFee = bn(0);
-    transactionRequest.gasLimit = bn(0);
+    request.maxFee = bn(0);
+    request.gasLimit = bn(0);
 
     // Clean coin inputs before add new coins to the request
-    transactionRequest.inputs = transactionRequest.inputs.filter((i) => i.type !== InputType.Coin);
+    request.inputs = request.inputs.filter((i) => i.type !== InputType.Coin);
 
     const provider = this.getProvider();
     const account: AbstractAccount = this.program.account ?? Wallet.generate({ provider });
@@ -296,7 +296,7 @@ export class BaseInvocationScope<TReturn = any> {
     const requiredBalancesIndex: Record<string, AssembleTxRequiredBalance> = {};
     const requiredBalanceAccount = resolveAccountForAssembleTxParams(account);
 
-    const allQuantities = transactionRequest.outputs
+    const allQuantities = request.outputs
       .filter((o) => o.type === OutputType.Coin)
       .map(({ amount, assetId }) => ({ assetId, amount }))
       .concat(this.requiredCoins);
@@ -324,11 +324,9 @@ export class BaseInvocationScope<TReturn = any> {
     });
 
     // eslint-disable-next-line prefer-const
-    let { transactionRequest: assembledRequest, gasPrice } = await provider.assembleTx({
-      blockHorizon: 10,
+    let { assembledRequest, gasPrice } = await provider.assembleTx({
+      request,
       feeAddressIndex: 0,
-      transactionRequest,
-      estimatePredicates: true,
       requiredBalances: Object.values(requiredBalancesIndex),
     });
 
@@ -523,19 +521,19 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   async get<T = TReturn>(): Promise<DryRunResult<T>> {
-    let transactionRequest = await this.getTransactionRequest();
-    transactionRequest = clone(transactionRequest);
+    let request = await this.getTransactionRequest();
+    request = clone(request);
 
-    transactionRequest.maxFee = bn(0);
-    transactionRequest.gasLimit = bn(0);
+    request.maxFee = bn(0);
+    request.gasLimit = bn(0);
 
-    transactionRequest.inputs = transactionRequest.inputs.filter((i) => i.type !== InputType.Coin);
+    request.inputs = request.inputs.filter((i) => i.type !== InputType.Coin);
 
     const provider = this.getProvider();
     const account = (this.program.account ?? Wallet.generate({ provider })) as Account;
     const baseAssetId = await provider.getBaseAssetId();
 
-    const allQuantities = transactionRequest.outputs
+    const allQuantities = request.outputs
       .filter((o) => o.type === OutputType.Coin)
       .map(({ amount, assetId }) => ({ assetId: String(assetId), amount: bn(amount) }))
       .concat(this.requiredCoins);
@@ -554,13 +552,11 @@ export class BaseInvocationScope<TReturn = any> {
       utxoForBaseAssetId.amount = utxoForBaseAssetId.amount.add(amountForFee);
     }
 
-    transactionRequest.addResources(resources);
+    request.addResources(resources);
 
     const { receipts } = await provider.assembleTx({
-      blockHorizon: 10,
       feeAddressIndex: 0,
-      transactionRequest,
-      estimatePredicates: true,
+      request,
       requiredBalances: [
         {
           account: resolveAccountForAssembleTxParams(account),
