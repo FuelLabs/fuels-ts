@@ -25,6 +25,7 @@ import {
   // If a git branch is specified in the VERSION file, build from that branch
   if (isGitBranch(forcVersion)) {
     const branchName = forcVersion.split(':')[1];
+    info(`Building forc from git branch: ${branchName}`);
     buildFromGitBranch(branchName);
     return;
   }
