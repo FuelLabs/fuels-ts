@@ -32,7 +32,7 @@ import {
   const binPath = join(binDir, 'fuel-core');
   const madeFromGitPath = join(binDir, 'MADE-FROM-GIT');
 
-  const versionMatches = false;
+  let versionMatches = false;
 
   if (existsSync(binPath)) {
     if (existsSync(madeFromGitPath)) {
@@ -46,6 +46,7 @@ import {
       const binRawVersion = spawnSync(binPath, ['--version'], { encoding: 'utf8' }).stdout.trim();
       const binVersion = binRawVersion.match(/([.0-9]+)/)?.[0];
 
+      versionMatches = binVersion === fuelCoreVersion;
       info({
         expected: fuelCoreVersion,
         received: binVersion,

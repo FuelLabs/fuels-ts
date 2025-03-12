@@ -44,24 +44,13 @@ import {
       const binRawVersion = execSync(binPath, ['--version'], { encoding: 'utf8' }).stdout.trim();
       const binVersion = binRawVersion.match(/([.0-9]+)/)?.[0];
 
+      versionMatches = binVersion === forcVersion;
       info({
         expected: forcVersion,
         received: binVersion,
         isGitBranch: isGitBranch(forcVersion),
       });
     }
-  }
-
-  if (existsSync(binPath)) {
-    const binRawVersion = execSync(`${binPath} --version`).toString().trim();
-    const binVersion = binRawVersion.match(/([.0-9]+)/)?.[0];
-
-    versionMatches = binVersion === forcVersion;
-    info({
-      expected: forcVersion,
-      received: binVersion,
-      isGitBranch: isGitBranch(forcVersion),
-    });
   }
 
   if (versionMatches) {
