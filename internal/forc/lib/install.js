@@ -22,6 +22,13 @@ import {
   const pkgPlatform = getPkgPlatform();
   const forcVersion = getCurrentVersion();
 
+  // If a git branch is specified in the VERSION file, build from that branch
+  if (isGitBranch(forcVersion)) {
+    const branchName = forcVersion.split(':')[1];
+    buildFromGitBranch(branchName);
+    return;
+  }
+
   const pkgName = `forc-binaries-${pkgPlatform}.tar.gz`;
   const pkgUrl = `https://github.com/FuelLabs/sway/releases/download/v${forcVersion}/${pkgName}`;
 
@@ -45,13 +52,6 @@ import {
   if (versionMatches) {
     info(`Forc binary already installed, skipping.`);
   } else {
-    // If a git branch is specified in the VERSION file, build from that branch
-    if (isGitBranch(forcVersion)) {
-      const branchName = forcVersion.split(':')[1];
-      buildFromGitBranch(branchName);
-      return;
-    }
-
     const stdioOpts = { stdio: 'inherit' };
 
     // Otherwise, download

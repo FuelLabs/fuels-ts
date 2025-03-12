@@ -22,6 +22,14 @@ import {
   const pkgPlatform = getPkgPlatform();
   const fuelCoreVersion = getCurrentVersion();
 
+  // If a git branch is specified in the VERSION file, build from that branch
+  if (isGitBranch(fuelCoreVersion)) {
+    const branchName = fuelCoreVersion.split(':')[1];
+    info(`Building fuel-core from git branch: ${branchName}`);
+    buildFromGitBranch(branchName);
+    return;
+  }
+
   const fileName = `fuel-core-${fuelCoreVersion}-${pkgPlatform}`;
   const pkgName = `${fileName}.tar.gz`;
   const pkgUrl = `https://github.com/FuelLabs/fuel-core/releases/download/v${fuelCoreVersion}/${pkgName}`;
@@ -46,13 +54,6 @@ import {
   if (versionMatches) {
     info(`fuel-core binary already installed, skipping.`);
   } else {
-    // If a git branch is specified in the VERSION file, build from that branch
-    if (isGitBranch(fuelCoreVersion)) {
-      const branchName = fuelCoreVersion.split(':')[1];
-      buildFromGitBranch(branchName);
-      return;
-    }
-
     // Empty the `fuel-core-binaries` directory if it exists
     rmSync(binDir, { recursive: true, force: true });
 
