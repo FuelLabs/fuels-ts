@@ -2,7 +2,7 @@
 
 import { execSync } from 'child_process';
 import { error } from 'console';
-import { existsSync, rmSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, rmSync, readFileSync, writeFileSync, copyFileSync, cpSync } from 'fs';
 import fetch from 'node-fetch';
 import { join } from 'path';
 
@@ -12,6 +12,7 @@ import {
   getCurrentVersion,
   getPkgPlatform,
   isGitBranch,
+  versionFilePath,
   // eslint-disable-next-line import/extensions
 } from './shared.js';
 
@@ -19,7 +20,7 @@ import {
   const { info } = console;
 
   const pkgPlatform = getPkgPlatform();
-  const forcVersion = await getCurrentVersion();
+  const forcVersion = getCurrentVersion();
 
   const pkgName = `forc-binaries-${pkgPlatform}.tar.gz`;
   const pkgUrl = `https://github.com/FuelLabs/sway/releases/download/v${forcVersion}/${pkgName}`;
@@ -27,30 +28,18 @@ import {
   const pkgPath = join(__dirname, pkgName);
   const binDir = join(__dirname, '../');
 
-  const binPath = join(binDir, 'forc-binaries', 'forc');
-  const madeFromGitPath = join(binDir, 'MADE-FROM-GIT');
+  const binVersionPath = join(binDir, 'VERSION');
 
   let versionMatches = false;
 
-  if (existsSync(binPath)) {
-    if (existsSync(madeFromGitPath)) {
-      const madeFromGit = readFileSync(madeFromGitPath, 'utf8').trim();
-      info({
-        expected: forcVersion,
-        received: madeFromGit,
-        isGitBranch: isGitBranch(forcVersion),
-      });
-    } else {
-      const binRawVersion = execSync(binPath, ['--version'], { encoding: 'utf8' }).stdout.trim();
-      const binVersion = binRawVersion.match(/([.0-9]+)/)?.[0];
-
-      versionMatches = binVersion === forcVersion;
-      info({
-        expected: forcVersion,
-        received: binVersion,
-        isGitBranch: isGitBranch(forcVersion),
-      });
-    }
+  if (existsSync(binVersionPath)) {
+    const binVersion = readFileSync(binVersionPath, 'utf8').trim();
+    versionMatches = binVersion === forcVersion;
+    info({
+      expected: forcVersion,
+      received: binVersion,
+      isGitBranch: isGitBranch(forcVersion),
+    });
   }
 
   if (versionMatches) {
@@ -76,9 +65,9 @@ import {
 
     // Extract
     execSync(`tar xzf "${pkgPath}" -C "${binDir}"`, stdioOpts);
+    cpSync(versionFilePath, binVersionPath);
 
     // Cleanup
     rmSync(pkgPath);
-    rmSync(madeFromGitPath, { force: true });
   }
 })().catch((e) => error(e));

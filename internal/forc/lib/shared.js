@@ -1,5 +1,13 @@
 import { execSync } from 'child_process';
-import { cpSync, mkdirSync, rmSync, readFileSync, writeFileSync, existsSync } from 'fs';
+import {
+  cpSync,
+  mkdirSync,
+  rmSync,
+  readFileSync,
+  writeFileSync,
+  existsSync,
+  copyFileSync,
+} from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -34,7 +42,7 @@ export const getPkgPlatform = () => {
   return platforms[process.platform][process.arch];
 };
 
-const versionFilePath = join(__dirname, '../VERSION');
+export const versionFilePath = join(__dirname, '../VERSION');
 
 export const getCurrentVersion = () => {
   const versionContents = readFileSync(versionFilePath, 'utf8');
@@ -85,6 +93,5 @@ export const buildFromGitBranch = (branchName) => {
   cpSync(join(from, 'forc-run'), join(to, 'forc-run'));
   cpSync(join(from, 'forc-submit'), join(to, 'forc-submit'));
   cpSync(join(from, 'forc-tx'), join(to, 'forc-tx'));
-
-  writeFileSync(join(to, 'MADE-FROM-GIT'), branchName);
+  cpSync(versionFilePath, to);
 };
