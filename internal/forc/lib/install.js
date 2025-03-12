@@ -35,7 +35,7 @@ import {
   const pkgUrl = `https://github.com/FuelLabs/sway/releases/download/v${forcVersion}/${pkgName}`;
 
   const pkgPath = join(__dirname, pkgName);
-
+  const rootDir = join(__dirname, '..');
   const binVersionPath = join(forcBinDirPath, 'VERSION');
 
   let versionMatches = false;
@@ -65,7 +65,7 @@ import {
     writeFileSync(pkgPath, buf);
 
     // Extract
-    execSync(`tar xzf "${pkgPath}" -C "${forcBinDirPath}"`, stdioOpts);
+    execSync(`tar xzf "${pkgPath}" -C "${rootDir}"`, stdioOpts);
     cpSync(versionFilePath, binVersionPath);
 
     // Cleanup
