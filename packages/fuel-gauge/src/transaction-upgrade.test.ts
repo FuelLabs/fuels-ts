@@ -9,8 +9,6 @@ import {
   UploadTransactionRequest,
   sleep,
   Provider,
-  resolveAccountForAssembleTxParams,
-  bn,
 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
@@ -60,20 +58,9 @@ const upgradeConsensusParameters = async (wallet: WalletUnlocked, bytecode: Byte
   request.addConsensusParametersUpgradePurpose(bytecode);
 
   const { assembledRequest } = await wallet.provider.assembleTx({
-    blockHorizon: 10,
-    feeAddressIndex: 0,
     request,
-    estimatePredicates: false,
-    requiredBalances: [
-      {
-        account: resolveAccountForAssembleTxParams(wallet),
-        amount: bn(0),
-        assetId: baseAssetId,
-        changePolicy: {
-          change: wallet.address.b256Address,
-        },
-      },
-    ],
+    feePayerAccount: wallet,
+    accountCoinQuantities: [],
   });
 
   const response = await wallet.sendTransaction(assembledRequest);
@@ -180,18 +167,8 @@ describe('Transaction upgrade state transition', () => {
     for (const request of requests) {
       const { assembledRequest } = await privileged.provider.assembleTx({
         request,
-        blockHorizon: 10,
-        feeAddressIndex: 0,
-        requiredBalances: [
-          {
-            account: resolveAccountForAssembleTxParams(privileged),
-            amount: bn(0),
-            assetId: baseAssetId,
-            changePolicy: {
-              change: privileged.address.b256Address,
-            },
-          },
-        ],
+        feePayerAccount: privileged,
+        accountCoinQuantities: [],
       });
 
       const response = await privileged.sendTransaction(assembledRequest);
@@ -212,17 +189,8 @@ describe('Transaction upgrade state transition', () => {
 
     const { assembledRequest } = await privileged.provider.assembleTx({
       request,
-      feeAddressIndex: 0,
-      requiredBalances: [
-        {
-          account: resolveAccountForAssembleTxParams(privileged),
-          amount: bn(0),
-          assetId: baseAssetId,
-          changePolicy: {
-            change: privileged.address.b256Address,
-          },
-        },
-      ],
+      feePayerAccount: privileged,
+      accountCoinQuantities: [],
     });
 
     const response = await privileged.sendTransaction(assembledRequest);
