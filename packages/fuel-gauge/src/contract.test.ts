@@ -13,6 +13,10 @@ import {
   PolicyType,
   buildFunctionResult,
   ReceiptType,
+  InputMessageCoder,
+  hexlify,
+  InputType,
+  randomBytes,
 } from 'fuels';
 import type {
   ContractTransferParams,
@@ -27,6 +31,7 @@ import {
   ASSET_B,
   launchTestNode,
   TestAssetId,
+  TestMessage,
 } from 'fuels/test-utils';
 
 import {
@@ -1387,5 +1392,51 @@ describe('Contract', () => {
     messageOutReceipts.forEach((receipt) => {
       expect(receipt.recipient).toBe(recipient.address.toB256());
     });
+  });
+
+  it('should customize the TX request and still use the scope invocation', async () => {
+    const testMessage = new TestMessage({
+      data: hexlify(InputMessageCoder.encodeData(randomBytes(10))),
+    });
+
+    using launched = await launchTestNode({
+      walletsConfig: {
+        messages: [testMessage],
+      },
+      contractsConfigs: [
+        {
+          factory: CallTestContractFactory,
+        },
+      ],
+    });
+
+    const {
+      wallets: [recipient],
+      contracts: [contract],
+    } = launched;
+
+    const fooValue = 1000;
+    const {
+      messages: [message],
+    } = await recipient.getMessages();
+
+    const scope = contract.functions.foo(fooValue);
+    const request = await scope.getTransactionRequest();
+    request.addMessageInput(message);
+
+    const call = await scope.call();
+
+    const {
+      value,
+      transactionResult: { transaction, isStatusSuccess },
+    } = await call.waitForResult();
+
+    expect(isStatusSuccess).toBeTruthy();
+    expect(value.toNumber()).toBe(fooValue + 1);
+
+    const messageInput = transaction.inputs.find((input) => input.type === InputType.Message);
+
+    expect(messageInput).toBeDefined();
+    expect(messageInput?.nonce).toBe(message.nonce);
   });
 });
