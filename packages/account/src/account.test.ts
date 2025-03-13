@@ -587,7 +587,7 @@ describe('Account', () => {
 
     // Test excludes the UTXO where the assetIdA gets added to the senders wallet
     await expectToThrowFuelError(
-      () => user.getResourcesToSpend([[1, ASSET_A, 500_000]], { utxos: [assetAUTXO.id] }),
+      () => user.getResourcesToSpend([[1, ASSET_A]], { utxos: [assetAUTXO.id] }),
       new FuelError(
         ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
         `Insufficient funds or too many small value coins. Consider combining UTXOs.`
