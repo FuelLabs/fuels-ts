@@ -44,12 +44,7 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
     });
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const [backgroundStream, resultStream] = response.body!.tee();
-
-    // eslint-disable-next-line no-void
-    void this.readInBackground(backgroundStream.getReader(), onEvent);
-
-    const [errorReader, resultReader] = resultStream.tee().map((stream) => stream.getReader());
+    const [errorReader, resultReader] = response.body!.tee().map((stream) => stream.getReader());
 
     /**
      * If the node threw an error, read it and throw it to the user
@@ -112,35 +107,6 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
         .replace(':keep-alive-text\n\n', '');
 
       text += decoded;
-    }
-  }
-
-  /**
-   * Reads the stream in the background,
-   * thereby preventing the stream from not being read
-   * if the user ignores the subscription.
-   * Even though the read data is ignored in this function,
-   * it is still available in the other streams
-   * via internal mechanisms related to teeing.
-   */
-  private static async readInBackground(
-    reader: ReadableStreamDefaultReader<Uint8Array>,
-    onEvent?: (event: FuelGraphqlSubscriberEvent) => void
-  ) {
-    let leftoverText = '';
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      const { event, done, parsingLeftover } = await FuelGraphqlSubscriber.readEvent(
-        reader,
-        leftoverText
-      );
-
-      if (done) {
-        return;
-      }
-
-      onEvent?.(event as FuelGraphqlSubscriberEvent);
-      leftoverText = parsingLeftover;
     }
   }
 
