@@ -23,7 +23,10 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
   public static incompatibleNodeVersionMessage: string | false = false;
   private static textDecoder = new TextDecoder();
 
-  private constructor(private stream: ReadableStreamDefaultReader<Uint8Array>) {}
+  private constructor(
+    private stream: ReadableStreamDefaultReader<Uint8Array>,
+    private onEvent?: (event: FuelGraphqlSubscriberEvent) => void
+  ) {}
 
   public static async create(options: FuelGraphQLSubscriberOptions) {
     const { url, query, variables, fetchFn, operationName, onEvent } = options;
@@ -55,7 +58,7 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
      */
     await new FuelGraphqlSubscriber(errorReader).next();
 
-    return new FuelGraphqlSubscriber(resultReader);
+    return new FuelGraphqlSubscriber(resultReader, onEvent);
   }
 
   public static async readEvent(
@@ -150,9 +153,13 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
     while (true) {
       if (this.events.length > 0) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const { data, errors } = this.events.shift()!;
-        assertGqlResponseHasNoErrors(errors, FuelGraphqlSubscriber.incompatibleNodeVersionMessage);
-        return { value: data, done: false };
+        const event = this.events.shift()!;
+        this.onEvent?.(event);
+        assertGqlResponseHasNoErrors(
+          event.errors,
+          FuelGraphqlSubscriber.incompatibleNodeVersionMessage
+        );
+        return { value: event.data, done: false };
       }
 
       const { event, done, parsingLeftover } = await FuelGraphqlSubscriber.readEvent(

@@ -251,10 +251,12 @@ describe('optimistic concurrency handling via block height', () => {
       );
     });
 
-    await provider.operations.submitAndAwaitStatus({ encodedTransaction: '' });
-
-    // allow for background processing
-    await sleep(150);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    for await (const element of await provider.operations.submitAndAwaitStatus({
+      encodedTransaction: '',
+    })) {
+      //
+    }
 
     fetchSpy.mockClear();
 
