@@ -34,6 +34,7 @@ import {
   TestMessage,
 } from 'fuels/test-utils';
 
+import { PredicateSigning } from '../test/typegen';
 import {
   CallTestContract,
   CallTestContractFactory,
@@ -1393,6 +1394,67 @@ describe('Contract', () => {
     messageOutReceipts.forEach((receipt) => {
       expect(receipt.recipient).toBe(recipient.address.toB256());
     });
+  });
+
+  it('should customize the TX request and still use the scope invocation[ADD WITNESS]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: CallTestContractFactory,
+        },
+      ],
+    });
+
+    const {
+      provider,
+      wallets: [wallet],
+      contracts: [contract],
+    } = launched;
+
+    const fooValue = 1000;
+    const baseAssetId = await provider.getBaseAssetId();
+
+    const predicate = new PredicateSigning({
+      provider,
+      data: [0],
+      configurableConstants: { SIGNER: wallet.address.toB256() },
+    });
+
+    await fundAccount(wallet, predicate, 500_000);
+
+    const predicateResources = await predicate.getResourcesToSpend([
+      { amount: bn(1), assetId: baseAssetId },
+    ]);
+
+    contract.account = wallet;
+
+    /**
+     * GasLimit and maxFee need to be set to avoid using optimal values from `getTransactionCost`
+     * resulting in invalidating the added signature.
+     */
+    const scope = contract.functions.foo(fooValue).txParams({
+      gasLimit: 20000,
+      maxFee: 1200,
+    });
+
+    let request = await scope.getTransactionRequest();
+    request.addResources(predicateResources);
+    request.addWitness(await wallet.signTransaction(request));
+
+    /**
+     * Estimating predicates now to avoid estimating later at `getTransactionCost`
+     */
+    request = await provider.estimatePredicates(request);
+
+    const call = await scope.call();
+
+    const {
+      value,
+      transactionResult: { isStatusSuccess },
+    } = await call.waitForResult();
+
+    expect(isStatusSuccess).toBeTruthy();
+    expect(value.toNumber()).toBe(fooValue + 1);
   });
 
   it('should customize the TX request and still use the scope invocation [COIN]', async () => {
