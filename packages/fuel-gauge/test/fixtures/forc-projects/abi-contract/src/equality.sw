@@ -1,6 +1,6 @@
 library;
 
-use core::ops::Eq;
+use std::ops::Eq;
 use ::data_structures::*;
 
 impl PartialEq for [u8; 4] {

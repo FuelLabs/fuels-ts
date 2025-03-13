@@ -1,6 +1,6 @@
 script;
 
-use core::ops::Eq;
+use std::ops::Eq;
 
 pub struct SomeStruct<T> {
     a: T,

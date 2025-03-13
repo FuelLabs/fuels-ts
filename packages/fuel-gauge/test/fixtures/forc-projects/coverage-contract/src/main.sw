@@ -1,6 +1,5 @@
 contract;
 
-use core::*;
 use std::*;
 use std::assert::assert;
 use std::b512::B512;
