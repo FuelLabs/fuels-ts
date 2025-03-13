@@ -572,25 +572,20 @@ export class Account extends AbstractAccount implements WithAddress {
     transactionRequestLike: TransactionRequestLike,
     { signatureCallback, quantities = [], gasPrice }: TransactionCostParams = {}
   ): Promise<TransactionCost> {
-    const txRequestClone = clone(transactionRequestify(transactionRequestLike));
-    let txRequest = txRequestClone;
-
-    if (this._connector) {
-      txRequest = await this._connector.onBeforeEstimation(txRequest);
-    }
+    let txRequest = clone(transactionRequestify(transactionRequestLike));
 
     const baseAssetId = await this.provider.getBaseAssetId();
 
     // Fund with fake UTXOs to avoid not enough funds error
     // Getting coin quantities from amounts being transferred
-    const coinOutputsQuantities = txRequestClone.getCoinOutputsQuantities();
+    const coinOutputsQuantities = txRequest.getCoinOutputsQuantities();
     // Combining coin quantities from amounts being transferred and forwarding to contracts
     const requiredQuantities = mergeQuantities(coinOutputsQuantities, quantities);
     // An arbitrary amount of the base asset is added to cover the transaction fee during dry runs
     const transactionFeeForDryRun = [{ assetId: baseAssetId, amount: bn('100000000000000000') }];
 
     const findAssetInput = (assetId: string) =>
-      txRequestClone.inputs.find((input) => {
+      txRequest.inputs.find((input) => {
         if (input.type === InputType.Coin) {
           return input.assetId === assetId;
         }
@@ -610,7 +605,7 @@ export class Account extends AbstractAccount implements WithAddress {
       if (assetInput && 'amount' in assetInput) {
         assetInput.amount = usedQuantity;
       } else {
-        txRequestClone.addResources(
+        txRequest.addResources(
           this.generateFakeResources([
             {
               amount: quantity,
@@ -625,7 +620,11 @@ export class Account extends AbstractAccount implements WithAddress {
       updateAssetInput(assetId, amount)
     );
 
-    const txCost = await this.provider.getTransactionCost(txRequestClone, {
+    if (this._connector) {
+      txRequest = await this._connector.onBeforeEstimation(txRequest);
+    }
+
+    const txCost = await this.provider.getTransactionCost(txRequest, {
       signatureCallback,
       gasPrice,
     });

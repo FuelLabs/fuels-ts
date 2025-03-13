@@ -762,7 +762,7 @@ describe('Fuel Connector', () => {
     expect(sendTransactionSpy).toHaveBeenCalledWith(request, expectedParams);
   });
 
-  it('should ensure onBeforeEstimation works just fine', async () => {
+  it('should ensure onBeforeEstimation works just fine [associated predicate account]', async () => {
     using launched = await setupTestProviderAndWallets();
     const {
       provider,
@@ -775,11 +775,31 @@ describe('Fuel Connector', () => {
       connectors: [connector],
     }).init();
 
-    const account = new Account(connectorWallet.address.toString(), provider, fuel);
-    const tx = await account.transfer(receiverWallet.address, 1000);
-    const result = await tx.waitForResult();
+    const fundingAmount = bn(100_000);
+    const transferAmount = bn(1000);
 
-    expect(result.isStatusSuccess).toBe(true);
-    expect(JSON.stringify(result.tip)).toBe(JSON.stringify(bn(1)));
+    // Fund the associated predicate that interacts with the dApp
+    const predicateAccountAddress = connector.getPredicateAddress(provider);
+    const predicateAccount = new Account(predicateAccountAddress, provider);
+    const fundTx = await receiverWallet.transfer(predicateAccountAddress, fundingAmount);
+    const fundResult = await fundTx.waitForResult();
+    expect(fundResult.isStatusSuccess).toBe(true);
+    expect(await predicateAccount.getBalance()).toStrictEqual(fundingAmount);
+
+    const initialBalance = await receiverWallet.getBalance();
+    const expectedBalance = initialBalance.add(transferAmount);
+
+    const connectorAccount = new Account(predicateAccountAddress, provider, fuel);
+    const tx = await connectorAccount.transfer(receiverWallet.address, transferAmount);
+
+    const txResult = await tx.waitForResult();
+    expect(txResult.isStatusSuccess).toBe(true);
+    expect(await receiverWallet.getBalance()).toStrictEqual(expectedBalance);
+
+    // Assert funds were transferred from the predicate account to the receiver wallet
+    const fee = txResult.fee;
+    const predicateBalance = await predicateAccount.getBalance();
+    const expectedPredicateBalance = fundingAmount.sub(transferAmount).sub(fee);
+    expect(predicateBalance.toString()).toStrictEqual(expectedPredicateBalance.toString());
   });
 });
