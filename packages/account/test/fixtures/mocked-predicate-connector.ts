@@ -1,12 +1,10 @@
-import { bn } from '@fuel-ts/math';
-import {
-  transactionRequestify,
-  type TransactionRequest,
-  type TransactionRequestLike,
-  Predicate,
+import { transactionRequestify, Predicate } from '../../src';
+import type {
   Provider,
   TransactionResponse,
   AccountSendTxParams,
+  type TransactionRequest,
+  type TransactionRequestLike,
 } from '../../src';
 
 import { MockConnector } from './mocked-connector';
