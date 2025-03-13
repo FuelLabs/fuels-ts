@@ -7,7 +7,13 @@ import { bn } from '@fuel-ts/math';
 import type { BytesLike } from '@fuel-ts/utils';
 import { EventEmitter } from 'events';
 
-import { Account, type Network, type ProviderOptions, type SelectNetworkArguments } from '../src';
+import {
+  Account,
+  assembleTransactionSummaryFromJson,
+  type Network,
+  type ProviderOptions,
+  type SelectNetworkArguments,
+} from '../src';
 import { TESTNET_NETWORK_URL } from '../src/configs';
 import { Fuel } from '../src/connectors/fuel';
 import type { FuelConnectorSendTxParams } from '../src/connectors/types';
@@ -801,5 +807,67 @@ describe('Fuel Connector', () => {
     const predicateBalance = await predicateAccount.getBalance();
     const expectedPredicateBalance = fundingAmount.sub(transferAmount).sub(fee);
     expect(predicateBalance.toString()).toStrictEqual(expectedPredicateBalance.toString());
+  });
+
+  it('should ensure transaction summary works just fine [state: funded]', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider,
+      wallets: [connectorWallet, receiverWallet],
+    } = launched;
+    const connector = new MockConnector({
+      wallets: [connectorWallet],
+    });
+    const fuel = await new Fuel({
+      connectors: [connector],
+    }).init();
+
+    const account = new Account(connectorWallet.address.toString(), provider, fuel);
+
+    const sendTransactionSpy = vi.spyOn(connectorWallet, 'sendTransaction');
+
+    const request = new ScriptTransactionRequest();
+    request.addCoinOutput(receiverWallet.address, 1000, await provider.getBaseAssetId());
+    await request.estimateAndFund(connectorWallet);
+
+    const initialTxBytes = request.toTransactionBytes();
+
+    const response = await account.sendTransaction(request);
+    expect(response).toBeDefined();
+
+    const { rawReceipts, gasPrice } = await provider.getTransactionCost(request);
+    const chainId = await provider.getChainId();
+
+    const transactionSummaryJson = {
+      id: request.getTransactionId(chainId),
+      transactionBytes: initialTxBytes,
+      receipts: rawReceipts,
+      gasPrice: gasPrice.toString(),
+    };
+    const expectedParams: FuelConnectorSendTxParams = {
+      onBeforeSend: undefined,
+      skipCustomFee: false,
+      provider: {
+        url: provider.url,
+        cache: await serializeProviderCache(provider),
+      },
+      transactionState: 'funded',
+      transactionSummary: transactionSummaryJson,
+    };
+
+    expect(sendTransactionSpy).toHaveBeenCalledWith(request, expectedParams);
+
+    const jsonSummary = await assembleTransactionSummaryFromJson({
+      provider,
+      transactionSummary: transactionSummaryJson,
+    });
+    const responseSummary = await response.getTransactionSummary();
+
+    expect(jsonSummary.id).toBe(responseSummary.id);
+    expect(jsonSummary.gasUsed).toStrictEqual(responseSummary.gasUsed);
+    expect(jsonSummary.receipts).toStrictEqual(responseSummary.receipts);
+    expect(jsonSummary.transaction.scriptGasLimit).toStrictEqual(
+      responseSummary.transaction.scriptGasLimit
+    );
   });
 });
