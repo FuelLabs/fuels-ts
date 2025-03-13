@@ -701,8 +701,8 @@ export default class Provider {
    * @hidden
    */
   private static setIncompatibleNodeVersionMessage(nodeInfo: NodeInfo) {
-    const { isMajorSupported, isMinorSupported, supportedVersion } =
-      checkFuelCoreVersionCompatibility(nodeInfo.nodeVersion);
+    // const { isMajorSupported, isMinorSupported, supportedVersion } =
+    checkFuelCoreVersionCompatibility(nodeInfo.nodeVersion);
 
     // if (!isMajorSupported || !isMinorSupported) {
     //   Provider.incompatibleNodeVersionMessage = [
