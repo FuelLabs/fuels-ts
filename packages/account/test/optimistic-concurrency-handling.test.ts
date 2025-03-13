@@ -199,7 +199,7 @@ describe('optimistic concurrency handling via block height', () => {
           queryPerAsset: { amount: '10', assetId: baseAssetId },
         }),
       new FuelError(
-        ErrorCode.INVALID_REQUEST,
+        ErrorCode.RPC_CONSISTENCY,
         `The required fuel block height is higher than the current block height. Required: ${expectedHeight}, Current: 0`
       )
     );
