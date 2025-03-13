@@ -3,7 +3,7 @@ import type { Versions } from './types';
 export function getBuiltinVersions(): Versions {
   return {
     FUEL_CORE: '0.41.9',
-    FORC: '0.66.10',
+    FORC: '0.67.0',
     FUELS: '0.99.0',
   };
 }
