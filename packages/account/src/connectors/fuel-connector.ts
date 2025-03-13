@@ -55,7 +55,10 @@ interface Connector {
     params?: FuelConnectorSendTxParams
   ): Promise<string | TransactionResponse>;
 
-  onBeforeEstimation(transaction: TransactionRequestLike): Promise<TransactionRequest>;
+  onBeforeEstimation(
+    address: string,
+    transaction: TransactionRequestLike
+  ): Promise<TransactionRequest>;
 
   // #endregion fuel-connector-method-sendTransaction
   // #region fuel-connector-method-currentAccount
@@ -222,10 +225,14 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * A hook that can be used to modify the transaction before it is estimated. Useful for any
    * connector specific logic e.g. predicates for non-native accounts.
    *
+   * @param address - The address of the account to modify the transaction for.
    * @param transaction - The transaction to modify.
    * @returns The modified transaction.
    */
-  async onBeforeEstimation(_transaction: TransactionRequestLike): Promise<TransactionRequest> {
+  async onBeforeEstimation(
+    _address: string,
+    _transaction: TransactionRequestLike
+  ): Promise<TransactionRequest> {
     return transactionRequestify(_transaction);
   }
 

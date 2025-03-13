@@ -3,8 +3,8 @@ import type {
   Provider,
   TransactionResponse,
   AccountSendTxParams,
-  type TransactionRequest,
-  type TransactionRequestLike,
+  TransactionRequest,
+  TransactionRequestLike,
 } from '../../src';
 
 import { MockConnector } from './mocked-connector';
@@ -46,6 +46,7 @@ export class MockedPredicateConnector extends MockConnector {
   private predicate: Predicate | undefined;
 
   override async onBeforeEstimation(
+    _address: string,
     _transaction: TransactionRequestLike
   ): Promise<TransactionRequest> {
     const currentAccount = await this.currentAccount();

@@ -621,7 +621,7 @@ export class Account extends AbstractAccount implements WithAddress {
     );
 
     if (this._connector) {
-      txRequest = await this._connector.onBeforeEstimation(txRequest);
+      txRequest = await this._connector.onBeforeEstimation(this.address.toString(), txRequest);
     }
 
     const txCost = await this.provider.getTransactionCost(txRequest, {
