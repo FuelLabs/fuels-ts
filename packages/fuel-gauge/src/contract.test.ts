@@ -45,6 +45,7 @@ import {
 } from '../test/typegen/contracts';
 import { PredicateTrue } from '../test/typegen/predicates/PredicateTrue';
 
+import { fundAccount } from './predicate/utils/predicate';
 import { launchTestContract } from './utils';
 
 const contractsConfigs = [CallTestContractFactory, CallTestContractFactory];
@@ -1394,7 +1395,57 @@ describe('Contract', () => {
     });
   });
 
-  it('should customize the TX request and still use the scope invocation', async () => {
+  it('should customize the TX request and still use the scope invocation [COIN]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: CallTestContractFactory,
+        },
+      ],
+    });
+
+    const {
+      provider,
+      wallets: [wallet],
+      contracts: [contract],
+    } = launched;
+
+    const fooValue = 1000;
+    const baseAssetId = await provider.getBaseAssetId();
+
+    const predicate = new PredicateTrue({ provider });
+
+    await fundAccount(wallet, predicate, 500_000);
+
+    const predicateResources = await predicate.getResourcesToSpend([
+      { amount: bn(1), assetId: baseAssetId },
+    ]);
+
+    contract.account = wallet;
+    const scope = contract.functions.foo(fooValue);
+    const request = await scope.getTransactionRequest();
+    request.addResources(predicateResources);
+
+    const call = await scope.call();
+
+    const {
+      value,
+      transactionResult: { transaction, isStatusSuccess },
+    } = await call.waitForResult();
+
+    expect(isStatusSuccess).toBeTruthy();
+    expect(value.toNumber()).toBe(fooValue + 1);
+
+    const allSpentCoins = transaction.inputs.filter((input) => input.type === InputType.Coin);
+
+    expect(allSpentCoins.length).toBeGreaterThan(0);
+
+    allSpentCoins.forEach((coin) => {
+      expect(coin.owner).toBe(predicate.address.toB256());
+    });
+  });
+
+  it('should customize the TX request and still use the scope invocation [MESSAGE]', async () => {
     const testMessage = new TestMessage({
       data: hexlify(InputMessageCoder.encodeData(randomBytes(10))),
     });
