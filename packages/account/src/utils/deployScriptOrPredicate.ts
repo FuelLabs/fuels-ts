@@ -1,14 +1,9 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
-import { bn } from '@fuel-ts/math';
 import { arrayify } from '@fuel-ts/utils';
 
 import type { Account } from '../account';
-import {
-  BlobTransactionRequest,
-  resolveAccountForAssembleTxParams,
-  TransactionStatus,
-} from '../providers';
+import { BlobTransactionRequest, TransactionStatus } from '../providers';
 
 import {
   getBytecodeConfigurableOffset,
@@ -17,22 +12,11 @@ import {
 } from './predicate-script-loader-instructions';
 
 async function fundBlobTx(deployer: Account, blobTxRequest: BlobTransactionRequest) {
-  const baseAssetId = await deployer.provider.getBaseAssetId();
-
   try {
     const { assembledRequest } = await deployer.provider.assembleTx({
       request: blobTxRequest,
-      requiredBalances: [
-        {
-          account: resolveAccountForAssembleTxParams(deployer),
-          amount: bn(0),
-          assetId: baseAssetId,
-          changePolicy: {
-            change: deployer.address.b256Address,
-          },
-        },
-      ],
-      feeAddressIndex: 0,
+      feePayerAccount: deployer,
+      accountCoinQuantities: [],
     });
 
     return assembledRequest;

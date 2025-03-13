@@ -2,7 +2,6 @@ import { Interface, WORD_SIZE } from '@fuel-ts/abi-coder';
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import type {
   Account,
-  AssembleTxRequiredBalance,
   CreateTransactionRequestLike,
   Provider,
   TransactionRequest,
@@ -14,7 +13,6 @@ import {
   BlobTransactionRequest,
   TransactionStatus,
   calculateGasFee,
-  resolveAccountForAssembleTxParams,
   setAndValidateGasAndFeeForAssembledTx,
 } from '@fuel-ts/account';
 import { randomBytes } from '@fuel-ts/crypto';
@@ -197,29 +195,15 @@ export default class ContractFactory<TContract extends Contract = Contract> {
 
   private async assembleTx(request: TransactionRequest, options: DeployContractOptions = {}) {
     const account = this.getAccount();
-    const assembleTxAccount = resolveAccountForAssembleTxParams(account);
-
-    const baseAssetId = await account.provider.getBaseAssetId();
 
     const { maxFee: setMaxFee } = options;
-
-    const requiredBalance: AssembleTxRequiredBalance = {
-      account: assembleTxAccount,
-      amount: bn(0),
-      assetId: baseAssetId,
-      changePolicy: {
-        change: account.address.b256Address,
-      },
-    };
 
     request.maxFee = bn(0);
 
     const { gasPrice, assembledRequest } = await account.provider.assembleTx({
-      blockHorizon: 10,
-      feeAddressIndex: 0,
-      requiredBalances: [requiredBalance],
       request,
-      estimatePredicates: true,
+      feePayerAccount: account,
+      accountCoinQuantities: [],
     });
 
     // eslint-disable-next-line no-param-reassign

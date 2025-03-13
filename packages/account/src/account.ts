@@ -32,14 +32,12 @@ import type {
   TransactionCostParams,
   TransactionResponse,
   ProviderSendTxParams,
-  AssembleTxRequiredBalance,
 } from './providers';
 import {
   withdrawScript,
   ScriptTransactionRequest,
   transactionRequestify,
   addAmountToCoinQuantities,
-  resolveAccountForAssembleTxParams,
   setAndValidateGasAndFeeForAssembledTx,
 } from './providers';
 import {
@@ -750,35 +748,14 @@ export class Account extends AbstractAccount implements WithAddress {
     transactionRequest: ScriptTransactionRequest,
     quantities: CoinQuantity[] = []
   ): Promise<{ transactionRequest: ScriptTransactionRequest; gasPrice: BN }> {
-    const requiredBalancesIndex: Record<string, AssembleTxRequiredBalance> = {};
-    const account = resolveAccountForAssembleTxParams(this);
-
-    transactionRequest.outputs
+    const outputQuantities = transactionRequest.outputs
       .filter((o) => o.type === OutputType.Coin)
-      .map(({ amount, assetId }) => ({ assetId, amount }))
-      .concat(quantities)
-      .forEach((quantity) => {
-        const assetId = String(quantity.assetId);
-        const amount = bn(quantity.amount);
-
-        const entry = requiredBalancesIndex[assetId] || {
-          account,
-          amount: bn(0),
-          assetId,
-          changePolicy: {
-            change: this.address.b256Address,
-          },
-        };
-
-        entry.amount = entry.amount.add(amount);
-
-        requiredBalancesIndex[assetId] = entry;
-      });
+      .map(({ amount, assetId }) => ({ assetId: String(assetId), amount: bn(amount) }));
 
     const { assembledRequest, gasPrice } = await this.provider.assembleTx({
-      feeAddressIndex: 0,
-      requiredBalances: Object.values(requiredBalancesIndex),
       request: transactionRequest,
+      accountCoinQuantities: mergeQuantities(outputQuantities, quantities),
+      feePayerAccount: this,
     });
 
     return { transactionRequest: assembledRequest as ScriptTransactionRequest, gasPrice };

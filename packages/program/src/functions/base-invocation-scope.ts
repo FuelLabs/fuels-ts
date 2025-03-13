@@ -10,13 +10,8 @@ import type {
   TransactionResponse,
   TransactionCost,
   AbstractAccount,
-  AssembleTxRequiredBalance,
 } from '@fuel-ts/account';
-import {
-  resolveAccountForAssembleTxParams,
-  ScriptTransactionRequest,
-  Wallet,
-} from '@fuel-ts/account';
+import { mergeQuantities, ScriptTransactionRequest, Wallet } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
@@ -290,44 +285,24 @@ export class BaseInvocationScope<TReturn = any> {
     request.inputs = request.inputs.filter((i) => i.type !== InputType.Coin);
 
     const provider = this.getProvider();
-    const account: AbstractAccount = this.program.account ?? Wallet.generate({ provider });
+    const account = (this.program.account ?? Wallet.generate({ provider })) as Account;
     const baseAssetId = await provider.getBaseAssetId();
 
-    const requiredBalancesIndex: Record<string, AssembleTxRequiredBalance> = {};
-    const requiredBalanceAccount = resolveAccountForAssembleTxParams(account);
-
-    const allQuantities = request.outputs
+    const outputQuantities = request.outputs
       .filter((o) => o.type === OutputType.Coin)
-      .map(({ amount, assetId }) => ({ assetId, amount }))
-      .concat(this.requiredCoins);
+      .map(({ amount, assetId }) => ({ assetId: String(assetId), amount: bn(amount) }));
 
-    if (!allQuantities.length) {
-      allQuantities.push({ assetId: baseAssetId, amount: bn(0) });
+    const accountCoinQuantities = mergeQuantities(outputQuantities, this.requiredCoins);
+
+    if (!accountCoinQuantities.length) {
+      accountCoinQuantities.push({ assetId: baseAssetId, amount: bn(0) });
     }
-
-    allQuantities.forEach((quantity) => {
-      const assetId = String(quantity.assetId);
-      const amount = bn(quantity.amount);
-
-      const entry = requiredBalancesIndex[assetId] || {
-        account: requiredBalanceAccount,
-        amount: bn(0),
-        assetId,
-        changePolicy: {
-          change: account.address.b256Address,
-        },
-      };
-
-      entry.amount = entry.amount.add(amount);
-
-      requiredBalancesIndex[assetId] = entry;
-    });
 
     // eslint-disable-next-line prefer-const
     let { assembledRequest, gasPrice } = await provider.assembleTx({
       request,
-      feeAddressIndex: 0,
-      requiredBalances: Object.values(requiredBalancesIndex),
+      feePayerAccount: account,
+      accountCoinQuantities,
     });
 
     assembledRequest = assembledRequest as ScriptTransactionRequest;
@@ -539,7 +514,6 @@ export class BaseInvocationScope<TReturn = any> {
       .concat(this.requiredCoins);
 
     const resources = account.generateFakeResources(allQuantities);
-
     const utxoForBaseAssetId = resources.find((utxo) => utxo.assetId === baseAssetId);
     const amountForFee = bn('1000000000000000');
 
@@ -555,18 +529,9 @@ export class BaseInvocationScope<TReturn = any> {
     request.addResources(resources);
 
     const { receipts } = await provider.assembleTx({
-      feeAddressIndex: 0,
       request,
-      requiredBalances: [
-        {
-          account: resolveAccountForAssembleTxParams(account),
-          amount: bn(0),
-          assetId: baseAssetId,
-          changePolicy: {
-            change: account.address.b256Address,
-          },
-        },
-      ],
+      feePayerAccount: account,
+      accountCoinQuantities: [{ amount: bn(0), assetId: baseAssetId }],
     });
 
     return buildDryRunResult<T>({

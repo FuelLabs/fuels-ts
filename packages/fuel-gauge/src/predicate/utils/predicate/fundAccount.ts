@@ -1,11 +1,5 @@
-import type { BigNumberish, Account, AssembleTxRequiredBalance } from 'fuels';
-import {
-  ScriptTransactionRequest,
-  BN,
-  OutputType,
-  bn,
-  resolveAccountForAssembleTxParams,
-} from 'fuels';
+import type { BigNumberish, Account } from 'fuels';
+import { ScriptTransactionRequest, BN, OutputType, bn, mergeQuantities } from 'fuels';
 
 export const fundAccount = async (
   fundedAccount: Account,
@@ -20,32 +14,16 @@ export const fundAccount = async (
     request.addCoinOutput(accountToBeFunded.address, new BN(amount).div(utxosAmount), baseAssetId);
   }
 
-  const requiredBalancesIndex: Record<string, AssembleTxRequiredBalance> = {};
-
-  request.outputs
+  const quantities = request.outputs
     .filter((o) => o.type === OutputType.Coin)
-    .forEach((o) => {
-      const assetId = String(o.assetId);
-      const outputAmount = bn(o.amount);
+    .map((o) => ({ assetId: String(o.assetId), amount: bn(o.amount) }));
 
-      const entry = requiredBalancesIndex[assetId] || {
-        account: resolveAccountForAssembleTxParams(fundedAccount),
-        amount: bn(0),
-        assetId,
-        changePolicy: {
-          change: fundedAccount.address.b256Address,
-        },
-      };
-
-      entry.amount = entry.amount.add(outputAmount);
-
-      requiredBalancesIndex[assetId] = entry;
-    });
+  const accountCoinQuantities = mergeQuantities(quantities);
 
   const { assembledRequest } = await fundedAccount.provider.assembleTx({
     request,
-    feeAddressIndex: 0,
-    requiredBalances: Object.values(requiredBalancesIndex),
+    feePayerAccount: fundedAccount,
+    accountCoinQuantities,
   });
 
   const submit = await fundedAccount.sendTransaction(assembledRequest);
