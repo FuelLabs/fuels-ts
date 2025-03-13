@@ -1,6 +1,6 @@
 predicate;
 
-use std::{b512::B512, ecr::ec_recover_address, constants::ZERO_B256, tx::{tx_id, tx_witness_data}};
+use std::{b512::B512, constants::ZERO_B256, ecr::ec_recover_address, tx::{tx_id, tx_witness_data}};
 
 configurable {
     SIGNER: b256 = ZERO_B256,
