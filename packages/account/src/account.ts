@@ -655,21 +655,58 @@ export class Account extends AbstractAccount implements WithAddress {
     transactionRequestLike: TransactionRequestLike,
     { estimateTxDependencies = true, onBeforeSend, skipCustomFee = false }: AccountSendTxParams = {}
   ): Promise<TransactionResponse> {
+    // Tx Response will usually be a TransactionResponse, but it could be a string
+    // where the connector returns the tx id, and we must build the `TransactionResponse` ourselves.
+    let response: TransactionResponse | string;
+    let request = transactionRequestLike;
+
+    // Check if the account is using a connector, and therefore we do not have direct access to the
+    // private key.
     if (this._connector) {
-      return this.provider.getTransactionResponse(
-        await this._connector.sendTransaction(this.address.toString(), transactionRequestLike, {
-          onBeforeSend,
-          skipCustomFee,
-        })
-      );
+      // Attempt to use the prepareForSend flow if the connector supports it. Wrapped in a try/catch
+      // to handle the case where the child connector is using the base implementation of prepareForSend.
+      try {
+        request = await this._connector.prepareForSend(
+          this.address.toString(),
+          transactionRequestLike,
+          {
+            onBeforeSend,
+            skipCustomFee,
+          }
+        );
+
+        // If we have a prepared request, we can send it directly from the SDK level provider.
+        response = await this.provider.sendTransaction(request, {
+          estimateTxDependencies: false,
+        });
+      } catch (error) {
+        // If the above has thrown, it may be because the child connector is using the base implementation
+        // of prepareForSend.
+        if ((<FuelError>error).code === ErrorCode.NOT_IMPLEMENTED) {
+          // In that case, attempt to send from the connector's sendTransaction method.
+          response = await this._connector.sendTransaction(this.address.toString(), request, {
+            onBeforeSend,
+            skipCustomFee,
+          });
+        } else {
+          // If it's a different error (e.g. tx validation), we need to throw it.
+          throw error;
+        }
+      }
+    } else {
+      // If we're not dealing with a connector, we can just send the transaction directly from the SDK.
+      const txRequest = transactionRequestify(request);
+      if (estimateTxDependencies) {
+        await this.provider.estimateTxDependencies(txRequest);
+      }
+
+      response = await this.provider.sendTransaction(txRequest, {
+        estimateTxDependencies: false,
+      });
     }
-    const transactionRequest = transactionRequestify(transactionRequestLike);
-    if (estimateTxDependencies) {
-      await this.provider.estimateTxDependencies(transactionRequest);
-    }
-    return this.provider.sendTransaction(transactionRequest, {
-      estimateTxDependencies: false,
-    });
+
+    // Return the response as a TransactionResponse.
+    return typeof response === 'string' ? this.provider.getTransactionResponse(response) : response;
   }
 
   /**
