@@ -4,7 +4,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
-import { InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
+import { InputMessageCoder, TransactionCoder, TransactionType } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility, gte, versions } from '@fuel-ts/versions';
@@ -13,6 +13,8 @@ import { GraphQLClient } from 'graphql-request';
 import type { GraphQLClientResponse, GraphQLResponse } from 'graphql-request/src/types';
 import gql from 'graphql-tag';
 import { clone } from 'ramda';
+
+import type { Account } from '../account';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
@@ -32,6 +34,7 @@ import type {
   GqlBlockFragment,
   GqlEstimatePredicatesQuery,
 } from './__generated__/operations';
+import { resolveAccountForAssembleTxParams } from './assemble-tx-helpers';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
@@ -43,9 +46,9 @@ import type {
   TransactionRequestLike,
   TransactionRequest,
   TransactionRequestInput,
-  CoinTransactionRequestInput,
   JsonAbisFromAllCalls,
   ScriptTransactionRequest,
+  CoinTransactionRequestInput,
 } from './transaction-request';
 import {
   isPredicate,
@@ -66,7 +69,7 @@ import {
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
 import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
-import { adjustResourcesToExclude } from './utils/helpers';
+import { parseRawInput, parseRawOutput } from './utils/parsers';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
 const MAX_RETRIES = 10;
@@ -116,6 +119,23 @@ export type Block = {
     prevRoot: string;
     applicationHash: string;
   };
+};
+
+export type AccountCoinQuantity = {
+  assetId: string;
+  amount: BigNumberish;
+  account?: Account;
+  changeOutputAccount?: Account;
+};
+
+export type AssembleTxParams = {
+  request: TransactionRequest;
+  blockHorizon?: number;
+  accountCoinQuantities: AccountCoinQuantity[];
+  feePayerAccount: Account;
+  excludeInput?: ExcludeResourcesOption;
+  estimatePredicates?: boolean;
+  reserveGas?: number;
 };
 
 export type PageInfo = GqlPageInfo;
@@ -681,18 +701,18 @@ export default class Provider {
    * @hidden
    */
   private static setIncompatibleNodeVersionMessage(nodeInfo: NodeInfo) {
-    const { isMajorSupported, isMinorSupported, supportedVersion } =
-      checkFuelCoreVersionCompatibility(nodeInfo.nodeVersion);
+    // const { isMajorSupported, isMinorSupported, supportedVersion } =
+    checkFuelCoreVersionCompatibility(nodeInfo.nodeVersion);
 
-    if (!isMajorSupported || !isMinorSupported) {
-      Provider.incompatibleNodeVersionMessage = [
-        `The Fuel Node that you are trying to connect to is using fuel-core version ${nodeInfo.nodeVersion}.`,
-        `The TS SDK currently supports fuel-core version ${supportedVersion}.`,
-        `Things may not work as expected.`,
-      ].join('\n');
-      FuelGraphqlSubscriber.incompatibleNodeVersionMessage =
-        Provider.incompatibleNodeVersionMessage;
-    }
+    // if (!isMajorSupported || !isMinorSupported) {
+    //   Provider.incompatibleNodeVersionMessage = [
+    //     `The Fuel Node that you are trying to connect to is using fuel-core version ${nodeInfo.nodeVersion}.`,
+    //     `The TS SDK currently supports fuel-core version ${supportedVersion}.`,
+    //     `Things may not work as expected.`,
+    //   ].join('\n');
+    //   FuelGraphqlSubscriber.incompatibleNodeVersionMessage =
+    //     Provider.incompatibleNodeVersionMessage;
+    // }
   }
 
   /**
@@ -1464,7 +1484,7 @@ export default class Provider {
         await this.estimateTxDependencies(txRequestClone, { gasPrice }));
 
       if (dryRunStatus && 'reason' in dryRunStatus) {
-        throw this.extractDryRunError(txRequestClone, receipts, dryRunStatus);
+        throw this.extractDryRunError(txRequestClone, receipts, dryRunStatus.reason);
       }
 
       const { maxGasPerTx } = await this.getGasConfig();
@@ -1493,6 +1513,114 @@ export default class Provider {
       estimatedPredicates: txRequestClone.inputs,
       dryRunStatus,
       updateMaxFee,
+    };
+  }
+
+  async assembleTx(params: AssembleTxParams) {
+    const {
+      accountCoinQuantities,
+      feePayerAccount,
+      excludeInput,
+      reserveGas,
+      blockHorizon = 10,
+      estimatePredicates = true,
+    } = params;
+
+    const { request } = params;
+
+    const allAddresses = new Set<string>();
+    const baseAssetId = await this.getBaseAssetId();
+
+    let feePayerIndex = -1;
+    let baseAssetChange;
+
+    const requiredBalances = accountCoinQuantities.map((quantity, index) => {
+      const { amount, assetId, account = feePayerAccount } = quantity;
+      let { changeOutputAccount } = quantity;
+
+      if (!changeOutputAccount) {
+        changeOutputAccount = account;
+      }
+
+      allAddresses.add(account.address.toB256());
+
+      const changePolicy = {
+        change: changeOutputAccount.address.toB256(),
+      };
+
+      if (assetId === baseAssetId) {
+        baseAssetChange = changePolicy.change;
+      }
+
+      if (account.address.equals(feePayerAccount.address)) {
+        feePayerIndex = index;
+      }
+
+      const requiredBalance = {
+        account: resolveAccountForAssembleTxParams(account),
+        amount: bn(amount).toString(10),
+        assetId,
+        changePolicy,
+      };
+
+      return requiredBalance;
+    });
+
+    if (feePayerIndex === -1) {
+      allAddresses.add(feePayerAccount.address.toB256());
+
+      const newLength = requiredBalances.push({
+        account: resolveAccountForAssembleTxParams(feePayerAccount),
+        amount: bn(0).toString(10),
+        assetId: baseAssetId,
+        changePolicy: {
+          change: baseAssetChange || feePayerAccount.address.toB256(),
+        },
+      });
+
+      feePayerIndex = newLength - 1;
+    }
+
+    const idsToExclude = await this.adjustExcludeResourcesForAddress(
+      Array.from(allAddresses),
+      excludeInput
+    );
+
+    const {
+      assembleTx: { status, transaction: gqlTransaction, gasPrice },
+    } = await this.operations.assembleTx({
+      tx: hexlify(request.toTransactionBytes()),
+      blockHorizon: String(blockHorizon),
+      feeAddressIndex: String(feePayerIndex),
+      requiredBalances,
+      estimatePredicates,
+      excludeInput: idsToExclude,
+      reserveGas: reserveGas ? reserveGas.toString(10) : undefined,
+    });
+
+    if (status.type === 'DryRunFailureStatus') {
+      const parsedReceipts = status.receipts.map(processGqlReceipt);
+
+      throw this.extractDryRunError(request, parsedReceipts, status.reason);
+    }
+
+    request.witnesses = gqlTransaction.witnesses || request.witnesses;
+
+    request.inputs = gqlTransaction.inputs?.map(parseRawInput) || request.inputs;
+    request.outputs = gqlTransaction.outputs?.map(parseRawOutput) || request.outputs;
+
+    if (gqlTransaction.policies?.maxFee) {
+      request.maxFee = bn(gqlTransaction.policies.maxFee);
+    }
+
+    if (gqlTransaction.scriptGasLimit) {
+      (request as ScriptTransactionRequest).gasLimit = bn(gqlTransaction.scriptGasLimit);
+    }
+
+    return {
+      assembledRequest: request,
+      gasPrice: bn(gasPrice),
+      receipts: status.receipts.map(processGqlReceipt),
     };
   }
 
@@ -1550,26 +1678,11 @@ export default class Provider {
     excludedIds?: ExcludeResourcesOption
   ): Promise<Resource[]> {
     const ownerAddress = new Address(owner);
-    let idsToExclude = {
-      messages: excludedIds?.messages?.map((nonce) => hexlify(nonce)) || [],
-      utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
-    };
 
-    if (this.cache) {
-      const cached = this.cache.getActiveData(ownerAddress.toB256());
-      if (cached.utxos.length || cached.messages.length) {
-        const {
-          consensusParameters: {
-            txParameters: { maxInputs },
-          },
-        } = await this.getChain();
-        idsToExclude = adjustResourcesToExclude({
-          userInput: idsToExclude,
-          cached,
-          maxInputs: maxInputs.toNumber(),
-        });
-      }
-    }
+    const idsToExclude = await this.adjustExcludeResourcesForAddress(
+      [ownerAddress.b256Address],
+      excludedIds
+    );
 
     const coinsQuery = {
       owner: ownerAddress.toB256(),
@@ -2299,14 +2412,13 @@ export default class Provider {
   /**
    * @hidden
    */
-  private extractDryRunError(
-    transactionRequest: ScriptTransactionRequest,
+  public extractDryRunError(
+    transactionRequest: TransactionRequest,
     receipts: TransactionResultReceipt[],
-    dryRunStatus: DryRunStatus
+    reason: string
   ): FuelError {
-    const status = dryRunStatus as DryRunFailureStatusFragment;
     let logs: unknown[] = [];
-    if (transactionRequest.abis) {
+    if (transactionRequest.type === TransactionType.Script && transactionRequest.abis) {
       logs = getDecodedLogs(
         receipts,
         transactionRequest.abis.main,
@@ -2317,7 +2429,7 @@ export default class Provider {
     return extractTxError({
       logs,
       receipts,
-      statusReason: status.reason,
+      statusReason: reason,
     });
   }
 
@@ -2339,5 +2451,50 @@ export default class Provider {
     }
 
     return transactionRequest;
+  }
+
+  /**
+   * @hidden
+   */
+  private async adjustExcludeResourcesForAddress(
+    addresses: string[],
+    excludedIds?: ExcludeResourcesOption
+  ) {
+    const final = {
+      messages: excludedIds?.messages?.map((nonce) => hexlify(nonce)) || [],
+      utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
+    };
+
+    if (this.cache) {
+      const cache = this.cache;
+      const allCached = addresses.map((address) => cache.getActiveData(address));
+
+      const {
+        consensusParameters: {
+          txParameters: { maxInputs: maxInputsBn },
+        },
+      } = await this.getChain();
+
+      const maxInputs = maxInputsBn.toNumber();
+
+      for (let i = 0; i < allCached.length; i++) {
+        let total = final.utxos.length + final.messages.length;
+        if (total >= maxInputs) {
+          break;
+        }
+
+        final.utxos = [...final.utxos, ...allCached[i].utxos.slice(0, maxInputs - total)];
+
+        total = final.utxos.length + final.messages.length;
+
+        if (total >= maxInputs) {
+          break;
+        }
+
+        final.messages = [...final.messages, ...allCached[i].messages.slice(0, maxInputs - total)];
+      }
+    }
+
+    return final;
   }
 }

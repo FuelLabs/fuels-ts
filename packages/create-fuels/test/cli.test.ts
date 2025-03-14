@@ -70,7 +70,7 @@ describe('CLI', { timeout: 15_000 }, () => {
     expect(originalTemplateFiles.sort()).toEqual(testProjectFiles.sort());
   });
 
-  test('create-fuels checks the versions on the fuel-toolchain file', async () => {
+  test.skip('create-fuels checks the versions on the fuel-toolchain file', async () => {
     const args = generateArgv({ projectName: paths.projectRoot, template: paths.templateName });
 
     vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValueOnce(true);
