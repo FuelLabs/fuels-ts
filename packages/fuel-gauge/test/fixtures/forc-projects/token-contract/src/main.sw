@@ -3,9 +3,8 @@ contract;
 
 use std::{asset::*, context::balance_of, context::msg_amount};
 use token_abi::{Token, TransferParams};
-use std::constants::ZERO_B256;
 
-const BASE_TOKEN: b256 = ZERO_B256;
+const BASE_TOKEN: b256 = b256::zero();
 
 impl Token for Contract {
     fn mint_coins(mint_amount: u64) {

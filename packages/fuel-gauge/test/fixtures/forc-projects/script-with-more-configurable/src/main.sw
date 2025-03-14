@@ -10,47 +10,63 @@ enum Colors {
     red: (),
     blue: (),
 }
-impl Eq for [u32; 2] {
+impl PartialEq for [u32; 2] {
     fn eq(self, other: Self) -> bool {
         self[0] == other[0] && self[1] == other[1]
     }
 }
-impl Eq for [u8; 3] {
+impl Eq for [u32; 2] {}
+
+impl PartialEq for [u8; 3] {
     fn eq(self, other: Self) -> bool {
         self[0] == other[0] && self[1] == other[1] && self[2] == other[2]
     }
 }
-impl Eq for [[u32; 2]; 2] {
+impl Eq for [u8; 3] {}
+
+impl PartialEq for [[u32; 2]; 2] {
     fn eq(self, other: Self) -> bool {
         self[0] == other[0] && self[1] == other[1]
     }
 }
-impl Eq for str[2] {
+impl Eq for [[u32; 2]; 2] {}
+
+impl PartialEq for str[2] {
     fn eq(self, other: Self) -> bool {
         from_str_array(self) == from_str_array(other)
     }
 }
-impl Eq for str[3] {
+impl Eq for str[2] {}
+
+impl PartialEq for str[3] {
     fn eq(self, other: Self) -> bool {
         from_str_array(self) == from_str_array(other)
     }
 }
-impl Eq for str[4] {
+impl Eq for str[3] {}
+
+impl PartialEq for str[4] {
     fn eq(self, other: Self) -> bool {
         from_str_array(self) == from_str_array(other)
     }
 }
-impl Eq for (u8, bool, str[2]) {
+impl Eq for str[4] {}
+
+impl PartialEq for (u8, bool, str[2]) {
     fn eq(self, other: Self) -> bool {
         self.0 == other.0 && self.1 == other.1 && self.2 == other.2
     }
 }
-impl Eq for Struct1 {
+impl Eq for (u8, bool, str[2]) {}
+
+impl PartialEq for Struct1 {
     fn eq(self, other: Self) -> bool {
         self.tag == other.tag && self.age == other.age && self.scores == other.scores
     }
 }
-impl Eq for Colors {
+impl Eq for Struct1 {}
+
+impl PartialEq for Colors {
     fn eq(self, other: Self) -> bool {
         match (self, other) {
             (Colors::red, Colors::red) => true,
@@ -59,6 +75,8 @@ impl Eq for Colors {
         }
     }
 }
+impl Eq for Colors {}
+
 configurable {
     U8: u8 = 10,
     U16: u16 = 301u16,
