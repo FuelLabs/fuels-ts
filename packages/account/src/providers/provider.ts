@@ -1554,7 +1554,7 @@ export default class Provider {
         .map(coinQuantityfy)
         .map(({ assetId, amount, max: maxPerAsset }) => ({
           assetId: hexlify(assetId),
-          amount: amount.toString(10),
+          amount: (amount.eqn(0) ? bn(1) : amount).toString(10),
           max: maxPerAsset ? maxPerAsset.toString(10) : undefined,
         })),
       excludedIds: idsToExclude,

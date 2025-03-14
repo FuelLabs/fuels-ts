@@ -165,6 +165,21 @@ describe('CallTestContract', () => {
     expect(value.toHex()).toBe(bn(1_000_000).toHex());
   });
 
+  it('should be possible to forward amount 0 to contract call', async () => {
+    using contract = await setupContract();
+    const baseAssetId = await contract.provider.getBaseAssetId();
+    const { waitForResult } = await contract.functions
+      .return_context_amount()
+      .callParams({
+        forward: [0, baseAssetId],
+      })
+      .call();
+
+    const { value } = await waitForResult();
+
+    expect(value.toNumber()).toBe(0);
+  });
+
   it('Forward asset_id on contract call', async () => {
     using contract = await setupContract();
 
