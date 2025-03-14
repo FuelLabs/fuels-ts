@@ -1,3 +1,4 @@
+import { hexlify } from '@fuel-ts/utils';
 import { ASSET_A } from '@fuel-ts/utils/test-utils';
 
 import { setupTestProviderAndWallets } from '../../test-utils';
@@ -109,7 +110,7 @@ describe('Serialization', () => {
         gasPrice: gasPrice.toString(),
         receipts: rawReceipts,
         id: request.getTransactionId(chainId),
-        transactionBytes: request.toTransactionBytes(),
+        transactionBytes: hexlify(request.toTransactionBytes()),
       };
 
       const jsonTransactionSummary = JSON.parse(JSON.stringify(serializedTransactionSummary));

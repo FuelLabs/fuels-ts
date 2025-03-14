@@ -777,7 +777,7 @@ export class Account extends AbstractAccount implements WithAddress {
       ? {
           ...request.flag.summary,
           id: request.getTransactionId(chainId),
-          transactionBytes: request.toTransactionBytes(),
+          transactionBytes: hexlify(request.toTransactionBytes()),
         }
       : undefined;
   }

@@ -1,3 +1,5 @@
+import { hexlify } from '@fuel-ts/utils';
+
 import { setupTestProviderAndWallets } from '../../test-utils';
 import { ScriptTransactionRequest } from '../transaction-request';
 import { normalizeJSON } from '../utils';
@@ -58,13 +60,14 @@ describe('assembleTransactionSummaryFromJson', () => {
     // Assembled the summary from the serialized data
     const serializedSummary: TransactionSummaryJson = {
       id: request.getTransactionId(chainId),
-      transactionBytes: request.toTransactionBytes(),
+      transactionBytes: hexlify(request.toTransactionBytes()),
       gasPrice: txCost.gasPrice.toString(),
       receipts: txCost.rawReceipts,
     };
+    const jsonSerializedSummary = JSON.parse(JSON.stringify(serializedSummary));
     const assembledSummary = await assembleTransactionSummaryFromJson({
       provider,
-      transactionSummary: serializedSummary,
+      transactionSummary: jsonSerializedSummary,
     });
 
     expect(normalizeJSON(assembledSummary)).toEqual(normalizeJSON(expectedSummary));

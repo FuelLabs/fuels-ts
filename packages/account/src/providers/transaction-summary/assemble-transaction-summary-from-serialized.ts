@@ -1,5 +1,6 @@
 import { bn } from '@fuel-ts/math';
 import { TransactionCoder } from '@fuel-ts/transactions';
+import { arrayify } from '@fuel-ts/utils';
 
 import type { Provider } from '../..';
 import { deserializeReceipt, type TransactionSummaryJson } from '../utils/serialization';
@@ -22,12 +23,13 @@ export const assembleTransactionSummaryFromJson = async (opts: {
     },
   } = await provider.getChain();
 
-  const [transaction] = new TransactionCoder().decode(transactionBytes, 0);
+  const deserializedTransactionBytes = arrayify(transactionBytes);
+  const [transaction] = new TransactionCoder().decode(deserializedTransactionBytes, 0);
 
   return assembleTransactionSummary({
     id,
     transaction,
-    transactionBytes,
+    transactionBytes: deserializedTransactionBytes,
     receipts: receipts.map(deserializeReceipt),
     gasPrice: bn(gasPrice),
 
