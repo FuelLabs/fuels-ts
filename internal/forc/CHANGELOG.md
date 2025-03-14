@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.89.7
+
+### Patch Changes
+
+- 521292a: chore: updated `forc` to `0.67.0`
+- ff97a6e: chore: upgrade `forc` to `0.66.7`
+
 ## 0.89.6
 
 ### Patch Changes
