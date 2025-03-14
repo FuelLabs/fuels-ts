@@ -3,46 +3,29 @@
 PUBLISHED_FUEL_PACKAGE_NAME="${PUBLISHED_FUEL_PACKAGE_NAME-"fuels"}"
 PUBLISHED_NPM_TAG="${PUBLISHED_NPM_TAG-"next"}"
 
-# Versions
-FUEL_CORE_VERSION=$(cat ./internal/fuel-core/VERSION)
-FORC_VERSION=$(cat ./internal/forc/VERSION)
-TOOLCHAIN="CI"
-
 # Project
-ROOT_DIR=$(pwd)
-PLAYWRIGHT_DIR="$ROOT_DIR"
-PROJECT_DIR="$ROOT_DIR/test-project"
+REPO_DIR=$(pwd)
 
-echo "1. Install toolchains"
-if [ -x "$(command -v fuelup)" ]; then
-  echo "Fuelup exists"
-else
-  echo "Fuelup does not exist - installing 'fuelup'"
-  curl -fsSL https://install.fuel.network/ | sh -s -- --no-modify-path
-  export PATH="${HOME}/.fuelup/bin:${PATH}"
-fi
+echo "1. Add binaries to PATH so that tests can use them"
+PATH="${REPO_DIR}/internal/fuel-core/fuel-core-binaries:${PATH}"
+PATH="${REPO_DIR}/internal/forc/forc-binaries:${PATH}"
 
-fuelup toolchain new $TOOLCHAIN
-fuelup default $TOOLCHAIN
-fuelup component add fuel-core@$FUEL_CORE_VERSION
-fuelup component add forc@$FORC_VERSION
+# Create a temporary directory where we'll scaffold the test project
+PROJECT_DIR="$(mktemp -d)/integration-test-project"
 
 echo "2. Scaffold a new project with '$PUBLISHED_FUEL_PACKAGE_NAME@$PUBLISHED_NPM_TAG'"
 if [ -d "$PROJECT_DIR" ]; then
   echo "Removing existing project directory '$PROJECT_DIR'"
   rm -rf $PROJECT_DIR
 fi
-pnpm create $PUBLISHED_FUEL_PACKAGE_NAME@$PUBLISHED_NPM_TAG $PROJECT_DIR --no-install
 
-echo "3. Intialise the project"
-cd $PROJECT_DIR
-pnpm remove fuels
-pnpm add $PUBLISHED_FUEL_PACKAGE_NAME@$PUBLISHED_NPM_TAG
-pnpm  --ignore-workspace install
-cp .env.example .env.local
+# NPM_CONFIG_REGISTRY is used to install the fuels pacakge
+# from our custom registry where we publish PR builds
+# VITEST is used to skip installing fuelup (see https://github.com/FuelLabs/fuels-ts/issues/3770)
+NPM_CONFIG_REGISTRY="https://npm-packages.fuel.network" VITEST="to-not-install-fuelup" pnpm create "$PUBLISHED_FUEL_PACKAGE_NAME"@"$PUBLISHED_NPM_TAG" "$PROJECT_DIR"
 
-echo "4. Running UI tests"
-cd $ROOT_DIR
+echo "3. Running UI tests"
+cd $REPO_DIR
 PROJECT_DIR=$PROJECT_DIR sh ./scripts/tests-ui.sh
 TEST_RESULT=$?
 

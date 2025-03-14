@@ -54,6 +54,18 @@ fragment SqueezedOutStatusFragment on SqueezedOutStatus {
   reason
 }
 
+fragment PreconfirmationSuccessStatusFragment on PreconfirmationSuccessStatus {
+  type: __typename
+}
+
+fragment PreconfirmationFailureStatusFragment on PreconfirmationFailureStatus {
+  type: __typename
+}
+
+fragment PreconfirmationSqueezedOutStatusFragment on PreconfirmationSqueezedOutStatus {
+  type: __typename
+}
+
 fragment transactionStatusFragment on TransactionStatus {
   ... on SubmittedStatus {
     ...SubmittedStatusFragment
@@ -66,6 +78,15 @@ fragment transactionStatusFragment on TransactionStatus {
   }
   ... on SqueezedOutStatus {
     ...SqueezedOutStatusFragment
+  }
+  ... on PreconfirmationSuccessStatus {
+    ...PreconfirmationSuccessStatusFragment
+  }
+  ... on PreconfirmationFailureStatus {
+    ...PreconfirmationFailureStatusFragment
+  }
+  ... on PreconfirmationSqueezedOutStatus {
+    ...PreconfirmationSqueezedOutStatusFragment
   }
 }
 
@@ -127,6 +148,15 @@ fragment transactionStatusSubscriptionFragment on TransactionStatus {
   }
   ... on SqueezedOutStatus {
     ...SqueezedOutStatusFragment
+  }
+  ... on PreconfirmationSuccessStatus {
+    ...PreconfirmationSuccessStatusFragment
+  }
+  ... on PreconfirmationFailureStatus {
+    ...PreconfirmationFailureStatusFragment
+  }
+  ... on PreconfirmationSqueezedOutStatus {
+    ...PreconfirmationSqueezedOutStatusFragment
   }
 }
 
@@ -503,6 +533,15 @@ query getTransactionWithReceipts($transactionId: TransactionId!) {
       }
       ... on SqueezedOutStatus {
         ...SqueezedOutStatusFragment
+      }
+      ... on PreconfirmationSuccessStatus {
+        ...PreconfirmationSuccessStatusFragment
+      }
+      ... on PreconfirmationFailureStatus {
+        ...PreconfirmationFailureStatusFragment
+      }
+      ... on PreconfirmationSqueezedOutStatus {
+        ...PreconfirmationSqueezedOutStatusFragment
       }
     }
   }

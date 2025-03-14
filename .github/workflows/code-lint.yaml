@@ -20,7 +20,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     name: Lint
-    timeout-minutes: 30
+    timeout-minutes: 120
     steps:
       - name: Checkout
         uses: actions/checkout@v4
