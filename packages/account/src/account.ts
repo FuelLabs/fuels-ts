@@ -943,58 +943,58 @@ export class Account extends AbstractAccount implements WithAddress {
       await this.provider.getChain()
     ).consensusParameters.txParameters.maxInputs.toNumber();
 
-    let remainingCoins = await this.getAllCoins(baseAssetId);
+    let remainingCoins = await this.getAllCoins(assetId);
 
     const resultingCoinIds: BytesLike[] = [];
     const transactions: TransactionResult[] = [];
 
-    let predicateGasUsed: BigNumberish | undefined;
-    const isPredicate = 'predicateData' in this;
+    // let predicateGasUsed: BigNumberish | undefined;
+    // const isPredicate = 'predicateData' in this;
 
-    if (isPredicate) {
-      const request = new ScriptTransactionRequest();
-      request.addCoinInput(remainingCoins[0]);
-      await this.provider.estimatePredicates(request);
+    // if (isPredicate) {
+    //   const request = new ScriptTransactionRequest();
+    //   request.addCoinInput(remainingCoins[0]);
+    //   await this.provider.estimatePredicates(request);
 
-      predicateGasUsed = (request.inputs[0] as CoinTransactionRequestInput).predicateGasUsed;
-    }
+    //   predicateGasUsed = (request.inputs[0] as CoinTransactionRequestInput).predicateGasUsed;
+    // }
 
     while (remainingCoins.length > 1) {
       const request = new ScriptTransactionRequest();
 
-      // if there are more than maxInputs unconsolidated coins,
-      // leave the selection of coins that fund the transaction to the node
-      // and add additional inputs to the request afterwards until max inputs reached
-      if (remainingCoins.length > maxInputs) {
-        const maxInputsRequest = new ScriptTransactionRequest();
-        const fakeCoins = this.generateFakeResources(
-          new Array(maxInputs).fill({ assetId: baseAssetId })
-        );
-        maxInputsRequest.addResources(fakeCoins);
+      // // if there are more than maxInputs unconsolidated coins,
+      // // leave the selection of coins that fund the transaction to the node
+      // // and add additional inputs to the request afterwards until max inputs reached
+      // if (remainingCoins.length > maxInputs) {
+      //   const maxInputsRequest = new ScriptTransactionRequest();
+      //   const fakeCoins = this.generateFakeResources(
+      //     new Array(maxInputs).fill({ assetId: baseAssetId })
+      //   );
+      //   maxInputsRequest.addResources(fakeCoins);
 
-        if (predicateGasUsed) {
-          maxInputsRequest.inputs.forEach((input) => {
-            // eslint-disable-next-line no-param-reassign
-            (input as CoinTransactionRequestInput).predicateGasUsed = predicateGasUsed;
-          });
-        }
+      //   if (predicateGasUsed) {
+      //     maxInputsRequest.inputs.forEach((input) => {
+      //       // eslint-disable-next-line no-param-reassign
+      //       (input as CoinTransactionRequestInput).predicateGasUsed = predicateGasUsed;
+      //     });
+      //   }
 
-        const { maxFee, gasLimit } = await this.provider.estimateTxGasAndFee({
-          transactionRequest: maxInputsRequest,
-        });
+      //   const { maxFee, gasLimit } = await this.provider.estimateTxGasAndFee({
+      //     transactionRequest: maxInputsRequest,
+      //   });
 
-        request.maxFee = maxFee;
-        request.gasLimit = gasLimit;
+      //   request.maxFee = maxFee;
+      //   request.gasLimit = gasLimit;
 
-        const resources = await this.getResourcesToSpend(
-          [{ amount: bn(maxFee), assetId: baseAssetId }],
-          {
-            utxos: resultingCoinIds,
-          }
-        );
+      //   const resources = await this.getResourcesToSpend(
+      //     [{ amount: bn(maxFee), assetId: baseAssetId }],
+      //     {
+      //       utxos: resultingCoinIds,
+      //     }
+      //   );
 
-        request.addResources(resources);
-      }
+      //   request.addResources(resources);
+      // }
 
       for (const coin of remainingCoins) {
         if (request.inputs.length === maxInputs) {
@@ -1008,12 +1008,12 @@ export class Account extends AbstractAccount implements WithAddress {
         request.addCoinInput(coin);
       }
 
-      if (predicateGasUsed) {
-        request.inputs.forEach((input) => {
-          // eslint-disable-next-line no-param-reassign
-          (input as CoinTransactionRequestInput).predicateGasUsed = predicateGasUsed;
-        });
-      }
+      // if (predicateGasUsed) {
+      //   request.inputs.forEach((input) => {
+      //     // eslint-disable-next-line no-param-reassign
+      //     (input as CoinTransactionRequestInput).predicateGasUsed = predicateGasUsed;
+      //   });
+      // }
 
       if (request.maxFee.eq(0)) {
         const { maxFee, gasLimit } = await this.provider.estimateTxGasAndFee({
@@ -1022,23 +1022,29 @@ export class Account extends AbstractAccount implements WithAddress {
 
         request.maxFee = maxFee;
         request.gasLimit = gasLimit;
+
+        const fundingResources = await this.getResourcesToSpend([
+          { amount: maxFee, assetId: await this.provider.getBaseAssetId() },
+        ]);
+
+        request.addResources(fundingResources);
       }
 
-      const amount = request.inputs.reduce(
-        (acc, coin) => acc.add((coin as CoinTransactionRequestInput).amount),
-        bn(0)
-      );
+      // const amount = request.inputs.reduce(
+      //   (acc, coin) => acc.add((coin as CoinTransactionRequestInput).amount),
+      //   bn(0)
+      // );
 
-      if (request.maxFee.gte(amount)) {
-        // TODO: to throw or not to throw, that's the question
-        throw new FuelError(
-          ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-          `The account sending the transaction doesn't have enough funds to cover the transaction.`,
-          {
-            transactions,
-          }
-        );
-      }
+      // if (request.maxFee.gte(amount)) {
+      //   // TODO: to throw or not to throw, that's the question
+      //   throw new FuelError(
+      //     ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
+      //     `The account sending the transaction doesn't have enough funds to cover the transaction.`,
+      //     {
+      //       transactions,
+      //     }
+      //   );
+      // }
 
       const { waitForResult } = await this.sendTransaction(request);
 
@@ -1046,7 +1052,8 @@ export class Account extends AbstractAccount implements WithAddress {
 
       transactions.push(tx);
 
-      // There's only one coin output in the transaction so we can hardcode the output index
+      // First output is non-base asset
+      // Second output is base asset
       resultingCoinIds.push(`${tx.id}0000`);
 
       remainingCoins = remainingCoins.filter(
@@ -1057,7 +1064,7 @@ export class Account extends AbstractAccount implements WithAddress {
     return {
       // we re-fetch the coins instead of combining the consolidation tx outputs and remaining coins
       // because the outputs don't have `blockHeight` and `txIdx` set in the `TransactionResult`
-      coins: await this.getAllCoins(baseAssetId),
+      coins: await this.getAllCoins(assetId),
       transactions,
     };
   }

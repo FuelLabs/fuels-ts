@@ -1,8 +1,12 @@
-import type { Provider, SnapshotConfigs, TransactionResult } from 'fuels';
-import { bn, ErrorCode, FuelError, hexlify, randomBytes } from 'fuels';
-import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
+import { FuelError, ErrorCode } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+import { bn } from '@fuel-ts/math';
+import type { SnapshotConfigs } from '@fuel-ts/utils';
+import { hexlify } from '@fuel-ts/utils';
+import { randomBytes } from 'crypto';
 
-import { PredicateTrue } from '../test/typegen';
+import type { TransactionResult, Provider } from '../src';
+import { setupTestProviderAndWallets, TestAssetId } from '../src/test-utils';
 
 /**
  * @group node
@@ -11,7 +15,7 @@ import { PredicateTrue } from '../test/typegen';
 describe('utxo-consolidation', () => {
   describe('base asset', () => {
     test("doesn't consolidate - only one coin", async () => {
-      using launched = await launchTestNode({
+      using launched = await setupTestProviderAndWallets({
         walletsConfig: {
           coinsPerAsset: 1,
           amountPerCoin: 10000, // can cover maxFee but we don't consolidate one coin
@@ -36,7 +40,7 @@ describe('utxo-consolidation', () => {
     });
 
     test('throws - coins value is less than max fee, under 255 coins', async () => {
-      using launched = await launchTestNode({
+      using launched = await setupTestProviderAndWallets({
         walletsConfig: {
           coinsPerAsset: 5,
           amountPerCoin: 1,
@@ -59,7 +63,7 @@ describe('utxo-consolidation', () => {
     });
 
     test('throws - coins value is equal to max fee, under 255 coins', async () => {
-      using launched = await launchTestNode({
+      using launched = await setupTestProviderAndWallets({
         walletsConfig: {
           coinsPerAsset: 26, // this is the max fee value
           amountPerCoin: 1,
@@ -82,7 +86,7 @@ describe('utxo-consolidation', () => {
     });
 
     test('consolidates once - less than max_inputs coins', async () => {
-      using launched = await launchTestNode({
+      using launched = await setupTestProviderAndWallets({
         walletsConfig: {
           coinsPerAsset: 2,
           amountPerCoin: 1000,
@@ -106,7 +110,7 @@ describe('utxo-consolidation', () => {
     });
 
     test('consolidates once - max_inputs + 1 coins', async () => {
-      using launched = await launchTestNode({
+      using launched = await setupTestProviderAndWallets({
         walletsConfig: {
           coinsPerAsset: 256,
           amountPerCoin: 100,
@@ -139,7 +143,7 @@ describe('utxo-consolidation', () => {
     max_inputs + >1 coins, second tx can't be funded`, async () => {
       const leftoverCoinsCount = 25;
       const coinsPerAsset = 255 + leftoverCoinsCount;
-      using launched = await launchTestNode({
+      using launched = await setupTestProviderAndWallets({
         walletsConfig: {
           coinsPerAsset,
           amountPerCoin: 1,
@@ -197,7 +201,7 @@ describe('utxo-consolidation', () => {
       // 4 tx with max_inputs and 1 tx with less than max_inputs;
       const coinsPerAsset = 255 * 4 + 134;
 
-      using launched = await launchTestNode({
+      using launched = await setupTestProviderAndWallets({
         walletsConfig: {
           coinsPerAsset,
           amountPerCoin: 1,
@@ -234,7 +238,7 @@ describe('utxo-consolidation', () => {
       const leftoverCoinsCount = 5;
       const coinsPerAsset = 255 * 4 + leftoverCoinsCount;
 
-      using launched = await launchTestNode({
+      using launched = await setupTestProviderAndWallets({
         walletsConfig: {
           coinsPerAsset,
           amountPerCoin: 1,
@@ -310,7 +314,7 @@ describe('utxo-consolidation', () => {
         });
       }
 
-      using launched = await launchTestNode({
+      using launched = await setupTestProviderAndWallets({
         nodeOptions: {
           snapshotConfig: {
             stateConfig: {
@@ -369,7 +373,53 @@ describe('utxo-consolidation', () => {
     });
   });
 
-  describe('non-base asset', () => {
-    test('', () => {});
+  describe.only('non-base asset', () => {
+    const assets = TestAssetId.random();
+    const testAssetId = assets[0].value;
+
+    test("doesn't consolidate - only one coin", async () => {
+      using launched = await setupTestProviderAndWallets({
+        walletsConfig: {
+          coinsPerAsset: 1,
+          assets,
+        },
+      });
+
+      const {
+        wallets: [wallet],
+        provider,
+      } = launched;
+
+      const originalCoins = await wallet.getAllCoins(testAssetId);
+
+      const sendSpy = vi.spyOn(provider, 'sendTransaction');
+
+      const { coins } = await wallet.consolidateCoins({ assetId: testAssetId });
+
+      expect(sendSpy).not.toHaveBeenCalled();
+      expect(coins).toEqual(originalCoins);
+    });
+
+    test('consolidates once - less than max_inputs coins', async () => {
+      using launched = await setupTestProviderAndWallets({
+        walletsConfig: {
+          coinsPerAsset: 2,
+          assets,
+        },
+      });
+
+      const {
+        wallets: [wallet],
+      } = launched;
+
+      const originalCoins = await wallet.getAllCoins(testAssetId);
+      const initialAmount = originalCoins.reduce((acc, coin) => acc.add(coin.amount), bn(0));
+
+      const { coins } = await wallet.consolidateCoins({ assetId: testAssetId });
+
+      expect(coins.length).toEqual(1);
+      expect(originalCoins).not.toContainEqual(coins[0]);
+      expect(coins[0].amount).toEqualBn(initialAmount);
+    });
   });
 });
