@@ -40,6 +40,8 @@ import { CreateTransactionRequest, ScriptTransactionRequest } from './transactio
 import { TransactionResponse } from './transaction-response';
 import type { SubmittedStatus } from './transaction-summary/types';
 import * as gasMod from './utils/gas';
+import { serializeProviderCache } from './utils/serialization';
+import type { ProviderCacheJson } from './utils/serialization';
 
 const getCustomFetch =
   (expectedOperationName: string, expectedResponse: object) =>
@@ -2414,5 +2416,36 @@ describe('Provider', () => {
     expect(keys.includes('edges')).toBeTruthy();
 
     expect(keys.includes('pageInfo')).toBeFalsy();
+  });
+
+  it('should fetch chain or node info if the cache is not provided', async () => {
+    // Given: we clear any pre-existing cache
+    using launched = await setupTestProviderAndWallets();
+    const { provider: sourceProvider } = launched;
+
+    Provider.clearChainAndNodeCaches();
+
+    // When: we create a new provider with the same url
+    const fetch = vi.spyOn(global, 'fetch');
+    await new Provider(sourceProvider.url, { cache: undefined }).init();
+
+    // Then: we should fetch the chain and node info
+    expect(fetch).toHaveBeenCalled();
+  });
+
+  it('should not refetch chain or node info if cache is provided', async () => {
+    // Given: we clear any pre-existing cache
+    using launched = await setupTestProviderAndWallets();
+    const { provider: sourceProvider } = launched;
+
+    const cache: ProviderCacheJson = await serializeProviderCache(sourceProvider);
+    Provider.clearChainAndNodeCaches();
+
+    // When: we create a new provider with the same url, but with a cache
+    const fetch = vi.spyOn(global, 'fetch');
+    await new Provider(launched.provider.url, { cache }).init();
+
+    // Then: we should not perform any fetch requests
+    expect(fetch).not.toHaveBeenCalled();
   });
 });
