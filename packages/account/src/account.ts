@@ -32,6 +32,7 @@ import type {
   TransactionCostParams,
   TransactionResponse,
   ProviderSendTxParams,
+  TransactionSummaryJson,
 } from './providers';
 import {
   withdrawScript,
@@ -47,6 +48,7 @@ import {
   isRequestInputResource,
 } from './providers/transaction-request/helpers';
 import { mergeQuantities } from './providers/utils/merge-quantities';
+import { serializeProviderCache } from './providers/utils/serialization';
 import { AbstractAccount } from './types';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
 
@@ -71,7 +73,12 @@ export type AccountSendTxParams = ProviderSendTxParams & FuelConnectorSendTxPara
 
 export type EstimatedTxParams = Pick<
   TransactionCost,
-  'estimatedPredicates' | 'addedSignatures' | 'requiredQuantities' | 'updateMaxFee' | 'gasPrice'
+  | 'estimatedPredicates'
+  | 'addedSignatures'
+  | 'requiredQuantities'
+  | 'updateMaxFee'
+  | 'gasPrice'
+  | 'transactionSummary'
 >;
 const MAX_FUNDING_ATTEMPTS = 5;
 
@@ -211,8 +218,16 @@ export class Account extends AbstractAccount implements WithAddress {
    * @returns A promise that resolves to the funded transaction request.
    */
   async fund<T extends TransactionRequest>(request: T, params: EstimatedTxParams): Promise<T> {
-    const { addedSignatures, estimatedPredicates, requiredQuantities, updateMaxFee, gasPrice } =
-      params;
+    const {
+      addedSignatures,
+      estimatedPredicates,
+      requiredQuantities,
+      updateMaxFee,
+      gasPrice,
+      transactionSummary,
+    } = params;
+
+    const chainId = await this.provider.getChainId();
 
     const fee = request.maxFee;
     const baseAssetId = await this.provider.getBaseAssetId();
@@ -311,6 +326,8 @@ export class Account extends AbstractAccount implements WithAddress {
         `The account ${this.address} does not have enough base asset funds to cover the transaction execution.`
       );
     }
+
+    request.updateState(chainId, 'funded', transactionSummary);
 
     await this.provider.validateTransaction(request);
 
@@ -653,17 +670,39 @@ export class Account extends AbstractAccount implements WithAddress {
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true, onBeforeSend, skipCustomFee = false }: AccountSendTxParams = {}
+    { estimateTxDependencies = true, ...connectorOptions }: AccountSendTxParams = {}
   ): Promise<TransactionResponse> {
+    let transactionRequest = transactionRequestify(transactionRequestLike);
+
+    // Check if the account is using a connector, and therefore we do not have direct access to the
+    // private key.
     if (this._connector) {
-      return this.provider.getTransactionResponse(
-        await this._connector.sendTransaction(this.address.toString(), transactionRequestLike, {
-          onBeforeSend,
-          skipCustomFee,
-        })
+      const { onBeforeSend, skipCustomFee = false } = connectorOptions;
+
+      transactionRequest = await this.prepareTransactionForSend(transactionRequest);
+
+      const params: FuelConnectorSendTxParams = {
+        onBeforeSend,
+        skipCustomFee,
+        provider: {
+          url: this.provider.url,
+          cache: await serializeProviderCache(this.provider),
+        },
+        transactionState: transactionRequest.flag.state,
+        transactionSummary: await this.prepareTransactionSummary(transactionRequest),
+      };
+
+      const transaction: string | TransactionResponse = await this._connector.sendTransaction(
+        this.address.toString(),
+        transactionRequest,
+        params
       );
+
+      return typeof transaction === 'string'
+        ? this.provider.getTransactionResponse(transaction)
+        : transaction;
     }
-    const transactionRequest = transactionRequestify(transactionRequestLike);
+
     if (estimateTxDependencies) {
       await this.provider.estimateTxDependencies(transactionRequest);
     }
@@ -704,6 +743,43 @@ export class Account extends AbstractAccount implements WithAddress {
       txCreatedIdx: bn(1),
       ...coin,
     }));
+  }
+
+  /** @hidden */
+  private async prepareTransactionForSend(
+    request: TransactionRequest
+  ): Promise<TransactionRequest> {
+    const { transactionId } = request.flag;
+
+    // If there is no transaction id, then no status is set.
+    if (!isDefined(transactionId)) {
+      return request;
+    }
+
+    const chainId = await this.provider.getChainId();
+    const currentTransactionId = request.getTransactionId(chainId);
+
+    // If the transaction id does not match the transaction id on the request.
+    // Then we need to invalidate the transaction status
+    if (transactionId !== currentTransactionId) {
+      request.updateState(chainId);
+    }
+    return request;
+  }
+
+  /** @hidden */
+  private async prepareTransactionSummary(
+    request: TransactionRequest
+  ): Promise<TransactionSummaryJson | undefined> {
+    const chainId = await this.provider.getChainId();
+
+    return isDefined(request.flag.summary)
+      ? {
+          ...request.flag.summary,
+          id: request.getTransactionId(chainId),
+          transactionBytes: hexlify(request.toTransactionBytes()),
+        }
+      : undefined;
   }
 
   /** @hidden * */
