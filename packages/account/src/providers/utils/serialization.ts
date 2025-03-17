@@ -44,7 +44,7 @@ export interface ProviderCacheJson {
 
 export interface TransactionSummaryJson {
   id: string;
-  transactionBytes: Uint8Array;
+  transactionBytes: string;
   receipts: TransactionReceiptJson[];
   gasPrice: string;
 }

@@ -1,5 +1,13 @@
 import { spawnSync } from 'child_process';
-import { cpSync, mkdirSync, rmSync, readFileSync, writeFileSync, existsSync } from 'fs';
+import {
+  cpSync,
+  mkdirSync,
+  rmSync,
+  readFileSync,
+  writeFileSync,
+  existsSync,
+  copyFileSync,
+} from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -34,7 +42,7 @@ export const getPkgPlatform = () => {
   return platforms[process.platform][process.arch];
 };
 
-const versionFilePath = join(__dirname, '../VERSION');
+export const versionFilePath = join(__dirname, '../VERSION');
 
 export const getCurrentVersion = () => {
   const fuelCoreVersion = readFileSync(versionFilePath, 'utf8');
@@ -73,4 +81,5 @@ export const buildFromGitBranch = (branchName) => {
   mkdirSync(to, { recursive: true });
 
   cpSync(join(from, 'fuel-core'), join(to, 'fuel-core'));
+  cpSync(versionFilePath, to);
 };

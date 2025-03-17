@@ -4,7 +4,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import type { BytesLike } from '@fuel-ts/utils';
+import { hexlify, type BytesLike } from '@fuel-ts/utils';
 import { EventEmitter } from 'events';
 
 import {
@@ -720,7 +720,7 @@ describe('Fuel Connector', () => {
       transactionState: 'funded',
       transactionSummary: {
         id: request.getTransactionId(chainId),
-        transactionBytes: initialTxBytes,
+        transactionBytes: hexlify(initialTxBytes),
         receipts: rawReceipts,
         gasPrice: gasPrice.toString(),
       },
@@ -840,7 +840,7 @@ describe('Fuel Connector', () => {
 
     const transactionSummaryJson = {
       id: request.getTransactionId(chainId),
-      transactionBytes: initialTxBytes,
+      transactionBytes: hexlify(initialTxBytes),
       receipts: rawReceipts,
       gasPrice: gasPrice.toString(),
     };
