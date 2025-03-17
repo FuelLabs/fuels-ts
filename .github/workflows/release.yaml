@@ -17,9 +17,8 @@ jobs:
     # Second check ensures that the workflow runs only after a commit is pushed into the branch,
     # and not when the branch is created.
     # This is to avoid running the workflow when a release/* branch is created.
-    if: |
-      github.event.head_commit.message == 'ci(release): versioning packages and changesets' &&
-      github.event.before != '0000000000000000000000000000000000000000'
+    # TODO: double-check comments above
+    if: github.event.before != '0000000000000000000000000000000000000000'
 
     steps:
       - name: Create Fuel Docs GitHub Token
