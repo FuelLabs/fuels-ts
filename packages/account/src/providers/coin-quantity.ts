@@ -23,10 +23,9 @@ export const coinQuantityfy = (coinQuantityLike: CoinQuantityLike): CoinQuantity
     max = coinQuantityLike.max ?? undefined;
   }
 
-  const bnAmount = bn(amount);
   return {
     assetId: hexlify(assetId),
-    amount: bnAmount.lt(1) ? bn(1) : bnAmount,
+    amount: bn(amount),
     max: max ? bn(max) : undefined,
   };
 };
