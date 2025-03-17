@@ -62,7 +62,6 @@ fragment PreconfirmationFailureStatusFragment on PreconfirmationFailureStatus {
   type: __typename
 }
 
-
 fragment transactionStatusFragment on TransactionStatus {
   ... on SubmittedStatus {
     ...SubmittedStatusFragment
