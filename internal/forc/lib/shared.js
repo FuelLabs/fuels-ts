@@ -94,5 +94,5 @@ export const buildFromGitBranch = (branchName) => {
   binaries.forEach((binaryFileName) => {
     cpSync(join(from, binaryFileName), join(to, binaryFileName));
   });
-  cpSync(versionFilePath, to);
+  cpSync(versionFilePath, join(to, 'VERSION'));
 };
