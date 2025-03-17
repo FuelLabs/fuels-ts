@@ -20,6 +20,20 @@ const platforms = {
   },
 };
 
+const binaries = [
+  'forc',
+  'forc-crypto',
+  'forc-debug',
+  'forc-deploy',
+  'forc-doc',
+  'forc-fmt',
+  'forc-lsp',
+  'forc-migrate',
+  'forc-run',
+  'forc-submit',
+  'forc-tx',
+];
+
 export const getPkgPlatform = () => {
   if (process.platform !== 'darwin' && process.platform !== 'linux') {
     throw new Error(
@@ -77,13 +91,8 @@ export const buildFromGitBranch = (branchName) => {
   rmSync(to, { recursive: true, force: true });
   mkdirSync(to, { recursive: true });
 
-  cpSync(join(from, 'forc'), join(to, 'forc'));
-  cpSync(join(from, 'forc-deploy'), join(to, 'forc-deploy'));
-  cpSync(join(from, 'forc-doc'), join(to, 'forc-doc'));
-  cpSync(join(from, 'forc-fmt'), join(to, 'forc-fmt'));
-  cpSync(join(from, 'forc-lsp'), join(to, 'forc-lsp'));
-  cpSync(join(from, 'forc-run'), join(to, 'forc-run'));
-  cpSync(join(from, 'forc-submit'), join(to, 'forc-submit'));
-  cpSync(join(from, 'forc-tx'), join(to, 'forc-tx'));
+  binaries.forEach((binaryFileName) => {
+    cpSync(join(from, binaryFileName), join(to, binaryFileName));
+  });
   cpSync(versionFilePath, to);
 };

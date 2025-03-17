@@ -32,6 +32,7 @@ import { isMessageCoin, type Message, type MessageCoin } from '../message';
 import type { ChainInfo, GasCosts } from '../provider';
 import type { Resource } from '../resource';
 import { isCoin } from '../resource';
+import type { TransactionSummaryJsonPartial } from '../utils';
 import { normalizeJSON } from '../utils';
 import { getMaxGas, getMinGas } from '../utils/gas';
 
@@ -101,6 +102,14 @@ type ToBaseTransactionResponse = Pick<
   | 'policyTypes'
 >;
 
+export type TransactionStateFlag =
+  | { state: undefined; transactionId: undefined; summary: undefined }
+  | {
+      state: 'funded';
+      transactionId: string;
+      summary: TransactionSummaryJsonPartial | undefined;
+    };
+
 /**
  * Abstract class to define the functionalities of a transaction request transaction request.
  */
@@ -123,6 +132,13 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   outputs: TransactionRequestOutput[] = [];
   /** List of witnesses */
   witnesses: TransactionRequestWitness[] = [];
+
+  /**
+   * @hidden
+   *
+   * The current status of the transaction
+   */
+  flag: TransactionStateFlag = { state: undefined, transactionId: undefined, summary: undefined };
 
   /**
    * Constructor for initializing a base transaction request.
@@ -265,8 +281,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    */
   addEmptyWitness(): number {
     // Push a dummy witness with same byte size as a real witness signature
-    this.addWitness(concat([ZeroBytes32, ZeroBytes32]));
-    return this.witnesses.length - 1;
+    return this.addWitness(concat([ZeroBytes32, ZeroBytes32]));
   }
 
   /**
@@ -716,5 +731,26 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
   byteLength(): number {
     return this.toTransactionBytes().byteLength;
+  }
+
+  /**
+   * @hidden
+   *
+   * Used internally to update the state of a transaction request.
+   *
+   * @param state - The state to update.
+   */
+  public updateState(
+    chainId: number,
+    state?: TransactionStateFlag['state'],
+    summary?: TransactionSummaryJsonPartial
+  ) {
+    if (!state) {
+      this.flag = { state: undefined, transactionId: undefined, summary: undefined };
+      return;
+    }
+
+    const transactionId = this.getTransactionId(chainId);
+    this.flag = { state, transactionId, summary };
   }
 }
