@@ -50,8 +50,8 @@ describe('getSystemVersions', () => {
 
   test('should get user versions just fine', () => {
     // mocking
-    const systemForcVersion = '1.0.0';
-    const systemFuelCoreVersion = '2.0.0';
+    const systemForcVersion = '11.22.33';
+    const systemFuelCoreVersion = '44.55.66';
     const { execSync } = mockAllDeps({
       systemForcVersion,
       systemFuelCoreVersion,
