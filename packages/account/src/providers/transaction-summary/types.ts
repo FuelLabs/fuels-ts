@@ -5,7 +5,6 @@ import type { Input, Output, Transaction, TransactionType } from '@fuel-ts/trans
 
 import type {
   GqlPreconfirmationFailureStatusFragment,
-  GqlPreconfirmationSqueezedOutStatusFragment,
   GqlPreconfirmationSuccessStatusFragment,
   GqlReceiptFragment,
   GqlSuccessStatusFragment,
@@ -53,7 +52,6 @@ export type GraphqlTransactionStatus =
   | SqueezedOutStatus
   | GqlPreconfirmationSuccessStatusFragment
   | GqlPreconfirmationFailureStatusFragment
-  | GqlPreconfirmationSqueezedOutStatusFragment
   | null;
 
 export type GqlTransaction = {
