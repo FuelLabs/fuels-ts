@@ -1024,6 +1024,8 @@ export class Account extends AbstractAccount implements WithAddress {
     const resultingCoinIds: BytesLike[] = [];
     const transactions: TransactionResult[] = [];
 
+    const baseCoins = await this.getAllCoins(baseAssetId);
+
     // let predicateGasUsed: BigNumberish | undefined;
     // const isPredicate = 'predicateData' in this;
 
@@ -1074,12 +1076,23 @@ export class Account extends AbstractAccount implements WithAddress {
           { amount: maxFee, assetId: baseAssetId },
         ]);
 
-        request.addResources(resources);
+        let totalFee = bn(0);
+        // reduce resources until maxFee is reached
+        for (const resource of resources) {
+          request.addResource(resource);
+          totalFee = totalFee.add(resource.amount);
 
-        console.log('resources to fund', resources);
-        console.log(resources[0].amount.gte(maxFee));
+          if (totalFee.gte(maxFee)) {
+            break;
+          }
+        }
 
-        console.log(maxFee);
+        // // request.addResources(resources);
+
+        // console.log('resources to fund', resources);
+        // console.log(resources[0].amount.gte(maxFee));
+
+        // console.log(maxFee);
       }
 
       for (const coin of remainingCoins) {
