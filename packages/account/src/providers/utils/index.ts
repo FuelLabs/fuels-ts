@@ -4,3 +4,4 @@ export * from './gas';
 export * from './json';
 export * from './extract-tx-error';
 export * from './serialization';
+export * from './merge-quantities';

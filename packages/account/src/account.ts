@@ -6,7 +6,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { HashableMessage } from '@fuel-ts/hasher';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import { InputType } from '@fuel-ts/transactions';
+import { InputType, OutputType } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, isDefined } from '@fuel-ts/utils';
 import { clone } from 'ramda';
@@ -39,6 +39,7 @@ import {
   ScriptTransactionRequest,
   transactionRequestify,
   addAmountToCoinQuantities,
+  setAndValidateGasAndFeeForAssembledTx,
 } from './providers';
 import {
   cacheRequestInputsResourcesFromOwner,
@@ -375,7 +376,18 @@ export class Account extends AbstractAccount implements WithAddress {
       assetId: assetId || (await this.provider.getBaseAssetId()),
     });
 
-    request = await this.estimateAndFundTransaction(request, txParams);
+    request.gasLimit = bn(0);
+    request.maxFee = bn(0);
+
+    const { gasPrice, transactionRequest } = await this.assembleTx(request);
+
+    request = await setAndValidateGasAndFeeForAssembledTx({
+      gasPrice,
+      provider: this.provider,
+      transactionRequest,
+      setGasLimit: txParams?.gasLimit,
+      setMaxFee: txParams?.maxFee,
+    });
 
     return request;
   }
@@ -412,7 +424,19 @@ export class Account extends AbstractAccount implements WithAddress {
   ): Promise<TransactionResponse> {
     let request = new ScriptTransactionRequest(txParams);
     request = this.addBatchTransfer(request, transferParams);
-    request = await this.estimateAndFundTransaction(request, txParams);
+
+    request.gasLimit = bn(0);
+    request.maxFee = bn(0);
+
+    const { gasPrice, transactionRequest } = await this.assembleTx(request);
+
+    request = await setAndValidateGasAndFeeForAssembledTx({
+      gasPrice,
+      provider: this.provider,
+      transactionRequest,
+      setGasLimit: txParams?.gasLimit,
+      setMaxFee: txParams?.maxFee,
+    });
     return this.sendTransaction(request, { estimateTxDependencies: false });
   }
 
@@ -506,7 +530,18 @@ export class Account extends AbstractAccount implements WithAddress {
     request.script = script;
     request.scriptData = scriptData;
 
-    request = await this.estimateAndFundTransaction(request, txParams, { quantities });
+    request.gasLimit = bn(0);
+    request.maxFee = bn(0);
+
+    const { gasPrice, transactionRequest } = await this.assembleTx(request, quantities);
+
+    request = await setAndValidateGasAndFeeForAssembledTx({
+      gasPrice,
+      provider: this.provider,
+      transactionRequest,
+      setGasLimit: txParams?.gasLimit,
+      setMaxFee: txParams?.maxFee,
+    });
 
     return this.sendTransaction(request);
   }
@@ -544,16 +579,18 @@ export class Account extends AbstractAccount implements WithAddress {
     let request = new ScriptTransactionRequest(params);
     const quantities = [{ amount: bn(amount), assetId: baseAssetId }];
 
-    const txCost = await this.getTransactionCost(request, { quantities });
+    request.gasLimit = bn(0);
+    request.maxFee = bn(0);
 
-    request = this.validateGasLimitAndMaxFee({
-      transactionRequest: request,
-      gasUsed: txCost.gasUsed,
-      maxFee: txCost.maxFee,
-      txParams,
+    const { gasPrice, transactionRequest } = await this.assembleTx(request, quantities);
+
+    request = await setAndValidateGasAndFeeForAssembledTx({
+      gasPrice,
+      provider: this.provider,
+      transactionRequest,
+      setGasLimit: txParams?.gasLimit,
+      setMaxFee: txParams?.maxFee,
     });
-
-    await this.fund(request, txCost);
 
     return this.sendTransaction(request);
   }
@@ -785,6 +822,24 @@ export class Account extends AbstractAccount implements WithAddress {
           transactionBytes: hexlify(request.toTransactionBytes()),
         }
       : undefined;
+  }
+
+  /** @hidden * */
+  private async assembleTx(
+    transactionRequest: ScriptTransactionRequest,
+    quantities: CoinQuantity[] = []
+  ): Promise<{ transactionRequest: ScriptTransactionRequest; gasPrice: BN }> {
+    const outputQuantities = transactionRequest.outputs
+      .filter((o) => o.type === OutputType.Coin)
+      .map(({ amount, assetId }) => ({ assetId: String(assetId), amount: bn(amount) }));
+
+    const { assembledRequest, gasPrice } = await this.provider.assembleTx({
+      request: transactionRequest,
+      accountCoinQuantities: mergeQuantities(outputQuantities, quantities),
+      feePayerAccount: this,
+    });
+
+    return { transactionRequest: assembledRequest as ScriptTransactionRequest, gasPrice };
   }
 
   /** @hidden * */

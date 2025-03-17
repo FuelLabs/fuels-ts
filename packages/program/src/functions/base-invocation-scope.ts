@@ -11,12 +11,12 @@ import type {
   TransactionCost,
   AbstractAccount,
 } from '@fuel-ts/account';
-import { ScriptTransactionRequest, Wallet } from '@fuel-ts/account';
+import { mergeQuantities, ScriptTransactionRequest, Wallet } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import { TransactionType } from '@fuel-ts/transactions';
+import { InputType, OutputType, TransactionType } from '@fuel-ts/transactions';
 import { isDefined } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
 import { clone } from 'ramda';
@@ -266,6 +266,58 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
+   * Costs and funds the underlying transaction request.
+   *
+   * @returns The invocation scope as a funded transaction request.
+   */
+  async assembleTx(): Promise<ScriptTransactionRequest> {
+    let request = await this.getTransactionRequest();
+    request = clone(request);
+
+    const { gasLimit: setGasLimit, maxFee: setMaxFee } = request;
+
+    request.maxFee = bn(0);
+    request.gasLimit = bn(0);
+
+    // Clean coin inputs before add new coins to the request
+    request.inputs = request.inputs.filter((i) => i.type !== InputType.Coin);
+
+    const provider = this.getProvider();
+    const account = (this.program.account ?? Wallet.generate({ provider })) as Account;
+    const baseAssetId = await provider.getBaseAssetId();
+
+    const outputQuantities = request.outputs
+      .filter((o) => o.type === OutputType.Coin)
+      .map(({ amount, assetId }) => ({ assetId: String(assetId), amount: bn(amount) }));
+
+    const accountCoinQuantities = mergeQuantities(outputQuantities, this.requiredCoins);
+
+    if (!accountCoinQuantities.length) {
+      accountCoinQuantities.push({ assetId: baseAssetId, amount: bn(0) });
+    }
+
+    // eslint-disable-next-line prefer-const
+    let { assembledRequest, gasPrice } = await provider.assembleTx({
+      request,
+      feePayerAccount: account,
+      accountCoinQuantities,
+    });
+
+    assembledRequest = assembledRequest as ScriptTransactionRequest;
+
+    await this.setAndValidateGasAndFee(
+      setGasLimit,
+      setMaxFee,
+      assembledRequest.gasLimit,
+      assembledRequest.maxFee,
+      assembledRequest,
+      gasPrice
+    );
+
+    return assembledRequest;
+  }
+
+  /**
    * Sets the transaction parameters.
    *
    * @param txParams - The transaction parameters to set.
@@ -369,7 +421,13 @@ export class BaseInvocationScope<TReturn = any> {
   }> {
     assert(this.program.account, 'Wallet is required!');
 
-    const transactionRequest = await this.fundWithRequiredCoins();
+    let transactionRequest: ScriptTransactionRequest;
+
+    if (this.addSignersCallback) {
+      transactionRequest = await this.fundWithRequiredCoins();
+    } else {
+      transactionRequest = await this.assembleTx();
+    }
 
     const response = (await this.program.account.sendTransaction(transactionRequest, {
       estimateTxDependencies: false,
@@ -436,15 +494,47 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   async get<T = TReturn>(): Promise<DryRunResult<T>> {
-    const { receipts } = await this.getTransactionCost();
+    let request = await this.getTransactionRequest();
+    request = clone(request);
 
-    const callResult: CallResult = {
-      receipts,
-    };
+    request.maxFee = bn(0);
+    request.gasLimit = bn(0);
+
+    request.inputs = request.inputs.filter((i) => i.type !== InputType.Coin);
+
+    const provider = this.getProvider();
+    const account = (this.program.account ?? Wallet.generate({ provider })) as Account;
+    const baseAssetId = await provider.getBaseAssetId();
+
+    const allQuantities = request.outputs
+      .filter((o) => o.type === OutputType.Coin)
+      .map(({ amount, assetId }) => ({ assetId: String(assetId), amount: bn(amount) }))
+      .concat(this.requiredCoins);
+
+    const resources = account.generateFakeResources(allQuantities);
+    const utxoForBaseAssetId = resources.find((utxo) => utxo.assetId === baseAssetId);
+    const amountForFee = bn('1000000000000000');
+
+    if (!utxoForBaseAssetId) {
+      const [baseAssetResource] = account.generateFakeResources([
+        { assetId: baseAssetId, amount: amountForFee },
+      ]);
+      resources.push(baseAssetResource);
+    } else {
+      utxoForBaseAssetId.amount = utxoForBaseAssetId.amount.add(amountForFee);
+    }
+
+    request.addResources(resources);
+
+    const { receipts } = await provider.assembleTx({
+      request,
+      feePayerAccount: account,
+      accountCoinQuantities: [{ amount: bn(0), assetId: baseAssetId }],
+    });
 
     return buildDryRunResult<T>({
       funcScopes: this.functionInvocationScopes,
-      callResult,
+      callResult: { receipts },
       isMultiCall: this.isMultiCall,
     });
   }
@@ -497,6 +587,52 @@ export class BaseInvocationScope<TReturn = any> {
         ErrorCode.MAX_FEE_TOO_LOW,
         `Max fee '${setMaxFee}' is lower than the required: '${maxFee}'.`
       );
+    }
+  }
+
+  /**
+   * In case the gasLimit is *not* set by the user, this method sets a default value.
+   */
+  private async setAndValidateGasAndFee(
+    setGasLimit: BN,
+    setMaxFee: BN,
+    estimatedGasUsed: BN,
+    estimatedMaxFee: BN,
+    transactionRequest: ScriptTransactionRequest,
+    gasPrice: BN
+  ) {
+    const gasLimitSpecified = isDefined(this.txParameters?.gasLimit) || this.hasCallParamsGasLimit;
+    const maxFeeSpecified = isDefined(this.txParameters?.maxFee);
+
+    if (gasLimitSpecified) {
+      if (setGasLimit.lt(estimatedGasUsed)) {
+        throw new FuelError(
+          ErrorCode.GAS_LIMIT_TOO_LOW,
+          `Gas limit '${setGasLimit}' is lower than the required: '${estimatedGasUsed}'.`
+        );
+      }
+
+      transactionRequest.gasLimit = setGasLimit;
+    }
+
+    if (maxFeeSpecified) {
+      if (setMaxFee.lt(estimatedMaxFee)) {
+        throw new FuelError(
+          ErrorCode.MAX_FEE_TOO_LOW,
+          `Max fee '${setMaxFee}' is lower than the required: '${estimatedMaxFee}'.`
+        );
+      }
+
+      transactionRequest.maxFee = setMaxFee;
+    }
+
+    if (gasLimitSpecified && !maxFeeSpecified) {
+      const { maxFee: feeForGasPrice } = await this.getProvider().estimateTxGasAndFee({
+        transactionRequest,
+        gasPrice,
+      });
+
+      transactionRequest.maxFee = feeForGasPrice;
     }
   }
 }

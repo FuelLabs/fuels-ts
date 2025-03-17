@@ -59,7 +59,7 @@ describe('Predicate', () => {
         provider,
       });
 
-      await fundAccount(wallet, predicate, 1000);
+      await fundAccount(wallet, predicate, 10_000);
 
       const receiver = Wallet.generate({ provider });
 

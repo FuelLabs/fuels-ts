@@ -141,7 +141,7 @@ export class Predicate<
     return super.simulateTransaction(transactionRequest, { estimateTxDependencies: false });
   }
 
-  private getPredicateData(): Uint8Array {
+  public getPredicateData(): Uint8Array {
     if (!this.predicateData.length) {
       return new Uint8Array();
     }
