@@ -2,7 +2,6 @@
 contract;
 
 use std::{asset::{mint_to, transfer}, call_frames::msg_asset_id, context::msg_amount};
-use std::constants::ZERO_B256;
 abi LiquidityPool {
     #[payable]
     fn deposit(recipient: Address);
@@ -20,7 +19,7 @@ impl LiquidityPool for Contract {
         // Mint two times the amount.
         let amount_to_mint = msg_amount() * 2;
         // Mint some LP token based upon the amount of the base token.
-        mint_to(Identity::Address(recipient), ZERO_B256, amount_to_mint);
+        mint_to(Identity::Address(recipient), b256::zero(), amount_to_mint);
     }
     #[payable]
     fn withdraw(recipient: Address) {
