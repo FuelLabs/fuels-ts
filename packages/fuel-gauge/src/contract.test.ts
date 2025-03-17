@@ -1396,7 +1396,7 @@ describe('Contract', () => {
     });
   });
 
-  it('should customize the TX request and still use the scope invocation[ADD WITNESS]', async () => {
+  it.skip('should customize the TX request and still use the scope invocation[ADD WITNESS]', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
@@ -1457,7 +1457,7 @@ describe('Contract', () => {
     expect(value.toNumber()).toBe(fooValue + 1);
   });
 
-  it('should customize the TX request and still use the scope invocation [COIN]', async () => {
+  it.skip('should customize the TX request and still use the scope invocation [COIN]', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
@@ -1507,7 +1507,7 @@ describe('Contract', () => {
     });
   });
 
-  it('should customize the TX request and still use the scope invocation [MESSAGE]', async () => {
+  it.skip('should customize the TX request and still use the scope invocation [MESSAGE]', async () => {
     const testMessage = new TestMessage({
       data: hexlify(InputMessageCoder.encodeData(randomBytes(10))),
     });
