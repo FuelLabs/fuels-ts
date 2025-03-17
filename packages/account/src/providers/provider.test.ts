@@ -1273,7 +1273,7 @@ describe('Provider', () => {
 
   it('should ensure estimated fee values on getTransactionCost are never 0', async () => {
     using launched = await setupTestProviderAndWallets({
-      nodeOptions: { args: ['--min-gas-price', '0', '--starting-gas-price', '1'] },
+      nodeOptions: { args: ['--min-gas-price', '0'] },
     });
     const {
       wallets: [wallet],
