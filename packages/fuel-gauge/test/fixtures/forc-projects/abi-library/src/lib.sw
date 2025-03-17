@@ -10,13 +10,14 @@ pub enum ExternalEnum {
     B: (),
 }
 
-impl Eq for ExternalStruct {
+impl PartialEq for ExternalStruct {
     fn eq(self, other: Self) -> bool {
         self.value == other.value
     }
 }
+impl Eq for ExternalStruct {}
 
-impl Eq for ExternalEnum {
+impl PartialEq for ExternalEnum {
     fn eq(self, other: Self) -> bool {
         match (self, other) {
             (ExternalEnum::A, ExternalEnum::A) => true,
@@ -25,3 +26,4 @@ impl Eq for ExternalEnum {
         }
     }
 }
+impl Eq for ExternalEnum {}
