@@ -131,11 +131,6 @@ fragment PreconfirmationFailureStatusFragment on PreconfirmationFailureStatus {
   reason
 }
 
-fragment PreconfirmationSqueezedOutStatusFragment on PreconfirmationSqueezedOutStatus {
-  type: __typename
-  reason
-}
-
 fragment transactionStatusFragment on TransactionStatus {
   ... on SubmittedStatus {
     ...SubmittedStatusFragment
@@ -154,9 +149,6 @@ fragment transactionStatusFragment on TransactionStatus {
   }
   ... on PreconfirmationFailureStatus {
     ...PreconfirmationFailureStatusFragment
-  }
-  ... on PreconfirmationSqueezedOutStatus {
-    ...PreconfirmationSqueezedOutStatusFragment
   }
 }
 
@@ -224,9 +216,6 @@ fragment transactionStatusSubscriptionFragment on TransactionStatus {
   }
   ... on PreconfirmationFailureStatus {
     ...PreconfirmationFailureStatusFragment
-  }
-  ... on PreconfirmationSqueezedOutStatus {
-    ...PreconfirmationSqueezedOutStatusFragment
   }
 }
 
@@ -624,9 +613,6 @@ query getTransactionWithReceipts($transactionId: TransactionId!) {
       }
       ... on PreconfirmationFailureStatus {
         ...PreconfirmationFailureStatusFragment
-      }
-      ... on PreconfirmationSqueezedOutStatus {
-        ...PreconfirmationSqueezedOutStatusFragment
       }
     }
   }

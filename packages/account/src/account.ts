@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
 import type { AddressInput, WithAddress } from '@fuel-ts/address';
 import { Address } from '@fuel-ts/address';
@@ -376,9 +377,6 @@ export class Account extends AbstractAccount implements WithAddress {
       assetId: assetId || (await this.provider.getBaseAssetId()),
     });
 
-    request.gasLimit = bn(0);
-    request.maxFee = bn(0);
-
     const { gasPrice, transactionRequest } = await this.assembleTx(request);
 
     request = await setAndValidateGasAndFeeForAssembledTx({
@@ -424,9 +422,6 @@ export class Account extends AbstractAccount implements WithAddress {
   ): Promise<TransactionResponse> {
     let request = new ScriptTransactionRequest(txParams);
     request = this.addBatchTransfer(request, transferParams);
-
-    request.gasLimit = bn(0);
-    request.maxFee = bn(0);
 
     const { gasPrice, transactionRequest } = await this.assembleTx(request);
 
@@ -530,9 +525,6 @@ export class Account extends AbstractAccount implements WithAddress {
     request.script = script;
     request.scriptData = scriptData;
 
-    request.gasLimit = bn(0);
-    request.maxFee = bn(0);
-
     const { gasPrice, transactionRequest } = await this.assembleTx(request, quantities);
 
     request = await setAndValidateGasAndFeeForAssembledTx({
@@ -578,9 +570,6 @@ export class Account extends AbstractAccount implements WithAddress {
     const baseAssetId = await this.provider.getBaseAssetId();
     let request = new ScriptTransactionRequest(params);
     const quantities = [{ amount: bn(amount), assetId: baseAssetId }];
-
-    request.gasLimit = bn(0);
-    request.maxFee = bn(0);
 
     const { gasPrice, transactionRequest } = await this.assembleTx(request, quantities);
 
@@ -832,6 +821,9 @@ export class Account extends AbstractAccount implements WithAddress {
     const outputQuantities = transactionRequest.outputs
       .filter((o) => o.type === OutputType.Coin)
       .map(({ amount, assetId }) => ({ assetId: String(assetId), amount: bn(amount) }));
+
+    transactionRequest.gasLimit = bn(0);
+    transactionRequest.maxFee = bn(0);
 
     const { assembledRequest, gasPrice } = await this.provider.assembleTx({
       request: transactionRequest,
