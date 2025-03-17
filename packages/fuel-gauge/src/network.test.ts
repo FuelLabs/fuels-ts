@@ -2,9 +2,11 @@
 
 import type {
   BaseWalletUnlocked,
+  Block,
   ChangeTransactionRequestOutput,
   CoinTransactionRequestOutput,
   ContractTransferParams,
+  ReceiptMessageOut,
   ReceiptTransfer,
 } from 'fuels';
 import {
@@ -14,6 +16,7 @@ import {
   Provider,
   ReceiptType,
   ScriptTransactionRequest,
+  sleep,
   Wallet,
 } from 'fuels';
 
@@ -97,6 +100,46 @@ describe('network', () => {
 
       expect(foundReceipt).toBeDefined();
     });
+  });
+
+  it('should withdraw to base layer just fine', { timeout }, async () => {
+    const recipient = Wallet.generate({ provider });
+
+    const submit = await wallet.withdrawToBaseLayer(recipient.address, 1);
+    const { id, receipts, blockId } = await submit.waitForResult();
+
+    const txBlock = (await provider.getBlock(blockId as string)) as Block;
+
+    expect(txBlock.height).toBeDefined();
+
+    let waitForCommit = true;
+    let commitBlock: Block | undefined;
+
+    /**
+     * Waiting for the commit block, which means we need to wait at least one block
+     * after the block in which the withdrawal transaction was included.
+     */
+    while (waitForCommit) {
+      commitBlock = (await provider.getBlock('latest' as string)) as Block;
+
+      if (commitBlock.height.lte(txBlock.height)) {
+        await sleep(1000);
+      } else {
+        waitForCommit = false;
+      }
+    }
+
+    const messageOutReceipt = receipts.find(
+      ({ type }) => type === ReceiptType.MessageOut
+    ) as ReceiptMessageOut;
+
+    const messageProof = await provider.getMessageProof(
+      id,
+      messageOutReceipt.nonce,
+      commitBlock?.id
+    );
+
+    expect(messageProof.nonce).toEqual(messageOutReceipt.nonce);
   });
 
   it('should execute contract call just fine', { timeout }, async () => {
