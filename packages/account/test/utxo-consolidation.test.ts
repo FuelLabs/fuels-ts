@@ -4,9 +4,11 @@ import { bn } from '@fuel-ts/math';
 import type { SnapshotConfigs } from '@fuel-ts/utils';
 import { hexlify } from '@fuel-ts/utils';
 import { randomBytes } from 'crypto';
+import { or } from 'ramda';
 
-import type { TransactionResult, Provider } from '../src';
+import { type TransactionResult, type Provider, ScriptTransactionRequest } from '../src';
 import { setupTestProviderAndWallets, TestAssetId } from '../src/test-utils';
+import { generateFakeCoin } from '../src/test-utils/resources';
 
 /**
  * @group node
@@ -373,7 +375,7 @@ describe('utxo-consolidation', () => {
     });
   });
 
-  describe.only('non-base asset', () => {
+  describe('non-base asset', () => {
     const assets = TestAssetId.random();
     const testAssetId = assets[0].value;
 
@@ -420,6 +422,68 @@ describe('utxo-consolidation', () => {
       expect(coins.length).toEqual(1);
       expect(originalCoins).not.toContainEqual(coins[0]);
       expect(coins[0].amount).toEqualBn(initialAmount);
+    });
+
+    test.only(`consolidates once - max_inputs coins, one base-asset UTXO can pay`, async () => {
+      using launched = await setupTestProviderAndWallets({
+        walletsConfig: {
+          coinsPerAsset: 255,
+          assets,
+          amountPerCoin: 1_000_000_0,
+        },
+      });
+
+      const {
+        wallets: [wallet],
+      } = launched;
+
+      const originalCoins = await wallet.getAllCoins(testAssetId);
+      const initialAmount = originalCoins.reduce((acc, coin) => acc.add(coin.amount), bn(0));
+
+      const { coins, transactions } = await wallet.consolidateCoins({ assetId: testAssetId });
+
+      expect(transactions).toHaveLength(1);
+      expect(coins.length).toEqual(2);
+
+      const consolidatedCoin = coins.find((coin) => !originalCoins.some((c) => c.id === coin.id));
+      expect(consolidatedCoin).toBeDefined();
+      expect(originalCoins).not.toContainEqual(consolidatedCoin);
+
+      const coinsInOriginal = originalCoins.filter((coin) => !coins.some((c) => c.id === coin.id));
+      expect(coinsInOriginal.length).toEqual(1);
+
+      const resultingAmount = coins.reduce((acc, coin) => acc.add(coin.amount), bn(0));
+      expect(resultingAmount).toEqualBn(initialAmount);
+    });
+
+    test('factors in change outputs coins of base assets', () => {});
+
+    test(`consolidates twice - max_inputs coins, one base-asset UTCO can't pay`, async () => {
+      using launched = await setupTestProviderAndWallets({
+        walletsConfig: {
+          coinsPerAsset: 255,
+          // amountPerCoin: 1_000, // this gives a different error, check it out
+          assets,
+        },
+      });
+
+      const {
+        wallets: [wallet],
+      } = launched;
+
+      const originalCoins = await wallet.getAllCoins(testAssetId);
+      const initialAmount = originalCoins.reduce((acc, coin) => acc.add(coin.amount), bn(0));
+
+      const { coins } = await wallet.consolidateCoins({ assetId: testAssetId });
+
+      console.log(coins);
+      expect(coins.length).toEqual(2);
+      coins.forEach((coin) => {
+        expect(originalCoins).not.toContainEqual(coin);
+      });
+
+      const resultingAmount = coins.reduce((acc, coin) => acc.add(coin.amount), bn(0));
+      expect(resultingAmount).toEqualBn(initialAmount);
     });
   });
 });

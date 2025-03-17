@@ -960,41 +960,51 @@ export class Account extends AbstractAccount implements WithAddress {
     // }
 
     while (remainingCoins.length > 1) {
+      console.log('remaining coins length', remainingCoins.length);
       const request = new ScriptTransactionRequest();
 
-      // // if there are more than maxInputs unconsolidated coins,
-      // // leave the selection of coins that fund the transaction to the node
-      // // and add additional inputs to the request afterwards until max inputs reached
-      // if (remainingCoins.length > maxInputs) {
-      //   const maxInputsRequest = new ScriptTransactionRequest();
-      //   const fakeCoins = this.generateFakeResources(
-      //     new Array(maxInputs).fill({ assetId: baseAssetId })
-      //   );
-      //   maxInputsRequest.addResources(fakeCoins);
+      // if there are more than maxInputs unconsolidated coins,
+      // leave the selection of coins that fund the transaction to the node
+      // and add additional inputs to the request afterwards until max inputs reached
+      if (remainingCoins.length === maxInputs) {
+        console.log('max inputs reached');
+        // if (remainingCoins.length >= maxInputs) {
+        const maxInputsRequest = new ScriptTransactionRequest();
 
-      //   if (predicateGasUsed) {
-      //     maxInputsRequest.inputs.forEach((input) => {
-      //       // eslint-disable-next-line no-param-reassign
-      //       (input as CoinTransactionRequestInput).predicateGasUsed = predicateGasUsed;
-      //     });
-      //   }
+        const fakeBaseCoins = this.generateFakeResources([
+          { assetId: baseAssetId, amount: bn(1000) },
+        ]);
+        const fakeNonBaseCoins = this.generateFakeResources(
+          new Array(maxInputs - 1).fill({ assetId, amount: bn(1000) })
+        );
+        maxInputsRequest.addResources(fakeBaseCoins);
+        maxInputsRequest.addResources(fakeNonBaseCoins);
 
-      //   const { maxFee, gasLimit } = await this.provider.estimateTxGasAndFee({
-      //     transactionRequest: maxInputsRequest,
-      //   });
+        // if (predicateGasUsed) {
+        //   maxInputsRequest.inputs.forEach((input) => {
+        //     // eslint-disable-next-line no-param-reassign
+        //     (input as CoinTransactionRequestInput).predicateGasUsed = predicateGasUsed;
+        //   });
+        // }
 
-      //   request.maxFee = maxFee;
-      //   request.gasLimit = gasLimit;
+        const { maxFee, gasLimit } = await this.provider.estimateTxGasAndFee({
+          transactionRequest: maxInputsRequest,
+        });
 
-      //   const resources = await this.getResourcesToSpend(
-      //     [{ amount: bn(maxFee), assetId: baseAssetId }],
-      //     {
-      //       utxos: resultingCoinIds,
-      //     }
-      //   );
+        request.maxFee = maxFee;
+        request.gasLimit = gasLimit;
 
-      //   request.addResources(resources);
-      // }
+        const resources = await this.getResourcesToSpend([
+          { amount: maxFee, assetId: baseAssetId },
+        ]);
+
+        request.addResources(resources);
+
+        console.log('resources to fund', resources);
+        console.log(resources[0].amount.gte(maxFee));
+
+        console.log(maxFee);
+      }
 
       for (const coin of remainingCoins) {
         if (request.inputs.length === maxInputs) {
