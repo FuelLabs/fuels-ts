@@ -16,7 +16,7 @@ import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import { InputType, TransactionType } from '@fuel-ts/transactions';
+import { TransactionType } from '@fuel-ts/transactions';
 import { isDefined } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
 import { clone } from 'ramda';
@@ -248,8 +248,6 @@ export class BaseInvocationScope<TReturn = any> {
     const txCost = await this.getTransactionCost();
     const { gasUsed, missingContractIds, outputVariables, maxFee } = txCost;
     this.setDefaultTxParams(transactionRequest, gasUsed, maxFee);
-    // Clean coin inputs before add new coins to the request
-    transactionRequest.inputs = transactionRequest.inputs.filter((i) => i.type !== InputType.Coin);
 
     // Adding missing contract ids
     missingContractIds.forEach((contractId) => {
