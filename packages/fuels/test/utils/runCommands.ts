@@ -112,6 +112,7 @@ export type InitParams = BaseParams & {
   build?: boolean;
   privateKey?: string;
   fuelCorePort?: string;
+  providerUrl?: string;
 };
 
 export type BuildParams = BaseParams & {
@@ -128,6 +129,7 @@ export async function runInit(params: InitParams) {
     workspace,
     privateKey,
     fuelCorePort,
+    providerUrl,
   } = params;
 
   const flag = (
@@ -158,12 +160,14 @@ export async function runInit(params: InitParams) {
 
   const command = await runCommand(Commands.init, flags);
 
-  if (privateKey) {
+  if (privateKey || providerUrl) {
     const configPath = join(root, 'fuels.config.ts');
     const config = readFileSync(configPath, 'utf-8');
 
     const search = /(^.*fuelCorePath:.*$)/m;
-    const replace = `$1\n  privateKey: '${privateKey}',`;
+    const privateKeyField = privateKey ? `\n  privateKey: '${privateKey}',` : '';
+    const providerUrlField = providerUrl ? `\n  providerUrl: '${providerUrl}',` : '';
+    const replace = `$1${privateKeyField}${providerUrlField}`;
 
     writeFileSync(configPath, config.replace(search, replace));
   }

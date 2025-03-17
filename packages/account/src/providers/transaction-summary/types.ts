@@ -6,9 +6,9 @@ import type { Input, Output, Transaction, TransactionType } from '@fuel-ts/trans
 import type {
   GqlPreconfirmationFailureStatusFragment,
   GqlPreconfirmationSuccessStatusFragment,
-  GqlReceiptFragment,
   GqlSuccessStatusFragment,
 } from '../__generated__/operations';
+import type { TransactionReceiptJson } from '../provider';
 import type { TransactionResultReceipt } from '../transaction-response';
 
 export type SubmittedStatus = {
@@ -23,7 +23,7 @@ export type SuccessStatus = {
   block?: {
     id: string;
   };
-  receipts: GqlReceiptFragment[];
+  receipts: TransactionReceiptJson[];
   totalGas: string;
   totalFee: string;
 };
@@ -35,7 +35,7 @@ export type FailureStatus = {
   block?: {
     id: string;
   };
-  receipts: GqlReceiptFragment[];
+  receipts: TransactionReceiptJson[];
   totalGas: string;
   totalFee: string;
 };

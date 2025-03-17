@@ -6,7 +6,7 @@ import { bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import { InputMessageCoder, TransactionCoder, TransactionType } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
-import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
+import { arrayify, hexlify, DateTime, isDefined, sleep } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility, gte, versions } from '@fuel-ts/versions';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
@@ -18,7 +18,9 @@ import type { Account } from '../account';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
-  GqlChainInfoFragment,
+  GqlReceiptFragment as TransactionReceiptJson,
+  GqlNodeInfoFragment as NodeInfoJson,
+  GqlChainInfoFragment as ChainInfoJson,
   GqlConsensusParametersVersion,
   GqlContractParameters as ContractParameters,
   GqlDryRunFailureStatusFragment,
@@ -59,7 +61,7 @@ import {
 } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse, getDecodedLogs } from './transaction-response';
-import { processGqlReceipt } from './transaction-summary/receipt';
+import { processGqlReceipt } from './transaction-summary';
 import {
   calculateGasFee,
   extractTxError,
@@ -67,9 +69,16 @@ import {
   getReceiptsWithMissingData,
 } from './utils';
 import type { RetryOptions } from './utils/auto-retry-fetch';
-import { autoRetryFetch } from './utils/auto-retry-fetch';
+import { autoRetryFetch, getWaitDelay } from './utils/auto-retry-fetch';
 import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
 import { parseRawInput, parseRawOutput } from './utils/parsers';
+import type { ProviderCacheJson, TransactionSummaryJsonPartial } from './utils/serialization';
+import {
+  deserializeChain,
+  deserializeNodeInfo,
+  deserializeProviderCache,
+  deserializeReceipt,
+} from './utils/serialization';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
 const MAX_RETRIES = 10;
@@ -99,6 +108,7 @@ export type CallResult = {
 export type EstimateTxDependenciesReturns = CallResult & {
   outputVariables: number;
   missingContractIds: string[];
+  rawReceipts: TransactionReceiptJson[];
 };
 
 /**
@@ -186,6 +196,9 @@ type ModifyStringToBN<T> = {
 };
 
 export {
+  TransactionReceiptJson,
+  NodeInfoJson,
+  ChainInfoJson,
   GasCosts,
   FeeParameters,
   ContractParameters,
@@ -226,6 +239,7 @@ export type NodeInfo = {
   nodeVersion: string;
 };
 
+/** @deprecated This type is no longer used. */
 export type NodeInfoAndConsensusParameters = {
   nodeVersion: string;
   gasPerByte: BN;
@@ -241,6 +255,7 @@ export type TransactionCost = {
   minFee: BN;
   maxFee: BN;
   maxGas: BN;
+  rawReceipts: TransactionReceiptJson[];
   receipts: TransactionResultReceipt[];
   outputVariables: number;
   missingContractIds: string[];
@@ -249,66 +264,9 @@ export type TransactionCost = {
   addedSignatures: number;
   dryRunStatus?: DryRunStatus;
   updateMaxFee?: boolean;
+  transactionSummary?: TransactionSummaryJsonPartial;
 };
 // #endregion cost-estimation-1
-
-const processGqlChain = (chain: GqlChainInfoFragment): ChainInfo => {
-  const { name, daHeight, consensusParameters } = chain;
-
-  const {
-    contractParams,
-    feeParams,
-    predicateParams,
-    scriptParams,
-    txParams,
-    gasCosts,
-    baseAssetId,
-    chainId,
-    version,
-  } = consensusParameters;
-
-  return {
-    name,
-    baseChainHeight: bn(daHeight),
-    consensusParameters: {
-      version,
-      chainId: bn(chainId),
-      baseAssetId,
-      feeParameters: {
-        version: feeParams.version,
-        gasPerByte: bn(feeParams.gasPerByte),
-        gasPriceFactor: bn(feeParams.gasPriceFactor),
-      },
-      contractParameters: {
-        version: contractParams.version,
-        contractMaxSize: bn(contractParams.contractMaxSize),
-        maxStorageSlots: bn(contractParams.maxStorageSlots),
-      },
-      txParameters: {
-        version: txParams.version,
-        maxInputs: bn(txParams.maxInputs),
-        maxOutputs: bn(txParams.maxOutputs),
-        maxWitnesses: bn(txParams.maxWitnesses),
-        maxGasPerTx: bn(txParams.maxGasPerTx),
-        maxSize: bn(txParams.maxSize),
-        maxBytecodeSubsections: bn(txParams.maxBytecodeSubsections),
-      },
-      predicateParameters: {
-        version: predicateParams.version,
-        maxPredicateLength: bn(predicateParams.maxPredicateLength),
-        maxPredicateDataLength: bn(predicateParams.maxPredicateDataLength),
-        maxGasPerPredicate: bn(predicateParams.maxGasPerPredicate),
-        maxMessageDataLength: bn(predicateParams.maxMessageDataLength),
-      },
-      scriptParameters: {
-        version: scriptParams.version,
-        maxScriptLength: bn(scriptParams.maxScriptLength),
-        maxScriptDataLength: bn(scriptParams.maxScriptDataLength),
-      },
-      gasCosts,
-    },
-  };
-};
 
 /**
  * @hidden
@@ -361,6 +319,10 @@ export type ProviderOptions = {
    * This can be used to add headers, modify the body, etc.
    */
   requestMiddleware?: (request: RequestInit) => RequestInit | Promise<RequestInit>;
+  /**
+   * The cache can be passed in to avoid re-fetching the chain + node info.
+   */
+  cache?: ProviderCacheJson;
 };
 
 /**
@@ -456,6 +418,13 @@ type SdkOperations = Omit<Operations, 'statusChange' | 'submitAndAwaitStatus'> &
   getBlobs: (variables: { blobIds: string[] }) => Promise<{ blob: { id: string } | null }[]>;
 };
 
+const BLOCK_HEIGHT_SENSITIVE_OPERATIONS: Array<keyof SdkOperations> = [
+  'submit',
+  'statusChange',
+  'getCoinsToSpend',
+  'submitAndAwaitStatus',
+];
+
 /**
  * A provider for connecting to a node
  */
@@ -464,9 +433,20 @@ export default class Provider {
   cache?: ResourceCache;
 
   /** @hidden */
-  static clearChainAndNodeCaches() {
+  /**
+   *
+   * @param url - If provided, clears cache only for given url
+   */
+  static clearChainAndNodeCaches(url?: string) {
+    if (url) {
+      delete Provider.chainInfoCache[url];
+      delete Provider.nodeInfoCache[url];
+      delete Provider.currentBlockHeightCache[url];
+      return;
+    }
     Provider.nodeInfoCache = {};
     Provider.chainInfoCache = {};
+    Provider.currentBlockHeightCache = {};
   }
 
   /** @hidden */
@@ -479,10 +459,22 @@ export default class Provider {
     amount128: false,
   };
 
+  /**
+   * Governs whether to include the required block height in the request body
+   * for block-sensitive operations like when submitting a transaction.
+   *
+   * This ensures that the operation is executed at the correct block height,
+   * regardless of which node in the network the request is routed to.
+   *
+   * `true` by default.
+   */
+  public static ENSURE_RPC_CONSISTENCY: boolean = true;
   /** @hidden */
   private static chainInfoCache: ChainInfoCache = {};
   /** @hidden */
   private static nodeInfoCache: NodeInfoCache = {};
+  /** @hidden */
+  private static currentBlockHeightCache: Record<string, number> = {};
   /** @hidden */
   private static incompatibleNodeVersionMessage: string = '';
 
@@ -495,6 +487,7 @@ export default class Provider {
     fetch: undefined,
     retryOptions: undefined,
     headers: undefined,
+    cache: undefined,
   };
 
   /**
@@ -518,8 +511,91 @@ export default class Provider {
         fullRequest = await options.requestMiddleware(fullRequest);
       }
 
-      return options.fetch ? options.fetch(url, fullRequest, options) : fetch(url, fullRequest);
+      if (Provider.ENSURE_RPC_CONSISTENCY) {
+        Provider.applyBlockHeight(fullRequest, url);
+      }
+
+      return Provider.fetchAndProcessBlockHeight(url, fullRequest, options);
     }, retryOptions);
+  }
+
+  private static applyBlockHeight(request: RequestInit, url: string) {
+    const operationName = request.body
+      ?.toString()
+      .match(/"operationName":"(.+)"/)?.[1] as keyof SdkOperations;
+
+    if (!BLOCK_HEIGHT_SENSITIVE_OPERATIONS.includes(operationName)) {
+      return;
+    }
+
+    const normalizedUrl = url.replace(/-sub$/, '');
+    const currentBlockHeight = this.currentBlockHeightCache[normalizedUrl] ?? 0;
+
+    request.body = request.body
+      ?.toString()
+      .replace(/}$/, `,"extensions":{"required_fuel_block_height":${currentBlockHeight}}}`);
+  }
+
+  private static async fetchAndProcessBlockHeight(
+    url: string,
+    request: RequestInit,
+    options: ProviderOptions
+  ): Promise<Response> {
+    const fetchFn = () =>
+      options.fetch ? options.fetch(url, request, options) : fetch(url, request);
+
+    let response: Response = await fetchFn();
+
+    const retryOptions: RetryOptions = {
+      maxRetries: 5,
+      baseDelay: 500,
+    };
+
+    for (let retriesLeft = retryOptions.maxRetries; retriesLeft > 0; --retriesLeft) {
+      const responseClone = response.clone();
+
+      let extensions: {
+        current_fuel_block_height?: number;
+        fuel_block_height_precondition_failed: boolean;
+      };
+
+      if (url.endsWith('-sub')) {
+        const reader = responseClone.body?.getReader() as ReadableStreamDefaultReader<Uint8Array>;
+        const { event } = await FuelGraphqlSubscriber.readEvent(reader);
+
+        extensions = event?.extensions as typeof extensions;
+      } else {
+        extensions = (await responseClone.json()).extensions;
+      }
+
+      Provider.setCurrentBlockHeight(url, extensions?.current_fuel_block_height);
+
+      if (!extensions?.fuel_block_height_precondition_failed) {
+        break;
+      }
+
+      const retryAttempt = retryOptions.maxRetries - retriesLeft + 1;
+      const sleepTime = getWaitDelay(retryOptions, retryAttempt);
+      await sleep(sleepTime);
+
+      response = await fetchFn();
+    }
+
+    return response;
+  }
+
+  private static setCurrentBlockHeight(url: string, height: number | undefined) {
+    if (height === undefined) {
+      return;
+    }
+
+    const normalizedUrl = url.replace(/-sub$/, '');
+
+    const currentBlockHeight: number | undefined = this.currentBlockHeightCache[normalizedUrl];
+
+    if (currentBlockHeight === undefined || height > currentBlockHeight) {
+      this.currentBlockHeightCache[normalizedUrl] = height;
+    }
   }
 
   /**
@@ -546,7 +622,21 @@ export default class Provider {
     };
 
     this.operations = this.createOperations();
-    const { resourceCacheTTL } = this.options;
+    const { resourceCacheTTL, cache } = this.options;
+
+    /**
+     * Re-instantiate chain + node info from the passed in cache
+     */
+    if (cache) {
+      const { consensusParametersTimestamp, chain, nodeInfo } = deserializeProviderCache(cache);
+      this.consensusParametersTimestamp = consensusParametersTimestamp;
+      Provider.chainInfoCache[this.urlWithoutAuth] = chain;
+      Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
+    }
+
+    /**
+     * Instantiate the resource cache (for UTXO's + messages)
+     */
     if (isDefined(resourceCacheTTL)) {
       if (resourceCacheTTL !== -1) {
         this.cache = new ResourceCache(resourceCacheTTL);
@@ -673,17 +763,11 @@ export default class Provider {
     } catch (_err) {
       const data = await this.operations.getChainAndNodeInfo();
 
-      nodeInfo = {
-        maxDepth: bn(data.nodeInfo.maxDepth),
-        maxTx: bn(data.nodeInfo.maxTx),
-        nodeVersion: data.nodeInfo.nodeVersion,
-        utxoValidation: data.nodeInfo.utxoValidation,
-        vmBacktrace: data.nodeInfo.vmBacktrace,
-      };
+      nodeInfo = deserializeNodeInfo(data.nodeInfo);
 
       Provider.setIncompatibleNodeVersionMessage(nodeInfo);
 
-      chain = processGqlChain(data.chain);
+      chain = deserializeChain(data.chain);
 
       Provider.chainInfoCache[this.urlWithoutAuth] = chain;
       Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
@@ -740,6 +824,7 @@ export default class Provider {
     const executeQuery = (query: DocumentNode, vars: Record<string, unknown>) => {
       const opDefinition = query.definitions.find((x) => x.kind === 'OperationDefinition') as {
         operation: string;
+        name: { kind: 'Name'; value: string };
       };
       const isSubscription = opDefinition?.operation === 'subscription';
 
@@ -749,6 +834,13 @@ export default class Provider {
           query,
           fetchFn: (url, requestInit) => fetchFn(url as string, requestInit, this.options),
           variables: vars,
+          operationName: opDefinition.name.value,
+          onEvent: (event) => {
+            Provider.setCurrentBlockHeight(
+              this.urlWithoutAuth,
+              event.extensions?.current_fuel_block_height as number
+            );
+          },
         });
       }
       return gqlClient.request(query, vars);
@@ -827,13 +919,7 @@ export default class Provider {
   async fetchNode(): Promise<NodeInfo> {
     const { nodeInfo } = await this.operations.getNodeInfo();
 
-    const processedNodeInfo: NodeInfo = {
-      maxDepth: bn(nodeInfo.maxDepth),
-      maxTx: bn(nodeInfo.maxTx),
-      nodeVersion: nodeInfo.nodeVersion,
-      utxoValidation: nodeInfo.utxoValidation,
-      vmBacktrace: nodeInfo.vmBacktrace,
-    };
+    const processedNodeInfo: NodeInfo = deserializeNodeInfo(nodeInfo);
 
     Provider.nodeInfoCache[this.urlWithoutAuth] = processedNodeInfo;
 
@@ -848,7 +934,7 @@ export default class Provider {
   async fetchChain(): Promise<ChainInfo> {
     const { chain } = await this.operations.getChain();
 
-    const processedChain = processGqlChain(chain);
+    const processedChain = deserializeChain(chain);
 
     Provider.chainInfoCache[this.urlWithoutAuth] = processedChain;
 
@@ -1002,7 +1088,7 @@ export default class Provider {
       utxoValidation: utxoValidation || false,
     });
     const [{ receipts: rawReceipts, status: dryRunStatus }] = dryRunStatuses;
-    const receipts = rawReceipts.map(processGqlReceipt);
+    const receipts = rawReceipts.map(deserializeReceipt);
 
     return { receipts, dryRunStatus };
   }
@@ -1096,12 +1182,14 @@ export default class Provider {
   ): Promise<EstimateTxDependenciesReturns> {
     if (isTransactionTypeCreate(transactionRequest)) {
       return {
+        rawReceipts: [],
         receipts: [],
         outputVariables: 0,
         missingContractIds: [],
       };
     }
 
+    let rawReceipts: TransactionReceiptJson[] = [];
     let receipts: TransactionResultReceipt[] = [];
     const missingContractIds: string[] = [];
     let outputVariables = 0;
@@ -1113,14 +1201,15 @@ export default class Provider {
 
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
       const {
-        dryRun: [{ receipts: rawReceipts, status }],
+        dryRun: [{ receipts: serializedReceipts, status }],
       } = await this.operations.dryRun({
         encodedTransactions: [hexlify(transactionRequest.toTransactionBytes())],
         utxoValidation: false,
         gasPrice: gasPrice.toString(),
       });
 
-      receipts = rawReceipts.map(processGqlReceipt);
+      rawReceipts = serializedReceipts;
+      receipts = serializedReceipts.map(deserializeReceipt);
       dryRunStatus = status;
 
       const { missingOutputVariables, missingOutputContractIds } =
@@ -1150,6 +1239,7 @@ export default class Provider {
     }
 
     return {
+      rawReceipts,
       receipts,
       outputVariables,
       missingContractIds,
@@ -1171,6 +1261,7 @@ export default class Provider {
     transactionRequests: TransactionRequest[]
   ): Promise<EstimateTxDependenciesReturns[]> {
     const results: EstimateTxDependenciesReturns[] = transactionRequests.map(() => ({
+      rawReceipts: [],
       receipts: [],
       outputVariables: 0,
       missingContractIds: [],
@@ -1208,7 +1299,7 @@ export default class Provider {
         const requestIdx = transactionsToProcess[i];
         const { receipts: rawReceipts, status } = dryRunResults.dryRun[i];
         const result = results[requestIdx];
-        result.receipts = rawReceipts.map(processGqlReceipt);
+        result.receipts = rawReceipts.map(deserializeReceipt);
         result.dryRunStatus = status;
         const { missingOutputVariables, missingOutputContractIds } = getReceiptsWithMissingData(
           result.receipts
@@ -1262,7 +1353,7 @@ export default class Provider {
     });
 
     const results = dryRunStatuses.map(({ receipts: rawReceipts, status }) => {
-      const receipts = rawReceipts.map(processGqlReceipt);
+      const receipts = rawReceipts.map(deserializeReceipt);
       return { receipts, dryRunStatus: status };
     });
 
@@ -1405,7 +1496,7 @@ export default class Provider {
     const callResult = dryRunStatuses.map((dryRunStatus) => {
       const { id, receipts, status } = dryRunStatus;
 
-      const processedReceipts = receipts.map(processGqlReceipt);
+      const processedReceipts = receipts.map(deserializeReceipt);
 
       return { id, receipts: processedReceipts, status };
     });
@@ -1467,6 +1558,7 @@ export default class Provider {
       gasPrice,
     });
 
+    let rawReceipts: TransactionReceiptJson[] = [];
     let receipts: TransactionResultReceipt[] = [];
     let dryRunStatus: DryRunStatus | undefined;
     let missingContractIds: string[] = [];
@@ -1480,7 +1572,7 @@ export default class Provider {
         await signatureCallback(txRequestClone);
       }
 
-      ({ receipts, missingContractIds, outputVariables, dryRunStatus } =
+      ({ rawReceipts, receipts, missingContractIds, outputVariables, dryRunStatus } =
         await this.estimateTxDependencies(txRequestClone, { gasPrice }));
 
       if (dryRunStatus && 'reason' in dryRunStatus) {
@@ -1499,7 +1591,13 @@ export default class Provider {
       }));
     }
 
+    const transactionSummary: TransactionSummaryJsonPartial = {
+      gasPrice: gasPrice.toString(),
+      receipts: rawReceipts,
+    };
+
     return {
+      rawReceipts,
       receipts,
       gasUsed,
       gasPrice,
@@ -1513,6 +1611,7 @@ export default class Provider {
       estimatedPredicates: txRequestClone.inputs,
       dryRunStatus,
       updateMaxFee,
+      transactionSummary,
     };
   }
 

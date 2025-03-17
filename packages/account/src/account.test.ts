@@ -311,7 +311,12 @@ describe('Account', () => {
     const estimateTxDependencies = vi
       .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
       .mockImplementation(() =>
-        Promise.resolve({ receipts: [], missingContractIds: [], outputVariables: 0 })
+        Promise.resolve({
+          rawReceipts: [],
+          receipts: [],
+          missingContractIds: [],
+          outputVariables: 0,
+        })
       );
 
     const sendTransaction = vi
@@ -353,7 +358,12 @@ describe('Account', () => {
     const estimateTxDependencies = vi
       .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
       .mockImplementation(() =>
-        Promise.resolve({ receipts: [], missingContractIds: [], outputVariables: 0 })
+        Promise.resolve({
+          rawReceipts: [],
+          receipts: [],
+          missingContractIds: [],
+          outputVariables: 0,
+        })
       );
 
     const simulate = vi
@@ -587,7 +597,7 @@ describe('Account', () => {
 
     // Test excludes the UTXO where the assetIdA gets added to the senders wallet
     await expectToThrowFuelError(
-      () => user.getResourcesToSpend([[1, ASSET_A, 10_000]], { utxos: [assetAUTXO.id] }),
+      () => user.getResourcesToSpend([[1, ASSET_A]], { utxos: [assetAUTXO.id] }),
       new FuelError(
         ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
         `Insufficient funds or too many small value coins. Consider combining UTXOs.`

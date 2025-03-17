@@ -40,6 +40,8 @@ import { CreateTransactionRequest, ScriptTransactionRequest } from './transactio
 import { TransactionResponse } from './transaction-response';
 import type { SubmittedStatus } from './transaction-summary/types';
 import * as gasMod from './utils/gas';
+import { serializeProviderCache } from './utils/serialization';
+import type { ProviderCacheJson } from './utils/serialization';
 
 const getCustomFetch =
   (expectedOperationName: string, expectedResponse: object) =>
@@ -930,6 +932,66 @@ describe('Provider', () => {
     await provider.fetchChainAndNodeInfo();
 
     expect(spyOperation).toHaveBeenCalledTimes(1);
+  });
+
+  test('clearing cache based on URL only clears the cache for that URL', async () => {
+    using launched1 = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '10ms'],
+        loggingEnabled: false,
+      },
+    });
+    using launched2 = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '10ms'],
+        loggingEnabled: false,
+      },
+    });
+    const { provider: provider1 } = launched1;
+    const { provider: provider2 } = launched2;
+
+    // allow for block production
+    await sleep(200);
+
+    // update block height cache for both providers
+    await provider1.getLatestGasPrice();
+    await provider2.getLatestGasPrice();
+
+    Provider.clearChainAndNodeCaches(provider1.url);
+
+    // verify block height cache got reset correctly
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    try {
+      await provider1.operations.submit({ encodedTransaction: '0x123' });
+    } catch (error) {
+      //
+    }
+    try {
+      await provider2.operations.submit({ encodedTransaction: '0x123' });
+    } catch (error) {
+      //
+    }
+
+    const {
+      extensions: { required_fuel_block_height: cache1BlockHeight },
+    } = JSON.parse(fetchSpy.mock.calls[0][1]?.body as string);
+    const {
+      extensions: { required_fuel_block_height: cache2BlockHeight },
+    } = JSON.parse(fetchSpy.mock.calls[1][1]?.body as string);
+
+    expect(cache1BlockHeight).toEqual(0);
+    expect(cache2BlockHeight).toBeGreaterThan(0);
+
+    // verify nodeInfo and chainInfo caches got reset correctly
+    const getChainAndNodeInfoSpy1 = vi.spyOn(provider1.operations, 'getChainAndNodeInfo');
+    const getChainAndNodeInfoSpy2 = vi.spyOn(provider2.operations, 'getChainAndNodeInfo');
+
+    await provider1.fetchChainAndNodeInfo();
+    await provider2.fetchChainAndNodeInfo();
+
+    expect(getChainAndNodeInfoSpy1).toHaveBeenCalledTimes(1);
+    expect(getChainAndNodeInfoSpy2).toHaveBeenCalledTimes(0);
   });
 
   it('should ensure getGasConfig return essential gas related data', async () => {
@@ -2414,5 +2476,36 @@ describe('Provider', () => {
     expect(keys.includes('edges')).toBeTruthy();
 
     expect(keys.includes('pageInfo')).toBeFalsy();
+  });
+
+  it('should fetch chain or node info if the cache is not provided', async () => {
+    // Given: we clear any pre-existing cache
+    using launched = await setupTestProviderAndWallets();
+    const { provider: sourceProvider } = launched;
+
+    Provider.clearChainAndNodeCaches();
+
+    // When: we create a new provider with the same url
+    const fetch = vi.spyOn(global, 'fetch');
+    await new Provider(sourceProvider.url, { cache: undefined }).init();
+
+    // Then: we should fetch the chain and node info
+    expect(fetch).toHaveBeenCalled();
+  });
+
+  it('should not refetch chain or node info if cache is provided', async () => {
+    // Given: we clear any pre-existing cache
+    using launched = await setupTestProviderAndWallets();
+    const { provider: sourceProvider } = launched;
+
+    const cache: ProviderCacheJson = await serializeProviderCache(sourceProvider);
+    Provider.clearChainAndNodeCaches();
+
+    // When: we create a new provider with the same url, but with a cache
+    const fetch = vi.spyOn(global, 'fetch');
+    await new Provider(launched.provider.url, { cache }).init();
+
+    // Then: we should not perform any fetch requests
+    expect(fetch).not.toHaveBeenCalled();
   });
 });

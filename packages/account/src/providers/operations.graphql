@@ -128,7 +128,6 @@ fragment PreconfirmationSuccessStatusFragment on PreconfirmationSuccessStatus {
 
 fragment PreconfirmationFailureStatusFragment on PreconfirmationFailureStatus {
   type: __typename
-  reason
 }
 
 fragment transactionStatusFragment on TransactionStatus {
