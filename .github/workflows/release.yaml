@@ -11,7 +11,7 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   release:
     runs-on: ubuntu-latest
-    environment: fuel-fuels-ts-bot
+    environment: npm-deploy
     permissions: write-all
     # First check ensures that the workflow runs only when the changesets PR commit is pushed into the branch.
     # Second check ensures that the workflow runs only after a commit is pushed into the branch,
