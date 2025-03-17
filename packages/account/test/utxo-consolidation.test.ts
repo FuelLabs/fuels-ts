@@ -482,6 +482,95 @@ describe('utxo-consolidation', () => {
       expect(resultingAmount).toEqualBn(initialAmount);
     });
 
+    test(`consolidates multiple times - no leftover coins`, async () => {
+      const expectedConsolidations = 7;
+      using launched = await setupTestProviderAndWallets({
+        walletsConfig: {
+          coinsPerAsset: expectedConsolidations * 254,
+          amountPerCoin: 1_000_000_00,
+          assets,
+        },
+      });
+
+      const {
+        wallets: [wallet],
+      } = launched;
+
+      const originalCoins = await wallet.getAllCoins(testAssetId);
+      const initialAmount = originalCoins.reduce((acc, coin) => acc.add(coin.amount), bn(0));
+
+      const { coins, transactions } = await wallet.consolidateCoins({ assetId: testAssetId });
+      expect(transactions).toHaveLength(expectedConsolidations);
+      expect(coins).toHaveLength(expectedConsolidations);
+
+      coins.forEach((coin) => expect(originalCoins).not.toContainEqual(coin));
+
+      const resultingAmount = coins.reduce((acc, coin) => acc.add(coin.amount), bn(0));
+      expect(resultingAmount).toEqualBn(initialAmount);
+    });
+
+    test.only('consolidates multiple times - one unconsolidated coin leftover', async () => {
+      const expectedConsolidations = 7;
+      using launched = await setupTestProviderAndWallets({
+        walletsConfig: {
+          coinsPerAsset: expectedConsolidations * 254 + 1,
+          amountPerCoin: 1_000_000_00,
+          assets,
+        },
+      });
+
+      const {
+        wallets: [wallet],
+      } = launched;
+
+      const originalCoins = await wallet.getAllCoins(testAssetId);
+      const initialAmount = originalCoins.reduce((acc, coin) => acc.add(coin.amount), bn(0));
+
+      const { coins, transactions } = await wallet.consolidateCoins({ assetId: testAssetId });
+      expect(transactions).toHaveLength(expectedConsolidations);
+
+      const consolidatedCoins = coins.filter(
+        (coin) => !originalCoins.some((c) => c.id === coin.id)
+      );
+      expect(consolidatedCoins).toHaveLength(expectedConsolidations);
+
+      const coinsInOriginal = coins.filter((coin) => !consolidatedCoins.includes(coin));
+
+      expect(coinsInOriginal.length).toEqual(1);
+      coinsInOriginal.forEach((coin) => expect(originalCoins).toContainEqual(coin));
+
+      const resultingAmount = coins.reduce((acc, coin) => acc.add(coin.amount), bn(0));
+      expect(resultingAmount).toEqualBn(initialAmount);
+    });
+
+    test(`consolidates multiple times - leftover coins`, async () => {
+      const expectedConsolidations = 8;
+      using launched = await setupTestProviderAndWallets({
+        walletsConfig: {
+          coinsPerAsset: (expectedConsolidations - 1) * 255,
+          amountPerCoin: 1_000_000_00,
+          assets,
+        },
+      });
+
+      const {
+        wallets: [wallet],
+      } = launched;
+
+      const originalCoins = await wallet.getAllCoins(testAssetId);
+      const initialAmount = originalCoins.reduce((acc, coin) => acc.add(coin.amount), bn(0));
+
+      const { coins, transactions } = await wallet.consolidateCoins({ assetId: testAssetId });
+      expect(transactions).toHaveLength(expectedConsolidations);
+      expect(coins).toHaveLength(expectedConsolidations);
+      coins.forEach((coin) => {
+        expect(originalCoins).not.toContainEqual(coin);
+      });
+
+      const resultingAmount = coins.reduce((acc, coin) => acc.add(coin.amount), bn(0));
+      expect(resultingAmount).toEqualBn(initialAmount);
+    });
+
     test('factors in change outputs coins of base assets', () => {});
   });
 });

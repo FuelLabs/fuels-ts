@@ -1044,7 +1044,7 @@ export class Account extends AbstractAccount implements WithAddress {
       // if there are more than maxInputs unconsolidated coins,
       // leave the selection of coins that fund the transaction to the node
       // and add additional inputs to the request afterwards until max inputs reached
-      if (remainingCoins.length === maxInputs) {
+      if (remainingCoins.length >= maxInputs) {
         console.log('max inputs reached');
         // if (remainingCoins.length >= maxInputs) {
         const maxInputsRequest = new ScriptTransactionRequest();
