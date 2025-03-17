@@ -5,55 +5,50 @@ import type { Coin } from './providers';
 function getBaseAssetsByLeastAmount(args: {
   maxFee: BN;
   count: number;
-  baseAssets: Coin[];
+  baseAssetCoins: Coin[];
 }): Coin[] {
-  const { maxFee, count, baseAssets } = args;
+  const { maxFee, count, baseAssetCoins } = args;
 
-  const sortedBaseAssets = [...baseAssets].sort((a, b) => a.amount.cmp(b.amount));
+  const sortedCoins = [...baseAssetCoins].sort((a, b) => a.amount.cmp(b.amount));
 
   let totalAmount = bn(0);
-  const selectedBaseAssets = [];
-  for (const asset of sortedBaseAssets) {
-    totalAmount = totalAmount.add(asset.amount);
-    selectedBaseAssets.push(asset);
+  const selectedCoins = [];
 
-    if (selectedBaseAssets.length === count) {
+  for (const asset of sortedCoins) {
+    selectedCoins.push(asset);
+    totalAmount = totalAmount.add(asset.amount);
+
+    if (selectedCoins.length === count) {
       if (totalAmount.gte(maxFee)) {
         break;
       }
 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const removedAsset = selectedBaseAssets.shift()!;
+      const removedAsset = selectedCoins.shift()!;
       totalAmount = totalAmount.sub(removedAsset.amount);
     }
   }
 
-  return selectedBaseAssets;
+  return selectedCoins;
 }
 
-function getBaseAssetsByMaxAmount(args: { maxInputs: number; maxFee: BN; baseAssets: Coin[] }) {
-  const { maxInputs, maxFee, baseAssets } = args;
+function getBaseAssetsByMaxAmount(args: { maxInputs: number; maxFee: BN; baseAssetCoins: Coin[] }) {
+  const { maxInputs, maxFee, baseAssetCoins } = args;
   let totalAmount = bn(0);
 
-  const sortedBaseAssets = [...baseAssets].sort((a, b) => b.amount.cmp(a.amount));
-  const selectedBaseAssets = [];
+  const sortedCoins = [...baseAssetCoins].sort((a, b) => b.amount.cmp(a.amount));
+  const selectedCoins = [];
 
-  for (const asset of sortedBaseAssets) {
-    if (totalAmount.gte(maxFee)) {
-      break;
-    }
-
+  for (const asset of sortedCoins) {
     totalAmount = totalAmount.add(asset.amount);
-    selectedBaseAssets.push(asset);
+    selectedCoins.push(asset);
 
-    if (selectedBaseAssets.length === maxInputs - 2) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const removedAsset = selectedBaseAssets.shift()!;
-      totalAmount = totalAmount.sub(removedAsset.amount);
+    if (totalAmount.gte(maxFee) || selectedCoins.length === maxInputs - 2) {
+      break;
     }
   }
 
-  return selectedBaseAssets;
+  return selectedCoins;
 }
 
 export function consolidationAssetSelector(params: {
@@ -69,10 +64,12 @@ export function consolidationAssetSelector(params: {
   const optimalBaseAssets = getBaseAssetsByLeastAmount({
     maxFee,
     count: consolidationCoins.length < maxInputs ? maxInputs - consolidationCoins.length : 1,
-    baseAssets,
+    baseAssetCoins: baseAssets,
   });
 
-  if (optimalBaseAssets.length > 0) {
+  const totalAmountOptimal = optimalBaseAssets.reduce((acc, asset) => acc.add(asset.amount), bn(0));
+
+  if (totalAmountOptimal.gte(maxFee)) {
     return {
       baseAssets: optimalBaseAssets,
       consolidationCoins: sortedConsolidationCoins.slice(0, maxInputs - optimalBaseAssets.length),
@@ -82,7 +79,7 @@ export function consolidationAssetSelector(params: {
   const maxAmountBaseAssets = getBaseAssetsByMaxAmount({
     maxFee,
     maxInputs,
-    baseAssets,
+    baseAssetCoins: baseAssets,
   });
 
   return {
