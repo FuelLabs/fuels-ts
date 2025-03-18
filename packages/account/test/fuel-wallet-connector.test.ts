@@ -869,4 +869,34 @@ describe('Fuel Connector', () => {
       responseSummary.transaction.scriptGasLimit
     );
   });
+
+  it('can get connector for account [has connector]', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider,
+      wallets: [connectorWallet],
+    } = launched;
+    const connector = new MockConnector({
+      wallets: [connectorWallet],
+    });
+    const fuel = await new Fuel({
+      connectors: [connector],
+    }).init();
+
+    const account = new Account(connectorWallet.address.toString(), provider, fuel);
+
+    expect(account.connector).toBe(fuel);
+  });
+
+  it('can get connector for account [undefined]', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider,
+      wallets: [connectorWallet],
+    } = launched;
+
+    const account = new Account(connectorWallet.address.toString(), provider);
+
+    expect(account.connector).toBeUndefined();
+  });
 });
