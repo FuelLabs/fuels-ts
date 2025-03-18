@@ -34,6 +34,7 @@ import type {
   TransactionResponse,
   ProviderSendTxParams,
   TransactionSummaryJson,
+  AssembleTxParams,
 } from './providers';
 import {
   withdrawScript,
@@ -141,6 +142,15 @@ export class Account extends AbstractAccount implements WithAddress {
    */
   set provider(provider: Provider) {
     this._provider = provider;
+  }
+
+  /**
+   * Returns the wallet connector for the account if it has been set.
+   *
+   * @returns A FuelConnector instance.
+   */
+  get connector(): FuelConnector | undefined {
+    return this._connector;
   }
 
   /**
@@ -646,10 +656,6 @@ export class Account extends AbstractAccount implements WithAddress {
       updateAssetInput(assetId, amount)
     );
 
-    if (this._connector) {
-      txRequest = await this._connector.onBeforeEstimation(this.address.toString(), txRequest);
-    }
-
     const txCost = await this.provider.getTransactionCost(txRequest, {
       signatureCallback,
       gasPrice,
@@ -825,11 +831,18 @@ export class Account extends AbstractAccount implements WithAddress {
     transactionRequest.gasLimit = bn(0);
     transactionRequest.maxFee = bn(0);
 
-    const { assembledRequest, gasPrice } = await this.provider.assembleTx({
+    let params: AssembleTxParams = {
       request: transactionRequest,
       accountCoinQuantities: mergeQuantities(outputQuantities, quantities),
       feePayerAccount: this,
-    });
+    };
+
+    if (this._connector) {
+      const connectorParams = await this._connector.onBeforeAssembleTx(params);
+      params = { ...params, ...connectorParams };
+    }
+
+    const { assembledRequest, gasPrice } = await this.provider.assembleTx(params);
 
     return { transactionRequest: assembledRequest as ScriptTransactionRequest, gasPrice };
   }

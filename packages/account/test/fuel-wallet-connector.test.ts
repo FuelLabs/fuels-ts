@@ -24,8 +24,8 @@ import { setupTestProviderAndWallets, TestMessage } from '../src/test-utils';
 import { Wallet } from '../src/wallet';
 
 import { MockConnector } from './fixtures/mocked-connector';
-import { MockedPredicateConnector } from './fixtures/mocked-predicate-connector';
 import { promiseCallback } from './fixtures/promise-callback';
+import { MockedOtherAccountConnector } from './fixtures/mocked-other-acc-connector';
 
 /**
  * @group node
@@ -768,45 +768,44 @@ describe('Fuel Connector', () => {
     expect(sendTransactionSpy).toHaveBeenCalledWith(request, expectedParams);
   });
 
-  it('should ensure onBeforeEstimation works just fine [associated predicate account]', async () => {
-    using launched = await setupTestProviderAndWallets();
+  it('should ensure onBeforeAssembleTx works just fine w/ associated account', async () => {
+    using launched = await setupTestProviderAndWallets({
+      walletsConfig: {
+        count: 3,
+      },
+    });
     const {
       provider,
-      wallets: [connectorWallet, receiverWallet],
+      wallets: [connectorWallet, receiverWallet, otherAccount],
     } = launched;
-    const connector = new MockedPredicateConnector({
+    const connector = new MockedOtherAccountConnector({
       wallets: [connectorWallet],
+      otherAccount,
     });
     const fuel = await new Fuel({
       connectors: [connector],
     }).init();
 
-    const fundingAmount = bn(100_000);
+    const account = new Account(connectorWallet.address.toString(), provider, fuel);
     const transferAmount = bn(1000);
 
-    // Fund the associated predicate that interacts with the dApp
-    const predicateAccountAddress = connector.getPredicateAddress(provider);
-    const predicateAccount = new Account(predicateAccountAddress, provider);
-    const fundTx = await receiverWallet.transfer(predicateAccountAddress, fundingAmount);
-    const fundResult = await fundTx.waitForResult();
-    expect(fundResult.isStatusSuccess).toBe(true);
-    expect(await predicateAccount.getBalance()).toStrictEqual(fundingAmount);
+    const initialConnectorWalletBalance = await connectorWallet.getBalance();
+    const initialReceiverBalance = await receiverWallet.getBalance();
+    const initialOtherAccountBalance = await otherAccount.getBalance();
 
-    const initialBalance = await receiverWallet.getBalance();
-    const expectedBalance = initialBalance.add(transferAmount);
-
-    const connectorAccount = new Account(predicateAccountAddress, provider, fuel);
-    const tx = await connectorAccount.transfer(receiverWallet.address, transferAmount);
-
+    const tx = await account.transfer(receiverWallet.address, transferAmount);
     const txResult = await tx.waitForResult();
     expect(txResult.isStatusSuccess).toBe(true);
-    expect(await receiverWallet.getBalance()).toStrictEqual(expectedBalance);
 
-    // Assert funds were transferred from the predicate account to the receiver wallet
-    const fee = txResult.fee;
-    const predicateBalance = await predicateAccount.getBalance();
-    const expectedPredicateBalance = fundingAmount.sub(transferAmount).sub(fee);
-    expect(predicateBalance.toString()).toStrictEqual(expectedPredicateBalance.toString());
+    const finalConnectorWalletBalance = await connectorWallet.getBalance();
+    const finalReceiverBalance = await receiverWallet.getBalance();
+    const finalOtherAccountBalance = await otherAccount.getBalance();
+
+    expect(finalConnectorWalletBalance).toStrictEqual(initialConnectorWalletBalance);
+    expect(finalReceiverBalance).toStrictEqual(initialReceiverBalance.add(transferAmount));
+    expect(finalOtherAccountBalance).toStrictEqual(
+      initialOtherAccountBalance.sub(transferAmount).sub(txResult.fee)
+    );
   });
 
   it('should ensure transaction summary works just fine [state: funded]', async () => {

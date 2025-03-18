@@ -5,6 +5,7 @@ import { EventEmitter } from 'events';
 
 import type { Asset } from '../assets/types';
 import {
+  AssembleTxParams,
   transactionRequestify,
   type TransactionRequest,
   type TransactionRequestLike,
@@ -55,10 +56,7 @@ interface Connector {
     params?: FuelConnectorSendTxParams
   ): Promise<string | TransactionResponse>;
 
-  onBeforeEstimation(
-    address: string,
-    transaction: TransactionRequestLike
-  ): Promise<TransactionRequest>;
+  onBeforeAssembleTx(params: AssembleTxParams): Promise<AssembleTxParams>;
 
   // #endregion fuel-connector-method-sendTransaction
   // #region fuel-connector-method-currentAccount
@@ -222,18 +220,15 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
   }
 
   /**
-   * A hook that can be used to modify the transaction before it is estimated. Useful for any
-   * connector specific logic e.g. predicates for non-native accounts.
+   * A hook that can be used to modify the params for an assembleTx call. This is used before
+   * estimating and funding transactions like transfers and contract calls. This is useful for
+   * connector specific logic such as adjusting the fee payer account to an associated predicate account.
    *
-   * @param address - The address of the account to modify the transaction for.
-   * @param transaction - The transaction to modify.
-   * @returns The modified transaction.
+   * @param _params - The params for the assembleTx call to modify.
+   * @returns The modified params.
    */
-  async onBeforeEstimation(
-    _address: string,
-    _transaction: TransactionRequestLike
-  ): Promise<TransactionRequest> {
-    return transactionRequestify(_transaction);
+  async onBeforeAssembleTx(_params: AssembleTxParams): Promise<AssembleTxParams> {
+    return _params;
   }
 
   /**

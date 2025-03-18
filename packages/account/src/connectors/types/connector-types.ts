@@ -12,7 +12,7 @@ export enum FuelConnectorMethods {
   // Transaction methods
   signMessage = 'signMessage',
   sendTransaction = 'sendTransaction',
-  onBeforeEstimation = 'onBeforeEstimation',
+  onBeforeAssembleTx = 'onBeforeAssembleTx',
   // Assets metadata methods
   assets = 'assets',
   addAsset = 'addAsset',

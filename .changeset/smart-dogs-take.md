@@ -2,4 +2,4 @@
 "@fuel-ts/account": patch
 ---
 
-feat: add `onBeforeEstimation` to connectors
+feat: connector aware estimation
