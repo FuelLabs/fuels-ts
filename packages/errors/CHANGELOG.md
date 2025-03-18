@@ -1,5 +1,19 @@
 # @fuel-ts/errors
 
+## 0.100.0
+
+### Minor Changes
+
+- f41887f: chore!: upgrade `fuel-core` to `0.41.7`
+
+### Patch Changes
+
+- Updated dependencies [b42f056]
+- Updated dependencies [f41887f]
+- Updated dependencies [521292a]
+- Updated dependencies [ff97a6e]
+  - @fuel-ts/versions@0.100.0
+
 ## 0.99.0
 
 ### Patch Changes

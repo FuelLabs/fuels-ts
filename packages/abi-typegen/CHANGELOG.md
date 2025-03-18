@@ -1,5 +1,21 @@
 # @fuel-ts/abi-typegen
 
+## 0.100.0
+
+### Patch Changes
+
+- f254f3a: chore: upgraded various dependencies
+- 6f32228: fix: favour `.ts` over `.d.ts` files in `@fuel-ts/abi-typegen`
+- Updated dependencies [1277ae6]
+- Updated dependencies [b42f056]
+- Updated dependencies [6eb113c]
+- Updated dependencies [f41887f]
+- Updated dependencies [521292a]
+- Updated dependencies [ff97a6e]
+  - @fuel-ts/utils@0.100.0
+  - @fuel-ts/versions@0.100.0
+  - @fuel-ts/errors@0.100.0
+
 ## 0.99.0
 
 ### Patch Changes
