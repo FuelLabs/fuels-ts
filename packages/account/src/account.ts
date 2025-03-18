@@ -609,7 +609,6 @@ export class Account extends AbstractAccount implements WithAddress {
     { signatureCallback, quantities = [], gasPrice }: TransactionCostParams = {}
   ): Promise<TransactionCost> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
-
     const baseAssetId = await this.provider.getBaseAssetId();
 
     // Fund with fake UTXOs to avoid not enough funds error
