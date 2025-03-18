@@ -6,12 +6,14 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { HashableMessage } from '@fuel-ts/hasher';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
+import type { OutputCoin } from '@fuel-ts/transactions';
 import { InputType } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, isDefined } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
 import type { FuelConnector, FuelConnectorSendTxParams } from './connectors';
+import { consolidationAssetSelector } from './consolidation-asset-selector';
 import type {
   TransactionRequest,
   CoinQuantityLike,
@@ -1002,6 +1004,52 @@ export class Account extends AbstractAccount implements WithAddress {
     };
   }
 
+  private async createConsolidationTx(args: {
+    baseAssetId: string;
+    consolidationAssetId: string;
+    baseAssetCoins: Coin[];
+    coinsToConsolidate: Coin[];
+    maxInputs: number;
+  }) {
+    const { baseAssetId, consolidationAssetId, maxInputs, baseAssetCoins, coinsToConsolidate } =
+      args;
+
+    const request = new ScriptTransactionRequest();
+
+    const inputsCount =
+      coinsToConsolidate.length + baseAssetCoins.length > maxInputs
+        ? maxInputs
+        : coinsToConsolidate.length + baseAssetCoins.length;
+
+    const maxInputsRequest = new ScriptTransactionRequest();
+
+    const fakeBaseCoins = this.generateFakeResources([{ assetId: baseAssetId, amount: bn(1) }]);
+    const fakeNonBaseCoins = this.generateFakeResources(
+      new Array(inputsCount - 1).fill({ assetId: consolidationAssetId, amount: bn(1) })
+    );
+    maxInputsRequest.addResources(fakeBaseCoins);
+    maxInputsRequest.addResources(fakeNonBaseCoins);
+
+    const { maxFee, gasLimit } = await this.provider.estimateTxGasAndFee({
+      transactionRequest: maxInputsRequest,
+    });
+
+    request.maxFee = maxFee;
+    request.gasLimit = gasLimit;
+
+    const { baseAssets, consolidationCoins } = consolidationAssetSelector({
+      baseAssets: baseAssetCoins,
+      consolidationCoins: coinsToConsolidate,
+      maxFee,
+      maxInputs,
+    });
+
+    request.addResources(baseAssets);
+    request.addResources(consolidationCoins);
+
+    return request;
+  }
+
   /**
    * Consolidates base asset coins owned by the account.
    */
@@ -1020,11 +1068,10 @@ export class Account extends AbstractAccount implements WithAddress {
     ).consensusParameters.txParameters.maxInputs.toNumber();
 
     let remainingCoins = await this.getAllCoins(assetId);
+    let baseAssetCoins = await this.getAllCoins(baseAssetId);
 
     const resultingCoinIds: BytesLike[] = [];
     const transactions: TransactionResult[] = [];
-
-    const baseCoins = await this.getAllCoins(baseAssetId);
 
     // let predicateGasUsed: BigNumberish | undefined;
     // const isPredicate = 'predicateData' in this;
@@ -1038,112 +1085,13 @@ export class Account extends AbstractAccount implements WithAddress {
     // }
 
     while (remainingCoins.length > 1) {
-      console.log('remaining coins length', remainingCoins.length);
-      const request = new ScriptTransactionRequest();
-
-      // if there are more than maxInputs unconsolidated coins,
-      // leave the selection of coins that fund the transaction to the node
-      // and add additional inputs to the request afterwards until max inputs reached
-      if (remainingCoins.length >= maxInputs) {
-        console.log('max inputs reached');
-        // if (remainingCoins.length >= maxInputs) {
-        const maxInputsRequest = new ScriptTransactionRequest();
-
-        const fakeBaseCoins = this.generateFakeResources([
-          { assetId: baseAssetId, amount: bn(1000) },
-        ]);
-        const fakeNonBaseCoins = this.generateFakeResources(
-          new Array(maxInputs - 1).fill({ assetId, amount: bn(1000) })
-        );
-        maxInputsRequest.addResources(fakeBaseCoins);
-        maxInputsRequest.addResources(fakeNonBaseCoins);
-
-        // if (predicateGasUsed) {
-        //   maxInputsRequest.inputs.forEach((input) => {
-        //     // eslint-disable-next-line no-param-reassign
-        //     (input as CoinTransactionRequestInput).predicateGasUsed = predicateGasUsed;
-        //   });
-        // }
-
-        const { maxFee, gasLimit } = await this.provider.estimateTxGasAndFee({
-          transactionRequest: maxInputsRequest,
-        });
-
-        request.maxFee = maxFee;
-        request.gasLimit = gasLimit;
-
-        const resources = await this.getResourcesToSpend([
-          { amount: maxFee, assetId: baseAssetId },
-        ]);
-
-        let totalFee = bn(0);
-        // reduce resources until maxFee is reached
-        for (const resource of resources) {
-          request.addResource(resource);
-          totalFee = totalFee.add(resource.amount);
-
-          if (totalFee.gte(maxFee)) {
-            break;
-          }
-        }
-
-        // // request.addResources(resources);
-
-        // console.log('resources to fund', resources);
-        // console.log(resources[0].amount.gte(maxFee));
-
-        // console.log(maxFee);
-      }
-
-      for (const coin of remainingCoins) {
-        if (request.inputs.length === maxInputs) {
-          break;
-        }
-
-        if (request.inputs.some((x) => (x as CoinTransactionRequestInput).id === coin.id)) {
-          continue;
-        }
-
-        request.addCoinInput(coin);
-      }
-
-      // if (predicateGasUsed) {
-      //   request.inputs.forEach((input) => {
-      //     // eslint-disable-next-line no-param-reassign
-      //     (input as CoinTransactionRequestInput).predicateGasUsed = predicateGasUsed;
-      //   });
-      // }
-
-      if (request.maxFee.eq(0)) {
-        const { maxFee, gasLimit } = await this.provider.estimateTxGasAndFee({
-          transactionRequest: request,
-        });
-
-        request.maxFee = maxFee;
-        request.gasLimit = gasLimit;
-
-        const fundingResources = await this.getResourcesToSpend([
-          { amount: maxFee, assetId: await this.provider.getBaseAssetId() },
-        ]);
-
-        request.addResources(fundingResources);
-      }
-
-      // const amount = request.inputs.reduce(
-      //   (acc, coin) => acc.add((coin as CoinTransactionRequestInput).amount),
-      //   bn(0)
-      // );
-
-      // if (request.maxFee.gte(amount)) {
-      //   // TODO: to throw or not to throw, that's the question
-      //   throw new FuelError(
-      //     ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-      //     `The account sending the transaction doesn't have enough funds to cover the transaction.`,
-      //     {
-      //       transactions,
-      //     }
-      //   );
-      // }
+      const request = await this.createConsolidationTx({
+        baseAssetId,
+        consolidationAssetId: assetId.toString(),
+        baseAssetCoins,
+        coinsToConsolidate: remainingCoins,
+        maxInputs,
+      });
 
       const { waitForResult } = await this.sendTransaction(request);
 
@@ -1151,13 +1099,32 @@ export class Account extends AbstractAccount implements WithAddress {
 
       transactions.push(tx);
 
-      // First output is non-base asset
-      // Second output is base asset
-      resultingCoinIds.push(`${tx.id}0000`);
+      const baseAssetOutput = tx.transaction.outputs?.find(
+        (o) => (o as OutputCoin).assetId === baseAssetId
+      ) as OutputCoin;
+
+      const baseAssetOutputId = `${tx.id}000${tx.transaction.outputs?.indexOf(baseAssetOutput)}`;
+      const baseAssetChange: Coin = {
+        id: baseAssetOutputId,
+        amount: baseAssetOutput.amount,
+        owner: this.address,
+        assetId: baseAssetId,
+      } as Coin;
+      // First output is base asset
+      // Second output is non-base asset
+      resultingCoinIds.push(`${tx.id}0001`);
 
       remainingCoins = remainingCoins.filter(
         (coin) => !request.inputs.some((x) => (x as CoinTransactionRequestInput).id === coin.id)
       );
+
+      baseAssetCoins = baseAssetCoins.filter(
+        (coin) => !request.inputs.some((x) => (x as CoinTransactionRequestInput).id === coin.id)
+      );
+      // TODO: write test around this
+      baseAssetCoins.push(baseAssetChange);
+
+      // TODO: include resulting coin into remainingCoins?
     }
 
     return {

@@ -1,11 +1,18 @@
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
+import type { InputCoin } from '@fuel-ts/transactions';
 import type { SnapshotConfigs } from '@fuel-ts/utils';
 import { hexlify } from '@fuel-ts/utils';
 import { randomBytes } from 'crypto';
 
-import { type TransactionResult, type Provider, TRANSACTIONS_PAGE_SIZE_LIMIT } from '../src';
+import type {
+  CoinTransactionRequestInput,
+  type TransactionResult,
+  type Provider,
+  TRANSACTIONS_PAGE_SIZE_LIMIT,
+  Coin,
+} from '../src';
 import { setupTestProviderAndWallets, TestAssetId } from '../src/test-utils';
 
 /**
@@ -57,7 +64,7 @@ describe('utxo-consolidation', () => {
         () => wallet.consolidateCoins({ assetId: baseAssetId }),
         new FuelError(
           ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-          `The account sending the transaction doesn't have enough funds to cover the transaction.`
+          `Insufficient funds or too many small value coins. Consider combining UTXOs.`
         )
       );
     });
@@ -80,7 +87,7 @@ describe('utxo-consolidation', () => {
         () => wallet.consolidateCoins({ assetId: baseAssetId }),
         new FuelError(
           ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-          `The account sending the transaction doesn't have enough funds to cover the transaction.`
+          `Insufficient funds or too many small value coins. Consider combining UTXOs.`
         )
       );
     });
@@ -165,7 +172,7 @@ describe('utxo-consolidation', () => {
         () => wallet.consolidateCoins({ assetId: baseAssetId }),
         new FuelError(
           ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-          `The account sending the transaction doesn't have enough funds to cover the transaction.`
+          `Insufficient funds or too many small value coins. Consider combining UTXOs.`
         )
       );
 
@@ -257,7 +264,7 @@ describe('utxo-consolidation', () => {
         () => wallet.consolidateCoins({ assetId: baseAssetId }),
         new FuelError(
           ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-          `The account sending the transaction doesn't have enough funds to cover the transaction.`
+          `Insufficient funds or too many small value coins. Consider combining UTXOs.`
         )
       );
 
@@ -336,7 +343,7 @@ describe('utxo-consolidation', () => {
         () => predicate.consolidateCoins({ assetId: baseAssetId }),
         new FuelError(
           ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-          `The account sending the transaction doesn't have enough funds to cover the transaction.`
+          `Insufficient funds or too many small value coins. Consider combining UTXOs.`
         )
       );
 
@@ -412,14 +419,51 @@ describe('utxo-consolidation', () => {
         wallets: [wallet],
       } = launched;
 
+      const baseAssetId = await wallet.provider.getBaseAssetId();
       const originalCoins = await wallet.getAllCoins(testAssetId);
+      const originalBaseAssetCoins = await wallet.getAllCoins(baseAssetId);
       const initialAmount = originalCoins.reduce((acc, coin) => acc.add(coin.amount), bn(0));
 
       const { coins } = await wallet.consolidateCoins({ assetId: testAssetId });
 
-      expect(coins.length).toEqual(1);
+      expect(coins).toHaveLength(1);
       expect(originalCoins).not.toContainEqual(coins[0]);
       expect(coins[0].amount).toEqualBn(initialAmount);
+
+      const baseAssetCoins = await wallet.getAllCoins(baseAssetId);
+      expect(baseAssetCoins).toHaveLength(1);
+      expect(originalBaseAssetCoins).not.toContainEqual(baseAssetCoins[0]);
+    });
+
+    test.only(`consolidates once - less than max_inputs,
+      prioritizes non-base asset consolidation`, async () => {
+      const coinsPerAsset = 200;
+      const maxInputs = 255;
+      using launched = await setupTestProviderAndWallets({
+        walletsConfig: {
+          coinsPerAsset,
+          assets,
+        },
+      });
+
+      const {
+        wallets: [wallet],
+      } = launched;
+
+      const baseAssetId = await wallet.provider.getBaseAssetId();
+      const originalCoins = await wallet.getAllCoins(testAssetId);
+      const originalBaseAssetCoins = await wallet.getAllCoins(baseAssetId);
+      const initialAmount = originalCoins.reduce((acc, coin) => acc.add(coin.amount), bn(0));
+
+      const { coins } = await wallet.consolidateCoins({ assetId: testAssetId });
+
+      expect(coins).toHaveLength(1);
+      expect(originalCoins).not.toContainEqual(coins[0]);
+      expect(coins[0].amount).toEqualBn(initialAmount);
+
+      const baseAssetCoins = await wallet.getAllCoins(baseAssetId);
+      expect(baseAssetCoins).toHaveLength(coinsPerAsset - (maxInputs - coinsPerAsset) + 1);
+      // expect(originalBaseAssetCoins).not.toContainEqual(baseAssetCoins[0]);
     });
 
     test(`consolidates once - max_inputs coins, one base-asset UTXO can pay`, async () => {
@@ -509,7 +553,7 @@ describe('utxo-consolidation', () => {
       expect(resultingAmount).toEqualBn(initialAmount);
     });
 
-    test.only('consolidates multiple times - one unconsolidated coin leftover', async () => {
+    test('consolidates multiple times - one unconsolidated coin leftover', async () => {
       const expectedConsolidations = 7;
       using launched = await setupTestProviderAndWallets({
         walletsConfig: {
@@ -543,7 +587,7 @@ describe('utxo-consolidation', () => {
       expect(resultingAmount).toEqualBn(initialAmount);
     });
 
-    test(`consolidates multiple times - leftover coins`, async () => {
+    test(`consolidates multiple times, uses leftover spots for base asset consolidation`, async () => {
       const expectedConsolidations = 8;
       using launched = await setupTestProviderAndWallets({
         walletsConfig: {
@@ -557,6 +601,7 @@ describe('utxo-consolidation', () => {
         wallets: [wallet],
       } = launched;
 
+      const baseAssetId = await wallet.provider.getBaseAssetId();
       const originalCoins = await wallet.getAllCoins(testAssetId);
       const initialAmount = originalCoins.reduce((acc, coin) => acc.add(coin.amount), bn(0));
 
@@ -569,6 +614,23 @@ describe('utxo-consolidation', () => {
 
       const resultingAmount = coins.reduce((acc, coin) => acc.add(coin.amount), bn(0));
       expect(resultingAmount).toEqualBn(initialAmount);
+
+      const { transaction: lastTransaction } = transactions[transactions.length - 1];
+      const lastTransactionNonBaseAssetInputs = lastTransaction?.inputs?.filter(
+        (input) => (input as InputCoin).assetId === testAssetId
+      ) as InputCoin[];
+
+      expect(lastTransactionNonBaseAssetInputs).toHaveLength(expectedConsolidations - 1);
+      const lastTransactionBaseAssetInputs = lastTransaction?.inputs?.filter(
+        (input) => (input as InputCoin).assetId === baseAssetId
+      ) as InputCoin[];
+
+      const maxInputs = 255;
+      expect(lastTransactionBaseAssetInputs).toHaveLength(
+        maxInputs - lastTransactionNonBaseAssetInputs.length
+      );
+
+      expect(transactions[transactions.length - 1].isStatusSuccess).toBe(true);
     });
 
     test('factors in change outputs coins of base assets', () => {});
