@@ -21,7 +21,13 @@ void (async () => {
   });
 
   const mdFiles = globSync('**/*.md', {
-    ignore: ['**/node_modules/**', 'apps/demo-*/**', '.changeset/**', '**/CHANGELOG.md'],
+    ignore: [
+      '**/node_modules/**',
+      'apps/demo-*/**',
+      '.changeset/**',
+      '**/CHANGELOG.md',
+      'internal/**',
+    ],
   });
 
   execSync(`pnpm markdown-link-check -q -c ./link-check.config.json ${mdFiles.join(' ')}`, {

@@ -6,7 +6,7 @@ import { bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import { InputMessageCoder, TransactionCoder, TransactionType } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
-import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
+import { arrayify, hexlify, DateTime, isDefined, sleep } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility, gte, versions } from '@fuel-ts/versions';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
@@ -61,6 +61,7 @@ import {
 } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse, getDecodedLogs } from './transaction-response';
+import { processGqlReceipt } from './transaction-summary';
 import {
   calculateGasFee,
   extractTxError,
@@ -68,8 +69,9 @@ import {
   getReceiptsWithMissingData,
 } from './utils';
 import type { RetryOptions } from './utils/auto-retry-fetch';
-import { autoRetryFetch } from './utils/auto-retry-fetch';
+import { autoRetryFetch, getWaitDelay } from './utils/auto-retry-fetch';
 import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
+import { parseRawInput, parseRawOutput } from './utils/parsers';
 import type { ProviderCacheJson, TransactionSummaryJsonPartial } from './utils/serialization';
 import {
   deserializeChain,
@@ -77,7 +79,6 @@ import {
   deserializeProviderCache,
   deserializeReceipt,
 } from './utils/serialization';
-import { parseRawInput, parseRawOutput } from './utils/parsers';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
 const MAX_RETRIES = 10;
@@ -417,6 +418,13 @@ type SdkOperations = Omit<Operations, 'statusChange' | 'submitAndAwaitStatus'> &
   getBlobs: (variables: { blobIds: string[] }) => Promise<{ blob: { id: string } | null }[]>;
 };
 
+const BLOCK_HEIGHT_SENSITIVE_OPERATIONS: Array<keyof SdkOperations> = [
+  'submit',
+  'statusChange',
+  'getCoinsToSpend',
+  'submitAndAwaitStatus',
+];
+
 /**
  * A provider for connecting to a node
  */
@@ -425,9 +433,20 @@ export default class Provider {
   cache?: ResourceCache;
 
   /** @hidden */
-  static clearChainAndNodeCaches() {
+  /**
+   *
+   * @param url - If provided, clears cache only for given url
+   */
+  static clearChainAndNodeCaches(url?: string) {
+    if (url) {
+      delete Provider.chainInfoCache[url];
+      delete Provider.nodeInfoCache[url];
+      delete Provider.currentBlockHeightCache[url];
+      return;
+    }
     Provider.nodeInfoCache = {};
     Provider.chainInfoCache = {};
+    Provider.currentBlockHeightCache = {};
   }
 
   /** @hidden */
@@ -440,10 +459,22 @@ export default class Provider {
     amount128: false,
   };
 
+  /**
+   * Governs whether to include the required block height in the request body
+   * for block-sensitive operations like when submitting a transaction.
+   *
+   * This ensures that the operation is executed at the correct block height,
+   * regardless of which node in the network the request is routed to.
+   *
+   * `true` by default.
+   */
+  public static ENSURE_RPC_CONSISTENCY: boolean = true;
   /** @hidden */
   private static chainInfoCache: ChainInfoCache = {};
   /** @hidden */
   private static nodeInfoCache: NodeInfoCache = {};
+  /** @hidden */
+  private static currentBlockHeightCache: Record<string, number> = {};
   /** @hidden */
   private static incompatibleNodeVersionMessage: string = '';
 
@@ -480,8 +511,91 @@ export default class Provider {
         fullRequest = await options.requestMiddleware(fullRequest);
       }
 
-      return options.fetch ? options.fetch(url, fullRequest, options) : fetch(url, fullRequest);
+      if (Provider.ENSURE_RPC_CONSISTENCY) {
+        Provider.applyBlockHeight(fullRequest, url);
+      }
+
+      return Provider.fetchAndProcessBlockHeight(url, fullRequest, options);
     }, retryOptions);
+  }
+
+  private static applyBlockHeight(request: RequestInit, url: string) {
+    const operationName = request.body
+      ?.toString()
+      .match(/"operationName":"(.+)"/)?.[1] as keyof SdkOperations;
+
+    if (!BLOCK_HEIGHT_SENSITIVE_OPERATIONS.includes(operationName)) {
+      return;
+    }
+
+    const normalizedUrl = url.replace(/-sub$/, '');
+    const currentBlockHeight = this.currentBlockHeightCache[normalizedUrl] ?? 0;
+
+    request.body = request.body
+      ?.toString()
+      .replace(/}$/, `,"extensions":{"required_fuel_block_height":${currentBlockHeight}}}`);
+  }
+
+  private static async fetchAndProcessBlockHeight(
+    url: string,
+    request: RequestInit,
+    options: ProviderOptions
+  ): Promise<Response> {
+    const fetchFn = () =>
+      options.fetch ? options.fetch(url, request, options) : fetch(url, request);
+
+    let response: Response = await fetchFn();
+
+    const retryOptions: RetryOptions = {
+      maxRetries: 5,
+      baseDelay: 500,
+    };
+
+    for (let retriesLeft = retryOptions.maxRetries; retriesLeft > 0; --retriesLeft) {
+      const responseClone = response.clone();
+
+      let extensions: {
+        current_fuel_block_height?: number;
+        fuel_block_height_precondition_failed: boolean;
+      };
+
+      if (url.endsWith('-sub')) {
+        const reader = responseClone.body?.getReader() as ReadableStreamDefaultReader<Uint8Array>;
+        const { event } = await FuelGraphqlSubscriber.readEvent(reader);
+
+        extensions = event?.extensions as typeof extensions;
+      } else {
+        extensions = (await responseClone.json()).extensions;
+      }
+
+      Provider.setCurrentBlockHeight(url, extensions?.current_fuel_block_height);
+
+      if (!extensions?.fuel_block_height_precondition_failed) {
+        break;
+      }
+
+      const retryAttempt = retryOptions.maxRetries - retriesLeft + 1;
+      const sleepTime = getWaitDelay(retryOptions, retryAttempt);
+      await sleep(sleepTime);
+
+      response = await fetchFn();
+    }
+
+    return response;
+  }
+
+  private static setCurrentBlockHeight(url: string, height: number | undefined) {
+    if (height === undefined) {
+      return;
+    }
+
+    const normalizedUrl = url.replace(/-sub$/, '');
+
+    const currentBlockHeight: number | undefined = this.currentBlockHeightCache[normalizedUrl];
+
+    if (currentBlockHeight === undefined || height > currentBlockHeight) {
+      this.currentBlockHeightCache[normalizedUrl] = height;
+    }
   }
 
   /**
@@ -710,6 +824,7 @@ export default class Provider {
     const executeQuery = (query: DocumentNode, vars: Record<string, unknown>) => {
       const opDefinition = query.definitions.find((x) => x.kind === 'OperationDefinition') as {
         operation: string;
+        name: { kind: 'Name'; value: string };
       };
       const isSubscription = opDefinition?.operation === 'subscription';
 
@@ -719,6 +834,13 @@ export default class Provider {
           query,
           fetchFn: (url, requestInit) => fetchFn(url as string, requestInit, this.options),
           variables: vars,
+          operationName: opDefinition.name.value,
+          onEvent: (event) => {
+            Provider.setCurrentBlockHeight(
+              this.urlWithoutAuth,
+              event.extensions?.current_fuel_block_height as number
+            );
+          },
         });
       }
       return gqlClient.request(query, vars);
@@ -1667,7 +1789,7 @@ export default class Provider {
         .map(coinQuantityfy)
         .map(({ assetId, amount, max: maxPerAsset }) => ({
           assetId: hexlify(assetId),
-          amount: amount.toString(10),
+          amount: (amount.eqn(0) ? bn(1) : amount).toString(10),
           max: maxPerAsset ? maxPerAsset.toString(10) : undefined,
         })),
       excludedIds: idsToExclude,
