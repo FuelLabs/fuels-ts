@@ -316,7 +316,7 @@ describe('Provider', () => {
     consoleWarnSpy.mockRestore();
   });
 
-  it.skip('can getVersion()', async () => {
+  it('can getVersion()', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
@@ -1006,7 +1006,7 @@ describe('Provider', () => {
     expect(gasConfig.maxGasPerTx).toBeDefined();
   });
 
-  it.skip('Prepend a warning to an error with version mismatch [major]', async () => {
+  it('Prepend a warning to an error with version mismatch [major]', async () => {
     const { current, supported } = mockIncompatibleVersions({
       isMajorMismatch: true,
       isMinorMismatch: false,
@@ -1033,7 +1033,7 @@ describe('Provider', () => {
     });
   });
 
-  it.skip('Prepend a warning to an error with version mismatch [minor]', async () => {
+  it('Prepend a warning to an error with version mismatch [minor]', async () => {
     const { current, supported } = mockIncompatibleVersions({
       isMajorMismatch: false,
       isMinorMismatch: true,
@@ -1060,7 +1060,7 @@ describe('Provider', () => {
     });
   });
 
-  it.skip('Prepend a warning to a subscription error with version mismatch [major]', async () => {
+  it('Prepend a warning to a subscription error with version mismatch [major]', async () => {
     const { current, supported } = mockIncompatibleVersions({
       isMajorMismatch: true,
       isMinorMismatch: false,
@@ -1097,7 +1097,7 @@ describe('Provider', () => {
     });
   });
 
-  it.skip('Prepend a warning to a subscription error with version mismatch [minor]', async () => {
+  it('Prepend a warning to a subscription error with version mismatch [minor]', async () => {
     const { current, supported } = mockIncompatibleVersions({
       isMajorMismatch: false,
       isMinorMismatch: true,
