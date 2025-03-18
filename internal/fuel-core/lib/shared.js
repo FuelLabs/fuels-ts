@@ -81,5 +81,5 @@ export const buildFromGitBranch = (branchName) => {
   mkdirSync(to, { recursive: true });
 
   cpSync(join(from, 'fuel-core'), join(to, 'fuel-core'));
-  cpSync(versionFilePath, to);
+  cpSync(versionFilePath, join(to, 'VERSION'));
 };
