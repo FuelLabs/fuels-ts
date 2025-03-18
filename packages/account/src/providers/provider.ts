@@ -61,7 +61,6 @@ import {
 } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse, getDecodedLogs } from './transaction-response';
-import { processGqlReceipt } from './transaction-summary';
 import {
   calculateGasFee,
   extractTxError,
@@ -1698,7 +1697,7 @@ export default class Provider {
     });
 
     if (status.type === 'DryRunFailureStatus') {
-      const parsedReceipts = status.receipts.map(processGqlReceipt);
+      const parsedReceipts = status.receipts.map(deserializeReceipt);
 
       throw this.extractDryRunError(request, parsedReceipts, status.reason);
     }
@@ -1719,7 +1718,7 @@ export default class Provider {
     return {
       assembledRequest: request,
       gasPrice: bn(gasPrice),
-      receipts: status.receipts.map(processGqlReceipt),
+      receipts: status.receipts.map(deserializeReceipt),
     };
   }
 
