@@ -4,13 +4,7 @@ import type { HashableMessage } from '@fuel-ts/hasher';
 import { EventEmitter } from 'events';
 
 import type { Asset } from '../assets/types';
-import {
-  AssembleTxParams,
-  transactionRequestify,
-  type TransactionRequest,
-  type TransactionRequestLike,
-  type TransactionResponse,
-} from '../providers';
+import type { AssembleTxParams, TransactionRequestLike, TransactionResponse } from '../providers';
 
 import { FuelConnectorEventTypes } from './types';
 import type {

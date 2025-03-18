@@ -1,4 +1,4 @@
-import {
+import type {
   AccountSendTxParams,
   Predicate,
   TransactionRequestLike,
@@ -6,13 +6,12 @@ import {
   AssembleTxParams,
   Provider,
   ScriptTransactionRequest,
-  transactionRequestify,
-  InputType,
-  CoinTransactionRequestInput,
 } from 'fuels';
-import { MockConnector } from './mock-connector';
+import { transactionRequestify } from 'fuels';
 
 import { PredicateSigning } from '../../typegen';
+
+import { MockConnector } from './mock-connector';
 
 export class MockPredicateSignerConnector extends MockConnector {
   override name = 'Mock Preicate Signer Connector';

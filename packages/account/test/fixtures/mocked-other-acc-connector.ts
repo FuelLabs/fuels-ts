@@ -1,13 +1,15 @@
-import { Account, transactionRequestify } from '../../src';
+import { transactionRequestify } from '../../src';
 import type {
   TransactionResponse,
   AccountSendTxParams,
   TransactionRequestLike,
   AssembleTxParams,
   ScriptTransactionRequest,
+  Account,
 } from '../../src';
 
-import { MockConnector, MockConnectorOptions } from './mocked-connector';
+import type { MockConnectorOptions } from './mocked-connector';
+import { MockConnector } from './mocked-connector';
 
 type MockedOtherAccountConnectorOptions = {
   otherAccount: Account;

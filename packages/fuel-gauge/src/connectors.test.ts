@@ -1,9 +1,14 @@
-import { launchTestNode } from 'fuels/test-utils';
-import { MockConnector } from '../test/fixtures/connectors/mock-connector';
 import { Fuel, Account, bn } from 'fuels';
-import { CallTestContract, CallTestContractFactory } from '../test/typegen';
-import { MockPredicateSignerConnector } from '../test/fixtures/connectors/mock-predicate-signer-connector';
+import { launchTestNode } from 'fuels/test-utils';
 
+import { MockConnector } from '../test/fixtures/connectors/mock-connector';
+import { MockPredicateSignerConnector } from '../test/fixtures/connectors/mock-predicate-signer-connector';
+import { CallTestContract, CallTestContractFactory } from '../test/typegen';
+
+/**
+ * @group node
+ * @group browser
+ */
 describe('Connectors', () => {
   it('transaction w/ connector [transfer]', async () => {
     using launched = await launchTestNode();

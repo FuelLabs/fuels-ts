@@ -24,8 +24,8 @@ import { setupTestProviderAndWallets, TestMessage } from '../src/test-utils';
 import { Wallet } from '../src/wallet';
 
 import { MockConnector } from './fixtures/mocked-connector';
-import { promiseCallback } from './fixtures/promise-callback';
 import { MockedOtherAccountConnector } from './fixtures/mocked-other-acc-connector';
+import { promiseCallback } from './fixtures/promise-callback';
 
 /**
  * @group node

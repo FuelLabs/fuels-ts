@@ -1,7 +1,7 @@
-import type { HashableMessage } from 'fuels';
-import { setTimeout } from 'timers/promises';
+/* eslint-disable @typescript-eslint/require-await */
 
 import type {
+  HashableMessage,
   TransactionRequestLike,
   WalletUnlocked,
   FuelABI,
@@ -10,10 +10,10 @@ import type {
   SelectNetworkArguments,
   AccountSendTxParams,
   TransactionResponse,
+  Asset,
 } from 'fuels';
-import type { Asset } from 'fuels';
-import { Address, FuelConnector } from 'fuels';
-import { FuelConnectorEventTypes } from 'fuels';
+import { Address, FuelConnector, FuelConnectorEventTypes } from 'fuels';
+import { setTimeout } from 'timers/promises';
 
 export function generateAccounts(total: number) {
   return new Array(total).fill(0).map(() => Address.fromRandom().toString());

@@ -608,20 +608,20 @@ export class Account extends AbstractAccount implements WithAddress {
     transactionRequestLike: TransactionRequestLike,
     { signatureCallback, quantities = [], gasPrice }: TransactionCostParams = {}
   ): Promise<TransactionCost> {
-    let txRequest = clone(transactionRequestify(transactionRequestLike));
+    const txRequestClone = clone(transactionRequestify(transactionRequestLike));
 
     const baseAssetId = await this.provider.getBaseAssetId();
 
     // Fund with fake UTXOs to avoid not enough funds error
     // Getting coin quantities from amounts being transferred
-    const coinOutputsQuantities = txRequest.getCoinOutputsQuantities();
+    const coinOutputsQuantities = txRequestClone.getCoinOutputsQuantities();
     // Combining coin quantities from amounts being transferred and forwarding to contracts
     const requiredQuantities = mergeQuantities(coinOutputsQuantities, quantities);
     // An arbitrary amount of the base asset is added to cover the transaction fee during dry runs
     const transactionFeeForDryRun = [{ assetId: baseAssetId, amount: bn('100000000000000000') }];
 
     const findAssetInput = (assetId: string) =>
-      txRequest.inputs.find((input) => {
+      txRequestClone.inputs.find((input) => {
         if (input.type === InputType.Coin) {
           return input.assetId === assetId;
         }
@@ -641,7 +641,7 @@ export class Account extends AbstractAccount implements WithAddress {
       if (assetInput && 'amount' in assetInput) {
         assetInput.amount = usedQuantity;
       } else {
-        txRequest.addResources(
+        txRequestClone.addResources(
           this.generateFakeResources([
             {
               amount: quantity,
@@ -656,7 +656,7 @@ export class Account extends AbstractAccount implements WithAddress {
       updateAssetInput(assetId, amount)
     );
 
-    const txCost = await this.provider.getTransactionCost(txRequest, {
+    const txCost = await this.provider.getTransactionCost(txRequestClone, {
       signatureCallback,
       gasPrice,
     });
