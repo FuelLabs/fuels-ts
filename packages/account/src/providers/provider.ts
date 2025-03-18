@@ -1632,9 +1632,20 @@ export default class Provider {
     let feePayerIndex = -1;
     let baseAssetChange;
 
+    const requestChanges = request.getChangeOutputs();
+
     const requiredBalances = accountCoinQuantities.map((quantity, index) => {
       const { amount, assetId, account = feePayerAccount } = quantity;
+      const setChangeOnRequest = requestChanges.find((change) => change.assetId === assetId);
+
       let { changeOutputAccount } = quantity;
+
+      if (setChangeOnRequest && changeOutputAccount) {
+        throw new FuelError(
+          ErrorCode.CHANGE_OUTPUT_COLLISION,
+          `OutputChange for asset ${assetId} is set in both the request and the txAssemble parameters.`
+        );
+      }
 
       if (!changeOutputAccount) {
         changeOutputAccount = account;
