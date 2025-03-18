@@ -70,13 +70,14 @@ import {
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch, getWaitDelay } from './utils/auto-retry-fetch';
 import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
-import { parseRawInput, parseRawOutput } from './utils/parsers';
 import type { ProviderCacheJson, TransactionSummaryJsonPartial } from './utils/serialization';
 import {
   deserializeChain,
   deserializeNodeInfo,
   deserializeProviderCache,
   deserializeReceipt,
+  parseRawInput,
+  parseRawOutput,
 } from './utils/serialization';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
