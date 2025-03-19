@@ -49,10 +49,10 @@ interface Connector {
     transaction: TransactionRequestLike,
     params?: FuelConnectorSendTxParams
   ): Promise<string | TransactionResponse>;
-
-  onBeforeAssembleTx(params: AssembleTxParams): Promise<AssembleTxParams>;
-
   // #endregion fuel-connector-method-sendTransaction
+  // #region fuel-connector-method-onBeforeAssembleTx
+  onBeforeAssembleTx(params: AssembleTxParams): Promise<AssembleTxParams>;
+  // #endregion fuel-connector-method-onBeforeAssembleTx
   // #region fuel-connector-method-currentAccount
   currentAccount(): Promise<string | null>;
   // #endregion fuel-connector-method-currentAccount
