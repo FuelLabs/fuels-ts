@@ -9,7 +9,7 @@ import {
   ConfigurableContractFactory,
   CoverageContractFactory,
 } from '../test/typegen/contracts';
-import { ScriptCallContract } from '../test/typegen/scripts';
+import { ScriptCallContract, ScriptCallLoggingContracts } from '../test/typegen/scripts';
 
 import { launchTestContract } from './utils';
 
@@ -142,6 +142,127 @@ describe('Advanced Logging', () => {
       'Hello from other Contract',
       'Received value from main Contract:',
       INPUT,
+    ]);
+  });
+
+  it('should not decode logs from external contracts when JSON ABIs are missing', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        { factory: AdvancedLoggingFactory },
+        { factory: AdvancedLoggingOtherContractFactory },
+      ],
+    });
+
+    const {
+      contracts: [advancedLogContract, otherAdvancedLogContract],
+      wallets: [wallet],
+    } = launched;
+
+    const script = new ScriptCallLoggingContracts(wallet);
+
+    const call = await script.functions
+      .main(advancedLogContract.id.toB256(), otherAdvancedLogContract.id.toB256())
+      .call();
+
+    const { logs } = await call.waitForResult();
+
+    expect(logs).toBeDefined();
+
+    expect(logs).toStrictEqual(['log from script 1', 'log from script 2']);
+  });
+
+  it('should not decode logs from external contracts when JSON ABIs are missing [ADD ID ONLY]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        { factory: AdvancedLoggingFactory },
+        { factory: AdvancedLoggingOtherContractFactory },
+      ],
+    });
+
+    const {
+      contracts: [advancedLogContract, otherAdvancedLogContract],
+      wallets: [wallet],
+    } = launched;
+
+    const script = new ScriptCallLoggingContracts(wallet);
+
+    const contractA = advancedLogContract.id.toB256();
+    const contractB = otherAdvancedLogContract.id.toB256();
+
+    const call = await script.functions
+      .main(contractA, contractB)
+      .addContracts([contractA, contractB])
+      .call();
+
+    const { logs } = await call.waitForResult();
+
+    expect(logs).toBeDefined();
+
+    expect(logs).toStrictEqual(['log from script 1', 'log from script 2']);
+  });
+
+  it('should decode logs from external contracts only when JSON ABI is present', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        { factory: AdvancedLoggingFactory },
+        { factory: AdvancedLoggingOtherContractFactory },
+      ],
+    });
+
+    const {
+      contracts: [advancedLogContract, otherAdvancedLogContract],
+      wallets: [wallet],
+    } = launched;
+
+    const script = new ScriptCallLoggingContracts(wallet);
+
+    const call = await script.functions
+      .main(advancedLogContract.id.toB256(), otherAdvancedLogContract.id.toB256())
+      .addContracts([advancedLogContract])
+      .call();
+
+    const { logs } = await call.waitForResult();
+
+    expect(logs).toBeDefined();
+
+    expect(logs).toStrictEqual([
+      'log from script 1',
+      'Hello from main Contract',
+      'log from script 2',
+    ]);
+  });
+
+  it('should decode all logs when all contracts JSON ABIs are present', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        { factory: AdvancedLoggingFactory },
+        { factory: AdvancedLoggingOtherContractFactory },
+      ],
+    });
+
+    const {
+      contracts: [advancedLogContract, otherAdvancedLogContract],
+      wallets: [wallet],
+    } = launched;
+
+    const script = new ScriptCallLoggingContracts(wallet);
+
+    const call = await script.functions
+      .main(advancedLogContract.id.toB256(), otherAdvancedLogContract.id.toB256())
+      .addContracts([advancedLogContract, otherAdvancedLogContract])
+      .call();
+
+    const { logs } = await call.waitForResult();
+
+    expect(logs).toBeDefined();
+
+    expect(logs).toStrictEqual([
+      'log from script 1',
+      'Hello from main Contract',
+      'Hello from other Contract',
+      'Received value from main Contract:',
+      10,
+      'log from script 2',
     ]);
   });
 
