@@ -64,29 +64,33 @@ jobs:
         with:
           refresh-message-position: true
           message: |
-            This PR is published in AWS CodeArtifact with version **${{ env.NPM_DIST_TAG }}**
+            # Temporary PR
 
-            Install using the following command:
+            This PR is published in AWS CodeArtifact with version:
+            - `pr-3792`
+
+            Install using the below commands.
+
+            > `create-fuels` variations are commented out.
+
+            ## PNPM
+
             ```bash
-            # PNPM
             pnpm config set registry https://npm-packages.fuel.network/ --global
-            pnpm install fuels@${{ env.NPM_DIST_TAG }}
-
-            # NPM
-            npm --registry=https://npm-packages.fuel.network/ install fuels@${{ env.NPM_DIST_TAG }}
-
-            # Bun
-            npm_config_registry=https://npm-packages.fuel.network/ bun install fuels@${{ env.NPM_DIST_TAG }}
+            pnpm install fuels@pr-3792
+            # pnpm create fuels@pr-3792
             ```
-            Or using `create-fuels`:
+
+            ## NPM
+
             ```bash
-            # PNPM
-            pnpm config set registry https://npm-packages.fuel.network/ --global
-            pnpm create fuels@${{ env.NPM_DIST_TAG }}
+            npm --registry=https://npm-packages.fuel.network/ install fuels@pr-3792
+            # npm --registry=https://npm-packages.fuel.network/ create fuels@pr-3792
+            ```
 
-            # NPM
-            npm --registry=https://npm-packages.fuel.network/ create fuels@${{ env.NPM_DIST_TAG }}
+            ## Bun
 
-            # Bun
-            npm_config_registry=https://npm-packages.fuel.network/ bun create fuels@${{ env.NPM_DIST_TAG }}
+            ```bash
+            npm_config_registry=https://npm-packages.fuel.network/ bun install fuels@pr-3792
+            # npm_config_registry=https://npm-packages.fuel.network/ bun create fuels@pr-3792
             ```
