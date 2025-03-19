@@ -7,15 +7,26 @@ const provider = new Provider(LOCAL_NETWORK_URL);
 const sender = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const receiverAddress = Address.fromRandom();
 
-const request = new ScriptTransactionRequest({
-  gasLimit: 10000,
-});
+const transferAmount = 1000;
+
+const request = new ScriptTransactionRequest();
 
 request.addCoinOutput(receiverAddress, 1000, await provider.getBaseAssetId());
 
-await request.estimateAndFund(sender);
+const { assembledRequest } = await provider.assembleTx({
+  request,
+  feePayerAccount: sender,
+  accountCoinQuantities: [
+    {
+      amount: transferAmount,
+      assetId: await provider.getBaseAssetId(),
+      account: sender,
+      changeOutputAccount: sender,
+    },
+  ],
+});
 
-const tx = await sender.sendTransaction(request);
+const tx = await sender.sendTransaction(assembledRequest);
 await tx.waitForResult();
 // #endregion signing-3
 
