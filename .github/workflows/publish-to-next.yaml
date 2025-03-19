@@ -60,7 +60,7 @@ jobs:
           npm_config_registry: "https://fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/npm/"
 
       - name: Add PR comment
-      uses: mshick/add-pr-comment@v2
+        uses: mshick/add-pr-comment@v2
         with:
           refresh-message-position: true
           message: |
