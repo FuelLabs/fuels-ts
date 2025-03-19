@@ -413,11 +413,11 @@ type SubmitAndAwaitStatusSubscription = {
   >;
 };
 
+type TransactionWithReceipts = NonNullable<GqlGetTransactionWithReceiptsQuery['transaction']>;
+
 type GetTransactionWithReceiptsQuery = {
-  transaction: Omit<NonNullable<GqlGetTransactionWithReceiptsQuery['transaction']>, 'status'> & {
-    status?: RemoveCodegenEmptyObject<
-      NonNullable<GqlGetTransactionWithReceiptsQuery['transaction']>['status']
-    >;
+  transaction?: Omit<TransactionWithReceipts, 'status'> & {
+    status?: RemoveCodegenEmptyObject<TransactionWithReceipts['status']>;
   };
 };
 
@@ -425,8 +425,7 @@ type TransactionsByOwnerNode =
   GqlGetTransactionsByOwnerQuery['transactionsByOwner']['edges'][number]['node'];
 
 type GetTransactionsByOwnerQuery = {
-  transactionsByOwner: {
-    pageInfo: GqlGetTransactionsByOwnerQuery['transactionsByOwner']['pageInfo'];
+  transactionsByOwner: Omit<GqlGetTransactionsByOwnerQuery['transactionsByOwner'], 'edges'> & {
     edges: Array<{
       node: Omit<TransactionsByOwnerNode, 'status'> & {
         status?: RemoveCodegenEmptyObject<TransactionsByOwnerNode['status']>;
