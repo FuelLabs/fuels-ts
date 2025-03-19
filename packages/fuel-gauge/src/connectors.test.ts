@@ -32,7 +32,7 @@ describe('Connectors', () => {
     expect(finalBalance).toStrictEqual(initialBalance.add(transferAmount));
   });
 
-  it('transaction w/ connector [contract]', async () => {
+  it('transaction w/ connector [contract call]', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
@@ -127,7 +127,7 @@ describe('Connectors', () => {
     );
   });
 
-  it('transaction w/ predicate connector [contract]', async () => {
+  it('transaction w/ predicate connector [contract call]', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
