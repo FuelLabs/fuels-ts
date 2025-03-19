@@ -279,9 +279,6 @@ export class BaseInvocationScope<TReturn = any> {
     request.maxFee = bn(0);
     request.gasLimit = bn(0);
 
-    // Clean coin inputs before add new coins to the request
-    request.inputs = request.inputs.filter((i) => i.type !== InputType.Coin);
-
     const provider = this.getProvider();
     const account = (this.program.account ?? Wallet.generate({ provider })) as Account;
     const baseAssetId = await provider.getBaseAssetId();
