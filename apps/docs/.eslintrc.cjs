@@ -11,7 +11,7 @@ module.exports = {
       rules: {
         "@typescript-eslint/no-unused-vars": [
           "error",
-          { varsIgnorePattern: "^_test_options$" },
+          { varsIgnorePattern: "^_", argsIgnorePattern: "^_" },
         ],
         "@typescript-eslint/naming-convention": [
           "error",
