@@ -90,6 +90,14 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 30
 
+      - name: Create .npmrc
+        run: |
+          cat << EOF > "$HOME/.npmrc"
+            registry="https://npm-packages.fuel.network/"
+          EOF
+        env:
+          HOME: ${{ github.workspace }}
+
       - name: Run tests (with published version)
         run: pnpm test:integration
         env:
