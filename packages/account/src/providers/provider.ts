@@ -400,6 +400,8 @@ type Operations = ReturnType<typeof getOperationsSdk>;
  * in place of the pre-confirmation statuses we don't declare in our operations.graphql.
  * Codegen converts these ignored statuses into `{}` types, and that messes up our TS code compilation,
  * because it's not written with this `{}` type in mind.
+ * This utility and its application on the types below removes those empty objects from the affected operations,
+ * thereby leaving their types unchanged from the perspective of their consumers.
  */
 type RemoveCodegenEmptyObject<T> = T extends object ? (keyof T extends never ? never : T) : T;
 
