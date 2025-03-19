@@ -10,7 +10,14 @@ import { clone } from 'ramda';
 /** @hidden */
 function normalize(object: any) {
   Object.keys(object).forEach((key) => {
-    switch (object[key]?.constructor.name) {
+    /**
+     * Classes get transformed by `tsup` into:
+     *  `var Address = class _Address`
+     *
+     * Therefore we need to strip of the `_` prefix
+     * to get the actual class name.
+     */
+    switch (object[key]?.constructor.name.replace(/^_/, '')) {
       case 'Uint8Array':
         object[key] = hexlify(object[key]);
         break;
