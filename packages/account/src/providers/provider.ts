@@ -33,6 +33,10 @@ import type {
   Requester,
   GqlBlockFragment,
   GqlEstimatePredicatesQuery,
+  GqlStatusChangeSubscription,
+  GqlSubmitAndAwaitStatusSubscription,
+  GqlGetTransactionWithReceiptsQuery,
+  GqlGetTransactionsByOwnerQuery,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -387,13 +391,64 @@ type NodeInfoCache = Record<string, NodeInfo>;
 
 type Operations = ReturnType<typeof getOperationsSdk>;
 
-type SdkOperations = Omit<Operations, 'statusChange' | 'submitAndAwaitStatus'> & {
+/**
+ * TODO: remove this once pre-confirmation status support lands.
+ *
+ * Because of the way graphql-codegen works, an empty object is added to the generated status types
+ * in place of the pre-confirmation statuses we don't declare in our operations.graphql.
+ * Codegen converts these ignored statuses into `{}` types, and that messes up our TS code compilation,
+ * because it's not written with this `{}` type in mind.
+ */
+type RemoveCodegenEmptyObject<T> = T extends object ? (keyof T extends never ? never : T) : T;
+
+type StatusChangeSubscription = {
+  statusChange: RemoveCodegenEmptyObject<GqlStatusChangeSubscription['statusChange']>;
+};
+
+type SubmitAndAwaitStatusSubscription = {
+  submitAndAwaitStatus: RemoveCodegenEmptyObject<
+    GqlSubmitAndAwaitStatusSubscription['submitAndAwaitStatus']
+  >;
+};
+
+type GetTransactionWithReceiptsQuery = {
+  transaction: Omit<NonNullable<GqlGetTransactionWithReceiptsQuery['transaction']>, 'status'> & {
+    status?: RemoveCodegenEmptyObject<
+      NonNullable<GqlGetTransactionWithReceiptsQuery['transaction']>['status']
+    >;
+  };
+};
+
+type TransactionsByOwnerNode =
+  GqlGetTransactionsByOwnerQuery['transactionsByOwner']['edges'][number]['node'];
+
+type GetTransactionsByOwnerQuery = {
+  transactionsByOwner: {
+    pageInfo: GqlGetTransactionsByOwnerQuery['transactionsByOwner']['pageInfo'];
+    edges: Array<{
+      node: Omit<TransactionsByOwnerNode, 'status'> & {
+        status?: RemoveCodegenEmptyObject<TransactionsByOwnerNode['status']>;
+      };
+    }>;
+  };
+};
+
+type SdkOperations = Omit<
+  Operations,
+  'statusChange' | 'submitAndAwaitStatus' | 'getTransactionWithReceipts' | 'getTransactionsByOwner'
+> & {
   statusChange: (
     ...args: Parameters<Operations['statusChange']>
-  ) => Promise<ReturnType<Operations['statusChange']>>;
+  ) => Promise<AsyncIterable<StatusChangeSubscription>>;
   submitAndAwaitStatus: (
     ...args: Parameters<Operations['submitAndAwaitStatus']>
-  ) => Promise<ReturnType<Operations['submitAndAwaitStatus']>>;
+  ) => Promise<AsyncIterable<SubmitAndAwaitStatusSubscription>>;
+  getTransactionWithReceipts: (
+    ...args: Parameters<Operations['getTransactionWithReceipts']>
+  ) => Promise<GetTransactionWithReceiptsQuery>;
+  getTransactionsByOwner: (
+    ...args: Parameters<Operations['getTransactionsByOwner']>
+  ) => Promise<GetTransactionsByOwnerQuery>;
   getBlobs: (variables: { blobIds: string[] }) => Promise<{ blob: { id: string } | null }[]>;
 };
 
