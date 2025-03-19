@@ -63,24 +63,24 @@ jobs:
         with:
           refresh-message-position: true
           message: |
-            This PR is published in AWS CodeArtifact with version **${{ NPM_DIST_TAG }}**
+            This PR is published in AWS CodeArtifact with version **$NPM_DIST_TAG**
             Install using the following command:
             ```bash
             # PNPM
             pnpm config set registry https://npm-packages.fuel.network/ --global
-            pnpm install fuels@${{ NPM_DIST_TAG }}
+            pnpm install fuels@$NPM_DIST_TAG
             # NPM
-            npm --registry=https://npm-packages.fuel.network/ install fuels@${{ NPM_DIST_TAG }}
+            npm --registry=https://npm-packages.fuel.network/ install fuels@$NPM_DIST_TAG
             # Bun
-            npm_config_registry=https://npm-packages.fuel.network/ bun install fuels@${{ NPM_DIST_TAG }}
+            npm_config_registry=https://npm-packages.fuel.network/ bun install fuels@$NPM_DIST_TAG
             ```
             Or using `create-fuels`:
             ```bash
             # PNPM
             pnpm config set registry https://npm-packages.fuel.network/ --global
-            pnpm create fuels@${{ NPM_DIST_TAG }}
+            pnpm create fuels@$NPM_DIST_TAG
             # NPM
-            npm --registry=https://npm-packages.fuel.network/ create fuels@${{ NPM_DIST_TAG }}
+            npm --registry=https://npm-packages.fuel.network/ create fuels@$NPM_DIST_TAG
             # Bun
-            npm_config_registry=https://npm-packages.fuel.network/ bun create fuels@${{ NPM_DIST_TAG }}
+            npm_config_registry=https://npm-packages.fuel.network/ bun create fuels@$NPM_DIST_TAG
             ```
