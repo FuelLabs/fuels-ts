@@ -1720,10 +1720,14 @@ export default class Provider {
       let { changeOutputAccount } = quantity;
 
       if (setChangeOnRequest && changeOutputAccount) {
-        throw new FuelError(
-          ErrorCode.CHANGE_OUTPUT_COLLISION,
-          `OutputChange for asset ${assetId} is set in both the request and the txAssemble parameters.`
-        );
+        const isCollision = setChangeOnRequest.to !== changeOutputAccount.address.toB256();
+
+        if (isCollision) {
+          throw new FuelError(
+            ErrorCode.CHANGE_OUTPUT_COLLISION,
+            `OutputChange address for asset ${assetId} differs between transaction request and assembleTx inputs.`
+          );
+        }
       }
 
       if (!changeOutputAccount) {
