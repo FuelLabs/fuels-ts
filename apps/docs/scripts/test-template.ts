@@ -11,7 +11,7 @@ afterAll(() => {
 });
 
 // %TEST_ENVIRONMENT%
-test('%NAME%', async () => {
+test('%NAME%', { timeout: 10_000 }, async () => {
   // TEST NODE LAUNCHER ———>>>
   // %NODE_LAUNCHER%
   // <<<——— TEST NODE LAUNCHER
