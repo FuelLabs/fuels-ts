@@ -207,4 +207,182 @@ describe('Block-sensitive operations have the current block height included in r
 
     expectBlockHeight({ included: false, fetchSpy });
   });
+
+  test('getCoins - block height included', async () => {
+    using launched = await setupTest();
+
+    const { provider, wallet, latestBlockHeight } = launched;
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    await provider.operations.getCoins({
+      filter: { owner: wallet.address.toB256() },
+      first: 1,
+    });
+
+    expectBlockHeight({ included: true, fetchSpy, latestBlockHeight });
+  });
+
+  test('getCoins - block height not included', async () => {
+    using launched = await setupTest();
+
+    const { provider, wallet } = launched;
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    Provider.ENSURE_RPC_CONSISTENCY = false;
+
+    await provider.operations.getCoins({
+      filter: { owner: wallet.address.toB256() },
+      first: 1,
+    });
+
+    expectBlockHeight({ included: false, fetchSpy });
+  });
+
+  test('getTransaction - block height included', async () => {
+    using launched = await setupTest();
+
+    const { provider, transactionId, latestBlockHeight } = launched;
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    await provider.operations.getTransaction({
+      transactionId,
+    });
+
+    expectBlockHeight({ included: true, fetchSpy, latestBlockHeight });
+  });
+
+  test('getTransaction - block height not included', async () => {
+    using launched = await setupTest();
+
+    const { provider, transactionId } = launched;
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    Provider.ENSURE_RPC_CONSISTENCY = false;
+
+    await provider.operations.getTransaction({
+      transactionId,
+    });
+
+    expectBlockHeight({ included: false, fetchSpy });
+  });
+
+  test('getTransactionWithReceipts - block height included', async () => {
+    using launched = await setupTest();
+
+    const { provider, transactionId, latestBlockHeight } = launched;
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    await provider.operations.getTransactionWithReceipts({
+      transactionId,
+    });
+
+    expectBlockHeight({ included: true, fetchSpy, latestBlockHeight });
+  });
+
+  test('getTransactionWithReceipts - block height not included', async () => {
+    using launched = await setupTest();
+
+    const { provider, transactionId } = launched;
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    Provider.ENSURE_RPC_CONSISTENCY = false;
+
+    await provider.operations.getTransactionWithReceipts({
+      transactionId,
+    });
+
+    expectBlockHeight({ included: false, fetchSpy });
+  });
+
+  test('getTransactions - block height included', async () => {
+    using launched = await setupTest();
+
+    const { provider, latestBlockHeight } = launched;
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    await provider.operations.getTransactions({
+      last: 2,
+    });
+
+    expectBlockHeight({ included: true, fetchSpy, latestBlockHeight });
+  });
+
+  test('getTransactions - block height not included', async () => {
+    using launched = await setupTest();
+
+    const { provider } = launched;
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    Provider.ENSURE_RPC_CONSISTENCY = false;
+
+    await provider.operations.getTransactions({
+      last: 2,
+    });
+
+    expectBlockHeight({ included: false, fetchSpy });
+  });
+
+  test('getTransactionsByOwner - block height included', async () => {
+    using launched = await setupTest();
+
+    const { provider, wallet, latestBlockHeight } = launched;
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    await provider.operations.getTransactionsByOwner({
+      owner: wallet.address.toB256(),
+    });
+
+    expectBlockHeight({ included: true, fetchSpy, latestBlockHeight });
+  });
+
+  test('getTransactionsByOwner - block height not included', async () => {
+    using launched = await setupTest();
+
+    const { provider, wallet } = launched;
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    Provider.ENSURE_RPC_CONSISTENCY = false;
+
+    await provider.operations.getTransactionsByOwner({
+      owner: wallet.address.toB256(),
+    });
+
+    expectBlockHeight({ included: false, fetchSpy });
+  });
+
+  test('estimateGasPrice - block height included', async () => {
+    using launched = await setupTest();
+
+    const { provider, latestBlockHeight } = launched;
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    await provider.operations.estimateGasPrice({ blockHorizon: '10' });
+
+    expectBlockHeight({ included: true, fetchSpy, latestBlockHeight });
+  });
+
+  test('estimateGasPrice - block height not included', async () => {
+    using launched = await setupTest();
+
+    const { provider } = launched;
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    Provider.ENSURE_RPC_CONSISTENCY = false;
+
+    await provider.operations.estimateGasPrice({ blockHorizon: '10' });
+
+    expectBlockHeight({ included: false, fetchSpy });
+  });
 });

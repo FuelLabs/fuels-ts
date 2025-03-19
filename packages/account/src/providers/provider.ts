@@ -402,6 +402,12 @@ const BLOCK_HEIGHT_SENSITIVE_OPERATIONS: Array<keyof SdkOperations> = [
   'statusChange',
   'getCoinsToSpend',
   'submitAndAwaitStatus',
+  'getCoins',
+  'getTransaction',
+  'getTransactionWithReceipts',
+  'getTransactions',
+  'getTransactionsByOwner',
+  'estimateGasPrice',
 ];
 
 /**
