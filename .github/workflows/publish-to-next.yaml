@@ -66,12 +66,9 @@ jobs:
           message: |
             # Temporary PR
 
-            This PR is published in AWS CodeArtifact with version:
-            - `pr-3792`
+            This PR is published in AWS CodeArtifact with version: `pr-3792`
 
-            Install using the below commands.
-
-            > `create-fuels` variations are commented out.
+            Install using the below commands — `create-fuels` variations are commented out.
 
             ## PNPM
 
