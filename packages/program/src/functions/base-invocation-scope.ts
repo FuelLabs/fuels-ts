@@ -345,10 +345,14 @@ export class BaseInvocationScope<TReturn = any> {
    * @param contracts - An array of contracts to add.
    * @returns The current instance of the class.
    */
-  addContracts(contracts: Array<AbstractContract>) {
+  addContracts(contracts: Array<AbstractContract | string>) {
     contracts.forEach((contract) => {
-      this.transactionRequest.addContractInputAndOutput(contract.id);
-      this.externalAbis[contract.id.toB256()] = contract.interface.jsonAbi;
+      if (typeof contract === 'string') {
+        this.transactionRequest.addContractInputAndOutput(new Address(contract));
+      } else {
+        this.transactionRequest.addContractInputAndOutput(contract.id);
+        this.externalAbis[contract.id.toB256()] = contract.interface.jsonAbi;
+      }
     });
     return this;
   }
