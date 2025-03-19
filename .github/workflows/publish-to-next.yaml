@@ -59,7 +59,8 @@ jobs:
           HOME: ${{ github.workspace }}
           npm_config_registry: "https://fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/npm/"
 
-      - uses: mshick/add-pr-comment@v2
+      - name: Add PR comment
+      uses: mshick/add-pr-comment@v2
         with:
           refresh-message-position: true
           message: |
@@ -85,7 +86,7 @@ jobs:
 
             # NPM
             npm --registry=https://npm-packages.fuel.network/ create fuels@${{ env.NPM_DIST_TAG }}
-            
+
             # Bun
             npm_config_registry=https://npm-packages.fuel.network/ bun create fuels@${{ env.NPM_DIST_TAG }}
             ```
