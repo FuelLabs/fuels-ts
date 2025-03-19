@@ -679,6 +679,51 @@ describe('Fuel Connector', () => {
     );
   });
 
+  it('should ensure transfer works just fine [state: funded]', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider,
+      wallets: [connectorWallet, receiverWallet],
+    } = launched;
+    const connector = new MockConnector({
+      wallets: [connectorWallet],
+    });
+    const fuel = await new Fuel({
+      connectors: [connector],
+    }).init();
+
+    const account = new Account(connectorWallet.address.toString(), provider, fuel);
+    const sendTransactionSpy = vi.spyOn(connectorWallet, 'sendTransaction');
+
+    const transferAmount = bn(1000);
+
+    const request = await account.createTransfer(receiverWallet.address, transferAmount);
+    const initialTxBytes = request.toTransactionBytes();
+    const tx = await account.sendTransaction(request);
+
+    const { rawReceipts, gasPrice } = await provider.getTransactionCost(request);
+    const chainId = await provider.getChainId();
+    const expectedParams: FuelConnectorSendTxParams = {
+      onBeforeSend: undefined,
+      skipCustomFee: false,
+      provider: {
+        url: provider.url,
+        cache: await serializeProviderCache(provider),
+      },
+      transactionState: 'funded',
+      transactionSummary: {
+        id: request.getTransactionId(chainId),
+        transactionBytes: hexlify(initialTxBytes),
+        receipts: rawReceipts,
+        gasPrice: gasPrice.toString(),
+      },
+    };
+
+    const txResult = await tx.waitForResult();
+    expect(txResult.isStatusSuccess).toBe(true);
+    expect(sendTransactionSpy).toHaveBeenCalledWith(request, expectedParams);
+  });
+
   it('should ensure sendTransaction works just fine [state: funded]', async () => {
     using launched = await setupTestProviderAndWallets();
     const {

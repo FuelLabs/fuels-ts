@@ -1715,6 +1715,14 @@ export default class Provider {
       (request as ScriptTransactionRequest).gasLimit = bn(gqlTransaction.scriptGasLimit);
     }
 
+    const transactionSummary: TransactionSummaryJsonPartial = {
+      gasPrice: gasPrice.toString(),
+      receipts: status.receipts,
+    };
+
+    const chainId = await this.getChainId();
+    request.updateState(chainId, 'funded', transactionSummary);
+
     return {
       assembledRequest: request,
       gasPrice: bn(gasPrice),
