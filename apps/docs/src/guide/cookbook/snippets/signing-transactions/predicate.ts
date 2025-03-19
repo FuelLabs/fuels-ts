@@ -1,5 +1,5 @@
 // #region multiple-signers-4
-import { Predicate, Provider, ScriptTransactionRequest, Wallet } from 'fuels';
+import { Provider, ScriptTransactionRequest, Wallet } from 'fuels';
 
 import {
   LOCAL_NETWORK_URL,
