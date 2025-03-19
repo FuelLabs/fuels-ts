@@ -6,6 +6,7 @@ import { setupTestProviderAndWallets } from '../src/test-utils/setup-test-provid
 const { error } = console;
 
 const main = async () => {
+  // use our internal package, not fuelup's fuel-core
   process.env.FUEL_CORE_PATH = 'fuels-core';
   using launched = await setupTestProviderAndWallets();
 
