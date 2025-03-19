@@ -88,6 +88,12 @@ export const wrapSnippet = (filepath: string) => {
   }
 
   /*
+    Injecting test options when provided through _test_options variable
+  */
+  const testOptionsReg = /_test_options\s*=\s*(\{[\s\S]*?\})/;
+  const testOptionsMatch = snippetContents.match(testOptionsReg);
+  const testOptions = testOptionsMatch ? `${testOptionsMatch[1]},` : '';
+  /*
     Format indentation
   */
   const indented = snippetsNoImports.replace(/^/gm, '  ').trim();
@@ -100,6 +106,7 @@ export const wrapSnippet = (filepath: string) => {
       .replace('// %TEST_ENVIRONMENT%', testEnvironments)
       .replace('// %IMPORTS%', imports)
       .replace('%NAME%', basename(filepath))
+      .replace('/* %TEST_OPTIONS% */', testOptions)
       .replace('// %SNIPPET%', indented)
       .replace('// %NODE_LAUNCHER%', nodeLauncher)
       .replace(/^.*#(end)?region.+$/gm, '')
