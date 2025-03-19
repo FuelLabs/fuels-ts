@@ -23,7 +23,7 @@ const result = await withdrawTx.waitForResult();
 
 // Waiting for a new block to be committed (1 confirmation block)
 // Retrieves the latest block
-await sleep(1000);
+await sleep(1500);
 const latestBlock = await provider.getBlock('latest');
 
 // Retrieves the `nonce` via message out receipt from the initial transaction result
