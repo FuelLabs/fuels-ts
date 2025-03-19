@@ -14,6 +14,8 @@ import type { GraphQLClientResponse, GraphQLResponse } from 'graphql-request/src
 import gql from 'graphql-tag';
 import { clone } from 'ramda';
 
+import { deferPromise } from '../connectors/utils/promises';
+
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
   GqlReceiptFragment as TransactionReceiptJson,
@@ -461,6 +463,7 @@ export default class Provider {
 
   /** @hidden */
   static clearChainAndNodeCaches() {
+    Provider.inflightFetchChainAndNodeInfoRequests = {};
     Provider.nodeInfoCache = {};
     Provider.chainInfoCache = {};
   }
@@ -475,6 +478,8 @@ export default class Provider {
     amount128: false,
   };
 
+  /** @hidden */
+  private static inflightFetchChainAndNodeInfoRequests: Record<string, Promise<number>> = {};
   /** @hidden */
   private static chainInfoCache: ChainInfoCache = {};
   /** @hidden */
@@ -668,7 +673,9 @@ export default class Provider {
    * @param ignoreCache - If true, ignores the cache and re-fetch configs.
    * @returns A promise that resolves to the Chain and NodeInfo.
    */
-  async fetchChainAndNodeInfo(ignoreCache: boolean = false) {
+  async fetchChainAndNodeInfo(
+    ignoreCache: boolean = false
+  ): Promise<{ chain: ChainInfo; nodeInfo: NodeInfo }> {
     let nodeInfo: NodeInfo;
     let chain: ChainInfo;
 
@@ -682,18 +689,32 @@ export default class Provider {
         throw new Error(`Jumps to the catch block and re-fetch`);
       }
     } catch (_err) {
+      const inflightRequest: Promise<number> =
+        Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth];
+
+      // When an inflight is request is available, wait for it to complete
+      // Then fetch (which will hit the cached values)
+      if (inflightRequest) {
+        const now = await inflightRequest;
+        this.consensusParametersTimestamp = now;
+        return this.fetchChainAndNodeInfo();
+      }
+
+      const { promise, resolve } = deferPromise<number>();
+      Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth] = promise;
+
       const data = await this.operations.getChainAndNodeInfo();
-
       nodeInfo = deserializeNodeInfo(data.nodeInfo);
-
-      Provider.setIncompatibleNodeVersionMessage(nodeInfo);
-
       chain = deserializeChain(data.chain);
 
+      Provider.setIncompatibleNodeVersionMessage(nodeInfo);
       Provider.chainInfoCache[this.urlWithoutAuth] = chain;
       Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
 
-      this.consensusParametersTimestamp = Date.now();
+      const now = Date.now();
+      this.consensusParametersTimestamp = now;
+      resolve(now);
+      delete Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth];
     }
 
     return {

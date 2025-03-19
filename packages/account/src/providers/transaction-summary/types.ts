@@ -84,7 +84,11 @@ export enum TransactionStatus {
 /**
  * @hidden
  */
-export type GqlTransactionStatusesNames = NonNullable<GraphqlTransactionStatus>['type'];
+export type GqlTransactionStatusesNames =
+  | 'FailureStatus'
+  | 'SubmittedStatus'
+  | 'SuccessStatus'
+  | 'SqueezedOutStatus';
 
 /**
  * @hidden
