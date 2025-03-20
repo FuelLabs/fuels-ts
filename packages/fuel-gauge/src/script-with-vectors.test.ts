@@ -1,4 +1,4 @@
-import type { BigNumberish } from 'fuels';
+import { ZeroBytes32, type BigNumberish } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
@@ -25,9 +25,13 @@ describe('Script With Vectors', () => {
     const scriptInstance = new ScriptWithArray(wallet);
 
     const { waitForResult } = await scriptInstance.functions.main(someArray).call();
-    const { logs } = await waitForResult();
+    const { logs, groupedLogs } = await waitForResult();
 
-    expect(logs.map((n) => n.toNumber())).toEqual([1]);
+    const expectedLogs = [expect.toEqualBn(1)];
+    expect(logs).toStrictEqual(expectedLogs);
+    expect(groupedLogs).toStrictEqual({
+      [ZeroBytes32]: expectedLogs,
+    });
   });
 
   it('can call script and use main argument [vec]', async () => {
@@ -43,21 +47,22 @@ describe('Script With Vectors', () => {
     const scriptInvocationScope = scriptInstance.functions.main(someVec);
 
     const { waitForResult } = await scriptInvocationScope.call();
-    const { logs } = await waitForResult();
-
-    const formattedLog = logs.map((l) => (typeof l === 'string' ? l : l.toNumber()));
+    const { logs, groupedLogs } = await waitForResult();
 
     const vecFirst = someVec[0];
     const vecCapacity = 4;
     const vecLen = 4;
-
-    expect(formattedLog).toEqual([
-      vecFirst,
+    const expectedLogs = [
+      expect.toEqualBn(vecFirst),
       'vector.capacity()',
-      vecCapacity,
+      expect.toEqualBn(vecCapacity),
       'vector.len()',
-      vecLen,
-    ]);
+      expect.toEqualBn(vecLen),
+    ];
+    expect(logs).toStrictEqual(expectedLogs);
+    expect(groupedLogs).toStrictEqual({
+      [ZeroBytes32]: expectedLogs,
+    });
   });
 
   it('can call script and use main argument [struct in vec in struct in vec in struct in vec]', async () => {

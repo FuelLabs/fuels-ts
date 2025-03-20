@@ -58,7 +58,7 @@ import {
   transactionRequestify,
   validateTransactionForAssetBurn,
 } from './transaction-request';
-import type { TransactionResultReceipt } from './transaction-response';
+import type { DecodedLogs, TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse, getDecodedLogs } from './transaction-response';
 import {
   calculateGasFee,
@@ -2303,17 +2303,20 @@ export default class Provider {
     dryRunStatus: DryRunStatus
   ): FuelError {
     const status = dryRunStatus as DryRunFailureStatusFragment;
-    let logs: unknown[] = [];
+    let logs: DecodedLogs['logs'] = [];
+    let groupedLogs: DecodedLogs['groupedLogs'] = {};
+
     if (transactionRequest.abis) {
-      logs = getDecodedLogs(
+      ({ logs, groupedLogs } = getDecodedLogs(
         receipts,
         transactionRequest.abis.main,
         transactionRequest.abis.otherContractsAbis
-      );
+      ));
     }
 
     return extractTxError({
       logs,
+      groupedLogs,
       receipts,
       statusReason: status.reason,
     });
