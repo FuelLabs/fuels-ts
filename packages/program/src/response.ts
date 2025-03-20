@@ -70,7 +70,13 @@ export const buildFunctionResult = async <T>(
   const mainCallConfig = functionScopes[0]?.getCallConfig();
 
   const { logs, groupedLogs } = getResultLogs(receipts, mainCallConfig, functionScopes);
-  const value = extractInvocationResult<T>(functionScopes, receipts, isMultiCall, logs, groupedLogs);
+  const value = extractInvocationResult<T>(
+    functionScopes,
+    receipts,
+    isMultiCall,
+    logs,
+    groupedLogs
+  );
   const gasUsed = getGasUsedFromReceipts(receipts);
 
   const submitResult: FunctionResult<T> = {
@@ -103,7 +109,13 @@ export const buildDryRunResult = <T>(params: BuiltDryRunResultParams): DryRunRes
   const mainCallConfig = functionScopes[0]?.getCallConfig();
 
   const { logs, groupedLogs } = getResultLogs(receipts, mainCallConfig, functionScopes);
-  const value = extractInvocationResult<T>(functionScopes, receipts, isMultiCall, logs, groupedLogs);
+  const value = extractInvocationResult<T>(
+    functionScopes,
+    receipts,
+    isMultiCall,
+    logs,
+    groupedLogs
+  );
   const gasUsed = getGasUsedFromReceipts(receipts);
 
   const submitResult: DryRunResult<T> = {

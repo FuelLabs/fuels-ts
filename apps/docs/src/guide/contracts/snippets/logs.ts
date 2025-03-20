@@ -26,12 +26,7 @@ const { logs } = await waitForResult();
 // logs = [value1, value2, value3, value4]
 // #endregion logs
 
-const expectedLogs = [
-  expect.toEqualBn(value1),
-  value2,
-  value3,
-  value4
-];
+const expectedLogs = [expect.toEqualBn(value1), value2, value3, value4];
 expect(logs).toStrictEqual(expectedLogs);
 
 // #region groupedLogs

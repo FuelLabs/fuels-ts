@@ -347,21 +347,15 @@ describe('Advanced Logging', () => {
         'fuelfuel',
       ]);
       expect(groupedLogs).toStrictEqual({
-        [advancedLogContract.id.toB256()]: [
-          'Hello from main Contract',
-        ],
+        [advancedLogContract.id.toB256()]: ['Hello from main Contract'],
         [otherAdvancedLogContract.id.toB256()]: [
           'Hello from other Contract',
           'Received value from main Contract:',
           10,
         ],
         [coverage.id.toB256()]: ['fuelfuel'],
-        [callTest.id.toB256()]: [
-          expect.toEqualBn(100000),
-        ],
-        [configurable.id.toB256()]: [
-          { tag: '000', age: 21, scores: [1, 3, 4] },
-        ],
+        [callTest.id.toB256()]: [expect.toEqualBn(100000)],
+        [configurable.id.toB256()]: [{ tag: '000', age: 21, scores: [1, 3, 4] }],
       });
     });
 
@@ -416,21 +410,15 @@ describe('Advanced Logging', () => {
         'fuelfuel',
       ]);
       expect(groupedLogs).toStrictEqual({
-        [advancedLogContract.id.toB256()]: [
-          'Hello from main Contract',
-        ],
+        [advancedLogContract.id.toB256()]: ['Hello from main Contract'],
         [otherAdvancedLogContract.id.toB256()]: [
           'Hello from other Contract',
           'Received value from main Contract:',
           10,
         ],
         [coverage.id.toB256()]: ['fuelfuel'],
-        [callTest.id.toB256()]: [
-          expect.toEqualBn(100000),
-        ],
-        [configurable.id.toB256()]: [
-          { tag: '000', age: 21, scores: [1, 3, 4] },
-        ],
+        [callTest.id.toB256()]: [expect.toEqualBn(100000)],
+        [configurable.id.toB256()]: [{ tag: '000', age: 21, scores: [1, 3, 4] }],
       });
     });
   });
