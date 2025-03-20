@@ -362,6 +362,10 @@ export default defineConfig({
                 link: '/guide/transactions/adding-policies',
               },
               {
+                text: 'Assembling Transactions',
+                link: '/guide/transactions/assembling-transactions',
+              },
+              {
                 text: 'Getting the Response',
                 link: '/guide/transactions/getting-the-response',
               },
