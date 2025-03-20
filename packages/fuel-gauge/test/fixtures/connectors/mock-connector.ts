@@ -123,8 +123,9 @@ export class MockConnector extends FuelConnector {
       throw new Error('Wallet is not found!');
     }
 
-    const { id } = await wallet.sendTransaction(_transaction, _params);
-    return id;
+    const response = await wallet.sendTransaction(_transaction, _params);
+
+    return response;
   }
 
   override async currentAccount() {

@@ -34,8 +34,9 @@ export class MockSendTransactionConnector extends MockConnector {
       await transaction.updateWitnessByOwner(wallet.address, signature);
     }
 
-    // Send transaction
-    const { id } = await wallet.provider.sendTransaction(_transaction, _params);
-    return id;
+    // Send transaction and return as transaction response
+    const response = await wallet.provider.sendTransaction(_transaction, _params);
+
+    return response;
   }
 }

@@ -199,7 +199,7 @@ It requires two arguments:
 - `address` (`string`)
 - `transaction` ([`TransactionRequestLike`](DOCS_API_URL/types/_fuel_ts_account.TransactionRequestLike.html))
 
-It will return the transaction signature (as a `string`) if it is successfully signed.
+This method will return a promise that either resolves to the submitted transaction id or a [`TransactionResponse`](DOCS_API_URL/types/_fuel_ts_account.TransactionResponse.html). 
 
 <<< @/../../../packages/account/src/connectors/fuel-connector.ts#fuel-connector-method-sendTransaction{ts:line-numbers}
 

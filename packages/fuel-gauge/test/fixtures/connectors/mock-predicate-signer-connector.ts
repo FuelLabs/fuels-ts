@@ -55,8 +55,9 @@ export class MockPredicateSignerConnector extends MockConnector {
 
     await wallet.provider.estimatePredicates(transaction);
 
-    const { id } = await wallet.provider.sendTransaction(transaction, _params);
-    return id;
+    const response = await wallet.provider.sendTransaction(transaction, _params);
+
+    return response;
   }
 
   private getPredicate(provider: Provider, address: string, index: number = 0): Predicate {
