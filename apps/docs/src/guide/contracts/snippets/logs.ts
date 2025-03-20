@@ -1,4 +1,4 @@
-// #region full
+// #region logs
 import type { BigNumberish } from 'fuels';
 import { Provider, Wallet } from 'fuels';
 
@@ -23,8 +23,25 @@ const { waitForResult } = await contract.functions
   .call();
 
 const { logs } = await waitForResult();
-// #endregion full
-console.log('log[0]', logs[0].toNumber() === value1);
-console.log('log[1]', logs[1] === value2);
-console.log('log[2]', logs[2] === value3);
-console.log('log[3]', logs[3][0] === value4[0]);
+// logs = [value1, value2, value3, value4]
+// #endregion logs
+
+const expectedLogs = [
+  expect.toEqualBn(value1),
+  value2,
+  value3,
+  value4
+];
+expect(logs).toStrictEqual(expectedLogs);
+
+// #region groupedLogs
+const { groupedLogs } = await waitForResult();
+// groupedLogs = {
+//   [contract.id]: [value1, value2, value3, value4]
+// }
+// #endregion groupedLogs
+
+const expectedGroupedLogs = {
+  [contract.id.toB256()]: expectedLogs,
+};
+expect(groupedLogs).toStrictEqual(expectedGroupedLogs);
