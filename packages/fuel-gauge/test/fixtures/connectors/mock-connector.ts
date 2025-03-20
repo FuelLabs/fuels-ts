@@ -11,6 +11,7 @@ import type {
   AccountSendTxParams,
   TransactionResponse,
   Asset,
+  AssembleTxParams,
 } from 'fuels';
 import { Address, FuelConnector, FuelConnectorEventTypes } from 'fuels';
 import { setTimeout } from 'timers/promises';
@@ -106,6 +107,10 @@ export class MockConnector extends FuelConnector {
       throw new Error('Wallet is not found!');
     }
     return wallet.signMessage(_message);
+  }
+
+  override async onBeforeAssembleTx(params: AssembleTxParams): Promise<AssembleTxParams> {
+    return params;
   }
 
   override async sendTransaction(
