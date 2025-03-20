@@ -11,6 +11,7 @@ import type {
   AccountSendTxParams,
   TransactionResponse,
   Asset,
+  AssembleTxParams,
 } from 'fuels';
 import { Address, FuelConnector, FuelConnectorEventTypes } from 'fuels';
 import { setTimeout } from 'timers/promises';
@@ -108,6 +109,10 @@ export class MockConnector extends FuelConnector {
     return wallet.signMessage(_message);
   }
 
+  override async onBeforeAssembleTx(params: AssembleTxParams): Promise<AssembleTxParams> {
+    return params;
+  }
+
   override async sendTransaction(
     _address: string,
     _transaction: TransactionRequestLike,
@@ -118,8 +123,9 @@ export class MockConnector extends FuelConnector {
       throw new Error('Wallet is not found!');
     }
 
-    const { id } = await wallet.sendTransaction(_transaction, _params);
-    return id;
+    const response = await wallet.sendTransaction(_transaction, _params);
+
+    return response;
   }
 
   override async currentAccount() {
