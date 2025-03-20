@@ -280,9 +280,6 @@ export class BaseInvocationScope<TReturn = any> {
     request.maxFee = bn(0);
     request.gasLimit = bn(0);
 
-    // Clean coin inputs before add new coins to the request
-    request.inputs = request.inputs.filter((i) => i.type !== InputType.Coin);
-
     const provider = this.getProvider();
     const account = (this.program.account ?? Wallet.generate({ provider })) as Account;
     const baseAssetId = await provider.getBaseAssetId();
@@ -353,10 +350,14 @@ export class BaseInvocationScope<TReturn = any> {
    * @param contracts - An array of contracts to add.
    * @returns The current instance of the class.
    */
-  addContracts(contracts: Array<AbstractContract>) {
+  addContracts(contracts: Array<AbstractContract | string>) {
     contracts.forEach((contract) => {
-      this.transactionRequest.addContractInputAndOutput(contract.id);
-      this.externalAbis[contract.id.toB256()] = contract.interface.jsonAbi;
+      if (typeof contract === 'string') {
+        this.transactionRequest.addContractInputAndOutput(new Address(contract));
+      } else {
+        this.transactionRequest.addContractInputAndOutput(contract.id);
+        this.externalAbis[contract.id.toB256()] = contract.interface.jsonAbi;
+      }
     });
     return this;
   }

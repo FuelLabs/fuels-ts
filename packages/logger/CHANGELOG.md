@@ -1,5 +1,21 @@
 # @fuel-ts/logger
 
+## 0.100.1
+
+### Patch Changes
+
+- @fuel-ts/address@0.100.1
+- @fuel-ts/math@0.100.1
+
+## 0.100.0
+
+### Patch Changes
+
+- 6eb113c: chore: upgrade NPM package versions
+- Updated dependencies [6eb113c]
+  - @fuel-ts/address@0.100.0
+  - @fuel-ts/math@0.100.0
+
 ## 0.99.0
 
 ### Patch Changes

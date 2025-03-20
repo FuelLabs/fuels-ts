@@ -7,11 +7,28 @@ const provider = new Provider(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 // #region estimate-and-fund
-const transactionRequest = new ScriptTransactionRequest({
+const transferAmount = 1000;
+
+const request = new ScriptTransactionRequest({
   script: ScriptSum.bytecode,
 });
 
-await transactionRequest.estimateAndFund(wallet);
+const baseAssetId = await provider.getBaseAssetId();
 
-await wallet.sendTransaction(transactionRequest);
+request.addCoinOutput(wallet.address, transferAmount, baseAssetId);
+
+const { assembledRequest } = await provider.assembleTx({
+  request,
+  feePayerAccount: wallet,
+  accountCoinQuantities: [
+    {
+      amount: transferAmount,
+      assetId: baseAssetId,
+      account: wallet,
+      changeOutputAccount: wallet,
+    },
+  ],
+});
+
+await wallet.sendTransaction(assembledRequest);
 // #endregion estimate-and-fund

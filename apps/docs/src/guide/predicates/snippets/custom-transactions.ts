@@ -29,23 +29,27 @@ await fundPredicateTx.waitForResult();
 const initialPredicateBalance = await predicate.getBalance(assetId);
 
 // Instantiate the script request
-const customRequest = new ScriptTransactionRequest();
+const request = new ScriptTransactionRequest();
 
-// Get the predicate resources that we would like to transfer
-const predicateResources = await predicate.getResourcesToSpend([
-  { assetId, amount: amountToReceiver },
-]);
-
-// Add the resources for the transfer of the asset to the receiver. The resources
-// adds the required inputs, and the output is for the transfer to the receiver address
-customRequest.addResources(predicateResources);
-customRequest.addCoinOutput(receiver.address, amountToReceiver, assetId);
+// Adding the OutputCoin that represents the funds that we want to send to the receiver
+request.addCoinOutput(receiver.address, amountToReceiver, assetId);
 
 // Estimate the transaction cost and fund accordingly
-await customRequest.estimateAndFund(predicate);
+const { assembledRequest } = await provider.assembleTx({
+  request,
+  feePayerAccount: predicate,
+  accountCoinQuantities: [
+    {
+      amount: amountToReceiver,
+      assetId,
+      account: predicate,
+      changeOutputAccount: predicate,
+    },
+  ],
+});
 
 // Submit the transaction and await it's result
-const predicateTx = await predicate.sendTransaction(customRequest);
+const predicateTx = await predicate.sendTransaction(assembledRequest);
 await predicateTx.waitForResult();
 // #endregion predicate-custom-transaction
 

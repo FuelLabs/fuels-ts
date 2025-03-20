@@ -113,7 +113,7 @@
     "rimraf": "5.0.10",
     "syncpack": "12.3.3",
     "ts-generator": "0.1.1",
-    "tsup": "6.7.0",
+    "tsup": "8.3.5",
     "tsx": "4.19.3",
     "turbo": "2.4.2",
     "typescript": "5.7.3",
