@@ -143,16 +143,24 @@ export type AccountCoinQuantity = {
   changeOutputAccount?: Account;
 };
 
+// #region assemble-tx-params
 export type AssembleTxParams = {
+  // The transaction request to assemble
   request: TransactionRequest;
+  // Block horizon for gas price estimation (default: 10)
   blockHorizon?: number;
+  // Coin quantities required for the transaction
   accountCoinQuantities: AccountCoinQuantity[];
+  // Account that will pay for the transaction fees
   feePayerAccount: Account;
+  // Resources to exclude from the transaction
   excludeInput?: ExcludeResourcesOption;
+  // Whether to estimate predicates (default: true)
   estimatePredicates?: boolean;
+  // Amount of gas to reserve (optional)
   reserveGas?: number;
 };
-
+// #endregion assemble-tx-params
 export type PageInfo = GqlPageInfo;
 
 export type GetCoinsResponse = {
