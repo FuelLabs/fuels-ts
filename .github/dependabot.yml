@@ -32,12 +32,6 @@ updates:
         update-types:
           - "version-update:semver-major"
 
-      # https://github.com/FuelLabs/fuels-ts/issues/2666
-      - dependency-name: "tsup"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-
       # https://github.com/FuelLabs/fuels-ts/issues/3724
       - dependency-name: "eslint"
         update-types:
