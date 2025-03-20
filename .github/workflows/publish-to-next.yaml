@@ -58,3 +58,36 @@ jobs:
         env:
           HOME: ${{ github.workspace }}
           npm_config_registry: "https://fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/npm/"
+
+      - name: Add PR comment
+        uses: mshick/add-pr-comment@v2
+        with:
+          refresh-message-position: true
+          message: |
+            # Temporary PR
+
+            This PR is published in AWS CodeArtifact with version: `${{ env.NPM_DIST_TAG }}`
+
+            Install using the below commands — `create-fuels` variations are commented out.
+
+            ## PNPM
+
+            ```bash
+            pnpm config set registry https://npm-packages.fuel.network/ --global
+            pnpm install fuels@${{ env.NPM_DIST_TAG }}
+            # pnpm create fuels@${{ env.NPM_DIST_TAG }}
+            ```
+
+            ## NPM
+
+            ```bash
+            npm --registry=https://npm-packages.fuel.network/ install fuels@${{ env.NPM_DIST_TAG }}
+            # npm --registry=https://npm-packages.fuel.network/ create fuels@${{ env.NPM_DIST_TAG }}
+            ```
+
+            ## Bun
+
+            ```bash
+            npm_config_registry=https://npm-packages.fuel.network/ bun install fuels@${{ env.NPM_DIST_TAG }}
+            # npm_config_registry=https://npm-packages.fuel.network/ bun create fuels@${{ env.NPM_DIST_TAG }}
+            ```

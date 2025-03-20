@@ -35,3 +35,5 @@ try {
   }
 }
 // #endregion resubmitting-failed-transactions-3
+
+const _test_options = { timeout: 10000 };
