@@ -391,6 +391,17 @@ export class BaseInvocationScope<TReturn = any> {
     return this;
   }
 
+  /**
+   * Adds signers to the transaction request.
+   *
+   * @param signers - The signers to add.
+   * @returns The current instance of the class.
+   *
+   * @deprecated This method is deprecated and will be removed in a future versions.
+   * All signatures should be manually added to the transaction request witnesses. If your
+   * Sway program relies on in-code signature validation, visit this guide:
+   * https://docs.fuel.network/guides/cookbook/sway-programs-with-signature-validation
+   */
   addSigners(signers: Account | Account[]) {
     this.addSignersCallback = (transactionRequest) =>
       transactionRequest.addAccountWitnesses(signers);
