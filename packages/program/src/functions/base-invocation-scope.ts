@@ -418,7 +418,11 @@ export class BaseInvocationScope<TReturn = any> {
    * - `waitForResult`: A function that waits for the transaction result.
    * @template T - The type of the return value.
    */
-  async call<T = TReturn>(): Promise<{
+  async call<T = TReturn>({
+    skipEstimationAndFunding,
+  }: {
+    skipEstimationAndFunding?: boolean; // What would be the best place for this flag?
+  } = {}): Promise<{
     transactionId: string;
     waitForResult: () => Promise<FunctionResult<T>>;
   }> {
@@ -426,7 +430,9 @@ export class BaseInvocationScope<TReturn = any> {
 
     let transactionRequest: ScriptTransactionRequest;
 
-    if (this.addSignersCallback) {
+    if (skipEstimationAndFunding) {
+      transactionRequest = await this.getTransactionRequest();
+    } else if (this.addSignersCallback) {
       transactionRequest = await this.fundWithRequiredCoins();
     } else {
       transactionRequest = await this.assembleTx();
