@@ -240,6 +240,8 @@ export class BaseInvocationScope<TReturn = any> {
    * Costs and funds the underlying transaction request.
    *
    * @returns The invocation scope as a funded transaction request.
+   *
+   * @deprecated Use contract.assembleTx instead
    */
   async fundWithRequiredCoins(): Promise<ScriptTransactionRequest> {
     let transactionRequest = await this.getTransactionRequest();
