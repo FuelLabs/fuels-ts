@@ -451,6 +451,19 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
+   * Updates the internal transaction request with the provided one.
+   * This is useful when you need to manually modify the transaction request
+   * before submitting it.
+   *
+   * @param request - The transaction request to use
+   * @returns The current invocation scope instance
+   */
+  fromTransactionRequest(request: ScriptTransactionRequest) {
+    this.transactionRequest = request;
+    return this;
+  }
+
+  /**
    * Simulates a transaction.
    *
    * @returns The result of the invocation call.
