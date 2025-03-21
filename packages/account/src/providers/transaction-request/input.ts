@@ -73,6 +73,9 @@ export type MessageTransactionRequestInput = {
 export type ContractTransactionRequestInput = {
   type: InputType.Contract;
 
+  /** ID of the last transaction that modified the contract state (It can be zeroed if unsure) */
+  txID?: BytesLike;
+
   /** Points to the TX whose output is being spent. (TxPointer) */
   txPointer: BytesLike;
 
@@ -114,7 +117,7 @@ export const inputify = (value: TransactionRequestInput): Input => {
     case InputType.Contract: {
       return {
         type: InputType.Contract,
-        txID: ZeroBytes32,
+        txID: hexlify(value.txID || ZeroBytes32),
         outputIndex: 0,
         balanceRoot: ZeroBytes32,
         stateRoot: ZeroBytes32,

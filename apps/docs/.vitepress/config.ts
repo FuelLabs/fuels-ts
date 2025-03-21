@@ -345,6 +345,17 @@ export default defineConfig({
             ],
           },
           {
+            text: 'Assembling Transactions',
+            link: '/guide/assembling-transactions/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Migration Guide',
+                link: '/guide/assembling-transactions/migration-guide',
+              },
+            ],
+          },
+          {
             text: 'Transactions',
             link: '/guide/transactions/',
             collapsed: true,
@@ -441,6 +452,12 @@ export default defineConfig({
               {
                 text: 'Transactions with Multiple Signers',
                 link: '/guide/cookbook/transactions-with-multiple-signers',
+              },
+              {
+                text: 'Sway Programs with Signature Validation',
+                link: '/guide/cookbook/sway-programs-with-signature-validation',
+                collapsed: true,
+                items: [],
               },
               {
                 text: 'GraphQL Integration',

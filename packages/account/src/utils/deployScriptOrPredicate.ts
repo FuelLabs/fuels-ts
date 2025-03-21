@@ -1,10 +1,9 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
-import { bn } from '@fuel-ts/math';
 import { arrayify } from '@fuel-ts/utils';
 
 import type { Account } from '../account';
-import { BlobTransactionRequest, calculateGasFee, TransactionStatus } from '../providers';
+import { BlobTransactionRequest, TransactionStatus } from '../providers';
 
 import {
   getBytecodeConfigurableOffset,
@@ -13,31 +12,21 @@ import {
 } from './predicate-script-loader-instructions';
 
 async function fundBlobTx(deployer: Account, blobTxRequest: BlobTransactionRequest) {
-  // Check the account can afford to deploy all chunks and loader
-  let totalCost = bn(0);
-  const chainInfo = await deployer.provider.getChain();
-  const gasPrice = await deployer.provider.estimateGasPrice(10);
-  const priceFactor = chainInfo.consensusParameters.feeParameters.gasPriceFactor;
+  try {
+    const { assembledRequest } = await deployer.provider.assembleTx({
+      request: blobTxRequest,
+      feePayerAccount: deployer,
+      accountCoinQuantities: [],
+    });
 
-  const minGas = blobTxRequest.calculateMinGas(chainInfo);
+    return assembledRequest;
+  } catch (error) {
+    if ((error as FuelError).code === ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS) {
+      throw new FuelError(ErrorCode.FUNDS_TOO_LOW, 'Insufficient balance to deploy predicate.');
+    }
 
-  const minFee = calculateGasFee({
-    gasPrice,
-    gas: minGas,
-    priceFactor,
-    tip: blobTxRequest.tip,
-  }).add(1);
-
-  totalCost = totalCost.add(minFee);
-
-  if (totalCost.gt(await deployer.getBalance())) {
-    throw new FuelError(ErrorCode.FUNDS_TOO_LOW, 'Insufficient balance to deploy predicate.');
+    throw error;
   }
-
-  const txCost = await deployer.getTransactionCost(blobTxRequest);
-  // eslint-disable-next-line no-param-reassign
-  blobTxRequest.maxFee = txCost.maxFee;
-  return deployer.fund(blobTxRequest, txCost);
 }
 
 function adjustConfigurableOffsets(jsonAbi: JsonAbi, configurableOffsetDiff: number) {

@@ -56,8 +56,19 @@ const encodedArguments = abiInterface.encodeType(argument, [argumentToAdd]);
 // The encoded value can now be set on the transaction via the script data property
 request.scriptData = encodedArguments;
 
-// Now we can estimate and fund the transaction
-await request.estimateAndFund(wallet);
+// Now we can use 'assembleTx' to estimate and fund the transaction
+const { assembledRequest } = await provider.assembleTx({
+  request,
+  feePayerAccount: wallet,
+  accountCoinQuantities: [
+    {
+      amount: '0', // Using 0 as the only amount required will be the fee
+      assetId: await provider.getBaseAssetId(),
+      account: wallet,
+      changeOutputAccount: wallet,
+    },
+  ],
+});
 
 // Finally, submit the built transaction
 const response = await wallet.sendTransaction(request);

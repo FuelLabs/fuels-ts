@@ -1,25 +1,15 @@
-// #region multiple-signers-2
-
+// #region combining-utxos
 import { Provider, Wallet } from 'fuels';
 
-import {
-  LOCAL_NETWORK_URL,
-  WALLET_PVT_KEY,
-  WALLET_PVT_KEY_2,
-  WALLET_PVT_KEY_3,
-} from '../../../../env';
-import { ScriptSigning } from '../../../../typegend';
+import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
+import { ScriptSigning } from '../../../../typegend/scripts';
 
 const provider = new Provider(LOCAL_NETWORK_URL);
-const sender = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
-const signer = Wallet.fromPrivateKey(WALLET_PVT_KEY_2, provider);
-const receiver = Wallet.fromPrivateKey(WALLET_PVT_KEY_3, provider);
+const signer = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 // #region signature-script
 // Instantiate the script
-const script = new ScriptSigning(sender);
-
-const amountToReceiver = 100;
+const script = new ScriptSigning(signer);
 
 /**
  * Witness index in which we will add the signature, since there will only be
@@ -28,13 +18,7 @@ const amountToReceiver = 100;
 const witnessIndex = 0;
 
 // Creating the scope invocation to be used later
-const scope = script.functions
-  .main(signer.address.toB256(), witnessIndex)
-  .addTransfer({
-    destination: receiver.address,
-    amount: amountToReceiver,
-    assetId: await provider.getBaseAssetId(),
-  });
+const scope = script.functions.main(signer.address.toB256(), witnessIndex);
 
 // Getting the transaction request to be signed
 const request = await scope.getTransactionRequest();
@@ -64,6 +48,6 @@ const call = await scope
 
 // Getting the result of the transaction
 const { value } = await call.waitForResult();
-// #endregion multiple-signers-2
+// #endregion signature-script
 
-console.log('value', value);
+console.log(value, true);

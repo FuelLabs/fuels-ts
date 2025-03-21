@@ -54,13 +54,16 @@ const setupTestNode = async () => {
 
 const upgradeConsensusParameters = async (wallet: WalletUnlocked, bytecode: BytesLike) => {
   const request = new UpgradeTransactionRequest();
+
   request.addConsensusParametersUpgradePurpose(bytecode);
 
-  const cost = await wallet.getTransactionCost(request);
-  request.maxFee = cost.maxFee;
-  await wallet.fund(request, cost);
+  const { assembledRequest } = await wallet.provider.assembleTx({
+    request,
+    feePayerAccount: wallet,
+    accountCoinQuantities: [],
+  });
 
-  const response = await wallet.sendTransaction(request);
+  const response = await wallet.sendTransaction(assembledRequest);
   return response.waitForResult();
 };
 
@@ -160,14 +163,15 @@ describe('Transaction upgrade state transition', () => {
       return request;
     });
 
-    const cost = await privileged.getTransactionCost(requests[0]);
-
     // Upload the subsections
     for (const request of requests) {
-      request.maxFee = cost.maxFee;
-      await privileged.fund(request, cost);
-      request.maxFee = cost.maxFee.add(1);
-      const response = await privileged.sendTransaction(request);
+      const { assembledRequest } = await privileged.provider.assembleTx({
+        request,
+        feePayerAccount: privileged,
+        accountCoinQuantities: [],
+      });
+
+      const response = await privileged.sendTransaction(assembledRequest);
       const { isTypeUpload, isStatusSuccess } = await response.waitForResult();
       expect(isTypeUpload).toBeTruthy();
       expect(isStatusSuccess).toBeTruthy();
@@ -183,11 +187,13 @@ describe('Transaction upgrade state transition', () => {
     const request = new UpgradeTransactionRequest();
     request.addStateTransitionUpgradePurpose(merkleRoot);
 
-    const cost = await privileged.getTransactionCost(request);
-    request.maxFee = cost.maxFee;
-    await privileged.fund(request, cost);
+    const { assembledRequest } = await privileged.provider.assembleTx({
+      request,
+      feePayerAccount: privileged,
+      accountCoinQuantities: [],
+    });
 
-    const response = await privileged.sendTransaction(request);
+    const response = await privileged.sendTransaction(assembledRequest);
     const { isTypeUpgrade, isStatusSuccess, blockId } = await response.waitForResult();
     expect(isTypeUpgrade).toBeTruthy();
     expect(isStatusSuccess).toBeTruthy();
