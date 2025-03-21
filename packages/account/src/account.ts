@@ -218,6 +218,8 @@ export class Account extends AbstractAccount implements WithAddress {
    * @param request - The transaction request to fund.
    * @param params - The estimated transaction parameters.
    * @returns A promise that resolves to the funded transaction request.
+   *
+   * @deprecated Use provider.assembleTx instead
    */
   async fund<T extends TransactionRequest>(request: T, params: EstimatedTxParams): Promise<T> {
     const {
