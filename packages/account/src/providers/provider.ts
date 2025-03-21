@@ -1701,6 +1701,19 @@ export default class Provider {
     };
   }
 
+  /**
+   * Assembles a transaction by completely estimating and funding it.
+   *
+   * @param request - The transaction request to assemble
+   * @param feePayerAccount - Account that will pay transaction fees
+   * @param accountCoinQuantities - Array of coin quantities needed from accounts
+   * @param blockHorizon - Number of blocks transaction is valid for (default: 10)
+   * @param estimatePredicates - Whether to estimate predicates (default: true)
+   * @param reserveGas - Optional gas to reserve
+   * @param excludeInput - Optional input to exclude
+   *
+   * @returns The assembled transaction request, estimated gas price, and receipts
+   */
   async assembleTx(params: AssembleTxParams) {
     const {
       accountCoinQuantities,
