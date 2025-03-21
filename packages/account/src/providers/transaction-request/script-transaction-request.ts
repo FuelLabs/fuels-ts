@@ -76,7 +76,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
    * @param params - The parameters for the transaction cost.
    * @returns The current instance of the `ScriptTransactionRequest` funded.
    *
-   * @deprecated Use provider.assembleTx instead
+   * @deprecated Use `provider.assembleTx` instead
    */
   async estimateAndFund(
     account: Account,

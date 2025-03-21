@@ -345,6 +345,12 @@ export default defineConfig({
             ],
           },
           {
+            text: 'Assembling Transactions',
+            link: '/guide/assembling-transactions/',
+            collapsed: true,
+            items: [],
+          },
+          {
             text: 'Transactions',
             link: '/guide/transactions/',
             collapsed: true,
@@ -360,10 +366,6 @@ export default defineConfig({
               {
                 text: 'Adding Policies',
                 link: '/guide/transactions/adding-policies',
-              },
-              {
-                text: 'Assembling Transactions',
-                link: '/guide/transactions/assembling-transactions',
               },
               {
                 text: 'Getting the Response',

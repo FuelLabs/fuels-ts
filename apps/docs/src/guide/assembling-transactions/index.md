@@ -47,7 +47,7 @@ The `accountCoinQuantities` entries have two optional properties with specific d
 
 Example of default behaviors:
 
-<<< @./snippets/assemble-tx/default-behaviors.ts#assemble-tx-default-behaviors{ts:line-numbers}
+<<< @./snippets/default-behaviors.ts#assemble-tx-default-behaviors{ts:line-numbers}
 
 ## Return Value
 
@@ -59,7 +59,7 @@ The method returns an object containing:
 
 ## Usage Example
 
-<<< @./snippets/assemble-tx/basic-usage.ts#assemble-tx-basic-usage{ts:line-numbers}
+<<< @./snippets/basic-usage.ts#assemble-tx-basic-usage{ts:line-numbers}
 
 ## Error Handling
 
@@ -74,7 +74,7 @@ This error occurs when there's a conflict between the change output specified in
 
 Here's an example that demonstrates this error:
 
-<<< @./snippets/assemble-tx/change-output-collision.ts#change-output-collision{ts:line-numbers}
+<<< @./snippets/change-output-collision.ts#change-output-collision{ts:line-numbers}
 
 In this example, the error occurs because:
 
