@@ -348,7 +348,12 @@ export default defineConfig({
             text: 'Assembling Transactions',
             link: '/guide/assembling-transactions/',
             collapsed: true,
-            items: [],
+            items: [
+              {
+                text: 'Migration Guide',
+                link: '/guide/assembling-transactions/migration',
+              },
+            ],
           },
           {
             text: 'Transactions',
