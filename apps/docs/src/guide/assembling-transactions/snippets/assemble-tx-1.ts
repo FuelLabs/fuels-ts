@@ -30,4 +30,4 @@ const { assembledRequest } = await provider.assembleTx({
   ],
 });
 // #endregion assemble-tx-1
-console.log(assembledRequest);
+console.log(assembledRequest, 'assembledRequest');
