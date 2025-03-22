@@ -228,6 +228,47 @@ describe('assembleTx', () => {
     });
   });
 
+  it('should default changeOutputAccount to request changeOutput if exists', async () => {
+    const { provider, wallet1, wallet2, baseAssetId, request, spy, transferAmount } =
+      await setupTest(1500);
+
+    request.addChangeOutput(wallet2.address, baseAssetId);
+
+    const { assembledRequest } = await provider.assembleTx({
+      request,
+      feePayerAccount: wallet1,
+      accountCoinQuantities: [
+        {
+          amount: transferAmount,
+          assetId: baseAssetId,
+        },
+      ],
+    });
+
+    const tx = await wallet1.sendTransaction(assembledRequest);
+    const { isStatusSuccess } = await tx.waitForResult();
+
+    expect(isStatusSuccess).toBeTruthy();
+
+    const call = spy.mock.calls[0][0];
+
+    validateRequiredBalance({
+      requiredBalance: call.requiredBalances,
+      index: 0,
+      account: wallet1,
+      amount: transferAmount,
+      assetId: baseAssetId,
+      changeAccount: wallet2,
+    });
+
+    validateFeePayer({
+      requiredBalance: call.requiredBalances,
+      feePayerIndex: call.feeAddressIndex,
+      payerAccount: wallet1,
+      baseAssetId,
+    });
+  });
+
   it('should validate OutputChange collision', async () => {
     const { provider, wallet1, wallet2, baseAssetId, request, transferAmount } =
       await setupTest(1500);
