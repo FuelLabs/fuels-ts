@@ -144,9 +144,9 @@ export type AccountCoinQuantity = {
 };
 
 // #region assemble-tx-params
-export type AssembleTxParams = {
+export type AssembleTxParams<T extends TransactionRequest = TransactionRequest> = {
   // The transaction request to assemble
-  request: TransactionRequest;
+  request: T;
   // Block horizon for gas price estimation (default: 10)
   blockHorizon?: number;
   // Coin quantities required for the transaction
@@ -1714,7 +1714,7 @@ export default class Provider {
    *
    * @returns The assembled transaction request, estimated gas price, and receipts
    */
-  async assembleTx(params: AssembleTxParams) {
+  async assembleTx<T extends TransactionRequest>(params: AssembleTxParams<T>) {
     const {
       accountCoinQuantities,
       feePayerAccount,
@@ -1730,35 +1730,43 @@ export default class Provider {
     const baseAssetId = await this.getBaseAssetId();
 
     let feePayerIndex = -1;
-    let baseAssetChange;
+    let baseAssetChange: string | undefined;
 
     const requestChanges = request.getChangeOutputs();
 
     const requiredBalances = accountCoinQuantities.map((quantity, index) => {
-      const { amount, assetId, account = feePayerAccount } = quantity;
+      const { amount, assetId, account = feePayerAccount, changeOutputAccount } = quantity;
       const setChangeOnRequest = requestChanges.find((change) => change.assetId === assetId);
 
-      let { changeOutputAccount } = quantity;
+      let changeAccountAddress: string;
 
-      if (setChangeOnRequest && changeOutputAccount) {
-        const isCollision = setChangeOnRequest.to !== changeOutputAccount.address.toB256();
+      if (changeOutputAccount && setChangeOnRequest) {
+        // Case 1: Both changeOutputAccount and setChangeOnRequest exist
+        const sameAddress = String(setChangeOnRequest.to) === changeOutputAccount.address.toB256();
 
-        if (isCollision) {
+        // If both changes were informed to different addresses, throw collision error
+        if (!sameAddress) {
           throw new FuelError(
             ErrorCode.CHANGE_OUTPUT_COLLISION,
             `OutputChange address for asset ${assetId} differs between transaction request and assembleTx inputs.`
           );
         }
-      }
-
-      if (!changeOutputAccount) {
-        changeOutputAccount = account;
+        changeAccountAddress = changeOutputAccount.address.toB256();
+      } else if (setChangeOnRequest) {
+        // Case 2: Only setChangeOnRequest exists, use it as changeAccountAddress
+        changeAccountAddress = String(setChangeOnRequest.to);
+      } else if (changeOutputAccount) {
+        // Case 3: Only changeOutputAccount exists, use it as changeAccountAddress
+        changeAccountAddress = changeOutputAccount.address.toB256();
+      } else {
+        // Case 4: No changeOutputAccount, use account
+        changeAccountAddress = account.address.toB256();
       }
 
       allAddresses.add(account.address.toB256());
 
       const changePolicy = {
-        change: changeOutputAccount.address.toB256(),
+        change: changeAccountAddress,
       };
 
       if (assetId === baseAssetId) {
@@ -1831,7 +1839,7 @@ export default class Provider {
     }
 
     return {
-      assembledRequest: request,
+      assembledRequest: request as T,
       gasPrice: bn(gasPrice),
       receipts: status.receipts.map(deserializeReceipt),
     };
