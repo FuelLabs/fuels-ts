@@ -429,21 +429,15 @@ export class BaseInvocationScope<TReturn = any> {
    * - `waitForResult`: A function that waits for the transaction result.
    * @template T - The type of the return value.
    */
-  async call<T = TReturn>({
-    skipEstimationAndFunding,
-  }: {
-    skipEstimationAndFunding?: boolean; // What would be the best place for this flag?
-  } = {}): Promise<{
+  async call<T = TReturn>(): Promise<{
     transactionId: string;
     waitForResult: () => Promise<FunctionResult<T>>;
   }> {
     assert(this.program.account, 'Wallet is required!');
 
-    let transactionRequest: ScriptTransactionRequest;
+    let transactionRequest = await this.getTransactionRequest();
 
-    if (skipEstimationAndFunding) {
-      transactionRequest = await this.getTransactionRequest();
-    } else if (this.addSignersCallback) {
+    if (this.addSignersCallback) {
       transactionRequest = await this.fundWithRequiredCoins();
     } else {
       transactionRequest = await this.assembleTx();
@@ -465,19 +459,6 @@ export class BaseInvocationScope<TReturn = any> {
           transactionResponse: response,
         }),
     };
-  }
-
-  /**
-   * Updates the internal transaction request with the provided one.
-   * This is useful when you need to manually modify the transaction request
-   * before submitting it.
-   *
-   * @param request - The transaction request to use
-   * @returns The current invocation scope instance
-   */
-  fromTransactionRequest(request: ScriptTransactionRequest) {
-    this.transactionRequest = request;
-    return this;
   }
 
   /**
