@@ -18,10 +18,9 @@ const script = new ScriptSigning(signer);
 const witnessIndex = 0;
 
 // Creating the scope invocation to be used later
-const scope = script.functions.main(signer.address.toB256(), witnessIndex);
-
-// Getting the transaction request to be signed
-const request = await scope.getTransactionRequest();
+const request = await script.functions
+  .main(signer.address.toB256(), witnessIndex)
+  .getTransactionRequest();
 
 // Signing the transaction request before estimation
 let signature = await signer.signTransaction(request);
@@ -30,24 +29,29 @@ let signature = await signer.signTransaction(request);
 request.addWitness(signature);
 
 // Assembling the transaction request, estimating and funding it
-const assembledRequest = await scope.assembleTx();
-
+const { assembledRequest } = await provider.assembleTx({
+  request,
+  feePayerAccount: signer,
+  accountCoinQuantities: [
+    {
+      amount: '0',
+      assetId: await provider.getBaseAssetId(),
+      account: signer,
+      changeOutputAccount: signer,
+    },
+  ],
+});
 // Signing the request again as the it was modified during estimation and funding
 signature = await signer.signTransaction(assembledRequest);
 
 // Updating the signature in the assembled request
 assembledRequest.updateWitness(witnessIndex, signature);
 
-/**
- * Sending the transaction request and skipping estimation and funding since
- * we already estimated and funded with assembleTx
- */
-const call = await scope
-  .fromTransactionRequest(assembledRequest)
-  .call({ skipEstimationAndFunding: true });
+// Sending the transaction request
+const submit = await signer.sendTransaction(assembledRequest);
 
 // Getting the result of the transaction
-const { value } = await call.waitForResult();
+const { isStatusSuccess } = await submit.waitForResult();
 // #endregion signature-script
 
-console.log(value, true);
+console.log('isStatusSuccess', isStatusSuccess);
