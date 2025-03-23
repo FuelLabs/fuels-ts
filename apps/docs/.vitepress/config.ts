@@ -454,10 +454,8 @@ export default defineConfig({
                 link: '/guide/cookbook/transactions-with-multiple-signers',
               },
               {
-                text: 'Sway Programs with Signature Validation',
-                link: '/guide/cookbook/sway-programs-with-signature-validation',
-                collapsed: true,
-                items: [],
+                text: 'Sway Script with Signature Validation',
+                link: '/guide/cookbook/sway-script-with-signature-validation',
               },
               {
                 text: 'GraphQL Integration',

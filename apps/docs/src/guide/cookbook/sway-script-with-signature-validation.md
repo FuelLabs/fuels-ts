@@ -1,6 +1,6 @@
-# Sway Programs With Signature Validation
+# Sway Script With Signature Validation
 
-This guide explains how to work with Sway programs that rely on in-code signature validation. This is particularly useful when you need to verify that a transaction was authorized by a specific account.
+This guide explains how to work with a Script that rely on in-code signature validation. This is particularly useful when you need to verify that a transaction was authorized by a specific account.
 
 ## Example Sway Script
 

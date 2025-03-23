@@ -1,8 +1,8 @@
 // #region combining-utxos
 import { Provider, Wallet } from 'fuels';
 
-import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
-import { ScriptSigning } from '../../../../typegend/scripts';
+import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../env';
+import { ScriptSigning } from '../../../typegend';
 
 const provider = new Provider(LOCAL_NETWORK_URL);
 const signer = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
