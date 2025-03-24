@@ -33,7 +33,8 @@ describe('assembleTx', () => {
     vi.restoreAllMocks();
   });
 
-  const setupTest = async (transferAmount: number, mock: boolean = true) => {
+  const setupTest = async (params: { transferAmount?: number; mock?: boolean } = {}) => {
+    const { transferAmount = bn(0), mock = true } = params;
     const message = new TestMessage({ data: '0x', amount: 1_000_000_000 });
     const launched = await launchTestNode({
       walletsConfig: {
@@ -51,7 +52,10 @@ describe('assembleTx', () => {
     const baseAssetId = await provider.getBaseAssetId();
 
     const request = new ScriptTransactionRequest();
-    request.addCoinOutput(wallet2.address, transferAmount, baseAssetId);
+
+    if (bn(transferAmount).gt(0)) {
+      request.addCoinOutput(wallet2.address, transferAmount, baseAssetId);
+    }
 
     const spy = vi.spyOn(provider.operations, 'assembleTx');
 
@@ -72,7 +76,9 @@ describe('assembleTx', () => {
   };
 
   it('should work just fine', async () => {
-    const { provider, wallet1, baseAssetId, request, spy, transferAmount } = await setupTest(1000);
+    const { provider, wallet1, baseAssetId, request, spy, transferAmount } = await setupTest({
+      transferAmount: 1000,
+    });
 
     const { assembledRequest } = await provider.assembleTx({
       request,
@@ -110,7 +116,9 @@ describe('assembleTx', () => {
   });
 
   it('should use feePayerAccount when account is not provided', async () => {
-    const { provider, wallet1, baseAssetId, request, spy, transferAmount } = await setupTest(2000);
+    const { provider, wallet1, baseAssetId, request, spy, transferAmount } = await setupTest({
+      transferAmount: 2000,
+    });
 
     const { assembledRequest } = await provider.assembleTx({
       request,
@@ -148,7 +156,7 @@ describe('assembleTx', () => {
 
   it('should default changeOutputAccount to account if not provided', async () => {
     const { provider, wallet1, wallet3, baseAssetId, request, spy, transferAmount } =
-      await setupTest(1500);
+      await setupTest({ transferAmount: 1500 });
 
     const { assembledRequest } = await provider.assembleTx({
       request,
@@ -198,7 +206,9 @@ describe('assembleTx', () => {
   });
 
   it('should default changeOutputAccount and account to feePayer if not provided', async () => {
-    const { provider, wallet1, baseAssetId, request, spy, transferAmount } = await setupTest(1500);
+    const { provider, wallet1, baseAssetId, request, spy, transferAmount } = await setupTest({
+      transferAmount: 1500,
+    });
     const { assembledRequest } = await provider.assembleTx({
       request,
       feePayerAccount: wallet1,
@@ -236,7 +246,7 @@ describe('assembleTx', () => {
 
   it('should default changeOutputAccount to request changeOutput if exists', async () => {
     const { provider, wallet1, wallet2, baseAssetId, request, spy, transferAmount } =
-      await setupTest(1500);
+      await setupTest({ transferAmount: 1500 });
 
     request.addChangeOutput(wallet2.address, baseAssetId);
 
@@ -276,8 +286,9 @@ describe('assembleTx', () => {
   });
 
   it('should validate OutputChange collision', async () => {
-    const { provider, wallet1, wallet2, baseAssetId, request, transferAmount } =
-      await setupTest(1500);
+    const { provider, wallet1, wallet2, baseAssetId, request, transferAmount } = await setupTest({
+      transferAmount: 1500,
+    });
 
     request.addChangeOutput(wallet2.address, baseAssetId);
 
@@ -300,7 +311,10 @@ describe('assembleTx', () => {
   });
 
   it('should work with multiple assets', async () => {
-    const { provider, wallet1, wallet2, baseAssetId } = await setupTest(1500, false);
+    const { provider, wallet1, wallet2, baseAssetId } = await setupTest({
+      transferAmount: 1500,
+      mock: false,
+    });
 
     const predicate = new PredicateTrue({ provider });
     const receiver = Wallet.generate({ provider });
@@ -370,10 +384,10 @@ describe('assembleTx', () => {
   });
 
   it('should validate default parameters values', async () => {
-    const { provider, request, wallet2, baseAssetId, transferAmount } = await setupTest(
-      1500,
-      false
-    );
+    const { provider, request, wallet2, baseAssetId, transferAmount } = await setupTest({
+      transferAmount: 1500,
+      mock: false,
+    });
 
     const predicate = new PredicateTrue({ provider });
 
@@ -421,7 +435,10 @@ describe('assembleTx', () => {
   });
 
   it('should use input values for default parameters', async () => {
-    const { provider, wallet1, request, baseAssetId } = await setupTest(1500, false);
+    const { provider, wallet1, request, baseAssetId } = await setupTest({
+      transferAmount: 1500,
+      mock: false,
+    });
 
     const amount = 1000;
     const blockHorizon = 1;
@@ -470,7 +487,9 @@ describe('assembleTx', () => {
   });
 
   it('should properly handle reserved gas parameter', async () => {
-    const { provider, wallet1, baseAssetId, request, spy } = await setupTest(1000);
+    const { provider, wallet1, baseAssetId, request, spy } = await setupTest({
+      transferAmount: 1000,
+    });
     const reserveGas = 10_000;
 
     const { assembledRequest } = await provider.assembleTx({
@@ -493,7 +512,9 @@ describe('assembleTx', () => {
   });
 
   it('should handle multiple assets with mixed change output configurations', async () => {
-    const { provider, wallet1, wallet2, wallet3, baseAssetId, spy } = await setupTest(1000);
+    const { provider, wallet1, wallet2, wallet3, baseAssetId, spy } = await setupTest({
+      transferAmount: 1000,
+    });
 
     const amountA = 300;
     const amountB = 500;
@@ -574,7 +595,10 @@ describe('assembleTx', () => {
   });
 
   it('should handle multiple predicates with different asset types', async () => {
-    const { provider, wallet1, baseAssetId, wallet2 } = await setupTest(1000, false);
+    const { provider, wallet1, baseAssetId, wallet2 } = await setupTest({
+      transferAmount: 1000,
+      mock: false,
+    });
 
     const amountA = 999;
     const amountB = 777;
