@@ -220,6 +220,7 @@ export class Account extends AbstractAccount implements WithAddress {
    * @returns A promise that resolves to the funded transaction request.
    *
    * @deprecated Use provider.assembleTx instead
+   * Check the migration guide https://docs.fuel.network/guide/assembling-transactions/migration-guide.html for more information.
    */
   async fund<T extends TransactionRequest>(request: T, params: EstimatedTxParams): Promise<T> {
     const {
