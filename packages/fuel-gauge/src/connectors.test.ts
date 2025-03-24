@@ -1,4 +1,4 @@
-import { Fuel, Account, bn } from 'fuels';
+import { Fuel, Account, bn, Wallet, TransactionResultMessageOutReceipt } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { MockConnector } from '../test/fixtures/connectors/mock-connector';
@@ -83,6 +83,32 @@ describe('Connectors', () => {
     const tx = await contract.functions.no_params().call();
     const { value } = await tx.waitForResult();
     expect(JSON.stringify(value)).toStrictEqual(JSON.stringify(bn(50)));
+  });
+
+  it('transaction w/ connector [withdraw]', async () => {
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [connectorWallet],
+    } = launched;
+    const connector = new MockConnector({
+      wallets: [connectorWallet],
+    });
+    const fuel = await new Fuel({
+      connectors: [connector],
+    }).init();
+
+    const recipient = Wallet.generate({ provider });
+    const amount = 1000;
+
+    const tx = await connectorWallet.withdrawToBaseLayer(recipient.address, amount);
+    const result = await tx.waitForResult();
+    expect(result.isStatusSuccess).toBe(true);
+
+    const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];
+    expect(result.id).toEqual(messageOutReceipt.sender);
+    expect(recipient.address.toHexString()).toEqual(messageOutReceipt.recipient);
+    expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
   });
 
   it('transaction w/ predicate connector [transfer]', async () => {
@@ -208,5 +234,31 @@ describe('Connectors', () => {
     const tx = await contract.functions.no_params().call();
     const { value } = await tx.waitForResult();
     expect(JSON.stringify(value)).toStrictEqual(JSON.stringify(bn(50)));
+  });
+
+  it('transaction w/ predicate connector [withdraw]', async () => {
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [connectorWallet],
+    } = launched;
+    const connector = new MockPredicateSignerConnector({
+      wallets: [connectorWallet],
+    });
+    const fuel = await new Fuel({
+      connectors: [connector],
+    }).init();
+
+    const recipient = Wallet.generate({ provider });
+    const amount = 1000;
+
+    const tx = await connectorWallet.withdrawToBaseLayer(recipient.address, amount);
+    const result = await tx.waitForResult();
+    expect(result.isStatusSuccess).toBe(true);
+
+    const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];
+    expect(result.id).toEqual(messageOutReceipt.sender);
+    expect(recipient.address.toHexString()).toEqual(messageOutReceipt.recipient);
+    expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
   });
 });
