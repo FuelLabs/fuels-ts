@@ -11,9 +11,13 @@ import {
   Wallet,
   resolveAccountForAssembleTxParams,
 } from 'fuels';
-import { expectToThrowFuelError, launchTestNode, TestAssetId } from 'fuels/test-utils';
+import { expectToThrowFuelError, launchTestNode, TestAssetId, TestMessage } from 'fuels/test-utils';
 
-import { PredicateTrue } from '../test/typegen';
+import {
+  PredicateFalseConfigurable,
+  Predicate as PredicatePassword,
+  PredicateTrue,
+} from '../test/typegen';
 
 import { fundAccount } from './predicate/utils/predicate';
 
@@ -30,9 +34,11 @@ describe('assembleTx', () => {
   });
 
   const setupTest = async (transferAmount: number, mock: boolean = true) => {
+    const message = new TestMessage({ data: '0x', amount: 1_000_000_000 });
     const launched = await launchTestNode({
       walletsConfig: {
         count: 3,
+        messages: [message],
       },
     });
     const {
@@ -459,6 +465,202 @@ describe('assembleTx', () => {
       requiredBalance: call.requiredBalances,
       feePayerIndex: call.feeAddressIndex,
       payerAccount: wallet1,
+      baseAssetId,
+    });
+  });
+
+  it('should properly handle reserved gas parameter', async () => {
+    const { provider, wallet1, baseAssetId, request, spy } = await setupTest(1000);
+    const reserveGas = 10_000;
+
+    const { assembledRequest } = await provider.assembleTx({
+      request,
+      feePayerAccount: wallet1,
+      accountCoinQuantities: [
+        {
+          amount: 1000,
+          assetId: baseAssetId,
+        },
+      ],
+      reserveGas,
+    });
+
+    const tx = await wallet1.sendTransaction(assembledRequest);
+    const { isStatusSuccess } = await tx.waitForResult();
+
+    expect(isStatusSuccess).toBeTruthy();
+    expect(spy.mock.calls[0][0].reserveGas).toBe(reserveGas.toString());
+  });
+
+  it('should handle multiple assets with mixed change output configurations', async () => {
+    const { provider, wallet1, wallet2, wallet3, baseAssetId, spy } = await setupTest(1000);
+
+    const amountA = 300;
+    const amountB = 500;
+
+    const receiver = Wallet.generate({ provider });
+
+    const request = new ScriptTransactionRequest();
+    request.addCoinOutput(receiver.address, amountA, TestAssetId.B.value);
+    request.addCoinOutput(receiver.address, amountB, TestAssetId.A.value);
+
+    let { assembledRequest } = await provider.assembleTx({
+      request,
+      feePayerAccount: wallet1,
+      accountCoinQuantities: [
+        {
+          account: wallet3,
+          amount: 500,
+          assetId: TestAssetId.A.value,
+          changeOutputAccount: wallet1,
+        },
+        {
+          account: wallet2,
+          amount: 300,
+          assetId: TestAssetId.B.value,
+          changeOutputAccount: wallet3,
+        },
+        {
+          amount: 0,
+          assetId: baseAssetId,
+          changeOutputAccount: receiver,
+        },
+      ],
+    });
+
+    assembledRequest = await wallet2.populateTransactionWitnessesSignature(assembledRequest);
+    assembledRequest = await wallet3.populateTransactionWitnessesSignature(assembledRequest);
+
+    const tx = await wallet1.sendTransaction(assembledRequest);
+    const { isStatusSuccess } = await tx.waitForResult();
+
+    expect(isStatusSuccess).toBeTruthy();
+
+    const call = spy.mock.calls[0][0];
+
+    validateRequiredBalance({
+      requiredBalance: call.requiredBalances,
+      index: 0,
+      account: wallet3,
+      amount: amountB,
+      assetId: TestAssetId.A.value,
+      changeAccount: wallet1,
+    });
+
+    validateRequiredBalance({
+      requiredBalance: call.requiredBalances,
+      index: 1,
+      account: wallet2,
+      amount: amountA,
+      assetId: TestAssetId.B.value,
+      changeAccount: wallet3,
+    });
+
+    validateRequiredBalance({
+      requiredBalance: call.requiredBalances,
+      index: 2,
+      account: wallet1,
+      amount: 0,
+      assetId: baseAssetId,
+      changeAccount: receiver,
+    });
+
+    validateFeePayer({
+      requiredBalance: call.requiredBalances,
+      feePayerIndex: call.feeAddressIndex,
+      payerAccount: wallet1,
+      baseAssetId,
+    });
+  });
+
+  it('should handle multiple predicates with different asset types', async () => {
+    const { provider, wallet1, baseAssetId, wallet2 } = await setupTest(1000, false);
+
+    const amountA = 999;
+    const amountB = 777;
+
+    const predicate1 = new PredicatePassword({ provider, data: [1000, 337] });
+    const predicate2 = new PredicateTrue({ provider });
+    const predicate3 = new PredicateFalseConfigurable({
+      provider,
+      data: [99],
+      configurableConstants: { SECRET_NUMBER: 99 },
+    });
+
+    // Fund predicates
+    await fundAccount(wallet1, predicate1, 100_000);
+    await fundAccount(wallet1, predicate2, 100_000);
+    await fundAccount(wallet1, predicate3, 100_000);
+
+    const request = new ScriptTransactionRequest();
+    request.addCoinOutput(wallet1.address, 500, baseAssetId);
+    request.addCoinOutput(wallet2.address, 300, baseAssetId);
+
+    const spy = vi.spyOn(provider.operations, 'assembleTx');
+
+    const { assembledRequest } = await provider.assembleTx({
+      request,
+      feePayerAccount: predicate1,
+      accountCoinQuantities: [
+        {
+          account: predicate3,
+          amount: amountA,
+          assetId: baseAssetId,
+          changeOutputAccount: wallet2,
+        },
+        {
+          account: predicate2,
+          amount: amountB,
+          assetId: baseAssetId,
+          changeOutputAccount: wallet2,
+        },
+        {
+          account: predicate1,
+          amount: 0,
+          assetId: baseAssetId,
+          changeOutputAccount: wallet2,
+        },
+      ],
+    });
+
+    const tx = await wallet1.sendTransaction(assembledRequest);
+    const { isStatusSuccess } = await tx.waitForResult();
+
+    expect(isStatusSuccess).toBeTruthy();
+
+    const call = spy.mock.calls[0][0];
+
+    validateRequiredBalance({
+      requiredBalance: call.requiredBalances,
+      index: 0,
+      account: predicate3,
+      amount: amountA,
+      assetId: baseAssetId,
+      changeAccount: wallet2,
+    });
+
+    validateRequiredBalance({
+      requiredBalance: call.requiredBalances,
+      index: 1,
+      account: predicate2,
+      amount: amountB,
+      assetId: baseAssetId,
+      changeAccount: wallet2,
+    });
+
+    validateRequiredBalance({
+      requiredBalance: call.requiredBalances,
+      index: 2,
+      account: predicate1,
+      amount: 0,
+      assetId: baseAssetId,
+      changeAccount: wallet2,
+    });
+
+    validateFeePayer({
+      requiredBalance: call.requiredBalances,
+      feePayerIndex: call.feeAddressIndex,
+      payerAccount: predicate1,
       baseAssetId,
     });
   });
