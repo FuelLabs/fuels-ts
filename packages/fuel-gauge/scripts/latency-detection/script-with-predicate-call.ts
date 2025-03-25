@@ -1,22 +1,57 @@
-import { measure } from './helpers';
-import type { PerformanceOperationParams, PerformanceResult } from './types';
-import { TagEnum } from './types';
+import { PredicateWithConfigurable } from '../../test/typegen/predicates';
 
-export async function scriptWithPredicateCall(
-  params: PerformanceOperationParams
-): Promise<PerformanceResult> {
-  const { baseAssetId, contract, callParams, predicate } = params;
+import {
+  TagEnum,
+  type Operation,
+  type OperationResult,
+  type PerformanceOperationParams,
+} from './types';
 
-  const { duration } = await measure(async () => {
-    contract.account = predicate;
-    const call = await contract.functions
-      .execute_transfer(callParams)
-      .txParams({ variableOutputs: 1 })
-      .callParams({ forward: [100, baseAssetId] })
-      .call();
+let predicate: PredicateWithConfigurable;
 
-    return call.waitForResult();
+// let callParams;
+
+const preparatorySteps = async (params: PerformanceOperationParams) => {
+  const { account, provider, baseAssetId } = params;
+
+  // Instantiating predicate
+  predicate = new PredicateWithConfigurable({
+    provider,
+    data: [10, account.address.toString()],
+    configurableConstants: {
+      ADDRESS: account.address.toString(),
+      FEE: 10,
+    },
   });
 
-  return { tag: TagEnum.ScriptWithPredicate, duration };
+  // Funding predicate
+  const res = await account.transfer(predicate.address, 3000, baseAssetId);
+  await res.waitForResult();
+};
+
+async function operation(params: PerformanceOperationParams): Promise<OperationResult> {
+  const { account, baseAssetId, contract } = params;
+
+  const callParams = [
+    {
+      recipient: { Address: { bits: account.address.toB256() } },
+      asset_id: { bits: baseAssetId },
+      amount: 100,
+    },
+  ];
+
+  contract.account = predicate;
+  const call = await contract.functions
+    .execute_transfer(callParams)
+    .txParams({ variableOutputs: 1 })
+    .callParams({ forward: [100, baseAssetId] })
+    .call();
+
+  return call.waitForResult();
 }
+
+export const scriptWithPredicateCall: Operation = {
+  tag: TagEnum.ScriptWithPredicate,
+  operation,
+  preparatorySteps,
+};

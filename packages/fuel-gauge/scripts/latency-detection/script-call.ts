@@ -1,19 +1,31 @@
-import { measure } from './helpers';
-import type { PerformanceOperationParams, PerformanceResult } from './types';
-import { TagEnum } from './types';
+import {
+  TagEnum,
+  type Operation,
+  type OperationResult,
+  type PerformanceOperationParams,
+} from './types';
 
-export async function scriptCall(params: PerformanceOperationParams): Promise<PerformanceResult> {
-  const { baseAssetId, contract, callParams } = params;
+async function operation(params: PerformanceOperationParams): Promise<OperationResult> {
+  const { baseAssetId, contract, account } = params;
 
-  const { duration } = await measure(async () => {
-    const call = await contract.functions
-      .execute_transfer(callParams)
-      .txParams({ variableOutputs: 1 })
-      .callParams({ forward: [100, baseAssetId] })
-      .call();
+  const callParams = [
+    {
+      recipient: { Address: { bits: account.address.toB256() } },
+      asset_id: { bits: baseAssetId },
+      amount: 100,
+    },
+  ];
 
-    return call.waitForResult();
-  });
+  const call = await contract.functions
+    .execute_transfer(callParams)
+    .txParams({ variableOutputs: 1 })
+    .callParams({ forward: [100, baseAssetId] })
+    .call();
 
-  return { tag: TagEnum.Script, duration };
+  return call.waitForResult();
 }
+
+export const scriptCall: Operation = {
+  tag: TagEnum.Script,
+  operation,
+};

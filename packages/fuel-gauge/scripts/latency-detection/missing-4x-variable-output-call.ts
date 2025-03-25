@@ -1,10 +1,11 @@
-import { measure } from './helpers';
-import type { PerformanceOperationParams, PerformanceResult } from './types';
-import { TagEnum } from './types';
+import {
+  TagEnum,
+  type Operation,
+  type OperationResult,
+  type PerformanceOperationParams,
+} from './types';
 
-export async function missing4xOutputVariableCall(
-  params: PerformanceOperationParams
-): Promise<PerformanceResult> {
+async function operation(params: PerformanceOperationParams): Promise<OperationResult> {
   const { account, baseAssetId, contract } = params;
 
   const callParams = [
@@ -30,14 +31,15 @@ export async function missing4xOutputVariableCall(
     },
   ];
 
-  const { duration } = await measure(async () => {
-    const call = await contract.functions
-      .execute_transfer(callParams)
-      .callParams({ forward: [1000, baseAssetId] })
-      .call();
+  const call = await contract.functions
+    .execute_transfer(callParams)
+    .callParams({ forward: [1000, baseAssetId] })
+    .call();
 
-    return call.waitForResult();
-  });
-
-  return { tag: TagEnum.Missing4xOutputVariable, duration };
+  return call.waitForResult();
 }
+
+export const missing4xOutputVariableCall: Operation = {
+  tag: TagEnum.Missing4xOutputVariable,
+  operation,
+};
