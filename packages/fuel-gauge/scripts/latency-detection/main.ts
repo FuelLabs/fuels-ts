@@ -11,8 +11,8 @@ const main = async () => {
   const operations = [
     simpleTransfer,
     missing4xOutputVariableCall,
-    predicateSignatureValidation,
     interContractCall,
+    predicateSignatureValidation,
   ];
 
   const operationsParams = await setupPerformanceAnalysis();
