@@ -1,18 +1,15 @@
 import type { Account, Provider } from 'fuels';
 
-import type { TransferContract } from '../../test/typegen/contracts';
-
 export type MeasureResponse<T> = {
   duration: number;
   response: T;
 };
 
 export enum TagEnum {
-  Script = 'script',
   SimpleTransfer = 'simple-transfer',
-  ScriptWithPredicate = 'script-with-predicate',
-  MissingOutputVariable = 'missing-output-variable',
+  PredicateSignatureValidation = 'predicate-signature-validation',
   Missing4xOutputVariable = 'missing-4x-output-variable',
+  InterContractCall = 'inter-contract-call',
 }
 
 export type OperationResult<T = unknown> = T;
@@ -21,7 +18,6 @@ export type PerformanceOperationParams = {
   account: Account;
   baseAssetId: string;
   provider: Provider;
-  contract: TransferContract;
 };
 
 export type PerformanceResult = {
@@ -34,3 +30,9 @@ export type Operation = {
   operation: (params: PerformanceOperationParams) => Promise<OperationResult>;
   preparatorySteps?: (params: PerformanceOperationParams) => Promise<void>;
 };
+
+export enum ContractEnum {
+  TransferContract = 'transfer-contract',
+  LogContract = 'log-contract',
+  AdvancedLogContract = 'advanced-log-contract',
+}
