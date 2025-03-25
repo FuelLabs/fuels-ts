@@ -1,35 +1,27 @@
 import 'dotenv/config';
-import fs from 'fs';
 
-import { preparatorySteps, runOperations } from './helpers';
+import { setupPerformanceAnalysis, runOperations, parseResults, saveResults } from './helpers';
 import { missing4xOutputVariableCall } from './missing-4x-variable-output-call';
 import { missingOutputVariableCall } from './missing-variable-output-call';
 import { scriptCall } from './script-call';
 import { scriptWithPredicateCall } from './script-with-predicate-call';
+import { simpleTransfer } from './simple-transfer';
 
-const { log, error } = console;
-
-const DIR_NAME = 'snapshots';
+const { error } = console;
 
 const main = async () => {
   const operations = [
+    simpleTransfer,
     scriptCall,
     missingOutputVariableCall,
     missing4xOutputVariableCall,
     scriptWithPredicateCall,
   ];
 
-  const operationsParams = await preparatorySteps();
+  const operationsParams = await setupPerformanceAnalysis();
   const results = await runOperations(operations, operationsParams);
-
-  const date = new Date();
-
-  const filename = `${date.toISOString().slice(0, 16)}.json`;
-
-  fs.mkdirSync(DIR_NAME, { recursive: true });
-  fs.writeFileSync(`${DIR_NAME}/${filename}`, JSON.stringify(results, null, 2));
-
-  log(`Snapshots saved into "${DIR_NAME}/${filename}"`);
+  const parsedResults = parseResults(results);
+  saveResults(parsedResults);
 };
 
 main().catch(error);
