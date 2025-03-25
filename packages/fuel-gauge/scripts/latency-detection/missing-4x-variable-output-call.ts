@@ -1,4 +1,8 @@
+import { TransferContract } from '../../test/typegen/contracts';
+
+import { getContractId } from './helpers';
 import {
+  ContractEnum,
   TagEnum,
   type Operation,
   type OperationResult,
@@ -6,8 +10,10 @@ import {
 } from './types';
 
 async function operation(params: PerformanceOperationParams): Promise<OperationResult> {
-  const { account, baseAssetId, contract } = params;
+  const { account, baseAssetId } = params;
 
+  const contractId = getContractId(ContractEnum.TransferContract);
+  const contract = new TransferContract(contractId, account);
   const callParams = [
     {
       recipient: { Address: { bits: account.address.toB256() } },
