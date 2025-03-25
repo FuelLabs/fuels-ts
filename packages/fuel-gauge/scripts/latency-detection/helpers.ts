@@ -50,6 +50,8 @@ export const setupPerformanceAnalysis = async (): Promise<PerformanceOperationPa
   const provider = new Provider(providerUrl);
   const account = Wallet.fromPrivateKey(privateKey, provider);
   const baseAssetId = await provider.getBaseAssetId();
+  const { nodeVersion } = await provider.getNode();
+  process.env.NODE_VERSION = nodeVersion;
 
   return { account, baseAssetId, provider };
 };
@@ -108,8 +110,9 @@ export const saveResults = (results: Record<string, unknown>) => {
       })
       .concat(' UTC'),
     url: process.env.PERFORMANCE_ANALYSIS_TEST_URL,
-    versions: getBuiltinVersions(),
-    'executed-count': Number(process.env.EXECUTION_COUNT),
+    'node-version': process.env.NODE_VERSION,
+    'sdk-versions': getBuiltinVersions(),
+    'execution-count': Number(process.env.EXECUTION_COUNT),
     results,
   };
 
