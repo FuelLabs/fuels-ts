@@ -3,9 +3,9 @@ import fs from 'fs';
 import { Provider, Wallet } from 'fuels';
 import ora from 'ora';
 
-import { TransferContract, TransferContractFactory } from '../../test/typegen/contracts';
-
+import { CONTRACT_IDS } from './constants';
 import type {
+  ContractEnum,
   MeasureResponse,
   Operation,
   PerformanceOperationParams,
@@ -35,7 +35,6 @@ export const setupPerformanceAnalysis = async (): Promise<PerformanceOperationPa
   // Preparatory steps
   const providerUrl = process.env.PERFORMANCE_ANALYSIS_TEST_URL;
   const privateKey = process.env.PERFORMANCE_ANALYSIS_PVT_KEY;
-  const contractAddress = process.env.PERFORMANCE_ANALYSIS_CONTRACT_ADDRESS;
 
   const args = process.argv;
   const executionCountIndex = args.indexOf('--execution-count');
@@ -48,36 +47,11 @@ export const setupPerformanceAnalysis = async (): Promise<PerformanceOperationPa
     );
   }
 
-  const logger = ora({
-    text: 'Setting up performance analysis...',
-    color: 'green',
-  }).start();
+  const provider = new Provider(providerUrl);
+  const account = Wallet.fromPrivateKey(privateKey, provider);
+  const baseAssetId = await provider.getBaseAssetId();
 
-  try {
-    const provider = new Provider(providerUrl);
-    const account = Wallet.fromPrivateKey(privateKey, provider);
-    const baseAssetId = await provider.getBaseAssetId();
-
-    // Deploying contract that will be executed
-    let contract: TransferContract;
-    let deployedMsg = '';
-    if (!contractAddress) {
-      const factory = new TransferContractFactory(account);
-      const deploy = await factory.deploy();
-      const result = await deploy.waitForResult();
-      contract = result.contract;
-      deployedMsg = `\n- contract deployed on address: ${contract.id.toB256()}`;
-    } else {
-      contract = new TransferContract(contractAddress, account);
-    }
-
-    logger.succeed(`Setup done${deployedMsg}`);
-
-    return { account, baseAssetId, provider, contract };
-  } catch (e) {
-    logger.fail('Failed to setup performance analysis');
-    throw e;
-  }
+  return { account, baseAssetId, provider };
 };
 
 /**
@@ -100,7 +74,9 @@ export const parseResults = (results: PerformanceResult[]) => {
   const parsedResults = {} as Record<string, number>;
 
   for (const [tag, durations] of Object.entries(allMeasured)) {
-    parsedResults[tag] = durations.reduce((a, b) => a + b, 0) / durations.length;
+    parsedResults[tag] = Number(
+      (durations.reduce((a, b) => a + b, 0) / durations.length).toFixed(3)
+    );
   }
 
   return parsedResults;
@@ -119,27 +95,40 @@ export const saveResults = (results: Record<string, unknown>) => {
   fs.mkdirSync(DIR_NAME, { recursive: true });
 
   const snapshot = {
-    generatedAt: date.toLocaleString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: true,
-      timeZone: 'UTC',
-    }),
-    url: process.env.PERFORMANCE_ANALYSIS_TEST_URL as string,
-    versions: {
-      ...getBuiltinVersions(),
-    },
-    executionCount: 5,
+    'generated-at': date
+      .toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+        timeZone: 'UTC',
+      })
+      .concat(' UTC'),
+    url: process.env.PERFORMANCE_ANALYSIS_TEST_URL,
+    versions: getBuiltinVersions(),
+    'executed-count': Number(process.env.EXECUTION_COUNT),
     results,
   };
 
   fs.writeFileSync(`${DIR_NAME}/${filename}`, JSON.stringify(snapshot, null, 2));
 
   log(`Snapshots saved into "${DIR_NAME}/${filename}"`);
+};
+
+const getChain = (url: string) => {
+  if (/testnet/.test(url)) {
+    return 'testnet';
+  }
+
+  return 'devnet';
+};
+
+export const getContractId = (contractEnum: ContractEnum) => {
+  const chain = getChain(process.env.PERFORMANCE_ANALYSIS_TEST_URL as string);
+  return CONTRACT_IDS[chain][contractEnum];
 };
 
 /**
