@@ -1,21 +1,18 @@
 import 'dotenv/config';
 
 import { setupPerformanceAnalysis, runOperations, parseResults, saveResults } from './helpers';
+import { interContractCall } from './inter-contract-call';
 import { missing4xOutputVariableCall } from './missing-4x-variable-output-call';
-import { missingOutputVariableCall } from './missing-variable-output-call';
-import { scriptCall } from './script-call';
-import { scriptWithPredicateCall } from './script-with-predicate-call';
+import { predicateSignatureValidation } from './predicate-signature-validation';
 import { simpleTransfer } from './simple-transfer';
 
 const { error } = console;
-
 const main = async () => {
   const operations = [
     simpleTransfer,
-    scriptCall,
-    missingOutputVariableCall,
     missing4xOutputVariableCall,
-    scriptWithPredicateCall,
+    predicateSignatureValidation,
+    interContractCall,
   ];
 
   const operationsParams = await setupPerformanceAnalysis();
