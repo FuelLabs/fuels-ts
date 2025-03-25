@@ -1,8 +1,9 @@
+import { getBuiltinVersions } from '@fuel-ts/versions/cli';
+import fs from 'fs';
 import { Provider, Wallet } from 'fuels';
 import ora from 'ora';
 
 import { TransferContract, TransferContractFactory } from '../../test/typegen/contracts';
-import { PredicateWithConfigurable } from '../../test/typegen/predicates';
 
 import type {
   MeasureResponse,
@@ -10,6 +11,8 @@ import type {
   PerformanceOperationParams,
   PerformanceResult,
 } from './types';
+
+const { log } = console;
 
 /**
  * Function to measure the execution time (in seconds) of an asynchronous operation.
@@ -28,26 +31,16 @@ export async function measure<T>(operation: () => Promise<T>): Promise<MeasureRe
   };
 }
 
-/**
- * Executes preparatory steps for latency detection.
- *
- * This function performs the following steps:
- * 1. Retrieves the provider URL and private key from environment variables.
- * 2. Initializes a logger to indicate the progress of the preparatory steps.
- * 3. Creates a provider and account using the retrieved credentials.
- * 4. Retrieves the base asset ID from the provider.
- * 5. Deploys a transfer contract and waits for the deployment result.
- * 6. Instantiates a predicate with configurable constants.
- * 7. Funds the predicate with a specified amount.
- *
- *
- * @returns The parameters to run a performance operation.
- */
-export const preparatorySteps = async (): Promise<PerformanceOperationParams> => {
+export const setupPerformanceAnalysis = async (): Promise<PerformanceOperationParams> => {
   // Preparatory steps
   const providerUrl = process.env.PERFORMANCE_ANALYSIS_TEST_URL;
   const privateKey = process.env.PERFORMANCE_ANALYSIS_PVT_KEY;
   const contractAddress = process.env.PERFORMANCE_ANALYSIS_CONTRACT_ADDRESS;
+
+  const args = process.argv;
+  const executionCountIndex = args.indexOf('--execution-count');
+  const executionCount = executionCountIndex !== -1 ? args[executionCountIndex + 1] : '1';
+  process.env.EXECUTION_COUNT = executionCount;
 
   if (!providerUrl || !privateKey) {
     throw new Error(
@@ -56,7 +49,7 @@ export const preparatorySteps = async (): Promise<PerformanceOperationParams> =>
   }
 
   const logger = ora({
-    text: 'Running preparatory steps..',
+    text: 'Setting up performance analysis...',
     color: 'green',
   }).start();
 
@@ -64,14 +57,6 @@ export const preparatorySteps = async (): Promise<PerformanceOperationParams> =>
     const provider = new Provider(providerUrl);
     const account = Wallet.fromPrivateKey(privateKey, provider);
     const baseAssetId = await provider.getBaseAssetId();
-    const amount = 100;
-    const callParams = [
-      {
-        recipient: { Address: { bits: account.address.toB256() } },
-        asset_id: { bits: baseAssetId },
-        amount,
-      },
-    ];
 
     // Deploying contract that will be executed
     let contract: TransferContract;
@@ -86,27 +71,75 @@ export const preparatorySteps = async (): Promise<PerformanceOperationParams> =>
       contract = new TransferContract(contractAddress, account);
     }
 
-    // Instantiating predicate
-    const predicate = new PredicateWithConfigurable({
-      provider: contract.provider,
-      data: [10, account.address.toString()],
-      configurableConstants: {
-        ADDRESS: account.address.toString(),
-        FEE: 10,
-      },
-    });
+    logger.succeed(`Setup done${deployedMsg}`);
 
-    // Funding predicate
-    const res = await account.transfer(predicate.address, 3000, baseAssetId);
-    await res.waitForResult();
-
-    logger.succeed(`Preparatory steps done${deployedMsg}`);
-
-    return { account, baseAssetId, provider, contract, callParams, predicate };
+    return { account, baseAssetId, provider, contract };
   } catch (e) {
-    logger.fail('Failed to run preparatory steps');
+    logger.fail('Failed to setup performance analysis');
     throw e;
   }
+};
+
+/**
+ * Assembles the results of a performance operation into a single object.
+ *
+ * @param results - An array of performance results.
+ * @returns A promise that resolves to an array of performance results.
+ */
+export const parseResults = (results: PerformanceResult[]) => {
+  const allMeasured = results.reduce(
+    (acc, { tag, duration }) => {
+      const durations = acc[tag] ?? [];
+      durations.push(duration);
+      acc[tag] = durations;
+      return acc;
+    },
+    {} as Record<string, number[]>
+  );
+
+  const parsedResults = {} as Record<string, number>;
+
+  for (const [tag, durations] of Object.entries(allMeasured)) {
+    parsedResults[tag] = durations.reduce((a, b) => a + b, 0) / durations.length;
+  }
+
+  return parsedResults;
+};
+
+/**
+ * Assembles the results of a performance operation into a single object.
+ *
+ * @param results - The results of a performance operation.
+ * @returns A promise that resolves to an array of performance results.
+ */
+export const saveResults = (results: Record<string, unknown>) => {
+  const DIR_NAME = 'snapshots';
+  const date = new Date();
+  const filename = `${date.toISOString().slice(0, 16)}.json`;
+  fs.mkdirSync(DIR_NAME, { recursive: true });
+
+  const snapshot = {
+    generatedAt: date.toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true,
+      timeZone: 'UTC',
+    }),
+    url: process.env.PERFORMANCE_ANALYSIS_TEST_URL as string,
+    versions: {
+      ...getBuiltinVersions(),
+    },
+    executionCount: 5,
+    results,
+  };
+
+  fs.writeFileSync(`${DIR_NAME}/${filename}`, JSON.stringify(snapshot, null, 2));
+
+  log(`Snapshots saved into "${DIR_NAME}/${filename}"`);
 };
 
 /**
@@ -123,25 +156,39 @@ export const runOperations = async (
   const results: PerformanceResult[] = [];
 
   // Performing measure operations
-  for (const operation of operations) {
+  for (const { tag, operation, preparatorySteps } of operations) {
+    const executionCount = Number(process.env.EXECUTION_COUNT as string);
+    let count = 0;
+    let execute = true;
+
     const logger = ora({
-      text: `Performing operation: ${operation.name}`,
+      text: ``,
       color: 'green',
     }).start();
-    try {
-      // Clear chain info cache
-      Provider.clearChainAndNodeCaches();
 
-      const result = await operation(params);
+    while (execute) {
+      logger.text = `Performing operation: ${tag} - ${count + 1} of ${executionCount}`;
+      try {
+        if (preparatorySteps) {
+          await preparatorySteps(params);
+        }
 
-      logger.text = `Operation: ${operation.name} completed`;
-      logger.succeed();
+        // Clear chain info cache
+        Provider.clearChainAndNodeCaches();
 
-      results.push(result);
-    } catch (e) {
-      logger.fail(`Operation: ${operation.name} failed`);
-      throw e;
+        const { duration } = await measure(async () => operation(params));
+        results.push({ duration, tag });
+      } catch (e) {
+        logger.fail(`Operation: ${tag} failed during execution ${count}`);
+        throw e;
+      }
+
+      count++;
+      execute = count < executionCount;
     }
+
+    logger.text = `Operation: ${tag} completed ${count} times`;
+    logger.succeed();
   }
 
   return results;
