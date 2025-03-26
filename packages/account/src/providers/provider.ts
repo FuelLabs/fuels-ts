@@ -81,8 +81,8 @@ import {
   deserializeNodeInfo,
   deserializeProviderCache,
   deserializeReceipt,
-  parseRawInput,
-  parseRawOutput,
+  deserializeInput,
+  deserializeOutput,
 } from './utils/serialization';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
@@ -143,16 +143,24 @@ export type AccountCoinQuantity = {
   changeOutputAccount?: Account;
 };
 
-export type AssembleTxParams = {
-  request: TransactionRequest;
-  blockHorizon?: number;
+// #region assemble-tx-params
+export type AssembleTxParams<T extends TransactionRequest = TransactionRequest> = {
+  // The transaction request to assemble
+  request: T;
+  // Coin quantities required for the transaction
   accountCoinQuantities: AccountCoinQuantity[];
+  // Account that will pay for the transaction fees
   feePayerAccount: Account;
-  excludeInput?: ExcludeResourcesOption;
+  // Block horizon for gas price estimation (default: 10)
+  blockHorizon?: number;
+  // Whether to estimate predicates (default: true)
   estimatePredicates?: boolean;
+  // Resources to exclude from the transaction (optional)
+  excludeInput?: ExcludeResourcesOption;
+  // Amount of gas to reserve (optional)
   reserveGas?: number;
 };
-
+// #endregion assemble-tx-params
 export type PageInfo = GqlPageInfo;
 
 export type GetCoinsResponse = {
@@ -1593,6 +1601,9 @@ export default class Provider {
    * @param transactionCostParams - The transaction cost parameters (optional).
    *
    * @returns A promise that resolves to the transaction cost object.
+   *
+   * @deprecated Use provider.assembleTx instead
+   * Check the migration guide https://docs.fuel.network/guide/assembling-transactions/migration-guide.html for more information.
    */
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
@@ -1693,7 +1704,20 @@ export default class Provider {
     };
   }
 
-  async assembleTx(params: AssembleTxParams) {
+  /**
+   * Assembles a transaction by completely estimating and funding it.
+   *
+   * @param request - The transaction request to assemble
+   * @param feePayerAccount - Account that will pay transaction fees
+   * @param accountCoinQuantities - Array of coin quantities needed from accounts
+   * @param blockHorizon - Number of blocks transaction is valid for (default: 10)
+   * @param estimatePredicates - Whether to estimate predicates (default: true)
+   * @param reserveGas - Optional gas to reserve
+   * @param excludeInput - Optional input to exclude
+   *
+   * @returns The assembled transaction request, estimated gas price, and receipts
+   */
+  async assembleTx<T extends TransactionRequest>(params: AssembleTxParams<T>) {
     const {
       accountCoinQuantities,
       feePayerAccount,
@@ -1709,35 +1733,43 @@ export default class Provider {
     const baseAssetId = await this.getBaseAssetId();
 
     let feePayerIndex = -1;
-    let baseAssetChange;
+    let baseAssetChange: string | undefined;
 
     const requestChanges = request.getChangeOutputs();
 
     const requiredBalances = accountCoinQuantities.map((quantity, index) => {
-      const { amount, assetId, account = feePayerAccount } = quantity;
+      const { amount, assetId, account = feePayerAccount, changeOutputAccount } = quantity;
       const setChangeOnRequest = requestChanges.find((change) => change.assetId === assetId);
 
-      let { changeOutputAccount } = quantity;
+      let changeAccountAddress: string;
 
-      if (setChangeOnRequest && changeOutputAccount) {
-        const isCollision = setChangeOnRequest.to !== changeOutputAccount.address.toB256();
+      if (changeOutputAccount && setChangeOnRequest) {
+        // Case 1: Both changeOutputAccount and setChangeOnRequest exist
+        const sameAddress = String(setChangeOnRequest.to) === changeOutputAccount.address.toB256();
 
-        if (isCollision) {
+        // If both changes were informed to different addresses, throw collision error
+        if (!sameAddress) {
           throw new FuelError(
             ErrorCode.CHANGE_OUTPUT_COLLISION,
             `OutputChange address for asset ${assetId} differs between transaction request and assembleTx inputs.`
           );
         }
-      }
-
-      if (!changeOutputAccount) {
-        changeOutputAccount = account;
+        changeAccountAddress = changeOutputAccount.address.toB256();
+      } else if (setChangeOnRequest) {
+        // Case 2: Only setChangeOnRequest exists, use it as changeAccountAddress
+        changeAccountAddress = String(setChangeOnRequest.to);
+      } else if (changeOutputAccount) {
+        // Case 3: Only changeOutputAccount exists, use it as changeAccountAddress
+        changeAccountAddress = changeOutputAccount.address.toB256();
+      } else {
+        // Case 4: No changeOutputAccount, use account
+        changeAccountAddress = account.address.toB256();
       }
 
       allAddresses.add(account.address.toB256());
 
       const changePolicy = {
-        change: changeOutputAccount.address.toB256(),
+        change: changeAccountAddress,
       };
 
       if (assetId === baseAssetId) {
@@ -1798,8 +1830,8 @@ export default class Provider {
 
     request.witnesses = gqlTransaction.witnesses || request.witnesses;
 
-    request.inputs = gqlTransaction.inputs?.map(parseRawInput) || request.inputs;
-    request.outputs = gqlTransaction.outputs?.map(parseRawOutput) || request.outputs;
+    request.inputs = gqlTransaction.inputs?.map(deserializeInput) || request.inputs;
+    request.outputs = gqlTransaction.outputs?.map(deserializeOutput) || request.outputs;
 
     if (gqlTransaction.policies?.maxFee) {
       request.maxFee = bn(gqlTransaction.policies.maxFee);
@@ -1818,7 +1850,7 @@ export default class Provider {
     request.updateState(chainId, 'funded', transactionSummary);
 
     return {
-      assembledRequest: request,
+      assembledRequest: request as T,
       gasPrice: bn(gasPrice),
       receipts: status.receipts.map(deserializeReceipt),
     };
@@ -2612,7 +2644,7 @@ export default class Provider {
   /**
    * @hidden
    */
-  public extractDryRunError(
+  private extractDryRunError(
     transactionRequest: TransactionRequest,
     receipts: TransactionResultReceipt[],
     reason: string

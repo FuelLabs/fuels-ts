@@ -226,6 +226,9 @@ export class BaseInvocationScope<TReturn = any> {
    * Gets the transaction cost for dry running the transaction.
    *
    * @returns The transaction cost details.
+   *
+   * @deprecated Use contract.assembleTx instead
+   * Check the migration guide https://docs.fuel.network/guide/assembling-transactions/migration-guide.html for more information.
    */
   async getTransactionCost(): Promise<TransactionCost> {
     const request = clone(await this.getTransactionRequest());
@@ -241,6 +244,9 @@ export class BaseInvocationScope<TReturn = any> {
    * Costs and funds the underlying transaction request.
    *
    * @returns The invocation scope as a funded transaction request.
+   *
+   * @deprecated Use contract.assembleTx instead
+   * Check the migration guide https://docs.fuel.network/guide/assembling-transactions/migration-guide.html for more information.
    */
   async fundWithRequiredCoins(): Promise<ScriptTransactionRequest> {
     let transactionRequest = await this.getTransactionRequest();
@@ -397,6 +403,17 @@ export class BaseInvocationScope<TReturn = any> {
     return this;
   }
 
+  /**
+   * Adds signers to the transaction request.
+   *
+   * @param signers - The signers to add.
+   * @returns The current instance of the class.
+   *
+   * @deprecated This method is deprecated and will be removed in a future versions.
+   * All signatures should be manually added to the transaction request witnesses. If your
+   * Sway program relies on in-code signature validation, visit this guide:
+   * https://docs.fuel.network/guides/cookbook/sway-script-with-signature-validation.html
+   */
   addSigners(signers: Account | Account[]) {
     this.addSignersCallback = (transactionRequest) =>
       transactionRequest.addAccountWitnesses(signers);
@@ -430,7 +447,7 @@ export class BaseInvocationScope<TReturn = any> {
   }> {
     assert(this.program.account, 'Wallet is required!');
 
-    let transactionRequest: ScriptTransactionRequest;
+    let transactionRequest = await this.getTransactionRequest();
 
     if (this.addSignersCallback) {
       transactionRequest = await this.fundWithRequiredCoins();

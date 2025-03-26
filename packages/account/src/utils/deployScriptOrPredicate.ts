@@ -12,21 +12,13 @@ import {
 } from './predicate-script-loader-instructions';
 
 async function fundBlobTx(deployer: Account, blobTxRequest: BlobTransactionRequest) {
-  try {
-    const { assembledRequest } = await deployer.provider.assembleTx({
-      request: blobTxRequest,
-      feePayerAccount: deployer,
-      accountCoinQuantities: [],
-    });
+  const { assembledRequest } = await deployer.provider.assembleTx({
+    request: blobTxRequest,
+    feePayerAccount: deployer,
+    accountCoinQuantities: [],
+  });
 
-    return assembledRequest;
-  } catch (error) {
-    if ((error as FuelError).code === ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS) {
-      throw new FuelError(ErrorCode.FUNDS_TOO_LOW, 'Insufficient balance to deploy predicate.');
-    }
-
-    throw error;
-  }
+  return assembledRequest;
 }
 
 function adjustConfigurableOffsets(jsonAbi: JsonAbi, configurableOffsetDiff: number) {

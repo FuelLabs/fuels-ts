@@ -75,6 +75,9 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
    * @param account - The account to fund the transaction.
    * @param params - The parameters for the transaction cost.
    * @returns The current instance of the `ScriptTransactionRequest` funded.
+   *
+   * @deprecated Use `provider.assembleTx` instead.
+   * Check the migration guide https://docs.fuel.network/guide/assembling-transactions/migration-guide.html for more information.
    */
   async estimateAndFund(
     account: Account,
