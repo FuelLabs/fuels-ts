@@ -2636,7 +2636,7 @@ export default class Provider {
   /**
    * @hidden
    */
-  public extractDryRunError(
+  private extractDryRunError(
     transactionRequest: TransactionRequest,
     receipts: TransactionResultReceipt[],
     reason: string
