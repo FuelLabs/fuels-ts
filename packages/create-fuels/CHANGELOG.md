@@ -1,5 +1,32 @@
 # create-fuels
 
+## 0.100.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.100.1
+- @fuel-ts/versions@0.100.1
+
+## 0.100.0
+
+### Patch Changes
+
+- 1277ae6: chore: upgrade `vite` related dependencies
+- f254f3a: chore: upgraded various dependencies
+- 022d76e: build(deps): bump the npm_and_yarn group with 2 updates
+- 6eb113c: chore: upgrade NPM package versions
+- 4b122dc: build(deps): bump postcss from 8.5.2 to 8.5.3 in the npm_and_yarn group
+- 5c6c659: chore: add missing turbo cache
+- 521292a: chore: updated `forc` to `0.67.0`
+- ff97a6e: chore: upgrade `forc` to `0.66.7`
+- f8f324b: chore: upgrade frontend dependencies
+- Updated dependencies [b42f056]
+- Updated dependencies [f41887f]
+- Updated dependencies [521292a]
+- Updated dependencies [ff97a6e]
+  - @fuel-ts/versions@0.100.0
+  - @fuel-ts/errors@0.100.0
+
 ## 0.99.0
 
 ### Patch Changes

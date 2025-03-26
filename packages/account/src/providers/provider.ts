@@ -15,6 +15,7 @@ import gql from 'graphql-tag';
 import { clone } from 'ramda';
 
 import type { Account } from '../account';
+import { deferPromise } from '../connectors/utils/promises';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
@@ -35,6 +36,10 @@ import type {
   Requester,
   GqlBlockFragment,
   GqlEstimatePredicatesQuery,
+  GqlStatusChangeSubscription,
+  GqlSubmitAndAwaitStatusSubscription,
+  GqlGetTransactionWithReceiptsQuery,
+  GqlGetTransactionsByOwnerQuery,
 } from './__generated__/operations';
 import { resolveAccountForAssembleTxParams } from './assemble-tx-helpers';
 import type { Coin } from './coin';
@@ -70,13 +75,14 @@ import {
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch, getWaitDelay } from './utils/auto-retry-fetch';
 import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
-import { parseRawInput, parseRawOutput } from './utils/parsers';
 import type { ProviderCacheJson, TransactionSummaryJsonPartial } from './utils/serialization';
 import {
   deserializeChain,
   deserializeNodeInfo,
   deserializeProviderCache,
   deserializeReceipt,
+  parseRawInput,
+  parseRawOutput,
 } from './utils/serialization';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
@@ -407,13 +413,65 @@ type NodeInfoCache = Record<string, NodeInfo>;
 
 type Operations = ReturnType<typeof getOperationsSdk>;
 
-type SdkOperations = Omit<Operations, 'statusChange' | 'submitAndAwaitStatus'> & {
+/**
+ * TODO: remove this once pre-confirmation status support lands.
+ *
+ * Because of the way graphql-codegen works, an empty object is added to the generated status types
+ * in place of the pre-confirmation statuses we don't declare in our operations.graphql.
+ * Codegen converts these ignored statuses into `{}` types, and that messes up our TS code compilation,
+ * because it's not written with this `{}` type in mind.
+ * This utility and its application on the types below removes those empty objects from the affected operations,
+ * thereby leaving their types unchanged from the perspective of their consumers.
+ */
+type RemoveCodegenEmptyObject<T> = T extends object ? (keyof T extends never ? never : T) : T;
+
+type StatusChangeSubscription = {
+  statusChange: RemoveCodegenEmptyObject<GqlStatusChangeSubscription['statusChange']>;
+};
+
+type SubmitAndAwaitStatusSubscription = {
+  submitAndAwaitStatus: RemoveCodegenEmptyObject<
+    GqlSubmitAndAwaitStatusSubscription['submitAndAwaitStatus']
+  >;
+};
+
+type TransactionWithReceipts = NonNullable<GqlGetTransactionWithReceiptsQuery['transaction']>;
+
+type GetTransactionWithReceiptsQuery = {
+  transaction?: Omit<TransactionWithReceipts, 'status'> & {
+    status?: RemoveCodegenEmptyObject<TransactionWithReceipts['status']>;
+  };
+};
+
+type TransactionsByOwnerNode =
+  GqlGetTransactionsByOwnerQuery['transactionsByOwner']['edges'][number]['node'];
+
+type GetTransactionsByOwnerQuery = {
+  transactionsByOwner: Omit<GqlGetTransactionsByOwnerQuery['transactionsByOwner'], 'edges'> & {
+    edges: Array<{
+      node: Omit<TransactionsByOwnerNode, 'status'> & {
+        status?: RemoveCodegenEmptyObject<TransactionsByOwnerNode['status']>;
+      };
+    }>;
+  };
+};
+
+type SdkOperations = Omit<
+  Operations,
+  'statusChange' | 'submitAndAwaitStatus' | 'getTransactionWithReceipts' | 'getTransactionsByOwner'
+> & {
   statusChange: (
     ...args: Parameters<Operations['statusChange']>
-  ) => Promise<ReturnType<Operations['statusChange']>>;
+  ) => Promise<AsyncIterable<StatusChangeSubscription>>;
   submitAndAwaitStatus: (
     ...args: Parameters<Operations['submitAndAwaitStatus']>
-  ) => Promise<ReturnType<Operations['submitAndAwaitStatus']>>;
+  ) => Promise<AsyncIterable<SubmitAndAwaitStatusSubscription>>;
+  getTransactionWithReceipts: (
+    ...args: Parameters<Operations['getTransactionWithReceipts']>
+  ) => Promise<GetTransactionWithReceiptsQuery>;
+  getTransactionsByOwner: (
+    ...args: Parameters<Operations['getTransactionsByOwner']>
+  ) => Promise<GetTransactionsByOwnerQuery>;
   getBlobs: (variables: { blobIds: string[] }) => Promise<{ blob: { id: string } | null }[]>;
 };
 
@@ -422,6 +480,7 @@ const BLOCK_HEIGHT_SENSITIVE_OPERATIONS: Array<keyof SdkOperations> = [
   'statusChange',
   'getCoinsToSpend',
   'submitAndAwaitStatus',
+  'getTransactionWithReceipts',
 ];
 
 /**
@@ -438,11 +497,13 @@ export default class Provider {
    */
   static clearChainAndNodeCaches(url?: string) {
     if (url) {
+      delete Provider.inflightFetchChainAndNodeInfoRequests[url];
       delete Provider.chainInfoCache[url];
       delete Provider.nodeInfoCache[url];
       delete Provider.currentBlockHeightCache[url];
       return;
     }
+    Provider.inflightFetchChainAndNodeInfoRequests = {};
     Provider.nodeInfoCache = {};
     Provider.chainInfoCache = {};
     Provider.currentBlockHeightCache = {};
@@ -468,6 +529,8 @@ export default class Provider {
    * `true` by default.
    */
   public static ENSURE_RPC_CONSISTENCY: boolean = true;
+  /** @hidden */
+  private static inflightFetchChainAndNodeInfoRequests: Record<string, Promise<number>> = {};
   /** @hidden */
   private static chainInfoCache: ChainInfoCache = {};
   /** @hidden */
@@ -746,7 +809,9 @@ export default class Provider {
    * @param ignoreCache - If true, ignores the cache and re-fetch configs.
    * @returns A promise that resolves to the Chain and NodeInfo.
    */
-  async fetchChainAndNodeInfo(ignoreCache: boolean = false) {
+  async fetchChainAndNodeInfo(
+    ignoreCache: boolean = false
+  ): Promise<{ chain: ChainInfo; nodeInfo: NodeInfo }> {
     let nodeInfo: NodeInfo;
     let chain: ChainInfo;
 
@@ -760,18 +825,32 @@ export default class Provider {
         throw new Error(`Jumps to the catch block and re-fetch`);
       }
     } catch (_err) {
+      const inflightRequest: Promise<number> =
+        Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth];
+
+      // When an inflight is request is available, wait for it to complete
+      // Then fetch (which will hit the cached values)
+      if (inflightRequest) {
+        const now = await inflightRequest;
+        this.consensusParametersTimestamp = now;
+        return this.fetchChainAndNodeInfo();
+      }
+
+      const { promise, resolve } = deferPromise<number>();
+      Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth] = promise;
+
       const data = await this.operations.getChainAndNodeInfo();
-
       nodeInfo = deserializeNodeInfo(data.nodeInfo);
-
-      Provider.setIncompatibleNodeVersionMessage(nodeInfo);
-
       chain = deserializeChain(data.chain);
 
+      Provider.setIncompatibleNodeVersionMessage(nodeInfo);
       Provider.chainInfoCache[this.urlWithoutAuth] = chain;
       Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
 
-      this.consensusParametersTimestamp = Date.now();
+      const now = Date.now();
+      this.consensusParametersTimestamp = now;
+      resolve(now);
+      delete Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth];
     }
 
     return {
@@ -784,18 +863,18 @@ export default class Provider {
    * @hidden
    */
   private static setIncompatibleNodeVersionMessage(nodeInfo: NodeInfo) {
-    // const { isMajorSupported, isMinorSupported, supportedVersion } =
-    checkFuelCoreVersionCompatibility(nodeInfo.nodeVersion);
+    const { isMajorSupported, isMinorSupported, supportedVersion } =
+      checkFuelCoreVersionCompatibility(nodeInfo.nodeVersion);
 
-    // if (!isMajorSupported || !isMinorSupported) {
-    //   Provider.incompatibleNodeVersionMessage = [
-    //     `The Fuel Node that you are trying to connect to is using fuel-core version ${nodeInfo.nodeVersion}.`,
-    //     `The TS SDK currently supports fuel-core version ${supportedVersion}.`,
-    //     `Things may not work as expected.`,
-    //   ].join('\n');
-    //   FuelGraphqlSubscriber.incompatibleNodeVersionMessage =
-    //     Provider.incompatibleNodeVersionMessage;
-    // }
+    if (!isMajorSupported || !isMinorSupported) {
+      Provider.incompatibleNodeVersionMessage = [
+        `The Fuel Node that you are trying to connect to is using fuel-core version ${nodeInfo.nodeVersion}.`,
+        `The TS SDK currently supports fuel-core version ${supportedVersion}.`,
+        `Things may not work as expected.`,
+      ].join('\n');
+      FuelGraphqlSubscriber.incompatibleNodeVersionMessage =
+        Provider.incompatibleNodeVersionMessage;
+    }
   }
 
   /**
@@ -1632,9 +1711,24 @@ export default class Provider {
     let feePayerIndex = -1;
     let baseAssetChange;
 
+    const requestChanges = request.getChangeOutputs();
+
     const requiredBalances = accountCoinQuantities.map((quantity, index) => {
       const { amount, assetId, account = feePayerAccount } = quantity;
+      const setChangeOnRequest = requestChanges.find((change) => change.assetId === assetId);
+
       let { changeOutputAccount } = quantity;
+
+      if (setChangeOnRequest && changeOutputAccount) {
+        const isCollision = setChangeOnRequest.to !== changeOutputAccount.address.toB256();
+
+        if (isCollision) {
+          throw new FuelError(
+            ErrorCode.CHANGE_OUTPUT_COLLISION,
+            `OutputChange address for asset ${assetId} differs between transaction request and assembleTx inputs.`
+          );
+        }
+      }
 
       if (!changeOutputAccount) {
         changeOutputAccount = account;

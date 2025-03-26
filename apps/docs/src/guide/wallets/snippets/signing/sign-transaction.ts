@@ -13,15 +13,30 @@ const provider = new Provider(LOCAL_NETWORK_URL);
 const sender = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const receiverAddress = Address.fromRandom();
 
-const request = new ScriptTransactionRequest({
-  gasLimit: 10000,
+const request = new ScriptTransactionRequest();
+
+const transferAmount = 1000;
+
+request.addCoinOutput(
+  receiverAddress,
+  transferAmount,
+  await provider.getBaseAssetId()
+);
+
+const { assembledRequest } = await provider.assembleTx({
+  request,
+  feePayerAccount: sender,
+  accountCoinQuantities: [
+    {
+      amount: transferAmount,
+      assetId: await provider.getBaseAssetId(),
+      account: sender,
+      changeOutputAccount: sender,
+    },
+  ],
 });
 
-request.addCoinOutput(receiverAddress, 1000, await provider.getBaseAssetId());
-
-await request.estimateAndFund(sender);
-
-const signedTransaction = await sender.signTransaction(request);
+const signedTransaction = await sender.signTransaction(assembledRequest);
 const transactionId = request.getTransactionId(await provider.getChainId());
 
 const recoveredAddress = Signer.recoverAddress(

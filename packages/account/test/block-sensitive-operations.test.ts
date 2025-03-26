@@ -207,4 +207,34 @@ describe('Block-sensitive operations have the current block height included in r
 
     expectBlockHeight({ included: false, fetchSpy });
   });
+
+  test('getTransactionWithReceipts - block height included', async () => {
+    using launched = await setupTest();
+
+    const { provider, transactionId, latestBlockHeight } = launched;
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    await provider.operations.getTransactionWithReceipts({
+      transactionId,
+    });
+
+    expectBlockHeight({ included: true, fetchSpy, latestBlockHeight });
+  });
+
+  test('getTransactionWithReceipts - block height not included', async () => {
+    using launched = await setupTest();
+
+    const { provider, transactionId } = launched;
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    Provider.ENSURE_RPC_CONSISTENCY = false;
+
+    await provider.operations.getTransactionWithReceipts({
+      transactionId,
+    });
+
+    expectBlockHeight({ included: false, fetchSpy });
+  });
 });

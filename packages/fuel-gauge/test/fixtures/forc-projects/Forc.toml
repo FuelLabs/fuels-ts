@@ -53,6 +53,7 @@ members = [
   "revert-error",
   "script-bytes",
   "script-call-contract",
+  "script-call-logging-contracts",
   "script-main-arg-bool",
   "script-main-args",
   "script-main-return-struct",

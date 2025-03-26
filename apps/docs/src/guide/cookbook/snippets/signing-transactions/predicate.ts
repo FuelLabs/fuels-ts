@@ -1,5 +1,5 @@
 // #region multiple-signers-4
-import { Predicate, Provider, ScriptTransactionRequest, Wallet } from 'fuels';
+import { Provider, ScriptTransactionRequest, Wallet } from 'fuels';
 
 import {
   LOCAL_NETWORK_URL,
@@ -16,13 +16,12 @@ const signer = Wallet.fromPrivateKey(WALLET_PVT_KEY_2, provider);
 const receiver = Wallet.fromPrivateKey(WALLET_PVT_KEY_3, provider);
 
 const amountToReceiver = 100;
+const witnessIndex = 0;
 
 // Create and fund the predicate
-const predicate = new Predicate<[string]>({
-  bytecode: PredicateSigning.bytecode,
-  abi: PredicateSigning.abi,
+const predicate = new PredicateSigning({
   provider,
-  data: [signer.address.toB256()],
+  data: [signer.address.toB256(), witnessIndex],
 });
 const baseAssetId = await provider.getBaseAssetId();
 
@@ -42,17 +41,30 @@ const resources = await predicate.getResourcesToSpend([
 ]);
 request.addResources(resources);
 
+let signature = await signer.signTransaction(request);
+const signatureIndex = request.addWitness(signature);
+
 // Estimate and fund the request
-request.addWitness('0x');
-await request.estimateAndFund(predicate, {
-  signatureCallback: (txRequest) => txRequest.addAccountWitnesses(signer),
+const { assembledRequest } = await provider.assembleTx({
+  request,
+  feePayerAccount: predicate,
+  accountCoinQuantities: [
+    {
+      amount: '0',
+      assetId: baseAssetId,
+      account: predicate,
+      changeOutputAccount: predicate,
+    },
+  ],
 });
 
-// Add the signer as a witness
-await request.addAccountWitnesses(signer);
+signature = await signer.signTransaction(assembledRequest);
+assembledRequest.updateWitness(signatureIndex, signature);
 
 // Send the transaction
-const res = await provider.sendTransaction(request);
+const res = await provider.sendTransaction(assembledRequest, {
+  estimateTxDependencies: false,
+});
 await res.waitForResult();
 
 // #endregion multiple-signers-4

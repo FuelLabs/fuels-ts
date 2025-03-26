@@ -316,7 +316,7 @@ describe('Provider', () => {
     consoleWarnSpy.mockRestore();
   });
 
-  it.skip('can getVersion()', async () => {
+  it('can getVersion()', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
@@ -1006,7 +1006,7 @@ describe('Provider', () => {
     expect(gasConfig.maxGasPerTx).toBeDefined();
   });
 
-  it.skip('Prepend a warning to an error with version mismatch [major]', async () => {
+  it('Prepend a warning to an error with version mismatch [major]', async () => {
     const { current, supported } = mockIncompatibleVersions({
       isMajorMismatch: true,
       isMinorMismatch: false,
@@ -1033,7 +1033,7 @@ describe('Provider', () => {
     });
   });
 
-  it.skip('Prepend a warning to an error with version mismatch [minor]', async () => {
+  it('Prepend a warning to an error with version mismatch [minor]', async () => {
     const { current, supported } = mockIncompatibleVersions({
       isMajorMismatch: false,
       isMinorMismatch: true,
@@ -1060,7 +1060,7 @@ describe('Provider', () => {
     });
   });
 
-  it.skip('Prepend a warning to a subscription error with version mismatch [major]', async () => {
+  it('Prepend a warning to a subscription error with version mismatch [major]', async () => {
     const { current, supported } = mockIncompatibleVersions({
       isMajorMismatch: true,
       isMinorMismatch: false,
@@ -1097,7 +1097,7 @@ describe('Provider', () => {
     });
   });
 
-  it.skip('Prepend a warning to a subscription error with version mismatch [minor]', async () => {
+  it('Prepend a warning to a subscription error with version mismatch [minor]', async () => {
     const { current, supported } = mockIncompatibleVersions({
       isMajorMismatch: false,
       isMinorMismatch: true,
@@ -2507,5 +2507,33 @@ describe('Provider', () => {
 
     // Then: we should not perform any fetch requests
     expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it('should make a single request for chain or node info across multiple instances', async () => {
+    // Given: three provider instances, connected to the same node
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider: { url },
+    } = launched;
+    const fetchSpy = vi.spyOn(global, 'fetch');
+    const provider1 = new Provider(url);
+    const provider2 = new Provider(url);
+    const provider3 = new Provider(url);
+    Provider.clearChainAndNodeCaches();
+
+    // When: we initialize all three provider instances
+    await Promise.all([provider1.init(), provider2.init(), provider3.init()]);
+
+    // Then: we should only perform a single fetch request for the chain and node info
+    expect(fetchSpy.mock.calls).toEqual([
+      [
+        url,
+        expect.objectContaining({
+          method: 'POST',
+          body: expect.stringMatching(/query getChainAndNodeInfo/),
+        }),
+      ],
+    ]);
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
   });
 });

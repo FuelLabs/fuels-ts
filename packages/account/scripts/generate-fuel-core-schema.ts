@@ -6,7 +6,6 @@ import { setupTestProviderAndWallets } from '../src/test-utils/setup-test-provid
 const { error } = console;
 
 const main = async () => {
-  process.env.FUEL_CORE_PATH = 'fuels-core';
   using launched = await setupTestProviderAndWallets();
 
   const schemaPath = join(__dirname, '..', 'src/providers/fuel-core-schema.graphql');

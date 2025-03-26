@@ -1,5 +1,62 @@
 # Change Log
 
+## 0.100.1
+
+### Patch Changes
+
+- fdefaba: fix: skip decoding external contract logs without JSON ABI
+- bb6a76c: chore: eliminate chain requests across concurrent provider instances
+  - @fuel-ts/abi-coder@0.100.1
+  - @fuel-ts/address@0.100.1
+  - @fuel-ts/crypto@0.100.1
+  - @fuel-ts/errors@0.100.1
+  - @fuel-ts/hasher@0.100.1
+  - @fuel-ts/math@0.100.1
+  - @fuel-ts/merkle@0.100.1
+  - @fuel-ts/transactions@0.100.1
+  - @fuel-ts/utils@0.100.1
+  - @fuel-ts/versions@0.100.1
+
+## 0.100.0
+
+### Minor Changes
+
+- 260f64f: chore!: made `ResourceCache` consider resource owner
+- f41887f: chore!: upgrade `fuel-core` to `0.41.7`
+
+### Patch Changes
+
+- 3af8692: fix: ensure is possible to forward 0 amount to contract
+- 6668336: chore: merge gas price and predicate estimation requests
+- 68877c3: chore: revert "fix: ignored subscriptions not being read"
+- 0fd8a82: feat: consider `assetId` in check account utility
+- fc18871: feat: enable arbitrary data signing
+- 6eb113c: chore: upgrade NPM package versions
+- da33ca5: chore: remove call ops in tx summary
+- c5c8403: feat: improved connector JSON RPC interface
+- e48b0e9: feat: add receipts with the operations summary
+- 817bf13: fix: correct revert error name
+- 6d3cafb: chore: support BN input in block fetch methods
+- 194e31f: fix: contract operations in transaction summary
+- Updated dependencies [1277ae6]
+- Updated dependencies [b42f056]
+- Updated dependencies [fc18871]
+- Updated dependencies [6eb113c]
+- Updated dependencies [f41887f]
+- Updated dependencies [521292a]
+- Updated dependencies [ff97a6e]
+- Updated dependencies [194e31f]
+  - @fuel-ts/utils@0.100.0
+  - @fuel-ts/versions@0.100.0
+  - @fuel-ts/hasher@0.100.0
+  - @fuel-ts/abi-coder@0.100.0
+  - @fuel-ts/address@0.100.0
+  - @fuel-ts/crypto@0.100.0
+  - @fuel-ts/transactions@0.100.0
+  - @fuel-ts/errors@0.100.0
+  - @fuel-ts/merkle@0.100.0
+  - @fuel-ts/math@0.100.0
+
 ## 0.99.0
 
 ### Minor Changes
