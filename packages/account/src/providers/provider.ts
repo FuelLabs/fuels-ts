@@ -147,16 +147,16 @@ export type AccountCoinQuantity = {
 export type AssembleTxParams<T extends TransactionRequest = TransactionRequest> = {
   // The transaction request to assemble
   request: T;
-  // Block horizon for gas price estimation (default: 10)
-  blockHorizon?: number;
   // Coin quantities required for the transaction
   accountCoinQuantities: AccountCoinQuantity[];
   // Account that will pay for the transaction fees
   feePayerAccount: Account;
-  // Resources to exclude from the transaction
-  excludeInput?: ExcludeResourcesOption;
+  // Block horizon for gas price estimation (default: 10)
+  blockHorizon?: number;
   // Whether to estimate predicates (default: true)
   estimatePredicates?: boolean;
+  // Resources to exclude from the transaction (optional)
+  excludeInput?: ExcludeResourcesOption;
   // Amount of gas to reserve (optional)
   reserveGas?: number;
 };
