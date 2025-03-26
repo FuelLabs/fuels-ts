@@ -1,20 +1,19 @@
 import type {
   AccountSendTxParams,
-  Predicate,
   TransactionRequestLike,
   TransactionResponse,
   AssembleTxParams,
   Provider,
   ScriptTransactionRequest,
 } from 'fuels';
-import { transactionRequestify } from 'fuels';
-
-import { PredicateSigning } from '../../typegen';
+import { transactionRequestify, Predicate } from 'fuels';
 
 import { MockConnector } from './mock-connector';
 
-export class MockPredicateSignerConnector extends MockConnector {
-  override name = 'Mock Preicate Signer Connector';
+import { PredicateSigning } from '../../typegen';
+
+export class MockPredicateConnector extends MockConnector {
+  override name = 'Mock Predicate Connector';
 
   override async onBeforeAssembleTx(params: AssembleTxParams): Promise<AssembleTxParams> {
     const currentAccount = await this.currentAccount();
@@ -45,7 +44,6 @@ export class MockPredicateSignerConnector extends MockConnector {
     }
     const transaction = transactionRequestify(_transaction) as ScriptTransactionRequest;
 
-    // Only index could have changed, so we need to re-populate the predicate data
     const index = transaction.addEmptyWitness();
     const predicate = this.getPredicate(wallet.provider, currentAccount, index);
     predicate.populateTransactionPredicateData(transaction);
