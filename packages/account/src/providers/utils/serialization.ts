@@ -23,7 +23,7 @@ import {
   OutputType,
   ReceiptType,
 } from '@fuel-ts/transactions';
-import { hexlify, arrayify } from '@fuel-ts/utils';
+import { hexlify, arrayify, assertUnreachable } from '@fuel-ts/utils';
 
 import type {
   GqlInputCoinFragment,
@@ -495,13 +495,17 @@ export const parseRawInput = (input: RawInput) => {
       };
       break;
 
-    default:
+    case 'InputContract':
       parsedInput = {
         type: InputType.Contract,
         contractId: input.contractId,
         txPointer: `0x${input.txPointer}`,
         txID: hexlify(arrayify(input.utxoId).slice(0, 32)),
       };
+      break;
+
+    default:
+      assertUnreachable(input);
   }
 
   return parsedInput;
@@ -543,13 +547,17 @@ export const parseRawOutput = (output: RawOutput) => {
       };
       break;
 
-    default:
+    case 'VariableOutput':
       parsedOutput = {
         type: OutputType.Variable,
         amount: bn(output.amount),
         assetId: output.assetId,
         to: output.to,
       };
+      break;
+
+    default:
+      assertUnreachable(output);
   }
 
   return parsedOutput;
