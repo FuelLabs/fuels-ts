@@ -56,6 +56,12 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
     return new FuelGraphqlSubscriber(resultReader, onEvent);
   }
 
+  /**
+   *
+   * @param reader - The reader of the SSE stream
+   * @param parsingLeftover - The leftover string from parsing the previous event
+   * @returns The event parsed as a full GraphQL response, whether the stream is done and the leftover string after parsing
+   */
   public static async readEvent(
     reader: ReadableStreamDefaultReader<Uint8Array>,
     parsingLeftover: string = ''
@@ -114,6 +120,12 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
 
   private parsingLeftover = '';
 
+  /**
+   * Gets automatically called when iterating in a `for-await-of` loop.
+   * It can also be called manually.
+   *
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator/next
+   */
   async next(): Promise<IteratorResult<unknown, unknown>> {
     // eslint-disable-next-line no-constant-condition
     while (true) {
