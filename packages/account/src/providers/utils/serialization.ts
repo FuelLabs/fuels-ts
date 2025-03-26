@@ -461,7 +461,7 @@ export const deserializeReceipt = (receipt: TransactionReceiptJson): Transaction
   }
 };
 
-export const parseRawInput = (input: RawInput) => {
+export const deserializeInput = (input: RawInput) => {
   let parsedInput: TransactionRequestInput;
 
   switch (input.type) {
@@ -511,7 +511,7 @@ export const parseRawInput = (input: RawInput) => {
   return parsedInput;
 };
 
-export const parseRawOutput = (output: RawOutput) => {
+export const deserializeOutput = (output: RawOutput) => {
   let parsedOutput: TransactionRequestOutput;
 
   switch (output.type) {

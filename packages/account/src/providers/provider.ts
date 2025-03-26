@@ -81,8 +81,8 @@ import {
   deserializeNodeInfo,
   deserializeProviderCache,
   deserializeReceipt,
-  parseRawInput,
-  parseRawOutput,
+  deserializeInput,
+  deserializeOutput,
 } from './utils/serialization';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
@@ -1830,8 +1830,8 @@ export default class Provider {
 
     request.witnesses = gqlTransaction.witnesses || request.witnesses;
 
-    request.inputs = gqlTransaction.inputs?.map(parseRawInput) || request.inputs;
-    request.outputs = gqlTransaction.outputs?.map(parseRawOutput) || request.outputs;
+    request.inputs = gqlTransaction.inputs?.map(deserializeInput) || request.inputs;
+    request.outputs = gqlTransaction.outputs?.map(deserializeOutput) || request.outputs;
 
     if (gqlTransaction.policies?.maxFee) {
       request.maxFee = bn(gqlTransaction.policies.maxFee);
