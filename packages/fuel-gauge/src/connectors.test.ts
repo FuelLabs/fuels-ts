@@ -1,24 +1,9 @@
-import {
-  Fuel,
-  Account,
-  bn,
-  Wallet,
-  TransactionResultMessageOutReceipt,
-  buildFunctionResult,
-  AbstractProgram,
-  hexlify,
-} from 'fuels';
+import { Fuel, Account, bn, Wallet, TransactionResultMessageOutReceipt } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { MockConnector } from '../test/fixtures/connectors/mock-connector';
 import { MockPredicateConnector } from '../test/fixtures/connectors/mock-predicate-connector';
-import {
-  CallTestContract,
-  CallTestContractFactory,
-  PredicateSigning,
-  PredicateSol,
-  PredicateSolScript,
-} from '../test/typegen';
+import { CallTestContract, CallTestContractFactory } from '../test/typegen';
 import { MockSolanaConnector } from '../test/fixtures/connectors/mock-solana-connector';
 
 /**
@@ -332,62 +317,5 @@ describe('Connectors', () => {
     expect(JSON.stringify(predicateBalance)).toStrictEqual(
       JSON.stringify(fundingAmount.sub(transferAmount).sub(transferResult.fee))
     );
-  });
-
-  it.only('tx with sol script', async () => {
-    using launched = await launchTestNode();
-    const {
-      wallets: [connectorWallet],
-      provider,
-    } = launched;
-
-    const index = 0;
-    const script = new PredicateSolScript(connectorWallet).setConfigurableConstants({
-      SIGNER: connectorWallet.address.toB256(),
-    });
-    const scope = await script.functions.main(index);
-    const txReq = await scope.getTransactionRequest();
-    txReq.addEmptyWitness();
-
-    await provider.assembleTx({
-      request: txReq,
-      feePayerAccount: connectorWallet,
-      accountCoinQuantities: [],
-    });
-
-    // Funding Sig
-    const fundingSignature = await connectorWallet.signTransaction(txReq);
-    txReq.updateWitnessByOwner(connectorWallet.address.toB256(), fundingSignature);
-
-    // Script Logic Sig
-    const chainId = await provider.getChainId();
-    const transactionId = txReq.getTransactionId(chainId);
-    const message = new TextEncoder().encode(transactionId).slice(2);
-    const logicSignature = await connectorWallet.signer().sign(message);
-    txReq.witnesses[index] = logicSignature;
-
-    const tx = await provider.sendTransaction(txReq);
-    const result = await tx.waitForResult();
-    expect(result.isStatusSuccess).toBe(true);
-
-    const fnResult = await buildFunctionResult({
-      funcScope: scope,
-      transactionResponse: tx,
-      isMultiCall: false,
-      program: script,
-    });
-
-    const signerLog = fnResult.logs[0];
-    const signatureLog = fnResult.logs[1];
-
-    console.log('signatureLog', signatureLog);
-
-    const encodedTxIdLog = fnResult.logs[2];
-
-    expect(signerLog).toBe(connectorWallet.address.toB256());
-    expect(signatureLog).toBe(txReq.witnesses[index]);
-    expect(encodedTxIdLog).toStrictEqual(message);
-
-    expect(fnResult.value).toBe(true);
   });
 });
