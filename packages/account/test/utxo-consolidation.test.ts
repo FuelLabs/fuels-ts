@@ -435,7 +435,7 @@ describe('utxo-consolidation', () => {
       expect(originalBaseAssetCoins).not.toContainEqual(baseAssetCoins[0]);
     });
 
-    test.only(`consolidates once - less than max_inputs,
+    test(`consolidates once - less than max_inputs,
       prioritizes non-base asset consolidation`, async () => {
       const coinsPerAsset = 200;
       const maxInputs = 255;

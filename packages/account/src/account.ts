@@ -975,7 +975,7 @@ export class Account extends AbstractAccount implements WithAddress {
         // TODO: to throw or not to throw, that's the question
         throw new FuelError(
           ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-          `The account sending the transaction doesn't have enough funds to cover the transaction.`,
+          `Insufficient funds or too many small value coins. Consider combining UTXOs.`,
           {
             transactions,
           }
