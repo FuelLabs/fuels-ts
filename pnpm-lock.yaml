@@ -844,6 +844,9 @@ importers:
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
+      '@fuel-ts/versions':
+        specifier: workspace:*
+        version: link:../versions
       ora:
         specifier: 5.4.1
         version: 5.4.1
@@ -21451,7 +21454,7 @@ snapshots:
       chalk: 4.1.2
       execa: 5.1.1
       metro: 0.80.12(bufferutil@4.0.9)(utf-8-validate@5.0.10)
-      metro-config: 0.80.12(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      metro-config: 0.80.12(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       metro-core: 0.80.12
       node-fetch: 2.7.0
       querystring: 0.2.1
@@ -31086,21 +31089,6 @@ snapshots:
       flow-enums-runtime: 0.0.6
       jest-validate: 29.7.0
       metro: 0.80.12(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      metro-cache: 0.80.12
-      metro-core: 0.80.12
-      metro-runtime: 0.80.12
-    transitivePeerDependencies:
-      - bufferutil
-      - supports-color
-      - utf-8-validate
-
-  metro-config@0.80.12(bufferutil@4.0.9)(utf-8-validate@5.0.10):
-    dependencies:
-      connect: 3.7.0
-      cosmiconfig: 5.2.1
-      flow-enums-runtime: 0.0.6
-      jest-validate: 29.7.0
-      metro: 0.80.12(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       metro-cache: 0.80.12
       metro-core: 0.80.12
       metro-runtime: 0.80.12
