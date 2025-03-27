@@ -339,3 +339,10 @@ When the number of transaction inputs exceeds the maximum limit allowed by the b
 ### `MAX_OUTPUTS_EXCEEDED`
 
 When the number of transaction outputs exceeds the maximum limit allowed by the blockchain.
+
+### `CHANGE_OUTPUT_COLLISION`
+
+This error occurs when there's a conflict between the change output specified in the transaction request and the one specified in the `assembleTx` parameters:
+
+1. The transaction request already has a change output set for a specific asset ID and address
+2. The `assembleTx` parameters specify a different change output for the same asset ID
