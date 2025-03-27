@@ -41,8 +41,9 @@ export const configureCli = () => {
   /**
    * Defining local commands
    */
-
   const pathOption = new Option('--path <path>', 'Path to project root').default(process.cwd());
+  const fuelCorePathOption = new Option('--fuel-core-path <path>', 'Path to the `fuel-core` binary');
+  const fuelCorePortOption = new Option('--fuel-core-port <port>', 'Port to use when starting the node');
 
   let command: Command;
 
@@ -63,12 +64,9 @@ export const configureCli = () => {
     )
     .requiredOption('-o, --output <path>', 'Relative dir path for Typescript generation output')
     .option('--forc-path <path>', 'Path to the `forc` binary')
-    .option('--fuel-core-path <path>', 'Path to the `fuel-core` binary')
+    .addOption(fuelCorePathOption)
     .option('--auto-start-fuel-core', 'Auto-starts a `fuel-core` node during `dev` command')
-    .option(
-      '--fuel-core-port <port>',
-      'Port to use when starting a local `fuel-core` node for dev mode'
-    )
+    .addOption(fuelCorePortOption)
     .action(withProgram(command, Commands.init, init));
 
   (command = program.command(Commands.dev))
@@ -77,9 +75,11 @@ export const configureCli = () => {
     .action(withConfig(command, Commands.dev, dev));
 
   (command = program.command(Commands.node))
-    .description('Start a Fuel node using project configs')
-    .addOption(pathOption)
-    .action(withConfig(command, Commands.node, node));
+    .description('Start a standalone `fuel-core` node')
+    .addOption(new Option('--path <path>', 'Path to store fuel core data').default(undefined))
+    .addOption(fuelCorePathOption)
+    .addOption(fuelCorePortOption)
+    .action(withProgram(command, Commands.node, node));
 
   (command = program.command(Commands.build))
     .description('Build Sway programs and generate Typescript for them')

@@ -1,59 +1,41 @@
-import { watch, type FSWatcher } from 'chokidar';
+import { sleep } from '@fuel-ts/utils';
+import type { Command, OptionValues } from 'commander';
+import os from 'os';
 
-import { loadConfig } from '../../config/loadConfig';
-import type { FuelsConfig } from '../../types';
 import { error, log } from '../../utils/logger';
-import type { FuelCoreNode } from '../dev/autoStartFuelCore';
 import { autoStartFuelCore } from '../dev/autoStartFuelCore';
-import { withConfigErrorHandler } from '../withConfig';
 
-export type NodeState = {
-  config: FuelsConfig;
-  watchHandlers: FSWatcher[];
-  fuelCore?: FuelCoreNode;
+const startNodeWithoutConfig = async (options: OptionValues) => {
+  const { fuelCorePort, fuelCorePath } = options;
+
+  return autoStartFuelCore({
+    // This will be overridden by the `autoStartFuelCore` function
+    providerUrl: 'http://localhost:4000/v1/graphql',
+    // We always want to start the node
+    autoStartFuelCore: true,
+    // Stores the node data in a temporary directory
+    basePath: os.tmpdir(),
+    // These options can be overridden
+    fuelCorePath: fuelCorePath ?? 'fuel-core',
+    fuelCorePort: fuelCorePort ?? undefined,
+  });
 };
 
-export const getConfigFilepathsToWatch = (config: FuelsConfig) => {
-  const configFilePathsToWatch: string[] = [config.configPath];
-  if (config.snapshotDir) {
-    configFilePathsToWatch.push(config.snapshotDir);
-  }
-  return configFilePathsToWatch;
-};
-
-export const closeAllFileHandlers = (handlers: FSWatcher[]) => {
-  handlers.forEach((h) => h.close());
-};
-
-export const configFileChanged = (state: NodeState) => async (_event: string, path: string) => {
-  log(`\nFile changed: ${path}`);
-
-  closeAllFileHandlers(state.watchHandlers);
-  state.fuelCore?.killChildProcess();
+export const node = async (program: Command) => {
+  const options = program.opts();
 
   try {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    await node(await loadConfig(state.config.basePath));
-    await state.config.onNode?.(state.config);
+    const fuelCore = await startNodeWithoutConfig(options);
+    if (!fuelCore) {
+      throw new Error('Failed to start fuel-core');
+    }
+
+    // Sleep to ensure the message is logged at the end of the fuel-core output
+    await sleep(100);
+
+    log(`Started fuel core on ${fuelCore.providerUrl}`);
   } catch (err: unknown) {
-    await withConfigErrorHandler(<Error>err, state.config);
-  }
-};
-
-export const node = async (config: FuelsConfig) => {
-  const fuelCore = await autoStartFuelCore(config);
-
-  const configFilePaths = getConfigFilepathsToWatch(config);
-
-  try {
-    const watchHandlers: FSWatcher[] = [];
-    const options = { persistent: true, ignoreInitial: true, ignored: '**/out/**' };
-    const state = { config, watchHandlers, fuelCore };
-
-    // watch: fuels.config.ts and snapshotDir
-    watchHandlers.push(watch(configFilePaths, options).on('all', configFileChanged(state)));
-  } catch (err: unknown) {
-    error(err);
+    error((err as Error).message);
     throw err;
   }
 };

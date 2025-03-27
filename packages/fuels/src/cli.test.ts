@@ -51,7 +51,6 @@ describe('cli.js', () => {
 
     expect(init?.opts()).toEqual({ path });
     expect(dev?.opts()).toEqual({ path });
-    expect(node?.opts()).toEqual({ path });
     expect(build?.opts()).toEqual({ path });
     expect(deploy?.opts()).toEqual({ path });
   });
