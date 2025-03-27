@@ -4,7 +4,11 @@ import { bootstrapProject, resetDiskAndMocks, runNode } from '../utils/runComman
 
 const mockAll = () => {
   const logger = mockLogger();
-  const { autoStartFuelCore, killChildProcess, fuelCore: { providerUrl } } = mockStartFuelCore();
+  const {
+    autoStartFuelCore,
+    killChildProcess,
+    fuelCore: { providerUrl },
+  } = mockStartFuelCore();
 
   return {
     logger,

@@ -42,8 +42,14 @@ export const configureCli = () => {
    * Defining local commands
    */
   const pathOption = new Option('--path <path>', 'Path to project root').default(process.cwd());
-  const fuelCorePathOption = new Option('--fuel-core-path <path>', 'Path to the `fuel-core` binary');
-  const fuelCorePortOption = new Option('--fuel-core-port <port>', 'Port to use when starting the node');
+  const fuelCorePathOption = new Option(
+    '--fuel-core-path <path>',
+    'Path to the `fuel-core` binary'
+  );
+  const fuelCorePortOption = new Option(
+    '--fuel-core-port <port>',
+    'Port to use when starting the node'
+  );
 
   let command: Command;
 
