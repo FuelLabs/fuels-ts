@@ -40,7 +40,7 @@ import type { TransactionSummary, GqlTransaction, AbiMap } from '../transaction-
 import { extractTxError } from '../utils';
 import { deserializeReceipt } from '../utils/serialization';
 
-import { type DecodedLogs, getDecodedLogs } from './getDecodedLogs';
+import { type DecodedLogs, getAllDecodedLogs } from './getAllDecodedLogs';
 
 /** @hidden */
 export type TransactionResultCallReceipt = ReceiptCall;
@@ -86,7 +86,7 @@ export type TransactionResultReceipt =
 /** @hidden */
 export type TransactionResult<TTransactionType = void> = TransactionSummary<TTransactionType> & {
   logs?: DecodedLogs['logs'];
-  groupedLogs?: DecodedLogs['groupedLogs'];
+  logsByContract?: DecodedLogs['logsByContract'];
 };
 
 function mapGqlOutputsToTxOutputs(
@@ -379,18 +379,17 @@ export class TransactionResponse {
       ...transactionSummary,
     };
 
-    let logs: DecodedLogs['logs'] = [];
-    let groupedLogs: DecodedLogs['groupedLogs'] = {};
+    let { logs, logsByContract }: DecodedLogs = { logs: [], logsByContract: {} };
 
     if (this.abis) {
-      ({ logs, groupedLogs } = getDecodedLogs(
-        transactionSummary.receipts,
-        this.abis.main,
-        this.abis.otherContractsAbis
-      ));
+      ({ logs, logsByContract } = getAllDecodedLogs({
+        receipts: transactionSummary.receipts,
+        mainAbi: this.abis.main,
+        externalAbis: this.abis.otherContractsAbis,
+      }));
 
       transactionResult.logs = logs;
-      transactionResult.groupedLogs = groupedLogs;
+      transactionResult.logsByContract = logsByContract;
     }
 
     const { receipts } = transactionResult;
@@ -402,7 +401,7 @@ export class TransactionResponse {
         receipts,
         statusReason: reason,
         logs,
-        groupedLogs,
+        logsByContract,
       });
     }
 

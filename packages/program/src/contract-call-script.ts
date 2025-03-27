@@ -143,8 +143,9 @@ export const decodeContractCallScriptResult = (
   callResult: CallResult,
   contractId: Address,
   logs: DecodedLogs<any>['logs'] = [],
-  groupedLogs: DecodedLogs<any>['groupedLogs'] = {}
-): Uint8Array[] => decodeCallResult(callResult, scriptResultDecoder(contractId), logs, groupedLogs);
+  logsByContract: DecodedLogs<any>['logsByContract'] = {}
+): Uint8Array[] =>
+  decodeCallResult(callResult, scriptResultDecoder(contractId), logs, logsByContract);
 
 const getCallInstructionsLength = (contractCalls: ContractCall[]): number =>
   contractCalls.reduce(

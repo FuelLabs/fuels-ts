@@ -14,10 +14,10 @@ To access the logged values in TypeScript, use the `logs` property in the respon
 
 This approach allows you to work seamlessly with logged values in your contract, making it easier to understand and debug the contract's behavior.
 
-## Grouped Logs
+## Logs by Contract
 
-We also provide a `groupedLogs` property that will group the logs by contract id:
+We also provide a `logsByContract` property that will group the logs by contract id:
 
-<<< @./snippets/logs.ts#groupedLogs{ts:line-numbers}
+<<< @./snippets/logs.ts#logsByContract{ts:line-numbers}
 
 This is particularly useful when you are working with multiple contracts.

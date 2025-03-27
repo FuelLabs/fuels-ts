@@ -29,14 +29,14 @@ const { logs } = await waitForResult();
 const expectedLogs = [expect.toEqualBn(value1), value2, value3, value4];
 expect(logs).toStrictEqual(expectedLogs);
 
-// #region groupedLogs
-const { groupedLogs } = await waitForResult();
-// groupedLogs = {
+// #region logsByContract
+const { logsByContract } = await waitForResult();
+// logsByContract = {
 //   [contract.id]: [value1, value2, value3, value4]
 // }
-// #endregion groupedLogs
+// #endregion logsByContract
 
 const expectedGroupedLogs = {
   [contract.id.toB256()]: expectedLogs,
 };
-expect(groupedLogs).toStrictEqual(expectedGroupedLogs);
+expect(logsByContract).toStrictEqual(expectedGroupedLogs);

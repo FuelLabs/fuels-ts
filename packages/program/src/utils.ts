@@ -1,4 +1,4 @@
-import { getDecodedLogs } from '@fuel-ts/account';
+import { getAllDecodedLogs, getDecodedLogs } from '@fuel-ts/account';
 import type { TransactionResultReceipt, JsonAbisFromAllCalls, DecodedLogs } from '@fuel-ts/account';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
@@ -41,15 +41,29 @@ export function getAbisFromAllCalls(
 
 /**
  * @hidden
+ * @deprecated Use `getAllResultLogs` instead.
  */
 export const getResultLogs = (
   receipts: TransactionResultReceipt[],
   mainCallConfig: CallConfig | undefined,
   functionScopes: Array<InvocationScopeLike>
-): DecodedLogs => {
+) => {
   if (!mainCallConfig) {
-    return { logs: [], groupedLogs: {} };
+    return [];
   }
   const { main, otherContractsAbis } = getAbisFromAllCalls(functionScopes);
   return getDecodedLogs(receipts, main, otherContractsAbis);
+};
+
+/** @hidden */
+export const getAllResultLogs = (
+  receipts: TransactionResultReceipt[],
+  mainCallConfig: CallConfig | undefined,
+  functionScopes: Array<InvocationScopeLike>
+): DecodedLogs => {
+  if (!mainCallConfig) {
+    return { logs: [], logsByContract: {} };
+  }
+  const { main, otherContractsAbis } = getAbisFromAllCalls(functionScopes);
+  return getAllDecodedLogs({ receipts, mainAbi: main, externalAbis: otherContractsAbis });
 };

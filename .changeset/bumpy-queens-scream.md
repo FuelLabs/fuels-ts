@@ -1,6 +1,6 @@
 ---
-"@fuel-ts/account": minor
-"@fuel-ts/program": minor
+"@fuel-ts/account": patch
+"@fuel-ts/program": patch
 ---
 
-feat!: introduced `groupedLogs`
+feat: added `logsByContract`

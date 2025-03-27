@@ -137,7 +137,7 @@ describe('deploying blobs', () => {
     expect(decodeConfigurables(loaderScript)).toEqual(decodeConfigurables(script));
 
     const { waitForResult: waitForResult2 } = await script.functions.main().call();
-    const { value, logs, groupedLogs } = await waitForResult2();
+    const { value, logs, logsByContract } = await waitForResult2();
 
     const expectedLogs = [
       configurable.U8,
@@ -154,7 +154,7 @@ describe('deploying blobs', () => {
     ];
     expect(value).toBeTruthy();
     expect(logs).toStrictEqual(expectedLogs);
-    expect(groupedLogs).toStrictEqual({
+    expect(logsByContract).toStrictEqual({
       [ZeroBytes32]: expectedLogs,
     });
   });

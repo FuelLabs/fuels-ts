@@ -126,7 +126,7 @@ export type FunctionResult<TReturn> = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly logs: DecodedLogs<any>['logs'];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  readonly groupedLogs: DecodedLogs<any>['groupedLogs'];
+  readonly logsByContract: DecodedLogs<any>['logsByContract'];
   readonly value: TReturn;
   readonly gasUsed: BN;
   readonly program: AbstractProgram;

@@ -118,10 +118,8 @@ export const assembleRevertError = (
   });
 };
 
-interface IExtractTxError {
+interface IExtractTxError extends DecodedLogs {
   receipts: Array<TransactionResultReceipt>;
-  logs: DecodedLogs['logs'];
-  groupedLogs: DecodedLogs['groupedLogs'];
   statusReason: string;
 }
 
@@ -131,13 +129,13 @@ interface IExtractTxError {
  * @returns The FuelError object.
  */
 export const extractTxError = (params: IExtractTxError): FuelError => {
-  const { receipts, statusReason, logs, groupedLogs } = params;
+  const { receipts, statusReason, logs, logsByContract } = params;
 
   const isPanic = receipts.some(({ type }) => type === ReceiptType.Panic);
   const isRevert = receipts.some(({ type }) => type === ReceiptType.Revert);
   const metadata = {
     logs,
-    groupedLogs,
+    logsByContract,
     receipts,
     panic: isPanic,
     revert: isRevert,

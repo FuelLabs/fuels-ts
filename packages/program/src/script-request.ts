@@ -101,8 +101,8 @@ function callResultToScriptResult(callResult: CallResult): ScriptResult {
 export function decodeCallResult<TResult>(
   callResult: CallResult,
   decoder: (scriptResult: ScriptResult) => TResult,
-  logs: Array<any> = [],
-  groupedLogs: DecodedLogs['groupedLogs'] = {}
+  logs: DecodedLogs['logs'] = [],
+  logsByContract: DecodedLogs['logsByContract'] = {}
 ): TResult {
   try {
     const scriptResult = callResultToScriptResult(callResult);
@@ -112,7 +112,7 @@ export function decodeCallResult<TResult>(
       const statusReason = (<DryRunFailureStatusFragment>callResult?.dryRunStatus)?.reason;
       throw extractTxError({
         logs,
-        groupedLogs,
+        logsByContract,
         receipts: callResult.receipts,
         statusReason,
       });
@@ -134,7 +134,7 @@ export function callResultToInvocationResult<TReturn>(
   callResult: CallResult,
   call: CallConfig,
   logs?: DecodedLogs<unknown>['logs'],
-  groupedLogs?: DecodedLogs<unknown>['groupedLogs']
+  logsByContract?: DecodedLogs<unknown>['logsByContract']
 ): TReturn {
   return decodeCallResult(
     callResult,
@@ -155,7 +155,7 @@ export function callResultToInvocationResult<TReturn>(
           ErrorCode.SCRIPT_REVERTED,
           `Script Return Type [${type}] Invalid. Logs: ${JSON.stringify({
             logs,
-            groupedLogs,
+            logsByContract,
             receipt: scriptResult.returnReceipt,
           })}`
         );
