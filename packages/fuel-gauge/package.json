@@ -18,6 +18,7 @@
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
+    "@fuel-ts/versions": "workspace:*",
     "ora": "5.4.1"
   }
 }
