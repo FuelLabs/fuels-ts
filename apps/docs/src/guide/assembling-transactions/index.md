@@ -14,7 +14,7 @@ The `assembleTx` method takes a transaction request and assembles it with the ne
 
 ## Parameters
 
-The `AssembleTxParams` interface includes the following parameters:
+The [AssembleTxParams](DOCS_API_URL/types/_fuel_ts_account.AssembleTxParams.html) interface includes the following parameters:
 
 <<< @/../../../packages/account/src/providers/provider.ts#assemble-tx-params{ts:line-numbers}
 
