@@ -505,9 +505,8 @@ export default class Provider {
   operations: SdkOperations;
   cache?: ResourceCache;
 
-  /** @hidden */
   /**
-   *
+   * @hidden
    * @param url - If provided, clears cache only for given url
    */
   static clearChainAndNodeCaches(url?: string) {
