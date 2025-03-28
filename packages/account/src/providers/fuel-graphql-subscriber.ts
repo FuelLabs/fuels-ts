@@ -137,17 +137,22 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
   async next(): Promise<IteratorResult<unknown, unknown>> {
     // eslint-disable-next-line no-constant-condition
     while (true) {
-      if (this.events.length > 0) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const event = this.events.shift()!;
-        this.onEvent?.(event);
+      /**
+       * If we have an event in the queue, we will return it (ensure there is not an error).
+       */
+      const nextEvent = this.events.shift();
+      if (nextEvent) {
+        this.onEvent?.(nextEvent);
         assertGqlResponseHasNoErrors(
-          event.errors,
+          nextEvent.errors,
           FuelGraphqlSubscriber.incompatibleNodeVersionMessage
         );
-        return { value: event.data, done: false };
+        return { value: nextEvent.data, done: false };
       }
 
+      /**
+       * Otherwise, we will try and read the next event from the stream.
+       */
       const { event, done, parsingLeftover } = await FuelGraphqlSubscriber.readEvent(
         this.stream,
         this.parsingLeftover
