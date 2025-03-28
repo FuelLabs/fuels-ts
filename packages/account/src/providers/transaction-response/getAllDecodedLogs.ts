@@ -10,7 +10,7 @@ import type {
 
 export interface DecodedLogs<T = unknown> {
   logs: T[];
-  logsByContract: Record<string, T[]>;
+  groupedLogs: Record<string, T[]>;
 }
 
 /**
@@ -49,7 +49,7 @@ export function getAllDecodedLogs<T = unknown>(opts: {
   }
 
   return receipts.reduce(
-    ({ logs, logsByContract }, receipt) => {
+    ({ logs, groupedLogs }, receipt) => {
       if (receipt.type === ReceiptType.LogData || receipt.type === ReceiptType.Log) {
         const isLogFromMainAbi = receipt.id === ZeroBytes32 || mainContract === receipt.id;
         const isDecodable = isLogFromMainAbi || externalAbis[receipt.id];
@@ -67,12 +67,12 @@ export function getAllDecodedLogs<T = unknown>(opts: {
           const [decodedLog] = interfaceToUse.decodeLog(data, receipt.rb.toString());
           logs.push(decodedLog);
           // eslint-disable-next-line no-param-reassign
-          logsByContract[receipt.id] = [...(logsByContract[receipt.id] || []), decodedLog];
+          groupedLogs[receipt.id] = [...(groupedLogs[receipt.id] || []), decodedLog];
         }
       }
 
-      return { logs, logsByContract };
+      return { logs, groupedLogs };
     },
-    { logs: [], logsByContract: {} } as DecodedLogs<T>
+    { logs: [], groupedLogs: {} } as DecodedLogs<T>
   );
 }

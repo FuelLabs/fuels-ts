@@ -25,11 +25,11 @@ describe('Script With Vectors', () => {
     const scriptInstance = new ScriptWithArray(wallet);
 
     const { waitForResult } = await scriptInstance.functions.main(someArray).call();
-    const { logs, logsByContract } = await waitForResult();
+    const { logs, groupedLogs } = await waitForResult();
 
     const expectedLogs = [expect.toEqualBn(1)];
     expect(logs).toStrictEqual(expectedLogs);
-    expect(logsByContract).toStrictEqual({
+    expect(groupedLogs).toStrictEqual({
       [ZeroBytes32]: expectedLogs,
     });
   });
@@ -47,7 +47,7 @@ describe('Script With Vectors', () => {
     const scriptInvocationScope = scriptInstance.functions.main(someVec);
 
     const { waitForResult } = await scriptInvocationScope.call();
-    const { logs, logsByContract } = await waitForResult();
+    const { logs, groupedLogs } = await waitForResult();
 
     const vecFirst = someVec[0];
     const vecCapacity = 4;
@@ -60,7 +60,7 @@ describe('Script With Vectors', () => {
       expect.toEqualBn(vecLen),
     ];
     expect(logs).toStrictEqual(expectedLogs);
-    expect(logsByContract).toStrictEqual({
+    expect(groupedLogs).toStrictEqual({
       [ZeroBytes32]: expectedLogs,
     });
   });

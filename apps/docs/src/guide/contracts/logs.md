@@ -16,8 +16,8 @@ This approach allows you to work seamlessly with logged values in your contract,
 
 ## Logs by Contract
 
-We also provide a `logsByContract` property that will group the logs by contract id:
+We also provide a `groupedLogs` property that will group the logs by contract id:
 
-<<< @./snippets/logs.ts#logsByContract{ts:line-numbers}
+<<< @./snippets/logs.ts#groupedLogs{ts:line-numbers}
 
 This is particularly useful when you are working with multiple contracts.

@@ -700,7 +700,7 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
     using contractInstance = await setupContract();
 
     const { waitForResult } = await contractInstance.functions.produce_logs_variables().call();
-    const { logs, logsByContract } = await waitForResult();
+    const { logs, groupedLogs } = await waitForResult();
 
     const expectedLogs = [
       expect.toEqualBn(64),
@@ -709,7 +709,7 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
       [1, 2, 3],
     ];
     expect(logs).toStrictEqual(expectedLogs);
-    expect(logsByContract).toStrictEqual({
+    expect(groupedLogs).toStrictEqual({
       [contractInstance.id.toB256()]: expectedLogs,
     });
   });

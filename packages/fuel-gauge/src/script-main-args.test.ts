@@ -28,12 +28,12 @@ describe('Script Coverage', () => {
 
     const { waitForResult } = await scriptInstance.functions.main(foo).call();
 
-    const { value, logs, logsByContract } = await waitForResult();
+    const { value, logs, groupedLogs } = await waitForResult();
 
     const expectedLogs = ['u8 foo', 33];
     expect(value?.toString()).toEqual(bn(foo).toString());
     expect(logs).toStrictEqual(expectedLogs);
-    expect(logsByContract).toStrictEqual({
+    expect(groupedLogs).toStrictEqual({
       [ZeroBytes32]: expectedLogs,
     });
   });
@@ -51,12 +51,12 @@ describe('Script Coverage', () => {
     };
 
     const { waitForResult } = await scriptInstance.functions.main(foo, bar).call();
-    const { value, logs, logsByContract } = await waitForResult();
+    const { value, logs, groupedLogs } = await waitForResult();
 
     const expectedLogs = ['u8 foo', 33, 'u8 bar', 12, 'u8 bar', 12];
     expect(value?.toString()).toEqual(bn(foo + bar.x).toString());
     expect(logs).toStrictEqual(expectedLogs);
-    expect(logsByContract).toStrictEqual({
+    expect(groupedLogs).toStrictEqual({
       [ZeroBytes32]: expectedLogs,
     });
   });

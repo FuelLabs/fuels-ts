@@ -129,13 +129,13 @@ interface IExtractTxError extends DecodedLogs {
  * @returns The FuelError object.
  */
 export const extractTxError = (params: IExtractTxError): FuelError => {
-  const { receipts, statusReason, logs, logsByContract } = params;
+  const { receipts, statusReason, logs, groupedLogs } = params;
 
   const isPanic = receipts.some(({ type }) => type === ReceiptType.Panic);
   const isRevert = receipts.some(({ type }) => type === ReceiptType.Revert);
   const metadata = {
     logs,
-    logsByContract,
+    groupedLogs,
     receipts,
     panic: isPanic,
     revert: isRevert,

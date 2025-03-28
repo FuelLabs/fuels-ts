@@ -2304,10 +2304,10 @@ export default class Provider {
   ): FuelError {
     const status = dryRunStatus as DryRunFailureStatusFragment;
     let logs: DecodedLogs['logs'] = [];
-    let logsByContract: DecodedLogs['logsByContract'] = {};
+    let groupedLogs: DecodedLogs['groupedLogs'] = {};
 
     if (transactionRequest.abis) {
-      ({ logs, logsByContract } = getAllDecodedLogs({
+      ({ logs, groupedLogs } = getAllDecodedLogs({
         receipts,
         mainAbi: transactionRequest.abis.main,
         externalAbis: transactionRequest.abis.otherContractsAbis,
@@ -2316,7 +2316,7 @@ export default class Provider {
 
     return extractTxError({
       logs,
-      logsByContract,
+      groupedLogs,
       receipts,
       statusReason: status.reason,
     });

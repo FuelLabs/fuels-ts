@@ -62,7 +62,7 @@ export const getAllResultLogs = (
   functionScopes: Array<InvocationScopeLike>
 ): DecodedLogs => {
   if (!mainCallConfig) {
-    return { logs: [], logsByContract: {} };
+    return { logs: [], groupedLogs: {} };
   }
   const { main, otherContractsAbis } = getAbisFromAllCalls(functionScopes);
   return getAllDecodedLogs({ receipts, mainAbi: main, externalAbis: otherContractsAbis });

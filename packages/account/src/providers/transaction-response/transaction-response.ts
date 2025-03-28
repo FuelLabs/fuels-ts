@@ -86,7 +86,7 @@ export type TransactionResultReceipt =
 /** @hidden */
 export type TransactionResult<TTransactionType = void> = TransactionSummary<TTransactionType> & {
   logs?: DecodedLogs['logs'];
-  logsByContract?: DecodedLogs['logsByContract'];
+  groupedLogs?: DecodedLogs['groupedLogs'];
 };
 
 function mapGqlOutputsToTxOutputs(
@@ -379,17 +379,17 @@ export class TransactionResponse {
       ...transactionSummary,
     };
 
-    let { logs, logsByContract }: DecodedLogs = { logs: [], logsByContract: {} };
+    let { logs, groupedLogs }: DecodedLogs = { logs: [], groupedLogs: {} };
 
     if (this.abis) {
-      ({ logs, logsByContract } = getAllDecodedLogs({
+      ({ logs, groupedLogs } = getAllDecodedLogs({
         receipts: transactionSummary.receipts,
         mainAbi: this.abis.main,
         externalAbis: this.abis.otherContractsAbis,
       }));
 
       transactionResult.logs = logs;
-      transactionResult.logsByContract = logsByContract;
+      transactionResult.groupedLogs = groupedLogs;
     }
 
     const { receipts } = transactionResult;
@@ -401,7 +401,7 @@ export class TransactionResponse {
         receipts,
         statusReason: reason,
         logs,
-        logsByContract,
+        groupedLogs,
       });
     }
 
