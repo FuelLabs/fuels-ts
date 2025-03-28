@@ -346,3 +346,6 @@ XORs
 YAML
 RESTful
 EIP
+AssembleTxParams
+AssembleTxResponse
+AssembleTx

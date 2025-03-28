@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
 import type { AddressInput, WithAddress } from '@fuel-ts/address';
 import { Address } from '@fuel-ts/address';
@@ -6,7 +7,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { HashableMessage } from '@fuel-ts/hasher';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import { InputType } from '@fuel-ts/transactions';
+import { InputType, OutputType } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, isDefined } from '@fuel-ts/utils';
 import { clone } from 'ramda';
@@ -39,6 +40,7 @@ import {
   ScriptTransactionRequest,
   transactionRequestify,
   addAmountToCoinQuantities,
+  setAndValidateGasAndFeeForAssembledTx,
 } from './providers';
 import {
   cacheRequestInputsResourcesFromOwner,
@@ -216,6 +218,9 @@ export class Account extends AbstractAccount implements WithAddress {
    * @param request - The transaction request to fund.
    * @param params - The estimated transaction parameters.
    * @returns A promise that resolves to the funded transaction request.
+   *
+   * @deprecated Use provider.assembleTx instead
+   * Check the migration guide https://docs.fuel.network/guide/assembling-transactions/migration-guide.html for more information.
    */
   async fund<T extends TransactionRequest>(request: T, params: EstimatedTxParams): Promise<T> {
     const {
@@ -375,7 +380,15 @@ export class Account extends AbstractAccount implements WithAddress {
       assetId: assetId || (await this.provider.getBaseAssetId()),
     });
 
-    request = await this.estimateAndFundTransaction(request, txParams);
+    const { gasPrice, transactionRequest } = await this.assembleTx(request);
+
+    request = await setAndValidateGasAndFeeForAssembledTx({
+      gasPrice,
+      provider: this.provider,
+      transactionRequest,
+      setGasLimit: txParams?.gasLimit,
+      setMaxFee: txParams?.maxFee,
+    });
 
     return request;
   }
@@ -412,7 +425,16 @@ export class Account extends AbstractAccount implements WithAddress {
   ): Promise<TransactionResponse> {
     let request = new ScriptTransactionRequest(txParams);
     request = this.addBatchTransfer(request, transferParams);
-    request = await this.estimateAndFundTransaction(request, txParams);
+
+    const { gasPrice, transactionRequest } = await this.assembleTx(request);
+
+    request = await setAndValidateGasAndFeeForAssembledTx({
+      gasPrice,
+      provider: this.provider,
+      transactionRequest,
+      setGasLimit: txParams?.gasLimit,
+      setMaxFee: txParams?.maxFee,
+    });
     return this.sendTransaction(request, { estimateTxDependencies: false });
   }
 
@@ -506,7 +528,15 @@ export class Account extends AbstractAccount implements WithAddress {
     request.script = script;
     request.scriptData = scriptData;
 
-    request = await this.estimateAndFundTransaction(request, txParams, { quantities });
+    const { gasPrice, transactionRequest } = await this.assembleTx(request, quantities);
+
+    request = await setAndValidateGasAndFeeForAssembledTx({
+      gasPrice,
+      provider: this.provider,
+      transactionRequest,
+      setGasLimit: txParams?.gasLimit,
+      setMaxFee: txParams?.maxFee,
+    });
 
     return this.sendTransaction(request);
   }
@@ -544,16 +574,15 @@ export class Account extends AbstractAccount implements WithAddress {
     let request = new ScriptTransactionRequest(params);
     const quantities = [{ amount: bn(amount), assetId: baseAssetId }];
 
-    const txCost = await this.getTransactionCost(request, { quantities });
+    const { gasPrice, transactionRequest } = await this.assembleTx(request, quantities);
 
-    request = this.validateGasLimitAndMaxFee({
-      transactionRequest: request,
-      gasUsed: txCost.gasUsed,
-      maxFee: txCost.maxFee,
-      txParams,
+    request = await setAndValidateGasAndFeeForAssembledTx({
+      gasPrice,
+      provider: this.provider,
+      transactionRequest,
+      setGasLimit: txParams?.gasLimit,
+      setMaxFee: txParams?.maxFee,
     });
-
-    await this.fund(request, txCost);
 
     return this.sendTransaction(request);
   }
@@ -780,6 +809,27 @@ export class Account extends AbstractAccount implements WithAddress {
           transactionBytes: hexlify(request.toTransactionBytes()),
         }
       : undefined;
+  }
+
+  /** @hidden * */
+  private async assembleTx(
+    transactionRequest: ScriptTransactionRequest,
+    quantities: CoinQuantity[] = []
+  ): Promise<{ transactionRequest: ScriptTransactionRequest; gasPrice: BN }> {
+    const outputQuantities = transactionRequest.outputs
+      .filter((o) => o.type === OutputType.Coin)
+      .map(({ amount, assetId }) => ({ assetId: String(assetId), amount: bn(amount) }));
+
+    transactionRequest.gasLimit = bn(0);
+    transactionRequest.maxFee = bn(0);
+
+    const { assembledRequest, gasPrice } = await this.provider.assembleTx({
+      request: transactionRequest,
+      accountCoinQuantities: mergeQuantities(outputQuantities, quantities),
+      feePayerAccount: this,
+    });
+
+    return { transactionRequest: assembledRequest as ScriptTransactionRequest, gasPrice };
   }
 
   /** @hidden * */

@@ -4,7 +4,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
-import { InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
+import { InputMessageCoder, TransactionCoder, TransactionType } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, DateTime, isDefined, sleep } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility, gte, versions } from '@fuel-ts/versions';
@@ -14,6 +14,7 @@ import type { GraphQLClientResponse, GraphQLResponse } from 'graphql-request/src
 import gql from 'graphql-tag';
 import { clone } from 'ramda';
 
+import type { Account } from '../account';
 import { deferPromise } from '../connectors/utils/promises';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
@@ -40,6 +41,7 @@ import type {
   GqlGetTransactionWithReceiptsQuery,
   GqlGetTransactionsByOwnerQuery,
 } from './__generated__/operations';
+import { resolveAccountForAssembleTxParams } from './assemble-tx-helpers';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
@@ -51,9 +53,9 @@ import type {
   TransactionRequestLike,
   TransactionRequest,
   TransactionRequestInput,
-  CoinTransactionRequestInput,
   JsonAbisFromAllCalls,
   ScriptTransactionRequest,
+  CoinTransactionRequestInput,
 } from './transaction-request';
 import {
   isPredicate,
@@ -73,13 +75,14 @@ import {
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch, getWaitDelay } from './utils/auto-retry-fetch';
 import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
-import { adjustResourcesToExclude } from './utils/helpers';
 import type { ProviderCacheJson, TransactionSummaryJsonPartial } from './utils/serialization';
 import {
   deserializeChain,
   deserializeNodeInfo,
   deserializeProviderCache,
   deserializeReceipt,
+  deserializeInput,
+  deserializeOutput,
 } from './utils/serialization';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
@@ -133,6 +136,38 @@ export type Block = {
   };
 };
 
+export type AccountCoinQuantity = {
+  assetId: string;
+  amount: BigNumberish;
+  account?: Account;
+  changeOutputAccount?: Account;
+};
+
+// #region assemble-tx-params
+export type AssembleTxParams<T extends TransactionRequest = TransactionRequest> = {
+  // The transaction request to assemble
+  request: T;
+  // Coin quantities required for the transaction, optional if transaction only needs funds for the fee
+  accountCoinQuantities?: AccountCoinQuantity[];
+  // Account that will pay for the transaction fees
+  feePayerAccount: Account;
+  // Block horizon for gas price estimation (default: 10)
+  blockHorizon?: number;
+  // Whether to estimate predicates (default: true)
+  estimatePredicates?: boolean;
+  // Resources to exclude from the transaction (optional)
+  excludeInput?: ExcludeResourcesOption;
+  // Amount of gas to reserve (optional)
+  reserveGas?: number;
+};
+
+export type AssembleTxResponse<T extends TransactionRequest = TransactionRequest> = {
+  assembledRequest: T;
+  gasPrice: BN;
+  receipts: TransactionResultReceipt[];
+};
+
+// #endregion assemble-tx-params
 export type PageInfo = GqlPageInfo;
 
 export type GetCoinsResponse = {
@@ -1572,6 +1607,9 @@ export default class Provider {
    * @param transactionCostParams - The transaction cost parameters (optional).
    *
    * @returns A promise that resolves to the transaction cost object.
+   *
+   * @deprecated Use provider.assembleTx instead
+   * Check the migration guide https://docs.fuel.network/guide/assembling-transactions/migration-guide.html for more information.
    */
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
@@ -1633,7 +1671,7 @@ export default class Provider {
         await this.estimateTxDependencies(txRequestClone, { gasPrice }));
 
       if (dryRunStatus && 'reason' in dryRunStatus) {
-        throw this.extractDryRunError(txRequestClone, receipts, dryRunStatus);
+        throw this.extractDryRunError(txRequestClone, receipts, dryRunStatus.reason);
       }
 
       const { maxGasPerTx } = await this.getGasConfig();
@@ -1669,6 +1707,190 @@ export default class Provider {
       dryRunStatus,
       updateMaxFee,
       transactionSummary,
+    };
+  }
+
+  /**
+   * Assembles a transaction by completely estimating and funding it.
+   *
+   * @param request - The transaction request to assemble
+   * @param feePayerAccount - Account that will pay transaction fees
+   * @param accountCoinQuantities - Array of coin quantities needed from accounts
+   * @param blockHorizon - Number of blocks transaction is valid for (default: 10)
+   * @param estimatePredicates - Whether to estimate predicates (default: true)
+   * @param reserveGas - Optional gas to reserve
+   * @param excludeInput - Optional input to exclude
+   *
+   * @returns The assembled transaction request, estimated gas price, and receipts
+   */
+  async assembleTx<T extends TransactionRequest>(
+    params: AssembleTxParams<T>
+  ): Promise<AssembleTxResponse<T>> {
+    const {
+      request,
+      reserveGas,
+      excludeInput,
+      feePayerAccount,
+      blockHorizon = 10,
+      estimatePredicates = true,
+      accountCoinQuantities = [],
+    } = params;
+
+    /**
+     * A set of all addresses that are involved in the transaction. This is used later
+     * to recover cached resources IDs from these users.
+     */
+    const allAddresses = new Set<string>();
+    const baseAssetId = await this.getBaseAssetId();
+
+    /**
+     * Setting the index of the fee payer account to -1 as we don't know it yet.
+     */
+    let feePayerIndex = -1;
+
+    /**
+     * The change output for the base asset.
+     */
+    let baseAssetChange: string | undefined;
+
+    /**
+     * Get all change outputs that are present in the request.
+     */
+    const requestChanges = request.getChangeOutputs();
+
+    const requiredBalances = accountCoinQuantities.map((quantity, index) => {
+      // When the `account` property is not provided, it defaults to the fee payer account.
+      const { amount, assetId, account = feePayerAccount, changeOutputAccount } = quantity;
+      const setChangeOnRequest = requestChanges.find((change) => change.assetId === assetId);
+
+      let changeAccountAddress: string;
+
+      if (changeOutputAccount && setChangeOnRequest) {
+        /**
+         * Case 1: The change output for this assetId was informed with `changeOutputAccount` property and it
+         * also exists within the `request.outputs`
+         */
+        const sameAddress = String(setChangeOnRequest.to) === changeOutputAccount.address.toB256();
+
+        /**
+         * If the both change outputs (`changeOutputAccount` and the one set on the request) are for different addresses,
+         * throw an error.
+         */
+        if (!sameAddress) {
+          throw new FuelError(
+            ErrorCode.CHANGE_OUTPUT_COLLISION,
+            `OutputChange address for asset ${assetId} differs between transaction request and assembleTx inputs.`
+          );
+        }
+        changeAccountAddress = changeOutputAccount.address.toB256();
+      } else if (setChangeOnRequest) {
+        /**
+         * Case 2: The change output for this assetId is set on the request only, so use it
+         */
+        changeAccountAddress = String(setChangeOnRequest.to);
+      } else if (changeOutputAccount) {
+        /**
+         * Case 3: The change output was informed with `changeOutputAccount` and not set on the request
+         */
+        changeAccountAddress = changeOutputAccount.address.toB256();
+      } else {
+        /**
+         * Case 4: The change output for this assetId was neither informed with `changeOutputAccount` nor set on the request,
+         * so use the one from the `account` property.
+         */
+
+        changeAccountAddress = account.address.toB256();
+      }
+
+      allAddresses.add(account.address.toB256());
+
+      const changePolicy = {
+        change: changeAccountAddress,
+      };
+
+      if (assetId === baseAssetId) {
+        baseAssetChange = changePolicy.change;
+      }
+
+      /**
+       * If the account is the same as the fee payer account, set the index to the current index.
+       */
+      if (account.address.equals(feePayerAccount.address)) {
+        feePayerIndex = index;
+      }
+
+      const requiredBalance = {
+        account: resolveAccountForAssembleTxParams(account),
+        amount: bn(amount).toString(10),
+        assetId,
+        changePolicy,
+      };
+
+      return requiredBalance;
+    });
+
+    /**
+     * If the fee payer index is still -1, it means that the fee payer account was not added to the required balances.
+     */
+    if (feePayerIndex === -1) {
+      allAddresses.add(feePayerAccount.address.toB256());
+
+      const newLength = requiredBalances.push({
+        account: resolveAccountForAssembleTxParams(feePayerAccount),
+        amount: bn(0).toString(10), // Since the correct fee amount cannot be determined yet, we can use 0
+        assetId: baseAssetId,
+        changePolicy: {
+          change: baseAssetChange || feePayerAccount.address.toB256(),
+        },
+      });
+
+      feePayerIndex = newLength - 1;
+    }
+
+    /**
+     * Retrieving from the cache the resources IDs that should be excluded based on the addresses
+     * that are involved in the transaction.
+     */
+    const idsToExclude = await this.adjustExcludeResourcesForAddress(
+      Array.from(allAddresses),
+      excludeInput
+    );
+
+    const {
+      assembleTx: { status, transaction: gqlTransaction, gasPrice },
+    } = await this.operations.assembleTx({
+      tx: hexlify(request.toTransactionBytes()),
+      blockHorizon: String(blockHorizon),
+      feeAddressIndex: String(feePayerIndex),
+      requiredBalances,
+      estimatePredicates,
+      excludeInput: idsToExclude,
+      reserveGas: reserveGas ? reserveGas.toString(10) : undefined,
+    });
+
+    if (status.type === 'DryRunFailureStatus') {
+      const parsedReceipts = status.receipts.map(deserializeReceipt);
+
+      throw this.extractDryRunError(request, parsedReceipts, status.reason);
+    }
+
+    request.witnesses = gqlTransaction.witnesses || request.witnesses;
+
+    request.inputs = gqlTransaction.inputs?.map(deserializeInput) || request.inputs;
+    request.outputs = gqlTransaction.outputs?.map(deserializeOutput) || request.outputs;
+
+    if (gqlTransaction.policies?.maxFee) {
+      request.maxFee = bn(gqlTransaction.policies.maxFee);
+    }
+
+    if (gqlTransaction.scriptGasLimit) {
+      (request as ScriptTransactionRequest).gasLimit = bn(gqlTransaction.scriptGasLimit);
+    }
+
+    return {
+      assembledRequest: request,
+      gasPrice: bn(gasPrice),
+      receipts: status.receipts.map(deserializeReceipt),
     };
   }
 
@@ -1726,26 +1948,11 @@ export default class Provider {
     excludedIds?: ExcludeResourcesOption
   ): Promise<Resource[]> {
     const ownerAddress = new Address(owner);
-    let idsToExclude = {
-      messages: excludedIds?.messages?.map((nonce) => hexlify(nonce)) || [],
-      utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
-    };
 
-    if (this.cache) {
-      const cached = this.cache.getActiveData(ownerAddress.toB256());
-      if (cached.utxos.length || cached.messages.length) {
-        const {
-          consensusParameters: {
-            txParameters: { maxInputs },
-          },
-        } = await this.getChain();
-        idsToExclude = adjustResourcesToExclude({
-          userInput: idsToExclude,
-          cached,
-          maxInputs: maxInputs.toNumber(),
-        });
-      }
-    }
+    const idsToExclude = await this.adjustExcludeResourcesForAddress(
+      [ownerAddress.b256Address],
+      excludedIds
+    );
 
     const coinsQuery = {
       owner: ownerAddress.toB256(),
@@ -2476,13 +2683,12 @@ export default class Provider {
    * @hidden
    */
   private extractDryRunError(
-    transactionRequest: ScriptTransactionRequest,
+    transactionRequest: TransactionRequest,
     receipts: TransactionResultReceipt[],
-    dryRunStatus: DryRunStatus
+    reason: string
   ): FuelError {
-    const status = dryRunStatus as DryRunFailureStatusFragment;
     let logs: unknown[] = [];
-    if (transactionRequest.abis) {
+    if (transactionRequest.type === TransactionType.Script && transactionRequest.abis) {
       logs = getDecodedLogs(
         receipts,
         transactionRequest.abis.main,
@@ -2493,7 +2699,7 @@ export default class Provider {
     return extractTxError({
       logs,
       receipts,
-      statusReason: status.reason,
+      statusReason: reason,
     });
   }
 
@@ -2515,5 +2721,50 @@ export default class Provider {
     }
 
     return transactionRequest;
+  }
+
+  /**
+   * @hidden
+   */
+  private async adjustExcludeResourcesForAddress(
+    addresses: string[],
+    excludedIds?: ExcludeResourcesOption
+  ) {
+    const final = {
+      messages: excludedIds?.messages?.map((nonce) => hexlify(nonce)) || [],
+      utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
+    };
+
+    if (this.cache) {
+      const cache = this.cache;
+      const allCached = addresses.map((address) => cache.getActiveData(address));
+
+      const {
+        consensusParameters: {
+          txParameters: { maxInputs: maxInputsBn },
+        },
+      } = await this.getChain();
+
+      const maxInputs = maxInputsBn.toNumber();
+
+      for (let i = 0; i < allCached.length; i++) {
+        let total = final.utxos.length + final.messages.length;
+        if (total >= maxInputs) {
+          break;
+        }
+
+        final.utxos = [...final.utxos, ...allCached[i].utxos.slice(0, maxInputs - total)];
+
+        total = final.utxos.length + final.messages.length;
+
+        if (total >= maxInputs) {
+          break;
+        }
+
+        final.messages = [...final.messages, ...allCached[i].messages.slice(0, maxInputs - total)];
+      }
+    }
+
+    return final;
   }
 }
