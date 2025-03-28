@@ -51,7 +51,7 @@ Example of default behaviors:
 
 ## Return Value
 
-The method returns an object containing:
+The method returns an object of the type [AssembleTxResponse](DOCS_API_URL/types/_fuel_ts_account.AssembleTxResponse.html):
 
 - `assembledRequest`: The fully assembled transaction request with all necessary inputs, outputs, and policies
 - `gasPrice`: The estimated gas price for the transaction
