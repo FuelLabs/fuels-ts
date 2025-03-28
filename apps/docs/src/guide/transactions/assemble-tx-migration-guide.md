@@ -1,4 +1,4 @@
-# AssembleTX Migrating Guide
+# AssembleTx Migrating Guide
 
 The old methods of estimating and funding transaction were deprecated in favor of a more robust `provider.assembleTx`. This guide will help you migrate your code to use the new method.
 
