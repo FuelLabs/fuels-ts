@@ -348,3 +348,4 @@ RESTful
 EIP
 AssembleTxParams
 AssembleTxResponse
+AssembleTx
