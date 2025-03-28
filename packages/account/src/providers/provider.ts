@@ -1737,25 +1737,46 @@ export default class Provider {
       estimatePredicates = true,
     } = params;
 
+    /**
+     * A set of all addresses that are involved in the transaction. This is used later
+     * to recover cached resources IDs from these users.
+     */
     const allAddresses = new Set<string>();
     const baseAssetId = await this.getBaseAssetId();
 
+    /**
+     * Setting the index of the fee payer account to -1 as we don't know it yet.
+     */
     let feePayerIndex = -1;
+
+    /**
+     * The change output for the base asset.
+     */
     let baseAssetChange: string | undefined;
 
+    /**
+     * Get all change outputs that are present in the request.
+     */
     const requestChanges = request.getChangeOutputs();
 
     const requiredBalances = accountCoinQuantities.map((quantity, index) => {
+      // When the `account` property is not provided, it defaults to the fee payer account.
       const { amount, assetId, account = feePayerAccount, changeOutputAccount } = quantity;
       const setChangeOnRequest = requestChanges.find((change) => change.assetId === assetId);
 
       let changeAccountAddress: string;
 
       if (changeOutputAccount && setChangeOnRequest) {
-        // Case 1: Both changeOutputAccount and setChangeOnRequest exist
+        /**
+         * Case 1: The change output for this assetId was informed with `changeOutputAccount` property and it
+         * also exists within the `request.outputs`
+         */
         const sameAddress = String(setChangeOnRequest.to) === changeOutputAccount.address.toB256();
 
-        // If both changes were informed to different addresses, throw collision error
+        /**
+         * If the both change outputs (`changeOutputAccount` and the one set on the request) are for different addresses,
+         * throw an error.
+         */
         if (!sameAddress) {
           throw new FuelError(
             ErrorCode.CHANGE_OUTPUT_COLLISION,
@@ -1764,13 +1785,21 @@ export default class Provider {
         }
         changeAccountAddress = changeOutputAccount.address.toB256();
       } else if (setChangeOnRequest) {
-        // Case 2: Only setChangeOnRequest exists, use it as changeAccountAddress
+        /**
+         * Case 2: The change output for this assetId is set on the request only, so use it
+         */
         changeAccountAddress = String(setChangeOnRequest.to);
       } else if (changeOutputAccount) {
-        // Case 3: Only changeOutputAccount exists, use it as changeAccountAddress
+        /**
+         * Case 3: The change output was informed with `changeOutputAccount` and not set on the request
+         */
         changeAccountAddress = changeOutputAccount.address.toB256();
       } else {
-        // Case 4: No changeOutputAccount, use account
+        /**
+         * Case 4: The change output for this assetId was neither informed with `changeOutputAccount` nor set on the request,
+         * so use the one from the `account` property.
+         */
+
         changeAccountAddress = account.address.toB256();
       }
 
@@ -1784,6 +1813,9 @@ export default class Provider {
         baseAssetChange = changePolicy.change;
       }
 
+      /**
+       * If the account is the same as the fee payer account, set the index to the current index.
+       */
       if (account.address.equals(feePayerAccount.address)) {
         feePayerIndex = index;
       }
@@ -1798,12 +1830,15 @@ export default class Provider {
       return requiredBalance;
     });
 
+    /**
+     * If the fee payer index is still -1, it means that the fee payer account was not added to the required balances.
+     */
     if (feePayerIndex === -1) {
       allAddresses.add(feePayerAccount.address.toB256());
 
       const newLength = requiredBalances.push({
         account: resolveAccountForAssembleTxParams(feePayerAccount),
-        amount: bn(0).toString(10),
+        amount: bn(0).toString(10), // Since the correct fee amount cannot be determined yet, we can use 0
         assetId: baseAssetId,
         changePolicy: {
           change: baseAssetChange || feePayerAccount.address.toB256(),
@@ -1813,6 +1848,10 @@ export default class Provider {
       feePayerIndex = newLength - 1;
     }
 
+    /**
+     * Retrieving from the cache the resources IDs that should be excluded based on the addresses
+     * that are involved in the transaction.
+     */
     const idsToExclude = await this.adjustExcludeResourcesForAddress(
       Array.from(allAddresses),
       excludeInput
