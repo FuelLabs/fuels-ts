@@ -12,7 +12,7 @@ import {
   PANIC_DOC_URL,
 } from '@fuel-ts/transactions/configs';
 
-import type { TransactionResultReceipt } from '../transaction-response';
+import type { DecodedLogs, TransactionResultReceipt } from '../transaction-response';
 
 /**
  * Assembles an error message for a panic status.
@@ -118,9 +118,8 @@ export const assembleRevertError = (
   });
 };
 
-interface IExtractTxError {
+interface IExtractTxError extends DecodedLogs {
   receipts: Array<TransactionResultReceipt>;
-  logs: Array<unknown>;
   statusReason: string;
 }
 
@@ -130,12 +129,13 @@ interface IExtractTxError {
  * @returns The FuelError object.
  */
 export const extractTxError = (params: IExtractTxError): FuelError => {
-  const { receipts, statusReason, logs } = params;
+  const { receipts, statusReason, logs, groupedLogs } = params;
 
   const isPanic = receipts.some(({ type }) => type === ReceiptType.Panic);
   const isRevert = receipts.some(({ type }) => type === ReceiptType.Revert);
   const metadata = {
     logs,
+    groupedLogs,
     receipts,
     panic: isPanic,
     revert: isRevert,
