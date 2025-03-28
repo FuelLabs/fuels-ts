@@ -146,7 +146,7 @@ export class Predicate<
    *
    * @returns A Uint8Array containing the encoded predicate data. If no predicate data is available, returns an empty Uint8Array.
    */
-  public getPredicateData(): Uint8Array {
+  getPredicateData(): Uint8Array {
     if (!this.predicateData.length) {
       return new Uint8Array();
     }
