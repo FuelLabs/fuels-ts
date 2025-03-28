@@ -160,6 +160,13 @@ export type AssembleTxParams<T extends TransactionRequest = TransactionRequest> 
   // Amount of gas to reserve (optional)
   reserveGas?: number;
 };
+
+export type AssembleTxResponse<T extends TransactionRequest = TransactionRequest> = {
+  assembledRequest: T;
+  gasPrice: BN;
+  receipts: TransactionResultReceipt[];
+};
+
 // #endregion assemble-tx-params
 export type PageInfo = GqlPageInfo;
 
