@@ -278,6 +278,6 @@ describe('CallTestContract', () => {
     const dryRunSpy = vi.spyOn(contract.provider.operations, 'dryRun');
 
     await contract.functions.no_params().simulate();
-    expect(dryRunSpy).toHaveBeenCalledTimes(2);
+    expect(dryRunSpy).toHaveBeenCalledTimes(1);
   });
 });
