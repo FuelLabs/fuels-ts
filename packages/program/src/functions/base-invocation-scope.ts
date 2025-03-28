@@ -244,44 +244,7 @@ export class BaseInvocationScope<TReturn = any> {
     });
   }
 
-  /**
-   * Costs and funds the underlying transaction request.
-   *
-   * @returns The invocation scope as a funded transaction request.
-   *
-   * @deprecated Use contract.assembleTx instead
-   * Check the migration guide https://docs.fuel.network/guide/assembling-transactions/migration-guide.html for more information.
-   */
   async fundWithRequiredCoins(): Promise<ScriptTransactionRequest> {
-    let transactionRequest = await this.getTransactionRequest();
-    transactionRequest = clone(transactionRequest);
-
-    const txCost = await this.getTransactionCost();
-    const { gasUsed, missingContractIds, outputVariables, maxFee } = txCost;
-    this.setDefaultTxParams(transactionRequest, gasUsed, maxFee);
-
-    // Adding missing contract ids
-    missingContractIds.forEach((contractId) => {
-      transactionRequest.addContractInputAndOutput(new Address(contractId));
-    });
-
-    // Adding required number of OutputVariables
-    transactionRequest.addVariableOutputs(outputVariables);
-
-    await this.program.account?.fund(transactionRequest, txCost);
-
-    if (this.addSignersCallback) {
-      await this.addSignersCallback(transactionRequest);
-    }
-    return transactionRequest;
-  }
-
-  /**
-   * Costs and funds the underlying transaction request.
-   *
-   * @returns The invocation scope as a funded transaction request.
-   */
-  async assembleTx(): Promise<ScriptTransactionRequest> {
     let request = await this.getTransactionRequest();
     request = clone(request);
 
@@ -320,6 +283,33 @@ export class BaseInvocationScope<TReturn = any> {
     });
 
     return assembledRequest;
+  }
+
+  /**
+   * @deprecated - Should be removed with `addSigners`
+   */
+  private async legacyFundWithRequiredCoins(): Promise<ScriptTransactionRequest> {
+    let transactionRequest = await this.getTransactionRequest();
+    transactionRequest = clone(transactionRequest);
+
+    const txCost = await this.getTransactionCost();
+    const { gasUsed, missingContractIds, outputVariables, maxFee } = txCost;
+    this.setDefaultTxParams(transactionRequest, gasUsed, maxFee);
+
+    // Adding missing contract ids
+    missingContractIds.forEach((contractId) => {
+      transactionRequest.addContractInputAndOutput(new Address(contractId));
+    });
+
+    // Adding required number of OutputVariables
+    transactionRequest.addVariableOutputs(outputVariables);
+
+    await this.program.account?.fund(transactionRequest, txCost);
+
+    if (this.addSignersCallback) {
+      await this.addSignersCallback(transactionRequest);
+    }
+    return transactionRequest;
   }
 
   /**
@@ -444,9 +434,9 @@ export class BaseInvocationScope<TReturn = any> {
     let transactionRequest = await this.getTransactionRequest();
 
     if (this.addSignersCallback) {
-      transactionRequest = await this.fundWithRequiredCoins();
+      transactionRequest = await this.legacyFundWithRequiredCoins();
     } else {
-      transactionRequest = await this.assembleTx();
+      transactionRequest = await this.fundWithRequiredCoins();
     }
 
     const response = (await this.program.account.sendTransaction(transactionRequest, {
