@@ -1724,8 +1724,11 @@ export default class Provider {
    *
    * @returns The assembled transaction request, estimated gas price, and receipts
    */
-  async assembleTx<T extends TransactionRequest>(params: AssembleTxParams<T>) {
+  async assembleTx<T extends TransactionRequest>(
+    params: AssembleTxParams<T>
+  ): Promise<AssembleTxResponse<T>> {
     const {
+      request,
       accountCoinQuantities,
       feePayerAccount,
       excludeInput,
@@ -1733,8 +1736,6 @@ export default class Provider {
       blockHorizon = 10,
       estimatePredicates = true,
     } = params;
-
-    const { request } = params;
 
     const allAddresses = new Set<string>();
     const baseAssetId = await this.getBaseAssetId();
@@ -1849,7 +1850,7 @@ export default class Provider {
     }
 
     return {
-      assembledRequest: request as T,
+      assembledRequest: request,
       gasPrice: bn(gasPrice),
       receipts: status.receipts.map(deserializeReceipt),
     };
