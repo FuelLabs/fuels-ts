@@ -72,6 +72,9 @@ export class BaseInvocationScope<TReturn = any> {
   protected isMultiCall: boolean = false;
   protected hasCallParamsGasLimit: boolean = false; // flag to check if any of the callParams has gasLimit set
   protected externalAbis: Record<string, JsonAbi> = {};
+  /**
+   * @deprecated - Should be removed with `addSigners`
+   */
   private addSignersCallback?: (
     txRequest: ScriptTransactionRequest
   ) => Promise<ScriptTransactionRequest>;
