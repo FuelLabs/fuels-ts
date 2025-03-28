@@ -118,6 +118,16 @@ export type BuildParams = BaseParams & {
   deploy?: boolean;
 };
 
+export type NodeParams = BaseParams & {
+  fuelCorePort?: string;
+  fuelCorePath?: string;
+};
+
+const flag = (
+  flags: (string | string[] | undefined)[],
+  value?: string | string[] | boolean
+): string[] => (value ? (flags.flat() as string[]) : []);
+
 export async function runInit(params: InitParams) {
   const {
     autoStartFuelCore,
@@ -129,11 +139,6 @@ export async function runInit(params: InitParams) {
     privateKey,
     fuelCorePort,
   } = params;
-
-  const flag = (
-    flags: (string | string[] | undefined)[],
-    value?: string | string[] | boolean
-  ): string[] => (value ? (flags.flat() as string[]) : []);
 
   // The OS auto-magically expands glob patterns before passing them to the CLI
   // We mimic this behavior here, as we by-pass the OS for our tests
@@ -169,6 +174,16 @@ export async function runInit(params: InitParams) {
   }
 
   return command;
+}
+
+export async function runNode(params: NodeParams) {
+  const { root, fuelCorePort, fuelCorePath } = params;
+  const flags = [
+    flag(['--path', root], root),
+    flag(['--fuel-core-port', fuelCorePort], fuelCorePort),
+    flag(['--fuel-core-path', fuelCorePath], fuelCorePath),
+  ].flat();
+  return runCommand(Commands.node, flags);
 }
 
 export async function runBuild(params: BuildParams) {

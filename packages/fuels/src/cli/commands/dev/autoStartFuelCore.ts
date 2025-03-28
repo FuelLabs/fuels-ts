@@ -14,7 +14,18 @@ export type FuelCoreNode = {
   killChildProcess: () => void;
 };
 
-export const autoStartFuelCore = async (config: FuelsConfig) => {
+type AutoStartFuelCoreConfig = Pick<
+  FuelsConfig,
+  | 'fuelCorePath'
+  | 'fuelCorePort'
+  | 'autoStartFuelCore'
+  | 'basePath'
+  | 'snapshotDir'
+  | 'privateKey'
+  | 'providerUrl'
+>;
+
+export const autoStartFuelCore = async (config: AutoStartFuelCoreConfig) => {
   let fuelCore: FuelCoreNode | undefined;
 
   if (config.autoStartFuelCore) {

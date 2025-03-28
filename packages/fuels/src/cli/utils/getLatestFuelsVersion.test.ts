@@ -14,6 +14,7 @@ describe('getLatestFuelsVersion', () => {
   });
 
   it('should fail if fetch fails', async () => {
+    vi.spyOn(cacheMod, 'checkAndLoadCache').mockReturnValue(null);
     vi.spyOn(global, 'fetch').mockImplementation(() =>
       Promise.reject(new Error('Failed to fetch'))
     );
@@ -21,6 +22,7 @@ describe('getLatestFuelsVersion', () => {
   });
 
   it('should throw if fetch times out', async () => {
+    vi.spyOn(cacheMod, 'checkAndLoadCache').mockReturnValue(null);
     vi.spyOn(global, 'fetch').mockImplementation(
       () =>
         new Promise((resolve) => {

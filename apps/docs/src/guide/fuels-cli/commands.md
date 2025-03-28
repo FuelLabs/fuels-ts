@@ -149,11 +149,14 @@ The `fuels dev` command does three things:
 npx fuels@{{fuels}} node
 ```
 
-Starts a short-lived `fuel-core` node and requires a `fuels.config.ts` config file.
+Start a standalone `fuel-core` node
 
-Generate one with [`fuels init`](#fuels-init):
-
-<<< @/../../demo-fuels/fuels.config.minimal.ts#config{ts:line-numbers}
+```console
+Options:
+  --path <path>            Path to store fuel core data (optional)
+  --fuel-core-path <path>  Path to the `fuel-core` binary (default: fuel-core)
+  --fuel-core-port <port>  Port to use when starting the node (default: 4000)
+```
 
 ## `fuels typegen`
 
