@@ -1,6 +1,6 @@
 # Assembling Transactions
 
-The `assembleTx` method is a crucial part of the Fuel TypeScript SDK that helps prepare and assemble transactions with the correct inputs, outputs, and policies. This guide will explain how to use this method effectively.
+The `assembleTx` method is a crucial part of the Fuel TypeScript SDK that helps prepare and assemble transactions with the correct inputs, outputs, and policies. It is used by all higher-level APIs in the SDK, including account transfers, contract and blob deployments, and contract calls. This guide provides a comprehensive overview of how to use `assembleTx` effectively.
 
 ## Overview
 
