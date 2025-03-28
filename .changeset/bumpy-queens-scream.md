@@ -3,4 +3,4 @@
 "@fuel-ts/program": patch
 ---
 
-feat: added `logsByContract`
+feat: added `groupedLogs`
