@@ -345,21 +345,18 @@ export default defineConfig({
             ],
           },
           {
-            text: 'Assembling Transactions',
-            link: '/guide/assembling-transactions/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Migration Guide',
-                link: '/guide/assembling-transactions/migration-guide',
-              },
-            ],
-          },
-          {
             text: 'Transactions',
             link: '/guide/transactions/',
             collapsed: true,
             items: [
+              {
+                text: 'AssembleTx',
+                link: '/guide/transactions/assemble-tx',
+              },
+              {
+                text: 'AssembleTx Migration Guide',
+                link: '/guide/transactions/assemble-tx-migration-guide',
+              },
               {
                 text: 'Modifying the Request',
                 link: '/guide/transactions/modifying-the-request',

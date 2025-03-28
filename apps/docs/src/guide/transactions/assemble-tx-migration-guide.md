@@ -1,4 +1,4 @@
-# Migrating Guide
+# AssembleTX Migrating Guide
 
 The old methods of estimating and funding transaction were deprecated in favor of a more robust `provider.assembleTx`. This guide will help you migrate your code to use the new method.
 
@@ -6,11 +6,11 @@ The old methods of estimating and funding transaction were deprecated in favor o
 
 ### Old Approach (Deprecated)
 
-<<< @./snippets/get-cost-and-fund-1.ts#get-cost-and-fund-1{ts:line-numbers}
+<<< @./snippets/assemble-tx/get-cost-and-fund-1.ts#get-cost-and-fund-1{ts:line-numbers}
 
 ### New Approach
 
-<<< @./snippets/assemble-tx-3.ts#assemble-tx-3{ts:line-numbers}
+<<< @./snippets/assemble-tx/assemble-tx-3.ts#assemble-tx-3{ts:line-numbers}
 
 ### More Complex Transactions
 
@@ -22,21 +22,21 @@ This script will transfer 2 assets amount to the same contract address.
 
 ### Old Approach (Deprecated)
 
-<<< @./snippets/get-cost-and-fund-2.ts#get-cost-and-fund-2{ts:line-numbers}
+<<< @./snippets/assemble-tx/get-cost-and-fund-2.ts#get-cost-and-fund-2{ts:line-numbers}
 
 ### New Approach
 
-<<< @./snippets/assemble-tx-4.ts#assemble-tx-4{ts:line-numbers}
+<<< @./snippets/assemble-tx/assemble-tx-4.ts#assemble-tx-4{ts:line-numbers}
 
 ## Migrating from `estimateAndFund`
 
 ### Old Code
 
-<<< @./snippets/estimate-and-fund-2.ts#estimate-and-fund-2{ts:line-numbers}
+<<< @./snippets/assemble-tx/estimate-and-fund-2.ts#estimate-and-fund-2{ts:line-numbers}
 
 ### New Code
 
-<<< @./snippets/assemble-tx-2.ts#assemble-tx-2{ts:line-numbers}
+<<< @./snippets/assemble-tx/assemble-tx-2.ts#assemble-tx-2{ts:line-numbers}
 
 ### Key Differences
 

@@ -4,7 +4,7 @@ import {
   LOCAL_NETWORK_URL,
   WALLET_PVT_KEY,
   WALLET_PVT_KEY_2,
-} from '../../../env';
+} from '../../../../env';
 
 const provider = new Provider(LOCAL_NETWORK_URL);
 const accountA = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);

@@ -1,4 +1,4 @@
-# Assembling Transactions
+# AssembleTx
 
 The `assembleTx` method is a crucial part of the Fuel TypeScript SDK that helps prepare and assemble transactions with the correct inputs, outputs, and policies. It is used by all higher-level APIs in the SDK, including account transfers, contract and blob deployments, and contract calls. This guide provides a comprehensive overview of how to use `assembleTx` effectively.
 
@@ -47,7 +47,7 @@ The `accountCoinQuantities` entries have two optional properties with specific d
 
 Example of default behaviors:
 
-<<< @./snippets/default-behaviors.ts#assemble-tx-default-behaviors{ts:line-numbers}
+<<< @./snippets/assemble-tx/default-behaviors.ts#assemble-tx-default-behaviors{ts:line-numbers}
 
 ## Return Value
 
@@ -59,7 +59,7 @@ The method returns an object of the type [AssembleTxResponse](DOCS_API_URL/types
 
 ## Usage Example
 
-<<< @./snippets/basic-usage.ts#assemble-tx-basic-usage{ts:line-numbers}
+<<< @./snippets/assemble-tx/basic-usage.ts#assemble-tx-basic-usage{ts:line-numbers}
 
 ## Error Handling
 
@@ -74,7 +74,7 @@ This error occurs when there's a conflict between the change output specified in
 
 Here's an example that demonstrates this error:
 
-<<< @./snippets/change-output-collision.ts#change-output-collision{ts:line-numbers}
+<<< @./snippets/assemble-tx/change-output-collision.ts#change-output-collision{ts:line-numbers}
 
 In this example, the error occurs because:
 
