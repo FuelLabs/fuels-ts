@@ -542,7 +542,6 @@ export class BaseInvocationScope<TReturn = any> {
     const { receipts } = await provider.assembleTx({
       request,
       feePayerAccount: account,
-      accountCoinQuantities: [{ amount: bn(0), assetId: baseAssetId }],
     });
 
     return buildDryRunResult<T>({

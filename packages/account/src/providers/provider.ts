@@ -147,8 +147,8 @@ export type AccountCoinQuantity = {
 export type AssembleTxParams<T extends TransactionRequest = TransactionRequest> = {
   // The transaction request to assemble
   request: T;
-  // Coin quantities required for the transaction
-  accountCoinQuantities: AccountCoinQuantity[];
+  // Coin quantities required for the transaction, optional if transaction only needs funds for the fee
+  accountCoinQuantities?: AccountCoinQuantity[];
   // Account that will pay for the transaction fees
   feePayerAccount: Account;
   // Block horizon for gas price estimation (default: 10)
@@ -1728,12 +1728,12 @@ export default class Provider {
   ): Promise<AssembleTxResponse<T>> {
     const {
       request,
-      accountCoinQuantities,
-      feePayerAccount,
-      excludeInput,
       reserveGas,
+      excludeInput,
+      feePayerAccount,
       blockHorizon = 10,
       estimatePredicates = true,
+      accountCoinQuantities = [],
     } = params;
 
     /**
