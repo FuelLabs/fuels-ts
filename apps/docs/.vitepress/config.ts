@@ -450,10 +450,6 @@ export default defineConfig({
                 link: '/guide/cookbook/generate-fake-resources',
               },
               {
-                text: 'Transactions with Multiple Signers',
-                link: '/guide/cookbook/transactions-with-multiple-signers',
-              },
-              {
                 text: 'Sway Script with Signature Validation',
                 link: '/guide/cookbook/sway-script-with-signature-validation',
               },
