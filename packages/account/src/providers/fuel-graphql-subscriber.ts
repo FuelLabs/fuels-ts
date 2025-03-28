@@ -57,6 +57,7 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
   }
 
   /**
+   * This method will take a stream reader and parse the event from the stream.
    *
    * @param reader - The reader of the SSE stream
    * @param parsingLeftover - The leftover string from parsing the previous event
@@ -75,8 +76,11 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
 
     // eslint-disable-next-line no-constant-condition
     while (true) {
+      /**
+       * Given the steam has a `data:.*\n\n` text stream, we will extract the data from the stream
+       * and parse it as a GraphQL response.
+       */
       const matches = [...text.matchAll(regex)].flatMap((match) => match);
-
       if (matches.length > 0) {
         try {
           const event = JSON.parse(matches[0].replace(/^data:/, ''));
@@ -94,6 +98,10 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
         }
       }
 
+      /**
+       * Otherwise, it's in another format, that we will read differently.
+       * This could be responses such as `keep-alive` messages.
+       */
       const { value, done } = await reader.read();
 
       if (done) {
