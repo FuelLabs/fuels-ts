@@ -76,7 +76,7 @@ export async function setupTestProviderAndWallets({
     port: nodeOptions.port || '0',
   };
 
-  let cleanup: () => void;
+  let killNode: () => void;
   let url: string;
   if (launchNodeServerPort) {
     const serverUrl = `http://localhost:${launchNodeServerPort}`;
@@ -84,15 +84,20 @@ export async function setupTestProviderAndWallets({
       await fetch(serverUrl, { method: 'POST', body: JSON.stringify(launchNodeOptions) })
     ).text();
 
-    cleanup = () => {
+    killNode = () => {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       fetch(`${serverUrl}/cleanup/${url}`);
     };
   } else {
     const settings = await launchNode(launchNodeOptions);
     url = settings.url;
-    cleanup = settings.cleanup;
+    killNode = settings.cleanup;
   }
+
+  const cleanup = () => {
+    Provider.clearChainAndNodeCaches(url);
+    killNode();
+  };
 
   let provider: Provider;
 
