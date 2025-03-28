@@ -24,7 +24,7 @@ The [AssembleTxParams](DOCS_API_URL/types/_fuel_ts_account.AssembleTxParams.html
 - `blockHorizon`: The number of blocks to look ahead for gas price estimation. Defaults to `10` blocks.
 - `feePayerAccount`: The account that will pay for the transaction fees
 - `accountCoinQuantities`: An array of coin quantities required for the transaction, specifying:
-  - `amount`: The amount of coins needed
+  - `amount`: The amount of coins needed (fee value does need to be included)
   - `assetId`: The asset ID of the coins
   - `account`: The account providing the coins (optional, defaults to `feePayerAccount`)
   - `changeOutputAccount`: The account to receive change (optional, defaults to the account property)
