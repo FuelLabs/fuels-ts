@@ -351,11 +351,11 @@ export default defineConfig({
             items: [
               {
                 text: 'AssembleTx',
-                link: '/guide/transactions/assemble-tx',
+                link: '/guide/transactions/assembleTx',
               },
               {
                 text: 'AssembleTx Migration Guide',
-                link: '/guide/transactions/assemble-tx-migration-guide',
+                link: '/guide/transactions/assembleTx-migration-guide',
               },
               {
                 text: 'Modifying the Request',
