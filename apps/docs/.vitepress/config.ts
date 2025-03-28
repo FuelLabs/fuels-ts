@@ -350,12 +350,12 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'AssembleTx',
-                link: '/guide/transactions/assembleTx',
+                text: 'Assemble TX',
+                link: '/guide/transactions/assemble-tx',
               },
               {
-                text: 'AssembleTx Migration Guide',
-                link: '/guide/transactions/assembleTx-migration-guide',
+                text: 'Assemble TX Migration Guide',
+                link: '/guide/transactions/assemble-tx-migration-guide',
               },
               {
                 text: 'Modifying the Request',
