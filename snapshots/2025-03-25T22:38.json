@@ -1,0 +1,17 @@
+{
+  "generated-at": "Mar 25, 2025, 10:38:49 PM UTC",
+  "url": "https://devnet.fuel.network/v1/graphql",
+  "node-version": "0.42.0",
+  "sdk-versions": {
+    "FUEL_CORE": "0.41.9",
+    "FORC": "0.67.0",
+    "FUELS": "0.100.1"
+  },
+  "execution-count": 50,
+  "results": {
+    "simple-transfer": 1.989,
+    "missing-4x-output-variable": 2.424,
+    "inter-contract-call": 2.003,
+    "predicate-signature-validation": 2.001
+  }
+}
