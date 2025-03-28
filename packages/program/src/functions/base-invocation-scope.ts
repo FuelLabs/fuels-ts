@@ -10,6 +10,7 @@ import type {
   TransactionResponse,
   TransactionCost,
   AbstractAccount,
+  AssembleTxParams,
 } from '@fuel-ts/account';
 import {
   mergeQuantities,
@@ -302,12 +303,19 @@ export class BaseInvocationScope<TReturn = any> {
       accountCoinQuantities.push({ assetId: baseAssetId, amount: bn(0) });
     }
 
-    // eslint-disable-next-line prefer-const
-    let { assembledRequest, gasPrice } = await provider.assembleTx({
+    let params: AssembleTxParams = {
       request,
       feePayerAccount: account,
       accountCoinQuantities,
-    });
+    };
+
+    if (account.connector) {
+      const connectorParams = await account.connector.onBeforeAssembleTx(params);
+      params = { ...params, ...connectorParams };
+    }
+
+    // eslint-disable-next-line prefer-const
+    let { assembledRequest, gasPrice } = await provider.assembleTx(params);
 
     assembledRequest = assembledRequest as ScriptTransactionRequest;
 

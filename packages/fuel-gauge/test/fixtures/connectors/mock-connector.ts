@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/require-await */
 
-import type { HashableMessage } from '@fuel-ts/hasher';
-import { setTimeout } from 'timers/promises';
-
 import type {
+  HashableMessage,
   TransactionRequestLike,
   WalletUnlocked,
   FuelABI,
@@ -12,12 +10,15 @@ import type {
   SelectNetworkArguments,
   AccountSendTxParams,
   TransactionResponse,
-} from '../../src';
-import type { Asset } from '../../src/assets/types';
-import { FuelConnector } from '../../src/connectors/fuel-connector';
-import { FuelConnectorEventTypes } from '../../src/connectors/types';
+  Asset,
+  AssembleTxParams,
+} from 'fuels';
+import { Address, FuelConnector, FuelConnectorEventTypes } from 'fuels';
+import { setTimeout } from 'timers/promises';
 
-import { generateAccounts } from './generate-accounts';
+export function generateAccounts(total: number) {
+  return new Array(total).fill(0).map(() => Address.fromRandom().toString());
+}
 
 export type MockConnectorOptions = {
   name?: string;
@@ -108,6 +109,10 @@ export class MockConnector extends FuelConnector {
     return wallet.signMessage(_message);
   }
 
+  override async onBeforeAssembleTx(params: AssembleTxParams): Promise<AssembleTxParams> {
+    return params;
+  }
+
   override async sendTransaction(
     _address: string,
     _transaction: TransactionRequestLike,
@@ -117,8 +122,10 @@ export class MockConnector extends FuelConnector {
     if (!wallet) {
       throw new Error('Wallet is not found!');
     }
-    const { id } = await wallet.sendTransaction(_transaction, _params);
-    return id;
+
+    const response = await wallet.sendTransaction(_transaction, _params);
+
+    return response;
   }
 
   override async currentAccount() {

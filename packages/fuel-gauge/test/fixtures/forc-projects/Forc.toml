@@ -44,6 +44,7 @@ members = [
   "predicate-with-configurable",
   "predicate-with-more-configurables",
   "predicate-false-configurable",
+  "predicate-sol",
   "proxy-contract",
   "raw-slice-contract",
   "reentrant-bar",
