@@ -1,5 +1,5 @@
 // #region full
 import { Provider } from 'fuels';
 
-Provider.ENSURE_RPC_CONSISTENCY = false;
+Provider.ENABLE_RPC_CONSISTENCY = false;
 // #endregion full

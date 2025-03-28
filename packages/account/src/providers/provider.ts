@@ -507,7 +507,7 @@ export default class Provider {
    *
    * `true` by default.
    */
-  public static ENSURE_RPC_CONSISTENCY: boolean = true;
+  public static ENABLE_RPC_CONSISTENCY: boolean = true;
   /** @hidden */
   private static inflightFetchChainAndNodeInfoRequests: Record<string, Promise<number>> = {};
   /** @hidden */
@@ -552,7 +552,7 @@ export default class Provider {
         fullRequest = await options.requestMiddleware(fullRequest);
       }
 
-      if (Provider.ENSURE_RPC_CONSISTENCY) {
+      if (Provider.ENABLE_RPC_CONSISTENCY) {
         Provider.applyBlockHeight(fullRequest, url);
       }
 

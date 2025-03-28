@@ -81,7 +81,7 @@ function expectBlockHeight(props: ExpectBlockHeightProps) {
 describe('Block-sensitive operations have the current block height included in request', () => {
   afterEach(() => {
     vi.restoreAllMocks();
-    Provider.ENSURE_RPC_CONSISTENCY = true;
+    Provider.ENABLE_RPC_CONSISTENCY = true;
   });
 
   test('submit - block height included', async () => {
@@ -103,7 +103,7 @@ describe('Block-sensitive operations have the current block height included in r
 
     const fetchSpy = vi.spyOn(global, 'fetch');
 
-    Provider.ENSURE_RPC_CONSISTENCY = false;
+    Provider.ENABLE_RPC_CONSISTENCY = false;
 
     await provider.operations.submit({ encodedTransaction });
 
@@ -135,7 +135,7 @@ describe('Block-sensitive operations have the current block height included in r
 
     const fetchSpy = vi.spyOn(global, 'fetch');
 
-    Provider.ENSURE_RPC_CONSISTENCY = false;
+    Provider.ENABLE_RPC_CONSISTENCY = false;
 
     await provider.operations.getCoinsToSpend({
       owner: wallet.address.toB256(),
@@ -170,7 +170,7 @@ describe('Block-sensitive operations have the current block height included in r
 
     const fetchSpy = vi.spyOn(global, 'fetch');
 
-    Provider.ENSURE_RPC_CONSISTENCY = false;
+    Provider.ENABLE_RPC_CONSISTENCY = false;
 
     await provider.operations.statusChange({
       transactionId,
@@ -200,7 +200,7 @@ describe('Block-sensitive operations have the current block height included in r
 
     const fetchSpy = vi.spyOn(global, 'fetch');
 
-    Provider.ENSURE_RPC_CONSISTENCY = false;
+    Provider.ENABLE_RPC_CONSISTENCY = false;
 
     await provider.operations.submitAndAwaitStatus({
       encodedTransaction,
@@ -230,7 +230,7 @@ describe('Block-sensitive operations have the current block height included in r
 
     const fetchSpy = vi.spyOn(global, 'fetch');
 
-    Provider.ENSURE_RPC_CONSISTENCY = false;
+    Provider.ENABLE_RPC_CONSISTENCY = false;
 
     await provider.operations.getTransactionWithReceipts({
       transactionId,
