@@ -78,7 +78,7 @@ The SDK provides a way of either modifying the witnesses for a transaction reque
 
 <<< @./snippets/transaction-request/add-witness.ts#transaction-request-10{ts:line-numbers}
 
-A more complex example of adding multiple witnesses to a transaction request can be seen in the multiple signers guide [here](../cookbook/transactions-with-multiple-signers.md), which validates the signatures inside the script itself.
+A more complex example would when signatures are validated inside the script itself, like this guide [here](../cookbook/sway-script-with-signature-validation.md), .
 
 > **Note**: Once `addAccountWitnesses` has been called, any additional modifications to the transaction request will invalidate the signature as the transaction ID changes. Therefore, it is recommended to add witnesses last.
 
