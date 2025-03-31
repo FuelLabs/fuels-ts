@@ -11,7 +11,7 @@ const accountA = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const accountB = Wallet.fromPrivateKey(WALLET_PVT_KEY_2, provider);
 const baseAssetId = await provider.getBaseAssetId();
 
-// #region estimate-and-fund-2
+// #region estimate-and-fund-old
 const request = new ScriptTransactionRequest();
 
 // Add a coin output to transfer 100 base asset to accountB
@@ -23,4 +23,4 @@ await request.estimateAndFund(accountA);
 // Send the transaction
 const tx = await accountA.sendTransaction(request);
 await tx.waitForResult();
-// #endregion estimate-and-fund-2
+// #endregion estimate-and-fund-old

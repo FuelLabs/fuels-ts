@@ -11,7 +11,7 @@ const { waitForResult } = await new CounterFactory(account).deploy();
 const { contract } = await waitForResult();
 const contractId = contract.id.toB256();
 
-// #region assemble-tx-4
+// #region get-cost-and-fund-contract-call-new
 const transferAmountA = 400;
 const transferAmountB = 600;
 
@@ -48,6 +48,6 @@ const { assembledRequest } = await provider.assembleTx({
 
 const tx = await account.sendTransaction(assembledRequest);
 const { isStatusSuccess } = await tx.waitForResult();
-// #endregion assemble-tx-4
+// #endregion get-cost-and-fund-contract-call-new
 
 console.log('isStatusSuccess', isStatusSuccess);

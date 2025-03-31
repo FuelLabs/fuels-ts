@@ -6,11 +6,11 @@ The old methods of estimating and funding transaction were deprecated in favor o
 
 ### Old Approach (Deprecated)
 
-<<< @./snippets/assemble-tx/get-cost-and-fund-1.ts#get-cost-and-fund-1{ts:line-numbers}
+<<< @./snippets/assemble-tx/get-cost-and-fund-old.ts#get-cost-and-fund-old{ts:line-numbers}
 
 ### New Approach
 
-<<< @./snippets/assemble-tx/assemble-tx-3.ts#assemble-tx-3{ts:line-numbers}
+<<< @./snippets/assemble-tx/get-cost-and-fund-new.ts#get-cost-and-fund-new{ts:line-numbers}
 
 ### More Complex Transactions
 
@@ -22,21 +22,21 @@ This script will transfer 2 assets amount to the same contract address.
 
 ### Old Approach (Deprecated)
 
-<<< @./snippets/assemble-tx/get-cost-and-fund-2.ts#get-cost-and-fund-2{ts:line-numbers}
+<<< @./snippets/assemble-tx/get-cost-and-fund-contract-call-old.ts#get-cost-and-fund-contract-call-old{ts:line-numbers}
 
 ### New Approach
 
-<<< @./snippets/assemble-tx/assemble-tx-4.ts#assemble-tx-4{ts:line-numbers}
+<<< @./snippets/assemble-tx/get-cost-and-fund-contract-call-new.ts#get-cost-and-fund-contract-call-new{ts:line-numbers}
 
 ## Migrating from `estimateAndFund`
 
 ### Old Code
 
-<<< @./snippets/assemble-tx/estimate-and-fund-2.ts#estimate-and-fund-2{ts:line-numbers}
+<<< @./snippets/assemble-tx/estimate-and-fund-old.ts#estimate-and-fund-old{ts:line-numbers}
 
 ### New Code
 
-<<< @./snippets/assemble-tx/assemble-tx-2.ts#assemble-tx-2{ts:line-numbers}
+<<< @./snippets/assemble-tx/estimate-and-fund-new.ts#estimate-and-fund-new{ts:line-numbers}
 
 ### Key Differences
 
