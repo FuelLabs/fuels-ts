@@ -1,5 +1,10 @@
 // #region assemble-tx-default-behaviors
-import { Provider, ScriptTransactionRequest, Wallet, type AccountCoinQuantity } from 'fuels';
+import {
+  Provider,
+  ScriptTransactionRequest,
+  Wallet,
+  type AccountCoinQuantity,
+} from 'fuels';
 import { TestAssetId } from 'fuels/test-utils';
 
 import {

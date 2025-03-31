@@ -29,7 +29,6 @@ await request.estimateAndFund(account, {
 });
 // #endregion estimate-and-fund-1
 
-
 const { assembledRequest } = await provider.assembleTx({
   request,
   feePayerAccount: account,

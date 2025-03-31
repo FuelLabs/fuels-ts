@@ -32,7 +32,6 @@ const accountCoinQuantities: AccountCoinQuantity[] = [
 
 console.log('accountCoinQuantities', accountCoinQuantities);
 
-
 const promise = provider.assembleTx({
   request,
   feePayerAccount: accountA,
