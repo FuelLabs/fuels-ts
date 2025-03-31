@@ -24,3 +24,6 @@ await request.estimateAndFund(accountA);
 const tx = await accountA.sendTransaction(request);
 await tx.waitForResult();
 // #endregion estimate-and-fund-old
+
+const { isStatusSuccess } = await tx.waitForResult();
+console.log('isStatusSuccess', isStatusSuccess);

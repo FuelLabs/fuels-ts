@@ -1,5 +1,5 @@
 // #region assemble-tx-default-behaviors
-import { Provider, Wallet, type AccountCoinQuantity } from 'fuels';
+import { Provider, ScriptTransactionRequest, Wallet, type AccountCoinQuantity } from 'fuels';
 import { TestAssetId } from 'fuels/test-utils';
 
 import {
@@ -38,3 +38,14 @@ const accountCoinQuantities: AccountCoinQuantity[] = [
 // #endregion assemble-tx-default-behaviors
 
 console.log('accountCoinQuantities', accountCoinQuantities);
+
+const request = new ScriptTransactionRequest();
+const { assembledRequest } = await provider.assembleTx({
+  request,
+  feePayerAccount: accountA,
+  accountCoinQuantities,
+});
+
+const tx = await accountA.sendTransaction(assembledRequest);
+const { isStatusSuccess } = await tx.waitForResult();
+console.log('isStatusSuccess', isStatusSuccess);

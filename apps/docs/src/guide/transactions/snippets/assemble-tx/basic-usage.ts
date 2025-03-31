@@ -44,3 +44,6 @@ await submit.waitForResult();
 console.log('assembledRequest', assembledRequest);
 console.log('gasPrice', gasPrice);
 console.log('receipts', receipts);
+
+const { isStatusSuccess } = await submit.waitForResult();
+console.log('isStatusSuccess', isStatusSuccess);

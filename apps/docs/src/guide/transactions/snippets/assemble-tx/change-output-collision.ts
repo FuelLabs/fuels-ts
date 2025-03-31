@@ -31,3 +31,15 @@ const accountCoinQuantities: AccountCoinQuantity[] = [
 // #endregion change-output-collision
 
 console.log('accountCoinQuantities', accountCoinQuantities);
+
+
+const promise = provider.assembleTx({
+  request,
+  feePayerAccount: accountA,
+  accountCoinQuantities,
+});
+
+expect(promise).rejects.toThrow();
+expect(promise).rejects.toMatchObject({
+  code: 'change-output-collision',
+});

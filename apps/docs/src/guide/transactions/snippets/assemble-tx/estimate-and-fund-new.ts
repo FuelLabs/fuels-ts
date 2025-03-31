@@ -33,3 +33,6 @@ const { assembledRequest } = await provider.assembleTx({
 const tx = await accountA.sendTransaction(assembledRequest);
 await tx.waitForResult();
 // #endregion estimate-and-fund-new
+
+const { isStatusSuccess } = await tx.waitForResult();
+console.log('isStatusSuccess', isStatusSuccess);
