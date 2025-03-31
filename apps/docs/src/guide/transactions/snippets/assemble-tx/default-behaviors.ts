@@ -9,7 +9,6 @@ import {
   WALLET_PVT_KEY_3,
 } from '../../../../env';
 
-// #region transaction-request-3
 const provider = new Provider(LOCAL_NETWORK_URL);
 const accountA = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const accountB = Wallet.fromPrivateKey(WALLET_PVT_KEY_2, provider);
