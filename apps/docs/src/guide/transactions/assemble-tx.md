@@ -61,6 +61,45 @@ The method returns an object of the type [AssembleTxResponse](DOCS_API_URL/types
 
 <<< @./snippets/assemble-tx/basic-usage.ts#assemble-tx-basic-usage{ts:line-numbers}
 
+## Attention to `account` and `changeOutputAccount` Fields
+
+As mentioned earlier, the `account` and `changeOutputAccount` fields are optional in the `accountCoinQuantities` entries. However, **special attention must be paid to** `changeOutputAccount` due to how change from spent resources works on Fuel.
+
+In Fuel, only one `OutputChange` is allowed per `assetId` in a transaction. But what exactly is an `OutputChange`? In simple terms, it designates the recipient of the leftover funds ("change") after all UTXO resources for a specific `assetId` have been spent.
+
+### Understanding Change in Fuel's UTXO Model
+
+Because Fuel uses a **UTXO-based model** (unlike Ethereum’s account-based model), transactions will spend all included UTXOs, even if only a small portion is actually required. For example, suppose you have a single UTXO worth 10 ETH. If you create a transaction to send just 1 gwei, the entire 10 ETH UTXO will be consumed. The transaction will then:
+
+- Create a UTXO with 1 gwei to the recipient.
+- Create another UTXO for the remaining amount (i.e., 10 ETH - 1 gwei - fee), sent to the address defined in the `OutputChange`.
+
+In this context, the `OutputChange` ensures that **you receive the change** from your transaction.
+
+### Fuel's Constraint: One Change Output per `assetId`
+
+A key rule in Fuel is that only one `OutputChange` per `assetId` is allowed per transaction. This becomes particularly important when a transaction includes resources from **multiple accounts** that hold the same `assetId` (e.g., ETH). In such a case, **only one account can receive the change**, whichever one is defined on the `OutputChange`.
+
+If not managed correctly, this can lead to unintended behavior, such as one account spending its funds while another receives the leftover balance.
+
+### How This Relates to `assembleTx`
+
+The `changeOutputAccount` field in `assembleTx` explicitly specifies **which account should receive the change** for a particular `assetId`. This is critical when you're using resources from multiple accounts in the same transaction.
+
+Here's an example:
+
+<<< @./snippets/assemble-tx/multiple-output-change.ts#multiple-output-change{ts:line-numbers}
+
+In the example above:
+
+- Resources from `accountB` are being explicitly requested in `accountCoinQuantities`.
+- `accountA` is listed as the `feePayerAccount`, meaning it will also contribute resources to cover fees.
+- `changeOutputAccount` is explicitly set to `accountB`.
+
+As a result, `accountB` will receive the change, even if UTXOs from `accountA` are spent in the transaction.
+
+This means that if `accountA` contributes a 10 ETH UTXO, the transaction will spend the full 10 ETH. The leftover amount (change) will be sent to `accountB`, not back to `accountA`, because `changeOutputAccount`is set to `accountB`.
+
 ## Error Handling
 
 The method may throw the following error:
