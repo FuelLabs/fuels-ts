@@ -47,9 +47,9 @@ import type Provider from '../provider';
 import type { TransactionRequestInput, TransactionRequestOutput } from '../transaction-request';
 import type { TransactionResultReceipt } from '../transaction-response';
 
-type RawInput = GqlInputCoinFragment | GqlInputMessageFragment | GqlInputContractFragment;
+type InputJson = GqlInputCoinFragment | GqlInputMessageFragment | GqlInputContractFragment;
 
-type RawOutput =
+type OutputJson =
   | GqlOutputCoinFragment
   | GqlOutputChangeFragment
   | GqlOutputVariableFragment
@@ -461,7 +461,7 @@ export const deserializeReceipt = (receipt: TransactionReceiptJson): Transaction
   }
 };
 
-export const deserializeInput = (input: RawInput) => {
+export const deserializeInput = (input: InputJson) => {
   let parsedInput: TransactionRequestInput;
 
   switch (input.type) {
@@ -511,7 +511,7 @@ export const deserializeInput = (input: RawInput) => {
   return parsedInput;
 };
 
-export const deserializeOutput = (output: RawOutput) => {
+export const deserializeOutput = (output: OutputJson) => {
   let parsedOutput: TransactionRequestOutput;
 
   switch (output.type) {
