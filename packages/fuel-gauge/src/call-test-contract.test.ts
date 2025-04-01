@@ -268,9 +268,11 @@ describe('CallTestContract', () => {
 
   it('Calling a simple contract function does NOT execute dry run (Using assembleTx)', async () => {
     using contract = await setupContract();
-    const dryRunSpy = vi.spyOn(contract.provider.operations, 'dryRun');
+    const dryRun = vi.spyOn(contract.provider.operations, 'dryRun');
+    const assembleTx = vi.spyOn(contract.provider.operations, 'assembleTx');
     await contract.functions.no_params().call();
-    expect(dryRunSpy).not.toHaveBeenCalledOnce();
+    expect(dryRun).not.toHaveBeenCalledOnce();
+    expect(assembleTx).toHaveBeenCalledOnce();
   });
 
   it('Simulating a simple contract function does one dry runs', async () => {
