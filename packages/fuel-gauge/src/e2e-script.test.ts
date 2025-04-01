@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
-import { DEVNET_NETWORK_URL } from '@fuel-ts/account/configs';
+import { DEVNET_NETWORK_URL, TESTNET_NETWORK_URL } from '@fuel-ts/account/configs';
 import { WalletUnlocked, Provider, TransactionType, CHAIN_IDS, rawAssets, assets, bn } from 'fuels';
 
 import { ScriptMainArgBool } from '../test/typegen';
 
 enum Networks {
   DEVNET = 'devnet',
-  // TESTNET = 'testnet',
+  TESTNET = 'testnet',
 }
 
 type ConfiguredNetwork = {
@@ -32,17 +32,17 @@ const configuredNetworks = {
         '0x94bc2a189b8211796c8fe5b9c6b67624fe97d2007e104bf1b30739944f43bd73',
     },
   } as ConfiguredNetwork,
-  // [Networks.TESTNET]: {
-  //   networkUrl: TESTNET_NETWORK_URL,
-  //   privateKey: process.env.TESTNET_WALLET_PVT_KEY,
-  //   faucetUrl: `https://faucet-testnet.fuel.network/`,
-  //   txIds: {
-  //     [TransactionType.Upgrade]:
-  //       '0xd64e3f7589bc1c6dcf1e419f4a3a8fc21d3694abf98f151000f34682d1cacdce',
-  //     [TransactionType.Upload]:
-  //       '0x996eec87a702ac978663fe67dbde7ab94d31f32b1860fbfc527d4b5447b3446c',
-  //   },
-  // } as ConfiguredNetwork,
+  [Networks.TESTNET]: {
+    networkUrl: TESTNET_NETWORK_URL,
+    privateKey: process.env.TESTNET_WALLET_PVT_KEY,
+    faucetUrl: `https://faucet-testnet.fuel.network/`,
+    txIds: {
+      [TransactionType.Upgrade]:
+        '0xd64e3f7589bc1c6dcf1e419f4a3a8fc21d3694abf98f151000f34682d1cacdce',
+      [TransactionType.Upload]:
+        '0x996eec87a702ac978663fe67dbde7ab94d31f32b1860fbfc527d4b5447b3446c',
+    },
+  } as ConfiguredNetwork,
 };
 
 const selectedNetworks: Networks[] = [Networks.DEVNET];
