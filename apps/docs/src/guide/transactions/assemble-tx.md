@@ -69,10 +69,10 @@ In Fuel, only one `OutputChange` is allowed per `assetId` in a transaction. But 
 
 ### Understanding Change in Fuel's UTXO Model
 
-Because Fuel uses a **UTXO-based model** (unlike Ethereum’s account-based model), transactions will spend all included UTXOs, even if only a small portion is actually required. For example, suppose you have a single UTXO worth 10 ETH. If you create a transaction to send just 1 gwei, the entire 10 ETH UTXO will be consumed. The transaction will then:
+Because Fuel uses a **UTXO-based model** (unlike Ethereum’s account-based model), transactions will spend all included UTXOs, even if only a small portion is actually required. For example, suppose you have a single UTXO worth 10 ETH. If you create a transaction to send just 1 Gwei, the entire 10 ETH UTXO will be consumed. The transaction will then:
 
-- Create a UTXO with 1 gwei to the recipient.
-- Create another UTXO for the remaining amount (i.e., 10 ETH - 1 gwei - fee), sent to the address defined in the `OutputChange`.
+- Create a UTXO with 1 Gwei to the recipient.
+- Create another UTXO for the remaining amount (i.e., 10 ETH - 1 Gwei - fee), sent to the address defined in the `OutputChange`.
 
 In this context, the `OutputChange` ensures that **you receive the change** from your transaction.
 
