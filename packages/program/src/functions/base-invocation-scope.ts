@@ -234,7 +234,7 @@ export class BaseInvocationScope<TReturn = any> {
    *
    * @returns The transaction cost details.
    *
-   * @deprecated Use contract.assembleTx instead
+   * @deprecated Use contract.fundWithRequiredCoins instead
    * Check the migration guide https://docs.fuel.network/guide/assembling-transactions/migration-guide.html for more information.
    */
   async getTransactionCost(): Promise<TransactionCost> {
@@ -491,6 +491,8 @@ export class BaseInvocationScope<TReturn = any> {
    * Executes a transaction in dry run mode.
    *
    * @returns The result of the invocation call.
+   *
+   * @deprecated Use .get instead
    */
   async dryRun<T = TReturn>(): Promise<DryRunResult<T>> {
     const { receipts } = await this.getTransactionCost();
