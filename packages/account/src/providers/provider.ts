@@ -136,6 +136,11 @@ export type Block = {
   };
 };
 
+export type ResourcesIDsToIgnore = {
+  utxos?: BytesLike[];
+  messages?: BytesLike[];
+};
+
 export type AccountCoinQuantity = {
   assetId: string;
   amount: BigNumberish;
