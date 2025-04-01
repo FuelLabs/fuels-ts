@@ -6,10 +6,11 @@ import type {
 import type { BigNumberish, Account } from 'fuels';
 import {
   bn,
-  ErrorCode,
   ScriptTransactionRequest,
   Wallet,
   resolveAccountForAssembleTxParams,
+  ErrorCode,
+  FuelError,
 } from 'fuels';
 import { expectToThrowFuelError, launchTestNode, TestAssetId, TestMessage } from 'fuels/test-utils';
 
@@ -244,47 +245,6 @@ describe('assembleTx', () => {
     });
   });
 
-  it('should default changeOutputAccount to request changeOutput if exists', async () => {
-    const { provider, wallet1, wallet2, baseAssetId, request, spy, transferAmount } =
-      await setupTest({ transferAmount: 1500 });
-
-    request.addChangeOutput(wallet2.address, baseAssetId);
-
-    const { assembledRequest } = await provider.assembleTx({
-      request,
-      feePayerAccount: wallet1,
-      accountCoinQuantities: [
-        {
-          amount: transferAmount,
-          assetId: baseAssetId,
-        },
-      ],
-    });
-
-    const tx = await wallet1.sendTransaction(assembledRequest);
-    const { isStatusSuccess } = await tx.waitForResult();
-
-    expect(isStatusSuccess).toBeTruthy();
-
-    const call = spy.mock.calls[0][0];
-
-    validateRequiredBalance({
-      requiredBalance: call.requiredBalances,
-      index: 0,
-      account: wallet1,
-      amount: transferAmount,
-      assetId: baseAssetId,
-      changeAccount: wallet2,
-    });
-
-    validateFeePayer({
-      requiredBalance: call.requiredBalances,
-      feePayerIndex: call.feeAddressIndex,
-      payerAccount: wallet1,
-      baseAssetId,
-    });
-  });
-
   it('should validate OutputChange collision', async () => {
     const { provider, wallet1, wallet2, baseAssetId, request, transferAmount } = await setupTest({
       transferAmount: 1500,
@@ -306,7 +266,42 @@ describe('assembleTx', () => {
             },
           ],
         }),
-      { code: ErrorCode.CHANGE_OUTPUT_COLLISION }
+      new FuelError(
+        ErrorCode.CHANGE_OUTPUT_COLLISION,
+        `OutputChange address for asset ${baseAssetId} differs between transaction request and assembleTx parameters.`
+      )
+    );
+  });
+
+  it('should validate OutputChange collision, multiple changeOutputAccount for same assetId', async () => {
+    const { provider, wallet1, wallet2, request, transferAmount } = await setupTest({
+      transferAmount: 1500,
+    });
+
+    await expectToThrowFuelError(
+      () =>
+        provider.assembleTx({
+          request,
+          feePayerAccount: wallet1,
+          accountCoinQuantities: [
+            {
+              account: wallet1,
+              amount: transferAmount,
+              assetId: TestAssetId.A.value,
+              changeOutputAccount: wallet1,
+            },
+            {
+              account: wallet1,
+              amount: transferAmount,
+              assetId: TestAssetId.A.value,
+              changeOutputAccount: wallet2,
+            },
+          ],
+        }),
+      new FuelError(
+        ErrorCode.CHANGE_OUTPUT_COLLISION,
+        `The parameter 'accountCoinQuantities' of assembleTx contains duplicate entries for the same assetId with different changeOutputAccount.`
+      )
     );
   });
 
