@@ -100,26 +100,6 @@ As a result, `accountB` will receive the change, even if UTXOs from `accountA` a
 
 This means that if `accountA` contributes a 10 ETH UTXO, the transaction will spend the full 10 ETH. The leftover amount (change) will be sent to `accountB`, not back to `accountA`, because `changeOutputAccount`is set to `accountB`.
 
-## Error Handling
-
-The method may throw the following error:
-
-### `CHANGE_OUTPUT_COLLISION`
-
-This error occurs when there's a conflict between the change output specified in the transaction request and the one specified in the `assembleTx` parameters. Specifically, it happens when:
-
-1. The transaction request already has a change output set for a specific asset ID and address
-2. The `assembleTx` parameters specify a different change output for the same asset ID
-
-Here's an example that demonstrates this error:
-
-<<< @./snippets/assemble-tx/change-output-collision.ts#change-output-collision{ts:line-numbers}
-
-In this example, the error occurs because:
-
-1. The transaction request has a change output to `accountB` for the `baseAssetId`
-2. The `accountCoinQuantities` specifies a change output to `accountA` for the same `baseAssetId`
-
 ## Best Practices
 
 1. Always provide the correct `feePayerAccount` that has sufficient funds for the transaction fees
