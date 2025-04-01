@@ -65,7 +65,7 @@ The method returns an object of the type [AssembleTxResponse](DOCS_API_URL/types
 
 The method may throw the following error:
 
-### CHANGE_OUTPUT_COLLISION
+### `CHANGE_OUTPUT_COLLISION`
 
 This error occurs when there's a conflict between the change output specified in the transaction request and the one specified in the `assembleTx` parameters. Specifically, it happens when:
 
