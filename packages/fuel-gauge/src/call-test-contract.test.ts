@@ -273,7 +273,7 @@ describe('CallTestContract', () => {
     expect(dryRunSpy).not.toHaveBeenCalledOnce();
   });
 
-  it('Simulating a simple contract function does two dry runs', async () => {
+  it('Simulating a simple contract function does one dry runs', async () => {
     using contract = await setupContract();
     const dryRunSpy = vi.spyOn(contract.provider.operations, 'dryRun');
 
