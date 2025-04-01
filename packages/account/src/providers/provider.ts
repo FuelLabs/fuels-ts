@@ -2718,6 +2718,13 @@ export default class Provider {
 
   /**
    * @hidden
+   *
+   * This helper adjusts the resources to be excluded for a given set of addresses.
+   * Supporting multiple addresses is important because of the `assembleTx` method,
+   * which may be invoked with different addresses. It handles both messages and UTXOs,
+   * ensuring the total number of inputs does not exceed the maximum allowed by the chain's
+   * consensus parameters. The resources specified in the `excludedIds` parameter have priority
+   * over those retrieved from the cache.
    */
   private async adjustExcludeResourcesForAddress(
     addresses: string[],
