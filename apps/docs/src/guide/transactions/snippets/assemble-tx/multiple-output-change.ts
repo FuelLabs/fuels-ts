@@ -17,7 +17,7 @@ const request = new ScriptTransactionRequest();
 request.addCoinOutput(accountB.address, transferAmount, baseAssetId);
 
 // #region multiple-output-change
-const { assembledRequest } = await provider.assembleTx({
+let { assembledRequest } = await provider.assembleTx({
   request,
   feePayerAccount: accountA,
   accountCoinQuantities: [
@@ -35,6 +35,9 @@ const { assembledRequest } = await provider.assembleTx({
   ],
 });
 // #endregion multiple-output-change
+
+assembledRequest =
+  await accountB.populateTransactionWitnessesSignature(assembledRequest);
 
 const submit = await accountA.sendTransaction(assembledRequest);
 await submit.waitForResult();
