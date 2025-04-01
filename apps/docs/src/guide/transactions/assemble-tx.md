@@ -27,7 +27,7 @@ The [AssembleTxParams](DOCS_API_URL/types/_fuel_ts_account.AssembleTxParams.html
   - `amount`: The amount of coins needed (fee value does need to be included)
   - `assetId`: The asset ID of the coins
   - `account`: The account providing the coins (optional, defaults to `feePayerAccount`)
-  - `changeOutputAccount`: The account to receive change (optional, defaults to the account property)
+  - `changeOutputAccount`: The account to receive change (optional, defaults to the `account` or `feePayerAccount` properties, respectively)
 - `excludeInput`: Resources to exclude when funding the transaction (UTXOs or messages)
 - `estimatePredicates`: Whether to estimate gas for predicates
 - `reserveGas`: Additional Amount of gas to be set for the transaction
