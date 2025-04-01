@@ -596,6 +596,9 @@ export class Account extends AbstractAccount implements WithAddress {
    * @param transactionCostParams - The transaction cost parameters (optional).
    *
    * @returns A promise that resolves to the transaction cost object.
+   *
+   * @deprecated Use provider.assembleTx instead
+   * Check the migration guide https://docs.fuel.network/guide/assembling-transactions/migration-guide.html for more information.
    */
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
