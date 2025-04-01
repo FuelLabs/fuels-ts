@@ -346,3 +346,10 @@ This error occurs when there's a conflict between the change output specified in
 
 1. The transaction request already has a change output set for a specific asset ID and address
 2. The `assembleTx` parameters specify a different change output for the same asset ID
+
+### `DUPLICATE_CHANGE_OUTPUT_ACCOUNT`
+
+This error occurs when there are duplicate entries for the same asset ID with different `changeOutputAccount` values in the `accountCoinQuantities` parameter of the `assembleTx` method:
+
+1. The `accountCoinQuantities` parameter contains multiple entries for the same asset ID
+2. Each entry specifies a different `changeOutputAccount` for the same asset ID
