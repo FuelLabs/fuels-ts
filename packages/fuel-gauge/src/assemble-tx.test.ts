@@ -299,8 +299,8 @@ describe('assembleTx', () => {
           ],
         }),
       new FuelError(
-        ErrorCode.CHANGE_OUTPUT_COLLISION,
-        `The parameter 'accountCoinQuantities' of assembleTx contains duplicate entries for the same assetId with different changeOutputAccount.`
+        ErrorCode.DUPLICATE_CHANGE_OUTPUT_ACCOUNT,
+        `The parameter 'accountCoinQuantities' of assembleTx contains duplicate entries for the same assetId with different 'changeOutputAccount'.`
       )
     );
   });

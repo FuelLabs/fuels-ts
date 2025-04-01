@@ -87,6 +87,7 @@ export enum ErrorCode {
   MAX_OUTPUTS_EXCEEDED = 'max-outputs-exceeded',
   ASSET_BURN_DETECTED = 'asset-burn-detected',
   CHANGE_OUTPUT_COLLISION = 'change-output-collision',
+  DUPLICATE_CHANGE_OUTPUT_ACCOUNT = 'duplicate-change-output-account',
 
   // receipt
   INVALID_RECEIPT_TYPE = 'invalid-receipt-type',
