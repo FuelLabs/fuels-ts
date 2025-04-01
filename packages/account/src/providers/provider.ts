@@ -1752,54 +1752,13 @@ export default class Provider {
      */
     let baseAssetChange: string | undefined;
 
-    /**
-     * Get all change outputs that are present in the request.
-     */
-    const requestChanges = request.getChangeOutputs();
-
     const requiredBalances = accountCoinQuantities.map((quantity, index) => {
       // When the `account` property is not provided, it defaults to the fee payer account.
       const { amount, assetId, account = feePayerAccount, changeOutputAccount } = quantity;
-      const setChangeOnRequest = requestChanges.find((change) => change.assetId === assetId);
 
-      let changeAccountAddress: string;
-
-      if (changeOutputAccount && setChangeOnRequest) {
-        /**
-         * Case 1: The change output for this assetId was informed with `changeOutputAccount` property and it
-         * also exists within the `request.outputs`
-         */
-        const sameAddress = String(setChangeOnRequest.to) === changeOutputAccount.address.toB256();
-
-        /**
-         * If the both change outputs (`changeOutputAccount` and the one set on the request) are for different addresses,
-         * throw an error.
-         */
-        if (!sameAddress) {
-          throw new FuelError(
-            ErrorCode.CHANGE_OUTPUT_COLLISION,
-            `OutputChange address for asset ${assetId} differs between transaction request and assembleTx inputs.`
-          );
-        }
-        changeAccountAddress = changeOutputAccount.address.toB256();
-      } else if (setChangeOnRequest) {
-        /**
-         * Case 2: The change output for this assetId is set on the request only, so use it
-         */
-        changeAccountAddress = String(setChangeOnRequest.to);
-      } else if (changeOutputAccount) {
-        /**
-         * Case 3: The change output was informed with `changeOutputAccount` and not set on the request
-         */
-        changeAccountAddress = changeOutputAccount.address.toB256();
-      } else {
-        /**
-         * Case 4: The change output for this assetId was neither informed with `changeOutputAccount` nor set on the request,
-         * so use the one from the `account` property.
-         */
-
-        changeAccountAddress = account.address.toB256();
-      }
+      const changeAccountAddress = changeOutputAccount
+        ? changeOutputAccount.address.toB256()
+        : account.address.toB256();
 
       allAddresses.add(account.address.toB256());
 
