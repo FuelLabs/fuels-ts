@@ -28,6 +28,7 @@ members = [
   "return-true-predicate",
   "script-main-args",
   "script-signing",
+  "script-log-simple",
   "script-sum",
   "script-transfer-to-contract",
   "simple-predicate",
