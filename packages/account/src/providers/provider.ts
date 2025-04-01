@@ -166,7 +166,6 @@ export type AssembleTxResponse<T extends TransactionRequest = TransactionRequest
   gasPrice: BN;
   receipts: TransactionResultReceipt[];
 };
-
 // #endregion assemble-tx-params
 export type PageInfo = GqlPageInfo;
 
