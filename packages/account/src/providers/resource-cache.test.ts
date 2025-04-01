@@ -13,8 +13,10 @@ import {
 import type { Coin } from './coin';
 import type { Message } from './message';
 import type Provider from './provider';
+import type { ResourcesIDsToIgnore } from './provider';
 import { DEFAULT_RESOURCE_CACHE_TTL } from './provider';
-import { isCoin, type ExcludeResourcesOption } from './resource';
+import type { ExcludeResourcesOption } from './resource';
+import { isCoin } from './resource';
 import { ResourceCache } from './resource-cache';
 import type {
   CoinTransactionRequestInput,
@@ -35,13 +37,13 @@ describe('Resource Cache', () => {
 
   const inputsToExcludeResourcesOption = (
     inputs: Array<CoinTransactionRequestInput | MessageTransactionRequestInput>
-  ): ExcludeResourcesOption =>
+  ): ResourcesIDsToIgnore =>
     inputs.reduce(
       (acc, input) => {
         isRequestInputCoin(input) ? acc.utxos.push(input.id) : acc.messages.push(input.nonce);
         return acc;
       },
-      { utxos: [], messages: [] } as Required<ExcludeResourcesOption>
+      { utxos: [], messages: [] } as Required<ResourcesIDsToIgnore>
     );
 
   const extractBaseAssetAndMaxInputs = async (provider: Provider) => {
@@ -738,7 +740,7 @@ describe('Resource Cache', () => {
     );
 
     provider.cache?.set(owner, fakeInputs);
-    const activeData = provider.cache?.getActiveData(owner) as Required<ExcludeResourcesOption>;
+    const activeData = provider.cache?.getActiveData(owner) as Required<ResourcesIDsToIgnore>;
     const totalCached = activeData.utxos.length + activeData.messages.length;
 
     expect(totalCached).toBeGreaterThan(maxInputs);

@@ -40,6 +40,7 @@ import type {
   GqlSubmitAndAwaitStatusSubscription,
   GqlGetTransactionWithReceiptsQuery,
   GqlGetTransactionsByOwnerQuery,
+  GqlExcludeInput,
 } from './__generated__/operations';
 import { resolveAccountForAssembleTxParams } from './assemble-tx-helpers';
 import type { Coin } from './coin';
@@ -47,7 +48,7 @@ import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
 import { FuelGraphqlSubscriber } from './fuel-graphql-subscriber';
 import type { Message, MessageCoin, MessageProof, MessageStatus } from './message';
-import type { ExcludeResourcesOption, Resource } from './resource';
+import type { Resource } from './resource';
 import { ResourceCache } from './resource-cache';
 import type {
   TransactionRequestLike,
@@ -160,8 +161,8 @@ export type AssembleTxParams<T extends TransactionRequest = TransactionRequest> 
   blockHorizon?: number;
   // Whether to estimate predicates (default: true)
   estimatePredicates?: boolean;
-  // Resources to exclude from the transaction (optional)
-  excludeInput?: ExcludeResourcesOption;
+  // Resources to be ignored when funding the transaction (optional)
+  resourcesIDsToIgnore?: ResourcesIDsToIgnore;
   // Amount of gas to reserve (optional)
   reserveGas?: number;
 };
@@ -1727,7 +1728,7 @@ export default class Provider {
     const {
       request,
       reserveGas,
-      excludeInput,
+      resourcesIDsToIgnore,
       feePayerAccount,
       blockHorizon = 10,
       estimatePredicates = true,
@@ -1849,9 +1850,9 @@ export default class Provider {
      * Retrieving from the cache the resources IDs that should be excluded based on the addresses
      * that are involved in the transaction.
      */
-    const idsToExclude = await this.adjustExcludeResourcesForAddress(
+    const excludeInput = await this.adjustResourcesToIgnoreForAddresses(
       Array.from(allAddresses),
-      excludeInput
+      resourcesIDsToIgnore
     );
 
     const {
@@ -1862,7 +1863,7 @@ export default class Provider {
       feeAddressIndex: String(feePayerIndex),
       requiredBalances,
       estimatePredicates,
-      excludeInput: idsToExclude,
+      excludeInput,
       reserveGas: reserveGas ? reserveGas.toString(10) : undefined,
     });
 
@@ -1937,19 +1938,19 @@ export default class Provider {
    *
    * @param owner - The address to get resources for.
    * @param quantities - The coin quantities to get.
-   * @param excludedIds - IDs of excluded resources from the selection (optional).
+   * @param resourcesIDsToIgnore - IDs of excluded resources from the selection (optional).
    * @returns A promise that resolves to the resources.
    */
   async getResourcesToSpend(
     owner: AddressInput,
     quantities: CoinQuantityLike[],
-    excludedIds?: ExcludeResourcesOption
+    resourcesIDsToIgnore?: ResourcesIDsToIgnore
   ): Promise<Resource[]> {
     const ownerAddress = new Address(owner);
 
-    const idsToExclude = await this.adjustExcludeResourcesForAddress(
+    const excludedIds = await this.adjustResourcesToIgnoreForAddresses(
       [ownerAddress.b256Address],
-      excludedIds
+      resourcesIDsToIgnore
     );
 
     const coinsQuery = {
@@ -1961,7 +1962,7 @@ export default class Provider {
           amount: (amount.eqn(0) ? bn(1) : amount).toString(10),
           max: maxPerAsset ? maxPerAsset.toString(10) : undefined,
         })),
-      excludedIds: idsToExclude,
+      excludedIds,
     };
 
     const result = await this.operations.getCoinsToSpend(coinsQuery);
@@ -2728,16 +2729,16 @@ export default class Provider {
    * Supporting multiple addresses is important because of the `assembleTx` method,
    * which may be invoked with different addresses. It handles both messages and UTXOs,
    * ensuring the total number of inputs does not exceed the maximum allowed by the chain's
-   * consensus parameters. The resources specified in the `excludedIds` parameter have priority
+   * consensus parameters. The resources specified in the `resourcesIDsToIgnore` parameter have priority
    * over those retrieved from the cache.
    */
-  private async adjustExcludeResourcesForAddress(
+  private async adjustResourcesToIgnoreForAddresses(
     addresses: string[],
-    excludedIds?: ExcludeResourcesOption
-  ) {
+    resourcesIDsToIgnore?: ResourcesIDsToIgnore
+  ): Promise<GqlExcludeInput> {
     const final = {
-      messages: excludedIds?.messages?.map((nonce) => hexlify(nonce)) || [],
-      utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
+      messages: resourcesIDsToIgnore?.messages?.map((nonce) => hexlify(nonce)) || [],
+      utxos: resourcesIDsToIgnore?.utxos?.map((id) => hexlify(id)) || [],
     };
 
     if (this.cache) {

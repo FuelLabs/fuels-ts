@@ -16,7 +16,7 @@ import {
 import type {
   CallResult,
   CoinQuantityLike,
-  ExcludeResourcesOption,
+  ResourcesIDsToIgnore,
   Provider,
   Resource,
   TransactionRequest,
@@ -213,17 +213,17 @@ export class Predicate<
    * Retrieves resources satisfying the spend query for the account.
    *
    * @param quantities - IDs of coins to exclude.
-   * @param excludedIds - IDs of resources to be excluded from the query.
+   * @param resourcesIDsToIgnore - IDs of resources to be excluded from the query.
    * @returns A promise that resolves to an array of Resources.
    */
   override async getResourcesToSpend(
-    quantities: CoinQuantityLike[] /** IDs of coins to exclude */,
-    excludedIds?: ExcludeResourcesOption
+    quantities: CoinQuantityLike[],
+    resourcesIDsToIgnore?: ResourcesIDsToIgnore
   ): Promise<Resource[]> {
     const resources = await this.provider.getResourcesToSpend(
       this.address,
       quantities,
-      excludedIds
+      resourcesIDsToIgnore
     );
     return resources.map((resource) => ({
       ...resource,

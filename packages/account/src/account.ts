@@ -18,7 +18,7 @@ import type {
   CoinQuantityLike,
   CoinQuantity,
   Resource,
-  ExcludeResourcesOption,
+  ResourcesIDsToIgnore,
   Provider,
   ScriptTransactionRequestLike,
   TransactionCost,
@@ -158,14 +158,14 @@ export class Account extends AbstractAccount implements WithAddress {
    * Retrieves resources satisfying the spend query for the account.
    *
    * @param quantities - Quantities of resources to be obtained.
-   * @param excludedIds - IDs of resources to be excluded from the query (optional).
+   * @param resourcesIDsToIgnore - IDs of resources to be excluded from the query (optional).
    * @returns A promise that resolves to an array of Resources.
    */
   async getResourcesToSpend(
     quantities: CoinQuantityLike[],
-    excludedIds?: ExcludeResourcesOption
+    resourcesIDsToIgnore?: ResourcesIDsToIgnore
   ): Promise<Resource[]> {
-    return this.provider.getResourcesToSpend(this.address, quantities, excludedIds);
+    return this.provider.getResourcesToSpend(this.address, quantities, resourcesIDsToIgnore);
   }
 
   /**
