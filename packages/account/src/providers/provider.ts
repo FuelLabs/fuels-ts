@@ -171,6 +171,7 @@ export type AssembleTxResponse<T extends TransactionRequest = TransactionRequest
   assembledRequest: T;
   gasPrice: BN;
   receipts: TransactionResultReceipt[];
+  rawReceipts: TransactionReceiptJson[];
 };
 // #endregion assemble-tx-params
 export type PageInfo = GqlPageInfo;
@@ -1845,10 +1846,19 @@ export default class Provider {
       (request as ScriptTransactionRequest).gasLimit = bn(gqlTransaction.scriptGasLimit);
     }
 
+    const rawReceipts = status.receipts;
+    const chainId = await this.getChainId();
+
+    request.updateState(chainId, 'funded', {
+      gasPrice: gasPrice.toString(),
+      receipts: rawReceipts,
+    });
+
     return {
       assembledRequest: request,
       gasPrice: bn(gasPrice),
       receipts: status.receipts.map(deserializeReceipt),
+      rawReceipts,
     };
   }
 
