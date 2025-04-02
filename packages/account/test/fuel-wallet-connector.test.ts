@@ -743,17 +743,19 @@ describe('Fuel Connector', () => {
 
     const request = new ScriptTransactionRequest();
     request.addCoinOutput(receiverWallet.address, 1000, await provider.getBaseAssetId());
-    await request.estimateAndFund(connectorWallet);
+    const { assembledRequest, gasPrice, rawReceipts } = await provider.assembleTx({
+      request,
+      feePayerAccount: connectorWallet,
+    });
 
     // Store the initial transaction bytes for the assertion
     // as these get modified (signed) by the connector
-    const initialTxBytes = request.toTransactionBytes();
+    const initialTxBytes = assembledRequest.toTransactionBytes();
 
-    const response = await account.sendTransaction(request);
+    const response = await account.sendTransaction(assembledRequest);
     expect(response).toBeDefined();
     // transaction prepared and sent via connector
 
-    const { rawReceipts, gasPrice } = await provider.getTransactionCost(request);
     const chainId = await provider.getChainId();
     const expectedParams: FuelConnectorSendTxParams = {
       onBeforeSend: undefined,
@@ -793,9 +795,12 @@ describe('Fuel Connector', () => {
 
     const request = new ScriptTransactionRequest();
     request.addCoinOutput(receiverWallet.address, 1000, await provider.getBaseAssetId());
-    await request.estimateAndFund(connectorWallet);
-    request.addVariableOutputs(2);
-    const response = await account.sendTransaction(request);
+    const { assembledRequest } = await provider.assembleTx({
+      request,
+      feePayerAccount: connectorWallet,
+    });
+    assembledRequest.addVariableOutputs(2);
+    const response = await account.sendTransaction(assembledRequest);
     expect(response).toBeDefined();
     // transaction prepared and sent via connector
 
@@ -872,22 +877,26 @@ describe('Fuel Connector', () => {
 
     const request = new ScriptTransactionRequest();
     request.addCoinOutput(receiverWallet.address, 1000, await provider.getBaseAssetId());
-    await request.estimateAndFund(connectorWallet);
 
-    const initialTxBytes = request.toTransactionBytes();
+    const { assembledRequest, gasPrice, rawReceipts } = await provider.assembleTx({
+      request,
+      feePayerAccount: connectorWallet,
+    });
 
-    const response = await account.sendTransaction(request);
+    const initialTxBytes = assembledRequest.toTransactionBytes();
+
+    const response = await account.sendTransaction(assembledRequest);
     expect(response).toBeDefined();
 
-    const { rawReceipts, gasPrice } = await provider.getTransactionCost(request);
     const chainId = await provider.getChainId();
 
     const transactionSummaryJson = {
-      id: request.getTransactionId(chainId),
+      id: assembledRequest.getTransactionId(chainId),
       transactionBytes: hexlify(initialTxBytes),
       receipts: rawReceipts,
       gasPrice: gasPrice.toString(),
     };
+
     const expectedParams: FuelConnectorSendTxParams = {
       onBeforeSend: undefined,
       skipCustomFee: false,
@@ -899,7 +908,7 @@ describe('Fuel Connector', () => {
       transactionSummary: transactionSummaryJson,
     };
 
-    expect(sendTransactionSpy).toHaveBeenCalledWith(request, expectedParams);
+    expect(sendTransactionSpy).toHaveBeenCalledWith(assembledRequest, expectedParams);
 
     const jsonSummary = await assembleTransactionSummaryFromJson({
       provider,

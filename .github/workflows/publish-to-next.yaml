@@ -62,7 +62,7 @@ jobs:
       - name: Add PR comment
         uses: mshick/add-pr-comment@v2
         with:
-          refresh-message-position: true
+          refresh-message-position: false
           message: |
             # Temporary PR
 

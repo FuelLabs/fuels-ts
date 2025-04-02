@@ -7,6 +7,8 @@ const gqlErrorMessage = {
   NOT_ENOUGH_COINS_MAX_COINS:
     /the target cannot be met due to no coins available or exceeding the \d+ coin limit./,
   ASSET_NOT_FOUND: /resource was not found in table/,
+  MULTIPLE_CHANGE_POLICIES: /The asset ([a-fA-F0-9]{64}) has multiple change policies/,
+  DUPLICATE_CHANGE_OUTPUT_ACCOUNT: /required balances contain duplicate \(asset, account\) pair/,
 };
 
 type GqlError = { message: string } | GraphQLError;
@@ -16,6 +18,26 @@ const mapGqlErrorMessage = (error: GqlError): FuelError => {
     return new FuelError(
       ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
       `Insufficient funds or too many small value coins. Consider combining UTXOs.`,
+      {},
+      error
+    );
+  }
+
+  if (gqlErrorMessage.MULTIPLE_CHANGE_POLICIES.test(error.message)) {
+    const match = error.message.match(/asset ([a-fA-F0-9]{64})/);
+    const assetId = match?.[1] || '';
+    return new FuelError(
+      ErrorCode.CHANGE_OUTPUT_COLLISION,
+      `OutputChange address for asset 0x${assetId} differs between transaction request and assembleTx parameters.`,
+      {},
+      error
+    );
+  }
+
+  if (gqlErrorMessage.DUPLICATE_CHANGE_OUTPUT_ACCOUNT.test(error.message)) {
+    return new FuelError(
+      ErrorCode.DUPLICATE_CHANGE_OUTPUT_ACCOUNT,
+      `The parameter 'accountCoinQuantities' of assembleTx contains duplicate entries for the same assetId with different 'changeOutputAccount'.`,
       {},
       error
     );

@@ -28,18 +28,14 @@ let signature = await signer.signTransaction(request);
 // Adding the signature to the transaction request
 request.addWitness(signature);
 
-// Assembling the transaction request, estimating and funding it
+/**
+ * Uses `assembleTx` to estimate and fund the transaction request.
+ * Because the transaction only requires enough to cover the fee, there's no
+ * need to pass any `accountCoinQuantities` to the `assembleTx` function.
+ */
 const { assembledRequest } = await provider.assembleTx({
   request,
   feePayerAccount: signer,
-  accountCoinQuantities: [
-    {
-      amount: '0',
-      assetId: await provider.getBaseAssetId(),
-      account: signer,
-      changeOutputAccount: signer,
-    },
-  ],
 });
 // Signing the request again as the it was modified during estimation and funding
 signature = await signer.signTransaction(assembledRequest);

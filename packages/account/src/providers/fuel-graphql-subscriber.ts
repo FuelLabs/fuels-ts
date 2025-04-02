@@ -57,6 +57,7 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
   }
 
   /**
+   * This method will take a stream reader and parse the event from the stream.
    *
    * @param reader - The reader of the SSE stream
    * @param parsingLeftover - The leftover string from parsing the previous event
@@ -75,8 +76,11 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
 
     // eslint-disable-next-line no-constant-condition
     while (true) {
+      /**
+       * Given the steam has a `data:.*\n\n` text stream, we will extract the data from the stream
+       * and parse it as a GraphQL response.
+       */
       const matches = [...text.matchAll(regex)].flatMap((match) => match);
-
       if (matches.length > 0) {
         try {
           const event = JSON.parse(matches[0].replace(/^data:/, ''));
@@ -94,6 +98,10 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
         }
       }
 
+      /**
+       * Otherwise, it's in another format, that we will read differently.
+       * This could be responses such as `keep-alive` messages.
+       */
       const { value, done } = await reader.read();
 
       if (done) {
@@ -129,17 +137,22 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
   async next(): Promise<IteratorResult<unknown, unknown>> {
     // eslint-disable-next-line no-constant-condition
     while (true) {
-      if (this.events.length > 0) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const event = this.events.shift()!;
-        this.onEvent?.(event);
+      /**
+       * If we have an event in the queue, we will return it (ensure there is not an error).
+       */
+      const nextEvent = this.events.shift();
+      if (nextEvent) {
+        this.onEvent?.(nextEvent);
         assertGqlResponseHasNoErrors(
-          event.errors,
+          nextEvent.errors,
           FuelGraphqlSubscriber.incompatibleNodeVersionMessage
         );
-        return { value: event.data, done: false };
+        return { value: nextEvent.data, done: false };
       }
 
+      /**
+       * Otherwise, we will try and read the next event from the stream.
+       */
       const { event, done, parsingLeftover } = await FuelGraphqlSubscriber.readEvent(
         this.stream,
         this.parsingLeftover

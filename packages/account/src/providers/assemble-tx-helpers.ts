@@ -11,14 +11,39 @@ import type { GqlAccount } from './__generated__/operations';
 import type Provider from './provider';
 import type { TransactionRequest } from './transaction-request';
 
+/**
+ * Resolve the account for the `assembleTx` GraphQL input params. More specifically to the properties:
+ * - feePayerAccount
+ * - accountCoinQuantities[n].account
+ *
+ * These should be informed to the client in the following signature:
+ *
+ * 1 - Common Account (Not a Predicate)
+ * ```ts
+ * feePayerAccount: {
+ *   address: string;
+ * }
+ * ```
+ *
+ * 2 - Predicate
+ * ```ts
+ * feePayerAccount: {
+ *   predicate: {
+ *     predicate: string;
+ *     predicateAddress: string;
+ *     predicateData: string;
+ *   };
+ * }
+ * ```
+ */
 export const resolveAccountForAssembleTxParams = (account: AbstractAccount): GqlAccount => {
   const assembleTxAccount: GqlAccount = {};
   const accountIsPredicate = 'bytes' in account;
 
   if (accountIsPredicate) {
     assembleTxAccount.predicate = {
-      predicateAddress: account.address.toB256(),
       predicate: hexlify((account as Predicate).bytes),
+      predicateAddress: account.address.toB256(),
       predicateData: hexlify((account as Predicate).getPredicateData()),
     };
   } else {

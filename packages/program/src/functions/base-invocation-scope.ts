@@ -12,7 +12,12 @@ import type {
   AbstractAccount,
   AssembleTxParams,
 } from '@fuel-ts/account';
-import { mergeQuantities, ScriptTransactionRequest, Wallet } from '@fuel-ts/account';
+import {
+  mergeQuantities,
+  ScriptTransactionRequest,
+  Wallet,
+  setAndValidateGasAndFeeForAssembledTx,
+} from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
@@ -68,6 +73,9 @@ export class BaseInvocationScope<TReturn = any> {
   protected isMultiCall: boolean = false;
   protected hasCallParamsGasLimit: boolean = false; // flag to check if any of the callParams has gasLimit set
   protected externalAbis: Record<string, JsonAbi> = {};
+  /**
+   * @deprecated - Should be removed with `addSigners`
+   */
   private addSignersCallback?: (
     txRequest: ScriptTransactionRequest
   ) => Promise<ScriptTransactionRequest>;
@@ -227,7 +235,7 @@ export class BaseInvocationScope<TReturn = any> {
    *
    * @returns The transaction cost details.
    *
-   * @deprecated Use contract.assembleTx instead
+   * @deprecated Use contract.fundWithRequiredCoins instead
    * Check the migration guide https://docs.fuel.network/guide/assembling-transactions/migration-guide.html for more information.
    */
   async getTransactionCost(): Promise<TransactionCost> {
@@ -240,48 +248,9 @@ export class BaseInvocationScope<TReturn = any> {
     });
   }
 
-  /**
-   * Costs and funds the underlying transaction request.
-   *
-   * @returns The invocation scope as a funded transaction request.
-   *
-   * @deprecated Use contract.assembleTx instead
-   * Check the migration guide https://docs.fuel.network/guide/assembling-transactions/migration-guide.html for more information.
-   */
   async fundWithRequiredCoins(): Promise<ScriptTransactionRequest> {
-    let transactionRequest = await this.getTransactionRequest();
-    transactionRequest = clone(transactionRequest);
-
-    const txCost = await this.getTransactionCost();
-    const { gasUsed, missingContractIds, outputVariables, maxFee } = txCost;
-    this.setDefaultTxParams(transactionRequest, gasUsed, maxFee);
-
-    // Adding missing contract ids
-    missingContractIds.forEach((contractId) => {
-      transactionRequest.addContractInputAndOutput(new Address(contractId));
-    });
-
-    // Adding required number of OutputVariables
-    transactionRequest.addVariableOutputs(outputVariables);
-
-    await this.program.account?.fund(transactionRequest, txCost);
-
-    if (this.addSignersCallback) {
-      await this.addSignersCallback(transactionRequest);
-    }
-    return transactionRequest;
-  }
-
-  /**
-   * Costs and funds the underlying transaction request.
-   *
-   * @returns The invocation scope as a funded transaction request.
-   */
-  async assembleTx(): Promise<ScriptTransactionRequest> {
     let request = await this.getTransactionRequest();
     request = clone(request);
-
-    const { gasLimit: setGasLimit, maxFee: setMaxFee } = request;
 
     request.maxFee = bn(0);
     request.gasLimit = bn(0);
@@ -316,16 +285,42 @@ export class BaseInvocationScope<TReturn = any> {
 
     assembledRequest = assembledRequest as ScriptTransactionRequest;
 
-    await this.setAndValidateGasAndFee(
-      setGasLimit,
-      setMaxFee,
-      assembledRequest.gasLimit,
-      assembledRequest.maxFee,
-      assembledRequest,
-      gasPrice
-    );
+    await setAndValidateGasAndFeeForAssembledTx({
+      gasPrice,
+      provider,
+      transactionRequest: assembledRequest,
+      setGasLimit: this.txParameters?.gasLimit,
+      setMaxFee: this.txParameters?.maxFee,
+    });
 
     return assembledRequest;
+  }
+
+  /**
+   * @deprecated - Should be removed with `addSigners`
+   */
+  private async legacyFundWithRequiredCoins(): Promise<ScriptTransactionRequest> {
+    let transactionRequest = await this.getTransactionRequest();
+    transactionRequest = clone(transactionRequest);
+
+    const txCost = await this.getTransactionCost();
+    const { gasUsed, missingContractIds, outputVariables, maxFee } = txCost;
+    this.setDefaultTxParams(transactionRequest, gasUsed, maxFee);
+
+    // Adding missing contract ids
+    missingContractIds.forEach((contractId) => {
+      transactionRequest.addContractInputAndOutput(new Address(contractId));
+    });
+
+    // Adding required number of OutputVariables
+    transactionRequest.addVariableOutputs(outputVariables);
+
+    await this.program.account?.fund(transactionRequest, txCost);
+
+    if (this.addSignersCallback) {
+      await this.addSignersCallback(transactionRequest);
+    }
+    return transactionRequest;
   }
 
   /**
@@ -450,9 +445,9 @@ export class BaseInvocationScope<TReturn = any> {
     let transactionRequest = await this.getTransactionRequest();
 
     if (this.addSignersCallback) {
-      transactionRequest = await this.fundWithRequiredCoins();
+      transactionRequest = await this.legacyFundWithRequiredCoins();
     } else {
-      transactionRequest = await this.assembleTx();
+      transactionRequest = await this.fundWithRequiredCoins();
     }
 
     const response = (await this.program.account.sendTransaction(transactionRequest, {
@@ -504,6 +499,8 @@ export class BaseInvocationScope<TReturn = any> {
    * Executes a transaction in dry run mode.
    *
    * @returns The result of the invocation call.
+   *
+   * @deprecated Use .get instead
    */
   async dryRun<T = TReturn>(): Promise<DryRunResult<T>> {
     const { receipts } = await this.getTransactionCost();
@@ -555,7 +552,6 @@ export class BaseInvocationScope<TReturn = any> {
     const { receipts } = await provider.assembleTx({
       request,
       feePayerAccount: account,
-      accountCoinQuantities: [{ amount: bn(0), assetId: baseAssetId }],
     });
 
     return buildDryRunResult<T>({
@@ -613,52 +609,6 @@ export class BaseInvocationScope<TReturn = any> {
         ErrorCode.MAX_FEE_TOO_LOW,
         `Max fee '${setMaxFee}' is lower than the required: '${maxFee}'.`
       );
-    }
-  }
-
-  /**
-   * In case the gasLimit is *not* set by the user, this method sets a default value.
-   */
-  private async setAndValidateGasAndFee(
-    setGasLimit: BN,
-    setMaxFee: BN,
-    estimatedGasUsed: BN,
-    estimatedMaxFee: BN,
-    transactionRequest: ScriptTransactionRequest,
-    gasPrice: BN
-  ) {
-    const gasLimitSpecified = isDefined(this.txParameters?.gasLimit) || this.hasCallParamsGasLimit;
-    const maxFeeSpecified = isDefined(this.txParameters?.maxFee);
-
-    if (gasLimitSpecified) {
-      if (setGasLimit.lt(estimatedGasUsed)) {
-        throw new FuelError(
-          ErrorCode.GAS_LIMIT_TOO_LOW,
-          `Gas limit '${setGasLimit}' is lower than the required: '${estimatedGasUsed}'.`
-        );
-      }
-
-      transactionRequest.gasLimit = setGasLimit;
-    }
-
-    if (maxFeeSpecified) {
-      if (setMaxFee.lt(estimatedMaxFee)) {
-        throw new FuelError(
-          ErrorCode.MAX_FEE_TOO_LOW,
-          `Max fee '${setMaxFee}' is lower than the required: '${estimatedMaxFee}'.`
-        );
-      }
-
-      transactionRequest.maxFee = setMaxFee;
-    }
-
-    if (gasLimitSpecified && !maxFeeSpecified) {
-      const { maxFee: feeForGasPrice } = await this.getProvider().estimateTxGasAndFee({
-        transactionRequest,
-        gasPrice,
-      });
-
-      transactionRequest.maxFee = feeForGasPrice;
     }
   }
 }

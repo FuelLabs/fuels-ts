@@ -345,21 +345,18 @@ export default defineConfig({
             ],
           },
           {
-            text: 'Assembling Transactions',
-            link: '/guide/assembling-transactions/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Migration Guide',
-                link: '/guide/assembling-transactions/migration-guide',
-              },
-            ],
-          },
-          {
             text: 'Transactions',
             link: '/guide/transactions/',
             collapsed: true,
             items: [
+              {
+                text: 'Assemble TX',
+                link: '/guide/transactions/assemble-tx',
+              },
+              {
+                text: 'Assemble TX Migration Guide',
+                link: '/guide/transactions/assemble-tx-migration-guide',
+              },
               {
                 text: 'Modifying the Request',
                 link: '/guide/transactions/modifying-the-request',
@@ -448,10 +445,6 @@ export default defineConfig({
               {
                 text: 'Generate Fake Resources',
                 link: '/guide/cookbook/generate-fake-resources',
-              },
-              {
-                text: 'Transactions with Multiple Signers',
-                link: '/guide/cookbook/transactions-with-multiple-signers',
               },
               {
                 text: 'Sway Script with Signature Validation',

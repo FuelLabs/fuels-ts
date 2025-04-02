@@ -7,7 +7,7 @@ import {
   WALLET_PVT_KEY,
   WALLET_PVT_KEY_2,
   WALLET_PVT_KEY_3,
-} from '../../../env';
+} from '../../../../env';
 
 // #region transaction-request-3
 const provider = new Provider(LOCAL_NETWORK_URL);

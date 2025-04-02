@@ -18,7 +18,7 @@ import type {
   CoinQuantityLike,
   CoinQuantity,
   Resource,
-  ExcludeResourcesOption,
+  ResourcesIdsToIgnore,
   Provider,
   ScriptTransactionRequestLike,
   TransactionCost,
@@ -168,14 +168,14 @@ export class Account extends AbstractAccount implements WithAddress {
    * Retrieves resources satisfying the spend query for the account.
    *
    * @param quantities - Quantities of resources to be obtained.
-   * @param excludedIds - IDs of resources to be excluded from the query (optional).
+   * @param resourcesIdsToIgnore - IDs of resources to be excluded from the query (optional).
    * @returns A promise that resolves to an array of Resources.
    */
   async getResourcesToSpend(
     quantities: CoinQuantityLike[],
-    excludedIds?: ExcludeResourcesOption
+    resourcesIdsToIgnore?: ResourcesIdsToIgnore
   ): Promise<Resource[]> {
-    return this.provider.getResourcesToSpend(this.address, quantities, excludedIds);
+    return this.provider.getResourcesToSpend(this.address, quantities, resourcesIdsToIgnore);
   }
 
   /**
@@ -606,6 +606,9 @@ export class Account extends AbstractAccount implements WithAddress {
    * @param transactionCostParams - The transaction cost parameters (optional).
    *
    * @returns A promise that resolves to the transaction cost object.
+   *
+   * @deprecated Use provider.assembleTx instead
+   * Check the migration guide https://docs.fuel.network/guide/assembling-transactions/migration-guide.html for more information.
    */
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,

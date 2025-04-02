@@ -47,6 +47,7 @@ async function setupTest() {
     },
   } = await provider.operations.getLatestBlockHeight();
 
+  expect(Number(latestBlockHeight)).toBeGreaterThan(0);
   return {
     provider,
     wallet,

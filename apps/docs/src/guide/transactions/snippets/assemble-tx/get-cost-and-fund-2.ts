@@ -1,8 +1,8 @@
-import { Provider, Wallet } from 'fuels';
+import { bn, Provider, Wallet } from 'fuels';
 import { TestAssetId } from 'fuels/test-utils';
 
-import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../env';
-import { CounterFactory, ScriptTransferToContract } from '../../../typegend';
+import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
+import { CounterFactory, ScriptTransferToContract } from '../../../../typegend';
 
 const provider = new Provider(LOCAL_NETWORK_URL);
 const account = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
@@ -11,7 +11,7 @@ const { waitForResult } = await new CounterFactory(account).deploy();
 const { contract } = await waitForResult();
 const contractId = contract.id.toB256();
 
-// #region assemble-tx-4
+// #region get-cost-and-fund-2
 const transferAmountA = 400;
 const transferAmountB = 600;
 
@@ -25,29 +25,29 @@ const request = await script.functions
     { bits: TestAssetId.B.value },
     transferAmountB
   )
+  .addContracts([contract])
   .getTransactionRequest();
 
-const { assembledRequest } = await provider.assembleTx({
-  request,
-  feePayerAccount: account,
-  accountCoinQuantities: [
+const txCost = await account.getTransactionCost(request, {
+  quantities: [
     {
-      amount: transferAmountA,
+      amount: bn(transferAmountA),
       assetId: TestAssetId.A.value,
-      account,
-      changeOutputAccount: account,
     },
     {
-      amount: transferAmountB,
+      amount: bn(transferAmountB),
       assetId: TestAssetId.B.value,
-      account,
-      changeOutputAccount: account,
     },
   ],
 });
 
-const tx = await account.sendTransaction(assembledRequest);
+request.maxFee = txCost.maxFee;
+request.gasLimit = txCost.gasUsed;
+
+await account.fund(request, txCost);
+
+const tx = await account.sendTransaction(request);
 const { isStatusSuccess } = await tx.waitForResult();
-// #endregion assemble-tx-4
+// #endregion get-cost-and-fund-2
 
 console.log('isStatusSuccess', isStatusSuccess);
