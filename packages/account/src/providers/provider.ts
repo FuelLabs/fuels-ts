@@ -137,7 +137,7 @@ export type Block = {
   };
 };
 
-export type ResourcesIDsToIgnore = {
+export type ResourcesIdsToIgnore = {
   utxos?: BytesLike[];
   messages?: BytesLike[];
 };
@@ -162,7 +162,7 @@ export type AssembleTxParams<T extends TransactionRequest = TransactionRequest> 
   // Whether to estimate predicates (default: true)
   estimatePredicates?: boolean;
   // Resources to be ignored when funding the transaction (optional)
-  resourcesIDsToIgnore?: ResourcesIDsToIgnore;
+  resourcesIdsToIgnore?: ResourcesIdsToIgnore;
   // Amount of gas to reserve (optional)
   reserveGas?: number;
 };
@@ -1728,7 +1728,7 @@ export default class Provider {
     const {
       request,
       reserveGas,
-      resourcesIDsToIgnore,
+      resourcesIdsToIgnore,
       feePayerAccount,
       blockHorizon = 10,
       estimatePredicates = true,
@@ -1811,7 +1811,7 @@ export default class Provider {
      */
     const excludeInput = await this.adjustResourcesToIgnoreForAddresses(
       Array.from(allAddresses),
-      resourcesIDsToIgnore
+      resourcesIdsToIgnore
     );
 
     const {
@@ -1897,19 +1897,19 @@ export default class Provider {
    *
    * @param owner - The address to get resources for.
    * @param quantities - The coin quantities to get.
-   * @param resourcesIDsToIgnore - IDs of excluded resources from the selection (optional).
+   * @param resourcesIdsToIgnore - IDs of excluded resources from the selection (optional).
    * @returns A promise that resolves to the resources.
    */
   async getResourcesToSpend(
     owner: AddressInput,
     quantities: CoinQuantityLike[],
-    resourcesIDsToIgnore?: ResourcesIDsToIgnore
+    resourcesIdsToIgnore?: ResourcesIdsToIgnore
   ): Promise<Resource[]> {
     const ownerAddress = new Address(owner);
 
     const excludedIds = await this.adjustResourcesToIgnoreForAddresses(
       [ownerAddress.b256Address],
-      resourcesIDsToIgnore
+      resourcesIdsToIgnore
     );
 
     const coinsQuery = {
@@ -2688,16 +2688,16 @@ export default class Provider {
    * Supporting multiple addresses is important because of the `assembleTx` method,
    * which may be invoked with different addresses. It handles both messages and UTXOs,
    * ensuring the total number of inputs does not exceed the maximum allowed by the chain's
-   * consensus parameters. The resources specified in the `resourcesIDsToIgnore` parameter have priority
+   * consensus parameters. The resources specified in the `resourcesIdsToIgnore` parameter have priority
    * over those retrieved from the cache.
    */
   private async adjustResourcesToIgnoreForAddresses(
     addresses: string[],
-    resourcesIDsToIgnore?: ResourcesIDsToIgnore
+    resourcesIdsToIgnore?: ResourcesIdsToIgnore
   ): Promise<GqlExcludeInput> {
     const final = {
-      messages: resourcesIDsToIgnore?.messages?.map((nonce) => hexlify(nonce)) || [],
-      utxos: resourcesIDsToIgnore?.utxos?.map((id) => hexlify(id)) || [],
+      messages: resourcesIdsToIgnore?.messages?.map((nonce) => hexlify(nonce)) || [],
+      utxos: resourcesIdsToIgnore?.utxos?.map((id) => hexlify(id)) || [],
     };
 
     if (this.cache) {

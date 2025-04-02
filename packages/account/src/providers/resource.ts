@@ -27,7 +27,7 @@ export type Resource = Coin | MessageCoin;
 
 /**
  * @hidden
- * @deprecated Use type `ResourcesIDsToIgnore` instead
+ * @deprecated Use type `ResourcesIdsToIgnore` instead
  */
 export type ExcludeResourcesOption = {
   utxos?: BytesLike[];
