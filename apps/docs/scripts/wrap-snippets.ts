@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, rmSync, stat, statSync, writeFileSync } from 'fs';
 import { globSync } from 'glob';
 import { join, basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -127,7 +127,8 @@ export const wrapSnippet = (filepath: string) => {
   Wrap all snippets inside `src` dir
 */
 const dir = 'src/**';
-const src = `${dir}/*.ts`;
+const srcFiles = `${dir}/*.ts`;
+const testFiles = `${dir}/*.test.ts`;
 const ignore = [
   `src/typegend/**`,
   `src/env.ts`,
@@ -137,4 +138,16 @@ const ignore = [
   `${dir}/*.test.ts`,
 ];
 
-globSync(src, { ignore }).forEach(wrapSnippet);
+
+/**
+ * Remove all snippets test files that don't have snippet files
+ */
+const test = globSync(testFiles);
+const src = globSync(srcFiles, { ignore }).map((file) => file.replace(/\.ts$/, '.test.ts'));
+test.filter((file) => !src.includes(file)).forEach((file) => {
+  if (statSync(file).isFile()) {
+    rmSync(file, { force: true });
+  }
+});
+
+globSync(srcFiles, { ignore }).forEach(wrapSnippet);
