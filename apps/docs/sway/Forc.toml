@@ -29,6 +29,7 @@ members = [
   "script-main-args",
   "script-signing",
   "script-log-simple",
+  "script-log-with-contract",
   "script-sum",
   "script-transfer-to-contract",
   "simple-predicate",

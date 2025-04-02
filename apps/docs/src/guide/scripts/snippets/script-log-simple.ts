@@ -1,4 +1,4 @@
-// #region script-log-simple
+// #region full
 import { Provider, Wallet } from "fuels";
 
 import { WALLET_PVT_KEY, LOCAL_NETWORK_URL } from "../../../env";
@@ -12,7 +12,7 @@ const { waitForResult } = await script.functions.main("ScriptA").call();
 
 const { logs } = await waitForResult();
 // logs: ['ScriptA']
-// #endregion script-log-simple
+// #endregion full
 
 const [logA] = logs;
 console.log('logs', logA === 'ScriptA');

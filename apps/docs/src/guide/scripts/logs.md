@@ -10,5 +10,14 @@ Consider the following example script:
 
 To access the logged values in TypeScript, use the `logs` property in the response of a script call.
 
-<<< @./snippets/script-log-simple.ts#script-log-simple{ts:line-numbers}
+<<< @./snippets/script-log-simple.ts#full{ts:line-numbers}
 
+## Grouped logs
+
+Consider the following example script:
+
+<<< @/../../docs/sway/script-log-with-contract/src/main.sw#full{rust:line-numbers}
+
+To access the find grained logs for each contract, use the `groupedLogs` property in the response of a script call.
+
+<<< @./snippets/script-log-with-contract.ts#full{ts:line-numbers}
