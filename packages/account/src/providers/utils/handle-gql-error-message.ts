@@ -8,8 +8,7 @@ const gqlErrorMessage = {
     /the target cannot be met due to no coins available or exceeding the \d+ coin limit./,
   ASSET_NOT_FOUND: /resource was not found in table/,
   MULTIPLE_CHANGE_POLICIES: /The asset ([a-fA-F0-9]{64}) has multiple change policies/,
-  DUPLICATE_CHANGE_CHANGE_OUTPUT_ACCOUNT:
-    /required balances contain duplicate \(asset, account\) pair/,
+  DUPLICATE_CHANGE_OUTPUT_ACCOUNT: /required balances contain duplicate \(asset, account\) pair/,
 };
 
 type GqlError = { message: string } | GraphQLError;
@@ -35,7 +34,7 @@ const mapGqlErrorMessage = (error: GqlError): FuelError => {
     );
   }
 
-  if (gqlErrorMessage.DUPLICATE_CHANGE_CHANGE_OUTPUT_ACCOUNT.test(error.message)) {
+  if (gqlErrorMessage.DUPLICATE_CHANGE_OUTPUT_ACCOUNT.test(error.message)) {
     return new FuelError(
       ErrorCode.DUPLICATE_CHANGE_OUTPUT_ACCOUNT,
       `The parameter 'accountCoinQuantities' of assembleTx contains duplicate entries for the same assetId with different 'changeOutputAccount'.`,
