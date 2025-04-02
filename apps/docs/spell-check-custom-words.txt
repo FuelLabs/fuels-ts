@@ -349,3 +349,4 @@ EIP
 AssembleTxParams
 AssembleTxResponse
 AssembleTx
+Unparsed
