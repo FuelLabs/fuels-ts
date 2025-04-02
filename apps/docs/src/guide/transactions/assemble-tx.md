@@ -55,7 +55,8 @@ The method returns an object of the type [AssembleTxResponse](DOCS_API_URL/types
 
 - `assembledRequest`: The fully assembled transaction request with all necessary inputs, outputs, and policies
 - `gasPrice`: The estimated gas price for the transaction
-- `receipts`: The transaction receipts from the dry run
+- `receipts`: Parsed receipts returned from the transaction dry run.
+- `rawReceipts`: Unparsed receipts returned from the transaction dry run.
 
 ## Usage Example
 
