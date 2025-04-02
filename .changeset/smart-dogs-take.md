@@ -4,4 +4,4 @@
 "@fuel-ts/program": patch
 ---
 
-feat: connector aware estimation
+feat: front-end optimisation strategies
