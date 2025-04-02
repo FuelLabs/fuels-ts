@@ -7,9 +7,9 @@ import type {
   Provider,
   ScriptTransactionRequest,
 } from 'fuels';
-import { hash, hexlify, transactionRequestify } from 'fuels';
+import { hexlify, transactionRequestify } from 'fuels';
 
-import { PredicateSol, PredicateSolScript } from '../../typegen';
+import { PredicateSol } from '../../typegen';
 
 import { MockConnector } from './mock-connector';
 
