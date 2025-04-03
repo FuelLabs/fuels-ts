@@ -7,7 +7,7 @@ import type { Transaction } from '@fuel-ts/transactions';
 import { InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
-import { checkFuelCoreVersionCompatibility, gte, versions } from '@fuel-ts/versions';
+import { checkFuelCoreVersionCompatibility, versions } from '@fuel-ts/versions';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import type { GraphQLClientResponse, GraphQLResponse } from 'graphql-request/src/types';
