@@ -1,9 +1,14 @@
-import type { NodeInfoJson } from '../../src';
+import type { GqlNodeInfoFragment } from '../../src/providers/__generated__/operations';
 
-export const MOCK_NODE_INFO: NodeInfoJson = {
+export const MOCK_NODE_INFO: GqlNodeInfoFragment = {
   utxoValidation: true,
   vmBacktrace: true,
   maxTx: '4064',
   maxDepth: '10',
   nodeVersion: '0.22.0',
+  indexation: {
+    balances: false,
+    coinsToSpend: false,
+    assetMetadata: false,
+  },
 };
