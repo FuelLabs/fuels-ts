@@ -648,7 +648,7 @@ export default class Provider {
       const { promise, resolve } = deferPromise<number>();
       Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth] = promise;
 
-      const data = await this.operations.getChainAndNodeInfo();
+      const data = await this.getChainAndNodeInfo();
       nodeInfo = deserializeNodeInfo(data.nodeInfo);
       chain = deserializeChain(data.chain);
 
@@ -666,6 +666,20 @@ export default class Provider {
       chain,
       nodeInfo,
     };
+  }
+
+  private async getChainAndNodeInfo() {
+    try {
+      const data = await this.operations.getChainAndNodeInfoV2();
+      return data;
+    } catch (error) {
+      if (/Unknown field/.test((error as FuelError).message)) {
+        const data = await this.operations.getChainAndNodeInfo();
+        return data;
+      }
+
+      throw error;
+    }
   }
 
   /**
