@@ -868,6 +868,15 @@ export default class Provider {
    * @returns A promise that resolves to an object containing the asset details.
    */
   async getAssetDetails(assetId: string): Promise<GetAssetDetailsResponse> {
+    const { assetMetadata } = await this.getNodeFeatures();
+
+    if (!assetMetadata) {
+      throw new FuelError(
+        ErrorCode.UNSUPPORTED_FEATURE,
+        'The current node does not supports fetching asset details'
+      );
+    }
+
     const { assetDetails } = await this.operations.getAssetDetails({ assetId });
 
     const { contractId, subId, totalSupply } = assetDetails;
