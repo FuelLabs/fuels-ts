@@ -685,7 +685,7 @@ export default class Provider {
       const data = await this.operations.getChainAndNodeInfoV2();
       return data;
     } catch (error) {
-      if (/Unknown field/.test((error as FuelError).message)) {
+      if (/Unknown field "indexation" on type "NodeInfo"/.test((error as FuelError).message)) {
         const data = await this.operations.getChainAndNodeInfo();
         return data;
       }
