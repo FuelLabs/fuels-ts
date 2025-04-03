@@ -83,6 +83,7 @@ const MAX_RETRIES = 10;
 export const RESOURCES_PAGE_SIZE_LIMIT = 512;
 export const TRANSACTIONS_PAGE_SIZE_LIMIT = 60;
 export const BALANCES_PAGE_SIZE_LIMIT = 100;
+export const NON_PAGINATED_BALANCES_SIZE = 10000;
 export const BLOCKS_PAGE_SIZE_LIMIT = 5;
 export const DEFAULT_RESOURCE_CACHE_TTL = 20_000; // 20 seconds
 export const GAS_USED_MODIFIER = 1.2;
@@ -1921,7 +1922,9 @@ export default class Provider {
     const ownerStr = new Address(owner).toB256();
     const assetIdStr = hexlify(assetId);
 
-    if (!this.features.amount128) {
+    const { amount128 } = await this.getNodeFeatures();
+
+    if (!amount128) {
       const { balance } = await this.operations.getBalance({
         owner: ownerStr,
         assetId: assetIdStr,
@@ -1947,15 +1950,20 @@ export default class Provider {
     owner: string | Address,
     paginationArgs?: CursorPaginationArgs
   ): Promise<GetBalancesResponse> {
-    if (!this.features.balancePagination) {
+    const { balancesPagination: balancePagination, amount128 } = await this.getNodeFeatures();
+
+    if (!amount128) {
       return this.getBalancesV1(owner, paginationArgs);
     }
 
-    return this.getBalancesV2(owner, paginationArgs);
+    return this.getBalancesV2(owner, balancePagination, paginationArgs);
   }
 
   /**
    * @hidden
+   *
+   * This method is used for nodes that do NOT support amount128, a feature introduced
+   * in fuel-core v0.41.0.
    */
   private async getBalancesV1(
     owner: string | Address,
@@ -1965,10 +1973,10 @@ export default class Provider {
       balances: { edges },
     } = await this.operations.getBalances({
       /**
-       * The query parameters for this method were designed to support pagination,
-       * but the current Fuel-Core implementation does not support pagination yet.
+       * Balances indexation was a feature also introduced in fuel-core v0.41.0.
+       * So we use a fixed size for nodes that do not support it.
        */
-      first: 10000,
+      first: NON_PAGINATED_BALANCES_SIZE,
       filter: { owner: new Address(owner).toB256() },
     });
 
@@ -1982,19 +1990,33 @@ export default class Provider {
 
   /**
    * @hidden
+   *
+   * This method is used for nodes that support amount128, a feature introduced
+   * in fuel-core v0.41.0. The balances indexation was introduced in the same version,
+   * but not all nodes support it.
    */
   private async getBalancesV2(
     owner: string | Address,
+    supportsPagination: boolean,
     paginationArgs?: CursorPaginationArgs
   ): Promise<GetBalancesResponse> {
+    // The largest possible size allowed by the node.
+    let args: CursorPaginationArgs = { first: NON_PAGINATED_BALANCES_SIZE };
+
+    if (supportsPagination) {
+      // If the node supports pagination, we use the provided pagination arguments.
+      args = validatePaginationArgs({
+        inputArgs: paginationArgs,
+        paginationLimit: BALANCES_PAGE_SIZE_LIMIT,
+      });
+    }
+
     const {
       balances: { edges, pageInfo },
     } = await this.operations.getBalancesV2({
-      ...validatePaginationArgs({
-        inputArgs: paginationArgs,
-        paginationLimit: BALANCES_PAGE_SIZE_LIMIT,
-      }),
+      ...args,
       filter: { owner: new Address(owner).toB256() },
+      supportsPagination,
     });
 
     const balances = edges.map(({ node }) => ({
@@ -2002,7 +2024,10 @@ export default class Provider {
       amount: bn(node.amountU128),
     }));
 
-    return { balances, pageInfo };
+    return {
+      balances,
+      ...(supportsPagination ? { pageInfo } : {}),
+    };
   }
 
   /**
