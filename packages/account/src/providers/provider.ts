@@ -657,21 +657,36 @@ export default class Provider {
         return this.fetchChainAndNodeInfo();
       }
 
-      const { promise, resolve } = deferPromise<number>();
+      const { promise, resolve, reject } = deferPromise<number>();
       Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth] = promise;
 
-      const data = await this.getChainAndNodeInfo();
-      nodeInfo = deserializeNodeInfo(data.nodeInfo);
-      chain = deserializeChain(data.chain);
+      try {
+        const data = await this.getChainAndNodeInfo();
+        nodeInfo = deserializeNodeInfo(data.nodeInfo);
+        chain = deserializeChain(data.chain);
 
-      Provider.setIncompatibleNodeVersionMessage(nodeInfo);
-      Provider.chainInfoCache[this.urlWithoutAuth] = chain;
-      Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
+        Provider.setIncompatibleNodeVersionMessage(nodeInfo);
+        Provider.chainInfoCache[this.urlWithoutAuth] = chain;
+        Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
 
-      const now = Date.now();
-      this.consensusParametersTimestamp = now;
-      resolve(now);
-      delete Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth];
+        const now = Date.now();
+        this.consensusParametersTimestamp = now;
+        resolve(now);
+      } catch (err) {
+        let error = err;
+        if (!(error as FuelError).code) {
+          error = new FuelError(
+            FuelError.CODES.INVALID_REQUEST,
+            (error as Error).message,
+            {},
+            error
+          );
+        }
+        reject(error);
+        throw error;
+      } finally {
+        delete Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth];
+      }
     }
 
     return {
@@ -1951,6 +1966,8 @@ export default class Provider {
   ): Promise<GetBalancesResponse> {
     const { balancesPagination: balancePagination, amount128 } = await this.getNodeFeatures();
 
+    console.log('amount128: ', amount128);
+
     if (!amount128) {
       return this.getBalancesV1(owner, paginationArgs);
     }
@@ -2371,7 +2388,7 @@ export default class Provider {
   /**
    * @hidden
    */
-  private async getNodeFeatures() {
+  async getNodeFeatures() {
     const { indexation, nodeVersion } = await this.getNode();
 
     return {
