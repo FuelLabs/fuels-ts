@@ -19,6 +19,7 @@ import { deferPromise } from '../connectors/utils/promises';
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
   GqlReceiptFragment as TransactionReceiptJson,
+  GqlNodeInfoFragment as NodeInfoJson,
   GqlChainInfoFragment as ChainInfoJson,
   GqlConsensusParametersVersion,
   GqlContractParameters as ContractParameters,
@@ -176,19 +177,6 @@ type ModifyStringToBN<T> = {
   [P in keyof T]: P extends 'version' ? T[P] : T[P] extends string ? BN : T[P];
 };
 
-type NodeInfoJson = {
-  utxoValidation: boolean;
-  vmBacktrace: boolean;
-  maxTx: string;
-  maxDepth: string;
-  nodeVersion: string;
-  indexation?: {
-    balances: boolean;
-    coinsToSpend: boolean;
-    assetMetadata: boolean;
-  };
-};
-
 export {
   TransactionReceiptJson,
   NodeInfoJson,
@@ -231,7 +219,7 @@ export type NodeInfo = {
   maxTx: BN;
   maxDepth: BN;
   nodeVersion: string;
-  indexation?: {
+  indexation: {
     balances: boolean;
     coinsToSpend: boolean;
     assetMetadata: boolean;
@@ -661,7 +649,7 @@ export default class Provider {
       Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth] = promise;
 
       try {
-        const data = await this.getChainAndNodeInfo();
+        const data = await this.operations.getChainAndNodeInfo();
         nodeInfo = deserializeNodeInfo(data.nodeInfo);
         chain = deserializeChain(data.chain);
 
@@ -693,20 +681,6 @@ export default class Provider {
       chain,
       nodeInfo,
     };
-  }
-
-  private async getChainAndNodeInfo() {
-    try {
-      const data = await this.operations.getChainAndNodeInfoV2();
-      return data;
-    } catch (error) {
-      if (/Unknown field "indexation" on type "NodeInfo"/.test((error as FuelError).message)) {
-        const data = await this.operations.getChainAndNodeInfo();
-        return data;
-      }
-
-      throw error;
-    }
   }
 
   /**
@@ -1933,22 +1907,9 @@ export default class Provider {
     /** The asset ID of coins to get */
     assetId: BytesLike
   ): Promise<BN> {
-    const ownerStr = new Address(owner).toB256();
-    const assetIdStr = hexlify(assetId);
-
-    const { amount128 } = await this.getNodeFeatures();
-
-    if (!amount128) {
-      const { balance } = await this.operations.getBalance({
-        owner: ownerStr,
-        assetId: assetIdStr,
-      });
-      return bn(balance.amount, 10);
-    }
-
     const { balance } = await this.operations.getBalanceV2({
-      owner: ownerStr,
-      assetId: assetIdStr,
+      owner: new Address(owner).toB256(),
+      assetId: hexlify(assetId),
     });
     return bn(balance.amountU128, 10);
   }
@@ -1964,60 +1925,10 @@ export default class Provider {
     owner: string | Address,
     paginationArgs?: CursorPaginationArgs
   ): Promise<GetBalancesResponse> {
-    const { balancesPagination: balancePagination, amount128 } = await this.getNodeFeatures();
-
-    console.log('amount128: ', amount128);
-
-    if (!amount128) {
-      return this.getBalancesV1(owner, paginationArgs);
-    }
-
-    return this.getBalancesV2(owner, balancePagination, paginationArgs);
-  }
-
-  /**
-   * @hidden
-   *
-   * This method is used for nodes that do NOT support amount128, a feature introduced
-   * in fuel-core v0.41.0.
-   */
-  private async getBalancesV1(
-    owner: string | Address,
-    _paginationArgs?: CursorPaginationArgs
-  ): Promise<GetBalancesResponse> {
-    const {
-      balances: { edges },
-    } = await this.operations.getBalances({
-      /**
-       * Balances indexation was a feature also introduced in fuel-core v0.41.0.
-       * So we use a fixed size for nodes that do not support it.
-       */
-      first: NON_PAGINATED_BALANCES_SIZE,
-      filter: { owner: new Address(owner).toB256() },
-    });
-
-    const balances = edges.map(({ node }) => ({
-      assetId: node.assetId,
-      amount: bn(node.amount),
-    }));
-
-    return { balances };
-  }
-
-  /**
-   * @hidden
-   *
-   * This method is used for nodes that support amount128, a feature introduced
-   * in fuel-core v0.41.0. The balances indexation was introduced in the same version,
-   * but not all nodes support it.
-   */
-  private async getBalancesV2(
-    owner: string | Address,
-    supportsPagination: boolean,
-    paginationArgs?: CursorPaginationArgs
-  ): Promise<GetBalancesResponse> {
     // The largest possible size allowed by the node.
     let args: CursorPaginationArgs = { first: NON_PAGINATED_BALANCES_SIZE };
+
+    const { balancesPagination: supportsPagination } = await this.getNodeFeatures();
 
     if (supportsPagination) {
       // If the node supports pagination, we use the provided pagination arguments.
@@ -2389,10 +2300,9 @@ export default class Provider {
    * @hidden
    */
   async getNodeFeatures() {
-    const { indexation, nodeVersion } = await this.getNode();
+    const { indexation } = await this.getNode();
 
     return {
-      amount128: gte(nodeVersion, '0.41.0'),
       assetMetadata: Boolean(indexation?.assetMetadata),
       balancesPagination: Boolean(indexation?.balances),
       coinsToSpend: Boolean(indexation?.coinsToSpend),

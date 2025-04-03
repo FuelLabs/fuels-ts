@@ -927,7 +927,7 @@ describe('Provider', () => {
 
     Provider.clearChainAndNodeCaches();
 
-    const spyOperation = vi.spyOn(provider.operations, 'getChainAndNodeInfoV2');
+    const spyOperation = vi.spyOn(provider.operations, 'getChainAndNodeInfo');
 
     await provider.fetchChainAndNodeInfo();
 

@@ -451,10 +451,6 @@ fragment nodeInfoFragment on NodeInfo {
   maxTx
   maxDepth
   nodeVersion
-}
-
-fragment nodeInfoFragmentV2 on NodeInfo {
-  ...nodeInfoFragment
   indexation {
     balances
     coinsToSpend
@@ -487,15 +483,6 @@ query getChainAndNodeInfo {
   }
   nodeInfo {
     ...nodeInfoFragment
-  }
-}
-
-query getChainAndNodeInfoV2 {
-  chain {
-    ...chainInfoFragment
-  }
-  nodeInfo {
-    ...nodeInfoFragmentV2
   }
 }
 
