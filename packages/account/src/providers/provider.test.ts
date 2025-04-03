@@ -2063,16 +2063,21 @@ describe('Provider', () => {
     });
 
     describe('pagination arguments', async () => {
-      using launched = await setupTestProviderAndWallets({
+      const launched = await setupTestProviderAndWallets({
         walletsConfig: {
           coinsPerAsset: 100,
         },
       });
-      const { provider } = launched;
+
+      const provider = launched.provider;
       const baseAssetId = await provider.getBaseAssetId();
       const address = Address.fromRandom();
       const exceededLimit = RESOURCES_PAGE_SIZE_LIMIT + 1;
       const safeLimit = BLOCKS_PAGE_SIZE_LIMIT;
+
+      afterAll(() => {
+        launched.cleanup();
+      });
 
       function getInvocations(args: CursorPaginationArgs) {
         return [
