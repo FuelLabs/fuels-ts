@@ -22,7 +22,7 @@ import {
   MOCK_TX_SCRIPT_RAW_PAYLOAD,
 } from '../../test/fixtures/transaction-summary';
 import { mockIncompatibleVersions } from '../../test/utils/mockIncompabileVersions';
-import { setupTestProviderAndWallets, launchNode, TestMessage } from '../test-utils';
+import { setupTestProviderAndWallets, launchNode, TestMessage, TestAssetId } from '../test-utils';
 
 import type { GqlPageInfo } from './__generated__/operations';
 import type { Block, ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
@@ -2509,5 +2509,35 @@ describe('Provider', () => {
       ],
     ]);
     expect(fetchSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('should throw error of asset metadata is not supported', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    const node = await provider.getNode();
+    const chain = await provider.getChain();
+
+    vi.spyOn(provider.operations, 'getChainAndNodeInfo').mockImplementation(async () =>
+      Promise.resolve({
+        nodeInfo: {
+          ...serializeNodeInfo(node),
+          indexation: { assetMetadata: false, balances: false, coinsToSpend: false },
+        },
+        chain: serializeChain(chain),
+      })
+    );
+
+    Provider.clearChainAndNodeCaches();
+
+    await expectToThrowFuelError(
+      () => provider.getAssetDetails(TestAssetId.A.value),
+      new FuelError(
+        ErrorCode.UNSUPPORTED_FEATURE,
+        'The current node does not supports fetching asset details'
+      )
+    );
+
+    vi.restoreAllMocks();
   });
 });
