@@ -781,16 +781,6 @@ export default class Provider {
   }
 
   /**
-   * @hidden
-   */
-  private setupFeatures(nodeVersion: string) {
-    if (gte(nodeVersion, '0.41.0')) {
-      this.features.balancePagination = true;
-      this.features.amount128 = true;
-    }
-  }
-
-  /**
    * Returns the version of the connected node.
    *
    * @returns A promise that resolves to the version string.
