@@ -645,36 +645,21 @@ export default class Provider {
         return this.fetchChainAndNodeInfo();
       }
 
-      const { promise, resolve, reject } = deferPromise<number>();
+      const { promise, resolve } = deferPromise<number>();
       Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth] = promise;
 
-      try {
-        const data = await this.operations.getChainAndNodeInfo();
-        nodeInfo = deserializeNodeInfo(data.nodeInfo);
-        chain = deserializeChain(data.chain);
+      const data = await this.operations.getChainAndNodeInfo();
+      nodeInfo = deserializeNodeInfo(data.nodeInfo);
+      chain = deserializeChain(data.chain);
 
-        Provider.setIncompatibleNodeVersionMessage(nodeInfo);
-        Provider.chainInfoCache[this.urlWithoutAuth] = chain;
-        Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
+      Provider.setIncompatibleNodeVersionMessage(nodeInfo);
+      Provider.chainInfoCache[this.urlWithoutAuth] = chain;
+      Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
 
-        const now = Date.now();
-        this.consensusParametersTimestamp = now;
-        resolve(now);
-      } catch (err) {
-        let error = err;
-        if (!(error as FuelError).code) {
-          error = new FuelError(
-            FuelError.CODES.INVALID_REQUEST,
-            (error as Error).message,
-            {},
-            error
-          );
-        }
-        reject(error);
-        throw error;
-      } finally {
-        delete Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth];
-      }
+      const now = Date.now();
+      this.consensusParametersTimestamp = now;
+      resolve(now);
+      delete Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth];
     }
 
     return {
