@@ -19,7 +19,6 @@ import { deferPromise } from '../connectors/utils/promises';
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
   GqlReceiptFragment as TransactionReceiptJson,
-  GqlNodeInfoFragment as NodeInfoJson,
   GqlChainInfoFragment as ChainInfoJson,
   GqlConsensusParametersVersion,
   GqlContractParameters as ContractParameters,
@@ -435,11 +434,6 @@ export default class Provider {
   public url: string;
   /** @hidden */
   private urlWithoutAuth: string;
-  /** @hidden */
-  private features: Features = {
-    balancePagination: false,
-    amount128: false,
-  };
 
   /** @hidden */
   private static inflightFetchChainAndNodeInfoRequests: Record<string, Promise<number>> = {};
@@ -567,8 +561,7 @@ export default class Provider {
    * Initialize Provider async stuff
    */
   async init(): Promise<Provider> {
-    const { nodeInfo } = await this.fetchChainAndNodeInfo();
-    this.setupFeatures(nodeInfo.nodeVersion);
+    await this.fetchChainAndNodeInfo();
     return this;
   }
 
@@ -2349,6 +2342,20 @@ export default class Provider {
       receipts,
       statusReason: status.reason,
     });
+  }
+
+  /**
+   * @hidden
+   */
+  private async getNodeFeatures() {
+    const { indexation, nodeVersion } = await this.getNode();
+
+    return {
+      amount128: gte(nodeVersion, '0.41.0'),
+      assetMetadata: Boolean(indexation?.assetMetadata),
+      balancesPagination: Boolean(indexation?.balances),
+      coinsToSpend: Boolean(indexation?.coinsToSpend),
+    };
   }
 
   /**
