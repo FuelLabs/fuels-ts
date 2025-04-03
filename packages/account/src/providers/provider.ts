@@ -176,6 +176,19 @@ type ModifyStringToBN<T> = {
   [P in keyof T]: P extends 'version' ? T[P] : T[P] extends string ? BN : T[P];
 };
 
+type NodeInfoJson = {
+  utxoValidation: boolean;
+  vmBacktrace: boolean;
+  maxTx: string;
+  maxDepth: string;
+  nodeVersion: string;
+  indexation?: {
+    balances: boolean;
+    coinsToSpend: boolean;
+    assetMetadata: boolean;
+  };
+};
+
 export {
   TransactionReceiptJson,
   NodeInfoJson,
@@ -218,6 +231,11 @@ export type NodeInfo = {
   maxTx: BN;
   maxDepth: BN;
   nodeVersion: string;
+  indexation?: {
+    balances: boolean;
+    coinsToSpend: boolean;
+    assetMetadata: boolean;
+  };
 };
 
 /** @deprecated This type is no longer used. */
