@@ -744,6 +744,7 @@ query getBalancesV2(
   $before: String
   $first: Int
   $last: Int
+  $supportsPagination: Boolean!
 ) {
   balances(
     filter: $filter
@@ -752,7 +753,7 @@ query getBalancesV2(
     first: $first
     last: $last
   ) {
-    pageInfo {
+    pageInfo @include(if: $supportsPagination) {
       ...pageInfoFragment
     }
     edges {
