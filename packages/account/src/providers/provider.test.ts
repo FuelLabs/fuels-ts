@@ -40,7 +40,7 @@ import { CreateTransactionRequest, ScriptTransactionRequest } from './transactio
 import { TransactionResponse } from './transaction-response';
 import type { SubmittedStatus } from './transaction-summary/types';
 import * as gasMod from './utils/gas';
-import { serializeProviderCache } from './utils/serialization';
+import { serializeChain, serializeNodeInfo, serializeProviderCache } from './utils/serialization';
 import type { ProviderCacheJson } from './utils/serialization';
 
 const getCustomFetch =
@@ -2034,32 +2034,61 @@ describe('Provider', () => {
       expect(pageInfo.endCursor).toBeDefined();
     });
 
-    it('can get balances [V1]', async () => {
-      vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo').mockImplementationOnce(async () =>
-        Promise.resolve({
-          nodeInfo: { nodeVersion: '0.40.0' } as NodeInfo,
-          chain: {} as ChainInfo,
-        })
-      );
-
+    it('can get balances [NO PAGINATION SUPPORT]', async () => {
       using launched = await setupTestProviderAndWallets();
       const {
         provider,
         wallets: [wallet],
       } = launched;
 
-      const spy = vi.spyOn(provider.operations, 'getBalances');
+      const node = await provider.getNode();
+      const chain = await provider.getChain();
+
+      const spy = vi.spyOn(provider.operations, 'getBalancesV2');
+      vi.spyOn(provider.operations, 'getChainAndNodeInfo').mockImplementation(async () =>
+        Promise.resolve({
+          nodeInfo: {
+            ...serializeNodeInfo(node),
+            indexation: { assetMetadata: false, balances: false, coinsToSpend: false },
+          },
+          chain: serializeChain(chain),
+        })
+      );
+
+      Provider.clearChainAndNodeCaches();
 
       const { pageInfo } = await wallet.getBalances();
 
       expect(spy).toHaveBeenCalledWith({
         first: 10000,
         filter: { owner: wallet.address.toB256() },
+        supportsPagination: false,
       });
 
       expect(pageInfo).not.toBeDefined();
 
       vi.restoreAllMocks();
+    });
+
+    it('can get balances [PAGINATION SUPPORT]', async () => {
+      using launched = await setupTestProviderAndWallets();
+      const {
+        provider,
+        wallets: [wallet],
+      } = launched;
+
+      const spy = vi.spyOn(provider.operations, 'getBalancesV2');
+
+      const { balances, pageInfo } = await wallet.getBalances();
+
+      expect(spy).toHaveBeenCalledWith({
+        first: BALANCES_PAGE_SIZE_LIMIT,
+        filter: { owner: wallet.address.toB256() },
+        supportsPagination: true,
+      });
+
+      expect(balances).toBeDefined();
+      expect(pageInfo).toBeDefined();
     });
 
     describe('pagination arguments', async () => {
