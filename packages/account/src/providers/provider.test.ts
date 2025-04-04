@@ -22,7 +22,7 @@ import {
   MOCK_TX_SCRIPT_RAW_PAYLOAD,
 } from '../../test/fixtures/transaction-summary';
 import { mockIncompatibleVersions } from '../../test/utils/mockIncompabileVersions';
-import { setupTestProviderAndWallets, launchNode, TestMessage } from '../test-utils';
+import { setupTestProviderAndWallets, launchNode, TestMessage, TestAssetId } from '../test-utils';
 
 import type { GqlPageInfo } from './__generated__/operations';
 import type { Block, ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
@@ -40,7 +40,7 @@ import { CreateTransactionRequest, ScriptTransactionRequest } from './transactio
 import { TransactionResponse } from './transaction-response';
 import type { SubmittedStatus } from './transaction-summary/types';
 import * as gasMod from './utils/gas';
-import { serializeProviderCache } from './utils/serialization';
+import { serializeChain, serializeNodeInfo, serializeProviderCache } from './utils/serialization';
 import type { ProviderCacheJson } from './utils/serialization';
 
 const getCustomFetch =
@@ -2094,27 +2094,35 @@ describe('Provider', () => {
       expect(pageInfo.endCursor).toBeDefined();
     });
 
-    it('can get balances [V1]', async () => {
-      vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo').mockImplementationOnce(async () =>
-        Promise.resolve({
-          nodeInfo: { nodeVersion: '0.40.0' } as NodeInfo,
-          chain: {} as ChainInfo,
-        })
-      );
-
+    it('can get balances [NO PAGINATION SUPPORT]', async () => {
       using launched = await setupTestProviderAndWallets();
       const {
         provider,
         wallets: [wallet],
       } = launched;
 
-      const spy = vi.spyOn(provider.operations, 'getBalances');
+      const node = await provider.getNode();
+      const chain = await provider.getChain();
+
+      const spy = vi.spyOn(provider.operations, 'getBalancesV2');
+      vi.spyOn(provider.operations, 'getChainAndNodeInfo').mockImplementation(async () =>
+        Promise.resolve({
+          nodeInfo: {
+            ...serializeNodeInfo(node),
+            indexation: { assetMetadata: false, balances: false, coinsToSpend: false },
+          },
+          chain: serializeChain(chain),
+        })
+      );
+
+      Provider.clearChainAndNodeCaches();
 
       const { pageInfo } = await wallet.getBalances();
 
       expect(spy).toHaveBeenCalledWith({
         first: 10000,
         filter: { owner: wallet.address.toB256() },
+        supportsPagination: false,
       });
 
       expect(pageInfo).not.toBeDefined();
@@ -2122,17 +2130,43 @@ describe('Provider', () => {
       vi.restoreAllMocks();
     });
 
+    it('can get balances [PAGINATION SUPPORT]', async () => {
+      using launched = await setupTestProviderAndWallets();
+      const {
+        provider,
+        wallets: [wallet],
+      } = launched;
+
+      const spy = vi.spyOn(provider.operations, 'getBalancesV2');
+
+      const { balances, pageInfo } = await wallet.getBalances();
+
+      expect(spy).toHaveBeenCalledWith({
+        first: BALANCES_PAGE_SIZE_LIMIT,
+        filter: { owner: wallet.address.toB256() },
+        supportsPagination: true,
+      });
+
+      expect(balances).toBeDefined();
+      expect(pageInfo).toBeDefined();
+    });
+
     describe('pagination arguments', async () => {
-      using launched = await setupTestProviderAndWallets({
+      const launched = await setupTestProviderAndWallets({
         walletsConfig: {
           coinsPerAsset: 100,
         },
       });
-      const { provider } = launched;
+
+      const provider = launched.provider;
       const baseAssetId = await provider.getBaseAssetId();
       const address = Address.fromRandom();
       const exceededLimit = RESOURCES_PAGE_SIZE_LIMIT + 1;
       const safeLimit = BLOCKS_PAGE_SIZE_LIMIT;
+
+      afterAll(() => {
+        launched.cleanup();
+      });
 
       function getInvocations(args: CursorPaginationArgs) {
         return [
@@ -2535,5 +2569,35 @@ describe('Provider', () => {
       ],
     ]);
     expect(fetchSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('should throw error of asset metadata is not supported', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    const node = await provider.getNode();
+    const chain = await provider.getChain();
+
+    vi.spyOn(provider.operations, 'getChainAndNodeInfo').mockImplementation(async () =>
+      Promise.resolve({
+        nodeInfo: {
+          ...serializeNodeInfo(node),
+          indexation: { assetMetadata: false, balances: false, coinsToSpend: false },
+        },
+        chain: serializeChain(chain),
+      })
+    );
+
+    Provider.clearChainAndNodeCaches();
+
+    await expectToThrowFuelError(
+      () => provider.getAssetDetails(TestAssetId.A.value),
+      new FuelError(
+        ErrorCode.UNSUPPORTED_FEATURE,
+        'The current node does not supports fetching asset details'
+      )
+    );
+
+    vi.restoreAllMocks();
   });
 });
