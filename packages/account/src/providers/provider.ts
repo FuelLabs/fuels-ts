@@ -7,7 +7,7 @@ import type { Transaction } from '@fuel-ts/transactions';
 import { InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
-import { checkFuelCoreVersionCompatibility, gte, versions } from '@fuel-ts/versions';
+import { checkFuelCoreVersionCompatibility, versions } from '@fuel-ts/versions';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import type { GraphQLClientResponse, GraphQLResponse } from 'graphql-request/src/types';
@@ -88,6 +88,7 @@ const MAX_RETRIES = 10;
 export const RESOURCES_PAGE_SIZE_LIMIT = 512;
 export const TRANSACTIONS_PAGE_SIZE_LIMIT = 60;
 export const BALANCES_PAGE_SIZE_LIMIT = 100;
+export const NON_PAGINATED_BALANCES_SIZE = 10000;
 export const BLOCKS_PAGE_SIZE_LIMIT = 5;
 export const DEFAULT_RESOURCE_CACHE_TTL = 20_000; // 20 seconds
 export const GAS_USED_MODIFIER = 1.2;
@@ -222,6 +223,11 @@ export type NodeInfo = {
   maxTx: BN;
   maxDepth: BN;
   nodeVersion: string;
+  indexation: {
+    balances: boolean;
+    coinsToSpend: boolean;
+    assetMetadata: boolean;
+  };
 };
 
 /** @deprecated This type is no longer used. */
@@ -473,11 +479,6 @@ export default class Provider {
   public url: string;
   /** @hidden */
   private urlWithoutAuth: string;
-  /** @hidden */
-  private features: Features = {
-    balancePagination: false,
-    amount128: false,
-  };
 
   /** @hidden */
   private static inflightFetchChainAndNodeInfoRequests: Record<string, Promise<number>> = {};
@@ -605,8 +606,7 @@ export default class Provider {
    * Initialize Provider async stuff
    */
   async init(): Promise<Provider> {
-    const { nodeInfo } = await this.fetchChainAndNodeInfo();
-    this.setupFeatures(nodeInfo.nodeVersion);
+    await this.fetchChainAndNodeInfo();
     return this;
   }
 
@@ -811,16 +811,6 @@ export default class Provider {
   }
 
   /**
-   * @hidden
-   */
-  private setupFeatures(nodeVersion: string) {
-    if (gte(nodeVersion, '0.41.0')) {
-      this.features.balancePagination = true;
-      this.features.amount128 = true;
-    }
-  }
-
-  /**
    * Returns the version of the connected node.
    *
    * @returns A promise that resolves to the version string.
@@ -908,6 +898,15 @@ export default class Provider {
    * @returns A promise that resolves to an object containing the asset details.
    */
   async getAssetDetails(assetId: string): Promise<GetAssetDetailsResponse> {
+    const { assetMetadata } = await this.getNodeFeatures();
+
+    if (!assetMetadata) {
+      throw new FuelError(
+        ErrorCode.UNSUPPORTED_FEATURE,
+        'The current node does not supports fetching asset details'
+      );
+    }
+
     const { assetDetails } = await this.operations.getAssetDetails({ assetId });
 
     const { contractId, subId, totalSupply } = assetDetails;
@@ -1949,20 +1948,9 @@ export default class Provider {
     /** The asset ID of coins to get */
     assetId: BytesLike
   ): Promise<BN> {
-    const ownerStr = new Address(owner).toB256();
-    const assetIdStr = hexlify(assetId);
-
-    if (!this.features.amount128) {
-      const { balance } = await this.operations.getBalance({
-        owner: ownerStr,
-        assetId: assetIdStr,
-      });
-      return bn(balance.amount, 10);
-    }
-
     const { balance } = await this.operations.getBalanceV2({
-      owner: ownerStr,
-      assetId: assetIdStr,
+      owner: new Address(owner).toB256(),
+      assetId: hexlify(assetId),
     });
     return bn(balance.amountU128, 10);
   }
@@ -1978,54 +1966,25 @@ export default class Provider {
     owner: string | Address,
     paginationArgs?: CursorPaginationArgs
   ): Promise<GetBalancesResponse> {
-    if (!this.features.balancePagination) {
-      return this.getBalancesV1(owner, paginationArgs);
+    // The largest possible size allowed by the node.
+    let args: CursorPaginationArgs = { first: NON_PAGINATED_BALANCES_SIZE };
+
+    const { balancesPagination: supportsPagination } = await this.getNodeFeatures();
+
+    if (supportsPagination) {
+      // If the node supports pagination, we use the provided pagination arguments.
+      args = validatePaginationArgs({
+        inputArgs: paginationArgs,
+        paginationLimit: BALANCES_PAGE_SIZE_LIMIT,
+      });
     }
 
-    return this.getBalancesV2(owner, paginationArgs);
-  }
-
-  /**
-   * @hidden
-   */
-  private async getBalancesV1(
-    owner: string | Address,
-    _paginationArgs?: CursorPaginationArgs
-  ): Promise<GetBalancesResponse> {
-    const {
-      balances: { edges },
-    } = await this.operations.getBalances({
-      /**
-       * The query parameters for this method were designed to support pagination,
-       * but the current Fuel-Core implementation does not support pagination yet.
-       */
-      first: 10000,
-      filter: { owner: new Address(owner).toB256() },
-    });
-
-    const balances = edges.map(({ node }) => ({
-      assetId: node.assetId,
-      amount: bn(node.amount),
-    }));
-
-    return { balances };
-  }
-
-  /**
-   * @hidden
-   */
-  private async getBalancesV2(
-    owner: string | Address,
-    paginationArgs?: CursorPaginationArgs
-  ): Promise<GetBalancesResponse> {
     const {
       balances: { edges, pageInfo },
     } = await this.operations.getBalancesV2({
-      ...validatePaginationArgs({
-        inputArgs: paginationArgs,
-        paginationLimit: BALANCES_PAGE_SIZE_LIMIT,
-      }),
+      ...args,
       filter: { owner: new Address(owner).toB256() },
+      supportsPagination,
     });
 
     const balances = edges.map(({ node }) => ({
@@ -2033,7 +1992,10 @@ export default class Provider {
       amount: bn(node.amountU128),
     }));
 
-    return { balances, pageInfo };
+    return {
+      balances,
+      ...(supportsPagination ? { pageInfo } : {}),
+    };
   }
 
   /**
@@ -2373,6 +2335,19 @@ export default class Provider {
       receipts,
       statusReason: status.reason,
     });
+  }
+
+  /**
+   * @hidden
+   */
+  async getNodeFeatures() {
+    const { indexation } = await this.getNode();
+
+    return {
+      assetMetadata: Boolean(indexation?.assetMetadata),
+      balancesPagination: Boolean(indexation?.balances),
+      coinsToSpend: Boolean(indexation?.coinsToSpend),
+    };
   }
 
   /**
