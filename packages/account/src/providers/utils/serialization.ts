@@ -171,7 +171,7 @@ export const serializeChain = (chain: ChainInfo): ChainInfoJson => {
 
 /** @hidden */
 export const deserializeNodeInfo = (nodeInfo: NodeInfoJson): NodeInfo => {
-  const { maxDepth, maxTx, nodeVersion, utxoValidation, vmBacktrace } = nodeInfo;
+  const { maxDepth, maxTx, nodeVersion, utxoValidation, vmBacktrace, indexation } = nodeInfo;
 
   return {
     maxDepth: bn(maxDepth),
@@ -179,12 +179,13 @@ export const deserializeNodeInfo = (nodeInfo: NodeInfoJson): NodeInfo => {
     nodeVersion,
     utxoValidation,
     vmBacktrace,
+    indexation,
   };
 };
 
 /** @hidden */
 export const serializeNodeInfo = (nodeInfo: NodeInfo): NodeInfoJson => {
-  const { maxDepth, maxTx, nodeVersion, utxoValidation, vmBacktrace } = nodeInfo;
+  const { maxDepth, maxTx, nodeVersion, utxoValidation, vmBacktrace, indexation } = nodeInfo;
 
   return {
     maxDepth: maxDepth.toString(),
@@ -192,6 +193,7 @@ export const serializeNodeInfo = (nodeInfo: NodeInfo): NodeInfoJson => {
     nodeVersion,
     utxoValidation,
     vmBacktrace,
+    indexation,
   };
 };
 
