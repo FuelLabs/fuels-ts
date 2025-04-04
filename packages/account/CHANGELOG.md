@@ -1,5 +1,22 @@
 # Change Log
 
+## 0.100.2
+
+### Patch Changes
+
+- e909d54: fix: adjust feature detection for balances
+- Updated dependencies [e909d54]
+  - @fuel-ts/errors@0.100.2
+  - @fuel-ts/abi-coder@0.100.2
+  - @fuel-ts/address@0.100.2
+  - @fuel-ts/crypto@0.100.2
+  - @fuel-ts/math@0.100.2
+  - @fuel-ts/transactions@0.100.2
+  - @fuel-ts/utils@0.100.2
+  - @fuel-ts/hasher@0.100.2
+  - @fuel-ts/merkle@0.100.2
+  - @fuel-ts/versions@0.100.2
+
 ## 0.100.1
 
 ### Patch Changes
