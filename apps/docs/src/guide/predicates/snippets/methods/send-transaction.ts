@@ -1,5 +1,5 @@
 // #region sendTransaction
-import { bn, Provider, ScriptTransactionRequest, Wallet } from 'fuels';
+import { Provider, ScriptTransactionRequest, Wallet } from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
 import { ReturnTruePredicate } from '../../../../typegend';
@@ -23,24 +23,24 @@ const fundPredicate = await funder.transfer(
 await fundPredicate.waitForResult();
 
 // Instantiate the transaction request.
-const transactionRequest = new ScriptTransactionRequest({
-  gasLimit: 2000,
-  maxFee: bn(100),
-});
-
-// Get the resources available to send from the predicate.
-const predicateCoins = await predicate.getResourcesToSpend([
-  { amount: 2000, assetId: baseAssetId },
-]);
-
-// Add the predicate input and resources.
-transactionRequest.addResources(predicateCoins);
+const request = new ScriptTransactionRequest();
 
 // Estimate and fund the transaction
-await transactionRequest.estimateAndFund(predicate);
+const { assembledRequest } = await provider.assembleTx({
+  request,
+  feePayerAccount: predicate,
+  accountCoinQuantities: [
+    {
+      amount: '0',
+      assetId: baseAssetId,
+      account: predicate,
+      changeOutputAccount: predicate,
+    },
+  ],
+});
 
 // Send the transaction using the predicate
-const result = await predicate.sendTransaction(transactionRequest);
+const result = await predicate.sendTransaction(assembledRequest);
 
 await result.waitForResult();
 // #endregion sendTransaction
