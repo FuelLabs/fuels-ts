@@ -9,9 +9,10 @@ export enum FuelConnectorMethods {
   // Account methods
   accounts = 'accounts',
   currentAccount = 'currentAccount',
-  // Signature methods
+  // Transaction methods
   signMessage = 'signMessage',
   sendTransaction = 'sendTransaction',
+  onBeforeAssembleTx = 'onBeforeAssembleTx',
   // Assets metadata methods
   assets = 'assets',
   addAsset = 'addAsset',
