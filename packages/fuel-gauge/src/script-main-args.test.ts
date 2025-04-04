@@ -1,5 +1,5 @@
 import type { BigNumberish } from 'fuels';
-import { bn, Script as FuelScript } from 'fuels';
+import { bn, Script as FuelScript, ZeroBytes32 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { ScriptMainArgs, ScriptMainReturnStruct, Script } from '../test/typegen';
@@ -28,10 +28,14 @@ describe('Script Coverage', () => {
 
     const { waitForResult } = await scriptInstance.functions.main(foo).call();
 
-    const { value, logs } = await waitForResult();
+    const { value, logs, groupedLogs } = await waitForResult();
 
+    const expectedLogs = ['u8 foo', 33];
     expect(value?.toString()).toEqual(bn(foo).toString());
-    expect(logs).toEqual(['u8 foo', 33]);
+    expect(logs).toStrictEqual(expectedLogs);
+    expect(groupedLogs).toStrictEqual({
+      [ZeroBytes32]: expectedLogs,
+    });
   });
 
   it('can call script and use main arguments [two args, read logs]', async () => {
@@ -47,10 +51,14 @@ describe('Script Coverage', () => {
     };
 
     const { waitForResult } = await scriptInstance.functions.main(foo, bar).call();
-    const { value, logs } = await waitForResult();
+    const { value, logs, groupedLogs } = await waitForResult();
 
+    const expectedLogs = ['u8 foo', 33, 'u8 bar', 12, 'u8 bar', 12];
     expect(value?.toString()).toEqual(bn(foo + bar.x).toString());
-    expect(logs).toEqual(['u8 foo', 33, 'u8 bar', 12, 'u8 bar', 12]);
+    expect(logs).toStrictEqual(expectedLogs);
+    expect(groupedLogs).toStrictEqual({
+      [ZeroBytes32]: expectedLogs,
+    });
   });
 
   it('can call script and use main arguments [two args, struct return]', async () => {
