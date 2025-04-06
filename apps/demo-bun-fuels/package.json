@@ -12,6 +12,6 @@
     "fuels": "workspace:*"
   },
   "devDependencies": {
-    "bun": "1.2.3"
+    "bun": "1.2.8"
   }
 }
