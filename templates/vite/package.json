@@ -27,7 +27,7 @@
     "react-toastify": "11.0.3"
   },
   "devDependencies": {
-    "@eslint/js": "9.20.0",
+    "@eslint/js": "9.24.0",
     "@playwright/test": "1.50.1",
     "@tailwindcss/postcss": "4.0.8",
     "@types/react": "19.0.10",
