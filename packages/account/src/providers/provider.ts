@@ -82,6 +82,7 @@ import {
   deserializeReceipt,
 } from './utils/serialization';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
+import { parseGraphqlResponse } from './utils/parse-graphql-response';
 
 const MAX_RETRIES = 10;
 
@@ -463,6 +464,12 @@ const BLOCK_HEIGHT_SENSITIVE_OPERATIONS: Array<keyof SdkOperations> = [
   'getTransactionWithReceipts',
 ];
 
+const WRITE_OPERATIONS: Array<keyof SdkOperations> = [
+  'submit',
+  'submitAndAwaitStatus',
+  'produceBlocks',
+];
+
 /**
  * A provider for connecting to a node
  */
@@ -565,13 +572,23 @@ export default class Provider {
       ?.toString()
       .match(/"operationName":"(.+)"/)?.[1] as keyof SdkOperations;
 
-    if (!BLOCK_HEIGHT_SENSITIVE_OPERATIONS.includes(operationName)) {
+    const normalizedUrl = url.replace(/-sub$/, '');
+
+    // If it is a write operation, we will initialize the block height cache
+    // Return early as we don't need to apply the block height for write operations
+    if (WRITE_OPERATIONS.includes(operationName)) {
+      Provider.currentBlockHeightCache[normalizedUrl] = Provider.currentBlockHeightCache[normalizedUrl] ?? 0;
       return;
     }
 
-    const normalizedUrl = url.replace(/-sub$/, '');
-    const currentBlockHeight = this.currentBlockHeightCache[normalizedUrl] ?? 0;
+    // If the block height cache is not initialized, we don't need to apply the block height
+    const shouldIncludeBlockHeight = Provider.currentBlockHeightCache[normalizedUrl] !== undefined;
+    if (!shouldIncludeBlockHeight) {
+      return;
+    }
 
+    // Apply the block height to the request
+    const currentBlockHeight = Provider.currentBlockHeightCache[normalizedUrl] ?? 0;
     request.body = request.body
       ?.toString()
       .replace(/}$/, `,"extensions":{"required_fuel_block_height":${currentBlockHeight}}}`);
@@ -593,22 +610,11 @@ export default class Provider {
     };
 
     for (let retriesLeft = retryOptions.maxRetries; retriesLeft > 0; --retriesLeft) {
-      const responseClone = response.clone();
-
-      let extensions: {
-        current_fuel_block_height?: number;
-        fuel_block_height_precondition_failed: boolean;
-      };
-
-      if (url.endsWith('-sub')) {
-        const reader = responseClone.body?.getReader() as ReadableStreamDefaultReader<Uint8Array>;
-        const { event } = await FuelGraphqlSubscriber.readEvent(reader);
-
-        extensions = event?.extensions as typeof extensions;
-      } else {
-        extensions = (await responseClone.json()).extensions;
+      if (!Provider.ENABLE_RPC_CONSISTENCY) {
+        break;
       }
 
+      const { extensions } = await parseGraphqlResponse({ response, isSubscription: url.endsWith('-sub') });
       Provider.setCurrentBlockHeight(url, extensions?.current_fuel_block_height);
 
       if (!extensions?.fuel_block_height_precondition_failed) {
@@ -631,10 +637,15 @@ export default class Provider {
     }
 
     const normalizedUrl = url.replace(/-sub$/, '');
-
     const currentBlockHeight: number | undefined = this.currentBlockHeightCache[normalizedUrl];
 
-    if (currentBlockHeight === undefined || height > currentBlockHeight) {
+    // If the current block height is not set, then a write operation has not been performed yet
+    // Return early as we don't need to update the block height cache
+    if (currentBlockHeight === undefined) {
+      return;
+    }
+
+    if (height > currentBlockHeight) {
       this.currentBlockHeightCache[normalizedUrl] = height;
     }
   }

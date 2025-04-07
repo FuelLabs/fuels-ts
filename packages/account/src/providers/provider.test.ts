@@ -950,48 +950,31 @@ describe('Provider', () => {
     const { provider: provider1 } = launched1;
     const { provider: provider2 } = launched2;
 
-    // allow for block production
-    await sleep(200);
+    // Clear any existing chain info cache
+    Provider.clearChainAndNodeCaches();
 
-    // update block height cache for both providers
-    await provider1.getLatestGasPrice();
-    await provider2.getLatestGasPrice();
+    // Ensure the provider URLs are different, and there is not chain info cache for either
+    expect(provider1.url).not.toEqual(provider2.url);
+    // @ts-expect-error - chainInfoCache is private
+    expect(Provider.chainInfoCache[provider1.url]).not.toBeDefined();
+    // @ts-expect-error - chainInfoCache is private
+    expect(Provider.chainInfoCache[provider2.url]).not.toBeDefined();
 
+    // Ensure the the chain cache has been updated
+    await provider1.init();
+    await provider2.init();
+    // @ts-expect-error - chainInfoCache is private
+    expect(Provider.chainInfoCache[provider1.url]).toBeDefined();
+    // @ts-expect-error - chainInfoCache is private
+    expect(Provider.chainInfoCache[provider2.url]).toBeDefined();
+
+
+    // Given: we clear the cache for provider1
     Provider.clearChainAndNodeCaches(provider1.url);
-
-    // verify block height cache got reset correctly
-    const fetchSpy = vi.spyOn(global, 'fetch');
-
-    try {
-      await provider1.operations.submit({ encodedTransaction: '0x123' });
-    } catch (error) {
-      //
-    }
-    try {
-      await provider2.operations.submit({ encodedTransaction: '0x123' });
-    } catch (error) {
-      //
-    }
-
-    const {
-      extensions: { required_fuel_block_height: cache1BlockHeight },
-    } = JSON.parse(fetchSpy.mock.calls[0][1]?.body as string);
-    const {
-      extensions: { required_fuel_block_height: cache2BlockHeight },
-    } = JSON.parse(fetchSpy.mock.calls[1][1]?.body as string);
-
-    expect(cache1BlockHeight).toEqual(0);
-    expect(cache2BlockHeight).toBeGreaterThan(0);
-
-    // verify nodeInfo and chainInfo caches got reset correctly
-    const getChainAndNodeInfoSpy1 = vi.spyOn(provider1.operations, 'getChainAndNodeInfo');
-    const getChainAndNodeInfoSpy2 = vi.spyOn(provider2.operations, 'getChainAndNodeInfo');
-
-    await provider1.fetchChainAndNodeInfo();
-    await provider2.fetchChainAndNodeInfo();
-
-    expect(getChainAndNodeInfoSpy1).toHaveBeenCalledTimes(1);
-    expect(getChainAndNodeInfoSpy2).toHaveBeenCalledTimes(0);
+    // @ts-expect-error - chainInfoCache is private
+    expect(Provider.chainInfoCache[provider1.url]).not.toBeDefined();
+    // @ts-expect-error - chainInfoCache is private
+    expect(Provider.chainInfoCache[provider2.url]).toBeDefined();
   });
 
   it('should ensure getGasConfig return essential gas related data', async () => {
