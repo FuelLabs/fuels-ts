@@ -1,10 +1,7 @@
 import { Provider, Wallet } from 'fuels';
 
 import { WALLET_PVT_KEY, LOCAL_NETWORK_URL } from '../../../env';
-import {
-  LogInterCallsFactory,
-  LogSimpleFactory,
-} from '../../../typegend';
+import { LogInterCallsFactory, LogSimpleFactory } from '../../../typegend';
 
 const provider = new Provider(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);

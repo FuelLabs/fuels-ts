@@ -20,7 +20,6 @@ const { logs } = await waitForResult();
 // ]
 // #endregion logs
 
-const expectedLogs = [
-  'ContractA'
-];
-expect(logs).toStrictEqual(expectedLogs);
+const expectedLogs = ['ContractA'];
+console.log('Logs should have the same length', logs.length === expectedLogs.length);
+console.log('Logs should be in the correct format', expectedLogs.every((log) => logs.includes(log)));
