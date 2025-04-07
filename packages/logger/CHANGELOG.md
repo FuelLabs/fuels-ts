@@ -1,5 +1,12 @@
 # @fuel-ts/logger
 
+## 0.100.2
+
+### Patch Changes
+
+- @fuel-ts/address@0.100.2
+- @fuel-ts/math@0.100.2
+
 ## 0.100.1
 
 ### Patch Changes

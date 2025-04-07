@@ -1,5 +1,12 @@
 # @fuel-ts/errors
 
+## 0.100.2
+
+### Patch Changes
+
+- e909d54: fix: adjust feature detection for balances
+  - @fuel-ts/versions@0.100.2
+
 ## 0.100.1
 
 ### Patch Changes
