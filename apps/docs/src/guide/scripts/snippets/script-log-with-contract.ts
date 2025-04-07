@@ -1,5 +1,5 @@
 // #region full
-import { Provider, Wallet } from "fuels";
+import { Provider, Wallet, ZeroBytes32 } from "fuels";
 
 import { WALLET_PVT_KEY, LOCAL_NETWORK_URL } from "../../../env";
 import { LogSimpleFactory, ScriptLogWithContract } from "../../../typegend";
@@ -15,16 +15,18 @@ const {contract} = await waitForDeploy();
 const script = new ScriptLogWithContract(wallet);
 
 // Call the script
-const { waitForResult } = await script.functions.main(contract.id.toB256()).call();
+const { waitForResult } = await script.functions.main(contract.id.toB256()).addContracts([contract]).call();
 
 // Wait for the script to finish and get the logs
 const { groupedLogs } = await waitForResult();
-// groupedLogs = [
-//   {
-//     contractId: '0x0000000000000000000000000000000000000000000000000000000000000000',
-//     logs: ['Script started', 'Script finished'],
-//   },
-// ]
+// groupedLogs = {
+//   [ZeroBytes32]: ['Script started', 'Script finished'],
+//   [contract.id.toB256()]: ['ContractA', 'ContractB'],
+// }
 // #endregion full
+const logs = groupedLogs
+console.log('Should have zeroed log', typeof logs[ZeroBytes32] !== 'undefined');
+console.log('Should script logs [Script Started]', logs[ZeroBytes32].includes('Script started'));
+console.log('Should script logs [Script Finished]', logs[ZeroBytes32].includes('Script finished'));
 
 console.log('groupedLogs', groupedLogs);

@@ -2,7 +2,7 @@ import { Provider, Wallet } from 'fuels';
 
 import { WALLET_PVT_KEY, LOCAL_NETWORK_URL } from '../../../env';
 import {
-  LogValuesInterCallsFactory,
+  LogInterCallsFactory,
   LogSimpleFactory,
 } from '../../../typegend';
 
@@ -15,7 +15,7 @@ const deploySimpleContract = await LogSimpleFactory.deploy(wallet);
 const { contract: simpleContract } = await deploySimpleContract.waitForResult();
 
 // Then we make an inter-contract that makes a multi-call to the simple contract
-const deployInterContract = await LogValuesInterCallsFactory.deploy(wallet);
+const deployInterContract = await LogInterCallsFactory.deploy(wallet);
 const { contract: interContract } = await deployInterContract.waitForResult();
 
 // We can then call the inter-contract function that makes call out to the simple contract

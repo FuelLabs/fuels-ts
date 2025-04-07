@@ -16,7 +16,7 @@ To access the logged values in TypeScript, use the `logs` property in the respon
 
 We also provide a `groupedLogs` property that will group the logs by their program identifier. This is particularly useful when you are working with inter-contract or multi-calls.
 
-We will use the same `LogSimple` contract as in the previous example.
+We will use the same [`LogSimple`](#simple-logs) contract as in the previous example.
 
 ### Multi-call
 
@@ -28,9 +28,11 @@ We can make a multi-call to the contract
 
 Consider the following example contract:
 
+In this example we are making a call an inter contract call to the [`LogSimple`](#simple-logs) contract from the previous example.
+
 <<< @/../../docs/sway/log-inter-calls/src/main.sw#full{rust:line-numbers}
 
-The `log_inter_call` function makes a multi-call to the `log_simple` function of the `LogsSimple` contract.
+The `log_inter_call` function makes a call to the `log_simple` function of the [`LogSimple`](#simple-logs) contract.
 
 <<< @./snippets/logs-grouped-for-inter-contract-call.ts#inter{ts:line-numbers}
 
