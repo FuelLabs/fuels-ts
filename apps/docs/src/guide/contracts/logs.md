@@ -35,7 +35,3 @@ In this example we are making a call an inter contract call to the [`LogSimple`]
 The `log_inter_call` function makes a call to the `log_simple` function of the [`LogSimple`](#simple-logs) contract.
 
 <<< @./snippets/logs-grouped-for-inter-contract-call.ts#inter{ts:line-numbers}
-
-
-
-

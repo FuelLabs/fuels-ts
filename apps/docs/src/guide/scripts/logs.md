@@ -18,6 +18,10 @@ Consider the following example script:
 
 <<< @/../../docs/sway/script-log-with-contract/src/main.sw#full{rust:line-numbers}
 
+### With Contract
+
 To access the find grained logs for each contract, use the `groupedLogs` property in the response of a script call.
 
 <<< @./snippets/script-log-with-contract.ts#full{ts:line-numbers}
+
+All script logs will be grouped using a zero'd out address as the key. This is because although they are executed on chain, and can execute functionality. They can not have any ownership over resources.
