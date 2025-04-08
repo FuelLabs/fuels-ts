@@ -218,7 +218,7 @@ describe('optimistic concurrency handling via block height', () => {
     // Set the expected block height to 10_000
     const { expectedHeight } = await setExpectedBlockHeightToRequest({
       provider,
-      newHeight: 10,
+      newHeight: 50,
     });
 
     await expectToThrowFuelError(
