@@ -597,16 +597,16 @@ export default class Provider {
 
     let response: Response = await fetchFn();
 
+    if (!Provider.ENABLE_RPC_CONSISTENCY) {
+      return response;
+    }
+
     const retryOptions: RetryOptions = {
       maxRetries: 5,
       baseDelay: 500,
     };
 
     for (let retriesLeft = retryOptions.maxRetries; retriesLeft > 0; --retriesLeft) {
-      if (!Provider.ENABLE_RPC_CONSISTENCY) {
-        break;
-      }
-
       const { extensions } = await parseGraphqlResponse({
         response,
         isSubscription: url.endsWith('-sub'),
