@@ -57,9 +57,9 @@ export const getResultLogs = (
 
 /** @hidden */
 export const getAllResultLogs = (opts: {
-  receipts: TransactionResultReceipt[],
-  mainCallConfig: CallConfig | undefined,
-  functionScopes: Array<InvocationScopeLike>
+  receipts: TransactionResultReceipt[];
+  mainCallConfig: CallConfig | undefined;
+  functionScopes: Array<InvocationScopeLike>;
 }): DecodedLogs => {
   const { receipts, mainCallConfig, functionScopes } = opts;
 
