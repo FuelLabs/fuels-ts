@@ -530,6 +530,22 @@ export default class Provider {
     cache: undefined,
   };
 
+  private static extractOperationName(body: BodyInit | undefined | null) {
+    return body?.toString().match(/"operationName":"(.+)"/)?.[1] as keyof SdkOperations;
+  }
+
+  private static isWriteOperation(body: BodyInit | undefined | null) {
+    return WRITE_OPERATIONS.includes(this.extractOperationName(body));
+  }
+
+  private static normalizeUrl(url: string) {
+    return url.replace(/-sub$/, '');
+  }
+
+  private static hasWriteOperationHappened(url: string) {
+    return isDefined(Provider.currentBlockHeightCache[this.normalizeUrl(url)]);
+  }
+
   /**
    * @hidden
    */
@@ -551,7 +567,7 @@ export default class Provider {
         fullRequest = await options.requestMiddleware(fullRequest);
       }
 
-      if (Provider.ENABLE_RPC_CONSISTENCY) {
+      if (Provider.ENABLE_RPC_CONSISTENCY && Provider.hasWriteOperationHappened(url)) {
         Provider.applyBlockHeight(fullRequest, url);
       }
 
@@ -560,25 +576,7 @@ export default class Provider {
   }
 
   private static applyBlockHeight(request: RequestInit, url: string) {
-    const operationName = request.body
-      ?.toString()
-      .match(/"operationName":"(.+)"/)?.[1] as keyof SdkOperations;
-
-    const normalizedUrl = url.replace(/-sub$/, '');
-
-    // If it is a write operation, we will initialize the block height cache
-    // Return early as we don't need to apply the block height for write operations
-    if (WRITE_OPERATIONS.includes(operationName)) {
-      Provider.currentBlockHeightCache[normalizedUrl] =
-        Provider.currentBlockHeightCache[normalizedUrl] ?? 0;
-      return;
-    }
-
-    // If the block height cache is not initialized, we don't need to apply the block height
-    const shouldIncludeBlockHeight = Provider.currentBlockHeightCache[normalizedUrl] !== undefined;
-    if (!shouldIncludeBlockHeight) {
-      return;
-    }
+    const normalizedUrl = this.normalizeUrl(url);
 
     // Apply the block height to the request
     const currentBlockHeight = Provider.currentBlockHeightCache[normalizedUrl] ?? 0;
@@ -594,6 +592,13 @@ export default class Provider {
   ): Promise<Response> {
     const fetchFn = () =>
       options.fetch ? options.fetch(url, request, options) : fetch(url, request);
+
+    const isWriteOperation = Provider.isWriteOperation(request.body);
+
+    // If it is a write operation, we will initialize the block height cache
+    if (isWriteOperation && !Provider.hasWriteOperationHappened(url)) {
+      Provider.currentBlockHeightCache[Provider.normalizeUrl(url)] = 0;
+    }
 
     let response: Response = await fetchFn();
 
@@ -627,22 +632,21 @@ export default class Provider {
     return response;
   }
 
-  private static setCurrentBlockHeight(url: string, height: number | undefined) {
-    if (height === undefined) {
+  private static setCurrentBlockHeight(url: string, height?: number) {
+    /**
+     * If the height is undefined, there is nothing to set. We can also return early if
+     * no write operation has happened yet, as it means the 'currentBlockHeightCache' was
+     * not initialized and the current block height should not be used.
+     */
+    const writeOperationHappened = Provider.hasWriteOperationHappened(url);
+    if (!isDefined(height) || !writeOperationHappened) {
       return;
     }
 
-    const normalizedUrl = url.replace(/-sub$/, '');
-    const currentBlockHeight: number | undefined = this.currentBlockHeightCache[normalizedUrl];
+    const normalizedUrl = Provider.normalizeUrl(url);
 
-    // If the current block height is not set, then a write operation has not been performed yet
-    // Return early as we don't need to update the block height cache
-    if (currentBlockHeight === undefined) {
-      return;
-    }
-
-    if (height > currentBlockHeight) {
-      this.currentBlockHeightCache[normalizedUrl] = height;
+    if (height > Provider.currentBlockHeightCache[normalizedUrl]) {
+      Provider.currentBlockHeightCache[normalizedUrl] = height;
     }
   }
 
