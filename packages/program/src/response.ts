@@ -69,7 +69,7 @@ export const buildFunctionResult = async <T>(
   const functionScopes = Array.isArray(funcScope) ? funcScope : [funcScope];
   const mainCallConfig = functionScopes[0]?.getCallConfig();
 
-  const { logs, groupedLogs } = getAllResultLogs(receipts, mainCallConfig, functionScopes);
+  const { logs, groupedLogs } = getAllResultLogs({ receipts, mainCallConfig, functionScopes });
   const value = extractInvocationResult<T>(
     functionScopes,
     receipts,
@@ -108,7 +108,7 @@ export const buildDryRunResult = <T>(params: BuiltDryRunResultParams): DryRunRes
   const functionScopes = Array.isArray(funcScopes) ? funcScopes : [funcScopes];
   const mainCallConfig = functionScopes[0]?.getCallConfig();
 
-  const { logs, groupedLogs } = getAllResultLogs(receipts, mainCallConfig, functionScopes);
+  const { logs, groupedLogs } = getAllResultLogs({ receipts, mainCallConfig, functionScopes });
   const value = extractInvocationResult<T>(
     functionScopes,
     receipts,

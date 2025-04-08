@@ -56,11 +56,13 @@ export const getResultLogs = (
 };
 
 /** @hidden */
-export const getAllResultLogs = (
+export const getAllResultLogs = (opts: {
   receipts: TransactionResultReceipt[],
   mainCallConfig: CallConfig | undefined,
   functionScopes: Array<InvocationScopeLike>
-): DecodedLogs => {
+}): DecodedLogs => {
+  const { receipts, mainCallConfig, functionScopes } = opts;
+
   if (!mainCallConfig) {
     return { logs: [], groupedLogs: {} };
   }
