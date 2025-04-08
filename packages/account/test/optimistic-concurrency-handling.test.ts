@@ -1,14 +1,15 @@
-import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { sleep } from '@fuel-ts/utils';
-import type { MockInstance } from 'vitest';
 
 import { Provider } from '../src/providers';
 import { type LaunchNodeOptions, setupTestProviderAndWallets } from '../src/test-utils';
 
 import { getFetchOperationsByName } from './utils/getFetchOperation';
 
-const setupTest = async (opts: Partial<{ blockHeightTolerance: number, poaIntervalPeriod: string }> = {}) => {
+const setupTest = async (
+  opts: Partial<{ blockHeightTolerance: number; poaIntervalPeriod: string }> = {}
+) => {
   const { blockHeightTolerance = 10, poaIntervalPeriod = '50ms' } = opts;
   const defaultNodeOptions: LaunchNodeOptions = {
     args: [
@@ -56,14 +57,11 @@ const mockAll = () => {
 
   return {
     fetch: fetchSpy,
-  }
-}
+  };
+};
 
-const setExpectedBlockHeightToRequest = async (opts: { provider: Provider, newHeight: number }) => {
-  const {
-    provider,
-    newHeight,
-  } = opts;
+const setExpectedBlockHeightToRequest = async (opts: { provider: Provider; newHeight: number }) => {
+  const { provider, newHeight } = opts;
 
   const {
     chain: {
@@ -92,7 +90,7 @@ const setExpectedBlockHeightToRequest = async (opts: { provider: Provider, newHe
 
   return {
     expectedHeight,
-  }
+  };
 };
 
 /**
@@ -119,18 +117,18 @@ describe('optimistic concurrency handling via block height', () => {
     using launched = await setupTest();
     const { provider } = launched;
 
-    await provider.operations.produceBlocks({ blocksToProduce: "1"});
+    await provider.operations.produceBlocks({ blocksToProduce: '1' });
 
     // @ts-expect-error - private property
     const providerBlockHeight = Provider.currentBlockHeightCache[provider.url];
     expect(providerBlockHeight).toEqual(1);
-  })
+  });
 
   it(`should clear the block height cache with clearChainAndNodeCaches`, async () => {
     using launched = await setupTest();
     const { provider } = launched;
 
-    await provider.operations.produceBlocks({ blocksToProduce: "1"});
+    await provider.operations.produceBlocks({ blocksToProduce: '1' });
     // @ts-expect-error - private property
     const providerBlockHeight = Provider.currentBlockHeightCache[provider.url];
     expect(providerBlockHeight).toEqual(1);
@@ -148,7 +146,7 @@ describe('optimistic concurrency handling via block height', () => {
     const { fetch } = mockAll();
 
     // Write operation
-    await provider.operations.produceBlocks({ blocksToProduce: "1"});
+    await provider.operations.produceBlocks({ blocksToProduce: '1' });
 
     // Read operation
     await provider.operations.getChain();
@@ -162,7 +160,7 @@ describe('optimistic concurrency handling via block height', () => {
     const { provider, wallet, baseAssetId } = launched;
 
     // Perform a write operation to ensure the block height is updated
-    await provider.operations.produceBlocks({ blocksToProduce: "1"});
+    await provider.operations.produceBlocks({ blocksToProduce: '1' });
 
     // Set the expected block height to 8
     const { expectedHeight } = await setExpectedBlockHeightToRequest({ provider, newHeight: 8 });
@@ -188,7 +186,7 @@ describe('optimistic concurrency handling via block height', () => {
     const { provider, wallet, baseAssetId } = launched;
 
     // Perform a write operation to ensure the block height is updated
-    await provider.operations.produceBlocks({ blocksToProduce: "1"});
+    await provider.operations.produceBlocks({ blocksToProduce: '1' });
 
     // Set the expected block height to 20
     const { expectedHeight } = await setExpectedBlockHeightToRequest({ provider, newHeight: 20 });
@@ -213,10 +211,13 @@ describe('optimistic concurrency handling via block height', () => {
     const { provider, wallet, baseAssetId } = launched;
 
     // Perform a write operation to ensure the block height is updated
-    await provider.operations.produceBlocks({ blocksToProduce: "1"});
+    await provider.operations.produceBlocks({ blocksToProduce: '1' });
 
     // Set the expected block height to 10_000
-    const { expectedHeight } = await setExpectedBlockHeightToRequest({ provider, newHeight: 10_000 });
+    const { expectedHeight } = await setExpectedBlockHeightToRequest({
+      provider,
+      newHeight: 10_000,
+    });
 
     await expectToThrowFuelError(
       () =>
@@ -226,7 +227,9 @@ describe('optimistic concurrency handling via block height', () => {
         }),
       {
         code: ErrorCode.RPC_CONSISTENCY,
-        message: expect.stringContaining(`The required fuel block height is higher than the current block height. Required: ${expectedHeight}`)
+        message: expect.stringContaining(
+          `The required fuel block height is higher than the current block height. Required: ${expectedHeight}`
+        ),
       }
     );
   }, 20_000);
@@ -235,22 +238,15 @@ describe('optimistic concurrency handling via block height', () => {
     using launched1 = await setupTest({ poaIntervalPeriod: '50ms' });
     using launched2 = await setupTest({ poaIntervalPeriod: '100ms' });
 
-    const {
-      provider: provider1,
-      wallet: wallet1,
-      baseAssetId
-    } = launched1;
-    const {
-      provider: provider2,
-      wallet: wallet2,
-    } = launched2;
+    const { provider: provider1, wallet: wallet1, baseAssetId } = launched1;
+    const { provider: provider2, wallet: wallet2 } = launched2;
 
     // allow for block production
     await sleep(250);
 
     // Make a write operation to ensure the block height is updated
-    await provider1.operations.produceBlocks({ blocksToProduce: "1"});
-    await provider2.operations.produceBlocks({ blocksToProduce: "1"});
+    await provider1.operations.produceBlocks({ blocksToProduce: '1' });
+    await provider2.operations.produceBlocks({ blocksToProduce: '1' });
 
     const { fetch } = mockAll();
 
@@ -265,7 +261,9 @@ describe('optimistic concurrency handling via block height', () => {
     });
 
     const [operation1, operation2] = getFetchOperationsByName(fetch, 'getCoinsToSpend');
-    expect(operation1.extensions.required_fuel_block_height).toBeGreaterThan(operation2.extensions.required_fuel_block_height);
+    expect(operation1.extensions.required_fuel_block_height).toBeGreaterThan(
+      operation2.extensions.required_fuel_block_height
+    );
   });
 
   it(`should not update the cache with a lower block height`, async () => {
@@ -274,7 +272,7 @@ describe('optimistic concurrency handling via block height', () => {
     const { fetch } = mockAll();
 
     // Perform a write operation to ensure the block height is updated
-    await provider.operations.produceBlocks({ blocksToProduce: "1"});
+    await provider.operations.produceBlocks({ blocksToProduce: '1' });
     // @ts-expect-error - private property
     expect(Provider.currentBlockHeightCache[provider.url]).toEqual(1);
 
@@ -302,15 +300,15 @@ describe('optimistic concurrency handling via block height', () => {
     );
 
     // Perform a read operation
-    await provider.operations.produceBlocks({ blocksToProduce: "1"});
+    await provider.operations.produceBlocks({ blocksToProduce: '1' });
     // @ts-expect-error - private property
     expect(Provider.currentBlockHeightCache[provider.url]).toEqual(expectedBlockHeight);
 
     // Update the expected block height to 50
     mockedFuelBlockHeight.value = 50;
-    await provider.operations.produceBlocks({ blocksToProduce: "1"});
+    await provider.operations.produceBlocks({ blocksToProduce: '1' });
     // @ts-expect-error - private property
-    expect(Provider.currentBlockHeightCache[provider.url]).toEqual(expectedBlockHeight);  // Should not be updated to 50.
+    expect(Provider.currentBlockHeightCache[provider.url]).toEqual(expectedBlockHeight); // Should not be updated to 50.
 
     // Perform a read operation
     await provider.operations.getCoinsToSpend({
