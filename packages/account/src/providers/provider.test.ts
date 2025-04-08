@@ -968,7 +968,6 @@ describe('Provider', () => {
     // @ts-expect-error - chainInfoCache is private
     expect(Provider.chainInfoCache[provider2.url]).toBeDefined();
 
-
     // Given: we clear the cache for provider1
     Provider.clearChainAndNodeCaches(provider1.url);
     // @ts-expect-error - chainInfoCache is private

@@ -1,13 +1,16 @@
-import { FuelGraphqlSubscriber } from "../fuel-graphql-subscriber";
+import { FuelGraphqlSubscriber } from '../fuel-graphql-subscriber';
 
 type ParseGraphqlResponseReturns = {
   extensions: {
     current_fuel_block_height?: number;
     fuel_block_height_precondition_failed: boolean;
   };
-}
+};
 
-export const parseGraphqlResponse = async (options: { response: Response, isSubscription: boolean }): Promise<ParseGraphqlResponseReturns> => {
+export const parseGraphqlResponse = async (options: {
+  response: Response;
+  isSubscription: boolean;
+}): Promise<ParseGraphqlResponseReturns> => {
   const { response, isSubscription } = options;
 
   let extensions: {
@@ -28,5 +31,5 @@ export const parseGraphqlResponse = async (options: { response: Response, isSubs
 
   return {
     extensions,
-  }
-}
+  };
+};
