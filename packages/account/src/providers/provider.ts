@@ -74,6 +74,7 @@ import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch, getWaitDelay } from './utils/auto-retry-fetch';
 import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
 import { adjustResourcesToExclude } from './utils/helpers';
+import { parseGraphqlResponse } from './utils/parse-graphql-response';
 import type { ProviderCacheJson, TransactionSummaryJsonPartial } from './utils/serialization';
 import {
   deserializeChain,
@@ -82,7 +83,6 @@ import {
   deserializeReceipt,
 } from './utils/serialization';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
-import { parseGraphqlResponse } from './utils/parse-graphql-response';
 
 const MAX_RETRIES = 10;
 
@@ -577,7 +577,8 @@ export default class Provider {
     // If it is a write operation, we will initialize the block height cache
     // Return early as we don't need to apply the block height for write operations
     if (WRITE_OPERATIONS.includes(operationName)) {
-      Provider.currentBlockHeightCache[normalizedUrl] = Provider.currentBlockHeightCache[normalizedUrl] ?? 0;
+      Provider.currentBlockHeightCache[normalizedUrl] =
+        Provider.currentBlockHeightCache[normalizedUrl] ?? 0;
       return;
     }
 
@@ -614,7 +615,10 @@ export default class Provider {
         break;
       }
 
-      const { extensions } = await parseGraphqlResponse({ response, isSubscription: url.endsWith('-sub') });
+      const { extensions } = await parseGraphqlResponse({
+        response,
+        isSubscription: url.endsWith('-sub'),
+      });
       Provider.setCurrentBlockHeight(url, extensions?.current_fuel_block_height);
 
       if (!extensions?.fuel_block_height_precondition_failed) {
