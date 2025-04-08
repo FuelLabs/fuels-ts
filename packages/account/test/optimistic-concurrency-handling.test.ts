@@ -209,7 +209,7 @@ describe('optimistic concurrency handling via block height', () => {
   }, 10_000);
 
   it('should throw when retries are exceeded', async () => {
-    using launched = await setupTest();
+    using launched = await setupTest({ poaIntervalPeriod: '1s' });
     const { provider, wallet, baseAssetId } = launched;
 
     // Perform a write operation to ensure the block height is updated
@@ -218,7 +218,7 @@ describe('optimistic concurrency handling via block height', () => {
     // Set the expected block height to 10_000
     const { expectedHeight } = await setExpectedBlockHeightToRequest({
       provider,
-      newHeight: 10_000,
+      newHeight: 10,
     });
 
     await expectToThrowFuelError(
