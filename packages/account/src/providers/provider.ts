@@ -456,14 +456,6 @@ type SdkOperations = Omit<
   getBlobs: (variables: { blobIds: string[] }) => Promise<{ blob: { id: string } | null }[]>;
 };
 
-const BLOCK_HEIGHT_SENSITIVE_OPERATIONS: Array<keyof SdkOperations> = [
-  'submit',
-  'statusChange',
-  'getCoinsToSpend',
-  'submitAndAwaitStatus',
-  'getTransactionWithReceipts',
-];
-
 const WRITE_OPERATIONS: Array<keyof SdkOperations> = [
   'submit',
   'submitAndAwaitStatus',
