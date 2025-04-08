@@ -180,16 +180,17 @@ describe('optimistic concurrency handling via block height', () => {
     expect(Number(newBlockHeight)).toBeGreaterThanOrEqual(expectedHeight);
   });
 
-  // TODO: I don't understand this test...
-  it(`waits when current block height is higher than actual [outside node's tolerance]`, async () => {
-    using launched = await setupTest({ blockHeightTolerance: 0 });
+  it(`waits when current block height is higher than actual [SDK retries]`, async () => {
+    using launched = await setupTest({ blockHeightTolerance: 0, poaIntervalPeriod: '1s' });
     const { provider, wallet, baseAssetId } = launched;
 
     // Perform a write operation to ensure the block height is updated
     await provider.operations.produceBlocks({ blocksToProduce: '1' });
 
-    // Set the expected block height to 20
-    const { expectedHeight } = await setExpectedBlockHeightToRequest({ provider, newHeight: 20 });
+    // Set the expected block height to more 2 from current one blocks
+    const { expectedHeight } = await setExpectedBlockHeightToRequest({ provider, newHeight: 2 });
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
 
     // Perform a read operation
     await provider.operations.getCoinsToSpend({
@@ -204,7 +205,8 @@ describe('optimistic concurrency handling via block height', () => {
     } = await provider.operations.getLatestBlockHeight();
 
     expect(Number(newBlockHeight)).toBeGreaterThanOrEqual(expectedHeight);
-  });
+    expect(fetchSpy.mock.calls.length).toBeGreaterThanOrEqual(3);
+  }, 10_000);
 
   it('should throw when retries are exceeded', async () => {
     using launched = await setupTest();
