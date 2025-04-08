@@ -1,8 +1,6 @@
 // #region full
 contract;
 
-use std::logging::log;
-
 // Interface from the `LogSimple` contract
 abi LogSimple {
     fn log_simple(val: str[9]);
