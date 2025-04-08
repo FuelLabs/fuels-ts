@@ -15,7 +15,7 @@
     "@types/react-dom": "19.0.4",
     "@types/react": "19.0.10",
     "fuels": "workspace:*",
-    "next": "15.1.7",
+    "next": "15.2.3",
     "react-dom": "19.0.0",
     "react": "19.0.0",
     "typescript": "5.7.3"
