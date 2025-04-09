@@ -1,14 +1,12 @@
 // #region full
 script;
 
-abi LogSimple {
-    fn log_simple(val: str[9]);
-}
+use log_simple_abi::LogSimple;
 
-fn main(simple_contract_id: b256) {
+fn main(contract_id: b256) {
     log("Script started");
 
-    let log_contract     = abi(LogSimple, simple_contract_id);
+    let log_contract = abi(LogSimple, contract_id);
     log_contract.log_simple("ContractA");
 
     log("Script finished");

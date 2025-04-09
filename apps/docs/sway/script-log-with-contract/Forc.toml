@@ -2,3 +2,6 @@
 authors = ["Fuel Labs <contact@fuel.sh>"]
 license = "Apache-2.0"
 name = "script-log-with-contract"
+
+[dependencies]
+log_simple_abi = { path = "../log-simple-abi" }
