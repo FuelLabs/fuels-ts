@@ -39,6 +39,7 @@ import {
   ScriptTransactionRequest,
   transactionRequestify,
   addAmountToCoinQuantities,
+  calculateGasFee,
 } from './providers';
 import {
   cacheRequestInputsResourcesFromOwner,
@@ -556,6 +557,71 @@ export class Account extends AbstractAccount implements WithAddress {
     await this.fund(request, txCost);
 
     return this.sendTransaction(request);
+  }
+
+  async consolidateCoins(params: { assetId: string }): Promise<TransactionResponse> {
+    const { assetId } = params;
+
+    const { coins } = await this.getCoins(assetId);
+
+    if (coins.length <= 1) {
+      throw new FuelError(ErrorCode.NO_COINS_TO_CONSOLIDATE, 'No coins to consolidate.');
+    }
+    const baseAssetId = await this.provider.getBaseAssetId();
+    const isBaseAsset = baseAssetId === assetId;
+
+    let request: ScriptTransactionRequest;
+
+    if (isBaseAsset) {
+      request = await this.assembleBaseAssetConsolidation(coins);
+    } else {
+      throw new Error('implement me.');
+    }
+
+    return this.sendTransaction(request);
+  }
+
+  private async assembleBaseAssetConsolidation(coins: Coin[]) {
+    const chainInfo = await this.provider.getChain();
+    const maxInputsNumber = chainInfo.consensusParameters.txParameters.maxInputs.toNumber();
+
+    let coinsToConsolidate = coins;
+
+    if (coinsToConsolidate.length > maxInputsNumber) {
+      // Consolidate coins with the highest amount
+      coinsToConsolidate.sort((a, b) => (b.amount.lt(a.amount) ? -1 : 1));
+
+      coinsToConsolidate = coinsToConsolidate.slice(0, maxInputsNumber);
+    }
+
+    const request = new ScriptTransactionRequest({
+      script: '0x',
+    });
+
+    request.addResources(coinsToConsolidate);
+
+    const minGas = request.calculateMinGas(chainInfo);
+    const gasPrice = await this.provider.estimateGasPrice(10);
+
+    const fee = calculateGasFee({
+      gasPrice,
+      gas: minGas,
+      priceFactor: chainInfo.consensusParameters.feeParameters.gasPriceFactor,
+      tip: request.tip,
+    });
+
+    const totalFundAmount = coinsToConsolidate.reduce((acc, coin) => acc.add(coin.amount), bn(0));
+
+    if (totalFundAmount.lt(fee)) {
+      throw new FuelError(
+        ErrorCode.FUNDS_TOO_LOW,
+        'Not enough funds to pay for the consolidation transaction'
+      );
+    }
+
+    request.maxFee = fee;
+
+    return request;
   }
 
   /**
