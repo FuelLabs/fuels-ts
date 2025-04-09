@@ -27,7 +27,7 @@ export const extractInvocationResult = <T>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   logs: DecodedLogs<any>['logs'],
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  groupedLogs: DecodedLogs<any>['groupedLogs']
+  groupedLogs: DecodedLogs<any>['groupedLogs'] = {}
 ) => {
   const mainCallConfig = functionScopes[0]?.getCallConfig();
 
