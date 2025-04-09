@@ -1,8 +1,9 @@
 import { hexlify, sleep } from '@fuel-ts/utils';
-import type { MockInstance } from 'vitest';
 
 import { Provider, type WalletUnlocked } from '../src';
 import { setupTestProviderAndWallets } from '../src/test-utils';
+
+import { getFetchOperationsByName } from './utils/getFetchOperation';
 
 async function createTransfer(wallet: WalletUnlocked) {
   const baseAssetId = await wallet.provider.getBaseAssetId();
@@ -58,22 +59,6 @@ async function setupTest() {
   };
 }
 
-type ExpectBlockHeightProps = { fetchSpy: MockInstance<typeof fetch> } & (
-  | { included: true; latestBlockHeight: number }
-  | { included: false }
-);
-
-function expectBlockHeight(props: ExpectBlockHeightProps) {
-  const body = JSON.parse(props.fetchSpy.mock.calls[0][1]?.body?.toString() as string);
-  const property = 'extensions.required_fuel_block_height';
-
-  if (props.included) {
-    expect(body).toHaveProperty(property, props.latestBlockHeight);
-  } else {
-    expect(body).not.toHaveProperty(property);
-  }
-}
-
 /**
  * @group node
  * @group browser
@@ -81,161 +66,46 @@ function expectBlockHeight(props: ExpectBlockHeightProps) {
 describe('Block-sensitive operations have the current block height included in request', () => {
   afterEach(() => {
     vi.restoreAllMocks();
-    Provider.ENSURE_RPC_CONSISTENCY = true;
+    Provider.ENABLE_RPC_CONSISTENCY = true;
   });
 
-  test('submit - block height included', async () => {
+  it('should not apply a required block height for a [single non-write operation]', async () => {
     using launched = await setupTest();
-
-    const { provider, encodedTransaction, latestBlockHeight } = launched;
-
-    const fetchSpy = vi.spyOn(global, 'fetch');
-
-    await provider.operations.submit({ encodedTransaction });
-
-    expectBlockHeight({ included: true, fetchSpy, latestBlockHeight });
-  });
-
-  test('submit - block height not included', async () => {
-    using launched = await setupTest();
-
-    const { provider, encodedTransaction } = launched;
-
-    const fetchSpy = vi.spyOn(global, 'fetch');
-
-    Provider.ENSURE_RPC_CONSISTENCY = false;
-
-    await provider.operations.submit({ encodedTransaction });
-
-    expectBlockHeight({ included: false, fetchSpy });
-  });
-  test('getCoinsToSpend - block height included', async () => {
-    using launched = await setupTest();
-
-    const { provider, wallet, latestBlockHeight } = launched;
-
-    const baseAssetId = await provider.getBaseAssetId();
-
-    const fetchSpy = vi.spyOn(global, 'fetch');
-
-    await provider.operations.getCoinsToSpend({
-      owner: wallet.address.toB256(),
-      queryPerAsset: { amount: '10', assetId: baseAssetId },
-    });
-
-    expectBlockHeight({ included: true, fetchSpy, latestBlockHeight });
-  });
-
-  test('getCoinsToSpend - block height not included', async () => {
-    using launched = await setupTest();
-
     const { provider, wallet } = launched;
-
-    const baseAssetId = await provider.getBaseAssetId();
-
     const fetchSpy = vi.spyOn(global, 'fetch');
 
-    Provider.ENSURE_RPC_CONSISTENCY = false;
+    const balances = await provider.getBalances(wallet.address.toB256());
 
-    await provider.operations.getCoinsToSpend({
-      owner: wallet.address.toB256(),
-      queryPerAsset: { amount: '10', assetId: baseAssetId },
-    });
-
-    expectBlockHeight({ included: false, fetchSpy });
+    expect(balances).toBeDefined();
+    const [getBalancesV2] = getFetchOperationsByName(fetchSpy, 'getBalancesV2');
+    expect(getBalancesV2).not.toHaveProperty('required_fuel_block_height');
   });
 
-  test('statusChange - block height included', async () => {
+  it('should not apply a required block height for a [single write operation]', async () => {
     using launched = await setupTest();
-
-    const { provider, encodedTransaction, transactionId, latestBlockHeight } = launched;
-
-    await provider.operations.submit({ encodedTransaction });
-
-    const fetchSpy = vi.spyOn(global, 'fetch');
-
-    await provider.operations.statusChange({
-      transactionId,
-    });
-
-    expectBlockHeight({ included: true, fetchSpy, latestBlockHeight });
-  });
-
-  test('statusChange - block height not included', async () => {
-    using launched = await setupTest();
-
-    const { provider, encodedTransaction, transactionId } = launched;
-
-    await provider.operations.submit({ encodedTransaction });
-
-    const fetchSpy = vi.spyOn(global, 'fetch');
-
-    Provider.ENSURE_RPC_CONSISTENCY = false;
-
-    await provider.operations.statusChange({
-      transactionId,
-    });
-
-    expectBlockHeight({ included: false, fetchSpy });
-  });
-
-  test('submitAndAwaitStatus - block height included', async () => {
-    using launched = await setupTest();
-
-    const { provider, encodedTransaction, latestBlockHeight } = launched;
-
-    const fetchSpy = vi.spyOn(global, 'fetch');
-
-    await provider.operations.submitAndAwaitStatus({
-      encodedTransaction,
-    });
-
-    expectBlockHeight({ included: true, fetchSpy, latestBlockHeight });
-  });
-
-  test('submitAndAwaitStatus - block height not included', async () => {
-    using launched = await setupTest();
-
     const { provider, encodedTransaction } = launched;
-
     const fetchSpy = vi.spyOn(global, 'fetch');
 
-    Provider.ENSURE_RPC_CONSISTENCY = false;
+    await provider.operations.submit({ encodedTransaction });
 
-    await provider.operations.submitAndAwaitStatus({
-      encodedTransaction,
-    });
-
-    expectBlockHeight({ included: false, fetchSpy });
+    const [getBalancesV2] = getFetchOperationsByName(fetchSpy, 'submit');
+    expect(getBalancesV2).not.toHaveProperty('required_fuel_block_height');
   });
 
-  test('getTransactionWithReceipts - block height included', async () => {
+  it('should apply a required block height for all operations after a [single write operation]', async () => {
     using launched = await setupTest();
-
-    const { provider, transactionId, latestBlockHeight } = launched;
-
+    const { provider, encodedTransaction, wallet, latestBlockHeight } = launched;
     const fetchSpy = vi.spyOn(global, 'fetch');
 
-    await provider.operations.getTransactionWithReceipts({
-      transactionId,
-    });
+    await provider.operations.submit({ encodedTransaction });
+    const [submitOperation] = getFetchOperationsByName(fetchSpy, 'submit');
+    expect(submitOperation?.extensions).not.toHaveProperty('required_fuel_block_height');
 
-    expectBlockHeight({ included: true, fetchSpy, latestBlockHeight });
-  });
+    const balances = await provider.getBalances(wallet.address.toB256());
+    expect(balances).toBeDefined();
 
-  test('getTransactionWithReceipts - block height not included', async () => {
-    using launched = await setupTest();
-
-    const { provider, transactionId } = launched;
-
-    const fetchSpy = vi.spyOn(global, 'fetch');
-
-    Provider.ENSURE_RPC_CONSISTENCY = false;
-
-    await provider.operations.getTransactionWithReceipts({
-      transactionId,
-    });
-
-    expectBlockHeight({ included: false, fetchSpy });
+    const [getBalancesV2] = getFetchOperationsByName(fetchSpy, 'getBalancesV2');
+    expect(getBalancesV2?.extensions).toHaveProperty('required_fuel_block_height');
+    expect(getBalancesV2?.extensions.required_fuel_block_height).toBe(latestBlockHeight);
   });
 });

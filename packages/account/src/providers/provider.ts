@@ -76,6 +76,7 @@ import {
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch, getWaitDelay } from './utils/auto-retry-fetch';
 import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
+import { parseGraphqlResponse } from './utils/parse-graphql-response';
 import type { ProviderCacheJson, TransactionSummaryJsonPartial } from './utils/serialization';
 import {
   deserializeChain,
@@ -502,12 +503,10 @@ type SdkOperations = Omit<
   getBlobs: (variables: { blobIds: string[] }) => Promise<{ blob: { id: string } | null }[]>;
 };
 
-const BLOCK_HEIGHT_SENSITIVE_OPERATIONS: Array<keyof SdkOperations> = [
+const WRITE_OPERATIONS: Array<keyof SdkOperations> = [
   'submit',
-  'statusChange',
-  'getCoinsToSpend',
   'submitAndAwaitStatus',
-  'getTransactionWithReceipts',
+  'produceBlocks',
 ];
 
 /**
@@ -549,7 +548,7 @@ export default class Provider {
    *
    * `true` by default.
    */
-  public static ENSURE_RPC_CONSISTENCY: boolean = true;
+  public static ENABLE_RPC_CONSISTENCY: boolean = true;
   /** @hidden */
   private static inflightFetchChainAndNodeInfoRequests: Record<string, Promise<number>> = {};
   /** @hidden */
@@ -573,6 +572,22 @@ export default class Provider {
     cache: undefined,
   };
 
+  private static extractOperationName(body: BodyInit | undefined | null) {
+    return body?.toString().match(/"operationName":"(.+)"/)?.[1] as keyof SdkOperations;
+  }
+
+  private static isWriteOperation(body: BodyInit | undefined | null) {
+    return WRITE_OPERATIONS.includes(this.extractOperationName(body));
+  }
+
+  private static normalizeUrl(url: string) {
+    return url.replace(/-sub$/, '');
+  }
+
+  private static hasWriteOperationHappened(url: string) {
+    return isDefined(Provider.currentBlockHeightCache[this.normalizeUrl(url)]);
+  }
+
   /**
    * @hidden
    */
@@ -594,7 +609,7 @@ export default class Provider {
         fullRequest = await options.requestMiddleware(fullRequest);
       }
 
-      if (Provider.ENSURE_RPC_CONSISTENCY) {
+      if (Provider.ENABLE_RPC_CONSISTENCY && Provider.hasWriteOperationHappened(url)) {
         Provider.applyBlockHeight(fullRequest, url);
       }
 
@@ -603,17 +618,10 @@ export default class Provider {
   }
 
   private static applyBlockHeight(request: RequestInit, url: string) {
-    const operationName = request.body
-      ?.toString()
-      .match(/"operationName":"(.+)"/)?.[1] as keyof SdkOperations;
+    const normalizedUrl = this.normalizeUrl(url);
 
-    if (!BLOCK_HEIGHT_SENSITIVE_OPERATIONS.includes(operationName)) {
-      return;
-    }
-
-    const normalizedUrl = url.replace(/-sub$/, '');
-    const currentBlockHeight = this.currentBlockHeightCache[normalizedUrl] ?? 0;
-
+    // Apply the block height to the request
+    const currentBlockHeight = Provider.currentBlockHeightCache[normalizedUrl] ?? 0;
     request.body = request.body
       ?.toString()
       .replace(/}$/, `,"extensions":{"required_fuel_block_height":${currentBlockHeight}}}`);
@@ -627,7 +635,18 @@ export default class Provider {
     const fetchFn = () =>
       options.fetch ? options.fetch(url, request, options) : fetch(url, request);
 
+    const isWriteOperation = Provider.isWriteOperation(request.body);
+
+    // If it is a write operation, we will initialize the block height cache
+    if (isWriteOperation && !Provider.hasWriteOperationHappened(url)) {
+      Provider.currentBlockHeightCache[Provider.normalizeUrl(url)] = 0;
+    }
+
     let response: Response = await fetchFn();
+
+    if (!Provider.ENABLE_RPC_CONSISTENCY) {
+      return response;
+    }
 
     const retryOptions: RetryOptions = {
       maxRetries: 5,
@@ -635,22 +654,10 @@ export default class Provider {
     };
 
     for (let retriesLeft = retryOptions.maxRetries; retriesLeft > 0; --retriesLeft) {
-      const responseClone = response.clone();
-
-      let extensions: {
-        current_fuel_block_height?: number;
-        fuel_block_height_precondition_failed: boolean;
-      };
-
-      if (url.endsWith('-sub')) {
-        const reader = responseClone.body?.getReader() as ReadableStreamDefaultReader<Uint8Array>;
-        const { event } = await FuelGraphqlSubscriber.readEvent(reader);
-
-        extensions = event?.extensions as typeof extensions;
-      } else {
-        extensions = (await responseClone.json()).extensions;
-      }
-
+      const { extensions } = await parseGraphqlResponse({
+        response,
+        isSubscription: url.endsWith('-sub'),
+      });
       Provider.setCurrentBlockHeight(url, extensions?.current_fuel_block_height);
 
       if (!extensions?.fuel_block_height_precondition_failed) {
@@ -667,17 +674,21 @@ export default class Provider {
     return response;
   }
 
-  private static setCurrentBlockHeight(url: string, height: number | undefined) {
-    if (height === undefined) {
+  private static setCurrentBlockHeight(url: string, height?: number) {
+    /**
+     * If the height is undefined, there is nothing to set. We can also return early if
+     * no write operation has happened yet, as it means the 'currentBlockHeightCache' was
+     * not initialized and the current block height should not be used.
+     */
+    const writeOperationHappened = Provider.hasWriteOperationHappened(url);
+    if (!isDefined(height) || !writeOperationHappened) {
       return;
     }
 
-    const normalizedUrl = url.replace(/-sub$/, '');
+    const normalizedUrl = Provider.normalizeUrl(url);
 
-    const currentBlockHeight: number | undefined = this.currentBlockHeightCache[normalizedUrl];
-
-    if (currentBlockHeight === undefined || height > currentBlockHeight) {
-      this.currentBlockHeightCache[normalizedUrl] = height;
+    if (height > Provider.currentBlockHeightCache[normalizedUrl]) {
+      Provider.currentBlockHeightCache[normalizedUrl] = height;
     }
   }
 
