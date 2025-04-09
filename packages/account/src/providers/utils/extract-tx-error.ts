@@ -118,9 +118,11 @@ export const assembleRevertError = (
   });
 };
 
-interface IExtractTxError extends DecodedLogs {
+interface IExtractTxError<T = unknown > extends DecodedLogs<T> {
   receipts: Array<TransactionResultReceipt>;
   statusReason: string;
+  logs: T[];
+  groupedLogs: Record<string, T[]>;
 }
 
 /**
