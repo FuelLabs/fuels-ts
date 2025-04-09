@@ -1,8 +1,6 @@
 // #region full
 script;
 
-use std::logging::log;
-
 abi LogSimple {
     fn log_simple(val: str[9]);
 }
