@@ -1,6 +1,6 @@
 # RPC Consistency
 
-A common issue with querying distributed networks is ensuring each node is consistent. At any moment, each node could be at a different block height; therefore, querying the state of the blockchain may yield different results from node to node.
+A common issue with querying distributed networks is ensuring consistency between nodes. At any moment, each node could be at a different block height; therefore, querying the state of the blockchain may yield different results from node to node.
 
 To defend against this, the SDK appends the block height to block-sensitive requests so the node will verify that it meets the block height criteria before processing the request.
 
