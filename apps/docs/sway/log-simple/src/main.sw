@@ -1,11 +1,7 @@
 // #region full
 contract;
 
-use std::logging::log;
-
-abi LogSimple {
-    fn log_simple(val: str[9]);
-}
+use log_simple_abi::LogSimple;
 
 impl LogSimple for Contract {
     fn log_simple(val: str[9]) {

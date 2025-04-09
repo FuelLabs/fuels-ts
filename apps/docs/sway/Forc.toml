@@ -18,6 +18,7 @@ members = [
   "input-output-types",
   "liquidity-pool",
   "log-simple",
+  "log-simple-abi",
   "log-inter-calls",
   "my-contract",
   "predicate-main-args-struct",
