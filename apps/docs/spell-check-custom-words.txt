@@ -350,3 +350,4 @@ AssembleTxParams
 AssembleTxResponse
 AssembleTx
 Unparsed
+zero'd

@@ -29,15 +29,21 @@ describe('Revert Error Testing', () => {
       .validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE)
       .call();
 
-    const { logs } = await waitForResult();
-    const lastLog = logs[logs.length - 1];
+    const { logs, groupedLogs } = await waitForResult();
 
-    expect(JSON.stringify(lastLog)).toEqual(
-      JSON.stringify({
-        token_id: INPUT_TOKEN_ID,
-        price: INPUT_PRICE,
-      })
-    );
+    const expectedLogs = [
+      1,
+      'FOO',
+      'BAR',
+      'BAZ',
+      99,
+      100,
+      { token_id: expect.toEqualBn(INPUT_TOKEN_ID), price: expect.toEqualBn(INPUT_PRICE) },
+    ];
+    expect(logs).toStrictEqual(expectedLogs);
+    expect(groupedLogs).toStrictEqual({
+      [contractInstance.id.toB256()]: expectedLogs,
+    });
   });
 
   it('should throw for "require" revert TX [PriceCantBeZero]', async () => {
@@ -53,6 +59,9 @@ describe('Revert Error Testing', () => {
         `The transaction reverted because a "require" statement has thrown "PriceCantBeZero".`,
         {
           logs: [1, 'FOO', 'PriceCantBeZero'],
+          groupedLogs: {
+            [contractInstance.id.toB256()]: [1, 'FOO', 'PriceCantBeZero'],
+          },
           receipts: expect.any(Array<TransactionResultReceipt>),
           reason: 'require',
           panic: false,
@@ -80,6 +89,9 @@ describe('Revert Error Testing', () => {
         `The transaction reverted because a "require" statement has thrown "InvalidTokenId".`,
         {
           logs: [1, 'FOO', 'BAR', 'BAZ', 99, 'InvalidTokenId'],
+          groupedLogs: {
+            [contractInstance.id.toB256()]: [1, 'FOO', 'BAR', 'BAZ', 99, 'InvalidTokenId'],
+          },
           receipts: expect.any(Array<TransactionResultReceipt>),
           reason: 'require',
           panic: false,
@@ -100,6 +112,7 @@ describe('Revert Error Testing', () => {
         'The transaction reverted with reason: "TransferZeroCoins".\n\nYou can read more about this error at:\n\nhttps://docs.rs/fuel-asm/latest/fuel_asm/enum.PanicReason.html#variant.TransferZeroCoins',
         {
           logs: [],
+          groupedLogs: {},
           receipts: expect.any(Array<TransactionResultReceipt>),
           reason: 'TransferZeroCoins',
           panic: true,
@@ -115,13 +128,17 @@ describe('Revert Error Testing', () => {
     const INPUT_PRICE = bn(100);
     const INPUT_TOKEN_ID = bn(100);
 
+    const expectedLogs = [1, 'FOO', 'BAR', 'BAZ', 99, 100];
     await expectToThrowFuelError(
       () => contractInstance.functions.validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE).call(),
       new FuelError(
         ErrorCode.SCRIPT_REVERTED,
         'The transaction reverted because an "assert" statement failed to evaluate to true.',
         {
-          logs: [1, 'FOO', 'BAR', 'BAZ', 99, 100],
+          logs: expectedLogs,
+          groupedLogs: {
+            [contractInstance.id.toB256()]: expectedLogs,
+          },
           receipts: expect.any(Array<TransactionResultReceipt>),
           panic: false,
           revert: true,
@@ -141,6 +158,7 @@ describe('Revert Error Testing', () => {
         'The transaction reverted with reason: "NotEnoughBalance".\n\nYou can read more about this error at:\n\nhttps://docs.rs/fuel-asm/latest/fuel_asm/enum.PanicReason.html#variant.NotEnoughBalance',
         {
           logs: [],
+          groupedLogs: {},
           receipts: expect.any(Array<TransactionResultReceipt>),
           panic: true,
           revert: false,
@@ -153,13 +171,17 @@ describe('Revert Error Testing', () => {
   it('should throw for "assert_eq" revert TX', async () => {
     using contractInstance = await launchContract();
 
+    const expectedLogs = ['FOO', 9, 10];
     await expectToThrowFuelError(
       () => contractInstance.functions.assert_value_eq_10(9).call(),
       new FuelError(
         ErrorCode.SCRIPT_REVERTED,
         `The transaction reverted because of an "assert_eq" statement comparing 10 and 9.`,
         {
-          logs: ['FOO', 9, 10],
+          logs: expectedLogs,
+          groupedLogs: {
+            [contractInstance.id.toB256()]: expectedLogs,
+          },
           receipts: expect.any(Array<TransactionResultReceipt>),
           panic: false,
           revert: true,
@@ -172,13 +194,17 @@ describe('Revert Error Testing', () => {
   it('should throw for "assert_ne" revert TX', async () => {
     using contractInstance = await launchContract();
 
+    const expectedLogs = ['BAZ', 10, 5, 5];
     await expectToThrowFuelError(
       () => contractInstance.functions.assert_value_ne_5(5).call(),
       new FuelError(
         ErrorCode.SCRIPT_REVERTED,
         `The transaction reverted because of an "assert_ne" statement comparing 5 and 5.`,
         {
-          logs: ['BAZ', 10, 5, 5],
+          logs: expectedLogs,
+          groupedLogs: {
+            [contractInstance.id.toB256()]: expectedLogs,
+          },
           receipts: expect.any(Array<TransactionResultReceipt>),
           panic: false,
           revert: true,
@@ -225,6 +251,7 @@ describe('Revert Error Testing', () => {
         `The transaction reverted because it's missing an "OutputVariable".`,
         {
           logs: [],
+          groupedLogs: {},
           receipts: expect.any(Array<TransactionResultReceipt>),
           panic: false,
           revert: true,
@@ -241,6 +268,7 @@ describe('Revert Error Testing', () => {
       () => contractInstance.functions.revert_with_0().call(),
       new FuelError(ErrorCode.UNKNOWN, `The transaction reverted with an unknown reason: 0`, {
         logs: [],
+        groupedLogs: {},
         receipts: expect.any(Array<TransactionResultReceipt>),
         panic: false,
         revert: true,
@@ -252,13 +280,17 @@ describe('Revert Error Testing', () => {
   it('should ensure errors from getTransactionCost dry-run are properly thrown', async () => {
     using contractInstance = await launchContract();
 
+    const expectedLogs = ['BAZ', 10, 5, 5];
     await expectToThrowFuelError(
       () => contractInstance.functions.assert_value_ne_5(5).getTransactionCost(),
       new FuelError(
         ErrorCode.SCRIPT_REVERTED,
         `The transaction reverted because of an "assert_ne" statement comparing 5 and 5.`,
         {
-          logs: ['BAZ', 10, 5, 5],
+          logs: expectedLogs,
+          groupedLogs: {
+            [contractInstance.id.toB256()]: expectedLogs,
+          },
           receipts: expect.any(Array<TransactionResultReceipt>),
           panic: false,
           revert: true,
