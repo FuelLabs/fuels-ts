@@ -4,7 +4,7 @@ import { bn } from '@fuel-ts/math';
 import { InputType, OutputType } from '@fuel-ts/transactions';
 import { hexlify } from '@fuel-ts/utils';
 
-import { type ExcludeResourcesOption } from '../resource';
+import type { ResourcesIdsToIgnore } from '../provider';
 
 import type {
   TransactionRequestInput,
@@ -88,13 +88,13 @@ export const cacheRequestInputsResources = (inputs: TransactionRequestInput[]) =
     {
       utxos: [],
       messages: [],
-    } as Required<ExcludeResourcesOption>
+    } as Required<ResourcesIdsToIgnore>
   );
 
 export const cacheRequestInputsResourcesFromOwner = (
   inputs: TransactionRequestInput[],
   owner: Address
-): ExcludeResourcesOption =>
+): ResourcesIdsToIgnore =>
   inputs.reduce(
     (acc, input) => {
       if (isRequestInputCoin(input) && input.owner === owner.toB256()) {
@@ -107,7 +107,7 @@ export const cacheRequestInputsResourcesFromOwner = (
     {
       utxos: [],
       messages: [],
-    } as Required<ExcludeResourcesOption>
+    } as Required<ResourcesIdsToIgnore>
   );
 
 /**

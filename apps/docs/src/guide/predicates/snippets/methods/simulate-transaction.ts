@@ -28,18 +28,27 @@ const fundPredicate = await funder.transfer(
 await fundPredicate.waitForResult();
 
 // Instantiate the transaction request.
-const transactionRequest = new ScriptTransactionRequest({
-  gasLimit: 2000,
-  maxFee: bn(0),
-});
+const request = new ScriptTransactionRequest();
 
-transactionRequest.addCoinOutput(receiver.address, 1000000, baseAssetId);
+const amount = bn(1_000_000);
+
+request.addCoinOutput(receiver.address, amount, baseAssetId);
 
 // Estimate and fund the transaction
-await transactionRequest.estimateAndFund(predicate);
+const { assembledRequest } = await provider.assembleTx({
+  request,
+  feePayerAccount: predicate,
+  accountCoinQuantities: [
+    {
+      amount,
+      assetId: baseAssetId,
+      account: predicate,
+      changeOutputAccount: predicate,
+    },
+  ],
+});
 
-const result = await predicate.simulateTransaction(transactionRequest);
-
+const result = await predicate.simulateTransaction(assembledRequest);
 // #endregion simulateTransaction
 
 const hasReturnReceipt = result.receipts.some(

@@ -16,9 +16,25 @@ import type {
   ReceiptTransfer,
   ReceiptTransferOut,
 } from '@fuel-ts/transactions';
-import { getMintedAssetId, InputMessageCoder, ReceiptType } from '@fuel-ts/transactions';
-import { hexlify, arrayify } from '@fuel-ts/utils';
+import {
+  getMintedAssetId,
+  InputMessageCoder,
+  InputType,
+  OutputType,
+  ReceiptType,
+} from '@fuel-ts/transactions';
+import { hexlify, arrayify, assertUnreachable } from '@fuel-ts/utils';
 
+import type {
+  GqlInputCoinFragment,
+  GqlInputContractFragment,
+  GqlInputMessageFragment,
+  GqlOutputChangeFragment,
+  GqlOutputCoinFragment,
+  GqlOutputContractCreatedFragment,
+  GqlOutputContractFragment,
+  GqlOutputVariableFragment,
+} from '../__generated__/operations';
 import { GqlReceiptType } from '../__generated__/operations';
 import type {
   ChainInfo,
@@ -28,7 +44,17 @@ import type {
   TransactionReceiptJson,
 } from '../provider';
 import type Provider from '../provider';
+import type { TransactionRequestInput, TransactionRequestOutput } from '../transaction-request';
 import type { TransactionResultReceipt } from '../transaction-response';
+
+type InputJson = GqlInputCoinFragment | GqlInputMessageFragment | GqlInputContractFragment;
+
+type OutputJson =
+  | GqlOutputCoinFragment
+  | GqlOutputChangeFragment
+  | GqlOutputVariableFragment
+  | GqlOutputContractFragment
+  | GqlOutputContractCreatedFragment;
 
 export interface ProviderCache {
   consensusParametersTimestamp?: number;
@@ -435,4 +461,106 @@ export const deserializeReceipt = (receipt: TransactionReceiptJson): Transaction
     default:
       throw new FuelError(ErrorCode.INVALID_RECEIPT_TYPE, `Invalid receipt type: ${receiptType}.`);
   }
+};
+
+export const deserializeInput = (input: InputJson) => {
+  let parsedInput: TransactionRequestInput;
+
+  switch (input.type) {
+    case 'InputCoin':
+      parsedInput = {
+        type: InputType.Coin,
+        id: input.utxoId,
+        amount: bn(input.amount),
+        assetId: input.assetId,
+        owner: input.owner,
+        txPointer: `0x${input.txPointer}`,
+        witnessIndex: Number(input.coinWitnessIndex),
+        predicate: input.predicate,
+        predicateData: input.predicateData,
+        predicateGasUsed: bn(input.predicateGasUsed),
+      };
+      break;
+
+    case 'InputMessage':
+      parsedInput = {
+        type: InputType.Message,
+        nonce: input.nonce,
+        amount: bn(input.amount),
+        recipient: input.recipient,
+        sender: input.sender,
+        data: input.data,
+        witnessIndex: Number(input.messageWitnessIndex),
+        predicate: input.predicate,
+        predicateData: input.predicateData,
+        predicateGasUsed: bn(input.predicateGasUsed),
+      };
+      break;
+
+    case 'InputContract':
+      parsedInput = {
+        type: InputType.Contract,
+        contractId: input.contractId,
+        txPointer: `0x${input.txPointer}`,
+        txID: hexlify(arrayify(input.utxoId).slice(0, 32)),
+      };
+      break;
+
+    default:
+      assertUnreachable(input);
+  }
+
+  return parsedInput;
+};
+
+export const deserializeOutput = (output: OutputJson) => {
+  let parsedOutput: TransactionRequestOutput;
+
+  switch (output.type) {
+    case 'CoinOutput':
+      parsedOutput = {
+        type: OutputType.Coin,
+        amount: bn(output.amount),
+        assetId: output.assetId,
+        to: output.to,
+      };
+      break;
+
+    case 'ContractOutput':
+      parsedOutput = {
+        type: OutputType.Contract,
+        inputIndex: Number(output.inputIndex),
+      };
+      break;
+
+    case 'ChangeOutput':
+      parsedOutput = {
+        type: OutputType.Change,
+        assetId: output.assetId,
+        to: output.to,
+      };
+      break;
+
+    case 'ContractCreated':
+      parsedOutput = {
+        type: OutputType.ContractCreated,
+        stateRoot: output.stateRoot,
+        contractId: output.contract,
+      };
+      break;
+
+    case 'VariableOutput':
+      parsedOutput = {
+        type: OutputType.Variable,
+        amount: bn(output.amount),
+        assetId: output.assetId,
+        to: output.to,
+      };
+      break;
+
+    default:
+      assertUnreachable(output);
+  }
+
+  return parsedOutput;
 };

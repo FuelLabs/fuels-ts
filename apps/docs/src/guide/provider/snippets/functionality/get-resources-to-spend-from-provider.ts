@@ -1,5 +1,5 @@
 // #region getResourcesToSpend-1
-import type { CoinQuantityLike, ExcludeResourcesOption } from 'fuels';
+import type { CoinQuantityLike, ResourcesIdsToIgnore } from 'fuels';
 import { Provider, ScriptTransactionRequest, Wallet } from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../../../env';
@@ -20,7 +20,7 @@ const utxoId =
   '0x00000000000000000000000000000000000000000000000000000000000000010001';
 const messageNonce =
   '0x381de90750098776c71544527fd253412908dec3d07ce9a7367bd1ba975908a0';
-const excludedIds: ExcludeResourcesOption = {
+const excludedIds: ResourcesIdsToIgnore = {
   utxos: [utxoId],
   messages: [messageNonce],
 };
