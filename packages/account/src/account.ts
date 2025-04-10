@@ -33,6 +33,8 @@ import type {
   TransactionResponse,
   ProviderSendTxParams,
   TransactionSummaryJson,
+  TransactionResult,
+  TransactionType,
 } from './providers';
 import {
   withdrawScript,
@@ -81,6 +83,14 @@ export type EstimatedTxParams = Pick<
   | 'gasPrice'
   | 'transactionSummary'
 >;
+
+export type SubmitAllCallbackResponse = {
+  txResponses: TransactionResult<TransactionType.Script>[];
+  errors: FuelError[];
+};
+
+export type SubmitAllCallback = () => Promise<SubmitAllCallbackResponse>;
+
 const MAX_FUNDING_ATTEMPTS = 5;
 
 export type FakeResources = Partial<Coin> & Required<Pick<Coin, 'amount' | 'assetId'>>;
