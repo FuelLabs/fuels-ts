@@ -346,3 +346,4 @@ XORs
 YAML
 RESTful
 EIP
+zero'd
