@@ -2552,7 +2552,7 @@ describe('Provider', () => {
           code: 'ECONNREFUSED',
         },
       }),
-    }
+    };
     expect(result1).toMatchObject(expectedFailure);
     expect(result2).toMatchObject(expectedFailure);
     expect(fetchSpy).toHaveBeenCalledTimes(1);
