@@ -1,12 +1,19 @@
-import { measure } from './helpers';
-import type { PerformanceOperationParams, PerformanceResult } from './types';
-import { TagEnum } from './types';
+import { TransferContract } from '../../test/typegen/contracts';
 
-export async function missing4xOutputVariableCall(
-  params: PerformanceOperationParams
-): Promise<PerformanceResult> {
-  const { account, baseAssetId, contract } = params;
+import { getContractId } from './helpers';
+import {
+  ContractEnum,
+  TagEnum,
+  type Operation,
+  type OperationResult,
+  type PerformanceOperationParams,
+} from './types';
 
+async function operation(params: PerformanceOperationParams): Promise<OperationResult> {
+  const { account, baseAssetId } = params;
+
+  const contractId = getContractId(ContractEnum.TransferContract);
+  const contract = new TransferContract(contractId, account);
   const callParams = [
     {
       recipient: { Address: { bits: account.address.toB256() } },
@@ -30,14 +37,15 @@ export async function missing4xOutputVariableCall(
     },
   ];
 
-  const { duration } = await measure(async () => {
-    const call = await contract.functions
-      .execute_transfer(callParams)
-      .callParams({ forward: [1000, baseAssetId] })
-      .call();
+  const call = await contract.functions
+    .execute_transfer(callParams)
+    .callParams({ forward: [1000, baseAssetId] })
+    .call();
 
-    return call.waitForResult();
-  });
-
-  return { tag: TagEnum.Missing4xOutputVariable, duration };
+  return call.waitForResult();
 }
+
+export const missing4xOutputVariableCall: Operation = {
+  tag: TagEnum.Missing4xOutputVariable,
+  operation,
+};
