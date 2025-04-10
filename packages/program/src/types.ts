@@ -9,6 +9,7 @@ import type {
   TransactionType,
   AbstractAccount,
   Provider,
+  DecodedLogs,
 } from '@fuel-ts/account';
 import type { Address, WithContractId } from '@fuel-ts/address';
 import type { BN, BigNumberish } from '@fuel-ts/math';
@@ -123,7 +124,9 @@ export type TransactionCostOptions = Partial<{
 
 export type FunctionResult<TReturn> = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  readonly logs: Array<any>;
+  readonly logs: DecodedLogs<any>['logs'];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly groupedLogs: DecodedLogs<any>['groupedLogs'];
   readonly value: TReturn;
   readonly gasUsed: BN;
   readonly program: AbstractProgram;

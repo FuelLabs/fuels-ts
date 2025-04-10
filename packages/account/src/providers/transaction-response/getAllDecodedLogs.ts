@@ -8,6 +8,11 @@ import type {
   TransactionResultReceipt,
 } from './transaction-response';
 
+export interface DecodedLogs<T = unknown> {
+  logs: T[];
+  groupedLogs: Record<string, T[]>;
+}
+
 /**
  * @hidden
  *
@@ -25,14 +30,14 @@ import type {
  * @param mainAbi - The ABI of the script or main contract.
  * @param externalAbis - The record of external contract ABIs.
  * @returns An array of decoded logs from Sway projects.
- *
- * @deprecated Use `getAllDecodedLogs` instead.
  */
-export function getDecodedLogs<T = unknown>(
-  receipts: Array<TransactionResultReceipt>,
-  mainAbi: JsonAbi,
-  externalAbis: Record<string, JsonAbi> = {}
-): T[] {
+export function getAllDecodedLogs<T = unknown>(opts: {
+  receipts: Array<TransactionResultReceipt>;
+  mainAbi: JsonAbi;
+  externalAbis?: Record<string, JsonAbi>;
+}): DecodedLogs<T> {
+  const { receipts, mainAbi, externalAbis = {} } = opts;
+
   let mainContract = '';
   if (mainAbi.programType === 'contract') {
     const firstCallReceipt = receipts.find(
@@ -42,26 +47,31 @@ export function getDecodedLogs<T = unknown>(
     mainContract = firstCallReceipt.to;
   }
 
-  return receipts.reduce((logs: T[], receipt) => {
-    if (receipt.type === ReceiptType.LogData || receipt.type === ReceiptType.Log) {
-      const isLogFromMainAbi = receipt.id === ZeroBytes32 || mainContract === receipt.id;
-      const isDecodable = isLogFromMainAbi || externalAbis[receipt.id];
+  return receipts.reduce(
+    ({ logs, groupedLogs }, receipt) => {
+      if (receipt.type === ReceiptType.LogData || receipt.type === ReceiptType.Log) {
+        const isLogFromMainAbi = receipt.id === ZeroBytes32 || mainContract === receipt.id;
+        const isDecodable = isLogFromMainAbi || externalAbis[receipt.id];
 
-      if (isDecodable) {
-        const interfaceToUse = isLogFromMainAbi
-          ? new Interface(mainAbi)
-          : new Interface(externalAbis[receipt.id]);
+        if (isDecodable) {
+          const interfaceToUse = isLogFromMainAbi
+            ? new Interface(mainAbi)
+            : new Interface(externalAbis[receipt.id]);
 
-        const data =
-          receipt.type === ReceiptType.Log
-            ? new BigNumberCoder('u64').encode(receipt.ra)
-            : receipt.data;
+          const data =
+            receipt.type === ReceiptType.Log
+              ? new BigNumberCoder('u64').encode(receipt.ra)
+              : receipt.data;
 
-        const [decodedLog] = interfaceToUse.decodeLog(data, receipt.rb.toString());
-        logs.push(decodedLog);
+          const [decodedLog] = interfaceToUse.decodeLog(data, receipt.rb.toString());
+          logs.push(decodedLog);
+          // eslint-disable-next-line no-param-reassign
+          groupedLogs[receipt.id] = [...(groupedLogs[receipt.id] || []), decodedLog];
+        }
       }
-    }
 
-    return logs;
-  }, []);
+      return { logs, groupedLogs };
+    },
+    { logs: [], groupedLogs: {} } as DecodedLogs<T>
+  );
 }
