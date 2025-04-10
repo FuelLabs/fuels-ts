@@ -12,9 +12,9 @@ const baseAssetId = await provider.getBaseAssetId();
 const assetA = TestAssetId.A.value;
 
 const deploy1 = await CounterFactory.deploy(sender);
-const deploy2 = await EchoValuesFactory.deploy(sender);
-
 const { contract: contract1 } = await deploy1.waitForResult();
+
+const deploy2 = await EchoValuesFactory.deploy(sender);
 const { contract: contract2 } = await deploy2.waitForResult();
 
 const contractTransferParams: ContractTransferParams[] = [

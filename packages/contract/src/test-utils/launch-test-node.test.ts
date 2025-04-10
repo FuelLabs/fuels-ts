@@ -185,9 +185,9 @@ describe('launchTestNode', () => {
     } = launched;
 
     const { waitForResult: waitForResult1 } = await contract.functions.test_function().call();
-    const { waitForResult: waitForResult2 } = await contract2.functions.test_function().call();
-
     const response1 = await waitForResult1();
+
+    const { waitForResult: waitForResult2 } = await contract2.functions.test_function().call();
     const response2 = await waitForResult2();
 
     expect(response1.value).toBe(true);
@@ -226,9 +226,9 @@ describe('launchTestNode', () => {
     } = launched;
 
     const { waitForResult: waitForResult1 } = await contract1.functions.test_function().call();
-    const { waitForResult: waitForResult2 } = await contract2.functions.test_function().call();
-
     const contract1Response = await waitForResult1();
+
+    const { waitForResult: waitForResult2 } = await contract2.functions.test_function().call();
     const contract2Response = await waitForResult2();
 
     expect(contract1Response.value).toBe(true);

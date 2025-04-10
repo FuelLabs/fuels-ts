@@ -11,3 +11,4 @@ export * from './transaction-response';
 export * from './transaction-summary';
 export * from './utils';
 export * from './chains';
+export * from './assemble-tx-helpers';

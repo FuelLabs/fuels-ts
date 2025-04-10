@@ -9,7 +9,7 @@ import {
   hexlify,
   isCoin,
 } from 'fuels';
-import type { BN } from 'fuels';
+import type { Account, BN } from 'fuels';
 import { launchTestNode, ASSET_A, ASSET_B, expectToBeInRange, TestMessage } from 'fuels/test-utils';
 
 import {
@@ -379,17 +379,25 @@ describe('Fee', () => {
      * - 1st dry run will fail due to missing `OutputVariable`
      * - 2nd dry run will succeed
      */
-    const transferCall = await contract.functions
-      .transfer_to_address({ bits: wallet.address.toB256() }, { bits: assetId }, 10_000)
-      .call();
+    const scope = contract.functions.transfer_to_address(
+      { bits: wallet.address.toB256() },
+      { bits: assetId },
+      10_000
+    );
 
+    const account = contract.account as Account;
+
+    const request = await scope.getTransactionRequest();
+    await request.estimateAndFund(account);
+
+    const transferCall = await scope.call();
     await transferCall.waitForResult();
 
     expect(estimateGasPrice).toHaveBeenCalledOnce();
     expect(dryRun).toHaveBeenCalledTimes(2);
   });
 
-  it('should ensure estimateGasPrice runs only once when funding a transaction.', async () => {
+  it('should ensure estimateGasPrice runs only once when funding a transaction (manual estimation)', async () => {
     const amountPerCoin = 100;
 
     using launched = await launchTestNode({
@@ -412,15 +420,53 @@ describe('Fee', () => {
     const fund = vi.spyOn(wallet, 'fund');
     const estimateGasPrice = vi.spyOn(provider, 'estimateGasPrice');
 
+    const request = new ScriptTransactionRequest();
+
+    request.addCoinOutput(wallet.address, amountPerCoin * 20, await provider.getBaseAssetId());
+
+    await request.estimateAndFund(wallet);
+
+    const tx = await wallet.sendTransaction(request, { estimateTxDependencies: false });
+    const { isStatusSuccess } = await tx.waitForResult();
+
+    expect(fund).toHaveBeenCalledOnce();
+    expect(estimateGasPrice).toHaveBeenCalledOnce();
+
+    expect(isStatusSuccess).toBeTruthy();
+  });
+
+  it('should ensure estimateGasPrice is NOT executed when funding a transaction (assembleTx)', async () => {
+    const amountPerCoin = 100;
+
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin, // Funding with multiple UTXOs so the fee will change after funding the TX.
+        coinsPerAsset: 250,
+      },
+      contractsConfigs: [
+        {
+          factory: MultiTokenContractFactory,
+        },
+      ],
+    });
+
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+
+    const fund = vi.spyOn(wallet, 'fund');
+    const estimateGasPrice = vi.spyOn(provider, 'estimateGasPrice');
     const tx = await wallet.transfer(
       wallet.address,
       amountPerCoin * 20,
       await provider.getBaseAssetId()
     );
+
     const { isStatusSuccess } = await tx.waitForResult();
 
-    expect(fund).toHaveBeenCalledOnce();
-    expect(estimateGasPrice).toHaveBeenCalledOnce();
+    expect(fund).not.toHaveBeenCalledOnce();
+    expect(estimateGasPrice).not.toHaveBeenCalledOnce();
 
     expect(isStatusSuccess).toBeTruthy();
   });
