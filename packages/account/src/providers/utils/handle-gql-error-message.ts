@@ -4,6 +4,7 @@ import type { GraphQLError } from 'graphql';
 enum GqlErrorMessage {
   NOT_ENOUGH_COINS_MAX_COINS = 'the target cannot be met due to no coins available or exceeding the \\d+ coin limit.',
   ASSET_NOT_FOUND = 'resource was not found in table',
+  INSUFFICIENT_FEE_AMOUNT = 'InsufficientFeeAmount { expected: (\\d+), provided: (\\d+) }',
 }
 
 type GqlError = { message: string } | GraphQLError;
@@ -25,6 +26,11 @@ const mapGqlErrorMessage = (error: GqlError): FuelError => {
       {},
       error
     );
+  }
+
+  if (new RegExp(GqlErrorMessage.INSUFFICIENT_FEE_AMOUNT).test(error.message)) {
+    const match = error.message.match(GqlErrorMessage.INSUFFICIENT_FEE_AMOUNT);
+    return new FuelError(ErrorCode.FUNDS_TOO_LOW, match?.[0] || error.message, {}, error);
   }
 
   return new FuelError(ErrorCode.INVALID_REQUEST, error.message, {}, error);
