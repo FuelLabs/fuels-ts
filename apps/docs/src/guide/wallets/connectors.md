@@ -192,16 +192,28 @@ Providing the message signing flow is successful, it will return the message sig
 
 #### `sendTransaction`
 
-The `signTransaction` method initiates the send transaction flow for the current connection.
+The `sendTransaction` method initiates the send transaction flow for the current connection.
 
 It requires two arguments:
 
 - `address` (`string`)
 - `transaction` ([`TransactionRequestLike`](DOCS_API_URL/types/_fuel_ts_account.TransactionRequestLike.html))
 
-It will return the transaction signature (as a `string`) if it is successfully signed.
+This method will return a promise that either resolves to the submitted transaction id or a [`TransactionResponse`](DOCS_API_URL/types/_fuel_ts_account.TransactionResponse.html). 
 
 <<< @/../../../packages/account/src/connectors/fuel-connector.ts#fuel-connector-method-sendTransaction{ts:line-numbers}
+
+#### `onBeforeAssembleTx`
+
+The `onBeforeAssembleTx` method is used to modify the transaction before it is assembled.
+
+It requires a single argument:
+
+- `params` ([`AssembleTxParams`](DOCS_API_URL/types/_fuel_ts_account.AssembleTxParams.html))
+
+It is a hook that can be used to modify the parameters of the `assembleTx` method. This is useful for modifying the underlying transaction before it is assembled, or setting a different fee payer such in the cases of non-native accounts.
+
+<<< @/../../../packages/account/src/connectors/fuel-connector.ts#fuel-connector-method-onBeforeAssembleTx{ts:line-numbers}
 
 #### `assets`
 

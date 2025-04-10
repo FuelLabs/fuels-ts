@@ -2,6 +2,7 @@ import { Interface, WORD_SIZE } from '@fuel-ts/abi-coder';
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import type {
   Account,
+  AssembleTxParams,
   CreateTransactionRequestLike,
   Provider,
   TransactionRequest,
@@ -200,11 +201,18 @@ export default class ContractFactory<TContract extends Contract = Contract> {
 
     request.maxFee = bn(0);
 
-    const { gasPrice, assembledRequest } = await account.provider.assembleTx({
+    let params: AssembleTxParams = {
       request,
       feePayerAccount: account,
       accountCoinQuantities: [],
-    });
+    };
+
+    if (account.connector) {
+      const connectorParams = await account.connector.onBeforeAssembleTx(params);
+      params = { ...params, ...connectorParams };
+    }
+
+    const { gasPrice, assembledRequest } = await account.provider.assembleTx(params);
 
     // eslint-disable-next-line no-param-reassign
     request = await setAndValidateGasAndFeeForAssembledTx({

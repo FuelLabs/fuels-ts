@@ -1,7 +1,9 @@
+import { Wallet } from '../src';
 import { Account } from '../src/account';
 import { Fuel } from '../src/connectors/fuel';
 import { ScriptTransactionRequest } from '../src/providers';
 import { setupTestProviderAndWallets } from '../src/test-utils';
+import { MockConnector } from './fixtures/mocked-connector';
 
 import { MockSendTransactionConnector } from './fixtures/mocked-send-transaction-connector';
 
@@ -12,6 +14,7 @@ async function setupConnector() {
   } = launched;
   const fuel = await new Fuel({
     connectors: [
+      // Returns tx response from sendTransaction
       new MockSendTransactionConnector({
         wallets: [connector],
       }),
@@ -125,5 +128,62 @@ describe('Fuel Connector', () => {
     // Should estimate and fund
     expect(estimateSpy).toHaveBeenCalledTimes(1);
     expect(fundSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('sends transaction and builds response [1 request]', async () => {
+    using launched = await setupConnector();
+    const { account, connector } = launched;
+    const { provider } = connector;
+
+    const submitSpy = vi.spyOn(provider.operations, 'submitAndAwaitStatus');
+    const txWithReceiptsSpy = vi.spyOn(provider.operations, 'getTransactionWithReceipts');
+    const statusChangeSpy = vi.spyOn(provider.operations, 'statusChange');
+
+    const receiver = Wallet.generate({ provider });
+
+    const tx = await account.transfer(receiver.address, 1000);
+    const response = await tx.waitForResult();
+
+    expect(response).toBeDefined();
+    expect(response.isStatusSuccess).toBe(true);
+
+    expect(submitSpy).toHaveBeenCalledTimes(1);
+    expect(txWithReceiptsSpy).toHaveBeenCalledTimes(0);
+    expect(statusChangeSpy).toHaveBeenCalledTimes(0);
+  });
+
+  it('sends transaction and builds response [3 requests]', async () => {
+    const launched = await setupTestProviderAndWallets();
+
+    const {
+      wallets: [connector],
+      provider,
+    } = launched;
+    const fuel = await new Fuel({
+      connectors: [
+        // Returns tx id from sendTransaction
+        new MockConnector({
+          wallets: [connector],
+        }),
+      ],
+    }).init();
+
+    const account = new Account(connector.address, connector.provider, fuel);
+
+    const submitSpy = vi.spyOn(provider.operations, 'submitAndAwaitStatus');
+    const txWithReceiptsSpy = vi.spyOn(provider.operations, 'getTransactionWithReceipts');
+    const statusChangeSpy = vi.spyOn(provider.operations, 'statusChange');
+
+    const receiver = Wallet.generate({ provider });
+
+    const tx = await account.transfer(receiver.address, 1000);
+    const response = await tx.waitForResult();
+
+    expect(response).toBeDefined();
+    expect(response.isStatusSuccess).toBe(true);
+
+    expect(submitSpy).toHaveBeenCalledTimes(1);
+    expect(txWithReceiptsSpy).toHaveBeenCalledTimes(1);
+    expect(statusChangeSpy).toHaveBeenCalledTimes(1);
   });
 });
