@@ -425,7 +425,7 @@ export default class Provider {
   /** @hidden */
   private static inflightFetchChainAndNodeInfoRequests: Record<
     string,
-    Promise<{ chain: ChainInfo; nodeInfo: NodeInfo; consensusParametersTimestamp: number }>
+    Promise<{ consensusParametersTimestamp: number }>
   > = {};
 
   /** @hidden */
@@ -632,21 +632,22 @@ export default class Provider {
       return { nodeInfo, chain };
     }
 
-    const inflightRequest: Promise<{
-      chain: ChainInfo;
-      nodeInfo: NodeInfo;
-      consensusParametersTimestamp: number;
-    }> = Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth];
+    // Obtain any inflight requests from other instances of Provider
+    const inflightRequest: Promise<{ consensusParametersTimestamp: number }> =
+      Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth];
 
+    // If there is an inflight request, then wait for it to resolve and return the cached values
     if (inflightRequest) {
       return inflightRequest.then((data) => {
         this.consensusParametersTimestamp = data.consensusParametersTimestamp;
-        Provider.chainInfoCache[this.urlWithoutAuth] = data.chain;
-        Provider.nodeInfoCache[this.urlWithoutAuth] = data.nodeInfo;
-        return { nodeInfo: data.nodeInfo, chain: data.chain };
+        return {
+          nodeInfo: Provider.nodeInfoCache[this.urlWithoutAuth],
+          chain: Provider.chainInfoCache[this.urlWithoutAuth],
+        };
       });
     }
 
+    // If there is no inflight request, then fetch the chain and node info from the network
     const getChainAndNodeInfoFromNetwork = this.operations
       .getChainAndNodeInfo()
       .then((data) => ({
@@ -676,9 +677,18 @@ export default class Provider {
         delete Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth];
       });
 
+    // Set the inflight request to the network request
     Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth] =
       getChainAndNodeInfoFromNetwork;
-    return Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth];
+
+    // Return the cached values once the network request resolves
+    return Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth].then((data) => {
+      this.consensusParametersTimestamp = data.consensusParametersTimestamp;
+      return {
+        nodeInfo: Provider.nodeInfoCache[this.urlWithoutAuth],
+        chain: Provider.chainInfoCache[this.urlWithoutAuth],
+      };
+    });
   }
 
   /**
