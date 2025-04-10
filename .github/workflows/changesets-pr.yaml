@@ -23,14 +23,14 @@ jobs:
 
     steps:
       - name: Create the Internal GitHub App Token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@v2
         id: app-token
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.APP_KEY }}
 
       - name: Create Fuel Docs GitHub Token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@v2
         id: docs-token
         with:
           app-id: ${{ vars.FUEL_DOCS_BOT_APP_ID }}
