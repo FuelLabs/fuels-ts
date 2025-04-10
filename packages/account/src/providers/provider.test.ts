@@ -2511,6 +2511,42 @@ describe('Provider', () => {
     expect(fetchSpy).toHaveBeenCalledTimes(1);
   });
 
+  // We expect a small timeout
+  it('should fail early if the node is not reachable', { timeout: 200 }, async () => {
+    const invalidUrl = 'http://something-that-does-not-exist.com';
+    const fetchSpy = vi.spyOn(global, 'fetch');
+    const provider = new Provider(invalidUrl);
+
+    await expectToThrowFuelError(() => provider.init(), new FuelError(FuelError.CODES.INVALID_REQUEST, 'Failed to fetch chain and node info', {
+      url: invalidUrl,
+    }));
+
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('should fail early and across multiple instances', async () => {
+    const invalidUrl = 'http://something-that-does-not-exist.com';
+    const fetchSpy = vi.spyOn(global, 'fetch');
+    const provider1 = new Provider(invalidUrl);
+    const provider2 = new Provider(invalidUrl);
+
+    const [result1, result2] = await Promise.allSettled([provider1.init(), provider2.init()]);
+
+    const expectedFailure = {
+      status: 'rejected',
+      reason: expect.objectContaining({
+        code: FuelError.CODES.INVALID_REQUEST,
+        message: 'Failed to fetch chain and node info',
+        metadata: {
+          url: invalidUrl,
+        },
+      }),
+    }
+    expect(result1).toMatchObject(expectedFailure);
+    expect(result2).toMatchObject(expectedFailure);
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+  });
+
   it('should throw error of asset metadata is not supported', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
