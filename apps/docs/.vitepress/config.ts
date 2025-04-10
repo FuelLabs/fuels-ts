@@ -311,6 +311,10 @@ export default defineConfig({
                 text: 'Custom script Call',
                 link: '/guide/scripts/custom-script-call',
               },
+              {
+                text: 'Logs',
+                link: '/guide/scripts/logs',
+              },
             ],
           },
           {
