@@ -591,7 +591,7 @@ export class Account extends AbstractAccount implements WithAddress {
     return submitAll();
   }
 
-  private async assembleBaseAssetConsolidationTxs(coins: Coin[]) {
+  async assembleBaseAssetConsolidationTxs(coins: Coin[]) {
     const chainInfo = await this.provider.getChain();
     const maxInputsNumber = chainInfo.consensusParameters.txParameters.maxInputs.toNumber();
 
