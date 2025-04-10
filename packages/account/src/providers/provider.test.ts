@@ -2517,9 +2517,17 @@ describe('Provider', () => {
     const fetchSpy = vi.spyOn(global, 'fetch');
     const provider = new Provider(invalidUrl);
 
-    await expectToThrowFuelError(() => provider.init(), new FuelError(FuelError.CODES.INVALID_REQUEST, 'Failed to fetch chain and node info', {
-      url: invalidUrl,
-    }));
+    const expectedError = new FuelError(
+      FuelError.CODES.CONNECTION_REFUSED,
+      'Unable to fetch chain and node info from the network',
+      {
+        url: invalidUrl,
+      },
+      expect.any(Error)
+    );
+    expectedError.cause = { code: 'ECONNREFUSED' };
+
+    await expectToThrowFuelError(() => provider.init(), expectedError);
 
     expect(fetchSpy).toHaveBeenCalledTimes(1);
   });
@@ -2535,10 +2543,13 @@ describe('Provider', () => {
     const expectedFailure = {
       status: 'rejected',
       reason: expect.objectContaining({
-        code: FuelError.CODES.INVALID_REQUEST,
-        message: 'Failed to fetch chain and node info',
+        code: FuelError.CODES.CONNECTION_REFUSED,
+        message: 'Unable to fetch chain and node info from the network',
         metadata: {
           url: invalidUrl,
+        },
+        cause: {
+          code: 'ECONNREFUSED',
         },
       }),
     }

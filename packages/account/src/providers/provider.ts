@@ -632,8 +632,11 @@ export default class Provider {
       return { nodeInfo, chain };
     }
 
-    const inflightRequest: Promise<{ chain: ChainInfo; nodeInfo: NodeInfo; consensusParametersTimestamp: number }> =
-      Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth];
+    const inflightRequest: Promise<{
+      chain: ChainInfo;
+      nodeInfo: NodeInfo;
+      consensusParametersTimestamp: number;
+    }> = Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth];
 
     if (inflightRequest) {
       return inflightRequest.then((data) => {
@@ -658,17 +661,24 @@ export default class Provider {
         this.consensusParametersTimestamp = data.consensusParametersTimestamp;
         return data;
       })
-      .catch((error) => {
-        throw new FuelError(FuelError.CODES.INVALID_REQUEST, 'Failed to fetch chain and node info', {
-          url: this.urlWithoutAuth,
-        }, error);
+      .catch((err) => {
+        const error = new FuelError(
+          FuelError.CODES.CONNECTION_REFUSED,
+          'Unable to fetch chain and node info from the network',
+          { url: this.urlWithoutAuth },
+          err
+        );
+        error.cause = { code: 'ECONNREFUSED' };
+
+        throw error;
       })
       .finally(() => {
         delete Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth];
       });
 
-    Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth] = getChainAndNodeInfoFromNetwork;
-    return Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth]
+    Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth] =
+      getChainAndNodeInfoFromNetwork;
+    return Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth];
   }
 
   /**
