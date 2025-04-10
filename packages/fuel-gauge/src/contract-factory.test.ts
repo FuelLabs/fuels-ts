@@ -69,6 +69,7 @@ describe('Contract Factory', () => {
       isTypeScript: expect.any(Boolean),
       isTypeBlob: expect.any(Boolean),
       logs: expect.any(Array),
+      groupedLogs: expect.any(Object),
       date: expect.any(Date),
       mintedAssets: expect.any(Array),
       burnedAssets: expect.any(Array),
