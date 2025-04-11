@@ -788,12 +788,14 @@ describe('Fuel Connector', () => {
     request.addCoinOutput(receiverWallet.address, 1000, await provider.getBaseAssetId());
     await request.estimateAndFund(connectorWallet);
 
+    const gasPrice = bn(request.flag?.summary?.gasPrice);
+
     const initialTxBytes = request.toTransactionBytes();
 
     const response = await account.sendTransaction(request);
     expect(response).toBeDefined();
 
-    const { rawReceipts, gasPrice } = await provider.getTransactionCost(request);
+    const { rawReceipts } = await provider.getTransactionCost(request, { gasPrice });
     const chainId = await provider.getChainId();
 
     const transactionSummaryJson = {
