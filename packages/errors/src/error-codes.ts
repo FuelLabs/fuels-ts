@@ -102,6 +102,7 @@ export enum ErrorCode {
   INVALID_PASSWORD = 'invalid-password',
   ACCOUNT_REQUIRED = 'account-required',
   UNLOCKED_WALLET_REQUIRED = 'unlocked-wallet-required',
+  NO_COINS_TO_CONSOLIDATE = 'no-coins-to-consolidate',
 
   // asset
   ASSET_NOT_FOUND = 'asset-not-found',

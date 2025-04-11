@@ -33,12 +33,15 @@ import type {
   TransactionResponse,
   ProviderSendTxParams,
   TransactionSummaryJson,
+  TransactionResult,
+  TransactionType,
 } from './providers';
 import {
   withdrawScript,
   ScriptTransactionRequest,
   transactionRequestify,
   addAmountToCoinQuantities,
+  calculateGasFee,
 } from './providers';
 import {
   cacheRequestInputsResourcesFromOwner,
@@ -80,6 +83,14 @@ export type EstimatedTxParams = Pick<
   | 'gasPrice'
   | 'transactionSummary'
 >;
+
+export type SubmitAllCallbackResponse = {
+  txResponses: TransactionResult<TransactionType.Script>[];
+  errors: FuelError[];
+};
+
+export type SubmitAllCallback = () => Promise<SubmitAllCallbackResponse>;
+
 const MAX_FUNDING_ATTEMPTS = 5;
 
 export type FakeResources = Partial<Coin> & Required<Pick<Coin, 'amount' | 'assetId'>>;
@@ -556,6 +567,87 @@ export class Account extends AbstractAccount implements WithAddress {
     await this.fund(request, txCost);
 
     return this.sendTransaction(request);
+  }
+
+  async consolidateCoins(params: { assetId: string }): Promise<SubmitAllCallbackResponse> {
+    const { assetId } = params;
+
+    const { coins } = await this.getCoins(assetId);
+
+    if (coins.length <= 1) {
+      throw new FuelError(ErrorCode.NO_COINS_TO_CONSOLIDATE, 'No coins to consolidate.');
+    }
+    const baseAssetId = await this.provider.getBaseAssetId();
+    const isBaseAsset = baseAssetId === assetId;
+
+    let submitAll: SubmitAllCallback;
+
+    if (isBaseAsset) {
+      ({ submitAll } = await this.assembleBaseAssetConsolidationTxs(coins));
+    } else {
+      throw new Error('implement me.');
+    }
+
+    return submitAll();
+  }
+
+  async assembleBaseAssetConsolidationTxs(coins: Coin[]) {
+    const chainInfo = await this.provider.getChain();
+    const maxInputsNumber = chainInfo.consensusParameters.txParameters.maxInputs.toNumber();
+
+    let totalFeeCost = bn(0);
+    const txs: ScriptTransactionRequest[] = [];
+    const batchSize = Math.ceil(coins.length / maxInputsNumber);
+    const gasPrice = await this.provider.estimateGasPrice(10);
+
+    for (let i = 0; i < batchSize; i += 1) {
+      const batchStart = i * maxInputsNumber;
+      const batchEnd = (i + 1) * maxInputsNumber;
+      const batch = coins.slice(batchStart, batchEnd);
+
+      // There is no reason to consolidate just one coin
+      if (batch.length > 1) {
+        const request = new ScriptTransactionRequest({
+          script: '0x',
+        });
+
+        request.addResources(batch);
+
+        const minGas = request.calculateMinGas(chainInfo);
+
+        const fee = calculateGasFee({
+          gasPrice,
+          gas: minGas,
+          priceFactor: chainInfo.consensusParameters.feeParameters.gasPriceFactor,
+          tip: request.tip,
+        });
+
+        request.maxFee = fee;
+
+        totalFeeCost = totalFeeCost.add(fee);
+
+        txs.push(request);
+      }
+    }
+
+    const submitAll: SubmitAllCallback = async () => {
+      const txResponses: TransactionResult<TransactionType.Script>[] = [];
+      const errors: FuelError[] = [];
+
+      for (const tx of txs) {
+        try {
+          const submit = await this.sendTransaction(tx);
+          const response = await submit.waitForResult<TransactionType.Script>();
+          txResponses.push(response);
+        } catch (error) {
+          errors.push(error as FuelError);
+        }
+      }
+
+      return { txResponses, errors };
+    };
+
+    return { txs, totalFeeCost, submitAll };
   }
 
   /**
