@@ -41,11 +41,22 @@ export type SqueezedOutStatus = {
   reason: string;
 };
 
+export type PreconfirmationSuccessStatus = {
+  type: 'PreconfirmationSuccessStatus';
+}
+
+export type PreconfirmationFailureStatus = {
+  type: 'PreconfirmationFailureStatus';
+  reason: string;
+}
+
 export type GraphqlTransactionStatus =
   | SubmittedStatus
   | SuccessStatus
   | FailureStatus
   | SqueezedOutStatus
+  | PreconfirmationSuccessStatus
+  | PreconfirmationFailureStatus
   | null;
 
 export type GqlTransaction = {
@@ -79,6 +90,8 @@ export enum TransactionStatus {
   success = 'success',
   squeezedout = 'squeezedout',
   failure = 'failure',
+  preconfirmationSuccess = 'preconfirmationSuccess',
+  preconfirmationFailure = 'preconfirmationFailure',
 }
 
 /**
@@ -88,7 +101,9 @@ export type GqlTransactionStatusesNames =
   | 'FailureStatus'
   | 'SubmittedStatus'
   | 'SuccessStatus'
-  | 'SqueezedOutStatus';
+  | 'SqueezedOutStatus'
+  | 'PreconfirmationSuccessStatus'
+  | 'PreconfirmationFailureStatus';
 
 /**
  * @hidden
