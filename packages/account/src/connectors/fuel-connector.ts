@@ -4,19 +4,19 @@ import type { HashableMessage } from '@fuel-ts/hasher';
 import { EventEmitter } from 'events';
 
 import type { Asset } from '../assets/types';
-import type { TransactionRequestLike, TransactionResponse } from '../providers';
+import type { AssembleTxParams, TransactionRequestLike, TransactionResponse } from '../providers';
 
-import { FuelConnectorEventTypes } from './types';
 import type {
-  FuelConnectorEvents,
   ConnectorMetadata,
   FuelABI,
-  Network,
-  FuelEventArg,
-  Version,
-  SelectNetworkArguments,
+  FuelConnectorEvents,
   FuelConnectorSendTxParams,
+  FuelEventArg,
+  Network,
+  SelectNetworkArguments,
+  Version,
 } from './types';
+import { FuelConnectorEventTypes } from './types';
 
 interface Connector {
   // #region fuel-connector-method-ping
@@ -50,6 +50,9 @@ interface Connector {
     params?: FuelConnectorSendTxParams
   ): Promise<string | TransactionResponse>;
   // #endregion fuel-connector-method-sendTransaction
+  // #region fuel-connector-method-onBeforeAssembleTx
+  onBeforeAssembleTx(params: AssembleTxParams): Promise<AssembleTxParams>;
+  // #endregion fuel-connector-method-onBeforeAssembleTx
   // #region fuel-connector-method-currentAccount
   currentAccount(): Promise<string | null>;
   // #endregion fuel-connector-method-currentAccount
@@ -208,6 +211,18 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
     _params?: FuelConnectorSendTxParams
   ): Promise<string | TransactionResponse> {
     throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
+  }
+
+  /**
+   * A hook that can be used to modify the params for an assembleTx call. This is used before
+   * estimating and funding transactions like transfers and contract calls. This is useful for
+   * connector specific logic such as adjusting the fee payer account to an associated predicate account.
+   *
+   * @param _params - The params for the assembleTx call to modify.
+   * @returns The modified params.
+   */
+  async onBeforeAssembleTx(_params: AssembleTxParams): Promise<AssembleTxParams> {
+    return _params;
   }
 
   /**
