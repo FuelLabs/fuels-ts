@@ -1,13 +1,37 @@
 # Working with Contract Logs
 
-When you log a value within a contract method, it generates a log entry that is added to the log receipt, and the variable type is recorded in the contract's ABI. The SDK enables you to parse these values into TypeScript types.
+When you log a value within a contract method, you can generate a log entry that is added to the log receipt, and the variable type is recorded in the contract's ABI. The SDK enables you to parse these values into TypeScript types.
+
+## Simple Logs
 
 Consider the following example contract:
 
-<<< @/../../docs/sway/log-values/src/main.sw#log-1{rust:line-numbers}
+<<< @/../../docs/sway/log-simple/src/main.sw#full{rust:line-numbers}
 
-To access the logged values in TypeScript, use the `logs` property in the response of a contract call. The logs data will be stored in an `Array<any>`:
+To access the logged values in TypeScript, use the `logs` (typed as `Array<any>`) property from the response of a contract call.
 
-<<< @./snippets/logs.ts#full{ts:line-numbers}
+<<< @./snippets/logs-simple.ts#logs{ts:line-numbers}
 
-This approach allows you to work seamlessly with logged values in your contract, making it easier to understand and debug the contract's behavior.
+## Grouped Logs
+
+We also provide a `groupedLogs` property that groups the logs by their program identifier. This is particularly useful when working with inter-contract or multi-calls.
+
+We will use the same [`LogSimple`](#simple-logs) contract as in the previous example.
+
+### Multi-call
+
+We can make a multi-call to the contract
+
+<<< @./snippets/logs-grouped-for-single-contract.ts#single{ts:line-numbers}
+
+### Inter-contract
+
+Consider the following example contract:
+
+In this example, we are making a call an inter-contract call to the [`LogSimple`](#simple-logs) contract from the previous example.
+
+<<< @/../../docs/sway/log-inter-calls/src/main.sw#full{rust:line-numbers}
+
+The `log_inter_call` function makes a call to the `log_simple` function of the [`LogSimple`](#simple-logs) contract.
+
+<<< @./snippets/logs-grouped-for-inter-contract-call.ts#inter{ts:line-numbers}

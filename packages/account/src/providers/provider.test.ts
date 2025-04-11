@@ -2511,6 +2511,53 @@ describe('Provider', () => {
     expect(fetchSpy).toHaveBeenCalledTimes(1);
   });
 
+  // We expect a small timeout
+  it('should fail early if the node is not reachable', { timeout: 200 }, async () => {
+    const invalidUrl = 'http://something-that-does-not-exist.com';
+    const fetchSpy = vi.spyOn(global, 'fetch');
+    const provider = new Provider(invalidUrl);
+
+    const expectedError = new FuelError(
+      FuelError.CODES.CONNECTION_REFUSED,
+      'Unable to fetch chain and node info from the network',
+      {
+        url: invalidUrl,
+      },
+      expect.any(Error)
+    );
+    expectedError.cause = { code: 'ECONNREFUSED' };
+
+    await expectToThrowFuelError(() => provider.init(), expectedError);
+
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('should fail early and across multiple instances', async () => {
+    const invalidUrl = 'http://something-that-does-not-exist.com';
+    const fetchSpy = vi.spyOn(global, 'fetch');
+    const provider1 = new Provider(invalidUrl);
+    const provider2 = new Provider(invalidUrl);
+
+    const [result1, result2] = await Promise.allSettled([provider1.init(), provider2.init()]);
+
+    const expectedFailure = {
+      status: 'rejected',
+      reason: expect.objectContaining({
+        code: FuelError.CODES.CONNECTION_REFUSED,
+        message: 'Unable to fetch chain and node info from the network',
+        metadata: {
+          url: invalidUrl,
+        },
+        cause: {
+          code: 'ECONNREFUSED',
+        },
+      }),
+    };
+    expect(result1).toMatchObject(expectedFailure);
+    expect(result2).toMatchObject(expectedFailure);
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+  });
+
   it('should throw error of asset metadata is not supported', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
