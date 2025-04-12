@@ -123,12 +123,16 @@ fragment SqueezedOutStatusFragment on SqueezedOutStatus {
 }
 
 fragment PreconfirmationSuccessStatusFragment on PreconfirmationSuccessStatus {
-   type: __typename
+  type: __typename
+  totalGas
+  totalFee
  }
  
  fragment PreconfirmationFailureStatusFragment on PreconfirmationFailureStatus {
-   type: __typename
-   reason
+  type: __typename
+  reason
+  totalGas
+  totalFee
  }
 
 fragment transactionStatusFragment on TransactionStatus {

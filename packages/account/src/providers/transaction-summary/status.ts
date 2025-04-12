@@ -22,6 +22,10 @@ export const getTransactionStatusName = (gqlStatus: GqlTransactionStatusesNames)
       return TransactionStatus.submitted;
     case 'SqueezedOutStatus':
       return TransactionStatus.squeezedout;
+    case 'PreconfirmationSuccessStatus':
+      return TransactionStatus.preconfirmationSuccess;
+    case 'PreconfirmationFailureStatus':
+      return TransactionStatus.preconfirmationFailure;
     default:
       throw new FuelError(
         ErrorCode.INVALID_TRANSACTION_STATUS,
@@ -71,6 +75,19 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
         time = gqlTransactionStatus.time;
         isStatusPending = true;
         break;
+
+      case 'PreconfirmationSuccessStatus':
+        isStatusPending = true;
+        totalFee = bn(gqlTransactionStatus.totalFee);
+        totalGas = bn(gqlTransactionStatus.totalGas);
+        break;
+
+      case 'PreconfirmationFailureStatus':
+        isStatusFailure = true;
+        totalFee = bn(gqlTransactionStatus.totalFee);
+        totalGas = bn(gqlTransactionStatus.totalGas);
+        break;
+
       default:
     }
   }

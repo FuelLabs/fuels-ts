@@ -43,12 +43,16 @@ export type SqueezedOutStatus = {
 
 export type PreconfirmationSuccessStatus = {
   type: 'PreconfirmationSuccessStatus';
-}
+  totalFee: string;
+  totalGas: string;
+};
 
 export type PreconfirmationFailureStatus = {
   type: 'PreconfirmationFailureStatus';
   reason: string;
-}
+  totalFee: string;
+  totalGas: string;
+};
 
 export type GraphqlTransactionStatus =
   | SubmittedStatus
