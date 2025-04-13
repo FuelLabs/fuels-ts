@@ -12,11 +12,11 @@
   "dependencies": {
     "@fuels/vm-asm": "0.59.1",
     "@types/node": "22.13.5",
-    "@types/react-dom": "19.0.4",
+    "@types/react-dom": "19.1.2",
     "@types/react": "19.0.10",
     "fuels": "workspace:*",
     "next": "15.2.3",
-    "react-dom": "19.0.0",
+    "react-dom": "19.1.0",
     "react": "19.0.0",
     "typescript": "5.7.3"
   }
