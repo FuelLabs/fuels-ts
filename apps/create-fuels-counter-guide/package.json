@@ -23,7 +23,7 @@
     "fuels": "workspace:*",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-toastify": "11.0.3"
+    "react-toastify": "11.0.5"
   },
   "devDependencies": {
     "@eslint/js": "9.24.0",
@@ -33,7 +33,7 @@
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
     "@vitejs/plugin-react": "4.3.4",
-    "autoprefixer": "10.4.20",
+    "autoprefixer": "10.4.21",
     "eslint": "8.57.0",
     "eslint-plugin-react-hooks": "5.1.0",
     "eslint-plugin-react-refresh": "0.4.19",
