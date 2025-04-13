@@ -7,11 +7,11 @@
     "@testing-library/react": "16.2.0",
     "@types/node": "22.13.5",
     "@types/react": "19.0.10",
-    "@types/react-dom": "19.0.4",
+    "@types/react-dom": "19.1.2",
     "eslint-config-react-app": "7.0.1",
     "fuels": "workspace:*",
     "react": "19.0.0",
-    "react-dom": "19.0.0",
+    "react-dom": "19.1.0",
     "react-scripts": "5.0.1",
     "typescript": "5.7.3",
     "web-vitals": "2.1.4"
