@@ -79,7 +79,7 @@
     "@fuel-ts/recipes": "workspace:*",
     "bundle-require": "5.1.0",
     "chalk": "4",
-    "chokidar": "3.6.0",
+    "chokidar": "4.0.3",
     "commander": "13.1.0",
     "esbuild": "0.25.1",
     "glob": "10.4.5",
