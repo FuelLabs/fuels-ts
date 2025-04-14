@@ -10,8 +10,8 @@ These are our official RPC URLs:
 
 | Network   | URL                                                         |
 | --------- | ----------------------------------------------------------- |
-| Mainnet   | `https://testnet.fuel.network/v1/graphql`                   |
-| Testnet   | `https://mainnet.fuel.network/v1/graphql`                   |
+| Mainnet   | `https://mainnet.fuel.network/v1/graphql`                   |
+| Testnet   | `https://testnet.fuel.network/v1/graphql`                   |
 | Localhost | [Running a local Fuel node](./running-a-local-fuel-node.md) |
 
 # Resources
