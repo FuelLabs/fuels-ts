@@ -423,6 +423,10 @@ export type ProviderSendTxParams = EstimateTransactionParams & {
    * Whether to enable asset burn for the transaction.
    */
   enableAssetBurn?: boolean;
+  /**
+   * Whether to include preconfirmation status in the transaction.
+   */
+  includePreconfirmation?: boolean;
 };
 
 /**
@@ -1083,7 +1087,11 @@ export default class Provider {
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true, enableAssetBurn }: ProviderSendTxParams = {}
+    {
+      estimateTxDependencies = true,
+      enableAssetBurn,
+      includePreconfirmation = false,
+    }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     validateTransactionForAssetBurn(
@@ -1105,7 +1113,10 @@ export default class Provider {
     if (isTransactionTypeScript(transactionRequest)) {
       abis = transactionRequest.abis;
     }
-    const subscription = await this.operations.submitAndAwaitStatus({ encodedTransaction });
+    const subscription = await this.operations.submitAndAwaitStatus({
+      encodedTransaction,
+      includePreconfirmation,
+    });
 
     this.#cacheInputs(
       transactionRequest.inputs,

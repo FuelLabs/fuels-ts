@@ -1073,14 +1073,14 @@ query getConsensusParametersVersion {
   }
 }
 
-subscription submitAndAwaitStatus($encodedTransaction: HexString!) {
-  submitAndAwaitStatus(tx: $encodedTransaction) {
+subscription submitAndAwaitStatus($encodedTransaction: HexString!, $estimatePredicates: Boolean, $includePreconfirmation: Boolean) {
+  submitAndAwaitStatus(tx: $encodedTransaction, estimatePredicates: $estimatePredicates, includePreconfirmation: $includePreconfirmation) {
     ...transactionStatusSubscriptionFragment
   }
 }
 
-subscription statusChange($transactionId: TransactionId!) {
-  statusChange(id: $transactionId) {
+subscription statusChange($transactionId: TransactionId!, $includePreconfirmation: Boolean) {
+  statusChange(id: $transactionId, includePreconfirmation: $includePreconfirmation) {
     ...transactionStatusSubscriptionFragment
   }
 }
