@@ -628,6 +628,7 @@ export class Account extends AbstractAccount implements WithAddress {
     const txs: ScriptTransactionRequest[] = [];
     const coinsBatches = splitCoinsIntoBatches(coins, maxInputsNumber);
     const gasPrice = await this.provider.estimateGasPrice(10);
+    const consolidateMoreThanOneCoin = outputNum > 1;
 
     coinsBatches
       .filter((batch) => batch.length > 1) // Skip batches with just one coin
@@ -639,7 +640,7 @@ export class Account extends AbstractAccount implements WithAddress {
 
         request.addResources(coinBatch);
 
-        if (outputNum > 1) {
+        if (consolidateMoreThanOneCoin) {
           // We decrease one because the change output will also create one UTXO
           Array.from({ length: outputNum - 1 }).forEach(() => {
             // Real value will be added later after having fee calculated
@@ -658,18 +659,20 @@ export class Account extends AbstractAccount implements WithAddress {
 
         request.maxFee = fee;
 
-        const coinOutputs = request.outputs.filter((o) => o.type === OutputType.Coin);
-
-        if (coinOutputs.length) {
-          const total = request.inputs.filter(isRequestInputCoin).reduce((acc, input) => {
-            acc.add(input.amount);
-            return acc;
-          }, bn(0));
+        if (consolidateMoreThanOneCoin) {
+          const total = request.inputs
+            .filter(isRequestInputCoin)
+            .reduce((acc, input) => acc.add(input.amount), bn(0));
 
           // We add a +1 as the change output will also include one part of the total amount
           const amountPerNewUtxo = total.div(outputNum + 1);
 
-          coinOutputs.map((o) => ({ ...o, amount: amountPerNewUtxo }));
+          request.outputs.forEach((output) => {
+            if (output.type === OutputType.Coin) {
+              // eslint-disable-next-line no-param-reassign
+              output.amount = amountPerNewUtxo;
+            }
+          });
         }
 
         totalFeeCost = totalFeeCost.add(fee);

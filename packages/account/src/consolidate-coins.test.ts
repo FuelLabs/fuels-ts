@@ -365,5 +365,45 @@ describe('consolidate-coins', () => {
       // Account will end-up with 10 coins since 10 consolidation TXs were submitted
       expect(coins.length).toBe(totalConsolidationTxs);
     });
+
+    it('should ensure assembleBaseAssetConsolidationTxs considers outputNum when consolidating coins', async () => {
+      const maxInputs = 255;
+      const {
+        provider,
+        wallets: [adminWallet],
+      } = await setupTest({ maxInputs });
+
+      const baseAssetId = await provider.getBaseAssetId();
+
+      const wallet = Wallet.generate({ provider });
+
+      // Will result in 5 consolidation TXs
+      const utxoNum = Math.floor(maxInputs * 4.2);
+      const expectedTxsNum = 5;
+      const totalConsolidationTxs = Math.ceil(utxoNum / maxInputs);
+
+      await transferUTXOsToAccount(adminWallet, [
+        { utxoNum, amount: 1000, assetId: baseAssetId, recipient: wallet },
+      ]);
+
+      const allCoins = await fetchAllCoinsFromAccount(wallet);
+
+      expect(allCoins.length).toBe(utxoNum);
+      expect(totalConsolidationTxs).toBeGreaterThan(0);
+
+      const { submitAll, txs } = await wallet.assembleBaseAssetConsolidationTxs({
+        coins: allCoins,
+        outputNum: 4, // each consolidation will produce 4 new UTXOs each
+      });
+
+      expect(txs.length).toBe(expectedTxsNum);
+
+      await submitAll();
+
+      const { coins } = await wallet.getCoins();
+
+      // Account will end-up with 10 coins since 10 consolidation TXs were submitted
+      expect(coins.length).toBe(expectedTxsNum * 4);
+    });
   });
 });
