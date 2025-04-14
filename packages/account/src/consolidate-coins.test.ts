@@ -1,9 +1,14 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import type { SnapshotConfigs } from '@fuel-ts/utils';
+import type { BigNumberish } from '@fuel-ts/math';
+import { type SnapshotConfigs } from '@fuel-ts/utils';
 
+import type { Account } from '.';
+import type { Coin } from './providers';
+import { ScriptTransactionRequest } from './providers';
 import type { WalletsConfigOptions } from './test-utils';
 import { setupTestProviderAndWallets } from './test-utils';
+import type { WalletUnlocked } from './wallet';
 import { Wallet } from './wallet';
 
 /**
@@ -16,6 +21,64 @@ describe('consolidate-coins', () => {
   afterEach(() => {
     cleanup?.();
   });
+
+  const transferUTXOsToAccount = async (
+    adminWallet: WalletUnlocked,
+    params: Array<{
+      utxoNum: number;
+      assetId: string;
+      amount: BigNumberish;
+      recipient: Account;
+    }>
+  ) => {
+    for (let i = 0; i < params.length; i++) {
+      const maxOutputs = 253;
+      const total = params[i].utxoNum;
+      const rounds = Math.ceil(total / maxOutputs);
+      let currentRound = 0;
+
+      while (currentRound < rounds) {
+        const toCreate = Math.min(maxOutputs, total - currentRound * maxOutputs);
+
+        const request = new ScriptTransactionRequest({
+          scriptData: '0x',
+        });
+
+        Array.from({ length: toCreate }).forEach((_) => {
+          request.addCoinOutput(params[i].recipient.address, params[i].amount, params[i].assetId);
+        });
+
+        await request.estimateAndFund(adminWallet);
+
+        const transfer = await adminWallet.sendTransaction(request);
+        await transfer.waitForResult();
+
+        currentRound += 1;
+      }
+    }
+  };
+
+  const fetchAllCoinsFromAccount = async (account: Account) => {
+    const allCoins: Coin[] = [];
+    const baseAssetId = await account.provider.getBaseAssetId();
+
+    let hasNextPage = true;
+    let endCursor: string | undefined | null = null;
+
+    while (hasNextPage) {
+      const { coins, pageInfo } = await account.getCoins(baseAssetId, { after: endCursor });
+
+      allCoins.push(...coins);
+
+      hasNextPage = pageInfo.hasNextPage;
+
+      if (hasNextPage) {
+        endCursor = pageInfo.endCursor;
+      }
+    }
+
+    return allCoins;
+  };
 
   const setupTest = async (
     params: {
@@ -70,7 +133,7 @@ describe('consolidate-coins', () => {
     return { provider, wallets };
   };
 
-  describe('base asset', () => {
+  describe('Base asset', () => {
     it('should consolidate asset just fine [ACCOUNT HAS LESS THAN MAX INPUTS]', async () => {
       const maxInputs = 255;
       const totalCoins = maxInputs - 1; // Expected to be 1 consolidation tx
@@ -224,6 +287,83 @@ describe('consolidate-coins', () => {
       const error = new FuelError(ErrorCode.NO_COINS_TO_CONSOLIDATE, 'No coins to consolidate.');
 
       await expectToThrowFuelError(() => wallet.consolidateCoins({ assetId: baseAssetId }), error);
+    });
+
+    it('should ensure assembleBaseAssetConsolidationTxs can create many consolidation TXs [PARALLEL]', async () => {
+      const maxInputs = 255;
+      const {
+        provider,
+        wallets: [adminWallet],
+      } = await setupTest({ maxInputs });
+
+      const baseAssetId = await provider.getBaseAssetId();
+
+      const wallet = Wallet.generate({ provider });
+
+      // Will result in 10 consolidation TXs
+      const utxoNum = Math.floor(maxInputs * 9.5);
+      const totalConsolidationTxs = Math.ceil(utxoNum / maxInputs);
+
+      await transferUTXOsToAccount(adminWallet, [
+        { utxoNum, amount: 1000, assetId: baseAssetId, recipient: wallet },
+      ]);
+
+      const allCoins = await fetchAllCoinsFromAccount(wallet);
+
+      expect(allCoins.length).toBe(utxoNum);
+      expect(totalConsolidationTxs).toBeGreaterThan(0);
+
+      const { submitAll, txs } = await wallet.assembleBaseAssetConsolidationTxs({
+        coins: allCoins,
+      });
+
+      expect(txs.length).toBe(10);
+
+      await submitAll();
+
+      const { coins } = await wallet.getCoins();
+
+      // Account will end-up with 10 coins since 10 consolidation TXs were submitted
+      expect(coins.length).toBe(totalConsolidationTxs);
+    });
+
+    it('should ensure assembleBaseAssetConsolidationTxs can create many consolidation TXs [SEQUENTIAL]', async () => {
+      const maxInputs = 255;
+      const {
+        provider,
+        wallets: [adminWallet],
+      } = await setupTest({ maxInputs });
+
+      const baseAssetId = await provider.getBaseAssetId();
+
+      const wallet = Wallet.generate({ provider });
+
+      // Will result in 3 consolidation TXs
+      const utxoNum = Math.floor(maxInputs * 2.5);
+      const totalConsolidationTxs = Math.ceil(utxoNum / maxInputs);
+
+      await transferUTXOsToAccount(adminWallet, [
+        { utxoNum, amount: 1000, assetId: baseAssetId, recipient: wallet },
+      ]);
+
+      const allCoins = await fetchAllCoinsFromAccount(wallet);
+
+      expect(allCoins.length).toBe(utxoNum);
+      expect(totalConsolidationTxs).toBeGreaterThan(0);
+
+      const { submitAll, txs } = await wallet.assembleBaseAssetConsolidationTxs({
+        coins: allCoins,
+        mode: 'sequential',
+      });
+
+      expect(txs.length).toBe(3);
+
+      await submitAll();
+
+      const { coins } = await wallet.getCoins();
+
+      // Account will end-up with 10 coins since 10 consolidation TXs were submitted
+      expect(coins.length).toBe(totalConsolidationTxs);
     });
   });
 });
