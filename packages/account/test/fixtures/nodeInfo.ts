@@ -6,4 +6,9 @@ export const MOCK_NODE_INFO: GqlNodeInfoFragment = {
   maxTx: '4064',
   maxDepth: '10',
   nodeVersion: '0.22.0',
+  indexation: {
+    balances: false,
+    coinsToSpend: false,
+    assetMetadata: false,
+  },
 };

@@ -1,13 +1,13 @@
 "use client";
 
-import { FuelProvider } from "@fuels/react";
+import { FuelProvider, NetworkConfig } from "@fuels/react";
 import React, { ReactNode, useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ToastContainer } from "react-toastify";
 import { FuelConnector, Provider } from "fuels";
 import { defaultConnectors } from "@fuels/connectors";
 
-import { providerUrl } from "../lib";
+import { providerChainId, providerUrl } from "../lib";
 
 import "react-toastify/dist/ReactToastify.css";
 import "@/styles/globals.css";
@@ -17,8 +17,10 @@ const queryClient = new QueryClient();
 const connectors: FuelConnector[] = defaultConnectors({
   devMode: true,
   fuelProvider: new Provider(providerUrl),
+  chainId: providerChainId,
 });
 
+const networks: NetworkConfig[] = [{ url: providerUrl, chainId: providerChainId } as NetworkConfig];
 interface RootLayoutProps {
   children: ReactNode;
 }
@@ -46,6 +48,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
               theme="dark"
               fuelConfig={{ connectors }}
               uiConfig={{ suggestBridge: false }}
+              networks={networks}
             >
               {" "}
               <ToastContainer theme="dark" />

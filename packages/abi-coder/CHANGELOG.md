@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.100.2
+
+### Patch Changes
+
+- Updated dependencies [e909d54]
+  - @fuel-ts/errors@0.100.2
+  - @fuel-ts/crypto@0.100.2
+  - @fuel-ts/math@0.100.2
+  - @fuel-ts/utils@0.100.2
+  - @fuel-ts/hasher@0.100.2
+
 ## 0.100.1
 
 ### Patch Changes

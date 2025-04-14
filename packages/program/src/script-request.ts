@@ -14,6 +14,7 @@ import type {
   TransactionResultReturnReceipt,
   TransactionResultScriptResultReceipt,
   DryRunFailureStatusFragment,
+  DecodedLogs,
 } from '@fuel-ts/account';
 import { extractTxError } from '@fuel-ts/account';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -100,7 +101,8 @@ function callResultToScriptResult(callResult: CallResult): ScriptResult {
 export function decodeCallResult<TResult>(
   callResult: CallResult,
   decoder: (scriptResult: ScriptResult) => TResult,
-  logs: Array<any> = []
+  logs: DecodedLogs['logs'] = [],
+  groupedLogs: DecodedLogs['groupedLogs'] = {}
 ): TResult {
   try {
     const scriptResult = callResultToScriptResult(callResult);
@@ -110,6 +112,7 @@ export function decodeCallResult<TResult>(
       const statusReason = (<DryRunFailureStatusFragment>callResult?.dryRunStatus)?.reason;
       throw extractTxError({
         logs,
+        groupedLogs,
         receipts: callResult.receipts,
         statusReason,
       });
@@ -130,7 +133,8 @@ export function decodeCallResult<TResult>(
 export function callResultToInvocationResult<TReturn>(
   callResult: CallResult,
   call: CallConfig,
-  logs?: unknown[]
+  logs?: DecodedLogs<unknown>['logs'],
+  groupedLogs?: DecodedLogs<unknown>['groupedLogs']
 ): TReturn {
   return decodeCallResult(
     callResult,
@@ -151,6 +155,7 @@ export function callResultToInvocationResult<TReturn>(
           ErrorCode.SCRIPT_REVERTED,
           `Script Return Type [${type}] Invalid. Logs: ${JSON.stringify({
             logs,
+            groupedLogs,
             receipt: scriptResult.returnReceipt,
           })}`
         );
