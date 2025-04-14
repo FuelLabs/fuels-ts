@@ -15,7 +15,6 @@ import gql from 'graphql-tag';
 import { clone } from 'ramda';
 
 import type { Account } from '../account';
-import { deferPromise } from '../connectors/utils/promises';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
@@ -501,7 +500,11 @@ export default class Provider {
    */
   public static ENABLE_RPC_CONSISTENCY: boolean = true;
   /** @hidden */
-  private static inflightFetchChainAndNodeInfoRequests: Record<string, Promise<number>> = {};
+  private static inflightFetchChainAndNodeInfoRequests: Record<
+    string,
+    Promise<{ consensusParametersTimestamp: number }>
+  > = {};
+
   /** @hidden */
   private static chainInfoCache: ChainInfoCache = {};
   /** @hidden */
@@ -794,51 +797,72 @@ export default class Provider {
   async fetchChainAndNodeInfo(
     ignoreCache: boolean = false
   ): Promise<{ chain: ChainInfo; nodeInfo: NodeInfo }> {
-    let nodeInfo: NodeInfo;
-    let chain: ChainInfo;
+    const nodeInfo: NodeInfo | undefined = Provider.nodeInfoCache[this.urlWithoutAuth];
+    const chain: ChainInfo | undefined = Provider.chainInfoCache[this.urlWithoutAuth];
 
-    try {
-      nodeInfo = Provider.nodeInfoCache[this.urlWithoutAuth];
-      chain = Provider.chainInfoCache[this.urlWithoutAuth];
-
-      const noCache = !nodeInfo || !chain;
-
-      if (ignoreCache || noCache) {
-        throw new Error(`Jumps to the catch block and re-fetch`);
-      }
-    } catch (_err) {
-      const inflightRequest: Promise<number> =
-        Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth];
-
-      // When an inflight is request is available, wait for it to complete
-      // Then fetch (which will hit the cached values)
-      if (inflightRequest) {
-        const now = await inflightRequest;
-        this.consensusParametersTimestamp = now;
-        return this.fetchChainAndNodeInfo();
-      }
-
-      const { promise, resolve } = deferPromise<number>();
-      Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth] = promise;
-
-      const data = await this.operations.getChainAndNodeInfo();
-      nodeInfo = deserializeNodeInfo(data.nodeInfo);
-      chain = deserializeChain(data.chain);
-
-      Provider.setIncompatibleNodeVersionMessage(nodeInfo);
-      Provider.chainInfoCache[this.urlWithoutAuth] = chain;
-      Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
-
-      const now = Date.now();
-      this.consensusParametersTimestamp = now;
-      resolve(now);
-      delete Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth];
+    // If we have a cache and we're not ignoring it, return the cache
+    const hasCache = nodeInfo && chain;
+    if (hasCache && !ignoreCache) {
+      return { nodeInfo, chain };
     }
 
-    return {
-      chain,
-      nodeInfo,
-    };
+    // Obtain any inflight requests from other instances of Provider
+    const inflightRequest: Promise<{ consensusParametersTimestamp: number }> =
+      Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth];
+
+    // If there is an inflight request, then wait for it to resolve and return the cached values
+    if (inflightRequest) {
+      return inflightRequest.then((data) => {
+        this.consensusParametersTimestamp = data.consensusParametersTimestamp;
+        return {
+          nodeInfo: Provider.nodeInfoCache[this.urlWithoutAuth],
+          chain: Provider.chainInfoCache[this.urlWithoutAuth],
+        };
+      });
+    }
+
+    // If there is no inflight request, then fetch the chain and node info from the network
+    const getChainAndNodeInfoFromNetwork = this.operations
+      .getChainAndNodeInfo()
+      .then((data) => ({
+        chain: deserializeChain(data.chain),
+        nodeInfo: deserializeNodeInfo(data.nodeInfo),
+        consensusParametersTimestamp: Date.now(),
+      }))
+      .then((data) => {
+        Provider.setIncompatibleNodeVersionMessage(data.nodeInfo);
+        Provider.chainInfoCache[this.urlWithoutAuth] = data.chain;
+        Provider.nodeInfoCache[this.urlWithoutAuth] = data.nodeInfo;
+        this.consensusParametersTimestamp = data.consensusParametersTimestamp;
+        return data;
+      })
+      .catch((err) => {
+        const error = new FuelError(
+          FuelError.CODES.CONNECTION_REFUSED,
+          'Unable to fetch chain and node info from the network',
+          { url: this.urlWithoutAuth },
+          err
+        );
+        error.cause = { code: 'ECONNREFUSED' };
+
+        throw error;
+      })
+      .finally(() => {
+        delete Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth];
+      });
+
+    // Set the inflight request to the network request
+    Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth] =
+      getChainAndNodeInfoFromNetwork;
+
+    // Return the cached values once the network request resolves
+    return Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth].then((data) => {
+      this.consensusParametersTimestamp = data.consensusParametersTimestamp;
+      return {
+        nodeInfo: Provider.nodeInfoCache[this.urlWithoutAuth],
+        chain: Provider.chainInfoCache[this.urlWithoutAuth],
+      };
+    });
   }
 
   /**

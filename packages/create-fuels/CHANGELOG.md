@@ -1,5 +1,14 @@
 # create-fuels
 
+## 0.100.3
+
+### Patch Changes
+
+- 3d3b597: build(deps): bump @eslint/js from 9.20.0 to 9.24.0
+- 74d65a7: fix: connector detection of correct chain
+  - @fuel-ts/errors@0.100.3
+  - @fuel-ts/versions@0.100.3
+
 ## 0.100.2
 
 ### Patch Changes
