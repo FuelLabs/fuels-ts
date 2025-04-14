@@ -84,6 +84,11 @@ export type EstimatedTxParams = Pick<
   | 'transactionSummary'
 >;
 
+export type PrepareSubmitAllParams = {
+  txs: ScriptTransactionRequest[];
+  mode?: 'sequential' | 'parallel';
+};
+
 export type SubmitAllCallbackResponse = {
   txResponses: TransactionResult<TransactionType.Script>[];
   errors: FuelError[];
@@ -630,25 +635,50 @@ export class Account extends AbstractAccount implements WithAddress {
       }
     }
 
-    const submitAll: SubmitAllCallback = async () => {
+
+  prepareSubmitAll = (params: PrepareSubmitAllParams) => {
+    // Default to 'sequential' if mode is not provided
+    const { txs, mode = 'sequential' } = params;
+
+    return async () => {
       const txResponses: TransactionResult<TransactionType.Script>[] = [];
       const errors: FuelError[] = [];
 
-      for (const tx of txs) {
-        try {
-          const submit = await this.sendTransaction(tx);
-          const response = await submit.waitForResult<TransactionType.Script>();
-          txResponses.push(response);
-        } catch (error) {
-          errors.push(error as FuelError);
+      if (mode === 'sequential') {
+        // Sequential execution (original logic)
+        for (const tx of txs) {
+          try {
+            const submit = await this.sendTransaction(tx);
+            const response = await submit.waitForResult<TransactionType.Script>();
+            txResponses.push(response);
+          } catch (error) {
+            errors.push(error as FuelError);
+          }
         }
+      } else {
+        // Parallel execution
+        const results = await Promise.allSettled(
+          txs.map(async (tx) => {
+            // Chain the transaction sending and result waiting
+            const submit = await this.sendTransaction(tx);
+            return submit.waitForResult<TransactionType.Script>();
+          })
+        );
+
+        // Process results from Promise.allSettled
+        results.forEach((result) => {
+          if (result.status === 'fulfilled') {
+            txResponses.push(result.value);
+          } else {
+            // Ensure the rejected reason is treated as FuelError
+            errors.push(result.reason as FuelError);
+          }
+        });
       }
 
       return { txResponses, errors };
     };
-
-    return { txs, totalFeeCost, submitAll };
-  }
+  };
 
   /**
    * Returns a transaction cost to enable user
