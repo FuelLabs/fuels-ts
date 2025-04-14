@@ -85,9 +85,11 @@ export type EstimatedTxParams = Pick<
   | 'transactionSummary'
 >;
 
+export type SubmitAllMode = 'sequential' | 'parallel';
+
 export type PrepareSubmitAllParams = {
   txs: ScriptTransactionRequest[];
-  mode?: 'sequential' | 'parallel';
+  mode?: SubmitAllMode;
 };
 
 export type SubmitAllCallbackResponse = {
@@ -96,6 +98,18 @@ export type SubmitAllCallbackResponse = {
 };
 
 export type SubmitAllCallback = () => Promise<SubmitAllCallbackResponse>;
+
+export type AssembleConsolidationTxsParams = {
+  coins: Coin[];
+  mode?: SubmitAllMode;
+  outputNum?: number;
+};
+
+export type ConsolidateCoins = {
+  assetId: string;
+  mode?: SubmitAllMode;
+  outputNum?: number;
+};
 
 const MAX_FUNDING_ATTEMPTS = 5;
 
@@ -575,7 +589,7 @@ export class Account extends AbstractAccount implements WithAddress {
     return this.sendTransaction(request);
   }
 
-  async consolidateCoins(params: { assetId: string }): Promise<SubmitAllCallbackResponse> {
+  async consolidateCoins(params: ConsolidateCoins): Promise<SubmitAllCallbackResponse> {
     const { assetId } = params;
 
     const { coins } = await this.getCoins(assetId);
@@ -587,9 +601,14 @@ export class Account extends AbstractAccount implements WithAddress {
     const isBaseAsset = baseAssetId === assetId;
 
     let submitAll: SubmitAllCallback;
+    const consolidationParams: AssembleConsolidationTxsParams = {
+      coins,
+      mode: params.mode,
+      outputNum: params.outputNum,
+    };
 
     if (isBaseAsset) {
-      ({ submitAll } = await this.assembleBaseAssetConsolidationTxs(coins));
+      ({ submitAll } = await this.assembleBaseAssetConsolidationTxs(consolidationParams));
     } else {
       // ({ submitAll } = await this.assembleNonBaseAssetConsolidationTxs(coins));
       throw new Error('implement me.');
@@ -598,7 +617,9 @@ export class Account extends AbstractAccount implements WithAddress {
     return submitAll();
   }
 
-  async assembleBaseAssetConsolidationTxs(coins: Coin[], outputNum = 1) {
+  async assembleBaseAssetConsolidationTxs(params: AssembleConsolidationTxsParams) {
+    const { coins, mode = 'parallel', outputNum = 1 } = params;
+
     const chainInfo = await this.provider.getChain();
     const maxInputsNumber = chainInfo.consensusParameters.txParameters.maxInputs.toNumber();
     const baseAssetId = await this.provider.getBaseAssetId();
@@ -656,7 +677,7 @@ export class Account extends AbstractAccount implements WithAddress {
         txs.push(request);
       });
 
-    const submitAll = this.prepareSubmitAll({ txs, mode: 'parallel' });
+    const submitAll = this.prepareSubmitAll({ txs, mode });
 
     return { txs, totalFeeCost, submitAll };
   }
