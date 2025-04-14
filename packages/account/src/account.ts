@@ -53,6 +53,7 @@ import {
 import { mergeQuantities } from './providers/utils/merge-quantities';
 import { serializeProviderCache } from './providers/utils/serialization';
 import { AbstractAccount } from './types';
+import { splitCoinsIntoBatches } from './utils/consolidate-coins';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
 
 export type TxParamsType = Pick<
@@ -604,21 +605,18 @@ export class Account extends AbstractAccount implements WithAddress {
 
     let totalFeeCost = bn(0);
     const txs: ScriptTransactionRequest[] = [];
-    const batchSize = Math.ceil(coins.length / maxInputsNumber);
+    const coinsBatches = splitCoinsIntoBatches(coins, maxInputsNumber);
     const gasPrice = await this.provider.estimateGasPrice(10);
 
-    for (let i = 0; i < batchSize; i += 1) {
-      const batchStart = i * maxInputsNumber;
-      const batchEnd = (i + 1) * maxInputsNumber;
-      const batch = coins.slice(batchStart, batchEnd);
-
-      // There is no reason to consolidate just one coin
-      if (batch.length > 1) {
+    coinsBatches
+      .filter((batch) => batch.length > 1) // Skip batches with just one coin
+      .forEach((coinBatch) => {
+        // There is no reason to consolidate just one coin
         const request = new ScriptTransactionRequest({
           script: '0x',
         });
 
-        request.addResources(batch);
+        request.addResources(coinBatch);
 
         if (outputNum > 1) {
           // We decrease one because the change output will also create one UTXO
@@ -656,8 +654,7 @@ export class Account extends AbstractAccount implements WithAddress {
         totalFeeCost = totalFeeCost.add(fee);
 
         txs.push(request);
-      }
-    }
+      });
 
     const submitAll = this.prepareSubmitAll({ txs, mode: 'parallel' });
 
