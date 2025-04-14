@@ -340,6 +340,10 @@ describe('Account', () => {
 
     expect(sendTransaction.mock.calls.length).toEqual(1);
     expect(sendTransaction.mock.calls[0][0]).toEqual(transactionRequest);
+    expect(sendTransaction.mock.calls[0][1], 'Should have default parameters').toEqual({
+      estimateTxDependencies: false,
+      includePreconfirmation: false,
+    });
   });
 
   it('should execute simulateTransaction just fine', async () => {
@@ -1020,5 +1024,58 @@ describe('Account', () => {
       () => wallet.transfer(wallet.address, Number.MAX_SAFE_INTEGER + 1, baseAssetId),
       { code: ErrorCode.NUMBER_TOO_BIG }
     );
+  });
+
+  it('should execute sendTransaction just fine [preconfirmation]', async () => {
+    using provider = await setupTestProvider();
+
+    const transactionRequestLike: providersMod.TransactionRequestLike = {
+      type: providersMod.TransactionType.Script,
+    };
+
+    const transactionRequest = new ScriptTransactionRequest();
+    const transactionResponse =
+      'transactionResponse' as unknown as providersMod.TransactionResponse;
+
+    const transactionRequestify = vi.spyOn(providersMod, 'transactionRequestify');
+
+    const estimateTxDependencies = vi
+      .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
+      .mockImplementation(() =>
+        Promise.resolve({
+          rawReceipts: [],
+          receipts: [],
+          missingContractIds: [],
+          outputVariables: 0,
+        })
+      );
+
+    const sendTransaction = vi
+      .spyOn(providersMod.Provider.prototype, 'sendTransaction')
+      .mockImplementation(() => Promise.resolve(transactionResponse));
+
+    const account = new Account(
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+      provider
+    );
+
+    const result = await account.sendTransaction(transactionRequestLike, {
+      includePreconfirmation: true,
+    });
+
+    expect(result).toEqual(transactionResponse);
+
+    expect(transactionRequestify.mock.calls.length).toEqual(1);
+    expect(transactionRequestify.mock.calls[0][0]).toEqual(transactionRequestLike);
+
+    expect(estimateTxDependencies.mock.calls.length).toBe(1);
+    expect(estimateTxDependencies.mock.calls[0][0]).toEqual(transactionRequest);
+
+    expect(sendTransaction.mock.calls.length).toEqual(1);
+    expect(sendTransaction.mock.calls[0][0]).toEqual(transactionRequest);
+    expect(sendTransaction.mock.calls[0][1], 'Should have default parameters').toEqual({
+      estimateTxDependencies: false,
+      includePreconfirmation: true,
+    });
   });
 });

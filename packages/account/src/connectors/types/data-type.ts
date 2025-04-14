@@ -1,7 +1,7 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import type { RequireAtLeastOne } from 'type-fest';
 
-import type { TransactionRequest, TransactionStateFlag } from '../../providers';
+import type { PreconfirmationParams, TransactionRequest, TransactionStateFlag } from '../../providers';
 import type {
   ProviderCacheJson,
   TransactionSummaryJson,
@@ -52,7 +52,7 @@ export type FuelABI = JsonAbi;
 /**
  * Params for the sendTransaction method (for connectors).
  */
-export type FuelConnectorSendTxParams = {
+export type FuelConnectorSendTxParams = PreconfirmationParams & {
   skipCustomFee?: boolean;
   onBeforeSend?: (txRequest: TransactionRequest) => Promise<TransactionRequest>;
   provider?: {

@@ -712,6 +712,7 @@ describe('Fuel Connector', () => {
 
     const chainId = await provider.getChainId();
     const expectedParams: FuelConnectorSendTxParams = {
+      includePreconfirmation: false,
       onBeforeSend: undefined,
       skipCustomFee: false,
       provider: {
@@ -759,6 +760,7 @@ describe('Fuel Connector', () => {
     // transaction prepared and sent via connector
 
     const expectedParams: FuelConnectorSendTxParams = {
+      includePreconfirmation: false,
       onBeforeSend: undefined,
       skipCustomFee: false,
       provider: {
@@ -812,6 +814,7 @@ describe('Fuel Connector', () => {
     };
 
     const expectedParams: FuelConnectorSendTxParams = {
+      includePreconfirmation: false,
       onBeforeSend: undefined,
       skipCustomFee: false,
       provider: {
@@ -837,4 +840,6 @@ describe('Fuel Connector', () => {
       responseSummary.transaction.scriptGasLimit
     );
   });
+
+  it.todo('should ensure sendTransaction works just fine with preconfirmation');
 });

@@ -7,6 +7,7 @@ import {
   isMessage,
   ScriptTransactionRequest,
   sleep,
+  TransactionStatus,
   TransactionType,
 } from 'fuels';
 import { ASSET_A, expectToThrowFuelError, launchTestNode, TestMessage } from 'fuels/test-utils';
@@ -317,4 +318,28 @@ describe('Transaction', () => {
       })
     );
   });
+
+  it('should execute sendTransaction just fine [preconfirmation success]', async () => {
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [sender, receiver],
+    } = launched;
+
+    const baseAssetId = await provider.getBaseAssetId();
+    const transactionRequest = await sender.createTransfer(receiver.address, 100, baseAssetId);
+    const signedTransaction = await sender.signTransaction(transactionRequest);
+    transactionRequest.updateWitnessByOwner(sender.address, signedTransaction);
+
+    const { waitForPreConfirmation } = await provider.sendTransaction(transactionRequest, {
+      includePreconfirmation: true,
+    });
+
+    const { isStatusSuccess, isStatusPending, status } = await waitForPreConfirmation();
+    expect(isStatusSuccess).toEqual(false);
+    expect(isStatusPending).toEqual(true);
+    expect(status).toEqual(TransactionStatus.preconfirmationSuccess);
+  });
+
+  it.todo('should execute sendTransaction just fine [preconfirmation failure]');
 });

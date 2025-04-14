@@ -163,6 +163,7 @@ export class TransactionResponse {
     this.request = typeof tx === 'string' ? undefined : tx;
 
     this.waitForResult = this.waitForResult.bind(this);
+    this.waitForPreConfirmation = this.waitForPreConfirmation.bind(this);
   }
 
   /**
@@ -176,11 +177,12 @@ export class TransactionResponse {
   static async create(
     id: string,
     provider: Provider,
-    abis?: JsonAbisFromAllCalls
+    abis?: JsonAbisFromAllCalls,
+    includePreconfirmation?: boolean
   ): Promise<TransactionResponse> {
     const chainId = await provider.getChainId();
     const response = new TransactionResponse(id, provider, chainId, abis);
-    await response.fetch();
+    await response.fetch({ includePreconfirmation: includePreconfirmation ?? false });
     return response;
   }
 
@@ -255,7 +257,9 @@ export class TransactionResponse {
    *
    * @returns Transaction with receipts query result.
    */
-  async fetch(): Promise<GqlTransaction> {
+  async fetch(opts: { includePreconfirmation?: boolean } = {}): Promise<GqlTransaction> {
+    const { includePreconfirmation = false } = opts;
+
     const response = await this.provider.operations.getTransactionWithReceipts({
       transactionId: this.id,
     });
@@ -263,6 +267,7 @@ export class TransactionResponse {
     if (!response.transaction) {
       const subscription = await this.provider.operations.statusChange({
         transactionId: this.id,
+        includePreconfirmation,
       });
 
       for await (const { statusChange } of subscription) {
@@ -272,7 +277,7 @@ export class TransactionResponse {
         }
       }
 
-      return this.fetch();
+      return this.fetch({ includePreconfirmation });
     }
 
     this.gqlTransaction = response.transaction;
@@ -335,9 +340,12 @@ export class TransactionResponse {
     return transactionSummary;
   }
 
-  private async waitForStatusChange() {
+  private async waitForStatusChange(opts: { includePreconfirmation?: boolean } = {}) {
+    const { includePreconfirmation = false } = opts;
     const status = this.gqlTransaction?.status?.type;
-    if (status && status !== 'SubmittedStatus') {
+    const expectedSuccessStatus = 'SuccessStatus';
+
+    if (status && status !== expectedSuccessStatus) {
       return;
     }
 
@@ -345,11 +353,14 @@ export class TransactionResponse {
       this.submitTxSubscription ??
       (await this.provider.operations.statusChange({
         transactionId: this.id,
+        includePreconfirmation,
       }));
 
     for await (const sub of subscription) {
       const statusChange = 'statusChange' in sub ? sub.statusChange : sub.submitAndAwaitStatus;
       this.status = statusChange;
+
+      // Transaction Squeezed Out
       if (statusChange.type === 'SqueezedOutStatus') {
         this.unsetResourceCache();
         throw new FuelError(
@@ -357,6 +368,8 @@ export class TransactionResponse {
           `Transaction Squeezed Out with reason: ${statusChange.reason}`
         );
       }
+
+      // Successfully submitted
       if (statusChange.type !== 'SubmittedStatus') {
         break;
       }
@@ -422,6 +435,20 @@ export class TransactionResponse {
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
     await this.waitForStatusChange();
+    this.unsetResourceCache();
+    return this.assembleResult<TTransactionType>(contractsAbiMap);
+  }
+
+  /**
+   * Waits for transaction to complete and returns the result.
+   *
+   * @param contractsAbiMap - The contracts ABI map.
+   * @returns The completed transaction result
+   */
+  async waitForPreConfirmation<TTransactionType = void>(
+    contractsAbiMap?: AbiMap
+  ): Promise<TransactionResult<TTransactionType>> {
+    await this.waitForStatusChange({ includePreconfirmation: true });
     this.unsetResourceCache();
     return this.assembleResult<TTransactionType>(contractsAbiMap);
   }

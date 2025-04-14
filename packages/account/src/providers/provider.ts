@@ -410,23 +410,26 @@ export type EstimateTxGasAndFeeParams = {
   gasPrice?: BN;
 };
 
+export type PreconfirmationParams = {
+  /**
+   * Whether to include preconfirmation status in the transaction (default: true)
+   */
+  includePreconfirmation?: boolean;
+};
+
 /**
  * Provider Call transaction params
  */
-export type ProviderCallParams = UTXOValidationParams & EstimateTransactionParams;
+export type ProviderCallParams = UTXOValidationParams & EstimateTransactionParams & PreconfirmationParams;
 
 /**
  * Provider Send transaction params
  */
-export type ProviderSendTxParams = EstimateTransactionParams & {
+export type ProviderSendTxParams = EstimateTransactionParams & PreconfirmationParams & {
   /**
    * Whether to enable asset burn for the transaction.
    */
   enableAssetBurn?: boolean;
-  /**
-   * Whether to include preconfirmation status in the transaction.
-   */
-  includePreconfirmation?: boolean;
 };
 
 /**
