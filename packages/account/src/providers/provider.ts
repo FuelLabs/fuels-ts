@@ -36,10 +36,6 @@ import type {
   Requester,
   GqlBlockFragment,
   GqlEstimatePredicatesQuery,
-  GqlStatusChangeSubscription,
-  GqlSubmitAndAwaitStatusSubscription,
-  GqlGetTransactionWithReceiptsQuery,
-  GqlGetTransactionsByOwnerQuery,
   GqlExcludeInput,
 } from './__generated__/operations';
 import { resolveAccountForAssembleTxParams } from './assemble-tx-helpers';
