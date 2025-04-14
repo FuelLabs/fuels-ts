@@ -4,14 +4,21 @@ import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { HashableMessage } from '@fuel-ts/hasher';
-import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import { InputType } from '@fuel-ts/transactions';
+import type { BigNumberish, BN } from '@fuel-ts/math';
+import { InputType, OutputType } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, isDefined } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
 import type { FuelConnector, FuelConnectorSendTxParams } from './connectors';
+import {
+  withdrawScript,
+  ScriptTransactionRequest,
+  transactionRequestify,
+  addAmountToCoinQuantities,
+  calculateGasFee,
+} from './providers';
 import type {
   TransactionRequest,
   CoinQuantityLike,
@@ -35,13 +42,6 @@ import type {
   TransactionSummaryJson,
   TransactionResult,
   TransactionType,
-} from './providers';
-import {
-  withdrawScript,
-  ScriptTransactionRequest,
-  transactionRequestify,
-  addAmountToCoinQuantities,
-  calculateGasFee,
 } from './providers';
 import {
   cacheRequestInputsResourcesFromOwner,
@@ -590,15 +590,17 @@ export class Account extends AbstractAccount implements WithAddress {
     if (isBaseAsset) {
       ({ submitAll } = await this.assembleBaseAssetConsolidationTxs(coins));
     } else {
+      // ({ submitAll } = await this.assembleNonBaseAssetConsolidationTxs(coins));
       throw new Error('implement me.');
     }
 
     return submitAll();
   }
 
-  async assembleBaseAssetConsolidationTxs(coins: Coin[]) {
+  async assembleBaseAssetConsolidationTxs(coins: Coin[], outputNum = 1) {
     const chainInfo = await this.provider.getChain();
     const maxInputsNumber = chainInfo.consensusParameters.txParameters.maxInputs.toNumber();
+    const baseAssetId = await this.provider.getBaseAssetId();
 
     let totalFeeCost = bn(0);
     const txs: ScriptTransactionRequest[] = [];
@@ -618,6 +620,14 @@ export class Account extends AbstractAccount implements WithAddress {
 
         request.addResources(batch);
 
+        if (outputNum > 1) {
+          // We decrease one because the change output will also create one UTXO
+          Array.from({ length: outputNum - 1 }).forEach(() => {
+            // Real value will be added later after having fee calculated
+            request.addCoinOutput(this.address, 0, baseAssetId);
+          });
+        }
+
         const minGas = request.calculateMinGas(chainInfo);
 
         const fee = calculateGasFee({
@@ -628,6 +638,20 @@ export class Account extends AbstractAccount implements WithAddress {
         });
 
         request.maxFee = fee;
+
+        const coinOutputs = request.outputs.filter((o) => o.type === OutputType.Coin);
+
+        if (coinOutputs.length) {
+          const total = request.inputs.filter(isRequestInputCoin).reduce((acc, input) => {
+            acc.add(input.amount);
+            return acc;
+          }, bn(0));
+
+          // We add a +1 as the change output will also include one part of the total amount
+          const amountPerNewUtxo = total.div(outputNum + 1);
+
+          coinOutputs.map((o) => ({ ...o, amount: amountPerNewUtxo }));
+        }
 
         totalFeeCost = totalFeeCost.add(fee);
 
