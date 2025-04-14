@@ -1,4 +1,4 @@
-// #region log-1
+// #region full
 contract;
 
 use std::logging::log;
@@ -15,4 +15,4 @@ impl LogValues for Contract {
         log(val4);
     }
 }
-// #endregion log-1
+// #endregion full

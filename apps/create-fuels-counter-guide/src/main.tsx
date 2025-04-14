@@ -1,13 +1,13 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { defaultConnectors } from "@fuels/connectors";
-import { FuelProvider } from "@fuels/react";
+import { FuelProvider, NetworkConfig } from "@fuels/react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { ToastContainer } from "react-toastify";
-import { Network, Provider } from "fuels";
+import { Provider } from "fuels";
 
 import App from "./App.tsx";
-import { chainId, providerUrl } from "./lib.tsx";
+import { providerChainId, providerUrl } from "./lib.tsx";
 
 import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
@@ -17,9 +17,10 @@ const queryClient = new QueryClient();
 const connectors = defaultConnectors({
   devMode: true,
   fuelProvider: new Provider(providerUrl),
+  chainId: providerChainId,
 });
 
-const networks: Network[] = [{ url: providerUrl, chainId }];
+const networks: NetworkConfig[] = [{ url: providerUrl, chainId: providerChainId } as NetworkConfig];
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

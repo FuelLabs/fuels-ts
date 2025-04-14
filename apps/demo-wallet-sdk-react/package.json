@@ -9,11 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@fuels/connectors": "0.36.1",
-    "@fuels/react": "0.36.1",
+    "@fuels/connectors": "0.39.2",
+    "@fuels/react": "0.39.2",
     "@tanstack/react-query": "5.66.9",
     "fuels": "workspace:*",
-    "next": "15.1.7",
+    "next": "15.2.3",
     "react": "19.0.0",
     "react-dom": "19.0.0"
   },

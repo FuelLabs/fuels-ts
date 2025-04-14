@@ -1,5 +1,14 @@
 # create-fuels
 
+## 0.100.2
+
+### Patch Changes
+
+- f9c31e4: chore: upgrade `@fuels/connectors` to `0.39.2`
+- Updated dependencies [e909d54]
+  - @fuel-ts/errors@0.100.2
+  - @fuel-ts/versions@0.100.2
+
 ## 0.100.1
 
 ### Patch Changes
