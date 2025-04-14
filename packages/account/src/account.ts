@@ -635,6 +635,10 @@ export class Account extends AbstractAccount implements WithAddress {
       }
     }
 
+    const submitAll = this.prepareSubmitAll({ txs, mode: 'parallel' });
+
+    return { txs, totalFeeCost, submitAll };
+  }
 
   prepareSubmitAll = (params: PrepareSubmitAllParams) => {
     // Default to 'sequential' if mode is not provided
