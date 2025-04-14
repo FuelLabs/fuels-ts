@@ -1,5 +1,20 @@
 # Change Log
 
+## 0.100.3
+
+### Patch Changes
+
+- 5c40eb9: feat: added `groupedLogs`
+- Updated dependencies [5c40eb9]
+- Updated dependencies [e677921]
+  - @fuel-ts/account@0.100.3
+  - @fuel-ts/abi-coder@0.100.3
+  - @fuel-ts/address@0.100.3
+  - @fuel-ts/errors@0.100.3
+  - @fuel-ts/math@0.100.3
+  - @fuel-ts/transactions@0.100.3
+  - @fuel-ts/utils@0.100.3
+
 ## 0.100.2
 
 ### Patch Changes
