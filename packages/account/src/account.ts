@@ -594,9 +594,6 @@ export class Account extends AbstractAccount implements WithAddress {
 
     const { coins } = await this.getCoins(assetId);
 
-    if (coins.length <= 1) {
-      throw new FuelError(ErrorCode.NO_COINS_TO_CONSOLIDATE, 'No coins to consolidate.');
-    }
     const baseAssetId = await this.provider.getBaseAssetId();
     const isBaseAsset = baseAssetId === assetId;
 
@@ -620,9 +617,12 @@ export class Account extends AbstractAccount implements WithAddress {
   async assembleBaseAssetConsolidationTxs(params: AssembleConsolidationTxsParams) {
     const { coins, mode = 'parallel', outputNum = 1 } = params;
 
+    const baseAssetId = await this.provider.getBaseAssetId();
+
+    this.validateConsolidationTxsCoins(coins, baseAssetId);
+
     const chainInfo = await this.provider.getChain();
     const maxInputsNumber = chainInfo.consensusParameters.txParameters.maxInputs.toNumber();
-    const baseAssetId = await this.provider.getBaseAssetId();
 
     let totalFeeCost = bn(0);
     const txs: ScriptTransactionRequest[] = [];
@@ -1014,5 +1014,19 @@ export class Account extends AbstractAccount implements WithAddress {
     }
 
     return request;
+  }
+
+  /** @hidden * */
+  private validateConsolidationTxsCoins(coins: Coin[], assetId: string) {
+    if (coins.length <= 1) {
+      throw new FuelError(ErrorCode.NO_COINS_TO_CONSOLIDATE, 'No coins to consolidate.');
+    }
+
+    if (!coins.every((c) => c.assetId === assetId)) {
+      throw new FuelError(
+        ErrorCode.COINS_ASSET_ID_MISMATCH,
+        'All coins to consolidate must be from the same asset id.'
+      );
+    }
   }
 }
