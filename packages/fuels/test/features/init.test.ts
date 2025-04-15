@@ -131,7 +131,7 @@ describe('init', () => {
   });
 
   it('should run `init` command with --contracts [no matches - log error]', async () => {
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const { log } = mockLogger();
     const exit = vi.spyOn(process, 'exit').mockResolvedValue({} as never);
 
     await runInit({
@@ -140,8 +140,8 @@ describe('init', () => {
       output: paths.outputDir,
     });
 
-    expect(logSpy).toHaveBeenCalledTimes(1);
-    expect(logSpy).toHaveBeenCalledWith(
+    expect(log).toHaveBeenCalledTimes(2);
+    expect(log).toHaveBeenCalledWith(
       ['error: unable to detect program/s', '- contract/s detected 0'].join('\r\n')
     );
     expect(exit).toHaveBeenCalledTimes(1);
