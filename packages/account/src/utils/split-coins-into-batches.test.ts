@@ -5,6 +5,10 @@ import { splitCoinsIntoBatches } from './split-coins-into-batches';
 const createMockCoins = (count: number): Coin[] =>
   Array.from({ length: count }, (_, i) => ({ id: `${i}` }) as Coin);
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('splitCoinsIntoBatches', () => {
   it('should return an empty array if coins list is empty', () => {
     const result = splitCoinsIntoBatches([], 5);
