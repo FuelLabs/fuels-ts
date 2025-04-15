@@ -1,4 +1,4 @@
-import { execSync } from 'child_process';
+import { execSync } from "child_process";
 
 const { log } = console;
 
@@ -13,9 +13,9 @@ const SHOULD_DELETE = true;
 /**
  * Various variables for the command
  */
-const guideFileDir = './src/guide';
-const testFileSuffix = '*.test.ts';
-const printOrDelete = SHOULD_DELETE ? 'delete' : 'print';
+const guideFileDir = "./src/guide";
+const testFileSuffix = "*.test.ts";
+const printOrDelete = SHOULD_DELETE ? "delete" : "print";
 
 // The command to find the files (and either delete or print them)
 const command = `find ${guideFileDir} -type f -name "${testFileSuffix}" -${printOrDelete}`;
