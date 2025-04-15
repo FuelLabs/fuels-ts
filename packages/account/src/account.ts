@@ -589,6 +589,18 @@ export class Account extends AbstractAccount implements WithAddress {
     return this.sendTransaction(request);
   }
 
+  /**
+   * Consolidates base asset UTXOs into fewer, larger ones.
+   *
+   * Retrieves a limited number of base asset coins (as defined by `Provider.RESOURCES_PAGE_SIZE_LIMIT`),
+   * assembles consolidation transactions, and submits them to the network.
+   *
+   * Note: This method currently supports only the base asset.
+   *
+   * @param params - The parameters for coin consolidation, including the asset ID, mode, and output number.
+   * @returns A promise that resolves to the response of the submitted transactions.
+   * @throws Will throw an error if the asset is not a base asset as non-base asset consolidation is not implemented.
+   */
   async consolidateCoins(params: ConsolidateCoins): Promise<SubmitAllCallbackResponse> {
     const { assetId } = params;
 
@@ -616,6 +628,17 @@ export class Account extends AbstractAccount implements WithAddress {
     return submitAll();
   }
 
+  /**
+   * Assembles transactions for consolidating base asset coins into fewer UTXOs.
+   *
+   * This method splits the provided coins into batches and creates transaction requests
+   * to consolidate them. It calculates the necessary fee and sets up the transactions
+   * to be submitted either in parallel (default) or sequentially.
+   *
+   * @param params - The parameters for assembling base asset consolidation transactions.
+   *
+   * @returns An object containing the assembled transactions, the total fee cost, and a callback to submit all transactions.
+   */
   async assembleBaseAssetConsolidationTxs(params: AssembleConsolidationTxsParams) {
     const { coins, mode = 'parallel', outputNum = 1 } = params;
 
@@ -687,7 +710,14 @@ export class Account extends AbstractAccount implements WithAddress {
     return { txs, totalFeeCost, submitAll };
   }
 
-  prepareSubmitAll = (params: PrepareSubmitAllParams) => {
+  /**
+   * Prepares a function to submit all transactions either sequentially or in parallel.
+   *
+   * @param params - The parameters for preparing the submitAll callback.
+   *
+   * @returns A callback that, when called, submits all transactions and returns their results and any errors encountered.
+   */
+  prepareSubmitAll = (params: PrepareSubmitAllParams): SubmitAllCallback => {
     // Default to 'sequential' if mode is not provided
     const { txs, mode = 'sequential' } = params;
 
