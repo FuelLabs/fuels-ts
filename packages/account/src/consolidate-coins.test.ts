@@ -20,6 +20,7 @@ describe('consolidate-coins', () => {
 
   afterEach(() => {
     cleanup?.();
+    vi.resetAllMocks();
   });
 
   const transferUTXOsToAccount = async (
@@ -314,6 +315,8 @@ describe('consolidate-coins', () => {
     expect(allCoins.length).toBe(utxoNum);
     expect(totalConsolidationTxs).toBeGreaterThan(0);
 
+    const allSettled = vi.spyOn(Promise, 'allSettled');
+
     const { submitAll, txs } = await wallet.assembleBaseAssetConsolidationTxs({
       coins: allCoins,
     });
@@ -326,6 +329,8 @@ describe('consolidate-coins', () => {
 
     // Account will end-up with 10 coins since 10 consolidation TXs were submitted
     expect(coins.length).toBe(totalConsolidationTxs);
+    // AllSettled should have been called as we are using parallel mode
+    expect(allSettled).toHaveBeenCalled();
   });
 
   describe('assembleBaseAssetConsolidationTxs', () => {
@@ -353,6 +358,8 @@ describe('consolidate-coins', () => {
       expect(allCoins.length).toBe(utxoNum);
       expect(totalConsolidationTxs).toBeGreaterThan(0);
 
+      const allSettled = vi.spyOn(Promise, 'allSettled');
+
       const { submitAll, txs } = await wallet.assembleBaseAssetConsolidationTxs({
         coins: allCoins,
         mode: 'sequential',
@@ -366,6 +373,8 @@ describe('consolidate-coins', () => {
 
       // Account will end-up with 10 coins since 10 consolidation TXs were submitted
       expect(coins.length).toBe(totalConsolidationTxs);
+      // AllSettled should not have been called as we are using sequential mode
+      expect(allSettled).not.toHaveBeenCalled();
     });
 
     it('should ensure outputNum is considered when consolidating coins', async () => {
