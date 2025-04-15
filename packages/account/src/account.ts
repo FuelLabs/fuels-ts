@@ -631,9 +631,9 @@ export class Account extends AbstractAccount implements WithAddress {
     const consolidateMoreThanOneCoin = outputNum > 1;
 
     coinsBatches
-      .filter((batch) => batch.length > 1) // Skip batches with just one coin
+      // Skip batches with just one Coin to avoid consolidate just one coin
+      .filter((batch) => batch.length > 1)
       .forEach((coinBatch) => {
-        // There is no reason to consolidate just one coin
         const request = new ScriptTransactionRequest({
           script: '0x',
         });
@@ -694,7 +694,7 @@ export class Account extends AbstractAccount implements WithAddress {
       const errors: FuelError[] = [];
 
       if (mode === 'sequential') {
-        // Sequential execution (original logic)
+        // Sequential execution
         for (const tx of txs) {
           try {
             const submit = await this.sendTransaction(tx);
