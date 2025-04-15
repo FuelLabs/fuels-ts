@@ -51,6 +51,7 @@ export function init(program: Command) {
   const noneIsInformed = ![workspace, contracts, scripts, predicates].find((v) => v !== undefined);
   if (noneIsInformed) {
     // mimicking commander property validation
+    // We want to use `console.log` here to avoid the ability to turn off this command prompt.
     // eslint-disable-next-line no-console
     console.log(`error: required option '-w, --workspace <path>' not specified\r`);
     process.exit(1);
@@ -74,8 +75,7 @@ export function init(program: Command) {
       message.push(`- predicate/s detected ${predicateLength}`);
     }
 
-    // eslint-disable-next-line no-console
-    console.log(message.join('\r\n'));
+    log(message.join('\r\n'));
     process.exit(1);
   }
 
