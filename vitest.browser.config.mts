@@ -52,6 +52,8 @@ const config: ViteUserConfig = {
       headless: true,
       enabled: true,
       name: "chromium",
+      // Avoids taking screenshots
+      screenshotFailures: false,
     },
   },
 };
