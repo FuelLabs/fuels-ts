@@ -3,4 +3,4 @@
 "@fuel-ts/errors": patch
 ---
 
-feat: add method for coins consolidation
+feat: add method for base asset coins consolidation
