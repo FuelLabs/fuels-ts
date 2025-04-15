@@ -3,7 +3,7 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { BigNumberish } from '@fuel-ts/math';
 import { type SnapshotConfigs } from '@fuel-ts/utils';
 
-import type { Account } from '.';
+import { type Account } from '.';
 import type { Coin } from './providers';
 import { ScriptTransactionRequest } from './providers';
 import type { WalletsConfigOptions } from './test-utils';
@@ -291,49 +291,59 @@ describe('consolidate-coins', () => {
     await expectToThrowFuelError(() => wallet.consolidateCoins({ assetId: baseAssetId }), error);
   });
 
-  it('should ensures it can create many consolidation TXs [PARALLEL]', async () => {
-    const maxInputs = 255;
+  it('ensures it can consolidate only base asset coins', async () => {
     const {
-      provider,
-      wallets: [adminWallet],
-    } = await setupTest({ maxInputs });
+      wallets: [wallet],
+    } = await setupTest();
 
-    const baseAssetId = await provider.getBaseAssetId();
-
-    const wallet = Wallet.generate({ provider });
-
-    // Will result in 10 consolidation TXs
-    const utxoNum = Math.floor(maxInputs * 9.5);
-    const totalConsolidationTxs = Math.ceil(utxoNum / maxInputs);
-
-    await transferUTXOsToAccount(adminWallet, [
-      { utxoNum, amount: 1000, assetId: baseAssetId, recipient: wallet },
-    ]);
-
-    const allCoins = await fetchAllCoinsFromAccount(wallet);
-
-    expect(allCoins.length).toBe(utxoNum);
-    expect(totalConsolidationTxs).toBeGreaterThan(0);
-
-    const allSettled = vi.spyOn(Promise, 'allSettled');
-
-    const { submitAll, txs } = await wallet.assembleBaseAssetConsolidationTxs({
-      coins: allCoins,
+    await expectToThrowFuelError(() => wallet.consolidateCoins({ assetId: TestAssetId.A.value }), {
+      code: ErrorCode.UNSUPPORTED_FEATURE,
     });
-
-    expect(txs.length).toBe(10);
-
-    await submitAll();
-
-    const { coins } = await wallet.getCoins();
-
-    // Account will end-up with 10 coins since 10 consolidation TXs were submitted
-    expect(coins.length).toBe(totalConsolidationTxs);
-    // AllSettled should have been called as we are using parallel mode
-    expect(allSettled).toHaveBeenCalled();
   });
 
   describe('assembleBaseAssetConsolidationTxs', () => {
+    it('should ensures it can create many consolidation TXs [PARALLEL]', async () => {
+      const maxInputs = 255;
+      const {
+        provider,
+        wallets: [adminWallet],
+      } = await setupTest({ maxInputs });
+
+      const baseAssetId = await provider.getBaseAssetId();
+
+      const wallet = Wallet.generate({ provider });
+
+      // Will result in 10 consolidation TXs
+      const utxoNum = Math.floor(maxInputs * 9.5);
+      const totalConsolidationTxs = Math.ceil(utxoNum / maxInputs);
+
+      await transferUTXOsToAccount(adminWallet, [
+        { utxoNum, amount: 1000, assetId: baseAssetId, recipient: wallet },
+      ]);
+
+      const allCoins = await fetchAllCoinsFromAccount(wallet);
+
+      expect(allCoins.length).toBe(utxoNum);
+      expect(totalConsolidationTxs).toBeGreaterThan(0);
+
+      const allSettled = vi.spyOn(Promise, 'allSettled');
+
+      const { submitAll, txs } = await wallet.assembleBaseAssetConsolidationTxs({
+        coins: allCoins,
+      });
+
+      expect(txs.length).toBe(10);
+
+      await submitAll();
+
+      const { coins } = await wallet.getCoins();
+
+      // Account will end-up with 10 coins since 10 consolidation TXs were submitted
+      expect(coins.length).toBe(totalConsolidationTxs);
+      // AllSettled should have been called as we are using parallel mode
+      expect(allSettled).toHaveBeenCalled();
+    });
+
     it('should ensures it can create many consolidation TXs [SEQUENTIAL]', async () => {
       const maxInputs = 255;
       const {
