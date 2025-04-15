@@ -607,8 +607,10 @@ export class Account extends AbstractAccount implements WithAddress {
     if (isBaseAsset) {
       ({ submitAll } = await this.assembleBaseAssetConsolidationTxs(consolidationParams));
     } else {
-      // ({ submitAll } = await this.assembleNonBaseAssetConsolidationTxs(coins));
-      throw new Error('implement me.');
+      throw new FuelError(
+        ErrorCode.UNSUPPORTED_FEATURE,
+        'Consolidation for non-base assets is not supported yet.'
+      );
     }
 
     return submitAll();
