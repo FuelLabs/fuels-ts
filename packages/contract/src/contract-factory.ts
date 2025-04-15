@@ -13,6 +13,7 @@ import {
   BlobTransactionRequest,
   TransactionStatus,
   calculateGasFee,
+  setAndValidateGasAndFeeForAssembledTx,
 } from '@fuel-ts/account';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -192,6 +193,30 @@ export default class ContractFactory<TContract extends Contract = Contract> {
     return request;
   }
 
+  private async assembleTx(request: TransactionRequest, options: DeployContractOptions = {}) {
+    const account = this.getAccount();
+
+    const { maxFee: setMaxFee } = options;
+
+    request.maxFee = bn(0);
+
+    const { gasPrice, assembledRequest } = await account.provider.assembleTx({
+      request,
+      feePayerAccount: account,
+      accountCoinQuantities: [],
+    });
+
+    // eslint-disable-next-line no-param-reassign
+    request = await setAndValidateGasAndFeeForAssembledTx({
+      gasPrice,
+      provider: account.provider,
+      transactionRequest: assembledRequest,
+      setMaxFee,
+    });
+
+    return request;
+  }
+
   /**
    * Deploy a contract of any length with the specified options.
    *
@@ -335,10 +360,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
       // Deploy the chunks as blob txs
       for (const { blobId, transactionRequest } of chunks) {
         if (!uploadedBlobs.includes(blobId) && blobIdsToUpload.includes(blobId)) {
-          const fundedBlobRequest = await this.fundTransactionRequest(
-            transactionRequest,
-            deployOptions
-          );
+          const fundedBlobRequest = await this.assembleTx(transactionRequest, deployOptions);
 
           let result: TransactionResult<TransactionType.Blob>;
 
@@ -364,7 +386,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
         }
       }
 
-      await this.fundTransactionRequest(createRequest, deployOptions);
+      await this.assembleTx(createRequest, deployOptions);
       txIdResolver(createRequest.getTransactionId(await account.provider.getChainId()));
       const transactionResponse = await account.sendTransaction(createRequest);
       const transactionResult = await transactionResponse.waitForResult<TransactionType.Create>();
@@ -436,7 +458,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
 
     const { contractId, transactionRequest } = this.createTransactionRequest(deployOptions);
 
-    await this.fundTransactionRequest(transactionRequest, deployOptions);
+    await this.assembleTx(transactionRequest, deployOptions);
 
     return {
       contractId,

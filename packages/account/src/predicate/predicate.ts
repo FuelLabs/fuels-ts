@@ -16,7 +16,7 @@ import {
 import type {
   CallResult,
   CoinQuantityLike,
-  ExcludeResourcesOption,
+  ResourcesIdsToIgnore,
   Provider,
   Resource,
   TransactionRequest,
@@ -141,7 +141,12 @@ export class Predicate<
     return super.simulateTransaction(transactionRequest, { estimateTxDependencies: false });
   }
 
-  private getPredicateData(): Uint8Array {
+  /**
+   * Retrieves the properly encoded predicate data.
+   *
+   * @returns A Uint8Array containing the encoded predicate data. If no predicate data is available, returns an empty Uint8Array.
+   */
+  getPredicateData(): Uint8Array {
     if (!this.predicateData.length) {
       return new Uint8Array();
     }
@@ -208,17 +213,17 @@ export class Predicate<
    * Retrieves resources satisfying the spend query for the account.
    *
    * @param quantities - IDs of coins to exclude.
-   * @param excludedIds - IDs of resources to be excluded from the query.
+   * @param resourcesIdsToIgnore - IDs of resources to be excluded from the query.
    * @returns A promise that resolves to an array of Resources.
    */
   override async getResourcesToSpend(
-    quantities: CoinQuantityLike[] /** IDs of coins to exclude */,
-    excludedIds?: ExcludeResourcesOption
+    quantities: CoinQuantityLike[],
+    resourcesIdsToIgnore?: ResourcesIdsToIgnore
   ): Promise<Resource[]> {
     const resources = await this.provider.getResourcesToSpend(
       this.address,
       quantities,
-      excludedIds
+      resourcesIdsToIgnore
     );
     return resources.map((resource) => ({
       ...resource,
