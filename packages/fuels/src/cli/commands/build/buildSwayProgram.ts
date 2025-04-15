@@ -1,7 +1,7 @@
 import { spawn } from 'child_process';
 
 import type { FuelsConfig } from '../../types';
-import { debug, loggingConfig } from '../../utils/logger';
+import { debug, log, loggingConfig } from '../../utils/logger';
 
 import { onForcExit, onForcError } from './forcHandlers';
 
@@ -12,14 +12,12 @@ export const buildSwayProgram = async (config: FuelsConfig, path: string) => {
     const args = ['build', '-p', path].concat(config.forcBuildFlags);
     const forc = spawn(config.forcPath, args, { stdio: 'pipe' });
     if (loggingConfig.isLoggingEnabled) {
-      // eslint-disable-next-line no-console
-      forc.stderr?.on('data', (chunk) => console.log(chunk.toString()));
+      forc.stderr?.on('data', (chunk) => log(chunk.toString()));
     }
 
     if (loggingConfig.isDebugEnabled) {
       forc.stdout?.on('data', (chunk) => {
-        // eslint-disable-next-line no-console
-        console.log(chunk.toString());
+        debug(chunk.toString());
       });
     }
 
