@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.100.4
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.100.4
+- @fuel-ts/errors@0.100.4
+- @fuel-ts/hasher@0.100.4
+- @fuel-ts/math@0.100.4
+- @fuel-ts/utils@0.100.4
+
 ## 0.100.3
 
 ### Patch Changes
