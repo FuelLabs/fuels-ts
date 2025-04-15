@@ -1,5 +1,26 @@
 # Change Log
 
+## 0.100.4
+
+### Patch Changes
+
+- 2336a8d: chore: various fixes for suppressing build noise
+  - @fuel-ts/abi-coder@0.100.4
+  - @fuel-ts/abi-typegen@0.100.4
+  - @fuel-ts/account@0.100.4
+  - @fuel-ts/address@0.100.4
+  - @fuel-ts/contract@0.100.4
+  - @fuel-ts/crypto@0.100.4
+  - @fuel-ts/errors@0.100.4
+  - @fuel-ts/hasher@0.100.4
+  - @fuel-ts/math@0.100.4
+  - @fuel-ts/program@0.100.4
+  - @fuel-ts/recipes@0.100.4
+  - @fuel-ts/script@0.100.4
+  - @fuel-ts/transactions@0.100.4
+  - @fuel-ts/utils@0.100.4
+  - @fuel-ts/versions@0.100.4
+
 ## 0.100.3
 
 ### Patch Changes
