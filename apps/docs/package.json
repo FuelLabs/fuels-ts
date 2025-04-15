@@ -19,7 +19,7 @@
     "docs:dev": "vitepress dev",
     "clear:snippets": "tsx ./scripts/clear-snippets.mts",
     "wrap:snippets": "tsx ./scripts/wrap-snippets.ts",
-    "build:forc": "pnpm fuels build --deploy",
+    "build:forc": "pnpm fuels --silent build --deploy",
     "type:check": "pnpm tsc --noEmit --project tsconfig.emit.json"
   },
   "keywords": [],
