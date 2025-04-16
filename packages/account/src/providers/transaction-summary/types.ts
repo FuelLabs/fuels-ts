@@ -1,7 +1,7 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import type { B256Address } from '@fuel-ts/address';
 import type { BN, BNInput } from '@fuel-ts/math';
-import type { Input, Output, Transaction, TransactionType } from '@fuel-ts/transactions';
+import type { Transaction, Input, Output, TransactionType } from '@fuel-ts/transactions';
 
 import type { GqlSuccessStatusFragment } from '../__generated__/operations';
 import type { TransactionReceiptJson } from '../provider';
@@ -206,10 +206,10 @@ export interface MintedAsset {
 
 export type BurnedAsset = MintedAsset;
 
-export type TransactionSummary<TTransactionType = void> = {
+export interface PreConfirmationTransactionSummary<TTransactionType = void> {
   id: string;
   time?: string;
-  operations: Operation[];
+  operations?: Operation[];
   gasUsed: BN;
   tip: BN;
   fee: BN;
@@ -228,6 +228,13 @@ export type TransactionSummary<TTransactionType = void> = {
   mintedAssets: MintedAsset[];
   burnedAssets: BurnedAsset[];
   date?: Date;
+  receipts?: TransactionResultReceipt[];
+  transaction?: Transaction<TTransactionType>;
+}
+
+export interface TransactionSummary<TTransactionType = void>
+  extends PreConfirmationTransactionSummary<TTransactionType> {
+  operations: Operation[];
   receipts: TransactionResultReceipt[];
   transaction: Transaction<TTransactionType>;
-};
+}
