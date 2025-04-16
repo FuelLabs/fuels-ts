@@ -336,11 +336,10 @@ export class TransactionResponse {
     return transactionSummary;
   }
 
-  private async waitForStatusChange() {
+  private async waitForConfirmation() {
     const status = this.gqlTransaction?.status?.type;
-    const expectedSuccessStatus = 'SuccessStatus';
 
-    if (status && status !== expectedSuccessStatus) {
+    if (status && (status === 'FailureStatus' || status === 'SuccessStatus')) {
       return;
     }
 
@@ -428,7 +427,7 @@ export class TransactionResponse {
   async waitForResult<TTransactionType = void>(
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
-    await this.waitForStatusChange();
+    await this.waitForConfirmation();
     this.unsetResourceCache();
     return this.assembleResult<TTransactionType>(contractsAbiMap);
   }
@@ -442,7 +441,7 @@ export class TransactionResponse {
   async waitForPreConfirmation<TTransactionType = void>(
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
-    await this.waitForStatusChange();
+    await this.waitForConfirmation();
     this.unsetResourceCache();
     return this.assembleResult<TTransactionType>(contractsAbiMap);
   }
