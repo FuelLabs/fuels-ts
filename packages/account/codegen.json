@@ -2,6 +2,9 @@
   "$schema": "https://www.graphql-code-generator.com/config.schema.json",
   "schema": "./src/providers/fuel-core-schema.graphql",
   "documents": "./src/providers/operations.graphql",
+  "hooks": {
+    "afterAllFileWrite": ["prettier --write"]
+  },
   "generates": {
     "./src/providers/__generated__/operations.ts": {
       "plugins": [
