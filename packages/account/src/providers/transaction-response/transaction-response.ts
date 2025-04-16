@@ -363,7 +363,7 @@ export class TransactionResponse {
       }
 
       // Successfully submitted
-      if (statusChange.type !== 'SubmittedStatus') {
+      if (statusChange.type === 'SuccessStatus' || statusChange.type === 'FailureStatus') {
         break;
       }
     }
