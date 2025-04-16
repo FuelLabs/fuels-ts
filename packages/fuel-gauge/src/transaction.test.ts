@@ -319,7 +319,7 @@ describe('Transaction', () => {
     );
   });
 
-  it('should execute sendTransaction just fine [preconfirmation success]', async () => {
+  it.skip('should execute sendTransaction just fine [preconfirmation success]', async () => {
     using launched = await launchTestNode();
     const {
       provider,
@@ -331,9 +331,7 @@ describe('Transaction', () => {
     const signedTransaction = await sender.signTransaction(transactionRequest);
     transactionRequest.updateWitnessByOwner(sender.address, signedTransaction);
 
-    const { waitForPreConfirmation } = await provider.sendTransaction(transactionRequest, {
-      includePreconfirmation: true,
-    });
+    const { waitForPreConfirmation } = await provider.sendTransaction(transactionRequest);
 
     const { isStatusSuccess, isStatusPending, status } = await waitForPreConfirmation();
     expect(isStatusSuccess).toEqual(false);

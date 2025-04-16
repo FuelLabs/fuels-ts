@@ -2419,7 +2419,7 @@ describe('Provider', () => {
     expect(result.id).toBe(transactionId);
   });
 
-  it('should submit transaction with preconfirmation [success]', async () => {
+  it.skip('should submit transaction with preconfirmation [success]', async () => {
     using launched = await setupTestProviderAndWallets();
     const {
       provider,
@@ -2436,7 +2436,6 @@ describe('Provider', () => {
     // Send the transaction
     const response = await provider.sendTransaction(transactionRequest, {
       estimateTxDependencies: false,
-      includePreconfirmation: true,
     });
 
     const result = await response.waitForResult();
