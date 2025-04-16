@@ -45,20 +45,20 @@ import type { ProviderCacheJson } from './utils/serialization';
 
 const getCustomFetch =
   (expectedOperationName: string, expectedResponse: object) =>
-  async (url: string, options: RequestInit | undefined) => {
-    const graphqlRequest = JSON.parse(options?.body as string);
-    const { operationName } = graphqlRequest;
+    async (url: string, options: RequestInit | undefined) => {
+      const graphqlRequest = JSON.parse(options?.body as string);
+      const { operationName } = graphqlRequest;
 
-    if (operationName === expectedOperationName) {
-      const responseText = JSON.stringify({
-        data: expectedResponse,
-      });
-      const response = Promise.resolve(new Response(responseText, options));
+      if (operationName === expectedOperationName) {
+        const responseText = JSON.stringify({
+          data: expectedResponse,
+        });
+        const response = Promise.resolve(new Response(responseText, options));
 
-      return response;
-    }
-    return fetch(url, options);
-  };
+        return response;
+      }
+      return fetch(url, options);
+    };
 
 const createBasicAuth = (launchNodeUrl: string) => {
   const username: string = randomUUID();
@@ -253,7 +253,7 @@ describe('Provider', () => {
     });
 
     // Spy on console.warn
-    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
 
     // Verify that only one transaction was returned (the known type)
     const transaction = await mockProvider.getTransaction('0x1234567890abcdef');
@@ -301,7 +301,7 @@ describe('Provider', () => {
     });
 
     // Spy on console.warn
-    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
 
     // Verify that only one transaction was returned (the known type)
     const { transactions } = await mockProvider.getTransactions();
@@ -1055,6 +1055,7 @@ describe('Provider', () => {
       async () => {
         for await (const value of await provider.operations.statusChange({
           transactionId: 'invalid transaction id',
+          includePreconfirmation: false
         })) {
           // shouldn't be reached and should fail if reached
           expect(value).toBeFalsy();
@@ -1092,6 +1093,7 @@ describe('Provider', () => {
       async () => {
         for await (const value of await provider.operations.statusChange({
           transactionId: 'invalid transaction id',
+          includePreconfirmation: false
         })) {
           // shouldn't be reached and should fail if reached
           expect(value).toBeFalsy();
@@ -1124,6 +1126,7 @@ describe('Provider', () => {
       async () => {
         for await (const value of await provider.operations.statusChange({
           transactionId: 'invalid transaction id',
+          includePreconfirmation: false
         })) {
           // shouldn't be reached and should fail if reached
           expect(value).toBeFalsy();
@@ -1182,6 +1185,7 @@ describe('Provider', () => {
     const { error } = await safeExec(async () => {
       for await (const iterator of await provider.operations.statusChange({
         transactionId: "doesn't matter, will be aborted",
+        includePreconfirmation: false
       })) {
         // shouldn't be reached and should fail if reached
         expect(iterator).toBeFalsy();
@@ -1344,6 +1348,7 @@ describe('Provider', () => {
 
     for await (const { submitAndAwaitStatus } of await provider.operations.submitAndAwaitStatus({
       encodedTransaction: "it's mocked so doesn't matter",
+      includePreconfirmation: false
     })) {
       expect(submitAndAwaitStatus.type).toEqual('SuccessStatus');
       expect((<SubmittedStatus>submitAndAwaitStatus).time).toEqual('data: 4611686020137152060');
@@ -1376,6 +1381,7 @@ describe('Provider', () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for await (const { submitAndAwaitStatus } of await provider.operations.submitAndAwaitStatus({
       encodedTransaction: "it's mocked so doesn't matter",
+      includePreconfirmation: false
     })) {
       numberOfEvents += 1;
     }
@@ -1423,6 +1429,7 @@ describe('Provider', () => {
 
     for await (const { submitAndAwaitStatus } of await provider.operations.submitAndAwaitStatus({
       encodedTransaction: "it's mocked so doesn't matter",
+      includePreconfirmation: false
     })) {
       numberOfEvents += 1;
 
@@ -1471,6 +1478,7 @@ describe('Provider', () => {
 
     for await (const { submitAndAwaitStatus } of await provider.operations.submitAndAwaitStatus({
       encodedTransaction: "it's mocked so doesn't matter",
+      includePreconfirmation: false
     })) {
       expect(submitAndAwaitStatus.type).toEqual('SuccessStatus');
     }
@@ -1519,6 +1527,7 @@ describe('Provider', () => {
 
     for await (const { submitAndAwaitStatus } of await provider.operations.submitAndAwaitStatus({
       encodedTransaction: "it's mocked so doesn't matter",
+      includePreconfirmation: false
     })) {
       numberOfEvents += 1;
 
@@ -1578,6 +1587,7 @@ describe('Provider', () => {
 
     for await (const { submitAndAwaitStatus } of await provider.operations.submitAndAwaitStatus({
       encodedTransaction: "it's mocked so doesn't matter",
+      includePreconfirmation: false
     })) {
       numberOfEvents += 1;
 
@@ -1617,6 +1627,7 @@ describe('Provider', () => {
         for await (const { submitAndAwaitStatus } of await provider.operations.submitAndAwaitStatus(
           {
             encodedTransaction: "it's mocked so doesn't matter",
+            includePreconfirmation: false
           }
         )) {
           // shouldn't be reached!
@@ -1689,6 +1700,7 @@ describe('Provider', () => {
     await safeExec(async () => {
       for await (const iterator of await provider.operations.statusChange({
         transactionId: "doesn't matter, will be aborted",
+        includePreconfirmation: false
       })) {
         // Just running a subscription to trigger the middleware
         // shouldn't be reached and should fail if reached

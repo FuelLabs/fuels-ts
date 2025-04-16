@@ -28,7 +28,7 @@ export interface AssembleTransactionSummaryParams {
   id: string;
   transactionBytes: Uint8Array;
   gqlTransactionStatus?: GraphqlTransactionStatus;
-  receipts: TransactionResultReceipt[];
+  receipts?: TransactionResultReceipt[];
   abiMap?: AbiMap;
   maxInputs: BN;
   gasCosts: GasCosts;
@@ -43,7 +43,7 @@ export function assembleTransactionSummary<TTransactionType = void>(
 ) {
   const {
     id,
-    receipts,
+    receipts: receiptsFromParams,
     gasPerByte,
     gasPriceFactor,
     transaction,
@@ -56,6 +56,14 @@ export function assembleTransactionSummary<TTransactionType = void>(
     gasPrice,
     baseAssetId,
   } = params;
+
+    const { isStatusFailure, isStatusPending, isStatusSuccess, blockId, status, time, totalFee, receipts: receiptsFromStatus } =
+    processGraphqlStatus(gqlTransactionStatus);
+
+  const receipts = receiptsFromParams ?? receiptsFromStatus;
+  if (!receipts) {
+    throw new Error('Receipts are required');
+  }
 
   const gasUsed = getGasUsedFromReceipts(receipts);
 
@@ -76,8 +84,7 @@ export function assembleTransactionSummary<TTransactionType = void>(
 
   const tip = bn(transaction.policies?.find((policy) => policy.type === PolicyType.Tip)?.data);
 
-  const { isStatusFailure, isStatusPending, isStatusSuccess, blockId, status, time, totalFee } =
-    processGraphqlStatus(gqlTransactionStatus);
+
 
   const fee =
     totalFee ??

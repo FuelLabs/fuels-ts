@@ -27,14 +27,20 @@ import type {
 import { OutputType, TransactionCoder, TxPointerCoder } from '@fuel-ts/transactions';
 import { arrayify, assertUnreachable } from '@fuel-ts/utils';
 
-import type { GqlMalleableTransactionFieldsFragment } from '../__generated__/operations';
+import type {
+  GqlMalleableTransactionFieldsFragment,
+} from '../__generated__/operations';
 import type Provider from '../provider';
 import type { JsonAbisFromAllCalls, TransactionRequest } from '../transaction-request';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
-import { getTotalFeeFromStatus } from '../transaction-summary/status';
-import type { TransactionSummary, GqlTransaction, AbiMap } from '../transaction-summary/types';
+import { deserializeGraphqlStatus, getTotalFeeFromStatus, processGraphqlStatus } from '../transaction-summary/status';
+import type {
+  TransactionSummary,
+  GqlTransaction,
+  AbiMap,
+  GraphqlTransactionStatus,
+} from '../transaction-summary/types';
 import { extractTxError } from '../utils';
-import { deserializeReceipt } from '../utils/serialization';
 
 import { type DecodedLogs, getAllDecodedLogs } from './getAllDecodedLogs';
 
@@ -124,8 +130,8 @@ type SubmitAndAwaitStatusSubscriptionIterable = Awaited<
 
 type StatusChangeSubscription =
   Awaited<ReturnType<Provider['operations']['statusChange']>> extends AsyncIterable<infer R>
-    ? R
-    : never;
+  ? R
+  : never;
 
 /**
  * Represents a response for a transaction.
@@ -140,7 +146,7 @@ export class TransactionResponse {
   /** The graphql Transaction with receipts object. */
   private gqlTransaction?: GqlTransaction;
   private request?: TransactionRequest;
-  private status?: StatusChangeSubscription['statusChange'];
+  private statusFromSubscription?: StatusChangeSubscription['statusChange'];
   abis?: JsonAbisFromAllCalls;
 
   /**
@@ -187,7 +193,7 @@ export class TransactionResponse {
   private applyMalleableSubscriptionFields<TTransactionType = void>(
     transaction: Transaction<TTransactionType>
   ) {
-    const status = this.status;
+    const status = this.statusFromSubscription;
     if (!status) {
       return;
     }
@@ -238,24 +244,13 @@ export class TransactionResponse {
     };
   }
 
-  private getReceipts(): TransactionResultReceipt[] {
-    const status = this.status ?? this.gqlTransaction?.status;
-
-    switch (status?.type) {
-      case 'SuccessStatus':
-      case 'FailureStatus':
-        return status.receipts.map(deserializeReceipt);
-      default:
-        return [];
-    }
-  }
-
   /**
    * Fetch the transaction with receipts from the provider.
    *
    * @returns Transaction with receipts query result.
    */
   async fetch(): Promise<GqlTransaction> {
+    // TODO: this does not return preconfirmation...
     const response = await this.provider.operations.getTransactionWithReceipts({
       transactionId: this.id,
     });
@@ -263,11 +258,12 @@ export class TransactionResponse {
     if (!response.transaction) {
       const subscription = await this.provider.operations.statusChange({
         transactionId: this.id,
+        includePreconfirmation: false,
       });
 
       for await (const { statusChange } of subscription) {
         if (statusChange) {
-          this.status = statusChange;
+          this.statusFromSubscription = statusChange;
           break;
         }
       }
@@ -275,9 +271,16 @@ export class TransactionResponse {
       return this.fetch();
     }
 
-    this.gqlTransaction = response.transaction;
+    // We need to transform the response as the transaction status is not the same.
+    const { transaction: { id, rawPayload, status } } = response;
 
-    return response.transaction;
+    this.gqlTransaction = {
+      id,
+      rawPayload,
+      status: deserializeGraphqlStatus(status)
+    };
+
+    return this.gqlTransaction;
   }
 
   /**
@@ -310,7 +313,7 @@ export class TransactionResponse {
       await this.provider.getGasConfig();
 
     // If we have the total fee, we do not need to refetch the gas price
-    const totalFee = getTotalFeeFromStatus(this.status ?? this.gqlTransaction?.status);
+    const totalFee = getTotalFeeFromStatus(this.getStatus());
     const gasPrice = totalFee ? bn(0) : await this.provider.getLatestGasPrice();
 
     const maxInputs = (await this.provider.getChain()).consensusParameters.txParameters.maxInputs;
@@ -318,10 +321,9 @@ export class TransactionResponse {
 
     const transactionSummary = assembleTransactionSummary<TTransactionType>({
       id: this.id,
-      receipts: this.getReceipts(),
       transaction,
       transactionBytes,
-      gqlTransactionStatus: this.status ?? this.gqlTransaction?.status,
+      gqlTransactionStatus: this.getStatus(),
       gasPerByte,
       gasPriceFactor,
       abiMap: contractsAbiMap,
@@ -345,11 +347,12 @@ export class TransactionResponse {
       this.submitTxSubscription ??
       (await this.provider.operations.statusChange({
         transactionId: this.id,
+        includePreconfirmation: false,
       }));
 
     for await (const sub of subscription) {
       const statusChange = 'statusChange' in sub ? sub.statusChange : sub.submitAndAwaitStatus;
-      this.status = statusChange;
+      this.statusFromSubscription = statusChange;
       if (statusChange.type === 'SqueezedOutStatus') {
         this.unsetResourceCache();
         throw new FuelError(
@@ -399,7 +402,7 @@ export class TransactionResponse {
 
     const { receipts } = transactionResult;
 
-    const status = this.status ?? this.gqlTransaction?.status;
+    const status = this.getStatus();
     if (status?.type === 'FailureStatus') {
       const { reason } = status;
       throw extractTxError({
@@ -439,5 +442,18 @@ export class TransactionResponse {
 
   private unsetResourceCache() {
     this.provider.cache?.unset(this.id);
+  }
+
+  private getStatus(): GraphqlTransactionStatus | undefined {
+    if (this.statusFromSubscription) {
+      // We need to convert this into the GraphqlTransactionStatus type
+      return deserializeGraphqlStatus(this.statusFromSubscription);
+    }
+
+    if (this.gqlTransaction?.status) {
+      return this.gqlTransaction.status;
+    }
+
+    return undefined;
   }
 }

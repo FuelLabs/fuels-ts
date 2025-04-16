@@ -439,68 +439,22 @@ type ChainInfoCache = Record<string, ChainInfo>;
 type NodeInfoCache = Record<string, NodeInfo>;
 
 type Operations = ReturnType<typeof getOperationsSdk>;
-
-/**
- * TODO: remove this once pre-confirmation status support lands.
- *
- * Because of the way graphql-codegen works, an empty object is added to the generated status types
- * in place of the pre-confirmation statuses we don't declare in our operations.graphql.
- * Codegen converts these ignored statuses into `{}` types, and that messes up our TS code compilation,
- * because it's not written with this `{}` type in mind.
- * This utility and its application on the types below removes those empty objects from the affected operations,
- * thereby leaving their types unchanged from the perspective of their consumers.
- */
-type RemoveCodegenEmptyObject<T> = T extends object ? (keyof T extends never ? never : T) : T;
-
-type StatusChangeSubscription = {
-  statusChange: RemoveCodegenEmptyObject<GqlStatusChangeSubscription['statusChange']>;
-};
-
-type SubmitAndAwaitStatusSubscription = {
-  submitAndAwaitStatus: RemoveCodegenEmptyObject<
-    GqlSubmitAndAwaitStatusSubscription['submitAndAwaitStatus']
-  >;
-};
-
-type TransactionWithReceipts = NonNullable<GqlGetTransactionWithReceiptsQuery['transaction']>;
-
-type GetTransactionWithReceiptsQuery = {
-  transaction?: Omit<TransactionWithReceipts, 'status'> & {
-    status?: RemoveCodegenEmptyObject<TransactionWithReceipts['status']>;
-  };
-};
-
-type TransactionsByOwnerNode =
-  GqlGetTransactionsByOwnerQuery['transactionsByOwner']['edges'][number]['node'];
-
-type GetTransactionsByOwnerQuery = {
-  transactionsByOwner: Omit<GqlGetTransactionsByOwnerQuery['transactionsByOwner'], 'edges'> & {
-    edges: Array<{
-      node: Omit<TransactionsByOwnerNode, 'status'> & {
-        status?: RemoveCodegenEmptyObject<TransactionsByOwnerNode['status']>;
-      };
-    }>;
-  };
-};
+type SubscriptionOperations = {
+  statusChange: (
+    ...args: Parameters<Operations['statusChange']>
+  ) => Promise<ReturnType<Operations['statusChange']>>,
+  submitAndAwaitStatus: (
+    ...args: Parameters<Operations['submitAndAwaitStatus']>
+  ) => Promise<ReturnType<Operations['submitAndAwaitStatus']>>,
+}
+type CustomOperations = {
+  getBlobs: (variables: { blobIds: string[] }) => Promise<{ blob: { id: string } | null }[]>;
+}
 
 type SdkOperations = Omit<
   Operations,
-  'statusChange' | 'submitAndAwaitStatus' | 'getTransactionWithReceipts' | 'getTransactionsByOwner'
-> & {
-  statusChange: (
-    ...args: Parameters<Operations['statusChange']>
-  ) => Promise<AsyncIterable<StatusChangeSubscription>>;
-  submitAndAwaitStatus: (
-    ...args: Parameters<Operations['submitAndAwaitStatus']>
-  ) => Promise<AsyncIterable<SubmitAndAwaitStatusSubscription>>;
-  getTransactionWithReceipts: (
-    ...args: Parameters<Operations['getTransactionWithReceipts']>
-  ) => Promise<GetTransactionWithReceiptsQuery>;
-  getTransactionsByOwner: (
-    ...args: Parameters<Operations['getTransactionsByOwner']>
-  ) => Promise<GetTransactionsByOwnerQuery>;
-  getBlobs: (variables: { blobIds: string[] }) => Promise<{ blob: { id: string } | null }[]>;
-};
+  keyof SubscriptionOperations
+> & SubscriptionOperations & CustomOperations
 
 const WRITE_OPERATIONS: Array<keyof SdkOperations> = [
   'submit',
@@ -1185,7 +1139,7 @@ export default class Provider {
     if (isTransactionTypeScript(transactionRequest)) {
       abis = transactionRequest.abis;
     }
-    const subscription = await this.operations.submitAndAwaitStatus({ encodedTransaction });
+    const subscription = await this.operations.submitAndAwaitStatus({ encodedTransaction, includePreconfirmation: false });
 
     this.#cacheInputs(
       transactionRequest.inputs,
@@ -2575,7 +2529,7 @@ export default class Provider {
       if (asset) {
         return 'Asset';
       }
-    } catch (e) {}
+    } catch (e) { }
 
     return 'Account';
   }

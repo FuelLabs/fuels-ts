@@ -48,7 +48,7 @@ describe('Edge Cases', () => {
 
     await response.waitForResult();
 
-    const subscription = await provider.operations.statusChange({ transactionId });
+    const subscription = await provider.operations.statusChange({ transactionId, includePreconfirmation: false });
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for await (const iterator of subscription) {
@@ -72,6 +72,7 @@ describe('Edge Cases', () => {
       () =>
         launched.provider.operations.submitAndAwaitStatus({
           encodedTransaction: hexlify(transferTx.toTransactionBytes()),
+          includePreconfirmation: false
         }),
       new FuelError(
         ErrorCode.INVALID_REQUEST,

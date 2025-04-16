@@ -122,6 +122,25 @@ fragment SqueezedOutStatusFragment on SqueezedOutStatus {
   reason
 }
 
+fragment PreconfirmationSuccessStatusFragment on PreconfirmationSuccessStatus {
+  type: __typename
+  totalGas
+  totalFee
+  optionalReceipts: receipts {
+    ...receiptFragment
+  }
+}
+
+fragment PreconfirmationFailureStatusFragment on PreconfirmationFailureStatus {
+  type: __typename
+  reason
+  totalGas
+  totalFee
+  optionalReceipts: receipts {
+    ...receiptFragment
+  }
+}
+
 fragment transactionStatusFragment on TransactionStatus {
   ... on SubmittedStatus {
     ...SubmittedStatusFragment
@@ -134,6 +153,12 @@ fragment transactionStatusFragment on TransactionStatus {
   }
   ... on SqueezedOutStatus {
     ...SqueezedOutStatusFragment
+  }
+  ... on PreconfirmationSuccessStatus {
+    ...PreconfirmationSuccessStatusFragment
+  }
+  ... on PreconfirmationFailureStatus {
+    ...PreconfirmationFailureStatusFragment
   }
 }
 
@@ -195,6 +220,12 @@ fragment transactionStatusSubscriptionFragment on TransactionStatus {
   }
   ... on SqueezedOutStatus {
     ...SqueezedOutStatusFragment
+  }
+  ... on PreconfirmationSuccessStatus {
+    ...PreconfirmationSuccessStatusFragment
+  }
+  ... on PreconfirmationFailureStatus {
+    ...PreconfirmationFailureStatusFragment
   }
 }
 
@@ -580,18 +611,7 @@ query getTransactionWithReceipts($transactionId: TransactionId!) {
     id
     rawPayload
     status {
-      ... on SubmittedStatus {
-        ...SubmittedStatusFragment
-      }
-      ... on SuccessStatus {
-        ...SuccessStatusWithBlockIdFragment
-      }
-      ... on FailureStatus {
-        ...FailureStatusWithBlockIdFragment
-      }
-      ... on SqueezedOutStatus {
-        ...SqueezedOutStatusFragment
-      }
+      ...transactionStatusFragment
     }
   }
 }
@@ -1042,14 +1062,14 @@ query getConsensusParametersVersion {
   }
 }
 
-subscription submitAndAwaitStatus($encodedTransaction: HexString!) {
-  submitAndAwaitStatus(tx: $encodedTransaction) {
+subscription submitAndAwaitStatus($encodedTransaction: HexString!, $includePreconfirmation: Boolean!) {
+  submitAndAwaitStatus(tx: $encodedTransaction, includePreconfirmation: $includePreconfirmation) {
     ...transactionStatusSubscriptionFragment
   }
 }
 
-subscription statusChange($transactionId: TransactionId!) {
-  statusChange(id: $transactionId) {
+subscription statusChange($transactionId: TransactionId!, $includePreconfirmation: Boolean!) {
+  statusChange(id: $transactionId, includePreconfirmation: $includePreconfirmation) {
     ...transactionStatusSubscriptionFragment
   }
 }

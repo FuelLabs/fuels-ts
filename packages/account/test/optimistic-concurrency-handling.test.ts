@@ -370,6 +370,7 @@ describe('optimistic concurrency handling via block height', () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for await (const element of await provider.operations.submitAndAwaitStatus({
       encodedTransaction: '',
+      includePreconfirmation: false
     })) {
       //
     }

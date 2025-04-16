@@ -3,9 +3,20 @@ import type { B256Address } from '@fuel-ts/address';
 import type { BN, BNInput } from '@fuel-ts/math';
 import type { Input, Output, Transaction, TransactionType } from '@fuel-ts/transactions';
 
-import type { GqlSuccessStatusFragment } from '../__generated__/operations';
+import type { GqlGetTransactionWithReceiptsQuery, GqlSuccessStatusFragment } from '../__generated__/operations';
+import type Provider from '../provider';
 import type { TransactionReceiptJson } from '../provider';
 import type { TransactionResultReceipt } from '../transaction-response';
+
+type StatusChangeSubscription =
+  Awaited<ReturnType<Provider['operations']['statusChange']>> extends AsyncIterable<infer R>
+    ? R
+    : never;
+
+export type TransactionStatusFromSubscription = StatusChangeSubscription['statusChange'];
+
+export type TransactionStatusFromGetTransactionWithReceipts = NonNullable<GqlGetTransactionWithReceiptsQuery['transaction']>['status'];
+
 
 export type SubmittedStatus = {
   type: 'SubmittedStatus';
@@ -41,11 +52,28 @@ export type SqueezedOutStatus = {
   reason: string;
 };
 
+export type PreconfirmationSuccessStatus = {
+  type: 'PreconfirmationSuccessStatus';
+  totalGas: string;
+  totalFee: string;
+  receipts: TransactionReceiptJson[];
+};
+
+export type PreconfirmationFailureStatus = {
+  type: 'PreconfirmationFailureStatus';
+  reason: string;
+  totalGas: string;
+  totalFee: string;
+  receipts: TransactionReceiptJson[];
+};
+
 export type GraphqlTransactionStatus =
   | SubmittedStatus
   | SuccessStatus
   | FailureStatus
   | SqueezedOutStatus
+  | PreconfirmationSuccessStatus
+  | PreconfirmationFailureStatus
   | null;
 
 export type GqlTransaction = {
@@ -79,6 +107,8 @@ export enum TransactionStatus {
   success = 'success',
   squeezedout = 'squeezedout',
   failure = 'failure',
+  preconfirmationsuccess = 'preconfirmationsuccess',
+  preconfirmationfailure = 'preconfirmationfailure',
 }
 
 /**
@@ -88,7 +118,9 @@ export type GqlTransactionStatusesNames =
   | 'FailureStatus'
   | 'SubmittedStatus'
   | 'SuccessStatus'
-  | 'SqueezedOutStatus';
+  | 'SqueezedOutStatus'
+  | 'PreconfirmationSuccessStatus'
+  | 'PreconfirmationFailureStatus';
 
 /**
  * @hidden

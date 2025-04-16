@@ -6,14 +6,13 @@ import { arrayify } from '@fuel-ts/utils';
 import type { GqlGetTransactionsByOwnerQueryVariables } from '../__generated__/operations';
 import { TRANSACTIONS_PAGE_SIZE_LIMIT } from '../provider';
 import type Provider from '../provider';
-import type { TransactionReceiptJson, PageInfo } from '../provider';
+import type { PageInfo } from '../provider';
 import type { TransactionRequest } from '../transaction-request';
 import type { TransactionResult } from '../transaction-response';
-import { deserializeReceipt } from '../utils/serialization';
 import { validatePaginationArgs } from '../utils/validate-pagination-args';
 
 import { assembleTransactionSummary } from './assemble-transaction-summary';
-import { getTotalFeeFromStatus } from './status';
+import { deserializeGraphqlStatus, getTotalFeeFromStatus } from './status';
 import type { AbiMap, TransactionSummary } from './types';
 /** @hidden */
 export interface GetTransactionSummaryParams {
@@ -43,13 +42,7 @@ export async function getTransactionSummary<TTransactionType = void>(
     0
   );
 
-  let txReceipts: TransactionReceiptJson[] = [];
-
-  if (gqlTransaction?.status && 'receipts' in gqlTransaction.status) {
-    txReceipts = gqlTransaction.status.receipts;
-  }
-
-  const receipts = txReceipts.map(deserializeReceipt);
+  const gqlTransactionStatus = deserializeGraphqlStatus(gqlTransaction.status);
 
   const {
     consensusParameters: {
@@ -60,17 +53,16 @@ export async function getTransactionSummary<TTransactionType = void>(
   } = await provider.getChain();
 
   // If we have the total fee, we do not need to refetch the gas price
-  const totalFee = getTotalFeeFromStatus(gqlTransaction.status);
+  const totalFee = getTotalFeeFromStatus(gqlTransactionStatus);
   const gasPrice = totalFee ? bn(0) : await provider.getLatestGasPrice();
 
   const baseAssetId = await provider.getBaseAssetId();
 
   const transactionInfo = assembleTransactionSummary<TTransactionType>({
     id: gqlTransaction.id,
-    receipts,
     transaction: decodedTransaction,
     transactionBytes: arrayify(gqlTransaction.rawPayload),
-    gqlTransactionStatus: gqlTransaction.status,
+    gqlTransactionStatus,
     gasPerByte: bn(gasPerByte),
     gasPriceFactor: bn(gasPriceFactor),
     abiMap,
@@ -98,7 +90,7 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
 ): Promise<TransactionSummary<TTransactionType>> {
   const { provider, transactionRequest, abiMap } = params;
 
-  const { receipts } = await provider.dryRun(transactionRequest);
+  await provider.dryRun(transactionRequest);
 
   const { gasPerByte, gasPriceFactor, gasCosts, maxGasPerTx } = await provider.getGasConfig();
   const maxInputs = (await provider.getChain()).consensusParameters.txParameters.maxInputs;
@@ -111,7 +103,6 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
 
   const transactionSummary = assembleTransactionSummary<TTransactionType>({
     id: transactionRequest.getTransactionId(await provider.getChainId()),
-    receipts,
     transaction,
     transactionBytes,
     abiMap,
@@ -181,20 +172,11 @@ export async function getTransactionsSummaries(
 
     const [decodedTransaction] = new TransactionCoder().decode(arrayify(rawPayload), 0);
 
-    let txReceipts: TransactionReceiptJson[] = [];
-
-    if (gqlTransaction?.status && 'receipts' in gqlTransaction.status) {
-      txReceipts = gqlTransaction.status.receipts;
-    }
-
-    const receipts = txReceipts.map(deserializeReceipt);
-
     const transactionSummary = assembleTransactionSummary({
       id,
-      receipts,
       transaction: decodedTransaction,
       transactionBytes: arrayify(rawPayload),
-      gqlTransactionStatus: status,
+      gqlTransactionStatus: deserializeGraphqlStatus(status),
       abiMap,
       gasPerByte,
       gasPriceFactor,
