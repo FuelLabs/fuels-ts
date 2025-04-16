@@ -4,11 +4,25 @@ When performing a funding operation or calling `getResourcesToSpend`, you may en
 
 You may also want to do this if you want to reduce the number of inputs in your transaction, which can be useful if you are trying to reduce the size of your transaction or you are receiving the `MAX_INPUTS_EXCEEDED` error.
 
-One way to avoid these errors is to combine your UTXOs. This can be done by performing a transfer that combines multiple UTXOs into a single UTXO, where the transaction has multiple inputs for the asset, but a smaller number of outputs.
+## Using the Account's `consolidateCoins` Method
 
-> **Note:** You will not be able to have a single UTXO for the base asset after combining, as one output will be for the transfer, and you will have another for the fees.
+The SDK provides a built-in method to consolidate your base asset UTXOs:
 
 <<< @./snippets/combining-utxos.ts#combining-utxos{ts:line-numbers}
+
+### Configuration Options
+
+The `consolidateCoins` method accepts the following parameters:
+
+- `assetId`: The ID of the asset to consolidate (currently supports only the base asset)
+- `mode` (optional): How to submit consolidation transactions
+  - `'parallel'` (default): Submit all transactions simultaneously for faster processing
+  - `'sequential'`: Submit transactions one after another, waiting for each to complete
+- `outputNum` (optional): Number of output UTXOs to create (default is 1)
+
+### Limitations
+
+- Currently only supports consolidating the base asset
 
 ## Max Inputs and Outputs
 
