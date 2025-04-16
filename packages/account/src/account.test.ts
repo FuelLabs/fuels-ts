@@ -342,7 +342,6 @@ describe('Account', () => {
     expect(sendTransaction.mock.calls[0][0]).toEqual(transactionRequest);
     expect(sendTransaction.mock.calls[0][1], 'Should have default parameters').toEqual({
       estimateTxDependencies: false,
-      includePreconfirmation: false,
     });
   });
 
@@ -1059,9 +1058,7 @@ describe('Account', () => {
       provider
     );
 
-    const result = await account.sendTransaction(transactionRequestLike, {
-      includePreconfirmation: true,
-    });
+    const result = await account.sendTransaction(transactionRequestLike);
 
     expect(result).toEqual(transactionResponse);
 
@@ -1075,7 +1072,6 @@ describe('Account', () => {
     expect(sendTransaction.mock.calls[0][0]).toEqual(transactionRequest);
     expect(sendTransaction.mock.calls[0][1], 'Should have default parameters').toEqual({
       estimateTxDependencies: false,
-      includePreconfirmation: true,
     });
   });
 });

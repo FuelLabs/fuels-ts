@@ -702,7 +702,7 @@ export class Account extends AbstractAccount implements WithAddress {
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true, includePreconfirmation = false, ...connectorOptions }: AccountSendTxParams = {}
+    { estimateTxDependencies = true, ...connectorOptions }: AccountSendTxParams = {}
   ): Promise<TransactionResponse> {
     let transactionRequest = transactionRequestify(transactionRequestLike);
 
@@ -714,7 +714,6 @@ export class Account extends AbstractAccount implements WithAddress {
       transactionRequest = await this.prepareTransactionForSend(transactionRequest);
 
       const params: FuelConnectorSendTxParams = {
-        includePreconfirmation,
         onBeforeSend,
         skipCustomFee,
         provider: {
@@ -741,7 +740,6 @@ export class Account extends AbstractAccount implements WithAddress {
     }
     return this.provider.sendTransaction(transactionRequest, {
       estimateTxDependencies: false,
-      includePreconfirmation,
     });
   }
 

@@ -177,12 +177,11 @@ export class TransactionResponse {
   static async create(
     id: string,
     provider: Provider,
-    abis?: JsonAbisFromAllCalls,
-    includePreconfirmation?: boolean
+    abis?: JsonAbisFromAllCalls
   ): Promise<TransactionResponse> {
     const chainId = await provider.getChainId();
     const response = new TransactionResponse(id, provider, chainId, abis);
-    await response.fetch({ includePreconfirmation: includePreconfirmation ?? false });
+    await response.fetch();
     return response;
   }
 
@@ -257,9 +256,7 @@ export class TransactionResponse {
    *
    * @returns Transaction with receipts query result.
    */
-  async fetch(opts: { includePreconfirmation?: boolean } = {}): Promise<GqlTransaction> {
-    const { includePreconfirmation = false } = opts;
-
+  async fetch(): Promise<GqlTransaction> {
     const response = await this.provider.operations.getTransactionWithReceipts({
       transactionId: this.id,
     });
@@ -267,7 +264,6 @@ export class TransactionResponse {
     if (!response.transaction) {
       const subscription = await this.provider.operations.statusChange({
         transactionId: this.id,
-        includePreconfirmation,
       });
 
       for await (const { statusChange } of subscription) {
@@ -277,7 +273,7 @@ export class TransactionResponse {
         }
       }
 
-      return this.fetch({ includePreconfirmation });
+      return this.fetch();
     }
 
     this.gqlTransaction = response.transaction;
@@ -340,8 +336,7 @@ export class TransactionResponse {
     return transactionSummary;
   }
 
-  private async waitForStatusChange(opts: { includePreconfirmation?: boolean } = {}) {
-    const { includePreconfirmation = false } = opts;
+  private async waitForStatusChange() {
     const status = this.gqlTransaction?.status?.type;
     const expectedSuccessStatus = 'SuccessStatus';
 
@@ -353,7 +348,6 @@ export class TransactionResponse {
       this.submitTxSubscription ??
       (await this.provider.operations.statusChange({
         transactionId: this.id,
-        includePreconfirmation,
       }));
 
     for await (const sub of subscription) {
@@ -448,7 +442,7 @@ export class TransactionResponse {
   async waitForPreConfirmation<TTransactionType = void>(
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
-    await this.waitForStatusChange({ includePreconfirmation: true });
+    await this.waitForStatusChange();
     this.unsetResourceCache();
     return this.assembleResult<TTransactionType>(contractsAbiMap);
   }

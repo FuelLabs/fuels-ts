@@ -409,22 +409,14 @@ export type EstimateTxGasAndFeeParams = {
   gasPrice?: BN;
 };
 
-export type PreconfirmationParams = {
-  /**
-   * Whether to include preconfirmation status in the transaction (default: true)
-   */
-  includePreconfirmation?: boolean;
-};
-
 /**
  * Provider Call transaction params
  */
-export type ProviderCallParams = UTXOValidationParams & EstimateTransactionParams & PreconfirmationParams;
-
+export type ProviderCallParams = UTXOValidationParams & EstimateTransactionParams;
 /**
  * Provider Send transaction params
  */
-export type ProviderSendTxParams = EstimateTransactionParams & PreconfirmationParams & {
+export type ProviderSendTxParams = EstimateTransactionParams & {
   /**
    * Whether to enable asset burn for the transaction.
    */
@@ -1114,11 +1106,7 @@ export default class Provider {
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    {
-      estimateTxDependencies = true,
-      enableAssetBurn,
-      includePreconfirmation = false,
-    }: ProviderSendTxParams = {}
+    { estimateTxDependencies = true, enableAssetBurn }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     validateTransactionForAssetBurn(
@@ -1142,7 +1130,7 @@ export default class Provider {
     }
     const subscription = await this.operations.submitAndAwaitStatus({
       encodedTransaction,
-      includePreconfirmation,
+      includePreconfirmation: false,
     });
 
     this.#cacheInputs(

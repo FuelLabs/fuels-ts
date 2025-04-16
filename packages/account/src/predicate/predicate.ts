@@ -121,14 +121,12 @@ export class Predicate<
    * @returns A promise that resolves to the transaction response.
    */
   override sendTransaction(
-    transactionRequestLike: TransactionRequestLike,
-    { includePreconfirmation = false }: { includePreconfirmation?: boolean } = {}
+    transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
 
     return super.sendTransaction(transactionRequest, {
       estimateTxDependencies: false,
-      includePreconfirmation,
     });
   }
 
