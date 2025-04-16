@@ -336,7 +336,7 @@ export class TransactionResponse {
     return transactionSummary;
   }
 
-  private async waitForConfirmation() {
+  private async waitForConfirmationStatuses() {
     const status = this.gqlTransaction?.status?.type;
 
     if (status && (status === 'FailureStatus' || status === 'SuccessStatus')) {
@@ -364,6 +364,39 @@ export class TransactionResponse {
 
       // Successfully submitted
       if (statusChange.type === 'SuccessStatus' || statusChange.type === 'FailureStatus') {
+        break;
+      }
+    }
+  }
+
+  private async waitForPreConfirmationStatuses() {
+    const status = this.gqlTransaction?.status?.type;
+
+    if (status && (status === 'FailureStatus' || status === 'SuccessStatus')) {
+      return;
+    }
+
+    const subscription =
+      this.submitTxSubscription ??
+      (await this.provider.operations.statusChange({
+        transactionId: this.id,
+        includePreconfirmation: true,
+      }));
+
+    for await (const sub of subscription) {
+      const statusChange = 'statusChange' in sub ? sub.statusChange : sub.submitAndAwaitStatus;
+      this.status = statusChange;
+
+      // Transaction Squeezed Out
+      if (statusChange.type === 'SqueezedOutStatus') {
+        this.unsetResourceCache();
+        throw new FuelError(
+          ErrorCode.TRANSACTION_SQUEEZED_OUT,
+          `Transaction Squeezed Out with reason: ${statusChange.reason}`
+        );
+      }
+
+      if (statusChange.type !== 'SubmittedStatus') {
         break;
       }
     }
@@ -427,7 +460,7 @@ export class TransactionResponse {
   async waitForResult<TTransactionType = void>(
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
-    await this.waitForConfirmation();
+    await this.waitForConfirmationStatuses();
     this.unsetResourceCache();
     return this.assembleResult<TTransactionType>(contractsAbiMap);
   }
@@ -441,7 +474,7 @@ export class TransactionResponse {
   async waitForPreConfirmation<TTransactionType = void>(
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
-    await this.waitForConfirmation();
+    await this.waitForPreConfirmationStatuses();
     this.unsetResourceCache();
     return this.assembleResult<TTransactionType>(contractsAbiMap);
   }
