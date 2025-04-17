@@ -1130,7 +1130,7 @@ export default class Provider {
     }
     const subscription = await this.operations.submitAndAwaitStatus({
       encodedTransaction,
-      includePreconfirmation: false,
+      includePreconfirmation: true,
     });
 
     this.#cacheInputs(
