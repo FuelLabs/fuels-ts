@@ -19,7 +19,14 @@ import {
 } from './operations';
 import { extractBurnedAssetsFromReceipts, extractMintedAssetsFromReceipts } from './receipt';
 import { processGraphqlStatus } from './status';
-import type { AbiMap, GraphqlTransactionStatus, TransactionSummary } from './types';
+import type {
+  AbiMap,
+  BurnedAsset,
+  GraphqlTransactionStatus,
+  MintedAsset,
+  PreConfirmationTransactionSummary,
+  TransactionSummary,
+} from './types';
 
 export interface AssembleTransactionSummaryParams {
   gasPerByte: BN;
@@ -128,6 +135,56 @@ export function assembleTransactionSummary<TTransactionType = void>(
     isStatusPending,
     date,
     transaction: transaction as Transaction<TTransactionType>,
+  };
+
+  return transactionSummary;
+}
+
+export interface AssemblePreconfirmationTransactionSummaryParams {
+  id: string;
+  gqlTransactionStatus?: GraphqlTransactionStatus;
+}
+
+/** @hidden */
+export function assemblePreconfirmationTransactionSummary<TTransactionType = void>(
+  params: AssemblePreconfirmationTransactionSummaryParams
+) {
+  const { id, gqlTransactionStatus } = params;
+
+  const { isStatusFailure, isStatusSuccess, status, totalFee, receipts } =
+    processGraphqlStatus(gqlTransactionStatus);
+
+  let gasUsed: BN | undefined;
+  let mintedAssets: MintedAsset[] = [];
+  let burnedAssets: BurnedAsset[] = [];
+
+  if (receipts) {
+    gasUsed = getGasUsedFromReceipts(receipts);
+    mintedAssets = extractMintedAssetsFromReceipts(receipts);
+    burnedAssets = extractBurnedAssetsFromReceipts(receipts);
+  }
+
+  const transactionSummary: PreConfirmationTransactionSummary<TTransactionType> = {
+    id, // ALWAYS PRESENT
+    // tip, // YES IF TRANSACTION IS PRESENT
+    fee: totalFee, // ALWAYS PRESENT
+    gasUsed, // ALWAYS PRESENT
+    // operations, // YES IF TRANSACTION AND RECEIPTS ARE PRESENT
+    // type: typeName, // YES IF TRANSACTION IS PRESENT
+    status, // ALWAYS PRESENT
+    receipts, // PRESENT IF RECEIPTS ARE PRESENT
+    mintedAssets, // PRESENT IF RECEIPTS ARE PRESENT
+    burnedAssets, // PRESENT IF RECEIPTS ARE PRESENT
+    // isTypeMint: isTypeMint(transaction.type), // PRESENT IF TRANSACTION IS PRESENT
+    // isTypeCreate: isTypeCreate(transaction.type), // PRESENT IF TRANSACTION IS PRESENT
+    // isTypeScript: isTypeScript(transaction.type), // PRESENT IF TRANSACTION IS PRESENT
+    // isTypeUpgrade: isTypeUpgrade(transaction.type), // PRESENT IF TRANSACTION IS PRESENT
+    // isTypeUpload: isTypeUpload(transaction.type), // PRESENT IF TRANSACTION IS PRESENT
+    // isTypeBlob: isTypeBlob(transaction.type), // PRESENT IF TRANSACTION IS PRESENT
+    isStatusFailure, // CAN WE USE PRECONFIRMATION FAILURE STATUS FOR NO?
+    isStatusSuccess, // CAN WE USE PRECONFIRMATION SUCCESS STATUS FOR YES?
+    isStatusPending: true, // IT WILL ALWAYS BE 'TRUE'
+    // transaction: transaction as Transaction<TTransactionType>, // PRESENT IF TRANSACTION IS PRESENT
   };
 
   return transactionSummary;
