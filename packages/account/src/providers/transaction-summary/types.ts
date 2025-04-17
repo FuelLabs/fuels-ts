@@ -45,6 +45,7 @@ export type PreconfirmationSuccessStatus = {
   type: 'PreconfirmationSuccessStatus';
   totalFee: string;
   totalGas: string;
+  preconfirmationReceipts?: TransactionReceiptJson[] | null;
 };
 
 export type PreconfirmationFailureStatus = {
@@ -52,6 +53,7 @@ export type PreconfirmationFailureStatus = {
   reason: string;
   totalFee: string;
   totalGas: string;
+  preconfirmationReceipts?: TransactionReceiptJson[] | null;
 };
 
 export type GraphqlTransactionStatus =
