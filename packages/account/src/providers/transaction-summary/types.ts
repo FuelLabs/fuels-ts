@@ -212,18 +212,18 @@ export interface PreConfirmationTransactionSummary<TTransactionType = void> {
   id: string;
   time?: string;
   operations?: Operation[];
-  gasUsed: BN;
-  tip: BN;
-  fee: BN;
-  type: TransactionTypeName;
+  gasUsed?: BN;
+  tip?: BN;
+  fee?: BN;
+  type?: TransactionTypeName;
   blockId?: BlockId;
   status?: TransactionStatus;
-  isTypeMint: boolean;
-  isTypeCreate: boolean;
-  isTypeScript: boolean;
-  isTypeUpgrade: boolean;
-  isTypeUpload: boolean;
-  isTypeBlob: boolean;
+  isTypeMint?: boolean;
+  isTypeCreate?: boolean;
+  isTypeScript?: boolean;
+  isTypeUpgrade?: boolean;
+  isTypeUpload?: boolean;
+  isTypeBlob?: boolean;
   isStatusPending: boolean;
   isStatusSuccess: boolean;
   isStatusFailure: boolean;
@@ -236,7 +236,18 @@ export interface PreConfirmationTransactionSummary<TTransactionType = void> {
 
 export interface TransactionSummary<TTransactionType = void>
   extends PreConfirmationTransactionSummary<TTransactionType> {
+  id: string;
   operations: Operation[];
+  gasUsed: BN;
+  tip: BN;
+  fee: BN;
+  type: TransactionTypeName;
+  isTypeMint: boolean;
+  isTypeCreate: boolean;
+  isTypeScript: boolean;
+  isTypeUpgrade: boolean;
+  isTypeUpload: boolean;
+  isTypeBlob: boolean;
   receipts: TransactionResultReceipt[];
   transaction: Transaction<TTransactionType>;
 }
