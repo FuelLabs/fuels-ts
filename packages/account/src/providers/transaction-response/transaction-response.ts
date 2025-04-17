@@ -30,9 +30,17 @@ import { arrayify, assertUnreachable } from '@fuel-ts/utils';
 import type { GqlMalleableTransactionFieldsFragment } from '../__generated__/operations';
 import type Provider from '../provider';
 import type { JsonAbisFromAllCalls, TransactionRequest } from '../transaction-request';
-import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
+import {
+  assemblePreconfirmationTransactionSummary,
+  assembleTransactionSummary,
+} from '../transaction-summary/assemble-transaction-summary';
 import { getTotalFeeFromStatus } from '../transaction-summary/status';
-import type { TransactionSummary, GqlTransaction, AbiMap } from '../transaction-summary/types';
+import type {
+  TransactionSummary,
+  GqlTransaction,
+  AbiMap,
+  PreConfirmationTransactionSummary,
+} from '../transaction-summary/types';
 import { extractTxError } from '../utils';
 import { deserializeReceipt } from '../utils/serialization';
 
@@ -336,6 +344,17 @@ export class TransactionResponse {
     return transactionSummary;
   }
 
+  getPartialTransactionSummary<
+    TTransactionType = void,
+  >(): PreConfirmationTransactionSummary<TTransactionType> {
+    const transactionSummary = assemblePreconfirmationTransactionSummary<TTransactionType>({
+      id: this.id,
+      gqlTransactionStatus: this.status ?? this.gqlTransaction?.status,
+    });
+
+    return transactionSummary;
+  }
+
   private async waitForConfirmationStatuses() {
     const status = this.gqlTransaction?.status?.type;
 
@@ -452,6 +471,31 @@ export class TransactionResponse {
     return transactionResult;
   }
 
+  assemblePartialResult<TTransactionType = void>() {
+    const transactionSummary = this.getPartialTransactionSummary<TTransactionType>();
+
+    const transactionResult = {
+      ...transactionSummary,
+      logs: [] as DecodedLogs['logs'],
+      groupedLogs: {} as DecodedLogs['groupedLogs'],
+    };
+
+    let { logs, groupedLogs }: DecodedLogs = { logs: [], groupedLogs: {} };
+
+    if (this.abis && transactionSummary.receipts) {
+      ({ logs, groupedLogs } = getAllDecodedLogs({
+        receipts: transactionSummary.receipts,
+        mainAbi: this.abis.main,
+        externalAbis: this.abis.otherContractsAbis,
+      }));
+
+      transactionResult.logs = logs;
+      transactionResult.groupedLogs = groupedLogs;
+    }
+
+    return transactionResult;
+  }
+
   /**
    * Waits for transaction to complete and returns the result.
    *
@@ -471,12 +515,10 @@ export class TransactionResponse {
    * @param contractsAbiMap - The contracts ABI map.
    * @returns The completed transaction result
    */
-  async waitForPreConfirmation<TTransactionType = void>(
-    contractsAbiMap?: AbiMap
-  ): Promise<TransactionResult<TTransactionType>> {
+  async waitForPreConfirmation<TTransactionType = void>() {
     await this.waitForPreConfirmationStatuses();
     this.unsetResourceCache();
-    return this.assembleResult<TTransactionType>(contractsAbiMap);
+    return this.assemblePartialResult<TTransactionType>();
   }
 
   /**
