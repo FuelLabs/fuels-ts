@@ -319,7 +319,7 @@ describe('Transaction', () => {
     );
   });
 
-  it.skip('should execute sendTransaction just fine [preconfirmation success]', async () => {
+  it('should execute sendTransaction just fine [preconfirmation success]', async () => {
     using launched = await launchTestNode();
     const {
       provider,
@@ -333,10 +333,12 @@ describe('Transaction', () => {
 
     const { waitForPreConfirmation } = await provider.sendTransaction(transactionRequest);
 
-    const { isStatusSuccess, isStatusPending, status } = await waitForPreConfirmation();
+    const { isStatusSuccess, isStatusPending, status, receipts } = await waitForPreConfirmation();
     expect(isStatusSuccess).toEqual(false);
     expect(isStatusPending).toEqual(true);
     expect(status).toEqual(TransactionStatus.preconfirmationSuccess);
+    expect(receipts).toBeDefined();
+    expect(receipts?.length).toBeGreaterThan(0);
   });
 
   it.todo('should execute sendTransaction just fine [preconfirmation failure]');
