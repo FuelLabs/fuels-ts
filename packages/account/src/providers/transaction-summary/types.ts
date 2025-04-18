@@ -210,7 +210,7 @@ export interface MintedAsset {
 
 export type BurnedAsset = MintedAsset;
 
-export interface PreConfirmationTransactionSummary<TTransactionType = void> {
+export interface PreConfirmedTransactionSummary<TTransactionType = void> {
   id: string;
   time?: string;
   operations?: Operation[];
@@ -237,7 +237,7 @@ export interface PreConfirmationTransactionSummary<TTransactionType = void> {
 }
 
 export interface TransactionSummary<TTransactionType = void>
-  extends PreConfirmationTransactionSummary<TTransactionType> {
+  extends PreConfirmedTransactionSummary<TTransactionType> {
   id: string;
   operations: Operation[];
   gasUsed: BN;

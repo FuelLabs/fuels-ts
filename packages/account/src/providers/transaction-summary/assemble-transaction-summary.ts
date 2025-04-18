@@ -25,7 +25,7 @@ import type {
   GraphqlTransactionStatus,
   MintedAsset,
   Operation,
-  PreConfirmationTransactionSummary,
+  PreConfirmedTransactionSummary,
   TransactionSummary,
   TransactionTypeName,
 } from './types';
@@ -142,7 +142,7 @@ export function assembleTransactionSummary<TTransactionType = void>(
   return transactionSummary;
 }
 
-export interface AssemblePreConfirmationTransactionSummaryParams {
+export interface AssemblePreConfirmedTransactionSummaryParams {
   id: string;
   gqlTransactionStatus?: GraphqlTransactionStatus;
   abiMap?: AbiMap;
@@ -151,8 +151,8 @@ export interface AssemblePreConfirmationTransactionSummaryParams {
 }
 
 /** @hidden */
-export function assemblePreConfirmationTransactionSummary<TTransactionType = void>(
-  params: AssemblePreConfirmationTransactionSummaryParams
+export function assemblePreConfirmedTransactionSummary<TTransactionType = void>(
+  params: AssemblePreConfirmedTransactionSummaryParams
 ) {
   const { id, gqlTransactionStatus, abiMap, maxInputs, baseAssetId } = params;
 
@@ -191,7 +191,7 @@ export function assemblePreConfirmationTransactionSummary<TTransactionType = voi
     }
   }
 
-  const transactionSummary: PreConfirmationTransactionSummary<TTransactionType> = {
+  const transactionSummary: PreConfirmedTransactionSummary<TTransactionType> = {
     id,
     tip,
     fee: totalFee,
