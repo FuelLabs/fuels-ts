@@ -218,13 +218,13 @@ fragment transactionStatusSubscriptionFragment on TransactionStatus {
   ... on PreconfirmationSuccessStatus {
     ...PreconfirmationSuccessStatusFragment
     preconfirmationTransaction: transaction {
-      ...malleableTransactionFieldsFragment
+      rawPayload
     }
   }
   ... on PreconfirmationFailureStatus {
     ...PreconfirmationFailureStatusFragment
     preconfirmationTransaction: transaction {
-      ...malleableTransactionFieldsFragment
+      rawPayload
     }
   }
 }
