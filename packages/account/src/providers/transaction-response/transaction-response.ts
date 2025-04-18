@@ -242,6 +242,11 @@ export class TransactionResponse {
       transactionId: this.id,
     });
 
+    /**
+     * NOTE: Validate if there is a case where the transaction cannot be found after being submitted.
+     *
+     * This will subscribe to status change and it will to resolve as the first stream update is received
+     */
     if (!response.transaction) {
       const subscription = await this.provider.operations.statusChange({
         transactionId: this.id,
@@ -254,6 +259,7 @@ export class TransactionResponse {
         }
       }
 
+      // NOTE: This code seems to be added to fetch the transaction again after the status change
       return this.fetch();
     }
 
@@ -316,6 +322,9 @@ export class TransactionResponse {
     return transactionSummary;
   }
 
+  /**
+   * Waits for the transaction to be processed and reaches either a `SuccessStatus` or `FailureStatus`.
+   */
   private async waitForConfirmationStatuses() {
     const status = this.gqlTransaction?.status?.type;
 
