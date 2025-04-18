@@ -471,7 +471,7 @@ export class TransactionResponse {
     return transactionResult;
   }
 
-  assemblePartialResult<TTransactionType = void>() {
+  assemblePreConfirmationResult<TTransactionType = void>() {
     const transactionSummary = this.getPartialTransactionSummary<TTransactionType>();
 
     const transactionResult = {
@@ -518,7 +518,7 @@ export class TransactionResponse {
   async waitForPreConfirmation<TTransactionType = void>() {
     await this.waitForPreConfirmationStatuses();
     this.unsetResourceCache();
-    return this.assemblePartialResult<TTransactionType>();
+    return this.assemblePreConfirmationResult<TTransactionType>();
   }
 
   /**
