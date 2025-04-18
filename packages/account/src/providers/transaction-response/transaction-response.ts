@@ -16,18 +16,11 @@ import type {
   Transaction,
   ReceiptMint,
   ReceiptBurn,
-  OutputCoin,
-  OutputContract,
-  OutputChange,
-  OutputVariable,
-  OutputContractCreated,
-  Output,
   TransactionType,
 } from '@fuel-ts/transactions';
-import { OutputType, TransactionCoder, TxPointerCoder } from '@fuel-ts/transactions';
-import { arrayify, assertUnreachable } from '@fuel-ts/utils';
+import { TransactionCoder, TxPointerCoder } from '@fuel-ts/transactions';
+import { arrayify } from '@fuel-ts/utils';
 
-import type { GqlMalleableTransactionFieldsFragment } from '../__generated__/operations';
 import type Provider from '../provider';
 import type { JsonAbisFromAllCalls, TransactionRequest } from '../transaction-request';
 import {
@@ -42,7 +35,7 @@ import type {
   PreConfirmationTransactionSummary,
 } from '../transaction-summary/types';
 import { extractTxError } from '../utils';
-import { deserializeReceipt } from '../utils/serialization';
+import { deserializeProcessedTxOutput, deserializeReceipt } from '../utils/serialization';
 
 import { type DecodedLogs, getAllDecodedLogs } from './getAllDecodedLogs';
 
@@ -92,39 +85,6 @@ export type TransactionResult<TTransactionType = void> = TransactionSummary<TTra
   logs?: DecodedLogs['logs'];
   groupedLogs?: DecodedLogs['groupedLogs'];
 };
-
-function mapGqlOutputsToTxOutputs(
-  outputs: GqlMalleableTransactionFieldsFragment['outputs']
-): Output[] {
-  return outputs.map((o) => {
-    const obj = 'amount' in o ? { ...o, amount: bn(o.amount) } : o;
-    switch (obj.type) {
-      case 'CoinOutput':
-        return { ...obj, type: OutputType.Coin } satisfies OutputCoin;
-      case 'ContractOutput':
-        return {
-          ...obj,
-          type: OutputType.Contract,
-          inputIndex: parseInt(obj.inputIndex, 10),
-        } satisfies OutputContract;
-      case 'ChangeOutput':
-        return {
-          ...obj,
-          type: OutputType.Change,
-        } satisfies OutputChange;
-      case 'VariableOutput':
-        return { ...obj, type: OutputType.Variable } satisfies OutputVariable;
-      case 'ContractCreated':
-        return {
-          ...obj,
-          type: OutputType.ContractCreated,
-          contractId: obj.contract,
-        } satisfies OutputContractCreated;
-      default:
-        return assertUnreachable(obj);
-    }
-  });
-}
 
 type SubmitAndAwaitStatusSubscriptionIterable = Awaited<
   ReturnType<Provider['operations']['submitAndAwaitStatus']>
@@ -223,7 +183,7 @@ export class TransactionResponse {
         return input;
       });
 
-      tx.outputs = mapGqlOutputsToTxOutputs(status.transaction.outputs);
+      tx.outputs = status.transaction.outputs.map(deserializeProcessedTxOutput);
 
       if ('receiptsRoot' in status.transaction) {
         (tx as Transaction<TransactionType.Script>).receiptsRoot = status.transaction
