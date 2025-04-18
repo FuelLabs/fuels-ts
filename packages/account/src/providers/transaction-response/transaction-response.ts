@@ -221,7 +221,7 @@ export class TransactionResponse {
    * the status at this point is guaranteed to be either `SuccessStatus` or `FailureStatus`.
    */
   private getReceipts(): TransactionResultReceipt[] {
-    const status = this.status ?? this.gqlTransaction?.status;
+    const status = this.getTransactionStatus();
 
     switch (status?.type) {
       case 'SuccessStatus':
@@ -279,7 +279,8 @@ export class TransactionResponse {
       await this.provider.getGasConfig();
 
     // If we have the total fee, we do not need to refetch the gas price
-    const totalFee = getTotalFeeFromStatus(this.status ?? this.gqlTransaction?.status);
+    const transactionStatus = this.getTransactionStatus();
+    const totalFee = getTotalFeeFromStatus(transactionStatus);
     const gasPrice = totalFee ? bn(0) : await this.provider.getLatestGasPrice();
 
     const maxInputs = (await this.provider.getChain()).consensusParameters.txParameters.maxInputs;
@@ -290,7 +291,7 @@ export class TransactionResponse {
       receipts: this.getReceipts(),
       transaction,
       transactionBytes,
-      gqlTransactionStatus: this.status ?? this.gqlTransaction?.status,
+      gqlTransactionStatus: transactionStatus,
       gasPerByte,
       gasPriceFactor,
       abiMap: contractsAbiMap,
@@ -309,7 +310,7 @@ export class TransactionResponse {
   >(): PreConfirmationTransactionSummary<TTransactionType> {
     const transactionSummary = assemblePreconfirmationTransactionSummary<TTransactionType>({
       id: this.id,
-      gqlTransactionStatus: this.status ?? this.gqlTransaction?.status,
+      gqlTransactionStatus: this.getTransactionStatus(),
     });
 
     return transactionSummary;
@@ -417,7 +418,8 @@ export class TransactionResponse {
 
     const { receipts } = transactionResult;
 
-    const status = this.status ?? this.gqlTransaction?.status;
+    const status = this.getTransactionStatus();
+
     if (status?.type === 'FailureStatus') {
       const { reason } = status;
       throw extractTxError({
@@ -494,5 +496,9 @@ export class TransactionResponse {
 
   private unsetResourceCache() {
     this.provider.cache?.unset(this.id);
+  }
+
+  private getTransactionStatus() {
+    return this.status ?? this.gqlTransaction?.status;
   }
 }
