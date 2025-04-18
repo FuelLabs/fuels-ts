@@ -837,4 +837,6 @@ describe('Fuel Connector', () => {
       responseSummary.transaction.scriptGasLimit
     );
   });
+
+  it.todo('should ensure sendTransaction works just fine with preconfirmation');
 });

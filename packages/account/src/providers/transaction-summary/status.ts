@@ -1,15 +1,15 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
+import type { Transaction } from '@fuel-ts/transactions';
+import { TransactionCoder } from '@fuel-ts/transactions';
+import { arrayify } from '@fuel-ts/utils';
+
+import type { TransactionResultReceipt } from '../transaction-response';
+import { deserializeReceipt } from '../utils';
 
 import { TransactionStatus } from './types';
-import type {
-  BlockId,
-  GqlTransactionStatusesNames,
-  GraphqlTransactionStatus,
-  Time,
-  TransactionSummary,
-} from './types';
+import type { BlockId, GqlTransactionStatusesNames, GraphqlTransactionStatus, Time } from './types';
 
 /** @hidden */
 export const getTransactionStatusName = (gqlStatus: GqlTransactionStatusesNames) => {
@@ -22,6 +22,10 @@ export const getTransactionStatusName = (gqlStatus: GqlTransactionStatusesNames)
       return TransactionStatus.submitted;
     case 'SqueezedOutStatus':
       return TransactionStatus.squeezedout;
+    case 'PreconfirmationSuccessStatus':
+      return TransactionStatus.preconfirmationSuccess;
+    case 'PreconfirmationFailureStatus':
+      return TransactionStatus.preconfirmationFailure;
     default:
       throw new FuelError(
         ErrorCode.INVALID_TRANSACTION_STATUS,
@@ -30,10 +34,19 @@ export const getTransactionStatusName = (gqlStatus: GqlTransactionStatusesNames)
   }
 };
 
-type IProcessGraphqlStatusResponse = Pick<
-  TransactionSummary,
-  'time' | 'blockId' | 'isStatusPending' | 'isStatusSuccess' | 'isStatusFailure' | 'status'
-> & { totalFee?: BN; totalGas?: BN };
+type IProcessGraphqlStatusResponse = {
+  time?: Time;
+  blockId?: BlockId;
+  status?: TransactionStatus;
+  totalFee?: BN;
+  totalGas?: BN;
+  receipts?: TransactionResultReceipt[];
+  isStatusFailure: boolean;
+  isStatusSuccess: boolean;
+  isStatusPending: boolean;
+  transaction?: Transaction;
+  rawPayload?: string;
+};
 
 /** @hidden */
 export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionStatus) => {
@@ -42,6 +55,9 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
   let status: TransactionStatus | undefined;
   let totalFee: BN | undefined;
   let totalGas: BN | undefined;
+  let receipts: TransactionResultReceipt[] | undefined;
+  let rawPayload: string | undefined;
+  let transaction: Transaction | undefined;
 
   let isStatusFailure = false;
   let isStatusSuccess = false;
@@ -71,8 +87,29 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
         time = gqlTransactionStatus.time;
         isStatusPending = true;
         break;
+
+      case 'PreconfirmationSuccessStatus':
+        isStatusPending = true;
+        totalFee = bn(gqlTransactionStatus.totalFee);
+        totalGas = bn(gqlTransactionStatus.totalGas);
+        receipts = gqlTransactionStatus.preconfirmationReceipts?.map(deserializeReceipt);
+        rawPayload = gqlTransactionStatus.preconfirmationTransaction?.rawPayload;
+        break;
+
+      case 'PreconfirmationFailureStatus':
+        isStatusFailure = true;
+        totalFee = bn(gqlTransactionStatus.totalFee);
+        totalGas = bn(gqlTransactionStatus.totalGas);
+        receipts = gqlTransactionStatus.preconfirmationReceipts?.map(deserializeReceipt);
+        rawPayload = gqlTransactionStatus.preconfirmationTransaction?.rawPayload;
+        break;
+
       default:
     }
+  }
+
+  if (rawPayload) {
+    [transaction] = new TransactionCoder().decode(arrayify(rawPayload), 0);
   }
 
   const processedGraphqlStatus: IProcessGraphqlStatusResponse = {
@@ -81,9 +118,12 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
     status,
     totalFee,
     totalGas,
+    receipts,
     isStatusFailure,
     isStatusSuccess,
     isStatusPending,
+    transaction,
+    rawPayload,
   };
 
   return processedGraphqlStatus;

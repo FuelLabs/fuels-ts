@@ -1,7 +1,7 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import type { B256Address } from '@fuel-ts/address';
 import type { BN, BNInput } from '@fuel-ts/math';
-import type { Input, Output, Transaction, TransactionType } from '@fuel-ts/transactions';
+import type { Transaction, Input, Output, TransactionType } from '@fuel-ts/transactions';
 
 import type { GqlSuccessStatusFragment } from '../__generated__/operations';
 import type { TransactionReceiptJson } from '../provider';
@@ -41,11 +41,30 @@ export type SqueezedOutStatus = {
   reason: string;
 };
 
+export type PreconfirmationSuccessStatus = {
+  type: 'PreconfirmationSuccessStatus';
+  totalFee: string;
+  totalGas: string;
+  preconfirmationReceipts?: TransactionReceiptJson[] | null;
+  preconfirmationTransaction?: { rawPayload: string } | null;
+};
+
+export type PreconfirmationFailureStatus = {
+  type: 'PreconfirmationFailureStatus';
+  reason: string;
+  totalFee: string;
+  totalGas: string;
+  preconfirmationReceipts?: TransactionReceiptJson[] | null;
+  preconfirmationTransaction?: { rawPayload: string } | null;
+};
+
 export type GraphqlTransactionStatus =
   | SubmittedStatus
   | SuccessStatus
   | FailureStatus
   | SqueezedOutStatus
+  | PreconfirmationSuccessStatus
+  | PreconfirmationFailureStatus
   | null;
 
 export type GqlTransaction = {
@@ -79,6 +98,8 @@ export enum TransactionStatus {
   success = 'success',
   squeezedout = 'squeezedout',
   failure = 'failure',
+  preconfirmationSuccess = 'preconfirmationSuccess',
+  preconfirmationFailure = 'preconfirmationFailure',
 }
 
 /**
@@ -88,7 +109,9 @@ export type GqlTransactionStatusesNames =
   | 'FailureStatus'
   | 'SubmittedStatus'
   | 'SuccessStatus'
-  | 'SqueezedOutStatus';
+  | 'SqueezedOutStatus'
+  | 'PreconfirmationSuccessStatus'
+  | 'PreconfirmationFailureStatus';
 
 /**
  * @hidden
@@ -187,28 +210,46 @@ export interface MintedAsset {
 
 export type BurnedAsset = MintedAsset;
 
-export type TransactionSummary<TTransactionType = void> = {
+export interface PreConfirmedTransactionSummary<TTransactionType = void> {
   id: string;
   time?: string;
-  operations: Operation[];
-  gasUsed: BN;
-  tip: BN;
-  fee: BN;
-  type: TransactionTypeName;
+  operations?: Operation[];
+  gasUsed?: BN;
+  tip?: BN;
+  fee?: BN;
+  type?: TransactionTypeName;
   blockId?: BlockId;
   status?: TransactionStatus;
-  isTypeMint: boolean;
-  isTypeCreate: boolean;
-  isTypeScript: boolean;
-  isTypeUpgrade: boolean;
-  isTypeUpload: boolean;
-  isTypeBlob: boolean;
+  isTypeMint?: boolean;
+  isTypeCreate?: boolean;
+  isTypeScript?: boolean;
+  isTypeUpgrade?: boolean;
+  isTypeUpload?: boolean;
+  isTypeBlob?: boolean;
   isStatusPending: boolean;
   isStatusSuccess: boolean;
   isStatusFailure: boolean;
   mintedAssets: MintedAsset[];
   burnedAssets: BurnedAsset[];
   date?: Date;
+  receipts?: TransactionResultReceipt[];
+  transaction?: Transaction<TTransactionType>;
+}
+
+export interface TransactionSummary<TTransactionType = void>
+  extends PreConfirmedTransactionSummary<TTransactionType> {
+  id: string;
+  operations: Operation[];
+  gasUsed: BN;
+  tip: BN;
+  fee: BN;
+  type: TransactionTypeName;
+  isTypeMint: boolean;
+  isTypeCreate: boolean;
+  isTypeScript: boolean;
+  isTypeUpgrade: boolean;
+  isTypeUpload: boolean;
+  isTypeBlob: boolean;
   receipts: TransactionResultReceipt[];
   transaction: Transaction<TTransactionType>;
-};
+}

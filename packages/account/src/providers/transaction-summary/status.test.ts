@@ -2,6 +2,8 @@ import { bn } from '@fuel-ts/math';
 
 import {
   MOCK_FAILURE_STATUS,
+  MOCK_PRECONFIRMATION_FAILURE_STATUS,
+  MOCK_PRECONFIRMATION_SUCCESS_STATUS,
   MOCK_SQUEEZEDOUT_STATUS,
   MOCK_SUBMITTED_STATUS,
   MOCK_SUCCESS_STATUS,
@@ -27,6 +29,12 @@ describe('status', () => {
 
     status = getTransactionStatusName('SubmittedStatus');
     expect(status).toBe(TransactionStatus.submitted);
+
+    status = getTransactionStatusName('PreconfirmationSuccessStatus');
+    expect(status).toBe(TransactionStatus.preconfirmationSuccess);
+
+    status = getTransactionStatusName('PreconfirmationFailureStatus');
+    expect(status).toBe(TransactionStatus.preconfirmationFailure);
 
     expect(() =>
       getTransactionStatusName('UnknownStatus' as unknown as GqlTransactionStatusesNames)
@@ -88,6 +96,34 @@ describe('status', () => {
         blockIdType: 'undefined',
         status: TransactionStatus.squeezedout,
         timeType: 'undefined',
+      },
+    },
+    {
+      name: 'PreconfirmationSuccessStatus',
+      status: MOCK_PRECONFIRMATION_SUCCESS_STATUS,
+      expected: {
+        isStatusFailure: false,
+        isStatusPending: true,
+        isStatusSuccess: false,
+        blockIdType: 'undefined',
+        status: TransactionStatus.preconfirmationSuccess,
+        timeType: 'undefined',
+        totalFee: bn(1000),
+        totalGas: bn(1000),
+      },
+    },
+    {
+      name: 'PreconfirmationFailureStatus',
+      status: MOCK_PRECONFIRMATION_FAILURE_STATUS,
+      expected: {
+        isStatusFailure: true,
+        isStatusPending: false,
+        isStatusSuccess: false,
+        blockIdType: 'undefined',
+        status: TransactionStatus.preconfirmationFailure,
+        timeType: 'undefined',
+        totalFee: bn(1000),
+        totalGas: bn(1000),
       },
     },
   ];

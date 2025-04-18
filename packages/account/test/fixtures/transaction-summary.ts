@@ -26,6 +26,8 @@ import type {
   FailureStatus,
   SubmittedStatus,
   SqueezedOutStatus,
+  PreconfirmationSuccessStatus,
+  PreconfirmationFailureStatus,
 } from '../../src';
 
 export const MOCK_INPUT_COIN: InputCoin = {
@@ -318,6 +320,19 @@ export const MOCK_SUBMITTED_STATUS: SubmittedStatus = {
 export const MOCK_SQUEEZEDOUT_STATUS: SqueezedOutStatus = {
   type: 'SqueezedOutStatus',
   reason: 'Transaction removed.',
+};
+
+export const MOCK_PRECONFIRMATION_SUCCESS_STATUS: PreconfirmationSuccessStatus = {
+  type: 'PreconfirmationSuccessStatus',
+  totalFee: '1000',
+  totalGas: '1000',
+};
+
+export const MOCK_PRECONFIRMATION_FAILURE_STATUS: PreconfirmationFailureStatus = {
+  type: 'PreconfirmationFailureStatus',
+  reason: 'Transaction not accepted to the mempool.',
+  totalFee: '1000',
+  totalGas: '1000',
 };
 
 export const MOCK_TX_SCRIPT_RAW_PAYLOAD =

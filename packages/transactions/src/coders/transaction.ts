@@ -586,6 +586,13 @@ type PossibleTransactions =
   | TransactionUpload
   | TransactionBlob;
 
+export type SubmittableTransactions =
+  | TransactionScript
+  | TransactionCreate
+  | TransactionUpgrade
+  | TransactionUpload
+  | TransactionBlob;
+
 export type Transaction<TTransactionType = void> = TTransactionType extends TransactionType
   ? Extract<PossibleTransactions, { type: TTransactionType }>
   : Partial<Omit<TransactionScript, 'type'>> &
