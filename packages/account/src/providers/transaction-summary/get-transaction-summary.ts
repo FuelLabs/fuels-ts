@@ -14,7 +14,7 @@ import { validatePaginationArgs } from '../utils/validate-pagination-args';
 
 import { assembleTransactionSummary } from './assemble-transaction-summary';
 import { getTotalFeeFromStatus } from './status';
-import type { AbiMap, TransactionSummary } from './types';
+import type { AbiMap, GraphqlTransactionStatus, TransactionSummary } from './types';
 /** @hidden */
 export interface GetTransactionSummaryParams {
   id: string;
@@ -194,7 +194,7 @@ export async function getTransactionsSummaries(
       receipts,
       transaction: decodedTransaction,
       transactionBytes: arrayify(rawPayload),
-      gqlTransactionStatus: status,
+      gqlTransactionStatus: status as GraphqlTransactionStatus,
       abiMap,
       gasPerByte,
       gasPriceFactor,
