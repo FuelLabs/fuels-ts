@@ -1,6 +1,9 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
+import type { Transaction } from '@fuel-ts/transactions';
+import { TransactionCoder } from '@fuel-ts/transactions';
+import { arrayify } from '@fuel-ts/utils';
 
 import type { TransactionResultReceipt } from '../transaction-response';
 import { deserializeReceipt } from '../utils';
@@ -41,6 +44,8 @@ type IProcessGraphqlStatusResponse = {
   isStatusFailure: boolean;
   isStatusSuccess: boolean;
   isStatusPending: boolean;
+  transaction?: Transaction;
+  rawPayload?: string;
 };
 
 /** @hidden */
@@ -51,6 +56,8 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
   let totalFee: BN | undefined;
   let totalGas: BN | undefined;
   let receipts: TransactionResultReceipt[] | undefined;
+  let rawPayload: string | undefined;
+  let transaction: Transaction | undefined;
 
   let isStatusFailure = false;
   let isStatusSuccess = false;
@@ -86,6 +93,7 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
         totalFee = bn(gqlTransactionStatus.totalFee);
         totalGas = bn(gqlTransactionStatus.totalGas);
         receipts = gqlTransactionStatus.preconfirmationReceipts?.map(deserializeReceipt);
+        rawPayload = gqlTransactionStatus.preconfirmationTransaction?.rawPayload;
         break;
 
       case 'PreconfirmationFailureStatus':
@@ -93,10 +101,15 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
         totalFee = bn(gqlTransactionStatus.totalFee);
         totalGas = bn(gqlTransactionStatus.totalGas);
         receipts = gqlTransactionStatus.preconfirmationReceipts?.map(deserializeReceipt);
+        rawPayload = gqlTransactionStatus.preconfirmationTransaction?.rawPayload;
         break;
 
       default:
     }
+  }
+
+  if (rawPayload) {
+    [transaction] = new TransactionCoder().decode(arrayify(rawPayload), 0);
   }
 
   const processedGraphqlStatus: IProcessGraphqlStatusResponse = {
@@ -109,6 +122,8 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
     isStatusFailure,
     isStatusSuccess,
     isStatusPending,
+    transaction,
+    rawPayload,
   };
 
   return processedGraphqlStatus;
