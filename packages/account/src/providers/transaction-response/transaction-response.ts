@@ -164,12 +164,17 @@ export class TransactionResponse {
     abis?: JsonAbisFromAllCalls,
     private submitTxSubscription?: SubmitAndAwaitStatusSubscriptionIterable
   ) {
-    this.id = typeof tx === 'string' ? tx : tx.getTransactionId(chainId);
+    // Transaction Request was not provided
+    if (typeof tx === 'string') {
+      this.id = tx;
+    } else {
+      // Transaction Request was provided
+      this.id = tx.getTransactionId(chainId);
+      this.request = tx;
+    }
 
     this.provider = provider;
     this.abis = abis;
-    this.request = typeof tx === 'string' ? undefined : tx;
-
     this.waitForResult = this.waitForResult.bind(this);
     this.waitForPreConfirmation = this.waitForPreConfirmation.bind(this);
   }
