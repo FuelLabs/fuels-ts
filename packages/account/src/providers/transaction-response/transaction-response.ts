@@ -166,7 +166,7 @@ export class TransactionResponse {
       return;
     }
 
-    // The SDK currently submits only these
+    // The SDK currently submits only these -> FILTHY LIE
     const tx = transaction as Transaction<
       TransactionType.Script | TransactionType.Create | TransactionType.Blob
     >;
