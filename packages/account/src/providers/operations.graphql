@@ -154,12 +154,6 @@ fragment transactionStatusFragment on TransactionStatus {
   ... on SqueezedOutStatus {
     ...SqueezedOutStatusFragment
   }
-  ... on PreconfirmationSuccessStatus {
-    ...PreconfirmationSuccessStatusFragment
-  }
-  ... on PreconfirmationFailureStatus {
-    ...PreconfirmationFailureStatusFragment
-  }
 }
 
 fragment malleableTransactionFieldsFragment on Transaction {
