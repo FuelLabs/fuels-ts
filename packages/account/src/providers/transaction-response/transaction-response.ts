@@ -214,6 +214,12 @@ export class TransactionResponse {
     };
   }
 
+  /**
+   *
+   * NOTE: This method is only called within `getTransactionSummary`, which is invoked after `getTransaction`.
+   * Since `getTransaction` only resolves once the transaction has been processed,
+   * the status at this point is guaranteed to be either `SuccessStatus` or `FailureStatus`.
+   */
   private getReceipts(): TransactionResultReceipt[] {
     const status = this.status ?? this.gqlTransaction?.status;
 
