@@ -17,6 +17,7 @@ import type {
   ReceiptMint,
   ReceiptBurn,
   TransactionType,
+  SubmittableTransactions,
 } from '@fuel-ts/transactions';
 import { TransactionCoder, TxPointerCoder } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
@@ -166,10 +167,7 @@ export class TransactionResponse {
       return;
     }
 
-    // The SDK currently submits only these -> FILTHY LIE
-    const tx = transaction as Transaction<
-      TransactionType.Script | TransactionType.Create | TransactionType.Blob
-    >;
+    const tx = transaction as SubmittableTransactions;
 
     if (status.type === 'SuccessStatus' || status.type === 'FailureStatus') {
       tx.inputs = tx.inputs.map((input, idx) => {
@@ -185,9 +183,8 @@ export class TransactionResponse {
 
       tx.outputs = status.transaction.outputs.map(deserializeProcessedTxOutput);
 
-      if ('receiptsRoot' in status.transaction) {
-        (tx as Transaction<TransactionType.Script>).receiptsRoot = status.transaction
-          .receiptsRoot as string;
+      if (status.transaction.receiptsRoot) {
+        (tx as Transaction<TransactionType.Script>).receiptsRoot = status.transaction.receiptsRoot;
       }
     }
   }
