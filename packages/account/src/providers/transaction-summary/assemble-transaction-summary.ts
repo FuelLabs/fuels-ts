@@ -24,8 +24,10 @@ import type {
   BurnedAsset,
   GraphqlTransactionStatus,
   MintedAsset,
+  Operation,
   PreConfirmationTransactionSummary,
   TransactionSummary,
+  TransactionTypeName,
 } from './types';
 
 export interface AssembleTransactionSummaryParams {
@@ -140,18 +142,21 @@ export function assembleTransactionSummary<TTransactionType = void>(
   return transactionSummary;
 }
 
-export interface AssemblePreconfirmationTransactionSummaryParams {
+export interface AssemblePreConfirmationTransactionSummaryParams {
   id: string;
   gqlTransactionStatus?: GraphqlTransactionStatus;
+  abiMap?: AbiMap;
+  maxInputs: BN;
+  baseAssetId: string;
 }
 
 /** @hidden */
-export function assemblePreconfirmationTransactionSummary<TTransactionType = void>(
-  params: AssemblePreconfirmationTransactionSummaryParams
+export function assemblePreConfirmationTransactionSummary<TTransactionType = void>(
+  params: AssemblePreConfirmationTransactionSummaryParams
 ) {
-  const { id, gqlTransactionStatus } = params;
+  const { id, gqlTransactionStatus, abiMap, maxInputs, baseAssetId } = params;
 
-  const { isStatusFailure, isStatusSuccess, status, totalFee, receipts } =
+  const { isStatusFailure, isStatusSuccess, status, totalFee, receipts, transaction, rawPayload } =
     processGraphqlStatus(gqlTransactionStatus);
 
   let gasUsed: BN | undefined;
@@ -164,27 +169,51 @@ export function assemblePreconfirmationTransactionSummary<TTransactionType = voi
     burnedAssets = extractBurnedAssetsFromReceipts(receipts);
   }
 
+  let tip: BN | undefined;
+  let operations: Operation[] = [];
+  let typeName: TransactionTypeName | undefined;
+
+  if (transaction) {
+    typeName = getTransactionTypeName(transaction.type);
+    tip = bn(transaction.policies?.find((policy) => policy.type === PolicyType.Tip)?.data);
+
+    if (receipts && rawPayload) {
+      operations = getOperations({
+        transactionType: transaction.type,
+        inputs: transaction.inputs || [],
+        outputs: transaction.outputs || [],
+        receipts,
+        rawPayload,
+        abiMap,
+        maxInputs,
+        baseAssetId,
+      });
+    }
+  }
+
   const transactionSummary: PreConfirmationTransactionSummary<TTransactionType> = {
-    id, // ALWAYS PRESENT
-    // tip, // YES IF TRANSACTION IS PRESENT
-    fee: totalFee, // ALWAYS PRESENT
-    gasUsed, // ALWAYS PRESENT
-    // operations, // YES IF TRANSACTION AND RECEIPTS ARE PRESENT
-    // type: typeName, // YES IF TRANSACTION IS PRESENT
-    status, // ALWAYS PRESENT
-    receipts, // PRESENT IF RECEIPTS ARE PRESENT
-    mintedAssets, // PRESENT IF RECEIPTS ARE PRESENT
-    burnedAssets, // PRESENT IF RECEIPTS ARE PRESENT
-    // isTypeMint: isTypeMint(transaction.type), // PRESENT IF TRANSACTION IS PRESENT
-    // isTypeCreate: isTypeCreate(transaction.type), // PRESENT IF TRANSACTION IS PRESENT
-    // isTypeScript: isTypeScript(transaction.type), // PRESENT IF TRANSACTION IS PRESENT
-    // isTypeUpgrade: isTypeUpgrade(transaction.type), // PRESENT IF TRANSACTION IS PRESENT
-    // isTypeUpload: isTypeUpload(transaction.type), // PRESENT IF TRANSACTION IS PRESENT
-    // isTypeBlob: isTypeBlob(transaction.type), // PRESENT IF TRANSACTION IS PRESENT
-    isStatusFailure, // CAN WE USE PRECONFIRMATION FAILURE STATUS FOR NO?
-    isStatusSuccess, // CAN WE USE PRECONFIRMATION SUCCESS STATUS FOR YES?
-    isStatusPending: true, // IT WILL ALWAYS BE 'TRUE'
-    // transaction: transaction as Transaction<TTransactionType>, // PRESENT IF TRANSACTION IS PRESENT
+    id,
+    tip,
+    fee: totalFee,
+    gasUsed,
+    operations,
+    type: typeName,
+    status,
+    receipts,
+    mintedAssets,
+    burnedAssets,
+    ...(transaction && {
+      isTypeMint: isTypeMint(transaction.type),
+      isTypeCreate: isTypeCreate(transaction.type),
+      isTypeScript: isTypeScript(transaction.type),
+      isTypeUpgrade: isTypeUpgrade(transaction.type),
+      isTypeUpload: isTypeUpload(transaction.type),
+      isTypeBlob: isTypeBlob(transaction.type),
+    }),
+    isStatusFailure,
+    isStatusSuccess,
+    isStatusPending: true,
+    transaction: transaction as Transaction<TTransactionType>,
   };
 
   return transactionSummary;
