@@ -2,6 +2,7 @@ import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 import type {
+  Output,
   ReceiptBurn,
   ReceiptCall,
   ReceiptLog,
@@ -538,6 +539,61 @@ export const deserializeOutput = (output: OutputJson) => {
         type: OutputType.Change,
         assetId: output.assetId,
         to: output.to,
+      };
+      break;
+
+    case 'ContractCreated':
+      parsedOutput = {
+        type: OutputType.ContractCreated,
+        stateRoot: output.stateRoot,
+        contractId: output.contract,
+      };
+      break;
+
+    case 'VariableOutput':
+      parsedOutput = {
+        type: OutputType.Variable,
+        amount: bn(output.amount),
+        assetId: output.assetId,
+        to: output.to,
+      };
+      break;
+
+    default:
+      assertUnreachable(output);
+  }
+
+  return parsedOutput;
+};
+
+export const deserializeProcessedTxOutput = (output: OutputJson) => {
+  let parsedOutput: Output;
+
+  switch (output.type) {
+    case 'CoinOutput':
+      parsedOutput = {
+        type: OutputType.Coin,
+        amount: bn(output.amount),
+        assetId: output.assetId,
+        to: output.to,
+      };
+      break;
+
+    case 'ContractOutput':
+      parsedOutput = {
+        type: OutputType.Contract,
+        inputIndex: Number(output.inputIndex),
+        balanceRoot: output.balanceRoot,
+        stateRoot: output.stateRoot,
+      };
+      break;
+
+    case 'ChangeOutput':
+      parsedOutput = {
+        type: OutputType.Change,
+        assetId: output.assetId,
+        to: output.to,
+        amount: bn(output.amount),
       };
       break;
 
