@@ -203,9 +203,14 @@ export class TransactionResponse {
     }
 
     const gqlTransaction = this.gqlTransaction ?? (await this.fetch());
+
+    const { rawPayload } = gqlTransaction;
+    const bytes = arrayify(rawPayload);
+    const [tx] = new TransactionCoder().decode(bytes, 0);
+
     return {
-      tx: this.decodeTransaction(gqlTransaction) as Transaction<TTransactionType>,
-      bytes: arrayify(gqlTransaction.rawPayload),
+      tx: tx as Transaction<TTransactionType>,
+      bytes,
     };
   }
 
@@ -249,19 +254,6 @@ export class TransactionResponse {
     this.gqlTransaction = response.transaction;
 
     return response.transaction;
-  }
-
-  /**
-   * Decode the raw payload of the transaction.
-   *
-   * @param transactionWithReceipts - The transaction with receipts object.
-   * @returns The decoded transaction.
-   */
-  decodeTransaction<TTransactionType = void>(transactionWithReceipts: GqlTransaction) {
-    return new TransactionCoder().decode(
-      arrayify(transactionWithReceipts.rawPayload),
-      0
-    )?.[0] as Transaction<TTransactionType>;
   }
 
   /**
