@@ -1142,12 +1142,12 @@ query getConsensusParametersVersion {
 subscription submitAndAwaitStatus(
   $encodedTransaction: HexString!
   $estimatePredicates: Boolean
-  $includePreconfirmation: Boolean
+  $includePreConfirmation: Boolean
 ) {
   submitAndAwaitStatus(
     tx: $encodedTransaction
     estimatePredicates: $estimatePredicates
-    includePreconfirmation: $includePreconfirmation
+    includePreconfirmation: $includePreConfirmation
   ) {
     ...transactionStatusSubscriptionFragment
   }
@@ -1155,11 +1155,11 @@ subscription submitAndAwaitStatus(
 
 subscription statusChange(
   $transactionId: TransactionId!
-  $includePreconfirmation: Boolean
+  $includePreConfirmation: Boolean
 ) {
   statusChange(
     id: $transactionId
-    includePreconfirmation: $includePreconfirmation
+    includePreconfirmation: $includePreConfirmation
   ) {
     ...transactionStatusSubscriptionFragment
   }
