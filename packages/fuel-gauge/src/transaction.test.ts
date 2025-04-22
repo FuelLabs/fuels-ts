@@ -333,9 +333,13 @@ describe('Transaction', () => {
 
     const { waitForPreConfirmation } = await provider.sendTransaction(transactionRequest);
 
-    const { isStatusSuccess, isStatusPending, status, receipts } = await waitForPreConfirmation();
+    const { isStatusSuccess, isStatusPending, status, receipts, resolvedOutputs } =
+      await waitForPreConfirmation();
+
     expect(isStatusSuccess).toEqual(false);
     expect(isStatusPending).toEqual(true);
+    expect(resolvedOutputs).toBeDefined();
+    expect(resolvedOutputs?.length).toBeGreaterThan(0);
     expect(status).toEqual(TransactionStatus.preconfirmationSuccess);
     expect(receipts).toBeDefined();
     expect(receipts?.length).toBeGreaterThan(0);
