@@ -126,6 +126,36 @@ fragment PreconfirmationSuccessStatusFragment on PreconfirmationSuccessStatus {
   type: __typename
   totalGas
   totalFee
+  resolvedOutputs {
+    utxoId
+    output {
+      type: __typename
+      ... on CoinOutput {
+        to
+        amount
+        assetId
+      }
+      ... on ContractOutput {
+        inputIndex
+        balanceRoot
+        stateRoot
+      }
+      ... on ChangeOutput {
+        to
+        amount
+        assetId
+      }
+      ... on VariableOutput {
+        to
+        amount
+        assetId
+      }
+      ... on ContractCreated {
+        contract
+        stateRoot
+      }
+    }
+  }
   preconfirmationReceipts: receipts {
     ...receiptFragment
   }
@@ -136,6 +166,36 @@ fragment PreconfirmationFailureStatusFragment on PreconfirmationFailureStatus {
   reason
   totalGas
   totalFee
+  resolvedOutputs {
+    utxoId
+    output {
+      type: __typename
+      ... on CoinOutput {
+        to
+        amount
+        assetId
+      }
+      ... on ContractOutput {
+        inputIndex
+        balanceRoot
+        stateRoot
+      }
+      ... on ChangeOutput {
+        to
+        amount
+        assetId
+      }
+      ... on VariableOutput {
+        to
+        amount
+        assetId
+      }
+      ... on ContractCreated {
+        contract
+        stateRoot
+      }
+    }
+  }
   preconfirmationReceipts: receipts {
     ...receiptFragment
   }
