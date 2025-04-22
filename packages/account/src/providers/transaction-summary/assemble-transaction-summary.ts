@@ -165,6 +165,7 @@ export function assemblePreConfirmationTransactionSummary<TTransactionType = voi
     transaction,
     rawPayload,
     resolvedOutputs,
+    errorReason,
   } = processGraphqlStatus(gqlTransactionStatus);
 
   let gasUsed: BN | undefined;
@@ -223,6 +224,7 @@ export function assemblePreConfirmationTransactionSummary<TTransactionType = voi
     isStatusPending: true,
     transaction: transaction as Transaction<TTransactionType>,
     resolvedOutputs,
+    errorReason,
   };
 
   return transactionSummary;

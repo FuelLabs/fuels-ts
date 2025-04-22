@@ -251,6 +251,7 @@ export interface PreConfirmationTransactionSummary<TTransactionType = void> {
   date?: Date;
   receipts?: TransactionResultReceipt[];
   resolvedOutputs?: ResolvedOutput[];
+  errorReason?: string;
   transaction?: Transaction<TTransactionType>;
 }
 

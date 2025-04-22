@@ -68,6 +68,7 @@ type IProcessGraphqlStatusResponse = {
   transaction?: Transaction;
   rawPayload?: string;
   resolvedOutputs?: ResolvedOutput[];
+  errorReason?: string;
 };
 
 /** @hidden */
@@ -81,6 +82,7 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
   let rawPayload: string | undefined;
   let transaction: Transaction | undefined;
   let resolvedOutputs: ResolvedOutput[] = [];
+  let errorReason: string | undefined;
 
   let isStatusFailure = false;
   let isStatusSuccess = false;
@@ -127,6 +129,7 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
         receipts = gqlTransactionStatus.preconfirmationReceipts?.map(deserializeReceipt);
         rawPayload = gqlTransactionStatus.preconfirmationTransaction?.rawPayload;
         resolvedOutputs = extractResolvedOutputs(gqlTransactionStatus.resolvedOutputs);
+        errorReason = gqlTransactionStatus.reason;
         break;
 
       default:
@@ -150,6 +153,7 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
     transaction,
     rawPayload,
     resolvedOutputs,
+    errorReason,
   };
 
   return processedGraphqlStatus;
