@@ -25,7 +25,7 @@ import type {
   GraphqlTransactionStatus,
   MintedAsset,
   Operation,
-  PreConfirmedTransactionSummary,
+  PreConfirmationTransactionSummary,
   TransactionSummary,
   TransactionTypeName,
 } from './types';
@@ -142,7 +142,7 @@ export function assembleTransactionSummary<TTransactionType = void>(
   return transactionSummary;
 }
 
-export interface AssemblePreConfirmedTransactionSummaryParams {
+export interface AssemblePreConfirmationTransactionSummaryParams {
   id: string;
   gqlTransactionStatus?: GraphqlTransactionStatus;
   abiMap?: AbiMap;
@@ -151,13 +151,21 @@ export interface AssemblePreConfirmedTransactionSummaryParams {
 }
 
 /** @hidden */
-export function assemblePreConfirmedTransactionSummary<TTransactionType = void>(
-  params: AssemblePreConfirmedTransactionSummaryParams
+export function assemblePreConfirmationTransactionSummary<TTransactionType = void>(
+  params: AssemblePreConfirmationTransactionSummaryParams
 ) {
   const { id, gqlTransactionStatus, abiMap, maxInputs, baseAssetId } = params;
 
-  const { isStatusFailure, isStatusSuccess, status, totalFee, receipts, transaction, rawPayload } =
-    processGraphqlStatus(gqlTransactionStatus);
+  const {
+    isStatusFailure,
+    isStatusSuccess,
+    status,
+    totalFee,
+    receipts,
+    transaction,
+    rawPayload,
+    resolvedOutputs,
+  } = processGraphqlStatus(gqlTransactionStatus);
 
   let gasUsed: BN | undefined;
   let mintedAssets: MintedAsset[] = [];
@@ -191,7 +199,7 @@ export function assemblePreConfirmedTransactionSummary<TTransactionType = void>(
     }
   }
 
-  const transactionSummary: PreConfirmedTransactionSummary<TTransactionType> = {
+  const transactionSummary: PreConfirmationTransactionSummary<TTransactionType> = {
     id,
     tip,
     fee: totalFee,
@@ -214,6 +222,7 @@ export function assemblePreConfirmedTransactionSummary<TTransactionType = void>(
     isStatusSuccess,
     isStatusPending: true,
     transaction: transaction as Transaction<TTransactionType>,
+    resolvedOutputs,
   };
 
   return transactionSummary;

@@ -25,7 +25,7 @@ import { arrayify } from '@fuel-ts/utils';
 import type Provider from '../provider';
 import type { JsonAbisFromAllCalls, TransactionRequest } from '../transaction-request';
 import {
-  assemblePreConfirmedTransactionSummary,
+  assemblePreConfirmationTransactionSummary,
   assembleTransactionSummary,
 } from '../transaction-summary/assemble-transaction-summary';
 import { getTotalFeeFromStatus } from '../transaction-summary/status';
@@ -33,7 +33,7 @@ import type {
   TransactionSummary,
   GqlTransaction,
   AbiMap,
-  PreConfirmedTransactionSummary,
+  PreConfirmationTransactionSummary,
 } from '../transaction-summary/types';
 import { extractTxError } from '../utils';
 import { deserializeProcessedTxOutput, deserializeReceipt } from '../utils/serialization';
@@ -87,8 +87,8 @@ export type TransactionResult<TTransactionType = void> = TransactionSummary<TTra
   groupedLogs?: DecodedLogs['groupedLogs'];
 };
 
-export type PreConfirmedTransactionResult<TTransactionType = void> =
-  PreConfirmedTransactionSummary<TTransactionType> & {
+export type PreConfirmationTransactionResult<TTransactionType = void> =
+  PreConfirmationTransactionSummary<TTransactionType> & {
     logs?: DecodedLogs['logs'];
     groupedLogs?: DecodedLogs['groupedLogs'];
   };
@@ -319,11 +319,11 @@ export class TransactionResponse {
 
   async getPartialTransactionSummary<TTransactionType = void>(
     contractsAbiMap?: AbiMap
-  ): Promise<PreConfirmedTransactionSummary<TTransactionType>> {
+  ): Promise<PreConfirmationTransactionSummary<TTransactionType>> {
     const baseAssetId = await this.provider.getBaseAssetId();
     const maxInputs = (await this.provider.getChain()).consensusParameters.txParameters.maxInputs;
 
-    const transactionSummary = assemblePreConfirmedTransactionSummary<TTransactionType>({
+    const transactionSummary = assemblePreConfirmationTransactionSummary<TTransactionType>({
       id: this.id,
       gqlTransactionStatus: this.getTransactionStatus(),
       baseAssetId,
@@ -454,7 +454,7 @@ export class TransactionResponse {
     return transactionResult;
   }
 
-  async assemblePreConfirmedResult<TTransactionType = void>(contractsAbiMap?: AbiMap) {
+  async assemblePreConfirmationResult<TTransactionType = void>(contractsAbiMap?: AbiMap) {
     const transactionSummary =
       await this.getPartialTransactionSummary<TTransactionType>(contractsAbiMap);
 
@@ -501,10 +501,10 @@ export class TransactionResponse {
    */
   async waitForPreConfirmation<TTransactionType = void>(
     contractsAbiMap?: AbiMap
-  ): Promise<PreConfirmedTransactionResult<TTransactionType>> {
+  ): Promise<PreConfirmationTransactionResult<TTransactionType>> {
     await this.waitForPreConfirmationStatuses();
     this.unsetResourceCache();
-    return this.assemblePreConfirmedResult<TTransactionType>(contractsAbiMap);
+    return this.assemblePreConfirmationResult<TTransactionType>(contractsAbiMap);
   }
 
   /**
