@@ -41,10 +41,26 @@ export type SqueezedOutStatus = {
   reason: string;
 };
 
+export type SerializedResolvedOutput = {
+  utxoId: string;
+  output:
+    | { to: string; amount: string; assetId: string; type: 'ChangeOutput' }
+    | { to: string; amount: string; assetId: string; type: 'CoinOutput' }
+    | { contract: string; stateRoot: string; type: 'ContractCreated' }
+    | { inputIndex: string; balanceRoot: string; stateRoot: string; type: 'ContractOutput' }
+    | { to: string; amount: string; assetId: string; type: 'VariableOutput' };
+};
+
+export type ResolvedOutput = {
+  utxoId: string;
+  output: Output;
+};
+
 export type PreconfirmationSuccessStatus = {
   type: 'PreconfirmationSuccessStatus';
   totalFee: string;
   totalGas: string;
+  resolvedOutputs?: SerializedResolvedOutput[] | null;
   preconfirmationReceipts?: TransactionReceiptJson[] | null;
   preconfirmationTransaction?: { rawPayload: string } | null;
 };
@@ -54,6 +70,7 @@ export type PreconfirmationFailureStatus = {
   reason: string;
   totalFee: string;
   totalGas: string;
+  resolvedOutputs?: SerializedResolvedOutput[] | null;
   preconfirmationReceipts?: TransactionReceiptJson[] | null;
   preconfirmationTransaction?: { rawPayload: string } | null;
 };
@@ -210,7 +227,7 @@ export interface MintedAsset {
 
 export type BurnedAsset = MintedAsset;
 
-export interface PreConfirmedTransactionSummary<TTransactionType = void> {
+export interface PreConfirmationTransactionSummary<TTransactionType = void> {
   id: string;
   time?: string;
   operations?: Operation[];
@@ -233,11 +250,12 @@ export interface PreConfirmedTransactionSummary<TTransactionType = void> {
   burnedAssets: BurnedAsset[];
   date?: Date;
   receipts?: TransactionResultReceipt[];
+  resolvedOutputs?: ResolvedOutput[];
   transaction?: Transaction<TTransactionType>;
 }
 
 export interface TransactionSummary<TTransactionType = void>
-  extends PreConfirmedTransactionSummary<TTransactionType> {
+  extends PreConfirmationTransactionSummary<TTransactionType> {
   id: string;
   operations: Operation[];
   gasUsed: BN;
