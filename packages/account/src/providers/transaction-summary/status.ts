@@ -6,10 +6,17 @@ import { TransactionCoder } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
 
 import type { TransactionResultReceipt } from '../transaction-response';
-import { deserializeReceipt } from '../utils';
+import { deserializeProcessedTxOutput, deserializeReceipt } from '../utils';
 
 import { TransactionStatus } from './types';
-import type { BlockId, GqlTransactionStatusesNames, GraphqlTransactionStatus, Time } from './types';
+import type {
+  BlockId,
+  GqlTransactionStatusesNames,
+  GraphqlTransactionStatus,
+  Time,
+  ResolvedOutput,
+  SerializedResolvedOutput,
+} from './types';
 
 /** @hidden */
 export const getTransactionStatusName = (gqlStatus: GqlTransactionStatusesNames) => {
@@ -34,6 +41,20 @@ export const getTransactionStatusName = (gqlStatus: GqlTransactionStatusesNames)
   }
 };
 
+/** @hidden */
+export const extractResolvedOutputs = (
+  serializedOutputs?: SerializedResolvedOutput[] | null
+): ResolvedOutput[] => {
+  const resolvedOutputs: ResolvedOutput[] = [];
+  serializedOutputs?.forEach(({ utxoId, output }) =>
+    resolvedOutputs.push({
+      utxoId,
+      output: deserializeProcessedTxOutput(output),
+    })
+  );
+  return resolvedOutputs;
+};
+
 type IProcessGraphqlStatusResponse = {
   time?: Time;
   blockId?: BlockId;
@@ -46,6 +67,7 @@ type IProcessGraphqlStatusResponse = {
   isStatusPending: boolean;
   transaction?: Transaction;
   rawPayload?: string;
+  resolvedOutputs?: ResolvedOutput[];
 };
 
 /** @hidden */
@@ -58,6 +80,7 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
   let receipts: TransactionResultReceipt[] | undefined;
   let rawPayload: string | undefined;
   let transaction: Transaction | undefined;
+  let resolvedOutputs: ResolvedOutput[] = [];
 
   let isStatusFailure = false;
   let isStatusSuccess = false;
@@ -94,6 +117,7 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
         totalGas = bn(gqlTransactionStatus.totalGas);
         receipts = gqlTransactionStatus.preconfirmationReceipts?.map(deserializeReceipt);
         rawPayload = gqlTransactionStatus.preconfirmationTransaction?.rawPayload;
+        resolvedOutputs = extractResolvedOutputs(gqlTransactionStatus.resolvedOutputs);
         break;
 
       case 'PreconfirmationFailureStatus':
@@ -102,6 +126,7 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
         totalGas = bn(gqlTransactionStatus.totalGas);
         receipts = gqlTransactionStatus.preconfirmationReceipts?.map(deserializeReceipt);
         rawPayload = gqlTransactionStatus.preconfirmationTransaction?.rawPayload;
+        resolvedOutputs = extractResolvedOutputs(gqlTransactionStatus.resolvedOutputs);
         break;
 
       default:
@@ -124,6 +149,7 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
     isStatusPending,
     transaction,
     rawPayload,
+    resolvedOutputs,
   };
 
   return processedGraphqlStatus;
