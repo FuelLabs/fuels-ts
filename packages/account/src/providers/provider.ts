@@ -1113,7 +1113,7 @@ export default class Provider {
     {
       enableAssetBurn,
       estimateTxDependencies = true,
-      includePreConfirmation = true,
+      includePreConfirmation: _includePreConfirmation = true,
     }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
@@ -1138,7 +1138,6 @@ export default class Provider {
     }
     const subscription = await this.operations.submitAndAwaitStatus({
       encodedTransaction,
-      includePreConfirmation,
     });
 
     this.#cacheInputs(
