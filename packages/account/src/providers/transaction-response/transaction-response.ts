@@ -381,7 +381,7 @@ export class TransactionResponse {
       this.submitTxSubscription ??
       (await this.provider.operations.statusChange({
         transactionId: this.id,
-        includePreConfirmation: this.includePreConfirmation,
+        includePreConfirmation: true,
       }));
 
     for await (const sub of subscription) {
