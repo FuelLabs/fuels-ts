@@ -7,4 +7,4 @@
 "create-fuels": patch
 ---
 
-chore: upgrade `fuel-core` to `0.43.0`
+chore: upgrade `fuel-core` to `0.43.1`
