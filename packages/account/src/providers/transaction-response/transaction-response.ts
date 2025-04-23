@@ -102,6 +102,8 @@ type StatusChangeSubscription =
     ? R
     : never;
 
+type StatusChangeSubscriptionIterable = Awaited<ReturnType<Provider['operations']['statusChange']>>;
+
 /**
  * Represents a response for a transaction.
  */
@@ -117,6 +119,9 @@ export class TransactionResponse {
   private request?: TransactionRequest;
   private status?: StatusChangeSubscription['statusChange'];
   abis?: JsonAbisFromAllCalls;
+  private activeSubscription?:
+    | StatusChangeSubscriptionIterable
+    | SubmitAndAwaitStatusSubscriptionIterable;
 
   /**
    * Constructor for `TransactionResponse`.
@@ -344,13 +349,10 @@ export class TransactionResponse {
       return;
     }
 
-    const subscription =
-      this.submitTxSubscription ??
-      (await this.provider.operations.statusChange({
-        transactionId: this.id,
-      }));
+    const subscription = this.submitTxSubscription ?? (await this.getOrCreateSubscription(true));
 
     for await (const sub of subscription) {
+      // Handle both types of subscriptions
       const statusChange = 'statusChange' in sub ? sub.statusChange : sub.submitAndAwaitStatus;
       this.status = statusChange;
 
@@ -377,14 +379,10 @@ export class TransactionResponse {
       return;
     }
 
-    const subscription =
-      this.submitTxSubscription ??
-      (await this.provider.operations.statusChange({
-        transactionId: this.id,
-        includePreConfirmation: true,
-      }));
+    const subscription = this.submitTxSubscription ?? (await this.getOrCreateSubscription(true));
 
     for await (const sub of subscription) {
+      // Handle both types of subscriptions
       const statusChange = 'statusChange' in sub ? sub.statusChange : sub.submitAndAwaitStatus;
       this.status = statusChange;
 
@@ -401,6 +399,18 @@ export class TransactionResponse {
         break;
       }
     }
+  }
+
+  private async getOrCreateSubscription(
+    includePreConfirmation: boolean
+  ): Promise<StatusChangeSubscriptionIterable | SubmitAndAwaitStatusSubscriptionIterable> {
+    if (!this.activeSubscription) {
+      this.activeSubscription = await this.provider.operations.statusChange({
+        transactionId: this.id,
+        includePreConfirmation,
+      });
+    }
+    return this.activeSubscription;
   }
 
   /**
