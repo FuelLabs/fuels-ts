@@ -137,40 +137,6 @@ pub fn vec_from(vals: [u32; 3]) -> Vec<u32> {
     vec
 }
 
-impl PartialEq for Vec<u32> {
-    fn eq(self, other: Self) -> bool {
-        if self.len() != other.len() {
-            return false;
-        }
-        let mut i = 0;
-        while i < self.len() {
-            if self.get(i).unwrap() != other.get(i).unwrap() {
-                return false;
-            }
-            i += 1;
-        }
-        true
-    }
-}
-impl Eq for Vec<u32> {}
-
-impl PartialEq for Vec<Vec<u32>> {
-    fn eq(self, other: Self) -> bool {
-        if self.len() != other.len() {
-            return false;
-        }
-        let mut i = 0;
-        while i < self.len() {
-            if self.get(i).unwrap() != other.get(i).unwrap() {
-                return false;
-            }
-            i += 1;
-        }
-        true
-    }
-}
-impl Eq for Vec<Vec<u32>> {}
-
 impl PartialEq for [Vec<u32>; 2] {
     fn eq(self, other: Self) -> bool {
         let mut i = 0;
