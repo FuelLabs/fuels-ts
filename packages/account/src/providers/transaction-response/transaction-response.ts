@@ -494,10 +494,10 @@ export class TransactionResponse {
   }
 
   /**
-   * Waits for transaction to complete and returns the result.
+   * Waits for the transaction's pre-confirmation and returns the result.
    *
    * @param contractsAbiMap - The contracts ABI map.
-   * @returns The completed transaction result
+   * @returns The pre-confirmed transaction result
    */
   async waitForPreConfirmation<TTransactionType = void>(
     contractsAbiMap?: AbiMap
