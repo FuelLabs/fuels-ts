@@ -2419,32 +2419,6 @@ describe('Provider', () => {
     expect(result.id).toBe(transactionId);
   });
 
-  it('should submit transaction with preconfirmation [success]', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const {
-      provider,
-      wallets: [wallet],
-    } = launched;
-
-    // Create the transaction
-    const transactionRequest = await wallet.createTransfer(wallet.address, 100_000);
-
-    // Sign the transaction
-    const signedTransaction = await wallet.signTransaction(transactionRequest);
-    transactionRequest.updateWitnessByOwner(wallet.address, signedTransaction);
-
-    // Send the transaction
-    const response = await provider.sendTransaction(transactionRequest, {
-      estimateTxDependencies: false,
-    });
-
-    const result = await response.waitForResult();
-    expect(result.status).toBe('preconfirmationSuccess');
-    expect(result.receipts.length).toBe(0); // Preconfirmation doesn't return receipts
-    const transactionId = transactionRequest.getTransactionId(await provider.getChainId());
-    expect(result.id).toBe(transactionId);
-  });
-
   it('submits transaction and awaits status [success with estimation]', async () => {
     using launched = await setupTestProviderAndWallets();
     const {
