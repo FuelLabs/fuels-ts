@@ -10,11 +10,13 @@ enum Colors {
     red: (),
     blue: (),
 }
+
 impl PartialEq for [u32; 2] {
     fn eq(self, other: Self) -> bool {
         self[0] == other[0] && self[1] == other[1]
     }
 }
+
 impl Eq for [u32; 2] {}
 
 impl PartialEq for [u8; 3] {
@@ -22,6 +24,7 @@ impl PartialEq for [u8; 3] {
         self[0] == other[0] && self[1] == other[1] && self[2] == other[2]
     }
 }
+
 impl Eq for [u8; 3] {}
 
 impl PartialEq for [[u32; 2]; 2] {
@@ -29,6 +32,7 @@ impl PartialEq for [[u32; 2]; 2] {
         self[0] == other[0] && self[1] == other[1]
     }
 }
+
 impl Eq for [[u32; 2]; 2] {}
 
 impl PartialEq for str[2] {
@@ -36,7 +40,6 @@ impl PartialEq for str[2] {
         from_str_array(self) == from_str_array(other)
     }
 }
-impl Eq for str[2] {}
 
 impl PartialEq for str[3] {
     fn eq(self, other: Self) -> bool {
@@ -45,26 +48,11 @@ impl PartialEq for str[3] {
 }
 impl Eq for str[3] {}
 
-impl PartialEq for str[4] {
-    fn eq(self, other: Self) -> bool {
-        from_str_array(self) == from_str_array(other)
-    }
-}
-impl Eq for str[4] {}
-
-impl PartialEq for (u8, bool, str[2]) {
-    fn eq(self, other: Self) -> bool {
-        self.0 == other.0 && self.1 == other.1 && self.2 == other.2
-    }
-}
-impl Eq for (u8, bool, str[2]) {}
-
 impl PartialEq for Struct1 {
     fn eq(self, other: Self) -> bool {
         self.tag == other.tag && self.age == other.age && self.scores == other.scores
     }
 }
-impl Eq for Struct1 {}
 
 impl PartialEq for Colors {
     fn eq(self, other: Self) -> bool {
