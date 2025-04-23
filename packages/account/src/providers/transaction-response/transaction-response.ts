@@ -102,8 +102,6 @@ type StatusChangeSubscription =
     ? R
     : never;
 
-type StatusChangeSubscriptionIterable = Awaited<ReturnType<Provider['operations']['statusChange']>>;
-
 /**
  * Represents a response for a transaction.
  */
@@ -119,9 +117,6 @@ export class TransactionResponse {
   private request?: TransactionRequest;
   private status?: StatusChangeSubscription['statusChange'];
   abis?: JsonAbisFromAllCalls;
-  private activeSubscription?:
-    | StatusChangeSubscriptionIterable
-    | SubmitAndAwaitStatusSubscriptionIterable;
 
   /**
    * Constructor for `TransactionResponse`.
@@ -349,7 +344,11 @@ export class TransactionResponse {
       return;
     }
 
-    const subscription = this.submitTxSubscription ?? (await this.getOrCreateSubscription(true));
+    const subscription =
+      this.submitTxSubscription ??
+      (await this.provider.operations.statusChange({
+        transactionId: this.id,
+      }));
 
     for await (const sub of subscription) {
       // Handle both types of subscriptions
@@ -379,7 +378,12 @@ export class TransactionResponse {
       return;
     }
 
-    const subscription = this.submitTxSubscription ?? (await this.getOrCreateSubscription(true));
+    const subscription =
+      this.submitTxSubscription ??
+      (await this.provider.operations.statusChange({
+        transactionId: this.id,
+        includePreConfirmation: true,
+      }));
 
     for await (const sub of subscription) {
       // Handle both types of subscriptions
@@ -399,18 +403,6 @@ export class TransactionResponse {
         break;
       }
     }
-  }
-
-  private async getOrCreateSubscription(
-    includePreConfirmation: boolean
-  ): Promise<StatusChangeSubscriptionIterable | SubmitAndAwaitStatusSubscriptionIterable> {
-    if (!this.activeSubscription) {
-      this.activeSubscription = await this.provider.operations.statusChange({
-        transactionId: this.id,
-        includePreConfirmation,
-      });
-    }
-    return this.activeSubscription;
   }
 
   /**
