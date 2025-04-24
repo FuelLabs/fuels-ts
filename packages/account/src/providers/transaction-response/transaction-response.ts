@@ -102,6 +102,9 @@ type StatusChangeSubscription =
     ? R
     : never;
 
+type StatusType = 'confirmation' | 'preConfirmation';
+type StatusResolver = (status: StatusChangeSubscription['statusChange']) => void;
+
 /**
  * Represents a response for a transaction.
  */
@@ -117,6 +120,9 @@ export class TransactionResponse {
   private request?: TransactionRequest;
   private status?: StatusChangeSubscription['statusChange'];
   abis?: JsonAbisFromAllCalls;
+  private waitingForStreamData = false;
+  private statusResolvers: Map<StatusType, StatusResolver[]> = new Map();
+  private preConfirmationStatus?: StatusChangeSubscription['statusChange'];
 
   /**
    * Constructor for `TransactionResponse`.
@@ -325,7 +331,7 @@ export class TransactionResponse {
 
     const transactionSummary = assemblePreConfirmationTransactionSummary<TTransactionType>({
       id: this.id,
-      gqlTransactionStatus: this.getTransactionStatus(),
+      gqlTransactionStatus: this.preConfirmationStatus,
       baseAssetId,
       maxInputs,
       abiMap: contractsAbiMap,
@@ -334,49 +340,58 @@ export class TransactionResponse {
     return transactionSummary;
   }
 
-  /**
-   * Waits for the transaction to be processed and reaches either a `SuccessStatus` or `FailureStatus`.
-   */
-  private async waitForConfirmationStatuses() {
-    const status = this.gqlTransaction?.status?.type;
-
-    if (status && (status === 'FailureStatus' || status === 'SuccessStatus')) {
-      return;
-    }
-
-    const subscription =
-      this.submitTxSubscription ??
-      (await this.provider.operations.statusChange({
-        transactionId: this.id,
-      }));
-
-    for await (const sub of subscription) {
-      // Handle both types of subscriptions
-      const statusChange = 'statusChange' in sub ? sub.statusChange : sub.submitAndAwaitStatus;
-      this.status = statusChange;
-
-      // Transaction Squeezed Out
-      if (statusChange.type === 'SqueezedOutStatus') {
-        this.unsetResourceCache();
-        throw new FuelError(
-          ErrorCode.TRANSACTION_SQUEEZED_OUT,
-          `Transaction Squeezed Out with reason: ${statusChange.reason}`
-        );
-      }
-
-      // Successfully submitted
-      if (statusChange.type === 'SuccessStatus' || statusChange.type === 'FailureStatus') {
-        break;
-      }
-    }
+  private resolveStatus(type: StatusType, status: StatusChangeSubscription['statusChange']) {
+    const resolvers = this.statusResolvers.get(type) || [];
+    resolvers.forEach((resolve) => resolve(status));
+    this.statusResolvers.delete(type);
   }
 
-  private async waitForPreConfirmationStatuses() {
+  private async waitForStatus(
+    type: StatusType,
+    timeoutMs: number = 30000
+  ): Promise<StatusChangeSubscription['statusChange']> {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    this.waitForStatusChange();
+
+    return new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        this.statusResolvers.delete(type);
+        reject(
+          new FuelError(
+            ErrorCode.TIMEOUT_EXCEEDED,
+            `Transaction ${type} timed out after ${timeoutMs}ms`
+          )
+        );
+      }, timeoutMs);
+
+      const resolvers = this.statusResolvers.get(type) || [];
+      resolvers.push((status) => {
+        clearTimeout(timeout);
+        resolve(status);
+      });
+      this.statusResolvers.set(type, resolvers);
+    });
+  }
+
+  /**
+   * Waits for the status change of the transaction.
+   * If the transaction is already in a final state, it will return immediately.
+   * If the transaction is not in a final state, it will wait for the status change.
+   * If we are already subscribed to the status change, it will return immediately.
+   */
+  private async waitForStatusChange() {
     const status = this.gqlTransaction?.status?.type;
 
+    // If the transaction is already in a final state, we can return immediately
     if (status && (status === 'FailureStatus' || status === 'SuccessStatus')) {
       return;
     }
+
+    if (this.waitingForStreamData) {
+      return;
+    }
+
+    this.waitingForStreamData = true;
 
     const subscription =
       this.submitTxSubscription ??
@@ -392,16 +407,43 @@ export class TransactionResponse {
 
       // Transaction Squeezed Out
       if (statusChange.type === 'SqueezedOutStatus') {
-        this.unsetResourceCache();
         throw new FuelError(
           ErrorCode.TRANSACTION_SQUEEZED_OUT,
           `Transaction Squeezed Out with reason: ${statusChange.reason}`
         );
       }
 
-      if (statusChange.type !== 'SubmittedStatus') {
+      if (
+        statusChange.type === 'PreconfirmationSuccessStatus' ||
+        statusChange.type === 'PreconfirmationFailureStatus'
+      ) {
+        this.preConfirmationStatus = statusChange;
+        this.resolveStatus('preConfirmation', statusChange);
+      }
+
+      if (statusChange.type === 'SuccessStatus' || statusChange.type === 'FailureStatus') {
+        this.resolveStatus('confirmation', statusChange);
+        this.waitingForStreamData = false;
         break;
       }
+    }
+  }
+
+  private async waitForConfirmationStatuses() {
+    try {
+      await this.waitForStatus('confirmation');
+    } catch (error) {
+      this.unsetResourceCache();
+      throw error;
+    }
+  }
+
+  private async waitForPreConfirmationStatuses() {
+    try {
+      await this.waitForStatus('preConfirmation');
+    } catch (error) {
+      this.unsetResourceCache();
+      throw error;
     }
   }
 
