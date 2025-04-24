@@ -10,7 +10,7 @@
   import {
     Wallet,
     Provider,
-  } from "https://cdnjs.cloudflare.com/ajax/libs/fuels/{{fuels}}/browser.mjs";
+  } from "https://cdn.jsdelivr.net/npm/fuels@{{fuels}}/dist/browser.min.mjs";
 
   const main = async () => {
     const provider = new Provider(
