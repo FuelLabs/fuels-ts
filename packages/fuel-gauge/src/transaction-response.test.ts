@@ -368,55 +368,51 @@ describe('TransactionResponse', () => {
     }
   );
 
-  it(
-    'should throw error for a SqueezedOut status update [statusChange]',
-    { retry: 10 },
-    async () => {
-      using launched = await launchTestNode({
-        nodeOptions: {
-          args: [
-            '--poa-instant',
-            'false',
-            '--poa-interval-period',
-            '4s',
-            '--tx-pool-ttl',
-            '1s',
-            '--tx-ttl-check-interval',
-            '1s',
-          ],
-          loggingEnabled: false,
-        },
-      });
+  it('should throw error for a SqueezedOut status update [statusChange]', async () => {
+    using launched = await launchTestNode({
+      nodeOptions: {
+        args: [
+          '--poa-instant',
+          'false',
+          '--poa-interval-period',
+          '4s',
+          '--tx-pool-ttl',
+          '1s',
+          '--tx-ttl-check-interval',
+          '1s',
+        ],
+        loggingEnabled: false,
+      },
+    });
 
-      const {
-        provider,
-        wallets: [genesisWallet],
-      } = launched;
+    const {
+      provider,
+      wallets: [genesisWallet],
+    } = launched;
 
-      const request = new ScriptTransactionRequest();
+    const request = new ScriptTransactionRequest();
 
-      request.addCoinOutput(Wallet.generate(), 100, await provider.getBaseAssetId());
+    request.addCoinOutput(Wallet.generate(), 100, await provider.getBaseAssetId());
 
-      await request.estimateAndFund(genesisWallet, {
-        signatureCallback: (tx) => tx.addAccountWitnesses(genesisWallet),
-      });
+    await request.estimateAndFund(genesisWallet, {
+      signatureCallback: (tx) => tx.addAccountWitnesses(genesisWallet),
+    });
 
-      request.updateWitnessByOwner(
-        genesisWallet.address,
-        await genesisWallet.signTransaction(request)
-      );
-      const submit = await provider.sendTransaction(request);
+    request.updateWitnessByOwner(
+      genesisWallet.address,
+      await genesisWallet.signTransaction(request)
+    );
+    const submit = await provider.sendTransaction(request);
 
-      const txResponse = new TransactionResponse(submit.id, provider, await provider.getChainId());
+    const txResponse = new TransactionResponse(submit.id, provider, await provider.getChainId());
 
-      await expectToThrowFuelError(
-        async () => {
-          await txResponse.waitForResult();
-        },
-        { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
-      );
-    }
-  );
+    await expectToThrowFuelError(
+      async () => {
+        await txResponse.waitForResult();
+      },
+      { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
+    );
+  });
 
   it('builds response and awaits result [uses fee from status]', async () => {
     using launched = await launchTestNode();
