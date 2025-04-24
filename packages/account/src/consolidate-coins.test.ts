@@ -250,7 +250,7 @@ describe('consolidate-coins', () => {
     const { provider, wallets } = await setupTest({
       coinsPerAsset: maxInputs + 2,
       maxInputs,
-      amountPerCoin: 1300,
+      amountPerCoin: 700,
       /**
        * Warning: The fee values set here are working fine given the current values
        * set within the GasCosts chain config. However, any update to the GasCosts values
