@@ -4,6 +4,10 @@ import type { TransactionResult, PreConfirmationTransactionResult } from 'fuels'
 import { TransactionStatus, ScriptTransactionRequest, sleep } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('pre-confirmation', () => {
   const validateResult = (result?: TransactionResult) => {
     const { status } = result as TransactionResult;
