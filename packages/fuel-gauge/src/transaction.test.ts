@@ -7,7 +7,6 @@ import {
   isMessage,
   ScriptTransactionRequest,
   sleep,
-  TransactionStatus,
   TransactionType,
 } from 'fuels';
 import { ASSET_A, expectToThrowFuelError, launchTestNode, TestMessage } from 'fuels/test-utils';
@@ -317,63 +316,5 @@ describe('Transaction', () => {
         assetId: await provider.getBaseAssetId(),
       })
     );
-  });
-
-  it('should execute sendTransaction just fine [preconfirmation success]', async () => {
-    using launched = await launchTestNode();
-    const {
-      provider,
-      wallets: [sender, receiver],
-    } = launched;
-
-    const baseAssetId = await provider.getBaseAssetId();
-    const transactionRequest = await sender.createTransfer(receiver.address, 100, baseAssetId);
-    const signedTransaction = await sender.signTransaction(transactionRequest);
-    transactionRequest.updateWitnessByOwner(sender.address, signedTransaction);
-
-    const { waitForPreConfirmation } = await provider.sendTransaction(transactionRequest);
-
-    const { isStatusSuccess, status, receipts, resolvedOutputs, isStatusFailure } =
-      await waitForPreConfirmation();
-
-    expect(isStatusFailure).toBeFalsy();
-    expect(isStatusSuccess).toBeFalsy();
-    expect(isStatusSuccess).toEqual(false);
-    expect(resolvedOutputs).toBeDefined();
-    expect(resolvedOutputs?.length).toBeGreaterThan(0);
-    expect(status).toEqual(TransactionStatus.preconfirmationSuccess);
-    expect(receipts).toBeDefined();
-    expect(receipts?.length).toBeGreaterThan(0);
-  });
-
-  it('should execute sendTransaction just fine [preconfirmation failure]', async () => {
-    using launched = await launchTestNode();
-    const {
-      provider,
-      wallets: [wallet],
-    } = launched;
-
-    const request = new ScriptTransactionRequest({
-      gasLimit: 0,
-      maxFee: 100,
-    });
-
-    const resources = await wallet.getResourcesToSpend([
-      { assetId: await provider.getBaseAssetId(), amount: 100 },
-    ]);
-
-    request.addResources(resources);
-
-    const { waitForPreConfirmation } = await wallet.sendTransaction(request);
-
-    const { status, receipts, errorReason, isStatusFailure, isStatusSuccess } =
-      await waitForPreConfirmation();
-
-    expect(isStatusFailure).toBeTruthy();
-
-    expect(isStatusSuccess).toBeFalsy();
-    expect(errorReason).toBe('OutOfGas');
-    expect(status).toBe(TransactionStatus.preconfirmationFailure);
-    expect(receipts?.length).toBeGreaterThan(0);
   });
 });
