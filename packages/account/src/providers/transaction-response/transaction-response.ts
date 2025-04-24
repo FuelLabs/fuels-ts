@@ -103,7 +103,6 @@ type StatusChangeSubscription =
     : never;
 
 type StatusType = 'confirmation' | 'preConfirmation';
-type StatusResolver = (status: StatusChangeSubscription['statusChange']) => void;
 
 /**
  * Represents a response for a transaction.
@@ -121,7 +120,7 @@ export class TransactionResponse {
   private status?: StatusChangeSubscription['statusChange'];
   abis?: JsonAbisFromAllCalls;
   private waitingForStreamData = false;
-  private statusResolvers: Map<StatusType, StatusResolver[]> = new Map();
+  private statusResolvers: Map<StatusType, (() => void)[]> = new Map();
   private preConfirmationStatus?: StatusChangeSubscription['statusChange'];
 
   /**
@@ -340,36 +339,22 @@ export class TransactionResponse {
     return transactionSummary;
   }
 
-  private resolveStatus(type: StatusType, status: StatusChangeSubscription['statusChange']) {
+  private resolveStatus(type: StatusType) {
     const resolvers = this.statusResolvers.get(type) || [];
-    resolvers.forEach((resolve) => resolve(status));
+    // We can resolve all the promises at once for the same status type
+    resolvers.forEach((resolve) => resolve());
     this.statusResolvers.delete(type);
   }
 
-  private async waitForStatus(
-    type: StatusType,
-    timeoutMs: number = 30000
-  ): Promise<StatusChangeSubscription['statusChange']> {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this.waitForStatusChange();
-
+  private async waitForStatus(type: StatusType): Promise<void> {
     return new Promise((resolve, reject) => {
-      const timeout = setTimeout(() => {
-        this.statusResolvers.delete(type);
-        reject(
-          new FuelError(
-            ErrorCode.TIMEOUT_EXCEEDED,
-            `Transaction ${type} timed out after ${timeoutMs}ms`
-          )
-        );
-      }, timeoutMs);
-
       const resolvers = this.statusResolvers.get(type) || [];
-      resolvers.push((status) => {
-        clearTimeout(timeout);
-        resolve(status);
+      resolvers.push(() => {
+        resolve();
       });
       this.statusResolvers.set(type, resolvers);
+
+      this.waitForStatusChange().catch(reject);
     });
   }
 
@@ -380,10 +365,13 @@ export class TransactionResponse {
    * If we are already subscribed to the status change, it will return immediately.
    */
   private async waitForStatusChange() {
-    const status = this.gqlTransaction?.status?.type;
+    const type = this.status?.type;
 
     // If the transaction is already in a final state, we can return immediately
-    if (status && (status === 'FailureStatus' || status === 'SuccessStatus')) {
+    if (type && (type === 'FailureStatus' || type === 'SuccessStatus')) {
+      // We need to resolve the statuses to avoid waiting for the stream data
+      this.resolveStatus('preConfirmation');
+      this.resolveStatus('confirmation');
       return;
     }
 
@@ -418,11 +406,11 @@ export class TransactionResponse {
         statusChange.type === 'PreconfirmationFailureStatus'
       ) {
         this.preConfirmationStatus = statusChange;
-        this.resolveStatus('preConfirmation', statusChange);
+        this.resolveStatus('preConfirmation');
       }
 
       if (statusChange.type === 'SuccessStatus' || statusChange.type === 'FailureStatus') {
-        this.resolveStatus('confirmation', statusChange);
+        this.resolveStatus('confirmation');
         this.waitingForStreamData = false;
         break;
       }
