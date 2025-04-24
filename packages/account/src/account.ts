@@ -4,14 +4,21 @@ import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { HashableMessage } from '@fuel-ts/hasher';
-import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import { InputType } from '@fuel-ts/transactions';
+import type { BigNumberish, BN } from '@fuel-ts/math';
+import { InputType, OutputType } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, isDefined } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
 import type { FuelConnector, FuelConnectorSendTxParams } from './connectors';
+import {
+  withdrawScript,
+  ScriptTransactionRequest,
+  transactionRequestify,
+  addAmountToCoinQuantities,
+  calculateGasFee,
+} from './providers';
 import type {
   TransactionRequest,
   CoinQuantityLike,
@@ -33,12 +40,8 @@ import type {
   TransactionResponse,
   ProviderSendTxParams,
   TransactionSummaryJson,
-} from './providers';
-import {
-  withdrawScript,
-  ScriptTransactionRequest,
-  transactionRequestify,
-  addAmountToCoinQuantities,
+  TransactionResult,
+  TransactionType,
 } from './providers';
 import {
   cacheRequestInputsResourcesFromOwner,
@@ -51,6 +54,7 @@ import { mergeQuantities } from './providers/utils/merge-quantities';
 import { serializeProviderCache } from './providers/utils/serialization';
 import { AbstractAccount } from './types';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
+import { splitCoinsIntoBatches } from './utils/split-coins-into-batches';
 
 export type TxParamsType = Pick<
   ScriptTransactionRequestLike,
@@ -80,6 +84,33 @@ export type EstimatedTxParams = Pick<
   | 'gasPrice'
   | 'transactionSummary'
 >;
+
+export type SubmitAllMode = 'sequential' | 'parallel';
+
+export type PrepareSubmitAllParams = {
+  txs: ScriptTransactionRequest[];
+  mode?: SubmitAllMode;
+};
+
+export type SubmitAllCallbackResponse = {
+  txResponses: TransactionResult<TransactionType.Script>[];
+  errors: FuelError[];
+};
+
+export type SubmitAllCallback = () => Promise<SubmitAllCallbackResponse>;
+
+export type AssembleConsolidationTxsParams = {
+  coins: Coin[];
+  mode?: SubmitAllMode;
+  outputNum?: number;
+};
+
+export type ConsolidateCoins = {
+  assetId: string;
+  mode?: SubmitAllMode;
+  outputNum?: number;
+};
+
 const MAX_FUNDING_ATTEMPTS = 5;
 
 export type FakeResources = Partial<Coin> & Required<Pick<Coin, 'amount' | 'assetId'>>;
@@ -559,6 +590,178 @@ export class Account extends AbstractAccount implements WithAddress {
   }
 
   /**
+   * Consolidates base asset UTXOs into fewer, larger ones.
+   *
+   * Retrieves a limited number of base asset coins (as defined by `Provider.RESOURCES_PAGE_SIZE_LIMIT`),
+   * assembles consolidation transactions, and submits them to the network.
+   *
+   * Note: This method currently supports only the base asset.
+   *
+   * @param params - The parameters for coin consolidation, including the asset ID, mode, and output number.
+   * @returns A promise that resolves to the response of the submitted transactions.
+   * @throws Will throw an error if the asset is not a base asset as non-base asset consolidation is not implemented.
+   */
+  async consolidateCoins(params: ConsolidateCoins): Promise<SubmitAllCallbackResponse> {
+    const { assetId } = params;
+
+    const { coins } = await this.getCoins(assetId);
+
+    const baseAssetId = await this.provider.getBaseAssetId();
+    const isBaseAsset = baseAssetId === assetId;
+
+    let submitAll: SubmitAllCallback;
+    const consolidationParams: AssembleConsolidationTxsParams = {
+      coins,
+      mode: params.mode,
+      outputNum: params.outputNum,
+    };
+
+    if (isBaseAsset) {
+      ({ submitAll } = await this.assembleBaseAssetConsolidationTxs(consolidationParams));
+    } else {
+      throw new FuelError(
+        ErrorCode.UNSUPPORTED_FEATURE,
+        'Consolidation for non-base assets is not supported yet.'
+      );
+    }
+
+    return submitAll();
+  }
+
+  /**
+   * Assembles transactions for consolidating base asset coins into fewer UTXOs.
+   *
+   * This method splits the provided coins into batches and creates transaction requests
+   * to consolidate them. It calculates the necessary fee and sets up the transactions
+   * to be submitted either in parallel (default) or sequentially.
+   *
+   * @param params - The parameters for assembling base asset consolidation transactions.
+   *
+   * @returns An object containing the assembled transactions, the total fee cost, and a callback to submit all transactions.
+   */
+  async assembleBaseAssetConsolidationTxs(params: AssembleConsolidationTxsParams) {
+    const { coins, mode = 'parallel', outputNum = 1 } = params;
+
+    const baseAssetId = await this.provider.getBaseAssetId();
+
+    this.validateConsolidationTxsCoins(coins, baseAssetId);
+
+    const chainInfo = await this.provider.getChain();
+    const maxInputsNumber = chainInfo.consensusParameters.txParameters.maxInputs.toNumber();
+
+    let totalFeeCost = bn(0);
+    const txs: ScriptTransactionRequest[] = [];
+    const coinsBatches = splitCoinsIntoBatches(coins, maxInputsNumber);
+    const gasPrice = await this.provider.estimateGasPrice(10);
+    const consolidateMoreThanOneCoin = outputNum > 1;
+
+    coinsBatches
+      // Skip batches with just one Coin to avoid consolidate just one coin
+      .filter((batch) => batch.length > 1)
+      .forEach((coinBatch) => {
+        const request = new ScriptTransactionRequest({
+          script: '0x',
+        });
+
+        request.addResources(coinBatch);
+
+        if (consolidateMoreThanOneCoin) {
+          // We decrease one because the change output will also create one UTXO
+          Array.from({ length: outputNum - 1 }).forEach(() => {
+            // Real value will be added later after having fee calculated
+            request.addCoinOutput(this.address, 0, baseAssetId);
+          });
+        }
+
+        const minGas = request.calculateMinGas(chainInfo);
+
+        const fee = calculateGasFee({
+          gasPrice,
+          gas: minGas,
+          priceFactor: chainInfo.consensusParameters.feeParameters.gasPriceFactor,
+          tip: request.tip,
+        });
+
+        request.maxFee = fee;
+
+        if (consolidateMoreThanOneCoin) {
+          const total = request.inputs
+            .filter(isRequestInputCoin)
+            .reduce((acc, input) => acc.add(input.amount), bn(0));
+
+          // We add a +1 as the change output will also include one part of the total amount
+          const amountPerNewUtxo = total.div(outputNum + 1);
+
+          request.outputs.forEach((output) => {
+            if (output.type === OutputType.Coin) {
+              // eslint-disable-next-line no-param-reassign
+              output.amount = amountPerNewUtxo;
+            }
+          });
+        }
+
+        totalFeeCost = totalFeeCost.add(fee);
+
+        txs.push(request);
+      });
+
+    const submitAll = this.prepareSubmitAll({ txs, mode });
+
+    return { txs, totalFeeCost, submitAll };
+  }
+
+  /**
+   * Prepares a function to submit all transactions either sequentially or in parallel.
+   *
+   * @param params - The parameters for preparing the submitAll callback.
+   *
+   * @returns A callback that, when called, submits all transactions and returns their results and any errors encountered.
+   */
+  prepareSubmitAll = (params: PrepareSubmitAllParams): SubmitAllCallback => {
+    // Default to 'sequential' if mode is not provided
+    const { txs, mode = 'sequential' } = params;
+
+    return async () => {
+      const txResponses: TransactionResult<TransactionType.Script>[] = [];
+      const errors: FuelError[] = [];
+
+      if (mode === 'sequential') {
+        // Sequential execution
+        for (const tx of txs) {
+          try {
+            const submit = await this.sendTransaction(tx);
+            const response = await submit.waitForResult<TransactionType.Script>();
+            txResponses.push(response);
+          } catch (error) {
+            errors.push(error as FuelError);
+          }
+        }
+      } else {
+        // Parallel execution
+        const results = await Promise.allSettled(
+          txs.map(async (tx) => {
+            // Chain the transaction sending and result waiting
+            const submit = await this.sendTransaction(tx);
+            return submit.waitForResult<TransactionType.Script>();
+          })
+        );
+
+        // Process results from Promise.allSettled
+        results.forEach((result) => {
+          if (result.status === 'fulfilled') {
+            txResponses.push(result.value);
+          } else {
+            // Ensure the rejected reason is treated as FuelError
+            errors.push(result.reason as FuelError);
+          }
+        });
+      }
+
+      return { txResponses, errors };
+    };
+  };
+
+  /**
    * Returns a transaction cost to enable user
    * to set gasLimit and also reserve balance amounts
    * on the transaction.
@@ -843,5 +1046,19 @@ export class Account extends AbstractAccount implements WithAddress {
     }
 
     return request;
+  }
+
+  /** @hidden * */
+  private validateConsolidationTxsCoins(coins: Coin[], assetId: string) {
+    if (coins.length <= 1) {
+      throw new FuelError(ErrorCode.NO_COINS_TO_CONSOLIDATE, 'No coins to consolidate.');
+    }
+
+    if (!coins.every((c) => c.assetId === assetId)) {
+      throw new FuelError(
+        ErrorCode.COINS_ASSET_ID_MISMATCH,
+        'All coins to consolidate must be from the same asset id.'
+      );
+    }
   }
 }
