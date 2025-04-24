@@ -27,11 +27,7 @@ import type {
 import { OutputType, TransactionCoder, TxPointerCoder } from '@fuel-ts/transactions';
 import { arrayify, assertUnreachable } from '@fuel-ts/utils';
 
-import type {
-  GqlMalleableTransactionFieldsFragment,
-  GqlStatusChangeSubscription,
-  GqlSubmitAndAwaitStatusSubscription,
-} from '../__generated__/operations';
+import type { GqlMalleableTransactionFieldsFragment } from '../__generated__/operations';
 import type Provider from '../provider';
 import type { JsonAbisFromAllCalls, TransactionRequest } from '../transaction-request';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
@@ -122,6 +118,15 @@ function mapGqlOutputsToTxOutputs(
   });
 }
 
+type SubmitAndAwaitStatusSubscriptionIterable = Awaited<
+  ReturnType<Provider['operations']['submitAndAwaitStatus']>
+>;
+
+type StatusChangeSubscription =
+  Awaited<ReturnType<Provider['operations']['statusChange']>> extends AsyncIterable<infer R>
+    ? R
+    : never;
+
 /**
  * Represents a response for a transaction.
  */
@@ -135,7 +140,7 @@ export class TransactionResponse {
   /** The graphql Transaction with receipts object. */
   private gqlTransaction?: GqlTransaction;
   private request?: TransactionRequest;
-  private status?: GqlStatusChangeSubscription['statusChange'];
+  private status?: StatusChangeSubscription['statusChange'];
   abis?: JsonAbisFromAllCalls;
 
   /**
@@ -149,7 +154,7 @@ export class TransactionResponse {
     provider: Provider,
     chainId: number,
     abis?: JsonAbisFromAllCalls,
-    private submitTxSubscription?: AsyncIterable<GqlSubmitAndAwaitStatusSubscription>
+    private submitTxSubscription?: SubmitAndAwaitStatusSubscriptionIterable
   ) {
     this.id = typeof tx === 'string' ? tx : tx.getTransactionId(chainId);
 
