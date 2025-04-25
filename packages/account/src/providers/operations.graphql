@@ -277,15 +277,9 @@ fragment transactionStatusSubscriptionFragment on TransactionStatus {
   }
   ... on PreconfirmationSuccessStatus {
     ...PreconfirmationSuccessStatusFragment
-    preconfirmationTransaction: transaction {
-      rawPayload
-    }
   }
   ... on PreconfirmationFailureStatus {
     ...PreconfirmationFailureStatusFragment
-    preconfirmationTransaction: transaction {
-      rawPayload
-    }
   }
 }
 

@@ -227,28 +227,14 @@ export interface MintedAsset {
 
 export type BurnedAsset = MintedAsset;
 
-export interface PreConfirmationTransactionSummary<TTransactionType = void> {
+export interface PreConfirmationTransactionSummary {
   id: string;
-  operations?: Operation[];
-  gasUsed?: BN;
-  tip?: BN;
-  fee?: BN;
-  type?: TransactionTypeName;
   status?: TransactionStatus;
-  isTypeMint?: boolean;
-  isTypeCreate?: boolean;
-  isTypeScript?: boolean;
-  isTypeUpgrade?: boolean;
-  isTypeUpload?: boolean;
-  isTypeBlob?: boolean;
   isPreConfirmationStatusSuccess: boolean;
   isPreConfirmationStatusFailure: boolean;
-  mintedAssets?: MintedAsset[];
-  burnedAssets?: BurnedAsset[];
   receipts?: TransactionResultReceipt[];
   resolvedOutputs?: ResolvedOutput[];
   errorReason?: string;
-  transaction?: Transaction<TTransactionType>;
 }
 
 export type TransactionSummary<TTransactionType = void> = {

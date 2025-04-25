@@ -150,7 +150,7 @@ export type PreConfirmationFunctionResult<TReturn> = {
   readonly transactionId: string;
   readonly functionScopes: Array<InvocationScopeLike>;
   readonly transactionResponse: TransactionResponse;
-  readonly transactionResult: PreConfirmationTransactionResult<TransactionType.Script>;
+  readonly transactionResult: PreConfirmationTransactionResult;
 };
 
 export type DryRunResult<TReturn> = {

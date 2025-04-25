@@ -21,13 +21,9 @@ import { extractBurnedAssetsFromReceipts, extractMintedAssetsFromReceipts } from
 import { processGraphqlStatus } from './status';
 import type {
   AbiMap,
-  BurnedAsset,
   GraphqlTransactionStatus,
-  MintedAsset,
-  Operation,
   PreConfirmationTransactionSummary,
   TransactionSummary,
-  TransactionTypeName,
 } from './types';
 
 export interface AssembleTransactionSummaryParams {
@@ -151,77 +147,20 @@ export interface AssemblePreConfirmationTransactionSummaryParams {
 }
 
 /** @hidden */
-export function assemblePreConfirmationTransactionSummary<TTransactionType = void>(
+export function assemblePreConfirmationTransactionSummary(
   params: AssemblePreConfirmationTransactionSummaryParams
 ) {
-  const { id, gqlTransactionStatus, abiMap, maxInputs, baseAssetId } = params;
+  const { id, gqlTransactionStatus } = params;
 
-  const {
-    isStatusFailure,
-    isStatusSuccess,
-    status,
-    totalFee,
-    receipts,
-    transaction,
-    rawPayload,
-    resolvedOutputs,
-    errorReason,
-  } = processGraphqlStatus(gqlTransactionStatus);
+  const { isStatusFailure, isStatusSuccess, status, receipts, resolvedOutputs, errorReason } =
+    processGraphqlStatus(gqlTransactionStatus);
 
-  let gasUsed: BN | undefined;
-  let mintedAssets: MintedAsset[] = [];
-  let burnedAssets: BurnedAsset[] = [];
-
-  if (receipts) {
-    gasUsed = getGasUsedFromReceipts(receipts);
-    mintedAssets = extractMintedAssetsFromReceipts(receipts);
-    burnedAssets = extractBurnedAssetsFromReceipts(receipts);
-  }
-
-  let tip: BN | undefined;
-  let operations: Operation[] | undefined;
-  let typeName: TransactionTypeName | undefined;
-
-  if (transaction) {
-    typeName = getTransactionTypeName(transaction.type);
-    tip = bn(transaction.policies?.find((policy) => policy.type === PolicyType.Tip)?.data);
-
-    if (receipts && rawPayload) {
-      operations = getOperations({
-        transactionType: transaction.type,
-        inputs: transaction.inputs || [],
-        outputs: transaction.outputs || [],
-        receipts,
-        rawPayload,
-        abiMap,
-        maxInputs,
-        baseAssetId,
-      });
-    }
-  }
-
-  const transactionSummary: PreConfirmationTransactionSummary<TTransactionType> = {
+  const transactionSummary: PreConfirmationTransactionSummary = {
     id,
-    tip,
-    fee: totalFee,
-    gasUsed,
-    operations,
-    type: typeName,
     status,
     receipts,
-    mintedAssets,
-    burnedAssets,
-    ...(transaction && {
-      isTypeMint: isTypeMint(transaction.type),
-      isTypeCreate: isTypeCreate(transaction.type),
-      isTypeScript: isTypeScript(transaction.type),
-      isTypeUpgrade: isTypeUpgrade(transaction.type),
-      isTypeUpload: isTypeUpload(transaction.type),
-      isTypeBlob: isTypeBlob(transaction.type),
-    }),
     isPreConfirmationStatusFailure: isStatusFailure,
     isPreConfirmationStatusSuccess: isStatusSuccess,
-    transaction: transaction as Transaction<TTransactionType>,
     resolvedOutputs,
     errorReason,
   };
