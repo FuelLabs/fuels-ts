@@ -4,4 +4,4 @@
 "@fuel-ts/program": patch
 ---
 
-chore: ugrading `vm-asm` package
+chore: upgrading `@fuels/vm-asm` package
