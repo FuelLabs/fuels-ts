@@ -154,6 +154,10 @@ export default defineConfig({
                 text: 'Querying the Chain',
                 link: '/guide/provider/querying-the-chain',
               },
+              {
+                text: 'RPC Consistency',
+                link: '/guide/provider/rpc-consistency',
+              },
             ],
           },
           {
@@ -307,6 +311,10 @@ export default defineConfig({
                 text: 'Custom script Call',
                 link: '/guide/scripts/custom-script-call',
               },
+              {
+                text: 'Logs',
+                link: '/guide/scripts/logs',
+              },
             ],
           },
           {
@@ -345,6 +353,14 @@ export default defineConfig({
             link: '/guide/transactions/',
             collapsed: true,
             items: [
+              {
+                text: 'Assemble TX',
+                link: '/guide/transactions/assemble-tx',
+              },
+              {
+                text: 'Assemble TX Migration Guide',
+                link: '/guide/transactions/assemble-tx-migration-guide',
+              },
               {
                 text: 'Modifying the Request',
                 link: '/guide/transactions/modifying-the-request',
@@ -435,8 +451,8 @@ export default defineConfig({
                 link: '/guide/cookbook/generate-fake-resources',
               },
               {
-                text: 'Transactions with Multiple Signers',
-                link: '/guide/cookbook/transactions-with-multiple-signers',
+                text: 'Sway Script with Signature Validation',
+                link: '/guide/cookbook/sway-script-with-signature-validation',
               },
               {
                 text: 'GraphQL Integration',

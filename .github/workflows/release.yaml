@@ -11,19 +11,19 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   release:
     runs-on: ubuntu-latest
-    environment: fuel-fuels-ts-bot
+    environment: npm-deploy
     permissions: write-all
     # First check ensures that the workflow runs only when the changesets PR commit is pushed into the branch.
     # Second check ensures that the workflow runs only after a commit is pushed into the branch,
     # and not when the branch is created.
     # This is to avoid running the workflow when a release/* branch is created.
     if: |
-      github.event.head_commit.message == 'ci(release): versioning packages and changesets' &&
+      startsWith(github.event.head_commit.message, 'ci(release):') &&
       github.event.before != '0000000000000000000000000000000000000000'
 
     steps:
       - name: Create Fuel Docs GitHub Token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@v2
         id: docs-token
         with:
           app-id: ${{ vars.FUEL_DOCS_BOT_APP_ID }}

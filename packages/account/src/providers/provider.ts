@@ -4,19 +4,23 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
-import { InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
+import { InputMessageCoder, TransactionCoder, TransactionType } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
-import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
-import { checkFuelCoreVersionCompatibility, gte, versions } from '@fuel-ts/versions';
+import { arrayify, hexlify, DateTime, isDefined, sleep } from '@fuel-ts/utils';
+import { checkFuelCoreVersionCompatibility, versions } from '@fuel-ts/versions';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import type { GraphQLClientResponse, GraphQLResponse } from 'graphql-request/src/types';
 import gql from 'graphql-tag';
 import { clone } from 'ramda';
 
+import type { Account } from '../account';
+
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
-  GqlChainInfoFragment,
+  GqlReceiptFragment as TransactionReceiptJson,
+  GqlNodeInfoFragment as NodeInfoJson,
+  GqlChainInfoFragment as ChainInfoJson,
   GqlConsensusParametersVersion,
   GqlContractParameters as ContractParameters,
   GqlDryRunFailureStatusFragment,
@@ -31,21 +35,27 @@ import type {
   Requester,
   GqlBlockFragment,
   GqlEstimatePredicatesQuery,
+  GqlStatusChangeSubscription,
+  GqlSubmitAndAwaitStatusSubscription,
+  GqlGetTransactionWithReceiptsQuery,
+  GqlGetTransactionsByOwnerQuery,
+  GqlExcludeInput,
 } from './__generated__/operations';
+import { resolveAccountForAssembleTxParams } from './assemble-tx-helpers';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
 import { FuelGraphqlSubscriber } from './fuel-graphql-subscriber';
 import type { Message, MessageCoin, MessageProof, MessageStatus } from './message';
-import type { ExcludeResourcesOption, Resource } from './resource';
+import type { Resource } from './resource';
 import { ResourceCache } from './resource-cache';
 import type {
   TransactionRequestLike,
   TransactionRequest,
   TransactionRequestInput,
-  CoinTransactionRequestInput,
   JsonAbisFromAllCalls,
   ScriptTransactionRequest,
+  CoinTransactionRequestInput,
 } from './transaction-request';
 import {
   isPredicate,
@@ -54,9 +64,8 @@ import {
   transactionRequestify,
   validateTransactionForAssetBurn,
 } from './transaction-request';
-import type { TransactionResultReceipt } from './transaction-response';
-import { TransactionResponse, getDecodedLogs } from './transaction-response';
-import { processGqlReceipt } from './transaction-summary/receipt';
+import type { DecodedLogs, TransactionResultReceipt } from './transaction-response';
+import { TransactionResponse, getAllDecodedLogs } from './transaction-response';
 import {
   calculateGasFee,
   extractTxError,
@@ -64,9 +73,18 @@ import {
   getReceiptsWithMissingData,
 } from './utils';
 import type { RetryOptions } from './utils/auto-retry-fetch';
-import { autoRetryFetch } from './utils/auto-retry-fetch';
+import { autoRetryFetch, getWaitDelay } from './utils/auto-retry-fetch';
 import { assertGqlResponseHasNoErrors } from './utils/handle-gql-error-message';
-import { adjustResourcesToExclude } from './utils/helpers';
+import { parseGraphqlResponse } from './utils/parse-graphql-response';
+import type { ProviderCacheJson, TransactionSummaryJsonPartial } from './utils/serialization';
+import {
+  deserializeChain,
+  deserializeNodeInfo,
+  deserializeProviderCache,
+  deserializeReceipt,
+  deserializeInput,
+  deserializeOutput,
+} from './utils/serialization';
 import { validatePaginationArgs } from './utils/validate-pagination-args';
 
 const MAX_RETRIES = 10;
@@ -74,6 +92,7 @@ const MAX_RETRIES = 10;
 export const RESOURCES_PAGE_SIZE_LIMIT = 512;
 export const TRANSACTIONS_PAGE_SIZE_LIMIT = 60;
 export const BALANCES_PAGE_SIZE_LIMIT = 100;
+export const NON_PAGINATED_BALANCES_SIZE = 10000;
 export const BLOCKS_PAGE_SIZE_LIMIT = 5;
 export const DEFAULT_RESOURCE_CACHE_TTL = 20_000; // 20 seconds
 export const GAS_USED_MODIFIER = 1.2;
@@ -96,6 +115,7 @@ export type CallResult = {
 export type EstimateTxDependenciesReturns = CallResult & {
   outputVariables: number;
   missingContractIds: string[];
+  rawReceipts: TransactionReceiptJson[];
 };
 
 /**
@@ -118,6 +138,43 @@ export type Block = {
   };
 };
 
+export type ResourcesIdsToIgnore = {
+  utxos?: BytesLike[];
+  messages?: BytesLike[];
+};
+
+export type AccountCoinQuantity = {
+  assetId: string;
+  amount: BigNumberish;
+  account?: Account;
+  changeOutputAccount?: Account;
+};
+
+// #region assemble-tx-params
+export type AssembleTxParams<T extends TransactionRequest = TransactionRequest> = {
+  // The transaction request to assemble
+  request: T;
+  // Coin quantities required for the transaction, optional if transaction only needs funds for the fee
+  accountCoinQuantities?: AccountCoinQuantity[];
+  // Account that will pay for the transaction fees
+  feePayerAccount: Account;
+  // Block horizon for gas price estimation (default: 10)
+  blockHorizon?: number;
+  // Whether to estimate predicates (default: true)
+  estimatePredicates?: boolean;
+  // Resources to be ignored when funding the transaction (optional)
+  resourcesIdsToIgnore?: ResourcesIdsToIgnore;
+  // Amount of gas to reserve (optional)
+  reserveGas?: number;
+};
+
+export type AssembleTxResponse<T extends TransactionRequest = TransactionRequest> = {
+  assembledRequest: T;
+  gasPrice: BN;
+  receipts: TransactionResultReceipt[];
+  rawReceipts: TransactionReceiptJson[];
+};
+// #endregion assemble-tx-params
 export type PageInfo = GqlPageInfo;
 
 export type GetCoinsResponse = {
@@ -166,6 +223,9 @@ type ModifyStringToBN<T> = {
 };
 
 export {
+  TransactionReceiptJson,
+  NodeInfoJson,
+  ChainInfoJson,
   GasCosts,
   FeeParameters,
   ContractParameters,
@@ -204,8 +264,14 @@ export type NodeInfo = {
   maxTx: BN;
   maxDepth: BN;
   nodeVersion: string;
+  indexation: {
+    balances: boolean;
+    coinsToSpend: boolean;
+    assetMetadata: boolean;
+  };
 };
 
+/** @deprecated This type is no longer used. */
 export type NodeInfoAndConsensusParameters = {
   nodeVersion: string;
   gasPerByte: BN;
@@ -221,6 +287,7 @@ export type TransactionCost = {
   minFee: BN;
   maxFee: BN;
   maxGas: BN;
+  rawReceipts: TransactionReceiptJson[];
   receipts: TransactionResultReceipt[];
   outputVariables: number;
   missingContractIds: string[];
@@ -229,66 +296,9 @@ export type TransactionCost = {
   addedSignatures: number;
   dryRunStatus?: DryRunStatus;
   updateMaxFee?: boolean;
+  transactionSummary?: TransactionSummaryJsonPartial;
 };
 // #endregion cost-estimation-1
-
-const processGqlChain = (chain: GqlChainInfoFragment): ChainInfo => {
-  const { name, daHeight, consensusParameters } = chain;
-
-  const {
-    contractParams,
-    feeParams,
-    predicateParams,
-    scriptParams,
-    txParams,
-    gasCosts,
-    baseAssetId,
-    chainId,
-    version,
-  } = consensusParameters;
-
-  return {
-    name,
-    baseChainHeight: bn(daHeight),
-    consensusParameters: {
-      version,
-      chainId: bn(chainId),
-      baseAssetId,
-      feeParameters: {
-        version: feeParams.version,
-        gasPerByte: bn(feeParams.gasPerByte),
-        gasPriceFactor: bn(feeParams.gasPriceFactor),
-      },
-      contractParameters: {
-        version: contractParams.version,
-        contractMaxSize: bn(contractParams.contractMaxSize),
-        maxStorageSlots: bn(contractParams.maxStorageSlots),
-      },
-      txParameters: {
-        version: txParams.version,
-        maxInputs: bn(txParams.maxInputs),
-        maxOutputs: bn(txParams.maxOutputs),
-        maxWitnesses: bn(txParams.maxWitnesses),
-        maxGasPerTx: bn(txParams.maxGasPerTx),
-        maxSize: bn(txParams.maxSize),
-        maxBytecodeSubsections: bn(txParams.maxBytecodeSubsections),
-      },
-      predicateParameters: {
-        version: predicateParams.version,
-        maxPredicateLength: bn(predicateParams.maxPredicateLength),
-        maxPredicateDataLength: bn(predicateParams.maxPredicateDataLength),
-        maxGasPerPredicate: bn(predicateParams.maxGasPerPredicate),
-        maxMessageDataLength: bn(predicateParams.maxMessageDataLength),
-      },
-      scriptParameters: {
-        version: scriptParams.version,
-        maxScriptLength: bn(scriptParams.maxScriptLength),
-        maxScriptDataLength: bn(scriptParams.maxScriptDataLength),
-      },
-      gasCosts,
-    },
-  };
-};
 
 /**
  * @hidden
@@ -341,6 +351,10 @@ export type ProviderOptions = {
    * This can be used to add headers, modify the body, etc.
    */
   requestMiddleware?: (request: RequestInit) => RequestInit | Promise<RequestInit>;
+  /**
+   * The cache can be passed in to avoid re-fetching the chain + node info.
+   */
+  cache?: ProviderCacheJson;
 };
 
 /**
@@ -426,15 +440,73 @@ type NodeInfoCache = Record<string, NodeInfo>;
 
 type Operations = ReturnType<typeof getOperationsSdk>;
 
-type SdkOperations = Omit<Operations, 'statusChange' | 'submitAndAwaitStatus'> & {
+/**
+ * TODO: remove this once pre-confirmation status support lands.
+ *
+ * Because of the way graphql-codegen works, an empty object is added to the generated status types
+ * in place of the pre-confirmation statuses we don't declare in our operations.graphql.
+ * Codegen converts these ignored statuses into `{}` types, and that messes up our TS code compilation,
+ * because it's not written with this `{}` type in mind.
+ * This utility and its application on the types below removes those empty objects from the affected operations,
+ * thereby leaving their types unchanged from the perspective of their consumers.
+ */
+type RemoveCodegenEmptyObject<T> = T extends object ? (keyof T extends never ? never : T) : T;
+
+type StatusChangeSubscription = {
+  statusChange: RemoveCodegenEmptyObject<GqlStatusChangeSubscription['statusChange']>;
+};
+
+type SubmitAndAwaitStatusSubscription = {
+  submitAndAwaitStatus: RemoveCodegenEmptyObject<
+    GqlSubmitAndAwaitStatusSubscription['submitAndAwaitStatus']
+  >;
+};
+
+type TransactionWithReceipts = NonNullable<GqlGetTransactionWithReceiptsQuery['transaction']>;
+
+type GetTransactionWithReceiptsQuery = {
+  transaction?: Omit<TransactionWithReceipts, 'status'> & {
+    status?: RemoveCodegenEmptyObject<TransactionWithReceipts['status']>;
+  };
+};
+
+type TransactionsByOwnerNode =
+  GqlGetTransactionsByOwnerQuery['transactionsByOwner']['edges'][number]['node'];
+
+type GetTransactionsByOwnerQuery = {
+  transactionsByOwner: Omit<GqlGetTransactionsByOwnerQuery['transactionsByOwner'], 'edges'> & {
+    edges: Array<{
+      node: Omit<TransactionsByOwnerNode, 'status'> & {
+        status?: RemoveCodegenEmptyObject<TransactionsByOwnerNode['status']>;
+      };
+    }>;
+  };
+};
+
+type SdkOperations = Omit<
+  Operations,
+  'statusChange' | 'submitAndAwaitStatus' | 'getTransactionWithReceipts' | 'getTransactionsByOwner'
+> & {
   statusChange: (
     ...args: Parameters<Operations['statusChange']>
-  ) => Promise<ReturnType<Operations['statusChange']>>;
+  ) => Promise<AsyncIterable<StatusChangeSubscription>>;
   submitAndAwaitStatus: (
     ...args: Parameters<Operations['submitAndAwaitStatus']>
-  ) => Promise<ReturnType<Operations['submitAndAwaitStatus']>>;
+  ) => Promise<AsyncIterable<SubmitAndAwaitStatusSubscription>>;
+  getTransactionWithReceipts: (
+    ...args: Parameters<Operations['getTransactionWithReceipts']>
+  ) => Promise<GetTransactionWithReceiptsQuery>;
+  getTransactionsByOwner: (
+    ...args: Parameters<Operations['getTransactionsByOwner']>
+  ) => Promise<GetTransactionsByOwnerQuery>;
   getBlobs: (variables: { blobIds: string[] }) => Promise<{ blob: { id: string } | null }[]>;
 };
+
+const WRITE_OPERATIONS: Array<keyof SdkOperations> = [
+  'submit',
+  'submitAndAwaitStatus',
+  'produceBlocks',
+];
 
 /**
  * A provider for connecting to a node
@@ -443,26 +515,51 @@ export default class Provider {
   operations: SdkOperations;
   cache?: ResourceCache;
 
-  /** @hidden */
-  static clearChainAndNodeCaches() {
+  /**
+   * @hidden
+   * @param url - If provided, clears cache only for given url
+   */
+  static clearChainAndNodeCaches(url?: string) {
+    if (url) {
+      delete Provider.inflightFetchChainAndNodeInfoRequests[url];
+      delete Provider.chainInfoCache[url];
+      delete Provider.nodeInfoCache[url];
+      delete Provider.currentBlockHeightCache[url];
+      return;
+    }
+    Provider.inflightFetchChainAndNodeInfoRequests = {};
     Provider.nodeInfoCache = {};
     Provider.chainInfoCache = {};
+    Provider.currentBlockHeightCache = {};
   }
 
   /** @hidden */
   public url: string;
   /** @hidden */
   private urlWithoutAuth: string;
+
+  /**
+   * Governs whether to include the required block height in the request body
+   * for block-sensitive operations like when submitting a transaction.
+   *
+   * This ensures that the operation is executed at the correct block height,
+   * regardless of which node in the network the request is routed to.
+   *
+   * `true` by default.
+   */
+  public static ENABLE_RPC_CONSISTENCY: boolean = true;
   /** @hidden */
-  private features: Features = {
-    balancePagination: false,
-    amount128: false,
-  };
+  private static inflightFetchChainAndNodeInfoRequests: Record<
+    string,
+    Promise<{ consensusParametersTimestamp: number }>
+  > = {};
 
   /** @hidden */
   private static chainInfoCache: ChainInfoCache = {};
   /** @hidden */
   private static nodeInfoCache: NodeInfoCache = {};
+  /** @hidden */
+  private static currentBlockHeightCache: Record<string, number> = {};
   /** @hidden */
   private static incompatibleNodeVersionMessage: string = '';
 
@@ -475,7 +572,24 @@ export default class Provider {
     fetch: undefined,
     retryOptions: undefined,
     headers: undefined,
+    cache: undefined,
   };
+
+  private static extractOperationName(body: BodyInit | undefined | null) {
+    return body?.toString().match(/"operationName":"(.+)"/)?.[1] as keyof SdkOperations;
+  }
+
+  private static isWriteOperation(body: BodyInit | undefined | null) {
+    return WRITE_OPERATIONS.includes(this.extractOperationName(body));
+  }
+
+  private static normalizeUrl(url: string) {
+    return url.replace(/-sub$/, '');
+  }
+
+  private static hasWriteOperationHappened(url: string) {
+    return isDefined(Provider.currentBlockHeightCache[this.normalizeUrl(url)]);
+  }
 
   /**
    * @hidden
@@ -498,8 +612,87 @@ export default class Provider {
         fullRequest = await options.requestMiddleware(fullRequest);
       }
 
-      return options.fetch ? options.fetch(url, fullRequest, options) : fetch(url, fullRequest);
+      if (Provider.ENABLE_RPC_CONSISTENCY && Provider.hasWriteOperationHappened(url)) {
+        Provider.applyBlockHeight(fullRequest, url);
+      }
+
+      return Provider.fetchAndProcessBlockHeight(url, fullRequest, options);
     }, retryOptions);
+  }
+
+  private static applyBlockHeight(request: RequestInit, url: string) {
+    const normalizedUrl = this.normalizeUrl(url);
+
+    // Apply the block height to the request
+    const currentBlockHeight = Provider.currentBlockHeightCache[normalizedUrl] ?? 0;
+    request.body = request.body
+      ?.toString()
+      .replace(/}$/, `,"extensions":{"required_fuel_block_height":${currentBlockHeight}}}`);
+  }
+
+  private static async fetchAndProcessBlockHeight(
+    url: string,
+    request: RequestInit,
+    options: ProviderOptions
+  ): Promise<Response> {
+    const fetchFn = () =>
+      options.fetch ? options.fetch(url, request, options) : fetch(url, request);
+
+    const isWriteOperation = Provider.isWriteOperation(request.body);
+
+    // If it is a write operation, we will initialize the block height cache
+    if (isWriteOperation && !Provider.hasWriteOperationHappened(url)) {
+      Provider.currentBlockHeightCache[Provider.normalizeUrl(url)] = 0;
+    }
+
+    let response: Response = await fetchFn();
+
+    if (!Provider.ENABLE_RPC_CONSISTENCY) {
+      return response;
+    }
+
+    const retryOptions: RetryOptions = {
+      maxRetries: 5,
+      baseDelay: 500,
+    };
+
+    for (let retriesLeft = retryOptions.maxRetries; retriesLeft > 0; --retriesLeft) {
+      const { extensions } = await parseGraphqlResponse({
+        response,
+        isSubscription: url.endsWith('-sub'),
+      });
+      Provider.setCurrentBlockHeight(url, extensions?.current_fuel_block_height);
+
+      if (!extensions?.fuel_block_height_precondition_failed) {
+        break;
+      }
+
+      const retryAttempt = retryOptions.maxRetries - retriesLeft + 1;
+      const sleepTime = getWaitDelay(retryOptions, retryAttempt);
+      await sleep(sleepTime);
+
+      response = await fetchFn();
+    }
+
+    return response;
+  }
+
+  private static setCurrentBlockHeight(url: string, height?: number) {
+    /**
+     * If the height is undefined, there is nothing to set. We can also return early if
+     * no write operation has happened yet, as it means the 'currentBlockHeightCache' was
+     * not initialized and the current block height should not be used.
+     */
+    const writeOperationHappened = Provider.hasWriteOperationHappened(url);
+    if (!isDefined(height) || !writeOperationHappened) {
+      return;
+    }
+
+    const normalizedUrl = Provider.normalizeUrl(url);
+
+    if (height > Provider.currentBlockHeightCache[normalizedUrl]) {
+      Provider.currentBlockHeightCache[normalizedUrl] = height;
+    }
   }
 
   /**
@@ -526,7 +719,21 @@ export default class Provider {
     };
 
     this.operations = this.createOperations();
-    const { resourceCacheTTL } = this.options;
+    const { resourceCacheTTL, cache } = this.options;
+
+    /**
+     * Re-instantiate chain + node info from the passed in cache
+     */
+    if (cache) {
+      const { consensusParametersTimestamp, chain, nodeInfo } = deserializeProviderCache(cache);
+      this.consensusParametersTimestamp = consensusParametersTimestamp;
+      Provider.chainInfoCache[this.urlWithoutAuth] = chain;
+      Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
+    }
+
+    /**
+     * Instantiate the resource cache (for UTXO's + messages)
+     */
     if (isDefined(resourceCacheTTL)) {
       if (resourceCacheTTL !== -1) {
         this.cache = new ResourceCache(resourceCacheTTL);
@@ -568,8 +775,7 @@ export default class Provider {
    * Initialize Provider async stuff
    */
   async init(): Promise<Provider> {
-    const { nodeInfo } = await this.fetchChainAndNodeInfo();
-    this.setupFeatures(nodeInfo.nodeVersion);
+    await this.fetchChainAndNodeInfo();
     return this;
   }
 
@@ -637,44 +843,75 @@ export default class Provider {
    * @param ignoreCache - If true, ignores the cache and re-fetch configs.
    * @returns A promise that resolves to the Chain and NodeInfo.
    */
-  async fetchChainAndNodeInfo(ignoreCache: boolean = false) {
-    let nodeInfo: NodeInfo;
-    let chain: ChainInfo;
+  async fetchChainAndNodeInfo(
+    ignoreCache: boolean = false
+  ): Promise<{ chain: ChainInfo; nodeInfo: NodeInfo }> {
+    const nodeInfo: NodeInfo | undefined = Provider.nodeInfoCache[this.urlWithoutAuth];
+    const chain: ChainInfo | undefined = Provider.chainInfoCache[this.urlWithoutAuth];
 
-    try {
-      nodeInfo = Provider.nodeInfoCache[this.urlWithoutAuth];
-      chain = Provider.chainInfoCache[this.urlWithoutAuth];
-
-      const noCache = !nodeInfo || !chain;
-
-      if (ignoreCache || noCache) {
-        throw new Error(`Jumps to the catch block and re-fetch`);
-      }
-    } catch (_err) {
-      const data = await this.operations.getChainAndNodeInfo();
-
-      nodeInfo = {
-        maxDepth: bn(data.nodeInfo.maxDepth),
-        maxTx: bn(data.nodeInfo.maxTx),
-        nodeVersion: data.nodeInfo.nodeVersion,
-        utxoValidation: data.nodeInfo.utxoValidation,
-        vmBacktrace: data.nodeInfo.vmBacktrace,
-      };
-
-      Provider.setIncompatibleNodeVersionMessage(nodeInfo);
-
-      chain = processGqlChain(data.chain);
-
-      Provider.chainInfoCache[this.urlWithoutAuth] = chain;
-      Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
-
-      this.consensusParametersTimestamp = Date.now();
+    // If we have a cache and we're not ignoring it, return the cache
+    const hasCache = nodeInfo && chain;
+    if (hasCache && !ignoreCache) {
+      return { nodeInfo, chain };
     }
 
-    return {
-      chain,
-      nodeInfo,
-    };
+    // Obtain any inflight requests from other instances of Provider
+    const inflightRequest: Promise<{ consensusParametersTimestamp: number }> =
+      Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth];
+
+    // If there is an inflight request, then wait for it to resolve and return the cached values
+    if (inflightRequest) {
+      return inflightRequest.then((data) => {
+        this.consensusParametersTimestamp = data.consensusParametersTimestamp;
+        return {
+          nodeInfo: Provider.nodeInfoCache[this.urlWithoutAuth],
+          chain: Provider.chainInfoCache[this.urlWithoutAuth],
+        };
+      });
+    }
+
+    // If there is no inflight request, then fetch the chain and node info from the network
+    const getChainAndNodeInfoFromNetwork = this.operations
+      .getChainAndNodeInfo()
+      .then((data) => ({
+        chain: deserializeChain(data.chain),
+        nodeInfo: deserializeNodeInfo(data.nodeInfo),
+        consensusParametersTimestamp: Date.now(),
+      }))
+      .then((data) => {
+        Provider.setIncompatibleNodeVersionMessage(data.nodeInfo);
+        Provider.chainInfoCache[this.urlWithoutAuth] = data.chain;
+        Provider.nodeInfoCache[this.urlWithoutAuth] = data.nodeInfo;
+        this.consensusParametersTimestamp = data.consensusParametersTimestamp;
+        return data;
+      })
+      .catch((err) => {
+        const error = new FuelError(
+          FuelError.CODES.CONNECTION_REFUSED,
+          'Unable to fetch chain and node info from the network',
+          { url: this.urlWithoutAuth },
+          err
+        );
+        error.cause = { code: 'ECONNREFUSED' };
+
+        throw error;
+      })
+      .finally(() => {
+        delete Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth];
+      });
+
+    // Set the inflight request to the network request
+    Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth] =
+      getChainAndNodeInfoFromNetwork;
+
+    // Return the cached values once the network request resolves
+    return Provider.inflightFetchChainAndNodeInfoRequests[this.urlWithoutAuth].then((data) => {
+      this.consensusParametersTimestamp = data.consensusParametersTimestamp;
+      return {
+        nodeInfo: Provider.nodeInfoCache[this.urlWithoutAuth],
+        chain: Provider.chainInfoCache[this.urlWithoutAuth],
+      };
+    });
   }
 
   /**
@@ -720,6 +957,7 @@ export default class Provider {
     const executeQuery = (query: DocumentNode, vars: Record<string, unknown>) => {
       const opDefinition = query.definitions.find((x) => x.kind === 'OperationDefinition') as {
         operation: string;
+        name: { kind: 'Name'; value: string };
       };
       const isSubscription = opDefinition?.operation === 'subscription';
 
@@ -729,6 +967,13 @@ export default class Provider {
           query,
           fetchFn: (url, requestInit) => fetchFn(url as string, requestInit, this.options),
           variables: vars,
+          operationName: opDefinition.name.value,
+          onEvent: (event) => {
+            Provider.setCurrentBlockHeight(
+              this.urlWithoutAuth,
+              event.extensions?.current_fuel_block_height as number
+            );
+          },
         });
       }
       return gqlClient.request(query, vars);
@@ -761,16 +1006,6 @@ export default class Provider {
 
     // @ts-expect-error This is due to this function being generic. Its type is specified when calling a specific operation via provider.operations.xyz.
     return { ...getOperationsSdk(executeQuery), ...customOperations(executeQuery) };
-  }
-
-  /**
-   * @hidden
-   */
-  private setupFeatures(nodeVersion: string) {
-    if (gte(nodeVersion, '0.41.0')) {
-      this.features.balancePagination = true;
-      this.features.amount128 = true;
-    }
   }
 
   /**
@@ -807,13 +1042,7 @@ export default class Provider {
   async fetchNode(): Promise<NodeInfo> {
     const { nodeInfo } = await this.operations.getNodeInfo();
 
-    const processedNodeInfo: NodeInfo = {
-      maxDepth: bn(nodeInfo.maxDepth),
-      maxTx: bn(nodeInfo.maxTx),
-      nodeVersion: nodeInfo.nodeVersion,
-      utxoValidation: nodeInfo.utxoValidation,
-      vmBacktrace: nodeInfo.vmBacktrace,
-    };
+    const processedNodeInfo: NodeInfo = deserializeNodeInfo(nodeInfo);
 
     Provider.nodeInfoCache[this.urlWithoutAuth] = processedNodeInfo;
 
@@ -828,7 +1057,7 @@ export default class Provider {
   async fetchChain(): Promise<ChainInfo> {
     const { chain } = await this.operations.getChain();
 
-    const processedChain = processGqlChain(chain);
+    const processedChain = deserializeChain(chain);
 
     Provider.chainInfoCache[this.urlWithoutAuth] = processedChain;
 
@@ -867,6 +1096,15 @@ export default class Provider {
    * @returns A promise that resolves to an object containing the asset details.
    */
   async getAssetDetails(assetId: string): Promise<GetAssetDetailsResponse> {
+    const { assetMetadata } = await this.getNodeFeatures();
+
+    if (!assetMetadata) {
+      throw new FuelError(
+        ErrorCode.UNSUPPORTED_FEATURE,
+        'The current node does not supports fetching asset details'
+      );
+    }
+
     const { assetDetails } = await this.operations.getAssetDetails({ assetId });
 
     const { contractId, subId, totalSupply } = assetDetails;
@@ -982,7 +1220,7 @@ export default class Provider {
       utxoValidation: utxoValidation || false,
     });
     const [{ receipts: rawReceipts, status: dryRunStatus }] = dryRunStatuses;
-    const receipts = rawReceipts.map(processGqlReceipt);
+    const receipts = rawReceipts.map(deserializeReceipt);
 
     return { receipts, dryRunStatus };
   }
@@ -1076,12 +1314,14 @@ export default class Provider {
   ): Promise<EstimateTxDependenciesReturns> {
     if (isTransactionTypeCreate(transactionRequest)) {
       return {
+        rawReceipts: [],
         receipts: [],
         outputVariables: 0,
         missingContractIds: [],
       };
     }
 
+    let rawReceipts: TransactionReceiptJson[] = [];
     let receipts: TransactionResultReceipt[] = [];
     const missingContractIds: string[] = [];
     let outputVariables = 0;
@@ -1093,14 +1333,15 @@ export default class Provider {
 
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
       const {
-        dryRun: [{ receipts: rawReceipts, status }],
+        dryRun: [{ receipts: serializedReceipts, status }],
       } = await this.operations.dryRun({
         encodedTransactions: [hexlify(transactionRequest.toTransactionBytes())],
         utxoValidation: false,
         gasPrice: gasPrice.toString(),
       });
 
-      receipts = rawReceipts.map(processGqlReceipt);
+      rawReceipts = serializedReceipts;
+      receipts = serializedReceipts.map(deserializeReceipt);
       dryRunStatus = status;
 
       const { missingOutputVariables, missingOutputContractIds } =
@@ -1130,6 +1371,7 @@ export default class Provider {
     }
 
     return {
+      rawReceipts,
       receipts,
       outputVariables,
       missingContractIds,
@@ -1151,6 +1393,7 @@ export default class Provider {
     transactionRequests: TransactionRequest[]
   ): Promise<EstimateTxDependenciesReturns[]> {
     const results: EstimateTxDependenciesReturns[] = transactionRequests.map(() => ({
+      rawReceipts: [],
       receipts: [],
       outputVariables: 0,
       missingContractIds: [],
@@ -1188,7 +1431,7 @@ export default class Provider {
         const requestIdx = transactionsToProcess[i];
         const { receipts: rawReceipts, status } = dryRunResults.dryRun[i];
         const result = results[requestIdx];
-        result.receipts = rawReceipts.map(processGqlReceipt);
+        result.receipts = rawReceipts.map(deserializeReceipt);
         result.dryRunStatus = status;
         const { missingOutputVariables, missingOutputContractIds } = getReceiptsWithMissingData(
           result.receipts
@@ -1242,7 +1485,7 @@ export default class Provider {
     });
 
     const results = dryRunStatuses.map(({ receipts: rawReceipts, status }) => {
-      const receipts = rawReceipts.map(processGqlReceipt);
+      const receipts = rawReceipts.map(deserializeReceipt);
       return { receipts, dryRunStatus: status };
     });
 
@@ -1385,7 +1628,7 @@ export default class Provider {
     const callResult = dryRunStatuses.map((dryRunStatus) => {
       const { id, receipts, status } = dryRunStatus;
 
-      const processedReceipts = receipts.map(processGqlReceipt);
+      const processedReceipts = receipts.map(deserializeReceipt);
 
       return { id, receipts: processedReceipts, status };
     });
@@ -1404,6 +1647,9 @@ export default class Provider {
    * @param transactionCostParams - The transaction cost parameters (optional).
    *
    * @returns A promise that resolves to the transaction cost object.
+   *
+   * @deprecated Use provider.assembleTx instead
+   * Check the migration guide https://docs.fuel.network/guide/assembling-transactions/migration-guide.html for more information.
    */
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
@@ -1447,6 +1693,7 @@ export default class Provider {
       gasPrice,
     });
 
+    let rawReceipts: TransactionReceiptJson[] = [];
     let receipts: TransactionResultReceipt[] = [];
     let dryRunStatus: DryRunStatus | undefined;
     let missingContractIds: string[] = [];
@@ -1460,11 +1707,11 @@ export default class Provider {
         await signatureCallback(txRequestClone);
       }
 
-      ({ receipts, missingContractIds, outputVariables, dryRunStatus } =
+      ({ rawReceipts, receipts, missingContractIds, outputVariables, dryRunStatus } =
         await this.estimateTxDependencies(txRequestClone, { gasPrice }));
 
       if (dryRunStatus && 'reason' in dryRunStatus) {
-        throw this.extractDryRunError(txRequestClone, receipts, dryRunStatus);
+        throw this.extractDryRunError(txRequestClone, receipts, dryRunStatus.reason);
       }
 
       const { maxGasPerTx } = await this.getGasConfig();
@@ -1479,7 +1726,13 @@ export default class Provider {
       }));
     }
 
+    const transactionSummary: TransactionSummaryJsonPartial = {
+      gasPrice: gasPrice.toString(),
+      receipts: rawReceipts,
+    };
+
     return {
+      rawReceipts,
       receipts,
       gasUsed,
       gasPrice,
@@ -1493,6 +1746,153 @@ export default class Provider {
       estimatedPredicates: txRequestClone.inputs,
       dryRunStatus,
       updateMaxFee,
+      transactionSummary,
+    };
+  }
+
+  /**
+   * Assembles a transaction by completely estimating and funding it.
+   *
+   * @param params - Parameters used to assemble the transaction.
+   *
+   * @returns The assembled transaction request, estimated gas price, and receipts
+   */
+  async assembleTx<T extends TransactionRequest>(
+    params: AssembleTxParams<T>
+  ): Promise<AssembleTxResponse<T>> {
+    const {
+      request,
+      reserveGas,
+      resourcesIdsToIgnore,
+      feePayerAccount,
+      blockHorizon = 10,
+      estimatePredicates = true,
+      accountCoinQuantities = [],
+    } = params;
+
+    /**
+     * A set of all addresses that are involved in the transaction. This is used later
+     * to recover cached resources IDs from these users.
+     */
+    const allAddresses = new Set<string>();
+    const baseAssetId = await this.getBaseAssetId();
+
+    /**
+     * Setting the index of the fee payer account to -1 as we don't know it yet.
+     */
+    let feePayerIndex = -1;
+
+    /**
+     * The change output for the base asset.
+     */
+    let baseAssetChange: string | undefined;
+
+    const requiredBalances = accountCoinQuantities.map((quantity, index) => {
+      // When the `account` property is not provided, it defaults to the fee payer account.
+      const { amount, assetId, account = feePayerAccount, changeOutputAccount } = quantity;
+
+      const changeAccountAddress = changeOutputAccount
+        ? changeOutputAccount.address.toB256()
+        : account.address.toB256();
+
+      allAddresses.add(account.address.toB256());
+
+      const changePolicy = {
+        change: changeAccountAddress,
+      };
+
+      if (assetId === baseAssetId) {
+        baseAssetChange = changePolicy.change;
+      }
+
+      /**
+       * If the account is the same as the fee payer account, set the index to the current index.
+       */
+      if (account.address.equals(feePayerAccount.address)) {
+        feePayerIndex = index;
+      }
+
+      const requiredBalance = {
+        account: resolveAccountForAssembleTxParams(account),
+        amount: bn(amount).toString(10),
+        assetId,
+        changePolicy,
+      };
+
+      return requiredBalance;
+    });
+
+    /**
+     * If the fee payer index is still -1, it means that the fee payer account was not added to the required balances.
+     */
+    if (feePayerIndex === -1) {
+      allAddresses.add(feePayerAccount.address.toB256());
+
+      const newLength = requiredBalances.push({
+        account: resolveAccountForAssembleTxParams(feePayerAccount),
+        amount: bn(0).toString(10), // Since the correct fee amount cannot be determined yet, we can use 0
+        assetId: baseAssetId,
+        changePolicy: {
+          change: baseAssetChange || feePayerAccount.address.toB256(),
+        },
+      });
+
+      feePayerIndex = newLength - 1;
+    }
+
+    /**
+     * Retrieving from the cache the resources IDs that should be excluded based on the addresses
+     * that are involved in the transaction.
+     */
+    const excludeInput = await this.adjustResourcesToIgnoreForAddresses(
+      Array.from(allAddresses),
+      resourcesIdsToIgnore
+    );
+
+    const {
+      assembleTx: { status, transaction: gqlTransaction, gasPrice },
+    } = await this.operations.assembleTx({
+      tx: hexlify(request.toTransactionBytes()),
+      blockHorizon: String(blockHorizon),
+      feeAddressIndex: String(feePayerIndex),
+      requiredBalances,
+      estimatePredicates,
+      excludeInput,
+      reserveGas: reserveGas ? reserveGas.toString(10) : undefined,
+    });
+
+    if (status.type === 'DryRunFailureStatus') {
+      const parsedReceipts = status.receipts.map(deserializeReceipt);
+
+      throw this.extractDryRunError(request, parsedReceipts, status.reason);
+    }
+
+    request.witnesses = gqlTransaction.witnesses || request.witnesses;
+
+    request.inputs = gqlTransaction.inputs?.map(deserializeInput) || request.inputs;
+    request.outputs = gqlTransaction.outputs?.map(deserializeOutput) || request.outputs;
+
+    if (gqlTransaction.policies?.maxFee) {
+      request.maxFee = bn(gqlTransaction.policies.maxFee);
+    }
+
+    if (gqlTransaction.scriptGasLimit) {
+      (request as ScriptTransactionRequest).gasLimit = bn(gqlTransaction.scriptGasLimit);
+    }
+
+    const rawReceipts = status.receipts;
+    const chainId = await this.getChainId();
+
+    request.updateState(chainId, 'funded', {
+      gasPrice: gasPrice.toString(),
+      receipts: rawReceipts,
+    });
+
+    return {
+      assembledRequest: request,
+      gasPrice: bn(gasPrice),
+      receipts: status.receipts.map(deserializeReceipt),
+      rawReceipts,
     };
   }
 
@@ -1541,35 +1941,20 @@ export default class Provider {
    *
    * @param owner - The address to get resources for.
    * @param quantities - The coin quantities to get.
-   * @param excludedIds - IDs of excluded resources from the selection (optional).
+   * @param resourcesIdsToIgnore - IDs of excluded resources from the selection (optional).
    * @returns A promise that resolves to the resources.
    */
   async getResourcesToSpend(
     owner: AddressInput,
     quantities: CoinQuantityLike[],
-    excludedIds?: ExcludeResourcesOption
+    resourcesIdsToIgnore?: ResourcesIdsToIgnore
   ): Promise<Resource[]> {
     const ownerAddress = new Address(owner);
-    let idsToExclude = {
-      messages: excludedIds?.messages?.map((nonce) => hexlify(nonce)) || [],
-      utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
-    };
 
-    if (this.cache) {
-      const cached = this.cache.getActiveData(ownerAddress.toB256());
-      if (cached.utxos.length || cached.messages.length) {
-        const {
-          consensusParameters: {
-            txParameters: { maxInputs },
-          },
-        } = await this.getChain();
-        idsToExclude = adjustResourcesToExclude({
-          userInput: idsToExclude,
-          cached,
-          maxInputs: maxInputs.toNumber(),
-        });
-      }
-    }
+    const excludedIds = await this.adjustResourcesToIgnoreForAddresses(
+      [ownerAddress.b256Address],
+      resourcesIdsToIgnore
+    );
 
     const coinsQuery = {
       owner: ownerAddress.toB256(),
@@ -1577,10 +1962,10 @@ export default class Provider {
         .map(coinQuantityfy)
         .map(({ assetId, amount, max: maxPerAsset }) => ({
           assetId: hexlify(assetId),
-          amount: amount.toString(10),
+          amount: (amount.eqn(0) ? bn(1) : amount).toString(10),
           max: maxPerAsset ? maxPerAsset.toString(10) : undefined,
         })),
-      excludedIds: idsToExclude,
+      excludedIds,
     };
 
     const result = await this.operations.getCoinsToSpend(coinsQuery);
@@ -1895,20 +2280,9 @@ export default class Provider {
     /** The asset ID of coins to get */
     assetId: BytesLike
   ): Promise<BN> {
-    const ownerStr = new Address(owner).toB256();
-    const assetIdStr = hexlify(assetId);
-
-    if (!this.features.amount128) {
-      const { balance } = await this.operations.getBalance({
-        owner: ownerStr,
-        assetId: assetIdStr,
-      });
-      return bn(balance.amount, 10);
-    }
-
     const { balance } = await this.operations.getBalanceV2({
-      owner: ownerStr,
-      assetId: assetIdStr,
+      owner: new Address(owner).toB256(),
+      assetId: hexlify(assetId),
     });
     return bn(balance.amountU128, 10);
   }
@@ -1924,54 +2298,25 @@ export default class Provider {
     owner: string | Address,
     paginationArgs?: CursorPaginationArgs
   ): Promise<GetBalancesResponse> {
-    if (!this.features.balancePagination) {
-      return this.getBalancesV1(owner, paginationArgs);
+    // The largest possible size allowed by the node.
+    let args: CursorPaginationArgs = { first: NON_PAGINATED_BALANCES_SIZE };
+
+    const { balancesPagination: supportsPagination } = await this.getNodeFeatures();
+
+    if (supportsPagination) {
+      // If the node supports pagination, we use the provided pagination arguments.
+      args = validatePaginationArgs({
+        inputArgs: paginationArgs,
+        paginationLimit: BALANCES_PAGE_SIZE_LIMIT,
+      });
     }
 
-    return this.getBalancesV2(owner, paginationArgs);
-  }
-
-  /**
-   * @hidden
-   */
-  private async getBalancesV1(
-    owner: string | Address,
-    _paginationArgs?: CursorPaginationArgs
-  ): Promise<GetBalancesResponse> {
-    const {
-      balances: { edges },
-    } = await this.operations.getBalances({
-      /**
-       * The query parameters for this method were designed to support pagination,
-       * but the current Fuel-Core implementation does not support pagination yet.
-       */
-      first: 10000,
-      filter: { owner: new Address(owner).toB256() },
-    });
-
-    const balances = edges.map(({ node }) => ({
-      assetId: node.assetId,
-      amount: bn(node.amount),
-    }));
-
-    return { balances };
-  }
-
-  /**
-   * @hidden
-   */
-  private async getBalancesV2(
-    owner: string | Address,
-    paginationArgs?: CursorPaginationArgs
-  ): Promise<GetBalancesResponse> {
     const {
       balances: { edges, pageInfo },
     } = await this.operations.getBalancesV2({
-      ...validatePaginationArgs({
-        inputArgs: paginationArgs,
-        paginationLimit: BALANCES_PAGE_SIZE_LIMIT,
-      }),
+      ...args,
       filter: { owner: new Address(owner).toB256() },
+      supportsPagination,
     });
 
     const balances = edges.map(({ node }) => ({
@@ -1979,7 +2324,10 @@ export default class Provider {
       amount: bn(node.amountU128),
     }));
 
-    return { balances, pageInfo };
+    return {
+      balances,
+      ...(supportsPagination ? { pageInfo } : {}),
+    };
   }
 
   /**
@@ -2300,25 +2648,40 @@ export default class Provider {
    * @hidden
    */
   private extractDryRunError(
-    transactionRequest: ScriptTransactionRequest,
+    transactionRequest: TransactionRequest,
     receipts: TransactionResultReceipt[],
-    dryRunStatus: DryRunStatus
+    reason: string
   ): FuelError {
-    const status = dryRunStatus as DryRunFailureStatusFragment;
-    let logs: unknown[] = [];
-    if (transactionRequest.abis) {
-      logs = getDecodedLogs(
+    let logs: DecodedLogs['logs'] = [];
+    let groupedLogs: DecodedLogs['groupedLogs'] = {};
+
+    if (transactionRequest.type === TransactionType.Script && transactionRequest.abis) {
+      ({ logs, groupedLogs } = getAllDecodedLogs({
         receipts,
-        transactionRequest.abis.main,
-        transactionRequest.abis.otherContractsAbis
-      );
+        mainAbi: transactionRequest.abis.main,
+        externalAbis: transactionRequest.abis.otherContractsAbis,
+      }));
     }
 
     return extractTxError({
       logs,
+      groupedLogs,
       receipts,
-      statusReason: status.reason,
+      statusReason: reason,
     });
+  }
+
+  /**
+   * @hidden
+   */
+  async getNodeFeatures() {
+    const { indexation } = await this.getNode();
+
+    return {
+      assetMetadata: Boolean(indexation?.assetMetadata),
+      balancesPagination: Boolean(indexation?.balances),
+      coinsToSpend: Boolean(indexation?.coinsToSpend),
+    };
   }
 
   /**
@@ -2339,5 +2702,57 @@ export default class Provider {
     }
 
     return transactionRequest;
+  }
+
+  /**
+   * @hidden
+   *
+   * This helper adjusts the resources to be excluded for a given set of addresses.
+   * Supporting multiple addresses is important because of the `assembleTx` method,
+   * which may be invoked with different addresses. It handles both messages and UTXOs,
+   * ensuring the total number of inputs does not exceed the maximum allowed by the chain's
+   * consensus parameters. The resources specified in the `resourcesIdsToIgnore` parameter have priority
+   * over those retrieved from the cache.
+   */
+  private async adjustResourcesToIgnoreForAddresses(
+    addresses: string[],
+    resourcesIdsToIgnore?: ResourcesIdsToIgnore
+  ): Promise<GqlExcludeInput> {
+    const final = {
+      messages: resourcesIdsToIgnore?.messages?.map((nonce) => hexlify(nonce)) || [],
+      utxos: resourcesIdsToIgnore?.utxos?.map((id) => hexlify(id)) || [],
+    };
+
+    if (this.cache) {
+      const cache = this.cache;
+      const allCached = addresses.map((address) => cache.getActiveData(address));
+
+      const {
+        consensusParameters: {
+          txParameters: { maxInputs: maxInputsBn },
+        },
+      } = await this.getChain();
+
+      const maxInputs = maxInputsBn.toNumber();
+
+      for (let i = 0; i < allCached.length; i++) {
+        let total = final.utxos.length + final.messages.length;
+        if (total >= maxInputs) {
+          break;
+        }
+
+        final.utxos = [...final.utxos, ...allCached[i].utxos.slice(0, maxInputs - total)];
+
+        total = final.utxos.length + final.messages.length;
+
+        if (total >= maxInputs) {
+          break;
+        }
+
+        final.messages = [...final.messages, ...allCached[i].messages.slice(0, maxInputs - total)];
+      }
+    }
+
+    return final;
   }
 }

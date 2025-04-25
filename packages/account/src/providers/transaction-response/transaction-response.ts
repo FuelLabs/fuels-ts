@@ -27,20 +27,16 @@ import type {
 import { OutputType, TransactionCoder, TxPointerCoder } from '@fuel-ts/transactions';
 import { arrayify, assertUnreachable } from '@fuel-ts/utils';
 
-import type {
-  GqlMalleableTransactionFieldsFragment,
-  GqlStatusChangeSubscription,
-  GqlSubmitAndAwaitStatusSubscription,
-} from '../__generated__/operations';
+import type { GqlMalleableTransactionFieldsFragment } from '../__generated__/operations';
 import type Provider from '../provider';
 import type { JsonAbisFromAllCalls, TransactionRequest } from '../transaction-request';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
-import { processGqlReceipt } from '../transaction-summary/receipt';
 import { getTotalFeeFromStatus } from '../transaction-summary/status';
 import type { TransactionSummary, GqlTransaction, AbiMap } from '../transaction-summary/types';
 import { extractTxError } from '../utils';
+import { deserializeReceipt } from '../utils/serialization';
 
-import { getDecodedLogs } from './getDecodedLogs';
+import { type DecodedLogs, getAllDecodedLogs } from './getAllDecodedLogs';
 
 /** @hidden */
 export type TransactionResultCallReceipt = ReceiptCall;
@@ -85,7 +81,8 @@ export type TransactionResultReceipt =
 
 /** @hidden */
 export type TransactionResult<TTransactionType = void> = TransactionSummary<TTransactionType> & {
-  logs?: Array<unknown>;
+  logs?: DecodedLogs['logs'];
+  groupedLogs?: DecodedLogs['groupedLogs'];
 };
 
 function mapGqlOutputsToTxOutputs(
@@ -121,6 +118,15 @@ function mapGqlOutputsToTxOutputs(
   });
 }
 
+type SubmitAndAwaitStatusSubscriptionIterable = Awaited<
+  ReturnType<Provider['operations']['submitAndAwaitStatus']>
+>;
+
+type StatusChangeSubscription =
+  Awaited<ReturnType<Provider['operations']['statusChange']>> extends AsyncIterable<infer R>
+    ? R
+    : never;
+
 /**
  * Represents a response for a transaction.
  */
@@ -134,7 +140,7 @@ export class TransactionResponse {
   /** The graphql Transaction with receipts object. */
   private gqlTransaction?: GqlTransaction;
   private request?: TransactionRequest;
-  private status?: GqlStatusChangeSubscription['statusChange'];
+  private status?: StatusChangeSubscription['statusChange'];
   abis?: JsonAbisFromAllCalls;
 
   /**
@@ -148,7 +154,7 @@ export class TransactionResponse {
     provider: Provider,
     chainId: number,
     abis?: JsonAbisFromAllCalls,
-    private submitTxSubscription?: AsyncIterable<GqlSubmitAndAwaitStatusSubscription>
+    private submitTxSubscription?: SubmitAndAwaitStatusSubscriptionIterable
   ) {
     this.id = typeof tx === 'string' ? tx : tx.getTransactionId(chainId);
 
@@ -238,7 +244,7 @@ export class TransactionResponse {
     switch (status?.type) {
       case 'SuccessStatus':
       case 'FailureStatus':
-        return status.receipts.map(processGqlReceipt);
+        return status.receipts.map(deserializeReceipt);
       default:
         return [];
     }
@@ -378,16 +384,17 @@ export class TransactionResponse {
       ...transactionSummary,
     };
 
-    let logs: Array<unknown> = [];
+    let { logs, groupedLogs }: DecodedLogs = { logs: [], groupedLogs: {} };
 
     if (this.abis) {
-      logs = getDecodedLogs(
-        transactionSummary.receipts,
-        this.abis.main,
-        this.abis.otherContractsAbis
-      );
+      ({ logs, groupedLogs } = getAllDecodedLogs({
+        receipts: transactionSummary.receipts,
+        mainAbi: this.abis.main,
+        externalAbis: this.abis.otherContractsAbis,
+      }));
 
       transactionResult.logs = logs;
+      transactionResult.groupedLogs = groupedLogs;
     }
 
     const { receipts } = transactionResult;
@@ -399,6 +406,7 @@ export class TransactionResponse {
         receipts,
         statusReason: reason,
         logs,
+        groupedLogs,
       });
     }
 

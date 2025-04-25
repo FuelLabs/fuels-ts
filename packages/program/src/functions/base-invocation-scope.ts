@@ -11,12 +11,17 @@ import type {
   TransactionCost,
   AbstractAccount,
 } from '@fuel-ts/account';
-import { ScriptTransactionRequest, Wallet } from '@fuel-ts/account';
+import {
+  mergeQuantities,
+  ScriptTransactionRequest,
+  Wallet,
+  setAndValidateGasAndFeeForAssembledTx,
+} from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import { InputType, TransactionType } from '@fuel-ts/transactions';
+import { InputType, OutputType, TransactionType } from '@fuel-ts/transactions';
 import { isDefined } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
 import { clone } from 'ramda';
@@ -67,6 +72,9 @@ export class BaseInvocationScope<TReturn = any> {
   protected isMultiCall: boolean = false;
   protected hasCallParamsGasLimit: boolean = false; // flag to check if any of the callParams has gasLimit set
   protected externalAbis: Record<string, JsonAbi> = {};
+  /**
+   * @deprecated - Should be removed with `addSigners`
+   */
   private addSignersCallback?: (
     txRequest: ScriptTransactionRequest
   ) => Promise<ScriptTransactionRequest>;
@@ -225,6 +233,9 @@ export class BaseInvocationScope<TReturn = any> {
    * Gets the transaction cost for dry running the transaction.
    *
    * @returns The transaction cost details.
+   *
+   * @deprecated Use contract.fundWithRequiredCoins instead
+   * Check the migration guide https://docs.fuel.network/guide/assembling-transactions/migration-guide.html for more information.
    */
   async getTransactionCost(): Promise<TransactionCost> {
     const request = clone(await this.getTransactionRequest());
@@ -236,20 +247,57 @@ export class BaseInvocationScope<TReturn = any> {
     });
   }
 
-  /**
-   * Costs and funds the underlying transaction request.
-   *
-   * @returns The invocation scope as a funded transaction request.
-   */
   async fundWithRequiredCoins(): Promise<ScriptTransactionRequest> {
+    let request = await this.getTransactionRequest();
+    request = clone(request);
+
+    request.maxFee = bn(0);
+    request.gasLimit = bn(0);
+
+    const provider = this.getProvider();
+    const account = (this.program.account ?? Wallet.generate({ provider })) as Account;
+    const baseAssetId = await provider.getBaseAssetId();
+
+    const outputQuantities = request.outputs
+      .filter((o) => o.type === OutputType.Coin)
+      .map(({ amount, assetId }) => ({ assetId: String(assetId), amount: bn(amount) }));
+
+    const accountCoinQuantities = mergeQuantities(outputQuantities, this.requiredCoins);
+
+    if (!accountCoinQuantities.length) {
+      accountCoinQuantities.push({ assetId: baseAssetId, amount: bn(0) });
+    }
+
+    // eslint-disable-next-line prefer-const
+    let { assembledRequest, gasPrice } = await provider.assembleTx({
+      request,
+      feePayerAccount: account,
+      accountCoinQuantities,
+    });
+
+    assembledRequest = assembledRequest as ScriptTransactionRequest;
+
+    await setAndValidateGasAndFeeForAssembledTx({
+      gasPrice,
+      provider,
+      transactionRequest: assembledRequest,
+      setGasLimit: this.txParameters?.gasLimit,
+      setMaxFee: this.txParameters?.maxFee,
+    });
+
+    return assembledRequest;
+  }
+
+  /**
+   * @deprecated - Should be removed with `addSigners`
+   */
+  private async legacyFundWithRequiredCoins(): Promise<ScriptTransactionRequest> {
     let transactionRequest = await this.getTransactionRequest();
     transactionRequest = clone(transactionRequest);
 
     const txCost = await this.getTransactionCost();
     const { gasUsed, missingContractIds, outputVariables, maxFee } = txCost;
     this.setDefaultTxParams(transactionRequest, gasUsed, maxFee);
-    // Clean coin inputs before add new coins to the request
-    transactionRequest.inputs = transactionRequest.inputs.filter((i) => i.type !== InputType.Coin);
 
     // Adding missing contract ids
     missingContractIds.forEach((contractId) => {
@@ -295,10 +343,14 @@ export class BaseInvocationScope<TReturn = any> {
    * @param contracts - An array of contracts to add.
    * @returns The current instance of the class.
    */
-  addContracts(contracts: Array<AbstractContract>) {
+  addContracts(contracts: Array<AbstractContract | string>) {
     contracts.forEach((contract) => {
-      this.transactionRequest.addContractInputAndOutput(contract.id);
-      this.externalAbis[contract.id.toB256()] = contract.interface.jsonAbi;
+      if (typeof contract === 'string') {
+        this.transactionRequest.addContractInputAndOutput(new Address(contract));
+      } else {
+        this.transactionRequest.addContractInputAndOutput(contract.id);
+        this.externalAbis[contract.id.toB256()] = contract.interface.jsonAbi;
+      }
     });
     return this;
   }
@@ -338,6 +390,17 @@ export class BaseInvocationScope<TReturn = any> {
     return this;
   }
 
+  /**
+   * Adds signers to the transaction request.
+   *
+   * @param signers - The signers to add.
+   * @returns The current instance of the class.
+   *
+   * @deprecated This method is deprecated and will be removed in a future versions.
+   * All signatures should be manually added to the transaction request witnesses. If your
+   * Sway program relies on in-code signature validation, visit this guide:
+   * https://docs.fuel.network/guides/cookbook/sway-script-with-signature-validation.html
+   */
   addSigners(signers: Account | Account[]) {
     this.addSignersCallback = (transactionRequest) =>
       transactionRequest.addAccountWitnesses(signers);
@@ -371,7 +434,13 @@ export class BaseInvocationScope<TReturn = any> {
   }> {
     assert(this.program.account, 'Wallet is required!');
 
-    const transactionRequest = await this.fundWithRequiredCoins();
+    let transactionRequest = await this.getTransactionRequest();
+
+    if (this.addSignersCallback) {
+      transactionRequest = await this.legacyFundWithRequiredCoins();
+    } else {
+      transactionRequest = await this.fundWithRequiredCoins();
+    }
 
     const response = (await this.program.account.sendTransaction(transactionRequest, {
       estimateTxDependencies: false,
@@ -422,6 +491,8 @@ export class BaseInvocationScope<TReturn = any> {
    * Executes a transaction in dry run mode.
    *
    * @returns The result of the invocation call.
+   *
+   * @deprecated Use .get instead
    */
   async dryRun<T = TReturn>(): Promise<DryRunResult<T>> {
     const { receipts } = await this.getTransactionCost();
@@ -438,15 +509,46 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   async get<T = TReturn>(): Promise<DryRunResult<T>> {
-    const { receipts } = await this.getTransactionCost();
+    let request = await this.getTransactionRequest();
+    request = clone(request);
 
-    const callResult: CallResult = {
-      receipts,
-    };
+    request.maxFee = bn(0);
+    request.gasLimit = bn(0);
+
+    request.inputs = request.inputs.filter((i) => i.type !== InputType.Coin);
+
+    const provider = this.getProvider();
+    const account = (this.program.account ?? Wallet.generate({ provider })) as Account;
+    const baseAssetId = await provider.getBaseAssetId();
+
+    const allQuantities = request.outputs
+      .filter((o) => o.type === OutputType.Coin)
+      .map(({ amount, assetId }) => ({ assetId: String(assetId), amount: bn(amount) }))
+      .concat(this.requiredCoins);
+
+    const resources = account.generateFakeResources(allQuantities);
+    const utxoForBaseAssetId = resources.find((utxo) => utxo.assetId === baseAssetId);
+    const amountForFee = bn('1000000000000000');
+
+    if (!utxoForBaseAssetId) {
+      const [baseAssetResource] = account.generateFakeResources([
+        { assetId: baseAssetId, amount: amountForFee },
+      ]);
+      resources.push(baseAssetResource);
+    } else {
+      utxoForBaseAssetId.amount = utxoForBaseAssetId.amount.add(amountForFee);
+    }
+
+    request.addResources(resources);
+
+    const { receipts } = await provider.assembleTx({
+      request,
+      feePayerAccount: account,
+    });
 
     return buildDryRunResult<T>({
       funcScopes: this.functionInvocationScopes,
-      callResult,
+      callResult: { receipts },
       isMultiCall: this.isMultiCall,
     });
   }

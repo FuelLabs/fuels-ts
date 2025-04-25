@@ -1,5 +1,5 @@
 import type { Script } from 'fuels';
-import { getRandomB256, hexlify, Predicate, Wallet } from 'fuels';
+import { getRandomB256, hexlify, Predicate, Wallet, ZeroBytes32 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
@@ -137,21 +137,26 @@ describe('deploying blobs', () => {
     expect(decodeConfigurables(loaderScript)).toEqual(decodeConfigurables(script));
 
     const { waitForResult: waitForResult2 } = await script.functions.main().call();
-    const { value, logs } = await waitForResult2();
+    const { value, logs, groupedLogs } = await waitForResult2();
 
+    const expectedLogs = [
+      configurable.U8,
+      configurable.U16,
+      configurable.U32,
+      expect.toEqualBn(configurable.U64),
+      configurable.BOOL,
+      configurable.B256,
+      configurable.ENUM,
+      configurable.ARRAY,
+      configurable.STR_4,
+      configurable.TUPLE,
+      configurable.STRUCT_1,
+    ];
     expect(value).toBeTruthy();
-
-    expect(logs[0]).equal(configurable.U8);
-    expect(logs[1]).equal(configurable.U16);
-    expect(logs[2]).equal(configurable.U32);
-    expect(logs[3].toNumber()).equal(configurable.U64);
-    expect(logs[4]).equal(configurable.BOOL);
-    expect(logs[5]).equal(configurable.B256);
-    expect(logs[6]).equal(configurable.ENUM);
-    expect(logs[7]).toStrictEqual(configurable.ARRAY);
-    expect(logs[8]).equal(configurable.STR_4);
-    expect(logs[9]).toStrictEqual(configurable.TUPLE);
-    expect(logs[10]).toStrictEqual(configurable.STRUCT_1);
+    expect(logs).toStrictEqual(expectedLogs);
+    expect(groupedLogs).toStrictEqual({
+      [ZeroBytes32]: expectedLogs,
+    });
   });
 
   test("deploying existing script blob doesn't throw", async () => {
@@ -241,7 +246,8 @@ describe('deploying blobs', () => {
       configurableConstants: configurable,
     });
 
-    await wallet.transfer(predicate.address, 10_000, await provider.getBaseAssetId());
+    const res = await wallet.transfer(predicate.address, 10_000, await provider.getBaseAssetId());
+    await res.waitForResult();
 
     const tx = await predicate.transfer(receiver.address, 1000, await provider.getBaseAssetId());
     const response = await tx.waitForResult();

@@ -1,4 +1,4 @@
-import type { Contract } from 'fuels';
+import type { Account, Contract } from 'fuels';
 import { BN, bn, toHex } from 'fuels';
 import { ASSET_A } from 'fuels/test-utils';
 
@@ -165,6 +165,21 @@ describe('CallTestContract', () => {
     expect(value.toHex()).toBe(bn(1_000_000).toHex());
   });
 
+  it('should be possible to forward amount 0 to contract call', async () => {
+    using contract = await setupContract();
+    const baseAssetId = await contract.provider.getBaseAssetId();
+    const { waitForResult } = await contract.functions
+      .return_context_amount()
+      .callParams({
+        forward: [0, baseAssetId],
+      })
+      .call();
+
+    const { value } = await waitForResult();
+
+    expect(value.toNumber()).toBe(0);
+  });
+
   it('Forward asset_id on contract call', async () => {
     using contract = await setupContract();
 
@@ -235,18 +250,36 @@ describe('CallTestContract', () => {
     await expectContractCall();
   });
 
-  it('Calling a simple contract function does only one dry run', async () => {
+  it('Calling a simple contract function does only one dry run (Manual estimation and fund)', async () => {
     using contract = await setupContract();
     const dryRunSpy = vi.spyOn(contract.provider.operations, 'dryRun');
-    await contract.functions.no_params().call();
+
+    const account = contract.account as Account;
+    const scope = contract.functions.no_params();
+    const request = await scope.getTransactionRequest();
+
+    await request.estimateAndFund(account);
+
+    const tx = await account.sendTransaction(request, { estimateTxDependencies: false });
+    await tx.waitForResult();
+
     expect(dryRunSpy).toHaveBeenCalledOnce();
   });
 
-  it('Simulating a simple contract function does two dry runs', async () => {
+  it('Calling a simple contract function does NOT execute dry run (Using assembleTx)', async () => {
+    using contract = await setupContract();
+    const dryRun = vi.spyOn(contract.provider.operations, 'dryRun');
+    const assembleTx = vi.spyOn(contract.provider.operations, 'assembleTx');
+    await contract.functions.no_params().call();
+    expect(dryRun).not.toHaveBeenCalledOnce();
+    expect(assembleTx).toHaveBeenCalledOnce();
+  });
+
+  it('Simulating a simple contract function does one dry runs', async () => {
     using contract = await setupContract();
     const dryRunSpy = vi.spyOn(contract.provider.operations, 'dryRun');
 
     await contract.functions.no_params().simulate();
-    expect(dryRunSpy).toHaveBeenCalledTimes(2);
+    expect(dryRunSpy).toHaveBeenCalledTimes(1);
   });
 });

@@ -4,6 +4,74 @@
 # generate `operations.ts` from this file.
 
 # Fragments
+fragment InputCoinFragment on InputCoin {
+  type: __typename
+  utxoId
+  owner
+  amount
+  assetId
+  txPointer
+  coinWitnessIndex: witnessIndex
+  predicateGasUsed
+  predicate
+  predicateData
+}
+
+fragment InputMessageFragment on InputMessage {
+  type: __typename
+  sender
+  recipient
+  amount
+  nonce
+  messageWitnessIndex: witnessIndex
+  predicateGasUsed
+  data
+  predicate
+  predicateData
+}
+
+fragment InputContractFragment on InputContract {
+  type: __typename
+  utxoId
+  balanceRoot
+  stateRoot
+  txPointer
+  contractId
+}
+
+fragment OutputCoinFragment on CoinOutput {
+  type: __typename
+  to
+  amount
+  assetId
+}
+
+fragment OutputContractFragment on ContractOutput {
+  type: __typename
+  inputIndex
+  balanceRoot
+  stateRoot
+}
+
+fragment OutputChangeFragment on ChangeOutput {
+  type: __typename
+  to
+  amount
+  assetId
+}
+
+fragment OutputVariableFragment on VariableOutput {
+  type: __typename
+  to
+  amount
+  assetId
+}
+
+fragment OutputContractCreatedFragment on ContractCreated {
+  type: __typename
+  contract
+  stateRoot
+}
 
 fragment SubmittedStatusFragment on SubmittedStatus {
   type: __typename
@@ -176,6 +244,21 @@ fragment dryRunSuccessStatusFragment on DryRunSuccessStatus {
   programState {
     returnType
     data
+  }
+}
+
+fragment dryRunFailureAssembleTxFragment on DryRunFailureStatus {
+  type: __typename
+  reason
+  receipts {
+    ...receiptFragment
+  }
+}
+
+fragment dryRunSuccessAssembleTxFragment on DryRunSuccessStatus {
+  type: __typename
+  receipts {
+    ...receiptFragment
   }
 }
 
@@ -451,6 +534,11 @@ fragment nodeInfoFragment on NodeInfo {
   maxTx
   maxDepth
   nodeVersion
+  indexation {
+    balances
+    coinsToSpend
+    assetMetadata
+  }
 }
 
 fragment relayedTransactionStatusFragment on RelayedTransactionStatus {
@@ -726,6 +814,7 @@ query getBalancesV2(
   $before: String
   $first: Int
   $last: Int
+  $supportsPagination: Boolean!
 ) {
   balances(
     filter: $filter
@@ -734,7 +823,7 @@ query getBalancesV2(
     first: $first
     last: $last
   ) {
-    pageInfo {
+    pageInfo @include(if: $supportsPagination) {
       ...pageInfoFragment
     }
     edges {
@@ -818,6 +907,76 @@ query getAssetDetails($assetId: AssetId!) {
 query daCompressedBlock($height: U32!) {
   daCompressedBlock(height: $height) {
     bytes
+  }
+}
+
+query assembleTx(
+  $tx: HexString!
+  $blockHorizon: U32!
+  $requiredBalances: [RequiredBalance!]!
+  $feeAddressIndex: U16!
+  $excludeInput: ExcludeInput
+  $estimatePredicates: Boolean
+  $reserveGas: U64
+) {
+  assembleTx(
+    tx: $tx
+    blockHorizon: $blockHorizon
+    requiredBalances: $requiredBalances
+    feeAddressIndex: $feeAddressIndex
+    excludeInput: $excludeInput
+    estimatePredicates: $estimatePredicates
+    reserveGas: $reserveGas
+  ) {
+    transaction {
+      id
+      inputs {
+        ... on InputCoin {
+          ...InputCoinFragment
+        }
+        ... on InputContract {
+          ...InputContractFragment
+        }
+        ... on InputMessage {
+          ...InputMessageFragment
+        }
+      }
+      outputs {
+        ... on CoinOutput {
+          ...OutputCoinFragment
+        }
+        ... on ContractOutput {
+          ...OutputContractFragment
+        }
+        ... on ChangeOutput {
+          ...OutputChangeFragment
+        }
+        ... on VariableOutput {
+          ...OutputVariableFragment
+        }
+        ... on ContractCreated {
+          ...OutputContractCreatedFragment
+        }
+      }
+      policies {
+        tip
+        witnessLimit
+        maturity
+        maxFee
+      }
+      witnesses
+      scriptGasLimit
+    }
+    status {
+      ... on DryRunFailureStatus {
+        ...dryRunFailureAssembleTxFragment
+      }
+
+      ... on DryRunSuccessStatus {
+        ...dryRunSuccessAssembleTxFragment
+      }
+    }
+    gasPrice
   }
 }
 

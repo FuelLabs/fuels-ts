@@ -1,5 +1,85 @@
 # Change Log
 
+## 0.100.3
+
+### Patch Changes
+
+- Updated dependencies [5c40eb9]
+- Updated dependencies [e677921]
+  - @fuel-ts/account@0.100.3
+  - @fuel-ts/program@0.100.3
+  - @fuel-ts/contract@0.100.3
+  - @fuel-ts/abi-coder@0.100.3
+  - @fuel-ts/abi-typegen@0.100.3
+  - @fuel-ts/address@0.100.3
+  - @fuel-ts/transactions@0.100.3
+  - @fuel-ts/utils@0.100.3
+
+## 0.100.2
+
+### Patch Changes
+
+- Updated dependencies [e909d54]
+  - @fuel-ts/account@0.100.2
+  - @fuel-ts/contract@0.100.2
+  - @fuel-ts/program@0.100.2
+  - @fuel-ts/abi-coder@0.100.2
+  - @fuel-ts/abi-typegen@0.100.2
+  - @fuel-ts/address@0.100.2
+  - @fuel-ts/transactions@0.100.2
+  - @fuel-ts/utils@0.100.2
+
+## 0.100.1
+
+### Patch Changes
+
+- Updated dependencies [fdefaba]
+- Updated dependencies [bb6a76c]
+  - @fuel-ts/account@0.100.1
+  - @fuel-ts/program@0.100.1
+  - @fuel-ts/contract@0.100.1
+  - @fuel-ts/abi-coder@0.100.1
+  - @fuel-ts/abi-typegen@0.100.1
+  - @fuel-ts/address@0.100.1
+  - @fuel-ts/transactions@0.100.1
+  - @fuel-ts/utils@0.100.1
+
+## 0.100.0
+
+### Minor Changes
+
+- f41887f: chore!: upgrade `fuel-core` to `0.41.7`
+
+### Patch Changes
+
+- 6f32228: fix: favour `.ts` over `.d.ts` files in `@fuel-ts/abi-typegen`
+- Updated dependencies [3af8692]
+- Updated dependencies [6668336]
+- Updated dependencies [1277ae6]
+- Updated dependencies [68877c3]
+- Updated dependencies [f254f3a]
+- Updated dependencies [260f64f]
+- Updated dependencies [0fd8a82]
+- Updated dependencies [fc18871]
+- Updated dependencies [6b3753d]
+- Updated dependencies [6eb113c]
+- Updated dependencies [da33ca5]
+- Updated dependencies [c5c8403]
+- Updated dependencies [f41887f]
+- Updated dependencies [e48b0e9]
+- Updated dependencies [817bf13]
+- Updated dependencies [6d3cafb]
+- Updated dependencies [6f32228]
+- Updated dependencies [194e31f]
+  - @fuel-ts/account@0.100.0
+  - @fuel-ts/utils@0.100.0
+  - @fuel-ts/abi-typegen@0.100.0
+  - @fuel-ts/program@0.100.0
+  - @fuel-ts/abi-coder@0.100.0
+  - @fuel-ts/address@0.100.0
+  - @fuel-ts/transactions@0.100.0
+  - @fuel-ts/contract@0.100.0
+
 ## 0.99.0
 
 ### Patch Changes

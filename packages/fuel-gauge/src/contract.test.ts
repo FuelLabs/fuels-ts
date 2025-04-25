@@ -13,6 +13,10 @@ import {
   PolicyType,
   buildFunctionResult,
   ReceiptType,
+  InputMessageCoder,
+  hexlify,
+  InputType,
+  randomBytes,
 } from 'fuels';
 import type {
   ContractTransferParams,
@@ -27,8 +31,10 @@ import {
   ASSET_B,
   launchTestNode,
   TestAssetId,
+  TestMessage,
 } from 'fuels/test-utils';
 
+import { PredicateSigning } from '../test/typegen';
 import {
   CallTestContract,
   CallTestContractFactory,
@@ -40,6 +46,7 @@ import {
 } from '../test/typegen/contracts';
 import { PredicateTrue } from '../test/typegen/predicates/PredicateTrue';
 
+import { fundAccount } from './predicate/utils/predicate';
 import { launchTestContract } from './utils';
 
 const contractsConfigs = [CallTestContractFactory, CallTestContractFactory];
@@ -1387,5 +1394,162 @@ describe('Contract', () => {
     messageOutReceipts.forEach((receipt) => {
       expect(receipt.recipient).toBe(recipient.address.toB256());
     });
+  });
+
+  it.skip('should customize the TX request and still use the scope invocation[ADD WITNESS]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: CallTestContractFactory,
+        },
+      ],
+    });
+
+    const {
+      provider,
+      wallets: [wallet],
+      contracts: [contract],
+    } = launched;
+
+    const fooValue = 1000;
+    const baseAssetId = await provider.getBaseAssetId();
+
+    const predicate = new PredicateSigning({
+      provider,
+      data: [0],
+      configurableConstants: { SIGNER: wallet.address.toB256() },
+    });
+
+    await fundAccount(wallet, predicate, 500_000);
+
+    const predicateResources = await predicate.getResourcesToSpend([
+      { amount: bn(1), assetId: baseAssetId },
+    ]);
+
+    contract.account = wallet;
+
+    /**
+     * GasLimit and maxFee need to be set to avoid using optimal values from `getTransactionCost`
+     * resulting in invalidating the added signature.
+     */
+    const scope = contract.functions.foo(fooValue).txParams({
+      gasLimit: 20000,
+      maxFee: 1200,
+    });
+
+    let request = await scope.getTransactionRequest();
+    request.addResources(predicateResources);
+    request.addWitness(await wallet.signTransaction(request));
+
+    /**
+     * Estimating predicates now to avoid estimating later at `getTransactionCost`
+     */
+    request = await provider.estimatePredicates(request);
+
+    const call = await scope.call();
+
+    const {
+      value,
+      transactionResult: { isStatusSuccess },
+    } = await call.waitForResult();
+
+    expect(isStatusSuccess).toBeTruthy();
+    expect(value.toNumber()).toBe(fooValue + 1);
+  });
+
+  it.skip('should customize the TX request and still use the scope invocation [COIN]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: CallTestContractFactory,
+        },
+      ],
+    });
+
+    const {
+      provider,
+      wallets: [wallet],
+      contracts: [contract],
+    } = launched;
+
+    const fooValue = 1000;
+    const baseAssetId = await provider.getBaseAssetId();
+
+    const predicate = new PredicateTrue({ provider });
+
+    await fundAccount(wallet, predicate, 500_000);
+
+    const predicateResources = await predicate.getResourcesToSpend([
+      { amount: bn(1), assetId: baseAssetId },
+    ]);
+
+    contract.account = wallet;
+    const scope = contract.functions.foo(fooValue);
+    const request = await scope.getTransactionRequest();
+    request.addResources(predicateResources);
+
+    const call = await scope.call();
+
+    const {
+      value,
+      transactionResult: { transaction, isStatusSuccess },
+    } = await call.waitForResult();
+
+    expect(isStatusSuccess).toBeTruthy();
+    expect(value.toNumber()).toBe(fooValue + 1);
+
+    const allSpentCoins = transaction.inputs.filter((input) => input.type === InputType.Coin);
+
+    expect(allSpentCoins.length).toBeGreaterThan(0);
+
+    allSpentCoins.forEach((coin) => {
+      expect(coin.owner).toBe(predicate.address.toB256());
+    });
+  });
+
+  it.skip('should customize the TX request and still use the scope invocation [MESSAGE]', async () => {
+    const testMessage = new TestMessage({
+      data: hexlify(InputMessageCoder.encodeData(randomBytes(10))),
+    });
+
+    using launched = await launchTestNode({
+      walletsConfig: {
+        messages: [testMessage],
+      },
+      contractsConfigs: [
+        {
+          factory: CallTestContractFactory,
+        },
+      ],
+    });
+
+    const {
+      wallets: [recipient],
+      contracts: [contract],
+    } = launched;
+
+    const fooValue = 1000;
+    const {
+      messages: [message],
+    } = await recipient.getMessages();
+
+    const scope = contract.functions.foo(fooValue);
+    const request = await scope.getTransactionRequest();
+    request.addMessageInput(message);
+
+    const call = await scope.call();
+
+    const {
+      value,
+      transactionResult: { transaction, isStatusSuccess },
+    } = await call.waitForResult();
+
+    expect(isStatusSuccess).toBeTruthy();
+    expect(value.toNumber()).toBe(fooValue + 1);
+
+    const messageInput = transaction.inputs.find((input) => input.type === InputType.Message);
+
+    expect(messageInput).toBeDefined();
+    expect(messageInput?.nonce).toBe(message.nonce);
   });
 });

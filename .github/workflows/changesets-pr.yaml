@@ -18,19 +18,19 @@ jobs:
     # and not when the branch is created.
     # This is to avoid running the workflow when a release/* branch is created.
     if: |
-      github.event.head_commit.message != 'ci(release): versioning packages and changesets' &&
+      startsWith(github.event.head_commit.message, 'ci(release):') != true &&
       github.event.before != '0000000000000000000000000000000000000000'
 
     steps:
       - name: Create the Internal GitHub App Token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@v2
         id: app-token
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.APP_KEY }}
 
       - name: Create Fuel Docs GitHub Token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@v2
         id: docs-token
         with:
           app-id: ${{ vars.FUEL_DOCS_BOT_APP_ID }}

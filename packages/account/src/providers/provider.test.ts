@@ -9,7 +9,6 @@ import { InputType, OutputType, ReceiptType } from '@fuel-ts/transactions';
 import { DateTime, arrayify, hexlify, sleep } from '@fuel-ts/utils';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import { versions } from '@fuel-ts/versions';
-import type { MockInstance } from 'vitest';
 
 import type { CoinQuantity } from '..';
 import { Wallet } from '..';
@@ -23,7 +22,7 @@ import {
   MOCK_TX_SCRIPT_RAW_PAYLOAD,
 } from '../../test/fixtures/transaction-summary';
 import { mockIncompatibleVersions } from '../../test/utils/mockIncompabileVersions';
-import { setupTestProviderAndWallets, launchNode, TestMessage } from '../test-utils';
+import { setupTestProviderAndWallets, launchNode, TestMessage, TestAssetId } from '../test-utils';
 
 import type { GqlPageInfo } from './__generated__/operations';
 import type { Block, ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
@@ -41,6 +40,8 @@ import { CreateTransactionRequest, ScriptTransactionRequest } from './transactio
 import { TransactionResponse } from './transaction-response';
 import type { SubmittedStatus } from './transaction-summary/types';
 import * as gasMod from './utils/gas';
+import { serializeChain, serializeNodeInfo, serializeProviderCache } from './utils/serialization';
+import type { ProviderCacheJson } from './utils/serialization';
 
 const getCustomFetch =
   (expectedOperationName: string, expectedResponse: object) =>
@@ -933,6 +934,48 @@ describe('Provider', () => {
     expect(spyOperation).toHaveBeenCalledTimes(1);
   });
 
+  test('clearing cache based on URL only clears the cache for that URL', async () => {
+    using launched1 = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '10ms'],
+        loggingEnabled: false,
+      },
+    });
+    using launched2 = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '10ms'],
+        loggingEnabled: false,
+      },
+    });
+    const { provider: provider1 } = launched1;
+    const { provider: provider2 } = launched2;
+
+    // Clear any existing chain info cache
+    Provider.clearChainAndNodeCaches();
+
+    // Ensure the provider URLs are different, and there is not chain info cache for either
+    expect(provider1.url).not.toEqual(provider2.url);
+    // @ts-expect-error - chainInfoCache is private
+    expect(Provider.chainInfoCache[provider1.url]).not.toBeDefined();
+    // @ts-expect-error - chainInfoCache is private
+    expect(Provider.chainInfoCache[provider2.url]).not.toBeDefined();
+
+    // Ensure the the chain cache has been updated
+    await provider1.init();
+    await provider2.init();
+    // @ts-expect-error - chainInfoCache is private
+    expect(Provider.chainInfoCache[provider1.url]).toBeDefined();
+    // @ts-expect-error - chainInfoCache is private
+    expect(Provider.chainInfoCache[provider2.url]).toBeDefined();
+
+    // Given: we clear the cache for provider1
+    Provider.clearChainAndNodeCaches(provider1.url);
+    // @ts-expect-error - chainInfoCache is private
+    expect(Provider.chainInfoCache[provider1.url]).not.toBeDefined();
+    // @ts-expect-error - chainInfoCache is private
+    expect(Provider.chainInfoCache[provider2.url]).toBeDefined();
+  });
+
   it('should ensure getGasConfig return essential gas related data', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
@@ -1549,53 +1592,6 @@ describe('Provider', () => {
     expect(numberOfEvents).toEqual(2);
   });
 
-  it('subscriptions: streams are consumed even if the async iterator is not', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
-
-    const sseResponse = new TextEncoder().encode(`data:{"field":"not-relevant"}\n\n`);
-
-    let pullCallNum = 0;
-
-    const underlyingSource: UnderlyingDefaultSource = {
-      pull: (controller) => {
-        pullCallNum += 1;
-        controller.enqueue(sseResponse);
-        if (pullCallNum === 20) {
-          controller.close();
-        }
-      },
-    };
-
-    const pullSpy: MockInstance = vi.spyOn(underlyingSource, 'pull');
-
-    vi.spyOn(global, 'fetch').mockImplementationOnce(() =>
-      Promise.resolve(
-        new Response(
-          new ReadableStream(
-            underlyingSource,
-            /**
-             * Only pull when .read() is called.
-             * Don't do any behind-the-scenes buffering
-             * so that we can test that the sdk itself is pulling
-             * even if the user isn't reading.
-             */
-            { highWaterMark: 0 }
-          )
-        )
-      )
-    );
-
-    await provider.operations.submitAndAwaitStatus({
-      encodedTransaction: "it's mocked so doesn't matter",
-    });
-
-    // give time for the pulls to be called in the background
-    await sleep(500);
-
-    expect(pullSpy).toHaveBeenCalledTimes(20);
-  });
-
   it('subscriptions: throws if the stream data string parsing fails for some reason', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
@@ -2080,27 +2076,35 @@ describe('Provider', () => {
       expect(pageInfo.endCursor).toBeDefined();
     });
 
-    it('can get balances [V1]', async () => {
-      vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo').mockImplementationOnce(async () =>
-        Promise.resolve({
-          nodeInfo: { nodeVersion: '0.40.0' } as NodeInfo,
-          chain: {} as ChainInfo,
-        })
-      );
-
+    it('can get balances [NO PAGINATION SUPPORT]', async () => {
       using launched = await setupTestProviderAndWallets();
       const {
         provider,
         wallets: [wallet],
       } = launched;
 
-      const spy = vi.spyOn(provider.operations, 'getBalances');
+      const node = await provider.getNode();
+      const chain = await provider.getChain();
+
+      const spy = vi.spyOn(provider.operations, 'getBalancesV2');
+      vi.spyOn(provider.operations, 'getChainAndNodeInfo').mockImplementation(async () =>
+        Promise.resolve({
+          nodeInfo: {
+            ...serializeNodeInfo(node),
+            indexation: { assetMetadata: false, balances: false, coinsToSpend: false },
+          },
+          chain: serializeChain(chain),
+        })
+      );
+
+      Provider.clearChainAndNodeCaches();
 
       const { pageInfo } = await wallet.getBalances();
 
       expect(spy).toHaveBeenCalledWith({
         first: 10000,
         filter: { owner: wallet.address.toB256() },
+        supportsPagination: false,
       });
 
       expect(pageInfo).not.toBeDefined();
@@ -2108,17 +2112,43 @@ describe('Provider', () => {
       vi.restoreAllMocks();
     });
 
+    it('can get balances [PAGINATION SUPPORT]', async () => {
+      using launched = await setupTestProviderAndWallets();
+      const {
+        provider,
+        wallets: [wallet],
+      } = launched;
+
+      const spy = vi.spyOn(provider.operations, 'getBalancesV2');
+
+      const { balances, pageInfo } = await wallet.getBalances();
+
+      expect(spy).toHaveBeenCalledWith({
+        first: BALANCES_PAGE_SIZE_LIMIT,
+        filter: { owner: wallet.address.toB256() },
+        supportsPagination: true,
+      });
+
+      expect(balances).toBeDefined();
+      expect(pageInfo).toBeDefined();
+    });
+
     describe('pagination arguments', async () => {
-      using launched = await setupTestProviderAndWallets({
+      const launched = await setupTestProviderAndWallets({
         walletsConfig: {
           coinsPerAsset: 100,
         },
       });
-      const { provider } = launched;
+
+      const provider = launched.provider;
       const baseAssetId = await provider.getBaseAssetId();
       const address = Address.fromRandom();
       const exceededLimit = RESOURCES_PAGE_SIZE_LIMIT + 1;
       const safeLimit = BLOCKS_PAGE_SIZE_LIMIT;
+
+      afterAll(() => {
+        launched.cleanup();
+      });
 
       function getInvocations(args: CursorPaginationArgs) {
         return [
@@ -2462,5 +2492,141 @@ describe('Provider', () => {
     expect(keys.includes('edges')).toBeTruthy();
 
     expect(keys.includes('pageInfo')).toBeFalsy();
+  });
+
+  it('should fetch chain or node info if the cache is not provided', async () => {
+    // Given: we clear any pre-existing cache
+    using launched = await setupTestProviderAndWallets();
+    const { provider: sourceProvider } = launched;
+
+    Provider.clearChainAndNodeCaches();
+
+    // When: we create a new provider with the same url
+    const fetch = vi.spyOn(global, 'fetch');
+    await new Provider(sourceProvider.url, { cache: undefined }).init();
+
+    // Then: we should fetch the chain and node info
+    expect(fetch).toHaveBeenCalled();
+  });
+
+  it('should not refetch chain or node info if cache is provided', async () => {
+    // Given: we clear any pre-existing cache
+    using launched = await setupTestProviderAndWallets();
+    const { provider: sourceProvider } = launched;
+
+    const cache: ProviderCacheJson = await serializeProviderCache(sourceProvider);
+    Provider.clearChainAndNodeCaches();
+
+    // When: we create a new provider with the same url, but with a cache
+    const fetch = vi.spyOn(global, 'fetch');
+    await new Provider(launched.provider.url, { cache }).init();
+
+    // Then: we should not perform any fetch requests
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it('should make a single request for chain or node info across multiple instances', async () => {
+    // Given: three provider instances, connected to the same node
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider: { url },
+    } = launched;
+    const fetchSpy = vi.spyOn(global, 'fetch');
+    const provider1 = new Provider(url);
+    const provider2 = new Provider(url);
+    const provider3 = new Provider(url);
+    Provider.clearChainAndNodeCaches();
+
+    // When: we initialize all three provider instances
+    await Promise.all([provider1.init(), provider2.init(), provider3.init()]);
+
+    // Then: we should only perform a single fetch request for the chain and node info
+    expect(fetchSpy.mock.calls).toEqual([
+      [
+        url,
+        expect.objectContaining({
+          method: 'POST',
+          body: expect.stringMatching(/query getChainAndNodeInfo/),
+        }),
+      ],
+    ]);
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+  });
+
+  // We expect a small timeout
+  it('should fail early if the node is not reachable', { timeout: 200 }, async () => {
+    const invalidUrl = 'http://something-that-does-not-exist.com';
+    const fetchSpy = vi.spyOn(global, 'fetch');
+    const provider = new Provider(invalidUrl);
+
+    const expectedError = new FuelError(
+      FuelError.CODES.CONNECTION_REFUSED,
+      'Unable to fetch chain and node info from the network',
+      {
+        url: invalidUrl,
+      },
+      expect.any(Error)
+    );
+    expectedError.cause = { code: 'ECONNREFUSED' };
+
+    await expectToThrowFuelError(() => provider.init(), expectedError);
+
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('should fail early and across multiple instances', async () => {
+    const invalidUrl = 'http://something-that-does-not-exist.com';
+    const fetchSpy = vi.spyOn(global, 'fetch');
+    const provider1 = new Provider(invalidUrl);
+    const provider2 = new Provider(invalidUrl);
+
+    const [result1, result2] = await Promise.allSettled([provider1.init(), provider2.init()]);
+
+    const expectedFailure = {
+      status: 'rejected',
+      reason: expect.objectContaining({
+        code: FuelError.CODES.CONNECTION_REFUSED,
+        message: 'Unable to fetch chain and node info from the network',
+        metadata: {
+          url: invalidUrl,
+        },
+        cause: {
+          code: 'ECONNREFUSED',
+        },
+      }),
+    };
+    expect(result1).toMatchObject(expectedFailure);
+    expect(result2).toMatchObject(expectedFailure);
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('should throw error of asset metadata is not supported', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    const node = await provider.getNode();
+    const chain = await provider.getChain();
+
+    vi.spyOn(provider.operations, 'getChainAndNodeInfo').mockImplementation(async () =>
+      Promise.resolve({
+        nodeInfo: {
+          ...serializeNodeInfo(node),
+          indexation: { assetMetadata: false, balances: false, coinsToSpend: false },
+        },
+        chain: serializeChain(chain),
+      })
+    );
+
+    Provider.clearChainAndNodeCaches();
+
+    await expectToThrowFuelError(
+      () => provider.getAssetDetails(TestAssetId.A.value),
+      new FuelError(
+        ErrorCode.UNSUPPORTED_FEATURE,
+        'The current node does not supports fetching asset details'
+      )
+    );
+
+    vi.restoreAllMocks();
   });
 });

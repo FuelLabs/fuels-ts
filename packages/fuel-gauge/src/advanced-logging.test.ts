@@ -1,5 +1,5 @@
 import type { FuelError } from '@fuel-ts/errors';
-import { bn } from 'fuels';
+import { bn, ZeroBytes32 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
@@ -9,7 +9,7 @@ import {
   ConfigurableContractFactory,
   CoverageContractFactory,
 } from '../test/typegen/contracts';
-import { ScriptCallContract } from '../test/typegen/scripts';
+import { ScriptCallContract, ScriptCallLoggingContracts } from '../test/typegen/scripts';
 
 import { launchTestContract } from './utils';
 
@@ -24,13 +24,13 @@ describe('Advanced Logging', () => {
     });
 
     const { waitForResult } = await advancedLogContract.functions.test_function().call();
-    const { value, logs } = await waitForResult();
+    const { value, logs, groupedLogs } = await waitForResult();
 
     expect(value).toBeTruthy();
     logs[5].game_id = logs[5].game_id.toHex();
     logs[9].game_id = logs[9].game_id.toHex();
 
-    expect(logs).toEqual([
+    const expectedLogs = [
       'Game State',
       { Playing: 1 },
       'Contract Id',
@@ -64,7 +64,11 @@ describe('Advanced Logging', () => {
         difficulty: { Hard: true },
       },
       'Was True',
-    ]);
+    ];
+    expect(logs).toEqual(expectedLogs);
+    expect(groupedLogs).toStrictEqual({
+      [advancedLogContract.id.toB256()]: expectedLogs,
+    });
   });
 
   it('can get log data from require [condition=true]', async () => {
@@ -76,10 +80,13 @@ describe('Advanced Logging', () => {
       .test_function_with_require(1, 1)
       .call();
 
-    const { value, logs } = await waitForResult();
+    const { value, logs, groupedLogs } = await waitForResult();
 
     expect(value).toBeTruthy();
     expect(logs).toEqual(['Hello Tester', { Playing: 1 }]);
+    expect(groupedLogs).toStrictEqual({
+      [advancedLogContract.id.toB256()]: ['Hello Tester', { Playing: 1 }],
+    });
   });
 
   it('can get log data from require [condition=false]', async () => {
@@ -134,7 +141,7 @@ describe('Advanced Logging', () => {
       .addContracts([otherAdvancedLogContract])
       .call();
 
-    const { value, logs } = await waitForResult();
+    const { value, logs, groupedLogs } = await waitForResult();
 
     expect(value).toBeTruthy();
     expect(logs).toEqual([
@@ -143,6 +150,151 @@ describe('Advanced Logging', () => {
       'Received value from main Contract:',
       INPUT,
     ]);
+    expect(groupedLogs).toStrictEqual({
+      [advancedLogContract.id.toB256()]: ['Hello from main Contract'],
+      [otherAdvancedLogContract.id.toB256()]: [
+        'Hello from other Contract',
+        'Received value from main Contract:',
+        INPUT,
+      ],
+    });
+  });
+
+  it('should not decode logs from external contracts when JSON ABIs are missing', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        { factory: AdvancedLoggingFactory },
+        { factory: AdvancedLoggingOtherContractFactory },
+      ],
+    });
+
+    const {
+      contracts: [advancedLogContract, otherAdvancedLogContract],
+      wallets: [wallet],
+    } = launched;
+
+    const script = new ScriptCallLoggingContracts(wallet);
+
+    const call = await script.functions
+      .main(advancedLogContract.id.toB256(), otherAdvancedLogContract.id.toB256())
+      .call();
+
+    const { logs, groupedLogs } = await call.waitForResult();
+
+    expect(logs).toBeDefined();
+
+    expect(logs).toStrictEqual(['log from script 1', 'log from script 2']);
+    expect(groupedLogs).toStrictEqual({
+      [ZeroBytes32]: ['log from script 1', 'log from script 2'],
+    });
+  });
+
+  it('should not decode logs from external contracts when JSON ABIs are missing [ADD ID ONLY]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        { factory: AdvancedLoggingFactory },
+        { factory: AdvancedLoggingOtherContractFactory },
+      ],
+    });
+
+    const {
+      contracts: [advancedLogContract, otherAdvancedLogContract],
+      wallets: [wallet],
+    } = launched;
+
+    const script = new ScriptCallLoggingContracts(wallet);
+
+    const contractA = advancedLogContract.id.toB256();
+    const contractB = otherAdvancedLogContract.id.toB256();
+
+    const call = await script.functions
+      .main(contractA, contractB)
+      .addContracts([contractA, contractB])
+      .call();
+
+    const { logs, groupedLogs } = await call.waitForResult();
+
+    expect(logs).toBeDefined();
+    expect(logs).toStrictEqual(['log from script 1', 'log from script 2']);
+    expect(groupedLogs).toStrictEqual({
+      [ZeroBytes32]: ['log from script 1', 'log from script 2'],
+    });
+  });
+
+  it('should decode logs from external contracts only when JSON ABI is present', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        { factory: AdvancedLoggingFactory },
+        { factory: AdvancedLoggingOtherContractFactory },
+      ],
+    });
+
+    const {
+      contracts: [advancedLogContract, otherAdvancedLogContract],
+      wallets: [wallet],
+    } = launched;
+
+    const script = new ScriptCallLoggingContracts(wallet);
+
+    const call = await script.functions
+      .main(advancedLogContract.id.toB256(), otherAdvancedLogContract.id.toB256())
+      .addContracts([advancedLogContract])
+      .call();
+
+    const { logs, groupedLogs } = await call.waitForResult();
+
+    expect(logs).toBeDefined();
+    expect(logs).toStrictEqual([
+      'log from script 1',
+      'Hello from main Contract',
+      'log from script 2',
+    ]);
+    expect(groupedLogs).toStrictEqual({
+      [ZeroBytes32]: ['log from script 1', 'log from script 2'],
+      [advancedLogContract.id.toB256()]: ['Hello from main Contract'],
+    });
+  });
+
+  it('should decode all logs when all contracts JSON ABIs are present', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        { factory: AdvancedLoggingFactory },
+        { factory: AdvancedLoggingOtherContractFactory },
+      ],
+    });
+
+    const {
+      contracts: [advancedLogContract, otherAdvancedLogContract],
+      wallets: [wallet],
+    } = launched;
+
+    const script = new ScriptCallLoggingContracts(wallet);
+
+    const call = await script.functions
+      .main(advancedLogContract.id.toB256(), otherAdvancedLogContract.id.toB256())
+      .addContracts([advancedLogContract, otherAdvancedLogContract])
+      .call();
+
+    const { logs, groupedLogs } = await call.waitForResult();
+
+    expect(logs).toBeDefined();
+    expect(logs).toStrictEqual([
+      'log from script 1',
+      'Hello from main Contract',
+      'Hello from other Contract',
+      'Received value from main Contract:',
+      10,
+      'log from script 2',
+    ]);
+    expect(groupedLogs).toStrictEqual({
+      [ZeroBytes32]: ['log from script 1', 'log from script 2'],
+      [advancedLogContract.id.toB256()]: ['Hello from main Contract'],
+      [otherAdvancedLogContract.id.toB256()]: [
+        'Hello from other Contract',
+        'Received value from main Contract:',
+        10,
+      ],
+    });
   });
 
   describe('should properly decode all logs in a multiCall with inter-contract calls', () => {
@@ -150,16 +302,6 @@ describe('Advanced Logging', () => {
       a: true,
       b: 100000,
     };
-
-    const expectedLogs = [
-      'Hello from main Contract',
-      'Hello from other Contract',
-      'Received value from main Contract:',
-      10,
-      bn(100000),
-      { tag: '000', age: 21, scores: [1, 3, 4] },
-      'fuelfuel',
-    ];
 
     it('when using InvocationScope', async () => {
       using launched = await launchTestNode({
@@ -193,10 +335,27 @@ describe('Advanced Logging', () => {
         ])
         .call();
 
-      const { logs } = await waitForResult();
+      const { logs, groupedLogs } = await waitForResult();
 
-      logs.forEach((log, i) => {
-        expect(JSON.stringify(log)).toBe(JSON.stringify(expectedLogs[i]));
+      expect(logs).toStrictEqual([
+        'Hello from main Contract',
+        'Hello from other Contract',
+        'Received value from main Contract:',
+        10,
+        expect.toEqualBn(100000),
+        { tag: '000', age: 21, scores: [1, 3, 4] },
+        'fuelfuel',
+      ]);
+      expect(groupedLogs).toStrictEqual({
+        [advancedLogContract.id.toB256()]: ['Hello from main Contract'],
+        [otherAdvancedLogContract.id.toB256()]: [
+          'Hello from other Contract',
+          'Received value from main Contract:',
+          10,
+        ],
+        [coverage.id.toB256()]: ['fuelfuel'],
+        [callTest.id.toB256()]: [expect.toEqualBn(100000)],
+        [configurable.id.toB256()]: [{ tag: '000', age: 21, scores: [1, 3, 4] }],
       });
     });
 
@@ -239,16 +398,27 @@ describe('Advanced Logging', () => {
         estimateTxDependencies: false,
       });
 
-      const { logs } = await waitForResult();
+      const { logs, groupedLogs } = await waitForResult();
 
-      expect(logs).toBeDefined();
-
-      logs?.forEach((log, i) => {
-        if (typeof log === 'object') {
-          expect(JSON.stringify(log)).toBe(JSON.stringify(expectedLogs[i]));
-        } else {
-          expect(log).toBe(expectedLogs[i]);
-        }
+      expect(logs).toStrictEqual([
+        'Hello from main Contract',
+        'Hello from other Contract',
+        'Received value from main Contract:',
+        10,
+        expect.toEqualBn(100000),
+        { tag: '000', age: 21, scores: [1, 3, 4] },
+        'fuelfuel',
+      ]);
+      expect(groupedLogs).toStrictEqual({
+        [advancedLogContract.id.toB256()]: ['Hello from main Contract'],
+        [otherAdvancedLogContract.id.toB256()]: [
+          'Hello from other Contract',
+          'Received value from main Contract:',
+          10,
+        ],
+        [coverage.id.toB256()]: ['fuelfuel'],
+        [callTest.id.toB256()]: [expect.toEqualBn(100000)],
+        [configurable.id.toB256()]: [{ tag: '000', age: 21, scores: [1, 3, 4] }],
       });
     });
   });
@@ -284,9 +454,18 @@ describe('Advanced Logging', () => {
         .addContracts([advancedLogContract, otherAdvancedLogContract])
         .call();
 
-      const { logs } = await waitForResult();
+      const { logs, groupedLogs } = await waitForResult();
 
       expect(logs).toStrictEqual(expectedLogs);
+      expect(groupedLogs).toStrictEqual({
+        [ZeroBytes32]: ['Hello from script'],
+        [advancedLogContract.id.toB256()]: ['Hello from main Contract'],
+        [otherAdvancedLogContract.id.toB256()]: [
+          'Hello from other Contract',
+          'Received value from main Contract:',
+          amount,
+        ],
+      });
     });
 
     it('when using ScriptTransactionRequest', async () => {
@@ -313,11 +492,18 @@ describe('Advanced Logging', () => {
 
       const { waitForResult } = await wallet.sendTransaction(request);
 
-      const { logs } = await waitForResult();
-
-      expect(logs).toBeDefined();
+      const { logs, groupedLogs } = await waitForResult();
 
       expect(logs).toStrictEqual(expectedLogs);
+      expect(groupedLogs).toStrictEqual({
+        [ZeroBytes32]: ['Hello from script'],
+        [advancedLogContract.id.toB256()]: ['Hello from main Contract'],
+        [otherAdvancedLogContract.id.toB256()]: [
+          'Hello from other Contract',
+          'Received value from main Contract:',
+          amount,
+        ],
+      });
     });
   });
 });

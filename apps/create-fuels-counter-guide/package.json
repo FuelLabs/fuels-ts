@@ -15,8 +15,8 @@
     "postbuild": "run-s fuels:build original:build"
   },
   "dependencies": {
-    "@fuels/connectors": "0.36.1",
-    "@fuels/react": "0.36.1",
+    "@fuels/connectors": "0.39.2",
+    "@fuels/react": "0.39.2",
     "@tanstack/react-query": "5.66.9",
     "clsx": "2.1.1",
     "dotenv": "16.4.7",
@@ -26,7 +26,7 @@
     "react-toastify": "11.0.3"
   },
   "devDependencies": {
-    "@eslint/js": "9.20.0",
+    "@eslint/js": "9.24.0",
     "@playwright/test": "1.50.1",
     "@tailwindcss/postcss": "4.0.8",
     "@types/node": "22.13.5",
@@ -42,7 +42,7 @@
     "tailwindcss": "4.0.8",
     "typescript": "5.7.3",
     "typescript-eslint": "8.23.0",
-    "vite": "6.1.1",
-    "vitest": "3.0.5"
+    "vite": "6.1.3",
+    "vitest": "3.0.9"
   }
 }

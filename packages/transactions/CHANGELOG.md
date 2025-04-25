@@ -1,5 +1,59 @@
 # Change Log
 
+## 0.100.3
+
+### Patch Changes
+
+- @fuel-ts/abi-coder@0.100.3
+- @fuel-ts/address@0.100.3
+- @fuel-ts/errors@0.100.3
+- @fuel-ts/hasher@0.100.3
+- @fuel-ts/math@0.100.3
+- @fuel-ts/utils@0.100.3
+
+## 0.100.2
+
+### Patch Changes
+
+- Updated dependencies [e909d54]
+  - @fuel-ts/errors@0.100.2
+  - @fuel-ts/abi-coder@0.100.2
+  - @fuel-ts/address@0.100.2
+  - @fuel-ts/math@0.100.2
+  - @fuel-ts/utils@0.100.2
+  - @fuel-ts/hasher@0.100.2
+
+## 0.100.1
+
+### Patch Changes
+
+- @fuel-ts/abi-coder@0.100.1
+- @fuel-ts/address@0.100.1
+- @fuel-ts/errors@0.100.1
+- @fuel-ts/hasher@0.100.1
+- @fuel-ts/math@0.100.1
+- @fuel-ts/utils@0.100.1
+
+## 0.100.0
+
+### Minor Changes
+
+- f41887f: chore!: upgrade `fuel-core` to `0.41.7`
+
+### Patch Changes
+
+- Updated dependencies [1277ae6]
+- Updated dependencies [fc18871]
+- Updated dependencies [6eb113c]
+- Updated dependencies [f41887f]
+- Updated dependencies [194e31f]
+  - @fuel-ts/utils@0.100.0
+  - @fuel-ts/hasher@0.100.0
+  - @fuel-ts/abi-coder@0.100.0
+  - @fuel-ts/address@0.100.0
+  - @fuel-ts/errors@0.100.0
+  - @fuel-ts/math@0.100.0
+
 ## 0.99.0
 
 ### Patch Changes
