@@ -596,6 +596,12 @@ export default defineConfig({
             collapsed: false,
             items: [],
           },
+          {
+            text: 'Fuel ASM',
+            link: '/guide/fuel-asm/',
+            collapsed: false,
+            items: [],
+          },
         ],
       },
     ],
