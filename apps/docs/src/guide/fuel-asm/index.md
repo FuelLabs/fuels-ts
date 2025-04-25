@@ -17,7 +17,7 @@ This example demonstrates how to use the `FuelAsm` to create a program, represen
 
 ## Reference
 
-The above usage is the `Typescript` equivalent of the original docs above in `Rust`:
+The above usage is the `Typescript` equivalent of the [original example](https://crates.io/crates/fuel-asm) in `Rust`.
 
 <<< @../../../../fuel-asm-example/src/main.rs#main{rs:line-numbers}
 
