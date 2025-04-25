@@ -229,13 +229,11 @@ export type BurnedAsset = MintedAsset;
 
 export interface PreConfirmationTransactionSummary<TTransactionType = void> {
   id: string;
-  time?: string;
   operations?: Operation[];
   gasUsed?: BN;
   tip?: BN;
   fee?: BN;
   type?: TransactionTypeName;
-  blockId?: BlockId;
   status?: TransactionStatus;
   isTypeMint?: boolean;
   isTypeCreate?: boolean;
@@ -243,32 +241,38 @@ export interface PreConfirmationTransactionSummary<TTransactionType = void> {
   isTypeUpgrade?: boolean;
   isTypeUpload?: boolean;
   isTypeBlob?: boolean;
-  isStatusPending: boolean;
-  isStatusSuccess: boolean;
-  isStatusFailure: boolean;
-  mintedAssets: MintedAsset[];
-  burnedAssets: BurnedAsset[];
-  date?: Date;
+  isPreConfirmationStatusSuccess: boolean;
+  isPreConfirmationStatusFailure: boolean;
+  mintedAssets?: MintedAsset[];
+  burnedAssets?: BurnedAsset[];
   receipts?: TransactionResultReceipt[];
   resolvedOutputs?: ResolvedOutput[];
   errorReason?: string;
   transaction?: Transaction<TTransactionType>;
 }
 
-export interface TransactionSummary<TTransactionType = void>
-  extends PreConfirmationTransactionSummary<TTransactionType> {
+export type TransactionSummary<TTransactionType = void> = {
   id: string;
+  time?: string;
   operations: Operation[];
   gasUsed: BN;
   tip: BN;
   fee: BN;
   type: TransactionTypeName;
+  blockId?: BlockId;
+  status?: TransactionStatus;
   isTypeMint: boolean;
   isTypeCreate: boolean;
   isTypeScript: boolean;
   isTypeUpgrade: boolean;
   isTypeUpload: boolean;
   isTypeBlob: boolean;
+  isStatusPending: boolean;
+  isStatusSuccess: boolean;
+  isStatusFailure: boolean;
+  mintedAssets: MintedAsset[];
+  burnedAssets: BurnedAsset[];
+  date?: Date;
   receipts: TransactionResultReceipt[];
   transaction: Transaction<TTransactionType>;
-}
+};

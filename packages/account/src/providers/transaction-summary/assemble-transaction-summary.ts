@@ -179,7 +179,7 @@ export function assemblePreConfirmationTransactionSummary<TTransactionType = voi
   }
 
   let tip: BN | undefined;
-  let operations: Operation[] = [];
+  let operations: Operation[] | undefined;
   let typeName: TransactionTypeName | undefined;
 
   if (transaction) {
@@ -219,9 +219,8 @@ export function assemblePreConfirmationTransactionSummary<TTransactionType = voi
       isTypeUpload: isTypeUpload(transaction.type),
       isTypeBlob: isTypeBlob(transaction.type),
     }),
-    isStatusFailure,
-    isStatusSuccess,
-    isStatusPending: true,
+    isPreConfirmationStatusFailure: isStatusFailure,
+    isPreConfirmationStatusSuccess: isStatusSuccess,
     transaction: transaction as Transaction<TTransactionType>,
     resolvedOutputs,
     errorReason,

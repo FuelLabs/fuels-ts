@@ -114,7 +114,7 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
         break;
 
       case 'PreconfirmationSuccessStatus':
-        isStatusPending = true;
+        isStatusSuccess = true;
         totalFee = bn(gqlTransactionStatus.totalFee);
         totalGas = bn(gqlTransactionStatus.totalGas);
         receipts = gqlTransactionStatus.preconfirmationReceipts?.map(deserializeReceipt);
