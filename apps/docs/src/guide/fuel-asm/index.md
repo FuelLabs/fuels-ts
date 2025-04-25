@@ -15,13 +15,13 @@ This example demonstrates how to use the `FuelAsm` to create a program, represen
 
 <<< @./snippets/fuel-asm.ts#main{ts:line-numbers}
 
-### Reference
+## Reference
 
 The above usage is the `Typescript` equivalent of the original docs above in `Rust`:
 
 <<< @./snippets/original-example/src/main.rs#main{rs:line-numbers}
 
-# See Also
+## See Also
 
 - [FuelVM Specs](https://docs.fuel.network/docs/specs/fuel-vm/instruction-set/)
 - [FuelVM Semantics](https://docs.fuel.network/docs/specs/fuel-vm/#semantics)
