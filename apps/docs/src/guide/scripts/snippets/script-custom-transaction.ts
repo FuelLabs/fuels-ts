@@ -12,6 +12,7 @@ using launched = await launchTestNode({
 const {
   contracts: [contract],
   wallets: [wallet],
+  provider,
 } = launched;
 
 const defaultTxParams = {
@@ -41,17 +42,28 @@ request
   .setData(ScriptTransferToContract.abi, scriptArguments)
   .addContractInputAndOutput(contract.id);
 
-// 4. Get the transaction resources
-const quantities = [
-  coinQuantityfy([1000, ASSET_A]),
-  coinQuantityfy([500, ASSET_B]),
-];
+// 4. Estimate and fund the transaction
+const { assembledRequest } = await provider.assembleTx({
+  request,
+  feePayerAccount: wallet,
+  accountCoinQuantities: [
+    {
+      amount: 1000,
+      assetId: ASSET_A,
+      account: wallet,
+      changeOutputAccount: wallet,
+    },
+    {
+      amount: 500,
+      assetId: ASSET_B,
+      account: wallet,
+      changeOutputAccount: wallet,
+    },
+  ],
+});
 
-// 5. Estimate and fund the transaction
-await request.estimateAndFund(wallet, { quantities });
-
-// 6. Send the transaction
-const tx = await wallet.sendTransaction(request);
+// 5. Send the transaction
+const tx = await wallet.sendTransaction(assembledRequest);
 await tx.waitForResult();
 
 const contractFinalBalanceAssetA = await contract.getBalance(ASSET_A);

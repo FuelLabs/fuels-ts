@@ -25,7 +25,10 @@ export type RawMessage = {
 export type RawResource = RawCoin | RawMessage;
 export type Resource = Coin | MessageCoin;
 
-/** @hidden */
+/**
+ * @hidden
+ * @deprecated Use type `ResourcesIdsToIgnore` instead
+ */
 export type ExcludeResourcesOption = {
   utxos?: BytesLike[];
   messages?: BytesLike[];
