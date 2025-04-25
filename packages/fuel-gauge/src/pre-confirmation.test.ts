@@ -16,18 +16,53 @@ describe('pre-confirmation', () => {
   };
 
   const validatePreConfirmationResult = (result?: PreConfirmationTransactionResult) => {
-    const { receipts, status, resolvedOutputs, isStatusFailure, isStatusSuccess, isStatusPending } =
-      result as PreConfirmationTransactionResult;
+    const {
+      id,
+      fee,
+      type,
+      operations,
+      mintedAssets,
+      burnedAssets,
+      gasUsed,
+      isTypeBlob,
+      isTypeCreate,
+      isTypeMint,
+      isTypeScript,
+      isTypeUpgrade,
+      isTypeUpload,
+      tip,
+      transaction,
+      receipts,
+      status,
+      resolvedOutputs,
+      isPreConfirmationStatusFailure,
+      isPreConfirmationStatusSuccess,
+    } = result as PreConfirmationTransactionResult;
 
-    expect(isStatusFailure).toBeFalsy();
-    expect(isStatusSuccess).toBeFalsy();
-    expect(isStatusPending).toBeTruthy();
-
-    expect(status).toEqual(TransactionStatus.preconfirmationSuccess);
+    expect(id).toBeDefined();
+    expect(fee).toBeDefined();
     expect(receipts).toBeDefined();
     expect(receipts?.length).toBeGreaterThan(0);
     expect(resolvedOutputs).toBeDefined();
     expect(resolvedOutputs?.length).toBeGreaterThan(0);
+    expect(status).toBeDefined();
+    expect(mintedAssets).toBeDefined();
+    expect(burnedAssets).toBeDefined();
+    expect(gasUsed).toBeDefined();
+    expect(isPreConfirmationStatusFailure).toBeDefined();
+    expect(isPreConfirmationStatusSuccess).toBeDefined();
+
+    // Only present when the TX is present. Not supported yet
+    expect(tip).toBeUndefined();
+    expect(operations).toBeUndefined();
+    expect(type).toBeUndefined();
+    expect(transaction).toBeUndefined();
+    expect(isTypeBlob).toBeUndefined();
+    expect(isTypeCreate).toBeUndefined();
+    expect(isTypeMint).toBeUndefined();
+    expect(isTypeScript).toBeUndefined();
+    expect(isTypeUpgrade).toBeUndefined();
+    expect(isTypeUpload).toBeUndefined();
   };
 
   it('should execute sendTransaction just fine [preconfirmation success]', async () => {
@@ -69,15 +104,17 @@ describe('pre-confirmation', () => {
 
     const { waitForPreConfirmation } = await wallet.sendTransaction(request);
 
-    const { status, receipts, errorReason, isStatusFailure, isStatusSuccess } =
-      await waitForPreConfirmation();
+    const preConfirmationResult = await waitForPreConfirmation();
 
-    expect(isStatusFailure).toBeTruthy();
+    const { isPreConfirmationStatusFailure, isPreConfirmationStatusSuccess, errorReason, status } =
+      preConfirmationResult;
 
-    expect(isStatusSuccess).toBeFalsy();
     expect(errorReason).toBe('OutOfGas');
+    expect(isPreConfirmationStatusFailure).toBeTruthy();
+    expect(isPreConfirmationStatusSuccess).toBeFalsy();
     expect(status).toBe(TransactionStatus.preconfirmationFailure);
-    expect(receipts?.length).toBeGreaterThan(0);
+
+    validatePreConfirmationResult(preConfirmationResult);
   });
 
   it('should ensure we can listen to both callbacks at the same time', async () => {
