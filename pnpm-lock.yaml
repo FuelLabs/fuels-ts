@@ -898,6 +898,9 @@ importers:
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
+      '@fuels/vm-asm':
+        specifier: 0.60.2
+        version: 0.60.2
       bundle-require:
         specifier: 5.1.0
         version: 5.1.0(esbuild@0.25.1)
