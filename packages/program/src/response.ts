@@ -4,7 +4,6 @@ import type {
   TransactionResult,
   CallResult,
   DecodedLogs,
-  PreConfirmationTransactionResult,
 } from '@fuel-ts/account';
 import { getGasUsedFromReceipts } from '@fuel-ts/account';
 import type { BN } from '@fuel-ts/math';
@@ -104,9 +103,9 @@ export const buildPreConfirmationFunctionResult = async <T>(
 ): Promise<PreConfirmationFunctionResult<T>> => {
   const { funcScope, isMultiCall, program, transactionResponse } = params;
 
-  const txResult = await transactionResponse.waitForPreConfirmation();
+  const transactionResult = await transactionResponse.waitForPreConfirmation();
 
-  const { receipts } = txResult;
+  const { receipts } = transactionResult;
 
   const functionScopes = Array.isArray(funcScope) ? funcScope : [funcScope];
   const mainCallConfig = functionScopes[0]?.getCallConfig();
@@ -126,7 +125,7 @@ export const buildPreConfirmationFunctionResult = async <T>(
     isMultiCall,
     functionScopes,
     program,
-    transactionResult: txResult as PreConfirmationTransactionResult<TransactionType.Script>,
+    transactionResult,
     transactionResponse,
     transactionId: transactionResponse.id,
     logs,
