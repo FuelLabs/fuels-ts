@@ -19,7 +19,7 @@ This example demonstrates how to use the `FuelAsm` to create a program, represen
 
 The above usage is the `Typescript` equivalent of the original docs above in `Rust`:
 
-<<< @./snippets/original-example/src/main.rs#main{rs:line-numbers}
+<<< @../../../fuel-asm-example/src/main.rs#main{rs:line-numbers}
 
 ## See Also
 
