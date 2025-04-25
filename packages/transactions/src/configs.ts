@@ -50,6 +50,7 @@ export const PANIC_REASONS = [
   'BlobIdAlreadyUploaded',
   'BlobNotFound',
   'BytecodeAlreadyUploaded',
+  'CanNotGetGasPriceInPredicate',
   'ContractIdAlreadyDeployed',
   'ContractInstructionNotAllowed',
   'ContractMaxSize',
