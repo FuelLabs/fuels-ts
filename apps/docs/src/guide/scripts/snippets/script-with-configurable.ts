@@ -39,6 +39,10 @@ tx.callParams({ gasLimit: 7500 });
 // Get the entire transaction request prior to
 const txRequest = await tx.getTransactionRequest();
 
+// Get the transaction ID
+const chainId = await provider.getChainId();
+const txId = txRequest.getTransactionId(chainId);
+
 // Retrieve the value of the call and the actual gas used
 const { waitForResult: waitForActualGasUsed } = await tx.call();
 const { value: valueOfActualGasUsed, gasUsed: gasUsedOfActualGasUsed } =
