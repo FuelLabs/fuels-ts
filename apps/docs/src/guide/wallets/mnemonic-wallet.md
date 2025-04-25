@@ -5,7 +5,7 @@ A mnemonic phrase is a cryptographically-generated sequence of words that's used
 In addition to that, we also support [Hierarchical Deterministic Wallets](https://www.ledger.com/academy/crypto/what-are-hierarchical-deterministic-hd-wallets) and [derivation paths](https://learnmeabitcoin.com/technical/derivation-paths), allowing multiple wallets to be derived from a single root mnemonic. You may recognize a derivation path like:
 
 ```text
-"m/44'/60'/0'/0/0"
+"m/44'/1179993420'/0'/0/0"
 ```
 
 In simple terms, this structure enables the creation of multiple wallet addresses from the same mnemonic phrase.
@@ -14,7 +14,7 @@ The SDK gives you two wallets from mnemonic instantiation methods: one that take
 
 Here's how you can create wallets with both mnemonic phrases and derivation paths:
 
-1 - Using the default derivation path `m/44'/60'/0'/0/0`
+1 - Using the default derivation path `m/44'/1179993420'/0'/0/0`
 
 <<< @./snippets/mnemonic/from-mnemonic-phrases-1.ts#snippet-full{ts:line-numbers}
 
