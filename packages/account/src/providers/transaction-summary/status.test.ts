@@ -103,8 +103,8 @@ describe('status', () => {
       status: MOCK_PRECONFIRMATION_SUCCESS_STATUS,
       expected: {
         isStatusFailure: false,
-        isStatusPending: true,
-        isStatusSuccess: false,
+        isStatusPending: false,
+        isStatusSuccess: true,
         blockIdType: 'undefined',
         status: TransactionStatus.preconfirmationSuccess,
         timeType: 'undefined',
