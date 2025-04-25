@@ -9,6 +9,7 @@ const gqlErrorMessage = {
   ASSET_NOT_FOUND: /resource was not found in table/,
   MULTIPLE_CHANGE_POLICIES: /The asset ([a-fA-F0-9]{64}) has multiple change policies/,
   DUPLICATE_CHANGE_OUTPUT_ACCOUNT: /required balances contain duplicate \(asset, account\) pair/,
+  INSUFFICIENT_FEE_AMOUNT: /InsufficientFeeAmount { expected: (\d+), provided: (\d+) }/,
 };
 
 type GqlError = { message: string } | GraphQLError;
@@ -54,6 +55,11 @@ const mapGqlErrorMessage = (error: GqlError): FuelError => {
 
   if (gqlErrorMessage.RPC_CONSISTENCY.test(error.message)) {
     return new FuelError(ErrorCode.RPC_CONSISTENCY, error.message, {}, error);
+  }
+
+  if (gqlErrorMessage.INSUFFICIENT_FEE_AMOUNT.test(error.message)) {
+    const match = error.message.match(gqlErrorMessage.INSUFFICIENT_FEE_AMOUNT);
+    return new FuelError(ErrorCode.FUNDS_TOO_LOW, match?.[0] || error.message, {}, error);
   }
 
   return new FuelError(ErrorCode.INVALID_REQUEST, error.message, {}, error);
