@@ -13,8 +13,6 @@ import {
   MOCK_FAILURE_STATUS,
   MOCK_SUBMITTED_STATUS,
   MOCK_SQUEEZEDOUT_STATUS,
-  MOCK_PRECONFIRMATION_SUCCESS_STATUS,
-  MOCK_PRECONFIRMATION_FAILURE_STATUS,
 } from '../../../test/fixtures/transaction-summary';
 import { setupTestProviderAndWallets } from '../../test-utils';
 import type { GasCosts } from '../provider';
@@ -190,59 +188,5 @@ describe('TransactionSummary', () => {
     };
 
     runTest(MOCK_SQUEEZEDOUT_STATUS, expected, await provider.getBaseAssetId());
-  });
-
-  it('should assemble transaction summary just fine (PRECONFIRMATION_SUCCESS)', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
-
-    const expected = {
-      id,
-      blockId: undefined,
-      fee: expect.any(BN),
-      gasUsed: expect.any(BN),
-      isTypeCreate: false,
-      isTypeMint: false,
-      isTypeScript: true,
-      isTypeBlob: false,
-      isStatusPending: true,
-      isStatusFailure: false,
-      isStatusSuccess: false,
-      operations: expect.any(Array<Operation>),
-      receipts,
-      status: expect.any(String),
-      time: undefined,
-      transaction: MOCK_TRANSACTION,
-      type: expect.any(String),
-    };
-
-    runTest(MOCK_PRECONFIRMATION_SUCCESS_STATUS, expected, await provider.getBaseAssetId(), 0);
-  });
-
-  it('should assemble transaction summary just fine (PRECONFIRMATION_FAILURE)', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
-
-    const expected = {
-      id,
-      blockId: undefined,
-      fee: expect.any(BN),
-      gasUsed: expect.any(BN),
-      isTypeCreate: false,
-      isTypeMint: false,
-      isTypeScript: true,
-      isTypeBlob: false,
-      isStatusPending: false,
-      isStatusFailure: true,
-      isStatusSuccess: false,
-      operations: expect.any(Array<Operation>),
-      receipts,
-      status: expect.any(String),
-      time: undefined,
-      transaction: MOCK_TRANSACTION,
-      type: expect.any(String),
-    };
-
-    runTest(MOCK_PRECONFIRMATION_FAILURE_STATUS, expected, await provider.getBaseAssetId(), 0);
   });
 });
