@@ -154,6 +154,10 @@ export default defineConfig({
                 text: 'Querying the Chain',
                 link: '/guide/provider/querying-the-chain',
               },
+              {
+                text: 'RPC Consistency',
+                link: '/guide/provider/rpc-consistency',
+              },
             ],
           },
           {

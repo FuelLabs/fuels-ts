@@ -934,6 +934,48 @@ describe('Provider', () => {
     expect(spyOperation).toHaveBeenCalledTimes(1);
   });
 
+  test('clearing cache based on URL only clears the cache for that URL', async () => {
+    using launched1 = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '10ms'],
+        loggingEnabled: false,
+      },
+    });
+    using launched2 = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '10ms'],
+        loggingEnabled: false,
+      },
+    });
+    const { provider: provider1 } = launched1;
+    const { provider: provider2 } = launched2;
+
+    // Clear any existing chain info cache
+    Provider.clearChainAndNodeCaches();
+
+    // Ensure the provider URLs are different, and there is not chain info cache for either
+    expect(provider1.url).not.toEqual(provider2.url);
+    // @ts-expect-error - chainInfoCache is private
+    expect(Provider.chainInfoCache[provider1.url]).not.toBeDefined();
+    // @ts-expect-error - chainInfoCache is private
+    expect(Provider.chainInfoCache[provider2.url]).not.toBeDefined();
+
+    // Ensure the the chain cache has been updated
+    await provider1.init();
+    await provider2.init();
+    // @ts-expect-error - chainInfoCache is private
+    expect(Provider.chainInfoCache[provider1.url]).toBeDefined();
+    // @ts-expect-error - chainInfoCache is private
+    expect(Provider.chainInfoCache[provider2.url]).toBeDefined();
+
+    // Given: we clear the cache for provider1
+    Provider.clearChainAndNodeCaches(provider1.url);
+    // @ts-expect-error - chainInfoCache is private
+    expect(Provider.chainInfoCache[provider1.url]).not.toBeDefined();
+    // @ts-expect-error - chainInfoCache is private
+    expect(Provider.chainInfoCache[provider2.url]).toBeDefined();
+  });
+
   it('should ensure getGasConfig return essential gas related data', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;

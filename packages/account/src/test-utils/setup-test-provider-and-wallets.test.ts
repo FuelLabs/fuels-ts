@@ -42,6 +42,18 @@ describe('setupTestProviderAndWallets', () => {
     });
   });
 
+  test('killing the node cleans up provider cache for node url', async () => {
+    const { cleanup, provider } = await setupTestProviderAndWallets();
+
+    const clearChainAndNodeCachesSpy = vi.spyOn(Provider, 'clearChainAndNodeCaches');
+
+    cleanup();
+    await waitUntilUnreachable(provider.url);
+
+    expect(clearChainAndNodeCachesSpy).toHaveBeenCalledTimes(1);
+    expect(clearChainAndNodeCachesSpy).toHaveBeenCalledWith(provider.url);
+  });
+
   test('kills the node if provider cant connect post-launch', async () => {
     const launchNodeSpy = vi.spyOn(launchNodeMod, 'launchNode');
 
