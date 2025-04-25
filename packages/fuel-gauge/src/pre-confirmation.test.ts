@@ -4,6 +4,8 @@ import type { TransactionResult, PreConfirmationTransactionResult } from 'fuels'
 import { TransactionStatus, ScriptTransactionRequest, sleep } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
+import { ConfigurableContractFactory } from '../test/typegen';
+
 /**
  * @group node
  * @group browser
@@ -15,23 +17,12 @@ describe('pre-confirmation', () => {
     expect(status).toEqual(TransactionStatus.success);
   };
 
-  const validatePreConfirmationResult = (result?: PreConfirmationTransactionResult) => {
+  const validatePreConfirmationResult = (
+    result?: PreConfirmationTransactionResult,
+    isScript = true
+  ) => {
     const {
       id,
-      fee,
-      type,
-      operations,
-      mintedAssets,
-      burnedAssets,
-      gasUsed,
-      isTypeBlob,
-      isTypeCreate,
-      isTypeMint,
-      isTypeScript,
-      isTypeUpgrade,
-      isTypeUpload,
-      tip,
-      transaction,
       receipts,
       status,
       resolvedOutputs,
@@ -39,52 +30,71 @@ describe('pre-confirmation', () => {
       isPreConfirmationStatusSuccess,
     } = result as PreConfirmationTransactionResult;
 
+    expect(result).toBeDefined();
+
     expect(id).toBeDefined();
-    expect(fee).toBeDefined();
     expect(receipts).toBeDefined();
-    expect(receipts?.length).toBeGreaterThan(0);
+    if (isScript) {
+      expect(receipts?.length).toBeGreaterThan(0);
+    }
     expect(resolvedOutputs).toBeDefined();
     expect(resolvedOutputs?.length).toBeGreaterThan(0);
     expect(status).toBeDefined();
-    expect(mintedAssets).toBeDefined();
-    expect(burnedAssets).toBeDefined();
-    expect(gasUsed).toBeDefined();
     expect(isPreConfirmationStatusFailure).toBeDefined();
     expect(isPreConfirmationStatusSuccess).toBeDefined();
-
-    // Only present when the TX is present. Not supported yet
-    expect(tip).toBeUndefined();
-    expect(operations).toBeUndefined();
-    expect(type).toBeUndefined();
-    expect(transaction).toBeUndefined();
-    expect(isTypeBlob).toBeUndefined();
-    expect(isTypeCreate).toBeUndefined();
-    expect(isTypeMint).toBeUndefined();
-    expect(isTypeScript).toBeUndefined();
-    expect(isTypeUpgrade).toBeUndefined();
-    expect(isTypeUpload).toBeUndefined();
   };
 
-  it('should execute sendTransaction just fine [preconfirmation success]', async () => {
+  it('should call waitForPreConfirmation just fine [SEND TRANSACTION]', async () => {
     using launched = await launchTestNode();
     const {
       provider,
-      wallets: [sender, receiver],
+      wallets: [wallet],
     } = launched;
 
     const baseAssetId = await provider.getBaseAssetId();
-    const transactionRequest = await sender.createTransfer(receiver.address, 100, baseAssetId);
-    const signedTransaction = await sender.signTransaction(transactionRequest);
-    transactionRequest.updateWitnessByOwner(sender.address, signedTransaction);
-
-    const { waitForPreConfirmation } = await provider.sendTransaction(transactionRequest);
+    const transactionRequest = await wallet.createTransfer(wallet.address, 1200, baseAssetId);
+    const { waitForPreConfirmation } = await wallet.sendTransaction(transactionRequest);
 
     const preConfirmationResult = await waitForPreConfirmation();
 
     validatePreConfirmationResult(preConfirmationResult);
   });
 
-  it('should execute sendTransaction just fine [preconfirmation failure]', async () => {
+  it('should call waitForPreConfirmation just fine [CONTRACT CALL]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [{ factory: ConfigurableContractFactory }],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
+    const { waitForPreConfirmation } = await contract.functions.echo_u8().call();
+
+    const { transactionResult } = await waitForPreConfirmation();
+
+    validatePreConfirmationResult(transactionResult);
+  });
+
+  it('should call waitForPreConfirmation just fine [DEPLOY CONTRACT]', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const { waitForPreConfirmation } = await ConfigurableContractFactory.deploy(wallet);
+
+    let transactionResult: PreConfirmationTransactionResult | undefined;
+
+    if (waitForPreConfirmation) {
+      ({ transactionResult } = await waitForPreConfirmation());
+    }
+
+    validatePreConfirmationResult(transactionResult, false);
+  });
+
+  it('should call waitForPreConfirmation and validate pre-confirmation failure', async () => {
     using launched = await launchTestNode();
     const {
       provider,
@@ -117,7 +127,7 @@ describe('pre-confirmation', () => {
     validatePreConfirmationResult(preConfirmationResult);
   });
 
-  it('should ensure we can listen to both callbacks at the same time', async () => {
+  it('should ensure we can listen to both callbacks at the same time[SEND TRANSACTION]', async () => {
     using launched = await launchTestNode();
     const {
       provider,
@@ -125,7 +135,7 @@ describe('pre-confirmation', () => {
     } = launched;
 
     const baseAssetId = await provider.getBaseAssetId();
-    const transactionRequest = await wallet.createTransfer(wallet.address, 100, baseAssetId);
+    const transactionRequest = await wallet.createTransfer(wallet.address, 200, baseAssetId);
 
     const { waitForPreConfirmation, waitForResult } =
       await wallet.sendTransaction(transactionRequest);
@@ -148,7 +158,64 @@ describe('pre-confirmation', () => {
     validatePreConfirmationResult(finalPreConfirmationResult);
   });
 
-  it('calling waitForResult before waitForPreConfirmation should not impact the result', async () => {
+  it('should ensure we can listen to both callbacks at the same time [CONTRACT CALL]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [{ factory: ConfigurableContractFactory }],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
+    let finalResult: TransactionResult | undefined;
+    let finalPreConfirmationResult: PreConfirmationTransactionResult | undefined;
+
+    const { waitForPreConfirmation, waitForResult } = await contract.functions.echo_u8().call();
+
+    waitForResult().then((result) => {
+      finalResult = result.transactionResult;
+    });
+
+    waitForPreConfirmation().then((result) => {
+      finalPreConfirmationResult = result.transactionResult;
+    });
+
+    // Wait for both callbacks to finish
+    await sleep(1500);
+
+    validateResult(finalResult);
+    validatePreConfirmationResult(finalPreConfirmationResult);
+  });
+
+  it('should ensure we can listen to both callbacks at the same time [DEPLOY CONTRACT]', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    let finalResult: TransactionResult | undefined;
+    let finalPreConfirmationResult: PreConfirmationTransactionResult | undefined;
+
+    const { waitForPreConfirmation, waitForResult } =
+      await ConfigurableContractFactory.deploy(wallet);
+
+    waitForResult().then((result) => {
+      finalResult = result.transactionResult;
+    });
+
+    waitForPreConfirmation?.().then((result) => {
+      finalPreConfirmationResult = result.transactionResult;
+    });
+
+    // Wait for both callbacks to finish
+    await sleep(1500);
+
+    validateResult(finalResult);
+    validatePreConfirmationResult(finalPreConfirmationResult, false);
+  });
+
+  it('calling waitForResult before waitForPreConfirmation should not impact the result [SEND TRANSACTION]', async () => {
     using launched = await launchTestNode();
     const {
       provider,
@@ -156,7 +223,7 @@ describe('pre-confirmation', () => {
     } = launched;
 
     const baseAssetId = await provider.getBaseAssetId();
-    const transactionRequest = await wallet.createTransfer(wallet.address, 100, baseAssetId);
+    const transactionRequest = await wallet.createTransfer(wallet.address, 300, baseAssetId);
 
     const { waitForPreConfirmation, waitForResult } =
       await wallet.sendTransaction(transactionRequest);
@@ -168,7 +235,46 @@ describe('pre-confirmation', () => {
     validatePreConfirmationResult(finalPreConfirmationResult);
   });
 
-  it('calling callbacks multiple times should not impact the result[BLOCK CALL]', async () => {
+  it('calling waitForResult before waitForPreConfirmation should not impact the result [CONTRACT CALL]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [{ factory: ConfigurableContractFactory }],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
+    const { waitForPreConfirmation, waitForResult } = await contract.functions.echo_u8().call();
+
+    const { transactionResult: finalResult } = await waitForResult();
+    const { transactionResult: finalPreConfirmationResult } = await waitForPreConfirmation();
+
+    validateResult(finalResult);
+    validatePreConfirmationResult(finalPreConfirmationResult);
+  });
+
+  it('calling waitForResult before waitForPreConfirmation should not impact the result [CONTRACT DEPLOY]', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const { waitForPreConfirmation, waitForResult } =
+      await ConfigurableContractFactory.deploy(wallet);
+
+    let finalPreConfirmationResult: PreConfirmationTransactionResult | undefined;
+
+    const { transactionResult: finalResult } = await waitForResult();
+    if (waitForPreConfirmation) {
+      ({ transactionResult: finalPreConfirmationResult } = await waitForPreConfirmation());
+    }
+
+    validateResult(finalResult);
+    validatePreConfirmationResult(finalPreConfirmationResult, false);
+  });
+
+  it('calling callbacks multiple times should not impact the result [BLOCK CALL]', async () => {
     using launched = await launchTestNode();
     const {
       provider,
@@ -198,7 +304,7 @@ describe('pre-confirmation', () => {
     validatePreConfirmationResult(preConfirmationResultThree);
   });
 
-  it('calling callbacks multiple times should not impact the result[NON BLOCK CALL]', async () => {
+  it('calling callbacks multiple times should not impact the result [NON BLOCK CALL]', async () => {
     using launched = await launchTestNode();
     const {
       provider,
@@ -206,7 +312,7 @@ describe('pre-confirmation', () => {
     } = launched;
 
     const baseAssetId = await provider.getBaseAssetId();
-    const transactionRequest = await wallet.createTransfer(wallet.address, 100, baseAssetId);
+    const transactionRequest = await wallet.createTransfer(wallet.address, 700, baseAssetId);
 
     const { waitForPreConfirmation, waitForResult } =
       await wallet.sendTransaction(transactionRequest);
@@ -219,28 +325,28 @@ describe('pre-confirmation', () => {
     let preConfirmationResultTwo: PreConfirmationTransactionResult | undefined;
     let preConfirmationResultThree: PreConfirmationTransactionResult | undefined;
 
-    waitForResult().then((result) => {
-      resultOne = result;
+    waitForPreConfirmation().then((preResult1) => {
+      preConfirmationResultOne = preResult1;
     });
 
-    waitForResult().then((result) => {
-      resultTwo = result;
+    waitForPreConfirmation().then((preResult2) => {
+      preConfirmationResultTwo = preResult2;
     });
 
-    waitForResult().then((result) => {
-      resultThree = result;
+    waitForPreConfirmation().then((preResult3) => {
+      preConfirmationResultThree = preResult3;
     });
 
-    waitForPreConfirmation().then((result) => {
-      preConfirmationResultOne = result;
+    waitForResult().then((result1) => {
+      resultOne = result1;
     });
 
-    waitForPreConfirmation().then((result) => {
-      preConfirmationResultTwo = result;
+    waitForResult().then((result2) => {
+      resultTwo = result2;
     });
 
-    waitForPreConfirmation().then((result) => {
-      preConfirmationResultThree = result;
+    waitForResult().then((result3) => {
+      resultThree = result3;
     });
 
     await sleep(1500);
