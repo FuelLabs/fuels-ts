@@ -1,6 +1,14 @@
-export { Script } from '@fuel-ts/script';
+// exporting wrapped `@fuels/vm-asm` for convenience
+export * as FuelAsm from '@fuels/vm-asm';
+
+// Exporting CLI entrypoint for programatic API
 export * from './cli/index';
+
+// Exporting all sub-packages
+export { Script } from '@fuel-ts/script';
 export * from '@fuel-ts/abi-coder';
+export * from '@fuel-ts/account';
+export * from '@fuel-ts/account/configs';
 export * from '@fuel-ts/address';
 export * from '@fuel-ts/address/configs';
 export * from '@fuel-ts/contract';
@@ -10,9 +18,7 @@ export * from '@fuel-ts/hasher';
 export * from '@fuel-ts/math';
 export * from '@fuel-ts/math/configs';
 export * from '@fuel-ts/program';
-export * from '@fuel-ts/transactions';
-export * from '@fuel-ts/utils';
-export * from '@fuel-ts/account';
-export * from '@fuel-ts/transactions/configs';
-export * from '@fuel-ts/account/configs';
 export * from '@fuel-ts/recipes';
+export * from '@fuel-ts/transactions';
+export * from '@fuel-ts/transactions/configs';
+export * from '@fuel-ts/utils';
