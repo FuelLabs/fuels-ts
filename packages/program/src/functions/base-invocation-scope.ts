@@ -560,19 +560,6 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
-   * Obtains the ID of a transaction.
-   *
-   * @param chainId - the chainId to use to hash the transaction with
-   * @returns the ID of the transaction.
-   */
-  async getTransactionId(chainId?: number): Promise<string> {
-    const chainIdToHash = chainId ?? (await this.getProvider().getChainId());
-
-    const transactionRequest = await this.getTransactionRequest();
-    return transactionRequest.getTransactionId(chainIdToHash);
-  }
-
-  /**
    * In case the gasLimit is *not* set by the user, this method sets a default value.
    */
   private setDefaultTxParams(
