@@ -351,3 +351,8 @@ AssembleTxResponse
 AssembleTx
 Unparsed
 zero'd
+asm
+io
+asm
+github
+vm

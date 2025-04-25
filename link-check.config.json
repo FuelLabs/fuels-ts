@@ -13,6 +13,9 @@
     },
     {
       "pattern": "https://explorer-indexer-testnet.fuel.network"
+    },
+    {
+      "pattern": "https://crates.io/crates/fuel-asm"
     }
   ],
   "replacementPatterns": [

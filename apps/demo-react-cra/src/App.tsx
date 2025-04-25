@@ -1,14 +1,14 @@
-import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { ZeroBytes32, encrypt, decrypt, bn } from "fuels";
+import { ZeroBytes32, encrypt, decrypt, bn, FuelAsm } from "fuels";
 import * as asm from "@fuels/vm-asm";
 
 function App() {
   const { log } = console;
 
   log("Hello Fuels", ZeroBytes32, encrypt, decrypt);
-  log("Hello ASM", asm);
+  log("Hello ASM:standalone", asm);
+  log("Hello ASM:wrapped", FuelAsm);
   log("Hello BN", bn(1000));
 
   return (
