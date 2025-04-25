@@ -3,4 +3,6 @@
 
 src/typegend
 src/guide/**/*.test.ts
+src/guide/fuel-asm/snippets/original-example/target
+
 .fuels/
