@@ -38,7 +38,8 @@ This is the `ResolvedOutput` interface structure:
 ## Example Workflow
 
 Suppose you send a transaction that will send funds to another wallet.
-As soon as you receive a **PreconfirmationSuccessStatus**, you can:
+
+As soon as you receive a `PreconfirmationSuccessStatus`, you can:
 
 - Use the `OutputChange` in a new transaction.
 - Submit the next transaction **without waiting** for block finalization.
