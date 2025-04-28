@@ -31,7 +31,7 @@ These outputs can be:
 
 This significantly improves the ability to build transaction sequences or reactive transaction flows.
 
-The resolved outputs interface structure:
+This is the `ResolvedOutput` interface structure:
 
 <<< @/../../../packages/account/src/providers/transaction-summary/types.ts#resolved-output-type{ts:line-numbers}
 
