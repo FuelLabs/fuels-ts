@@ -6,8 +6,7 @@ A **pre-confirmation** is an intermediate transaction status that occurs after a
 
 At this stage, the transaction is pre-executed and assigned one of two possible statuses:
 
-- **PreconfirmationSuccessStatus**:
-  The transaction is expected to be successfully included in a future block.
+- `PreconfirmationSuccessStatus`: The transaction is expected to be successfully included in a future block.
 
 - **PreconfirmationFailureStatus**:
   The transaction will **not** be included in any future block.
