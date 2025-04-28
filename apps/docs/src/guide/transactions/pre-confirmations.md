@@ -18,7 +18,7 @@ Additionally, pre-confirmations expose **processed outputs** (such as `OutputCha
 
 ## Available Outputs for Pre-Confirmations
 
-When a transaction reaches **pre confirmation**, certain **resolved outputs** become available:
+When a transaction reaches the **pre-confirmation** stage, certain `resolvedOutputs` become available:
 
 - **OutputChange**:
   Represents the change UTXO generated from unspent inputs, grouped by `assetId` (one per asset).
