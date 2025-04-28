@@ -4,7 +4,7 @@
 
 A **pre-confirmation** is an intermediate transaction status that occurs after a transaction has been **submitted** and **accepted** by the blockchain, but **before** it is fully **processed and included** in a new block.
 
-At this stage, the transaction is pre-executed and assigned one of two possible outcomes:
+At this stage, the transaction is pre-executed and assigned one of two possible statuses:
 
 - **PreconfirmationSuccessStatus**:
   The transaction is expected to be successfully included in a future block.
