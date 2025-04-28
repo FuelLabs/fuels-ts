@@ -200,68 +200,6 @@ describe('TransactionResponse', () => {
     expect(id).toEqual(transactionId);
   });
 
-  // TODO: skipped this test for now, before it was successful, but now it's pending
-  it.todo(
-    'should ensure getTransactionSummary fetches a transaction and assembles transaction summary [non-preconfirmation]',
-    async () => {
-      using launched = await launchTestNode({
-        nodeOptions: {
-          args: [
-            '--poa-instant',
-            'false',
-            '--poa-interval-period',
-            '1s',
-            '--tx-ttl-check-interval',
-            '1s',
-          ],
-        },
-      });
-
-      const {
-        provider,
-        wallets: [adminWallet],
-      } = launched;
-
-      const destination = Wallet.generate({
-        provider,
-      });
-
-      const { id: transactionId } = await adminWallet.transfer(
-        destination.address,
-        100,
-        await provider.getBaseAssetId()
-      );
-
-      const response = await TransactionResponse.create(transactionId, provider);
-
-      const transactionSummary = await response.waitForResult();
-
-      expect(transactionSummary.id).toBeDefined();
-      expect(transactionSummary.fee).toBeDefined();
-      expect(transactionSummary.gasUsed).toBeDefined();
-      expect(transactionSummary.operations).toBeDefined();
-      expect(transactionSummary.type).toBeDefined();
-      expect(transactionSummary.blockId).toBeDefined();
-      expect(transactionSummary.time).toBeDefined();
-      expect(transactionSummary.status).toBeDefined();
-      expect(transactionSummary.receipts).toBeDefined();
-      expect(transactionSummary.mintedAssets).toBeDefined();
-      expect(transactionSummary.burnedAssets).toBeDefined();
-      expect(transactionSummary.isTypeMint).toBeDefined();
-      expect(transactionSummary.isTypeBlob).toBeDefined();
-      expect(transactionSummary.isTypeCreate).toBeDefined();
-      expect(transactionSummary.isTypeScript).toBeDefined();
-      expect(transactionSummary.isStatusFailure).toBeDefined();
-      expect(transactionSummary.isStatusSuccess).toBeDefined();
-      expect(transactionSummary.isStatusPending).toBeDefined();
-      expect(transactionSummary.transaction).toBeDefined();
-    }
-  );
-
-  it.todo(
-    'should ensure getTransactionSummary fetches a transaction and assembles transaction summary [nonpreconfirmation]'
-  );
-
   it.skip(
     'should ensure waitForResult always waits for the transaction to be processed',
     { timeout: 18_500 },

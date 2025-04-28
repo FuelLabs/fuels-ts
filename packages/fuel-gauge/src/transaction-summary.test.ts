@@ -631,10 +631,6 @@ describe('TransactionSummary', () => {
     });
   });
 
-  it.todo(
-    'should ensure getTransactionSummary fetches a transaction and assembles transaction summary [preconfirmation]'
-  );
-
   describe('Transfer Operations', () => {
     const validateTransferOperation = (params: {
       operations: Operation[];
