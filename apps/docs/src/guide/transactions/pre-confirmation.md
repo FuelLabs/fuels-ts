@@ -30,7 +30,7 @@ When a transaction reaches **pre confirmation**, certain **resolved outputs** be
 
 These outputs can be:
 
-- Extracted directly from the pre confirmation response.
+- Extracted directly from the pre-confirmation response.
 - **Used immediately** to fund new transactions, without waiting for block confirmation.
 
 This significantly improves the ability to build transaction sequences or reactive transaction flows.
