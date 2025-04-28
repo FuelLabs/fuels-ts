@@ -1,4 +1,4 @@
-# Pre Confirmation
+# Pre-Confirmations
 
 ## What is Pre Confirmation?
 
