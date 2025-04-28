@@ -1,6 +1,6 @@
 # Pre-Confirmations
 
-## What is a Pre-Confirmation?
+## What is a Pre-Confirmations?
 
 A **pre-confirmation** is an intermediate transaction status that occurs after a transaction has been **submitted** and **accepted** by the blockchain, but **before** it is fully **processed and included** in a new block.
 
