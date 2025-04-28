@@ -4,7 +4,7 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 
 import * as asm from "@fuels/vm-asm";
-import { ZeroBytes32, encrypt, decrypt } from "fuels";
+import { ZeroBytes32, encrypt, decrypt, FuelAsm } from "fuels";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -12,7 +12,8 @@ function App() {
   const { log } = console;
 
   log("Hello Fuels", ZeroBytes32, encrypt, decrypt);
-  log("Hello ASM", asm);
+  log("Hello ASM:standalone", asm);
+  log("Hello ASM:wrapped", FuelAsm);
 
   return (
     <>
