@@ -50,8 +50,12 @@ This reduces wait times and accelerates transaction chaining.
 
 ### Using Pre-Confirmations when Submitting a Transfer
 
+The following example sends a transfer, waits for the pre-confirmation success, and then submits another transfer using the resolved outputs from the first:
+
 <<< @./snippets/pre-confirmation/send-transaction.ts#pre-confirmation-send-transaction-1{ts:line-numbers}
 
 ### Using Pre-Confirmations with a Contract Call
+
+This example performs a contract call, waits for pre-confirmation success, and then uses the resolved output to execute another contract call:
 
 <<< @./snippets/pre-confirmation/contract-call.ts#pre-confirmation-contract-call-1{ts:line-numbers}
