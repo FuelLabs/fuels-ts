@@ -1,7 +1,14 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import type { B256Address } from '@fuel-ts/address';
 import type { BN, BNInput } from '@fuel-ts/math';
-import type { Transaction, Input, Output, TransactionType } from '@fuel-ts/transactions';
+import type {
+  Transaction,
+  Input,
+  Output,
+  TransactionType,
+  OutputChange,
+  OutputVariable,
+} from '@fuel-ts/transactions';
 
 import type { GqlSuccessStatusFragment } from '../__generated__/operations';
 import type { TransactionReceiptJson } from '../provider';
@@ -51,10 +58,12 @@ export type SerializedResolvedOutput = {
     | { to: string; amount: string; assetId: string; type: 'VariableOutput' };
 };
 
+// #region resolved-output-type
 export type ResolvedOutput = {
   utxoId: string;
-  output: Output;
+  output: OutputChange | OutputVariable;
 };
+// #endregion resolved-output-type
 
 export type PreconfirmationSuccessStatus = {
   type: 'PreconfirmationSuccessStatus';
@@ -230,11 +239,28 @@ export type BurnedAsset = MintedAsset;
 export interface PreConfirmationTransactionSummary {
   id: string;
   status?: TransactionStatus;
-  isPreConfirmationStatusSuccess: boolean;
-  isPreConfirmationStatusFailure: boolean;
+  isStatusPreConfirmationSuccess: boolean;
+  isStatusPreConfirmationFailure: boolean;
+  isStatusPending: boolean;
+  isStatusSuccess: boolean;
+  isStatusFailure: boolean;
   receipts?: TransactionResultReceipt[];
-  resolvedOutputs?: ResolvedOutput[];
+  isTypeMint?: boolean;
+  isTypeCreate?: boolean;
+  isTypeScript?: boolean;
+  isTypeUpgrade?: boolean;
+  isTypeUpload?: boolean;
+  isTypeBlob?: boolean;
   errorReason?: string;
+  operations?: Operation[];
+  gasUsed?: BN;
+  mintedAssets?: MintedAsset[];
+  burnedAssets?: BurnedAsset[];
+  tip?: BN;
+  fee?: BN;
+  type?: TransactionTypeName;
+  transaction?: Transaction;
+  resolvedOutputs?: ResolvedOutput[];
 }
 
 export type TransactionSummary<TTransactionType = void> = {
