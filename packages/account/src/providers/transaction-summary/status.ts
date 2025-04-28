@@ -1,6 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
+import type { OutputChange, OutputVariable } from '@fuel-ts/transactions';
 
 import type { TransactionResultReceipt } from '../transaction-response';
 import { deserializeProcessedTxOutput, deserializeReceipt } from '../utils';
@@ -46,7 +47,7 @@ export const extractResolvedOutputs = (
   serializedOutputs?.forEach(({ utxoId, output }) =>
     resolvedOutputs.push({
       utxoId,
-      output: deserializeProcessedTxOutput(output),
+      output: deserializeProcessedTxOutput(output) as OutputChange | OutputVariable,
     })
   );
   return resolvedOutputs;
@@ -62,6 +63,8 @@ type IProcessGraphqlStatusResponse = {
   isStatusFailure: boolean;
   isStatusSuccess: boolean;
   isStatusPending: boolean;
+  isStatusPreConfirmationSuccess: boolean;
+  isStatusPreConfirmationFailure: boolean;
   resolvedOutputs?: ResolvedOutput[];
   errorReason?: string;
 };
@@ -80,6 +83,8 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
   let isStatusFailure = false;
   let isStatusSuccess = false;
   let isStatusPending = false;
+  let isStatusPreConfirmationSuccess = false;
+  let isStatusPreConfirmationFailure = false;
 
   if (gqlTransactionStatus?.type) {
     status = getTransactionStatusName(gqlTransactionStatus.type);
@@ -89,6 +94,7 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
         time = gqlTransactionStatus.time;
         blockId = gqlTransactionStatus.block?.id;
         isStatusSuccess = true;
+        receipts = gqlTransactionStatus.receipts?.map(deserializeReceipt);
         totalFee = bn(gqlTransactionStatus.totalFee);
         totalGas = bn(gqlTransactionStatus.totalGas);
         break;
@@ -98,6 +104,7 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
         blockId = gqlTransactionStatus.block?.id;
         isStatusFailure = true;
         totalFee = bn(gqlTransactionStatus.totalFee);
+        receipts = gqlTransactionStatus.receipts?.map(deserializeReceipt);
         totalGas = bn(gqlTransactionStatus.totalGas);
         break;
 
@@ -107,7 +114,7 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
         break;
 
       case 'PreconfirmationSuccessStatus':
-        isStatusSuccess = true;
+        isStatusPreConfirmationSuccess = true;
         totalFee = bn(gqlTransactionStatus.totalFee);
         totalGas = bn(gqlTransactionStatus.totalGas);
         receipts = gqlTransactionStatus.preconfirmationReceipts?.map(deserializeReceipt);
@@ -115,7 +122,7 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
         break;
 
       case 'PreconfirmationFailureStatus':
-        isStatusFailure = true;
+        isStatusPreConfirmationFailure = true;
         totalFee = bn(gqlTransactionStatus.totalFee);
         totalGas = bn(gqlTransactionStatus.totalGas);
         receipts = gqlTransactionStatus.preconfirmationReceipts?.map(deserializeReceipt);
@@ -137,6 +144,8 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
     isStatusFailure,
     isStatusSuccess,
     isStatusPending,
+    isStatusPreConfirmationSuccess,
+    isStatusPreConfirmationFailure,
     resolvedOutputs,
     errorReason,
   };
