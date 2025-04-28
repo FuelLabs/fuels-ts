@@ -18,7 +18,7 @@ Pre-confirmations allow applications to **react earlier** by providing immediate
 
 Additionally, pre confirmation exposes **processed outputs** (such as `OutputChange` and `OutputVariable`) that can be **immediately reused** in new transactions.
 
-## Available Outputs at Pre Confirmation
+## Available Outputs at Pre-Confirmations
 
 When a transaction reaches **pre confirmation**, certain **resolved outputs** become available:
 
