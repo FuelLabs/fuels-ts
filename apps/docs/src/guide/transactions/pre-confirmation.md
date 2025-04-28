@@ -51,7 +51,7 @@ This reduces wait times and accelerates transaction chaining.
 
 ## Code Examples
 
-### Using Pre Confirmation when Submitting a Transfer
+### Using Pre-Confirmations when Submitting a Transfer
 
 <<< @./snippets/pre-confirmation/send-transaction.ts#pre-confirmation-send-transaction-1{ts:line-numbers}
 
