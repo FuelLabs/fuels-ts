@@ -10,7 +10,7 @@ At this stage, the transaction is pre-executed and assigned one of two possible 
 
 - `PreconfirmationFailureStatus`: The transaction will **not** be included in any future block.
 
-## Why are Pre-Confirmations Important?
+## Why are Pre-Confirmations important?
 
 Pre-confirmations allow applications to **react earlier** by providing immediate feedback about a transaction's expected outcome without waiting for full block finalization.
 
