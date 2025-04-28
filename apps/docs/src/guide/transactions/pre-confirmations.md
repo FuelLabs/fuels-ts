@@ -8,8 +8,7 @@ At this stage, the transaction is pre-executed and assigned one of two possible 
 
 - `PreconfirmationSuccessStatus`: The transaction is expected to be successfully included in a future block.
 
-- **PreconfirmationFailureStatus**:
-  The transaction will **not** be included in any future block.
+- `PreconfirmationFailureStatus`: The transaction will **not** be included in any future block.
 
 ## Why are Pre-Confirmations Important?
 
