@@ -14,7 +14,7 @@ At this stage, the transaction is pre-executed and assigned one of two possible 
 
 Pre-confirmations allow applications to **react earlier** by providing immediate feedback about a transaction's expected outcome without waiting for full block finalization.
 
-Additionally, pre confirmation exposes **processed outputs** (such as `OutputChange` and `OutputVariable`) that can be **immediately reused** in new transactions.
+Additionally, pre-confirmations expose **processed outputs** (such as `OutputChange` and `OutputVariable`) that can be **immediately reused** in new transactions.
 
 ## Available Outputs at Pre-Confirmations
 
