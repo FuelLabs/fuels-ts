@@ -55,6 +55,6 @@ This reduces wait times and accelerates transaction chaining.
 
 <<< @./snippets/pre-confirmation/send-transaction.ts#pre-confirmation-send-transaction-1{ts:line-numbers}
 
-### Using Pre Confirmation with a Contract Call
+### Using Pre-Confirmations with a Contract Call
 
 <<< @./snippets/pre-confirmation/contract-call.ts#pre-confirmation-contract-call-1{ts:line-numbers}
