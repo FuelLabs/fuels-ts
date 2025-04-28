@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
 import type { TransactionResult, PreConfirmationTransactionResult } from 'fuels';
-import { TransactionStatus, ScriptTransactionRequest, sleep } from 'fuels';
+import { TransactionStatus, ScriptTransactionRequest, sleep, TransactionResponse } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { ConfigurableContractFactory } from '../test/typegen';
@@ -26,8 +26,21 @@ describe('pre-confirmation', () => {
       receipts,
       status,
       resolvedOutputs,
-      isPreConfirmationStatusFailure,
-      isPreConfirmationStatusSuccess,
+      isStatusPreConfirmationFailure,
+      isStatusPreConfirmationSuccess,
+      isStatusFailure,
+      isStatusPending,
+      isStatusSuccess,
+      isTypeMint,
+      isTypeCreate,
+      isTypeScript,
+      isTypeUpgrade,
+      isTypeUpload,
+      isTypeBlob,
+      transaction,
+      fee,
+      tip,
+      operations,
     } = result as PreConfirmationTransactionResult;
 
     expect(result).toBeDefined();
@@ -40,8 +53,21 @@ describe('pre-confirmation', () => {
     expect(resolvedOutputs).toBeDefined();
     expect(resolvedOutputs?.length).toBeGreaterThan(0);
     expect(status).toBeDefined();
-    expect(isPreConfirmationStatusFailure).toBeDefined();
-    expect(isPreConfirmationStatusSuccess).toBeDefined();
+    expect(isStatusPreConfirmationFailure).toBeDefined();
+    expect(isStatusPreConfirmationSuccess).toBeDefined();
+    expect(isStatusFailure).toBeDefined();
+    expect(isStatusPending).toBeDefined();
+    expect(isStatusSuccess).toBeDefined();
+    expect(isTypeMint).toBeDefined();
+    expect(isTypeCreate).toBeDefined();
+    expect(isTypeScript).toBeDefined();
+    expect(isTypeUpgrade).toBeDefined();
+    expect(isTypeUpload).toBeDefined();
+    expect(isTypeBlob).toBeDefined();
+    expect(transaction).toBeDefined();
+    expect(fee).toBeDefined();
+    expect(tip).toBeDefined();
+    expect(operations).toBeDefined();
   };
 
   it('should call waitForPreConfirmation just fine [SEND TRANSACTION]', async () => {
@@ -116,12 +142,12 @@ describe('pre-confirmation', () => {
 
     const preConfirmationResult = await waitForPreConfirmation();
 
-    const { isPreConfirmationStatusFailure, isPreConfirmationStatusSuccess, errorReason, status } =
+    const { isStatusPreConfirmationFailure, isStatusPreConfirmationSuccess, errorReason, status } =
       preConfirmationResult;
 
     expect(errorReason).toBe('OutOfGas');
-    expect(isPreConfirmationStatusFailure).toBeTruthy();
-    expect(isPreConfirmationStatusSuccess).toBeFalsy();
+    expect(isStatusPreConfirmationFailure).toBeTruthy();
+    expect(isStatusPreConfirmationSuccess).toBeFalsy();
     expect(status).toBe(TransactionStatus.preconfirmationFailure);
 
     validatePreConfirmationResult(preConfirmationResult);
@@ -358,5 +384,99 @@ describe('pre-confirmation', () => {
     validatePreConfirmationResult(preConfirmationResultOne);
     validatePreConfirmationResult(preConfirmationResultTwo);
     validatePreConfirmationResult(preConfirmationResultThree);
+  });
+
+  it('validates that transaction and its dependent fields are not present if TransactionResponse does not have the transaction request', async () => {
+    using launched = await launchTestNode({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const baseAssetId = await provider.getBaseAssetId();
+    const chainId = await provider.getChainId();
+    const transactionRequest = await wallet.createTransfer(wallet.address, 700, baseAssetId);
+    const txId = transactionRequest.getTransactionId(await provider.getChainId());
+
+    await wallet.sendTransaction(transactionRequest);
+
+    const { waitForPreConfirmation } = new TransactionResponse(txId, provider, chainId);
+
+    const result = await waitForPreConfirmation();
+
+    expect(result.id).toBeDefined();
+    expect(result.fee).toBeDefined();
+    expect(result.status).toBeDefined();
+    expect(result.receipts).toBeDefined();
+    expect(result.gasUsed).toBeDefined();
+    expect(result.isStatusPreConfirmationSuccess).toBeDefined();
+    expect(result.isStatusPreConfirmationFailure).toBeDefined();
+    expect(result.mintedAssets).toBeDefined();
+    expect(result.burnedAssets).toBeDefined();
+    expect(result.resolvedOutputs).toBeDefined();
+    expect(result.logs).toBeDefined();
+    expect(result.groupedLogs).toBeDefined();
+
+    // Undefined because the transaction request is not present
+    expect(result.type).toBeUndefined();
+    expect(result.operations).toBeUndefined();
+    expect(result.transaction).toBeUndefined();
+    expect(result.tip).toBeUndefined();
+    expect(result.isTypeBlob).toBeUndefined();
+    expect(result.isTypeCreate).toBeUndefined();
+    expect(result.isTypeMint).toBeUndefined();
+    expect(result.isTypeScript).toBeUndefined();
+    expect(result.isTypeUpgrade).toBeUndefined();
+    expect(result.isTypeUpload).toBeUndefined();
+  });
+
+  it('ensures waitForPreConfirmation returns success if the transaction was already confirmed', async () => {
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const baseAssetId = await provider.getBaseAssetId();
+    const chainId = await provider.getChainId();
+    const transactionRequest = await wallet.createTransfer(wallet.address, 700, baseAssetId);
+    const txId = transactionRequest.getTransactionId(await provider.getChainId());
+
+    await wallet.sendTransaction(transactionRequest);
+
+    const { waitForPreConfirmation } = new TransactionResponse(txId, provider, chainId);
+
+    const result = await waitForPreConfirmation();
+
+    expect(result.isStatusPreConfirmationSuccess).toBeFalsy();
+    expect(result.isStatusPreConfirmationFailure).toBeFalsy();
+    expect(result.isStatusSuccess).toBeTruthy();
+
+    expect(result.id).toBeDefined();
+    expect(result.fee).toBeDefined();
+    expect(result.status).toBeDefined();
+    expect(result.receipts).toBeDefined();
+    expect(result.gasUsed).toBeDefined();
+    expect(result.mintedAssets).toBeDefined();
+    expect(result.burnedAssets).toBeDefined();
+    expect(result.resolvedOutputs).toBeDefined();
+    expect(result.logs).toBeDefined();
+    expect(result.groupedLogs).toBeDefined();
+
+    // Undefined because the transaction request is not present
+    expect(result.type).toBeUndefined();
+    expect(result.operations).toBeUndefined();
+    expect(result.transaction).toBeUndefined();
+    expect(result.tip).toBeUndefined();
+    expect(result.isTypeBlob).toBeUndefined();
+    expect(result.isTypeCreate).toBeUndefined();
+    expect(result.isTypeMint).toBeUndefined();
+    expect(result.isTypeScript).toBeUndefined();
+    expect(result.isTypeUpgrade).toBeUndefined();
+    expect(result.isTypeUpload).toBeUndefined();
   });
 });

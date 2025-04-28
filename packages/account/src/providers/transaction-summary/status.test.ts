@@ -104,7 +104,9 @@ describe('status', () => {
       expected: {
         isStatusFailure: false,
         isStatusPending: false,
-        isStatusSuccess: true,
+        isStatusSuccess: false,
+        isStatusPreConfirmationSuccess: true,
+        isStatusPreConfirmationFailure: false,
         blockIdType: 'undefined',
         status: TransactionStatus.preconfirmationSuccess,
         timeType: 'undefined',
@@ -116,9 +118,11 @@ describe('status', () => {
       name: 'PreconfirmationFailureStatus',
       status: MOCK_PRECONFIRMATION_FAILURE_STATUS,
       expected: {
-        isStatusFailure: true,
+        isStatusFailure: false,
         isStatusPending: false,
         isStatusSuccess: false,
+        isStatusPreConfirmationSuccess: false,
+        isStatusPreConfirmationFailure: true,
         blockIdType: 'undefined',
         status: TransactionStatus.preconfirmationFailure,
         timeType: 'undefined',
