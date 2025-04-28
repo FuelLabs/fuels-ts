@@ -329,10 +329,11 @@ export class TransactionResponse {
 
     const transactionSummary = assemblePreConfirmationTransactionSummary({
       id: this.id,
-      gqlTransactionStatus: this.preConfirmationStatus,
+      gqlTransactionStatus: this.preConfirmationStatus || this.status,
       baseAssetId,
       maxInputs,
       abiMap: contractsAbiMap,
+      transactionRequest: this.request,
     });
 
     return transactionSummary;
@@ -410,6 +411,12 @@ export class TransactionResponse {
 
       if (statusChange.type === 'SuccessStatus' || statusChange.type === 'FailureStatus') {
         this.resolveStatus('confirmation');
+        /**
+         * NOTE: We need to also resolve the preConfirmation status to avoid waiting for the stream data that
+         * already happened. If the call to `waitForPreConfirmation` happens after the transaction is already processed,
+         * the status will never be one of the preConfirmation statuses.
+         */
+        this.resolveStatus('preConfirmation');
         this.waitingForStreamData = false;
         break;
       }
@@ -488,7 +495,7 @@ export class TransactionResponse {
   async assemblePreConfirmationResult(contractsAbiMap?: AbiMap) {
     const transactionSummary = await this.getPartialTransactionSummary(contractsAbiMap);
 
-    const transactionResult = {
+    const transactionResult: PreConfirmationTransactionResult = {
       ...transactionSummary,
       logs: [] as DecodedLogs['logs'],
       groupedLogs: {} as DecodedLogs['groupedLogs'],
@@ -502,7 +509,6 @@ export class TransactionResponse {
         mainAbi: this.abis.main,
         externalAbis: this.abis.otherContractsAbis,
       }));
-
       transactionResult.logs = logs;
       transactionResult.groupedLogs = groupedLogs;
     }

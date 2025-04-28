@@ -1,8 +1,9 @@
 import { bn, type BN } from '@fuel-ts/math';
-import { PolicyType, type Transaction } from '@fuel-ts/transactions';
+import { PolicyType, TransactionCoder, type Transaction } from '@fuel-ts/transactions';
 import { DateTime, hexlify } from '@fuel-ts/utils';
 
 import type { GasCosts } from '../provider';
+import type { TransactionRequest } from '../transaction-request';
 import type { TransactionResultReceipt } from '../transaction-response';
 import { getGasUsedFromReceipts } from '../utils';
 
@@ -21,9 +22,13 @@ import { extractBurnedAssetsFromReceipts, extractMintedAssetsFromReceipts } from
 import { processGraphqlStatus } from './status';
 import type {
   AbiMap,
+  BurnedAsset,
   GraphqlTransactionStatus,
+  MintedAsset,
+  Operation,
   PreConfirmationTransactionSummary,
   TransactionSummary,
+  TransactionTypeName,
 } from './types';
 
 export interface AssembleTransactionSummaryParams {
@@ -144,25 +149,90 @@ export interface AssemblePreConfirmationTransactionSummaryParams {
   abiMap?: AbiMap;
   maxInputs: BN;
   baseAssetId: string;
+  transactionRequest?: TransactionRequest;
 }
 
 /** @hidden */
 export function assemblePreConfirmationTransactionSummary(
   params: AssemblePreConfirmationTransactionSummaryParams
 ) {
-  const { id, gqlTransactionStatus } = params;
+  const { id, gqlTransactionStatus, transactionRequest, baseAssetId, maxInputs, abiMap } = params;
 
-  const { isStatusFailure, isStatusSuccess, status, receipts, resolvedOutputs, errorReason } =
-    processGraphqlStatus(gqlTransactionStatus);
+  let type: TransactionTypeName | undefined;
+  let operations: Operation[] | undefined;
+  let gasUsed: BN | undefined;
+  let tip: BN | undefined;
+  let transaction: Transaction | undefined;
+  let mintedAssets: MintedAsset[] | undefined;
+  let burnedAssets: BurnedAsset[] | undefined;
+
+  const {
+    isStatusFailure,
+    isStatusSuccess,
+    isStatusPending,
+    status,
+    receipts,
+    resolvedOutputs,
+    errorReason,
+    totalFee,
+    isStatusPreConfirmationFailure,
+    isStatusPreConfirmationSuccess,
+  } = processGraphqlStatus(gqlTransactionStatus);
+
+  if (receipts) {
+    gasUsed = getGasUsedFromReceipts(receipts);
+    mintedAssets = extractMintedAssetsFromReceipts(receipts);
+    burnedAssets = extractBurnedAssetsFromReceipts(receipts);
+  }
+
+  if (transactionRequest) {
+    transaction = transactionRequest.toTransaction();
+    type = getTransactionTypeName(transaction.type);
+    tip = bn(transaction.policies?.find((policy) => policy.type === PolicyType.Tip)?.data);
+
+    if (receipts) {
+      const rawPayload = hexlify(new TransactionCoder().encode(transaction));
+
+      operations = getOperations({
+        transactionType: transaction.type,
+        inputs: transaction.inputs || [],
+        outputs: transaction.outputs || [],
+        receipts,
+        rawPayload,
+        abiMap,
+        maxInputs,
+        baseAssetId,
+      });
+    }
+  }
 
   const transactionSummary: PreConfirmationTransactionSummary = {
     id,
+    fee: totalFee,
+    type,
     status,
     receipts,
-    isPreConfirmationStatusFailure: isStatusFailure,
-    isPreConfirmationStatusSuccess: isStatusSuccess,
+    gasUsed,
+    tip,
+    isStatusPreConfirmationFailure,
+    isStatusPreConfirmationSuccess,
+    isStatusFailure,
+    isStatusSuccess,
+    isStatusPending,
+    ...(transaction && {
+      isTypeMint: isTypeMint(transaction.type),
+      isTypeCreate: isTypeCreate(transaction.type),
+      isTypeScript: isTypeScript(transaction.type),
+      isTypeUpgrade: isTypeUpgrade(transaction.type),
+      isTypeUpload: isTypeUpload(transaction.type),
+      isTypeBlob: isTypeBlob(transaction.type),
+    }),
+    mintedAssets,
+    burnedAssets,
     resolvedOutputs,
     errorReason,
+    transaction,
+    operations,
   };
 
   return transactionSummary;
