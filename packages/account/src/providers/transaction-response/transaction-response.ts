@@ -321,7 +321,7 @@ export class TransactionResponse {
     return transactionSummary;
   }
 
-  async getPartialTransactionSummary(
+  async getPreConfirmationTransactionSummary(
     contractsAbiMap?: AbiMap
   ): Promise<PreConfirmationTransactionSummary> {
     const baseAssetId = await this.provider.getBaseAssetId();
@@ -493,7 +493,7 @@ export class TransactionResponse {
   }
 
   async assemblePreConfirmationResult(contractsAbiMap?: AbiMap) {
-    const transactionSummary = await this.getPartialTransactionSummary(contractsAbiMap);
+    const transactionSummary = await this.getPreConfirmationTransactionSummary(contractsAbiMap);
 
     const transactionResult: PreConfirmationTransactionResult = {
       ...transactionSummary,

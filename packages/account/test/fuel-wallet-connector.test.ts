@@ -901,7 +901,7 @@ describe('Fuel Connector', () => {
       transactionSummary: transactionSummaryJson,
     });
 
-    const responseSummary = await response.getPartialTransactionSummary();
+    const responseSummary = await response.getPreConfirmationTransactionSummary();
 
     expect(jsonSummary.id).toBe(responseSummary.id);
     expect(jsonSummary.receipts).toStrictEqual(responseSummary.receipts);
