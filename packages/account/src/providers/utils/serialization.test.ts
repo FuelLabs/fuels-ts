@@ -74,6 +74,8 @@ describe('Serialization', () => {
       using launched = await setupTestProviderAndWallets();
       const { provider } = launched;
 
+      await provider.init();
+
       const cache = await serializeProviderCache(provider);
       const deserializedCache = deserializeProviderCache(cache);
 
@@ -89,7 +91,6 @@ describe('Serialization', () => {
       using launched = await setupTestProviderAndWallets();
       const { provider } = launched;
       const cache = await serializeProviderCache(provider);
-
       const jsonCache = JSON.parse(JSON.stringify(cache));
 
       expect(jsonCache).toEqual(cache);

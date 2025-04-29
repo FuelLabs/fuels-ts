@@ -340,6 +340,9 @@ describe('Account', () => {
 
     expect(sendTransaction.mock.calls.length).toEqual(1);
     expect(sendTransaction.mock.calls[0][0]).toEqual(transactionRequest);
+    expect(sendTransaction.mock.calls[0][1], 'Should have default parameters').toEqual({
+      estimateTxDependencies: false,
+    });
   });
 
   it('should execute simulateTransaction just fine', async () => {

@@ -837,4 +837,78 @@ describe('Fuel Connector', () => {
       responseSummary.transaction.scriptGasLimit
     );
   });
+
+  it('should ensure sendTransaction works just fine with preconfirmation', async () => {
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+    });
+    const {
+      provider,
+      wallets: [connectorWallet, receiverWallet],
+    } = launched;
+    const connector = new MockConnector({
+      wallets: [connectorWallet],
+    });
+    const fuel = await new Fuel({
+      connectors: [connector],
+    });
+
+    const account = new Account(connectorWallet.address.toString(), provider, fuel);
+
+    const sendTransactionSpy = vi.spyOn(connectorWallet, 'sendTransaction');
+
+    const request = new ScriptTransactionRequest();
+    request.addCoinOutput(receiverWallet.address, 1000, await provider.getBaseAssetId());
+
+    const { assembledRequest, gasPrice, rawReceipts } = await provider.assembleTx({
+      request,
+      feePayerAccount: connectorWallet,
+    });
+
+    const initialTxBytes = assembledRequest.toTransactionBytes();
+
+    const response = await account.sendTransaction(assembledRequest);
+    await response.waitForPreConfirmation();
+
+    expect(response).toBeDefined();
+
+    const chainId = await provider.getChainId();
+
+    const transactionSummaryJson = {
+      id: assembledRequest.getTransactionId(chainId),
+      transactionBytes: hexlify(initialTxBytes),
+      receipts: rawReceipts,
+      gasPrice: gasPrice.toString(),
+    };
+
+    const expectedParams: FuelConnectorSendTxParams = {
+      onBeforeSend: undefined,
+      skipCustomFee: false,
+      provider: {
+        url: provider.url,
+        cache: await serializeProviderCache(provider),
+      },
+      transactionState: 'funded',
+      transactionSummary: transactionSummaryJson,
+    };
+
+    expect(sendTransactionSpy).toHaveBeenCalledWith(assembledRequest, expectedParams);
+
+    const jsonSummary = await assembleTransactionSummaryFromJson({
+      provider,
+      transactionSummary: transactionSummaryJson,
+    });
+
+    const responseSummary = await response.getPreConfirmationTransactionSummary();
+
+    expect(jsonSummary.id).toBe(responseSummary.id);
+    expect(jsonSummary.receipts).toStrictEqual(responseSummary.receipts);
+    expect(responseSummary.status).toBe(TransactionStatus.preconfirmationSuccess);
+    expect(responseSummary.resolvedOutputs).toBeDefined();
+    expect(responseSummary.resolvedOutputs?.length).toBeGreaterThan(0);
+    expect(jsonSummary.transaction).toBeDefined();
+    expect(jsonSummary.gasUsed).toBeDefined();
+  });
 });

@@ -1,7 +1,14 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import type { B256Address } from '@fuel-ts/address';
 import type { BN, BNInput } from '@fuel-ts/math';
-import type { Input, Output, Transaction, TransactionType } from '@fuel-ts/transactions';
+import type {
+  Transaction,
+  Input,
+  Output,
+  TransactionType,
+  OutputChange,
+  OutputVariable,
+} from '@fuel-ts/transactions';
 
 import type { GqlSuccessStatusFragment } from '../__generated__/operations';
 import type { TransactionReceiptJson } from '../provider';
@@ -41,11 +48,49 @@ export type SqueezedOutStatus = {
   reason: string;
 };
 
+export type SerializedResolvedOutput = {
+  utxoId: string;
+  output:
+    | { to: string; amount: string; assetId: string; type: 'ChangeOutput' }
+    | { to: string; amount: string; assetId: string; type: 'CoinOutput' }
+    | { contract: string; stateRoot: string; type: 'ContractCreated' }
+    | { inputIndex: string; balanceRoot: string; stateRoot: string; type: 'ContractOutput' }
+    | { to: string; amount: string; assetId: string; type: 'VariableOutput' };
+};
+
+// #region resolved-output-type
+export type ResolvedOutput = {
+  utxoId: string;
+  output: OutputChange | OutputVariable;
+};
+// #endregion resolved-output-type
+
+export type PreconfirmationSuccessStatus = {
+  type: 'PreconfirmationSuccessStatus';
+  totalFee: string;
+  totalGas: string;
+  resolvedOutputs?: SerializedResolvedOutput[] | null;
+  preconfirmationReceipts?: TransactionReceiptJson[] | null;
+  preconfirmationTransaction?: { rawPayload: string } | null;
+};
+
+export type PreconfirmationFailureStatus = {
+  type: 'PreconfirmationFailureStatus';
+  reason: string;
+  totalFee: string;
+  totalGas: string;
+  resolvedOutputs?: SerializedResolvedOutput[] | null;
+  preconfirmationReceipts?: TransactionReceiptJson[] | null;
+  preconfirmationTransaction?: { rawPayload: string } | null;
+};
+
 export type GraphqlTransactionStatus =
   | SubmittedStatus
   | SuccessStatus
   | FailureStatus
   | SqueezedOutStatus
+  | PreconfirmationSuccessStatus
+  | PreconfirmationFailureStatus
   | null;
 
 export type GqlTransaction = {
@@ -79,6 +124,8 @@ export enum TransactionStatus {
   success = 'success',
   squeezedout = 'squeezedout',
   failure = 'failure',
+  preconfirmationSuccess = 'preconfirmationSuccess',
+  preconfirmationFailure = 'preconfirmationFailure',
 }
 
 /**
@@ -88,7 +135,9 @@ export type GqlTransactionStatusesNames =
   | 'FailureStatus'
   | 'SubmittedStatus'
   | 'SuccessStatus'
-  | 'SqueezedOutStatus';
+  | 'SqueezedOutStatus'
+  | 'PreconfirmationSuccessStatus'
+  | 'PreconfirmationFailureStatus';
 
 /**
  * @hidden
@@ -186,6 +235,33 @@ export interface MintedAsset {
 }
 
 export type BurnedAsset = MintedAsset;
+
+export interface PreConfirmationTransactionSummary {
+  id: string;
+  status?: TransactionStatus;
+  isStatusPreConfirmationSuccess: boolean;
+  isStatusPreConfirmationFailure: boolean;
+  isStatusPending: boolean;
+  isStatusSuccess: boolean;
+  isStatusFailure: boolean;
+  receipts?: TransactionResultReceipt[];
+  isTypeMint?: boolean;
+  isTypeCreate?: boolean;
+  isTypeScript?: boolean;
+  isTypeUpgrade?: boolean;
+  isTypeUpload?: boolean;
+  isTypeBlob?: boolean;
+  errorReason?: string;
+  operations?: Operation[];
+  gasUsed?: BN;
+  mintedAssets?: MintedAsset[];
+  burnedAssets?: BurnedAsset[];
+  tip?: BN;
+  fee?: BN;
+  type?: TransactionTypeName;
+  transaction?: Transaction;
+  resolvedOutputs?: ResolvedOutput[];
+}
 
 export type TransactionSummary<TTransactionType = void> = {
   id: string;

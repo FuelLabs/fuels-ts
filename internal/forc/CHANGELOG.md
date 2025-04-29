@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.89.8
+
+### Patch Changes
+
+- dbed315: chore: upgrade `fuel-core` to `0.43.1`
+
 ## 0.89.7
 
 ### Patch Changes

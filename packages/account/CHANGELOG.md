@@ -1,5 +1,31 @@
 # Change Log
 
+## 0.100.4
+
+### Patch Changes
+
+- efcce41: feat: integrate with new `AssembleTx` GQL end-point
+- 04fc7b5: chore: upgrading `@fuels/vm-asm` package
+- 5a57b97: chore: support RPC consistency mechanism
+- f534210: feat: add method for base asset coins consolidation
+- ec13d29: fix: provider async methods and tests
+- 3bb0eb7: chore: renaming method for consistency
+- dbed315: chore: upgrade `fuel-core` to `0.43.1`
+- Updated dependencies [efcce41]
+- Updated dependencies [5a57b97]
+- Updated dependencies [f534210]
+- Updated dependencies [dbed315]
+  - @fuel-ts/errors@0.100.4
+  - @fuel-ts/transactions@0.100.4
+  - @fuel-ts/versions@0.100.4
+  - @fuel-ts/abi-coder@0.100.4
+  - @fuel-ts/address@0.100.4
+  - @fuel-ts/crypto@0.100.4
+  - @fuel-ts/math@0.100.4
+  - @fuel-ts/utils@0.100.4
+  - @fuel-ts/hasher@0.100.4
+  - @fuel-ts/merkle@0.100.4
+
 ## 0.100.3
 
 ### Patch Changes

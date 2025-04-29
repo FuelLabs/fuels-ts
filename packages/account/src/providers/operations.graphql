@@ -122,6 +122,85 @@ fragment SqueezedOutStatusFragment on SqueezedOutStatus {
   reason
 }
 
+fragment PreconfirmationSuccessStatusFragment on PreconfirmationSuccessStatus {
+  type: __typename
+  totalGas
+  totalFee
+  resolvedOutputs {
+    utxoId
+    output {
+      type: __typename
+      ... on CoinOutput {
+        to
+        amount
+        assetId
+      }
+      ... on ContractOutput {
+        inputIndex
+        balanceRoot
+        stateRoot
+      }
+      ... on ChangeOutput {
+        to
+        amount
+        assetId
+      }
+      ... on VariableOutput {
+        to
+        amount
+        assetId
+      }
+      ... on ContractCreated {
+        contract
+        stateRoot
+      }
+    }
+  }
+  preconfirmationReceipts: receipts {
+    ...receiptFragment
+  }
+}
+
+fragment PreconfirmationFailureStatusFragment on PreconfirmationFailureStatus {
+  type: __typename
+  reason
+  totalGas
+  totalFee
+  resolvedOutputs {
+    utxoId
+    output {
+      type: __typename
+      ... on CoinOutput {
+        to
+        amount
+        assetId
+      }
+      ... on ContractOutput {
+        inputIndex
+        balanceRoot
+        stateRoot
+      }
+      ... on ChangeOutput {
+        to
+        amount
+        assetId
+      }
+      ... on VariableOutput {
+        to
+        amount
+        assetId
+      }
+      ... on ContractCreated {
+        contract
+        stateRoot
+      }
+    }
+  }
+  preconfirmationReceipts: receipts {
+    ...receiptFragment
+  }
+}
+
 fragment transactionStatusFragment on TransactionStatus {
   ... on SubmittedStatus {
     ...SubmittedStatusFragment
@@ -195,6 +274,12 @@ fragment transactionStatusSubscriptionFragment on TransactionStatus {
   }
   ... on SqueezedOutStatus {
     ...SqueezedOutStatusFragment
+  }
+  ... on PreconfirmationSuccessStatus {
+    ...PreconfirmationSuccessStatusFragment
+  }
+  ... on PreconfirmationFailureStatus {
+    ...PreconfirmationFailureStatusFragment
   }
 }
 
@@ -591,6 +676,12 @@ query getTransactionWithReceipts($transactionId: TransactionId!) {
       }
       ... on SqueezedOutStatus {
         ...SqueezedOutStatusFragment
+      }
+      ... on PreconfirmationSuccessStatus {
+        ...PreconfirmationSuccessStatusFragment
+      }
+      ... on PreconfirmationFailureStatus {
+        ...PreconfirmationFailureStatusFragment
       }
     }
   }
@@ -1042,14 +1133,28 @@ query getConsensusParametersVersion {
   }
 }
 
-subscription submitAndAwaitStatus($encodedTransaction: HexString!) {
-  submitAndAwaitStatus(tx: $encodedTransaction) {
+subscription submitAndAwaitStatus(
+  $encodedTransaction: HexString!
+  $estimatePredicates: Boolean
+  $includePreConfirmation: Boolean
+) {
+  submitAndAwaitStatus(
+    tx: $encodedTransaction
+    estimatePredicates: $estimatePredicates
+    includePreconfirmation: $includePreConfirmation
+  ) {
     ...transactionStatusSubscriptionFragment
   }
 }
 
-subscription statusChange($transactionId: TransactionId!) {
-  statusChange(id: $transactionId) {
+subscription statusChange(
+  $transactionId: TransactionId!
+  $includePreConfirmation: Boolean
+) {
+  statusChange(
+    id: $transactionId
+    includePreconfirmation: $includePreConfirmation
+  ) {
     ...transactionStatusSubscriptionFragment
   }
 }
