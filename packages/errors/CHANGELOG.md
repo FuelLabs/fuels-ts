@@ -1,5 +1,15 @@
 # @fuel-ts/errors
 
+## 0.100.4
+
+### Patch Changes
+
+- efcce41: feat: integrate with new `AssembleTx` GQL end-point
+- 5a57b97: chore: support RPC consistency mechanism
+- f534210: feat: add method for base asset coins consolidation
+- Updated dependencies [dbed315]
+  - @fuel-ts/versions@0.100.4
+
 ## 0.100.3
 
 ### Patch Changes

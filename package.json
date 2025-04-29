@@ -28,7 +28,7 @@
     "test:coverage-diff": "tsx ./scripts/tests-coverage-diff.ts",
     "test:watch": "vitest --watch --config vitest.node.config.mts --project node $(scripts/tests-find.sh --node)",
     "test:validate": "./scripts/tests-validate.sh",
-    "test:browser:filter": "vitest --run --coverage false --config vitest.browser.config.mts --project node",
+    "test:browser:filter": "vitest --run --coverage false --config vitest.browser.config.mts --project browser",
     "test:e2e": "vitest --run --config vitest.node.config.mts --project node $(scripts/tests-find.sh --e2e)",
     "test:integration": "vitest --run --config vitest.node.config.mts --project node $(scripts/tests-find.sh --integration)",
     "test:forc": "turbo run test:forc",

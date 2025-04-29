@@ -103,7 +103,6 @@ export async function setupTestProviderAndWallets({
 
   try {
     provider = new Provider(url, providerOptions);
-    await provider.init();
   } catch (err) {
     cleanup();
     throw err;

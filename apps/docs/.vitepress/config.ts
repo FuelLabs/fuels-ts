@@ -381,6 +381,10 @@ export default defineConfig({
                 text: 'Optimizing Frontend Apps',
                 link: '/guide/transactions/optimizing-frontend-apps',
               },
+              {
+                text: 'Pre-Confirmations',
+                link: '/guide/transactions/pre-confirmations',
+              },
             ],
           },
           {
