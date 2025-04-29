@@ -1,5 +1,11 @@
 # @internal/fuel-core
 
+## 0.90.1
+
+### Patch Changes
+
+- dbed315: chore: upgrade `fuel-core` to `0.43.1`
+
 ## 0.90.0
 
 ### Minor Changes

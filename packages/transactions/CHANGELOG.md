@@ -1,5 +1,20 @@
 # Change Log
 
+## 0.100.4
+
+### Patch Changes
+
+- dbed315: chore: upgrade `fuel-core` to `0.43.1`
+- Updated dependencies [efcce41]
+- Updated dependencies [5a57b97]
+- Updated dependencies [f534210]
+  - @fuel-ts/errors@0.100.4
+  - @fuel-ts/abi-coder@0.100.4
+  - @fuel-ts/address@0.100.4
+  - @fuel-ts/math@0.100.4
+  - @fuel-ts/utils@0.100.4
+  - @fuel-ts/hasher@0.100.4
+
 ## 0.100.3
 
 ### Patch Changes
