@@ -3,6 +3,7 @@ import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import type {
   Account,
   CreateTransactionRequestLike,
+  PreConfirmationTransactionResult,
   Provider,
   TransactionRequest,
   TransactionResult,
@@ -47,6 +48,9 @@ export type DeployContractResult<TContract extends Contract = Contract> = {
   waitForResult: () => Promise<{
     contract: TContract;
     transactionResult: TransactionResult<TransactionType.Create>;
+  }>;
+  waitForPreConfirmation?: () => Promise<{
+    transactionResult: PreConfirmationTransactionResult;
   }>;
 };
 
@@ -266,10 +270,18 @@ export default class ContractFactory<TContract extends Contract = Contract> {
       return { contract, transactionResult };
     };
 
+    const waitForPreConfirmation = async () => {
+      const transactionResult = await transactionResponse.waitForPreConfirmation();
+      const contract = new Contract(contractId, this.interface, account) as T;
+
+      return { contract, transactionResult };
+    };
+
     return {
       contractId,
-      waitForTransactionId: () => Promise.resolve(transactionResponse.id),
       waitForResult,
+      waitForPreConfirmation,
+      waitForTransactionId: () => Promise.resolve(transactionResponse.id),
     };
   }
 

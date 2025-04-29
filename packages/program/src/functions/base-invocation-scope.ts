@@ -27,7 +27,11 @@ import * as asm from '@fuels/vm-asm';
 import { clone } from 'ramda';
 
 import { getContractCallScript } from '../contract-call-script';
-import { buildDryRunResult, buildFunctionResult } from '../response';
+import {
+  buildDryRunResult,
+  buildFunctionResult,
+  buildPreConfirmationFunctionResult,
+} from '../response';
 import type {
   ContractCall,
   InvocationScopeLike,
@@ -36,6 +40,7 @@ import type {
   DryRunResult,
   AbstractContract,
   AbstractProgram,
+  PreConfirmationFunctionResult,
 } from '../types';
 import { assert, getAbisFromAllCalls } from '../utils';
 
@@ -431,6 +436,7 @@ export class BaseInvocationScope<TReturn = any> {
   async call<T = TReturn>(): Promise<{
     transactionId: string;
     waitForResult: () => Promise<FunctionResult<T>>;
+    waitForPreConfirmation: () => Promise<PreConfirmationFunctionResult<T>>;
   }> {
     assert(this.program.account, 'Wallet is required!');
 
@@ -452,6 +458,13 @@ export class BaseInvocationScope<TReturn = any> {
       transactionId,
       waitForResult: async () =>
         buildFunctionResult<T>({
+          funcScope: this.functionInvocationScopes,
+          isMultiCall: this.isMultiCall,
+          program: this.program,
+          transactionResponse: response,
+        }),
+      waitForPreConfirmation: async () =>
+        buildPreConfirmationFunctionResult<T>({
           funcScope: this.functionInvocationScopes,
           isMultiCall: this.isMultiCall,
           program: this.program,
