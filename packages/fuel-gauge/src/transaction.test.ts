@@ -21,13 +21,12 @@ describe('Transaction', () => {
   it('should ensure a mint transaction can be decoded just fine', async () => {
     using launched = await launchTestNode({
       nodeOptions: {
-        args: ['--poa-instant', 'false', '--poa-interval-period', '1ms'],
-        loggingEnabled: false,
+        args: ['--poa-instant', 'false', '--poa-interval-period', '100ms'],
       },
     });
 
     // Wait 1ms for the transaction to be added
-    await sleep(1);
+    await sleep(200);
 
     const { provider } = launched;
 
