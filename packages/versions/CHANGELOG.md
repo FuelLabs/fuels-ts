@@ -1,5 +1,11 @@
 # @fuel-ts/versions
 
+## 0.100.4
+
+### Patch Changes
+
+- dbed315: chore: upgrade `fuel-core` to `0.43.1`
+
 ## 0.100.3
 
 ## 0.100.2
