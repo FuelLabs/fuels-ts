@@ -6,6 +6,7 @@ import type {
   DecodedLogs,
 } from '@fuel-ts/account';
 import { getGasUsedFromReceipts } from '@fuel-ts/account';
+import type { BN } from '@fuel-ts/math';
 import type { TransactionType } from '@fuel-ts/transactions';
 
 import { decodeContractCallScriptResult } from './contract-call-script';
@@ -16,6 +17,7 @@ import type {
   InvocationScopeLike,
   FunctionResult,
   DryRunResult,
+  PreConfirmationFunctionResult,
 } from './types';
 import { getAllResultLogs } from './utils';
 
@@ -90,6 +92,46 @@ export const buildFunctionResult = async <T>(
     logs,
     groupedLogs,
     gasUsed,
+  };
+
+  return submitResult;
+};
+
+/** @hidden */
+export const buildPreConfirmationFunctionResult = async <T>(
+  params: BuiltFunctionResultParams
+): Promise<PreConfirmationFunctionResult<T>> => {
+  const { funcScope, isMultiCall, program, transactionResponse } = params;
+
+  const transactionResult = await transactionResponse.waitForPreConfirmation();
+
+  const { receipts } = transactionResult;
+
+  const functionScopes = Array.isArray(funcScope) ? funcScope : [funcScope];
+  const mainCallConfig = functionScopes[0]?.getCallConfig();
+
+  let logs: DecodedLogs<unknown>['logs'] | undefined;
+  let groupedLogs: DecodedLogs<unknown>['groupedLogs'] | undefined;
+  let gasUsed: BN | undefined;
+  let value: T | undefined;
+
+  if (receipts) {
+    ({ logs, groupedLogs } = getAllResultLogs({ receipts, mainCallConfig, functionScopes }));
+    value = extractInvocationResult<T>(functionScopes, receipts, isMultiCall, logs, groupedLogs);
+    gasUsed = getGasUsedFromReceipts(receipts);
+  }
+
+  const submitResult: PreConfirmationFunctionResult<T> = {
+    isMultiCall,
+    functionScopes,
+    program,
+    transactionResult,
+    transactionResponse,
+    transactionId: transactionResponse.id,
+    logs,
+    groupedLogs,
+    gasUsed,
+    value,
   };
 
   return submitResult;

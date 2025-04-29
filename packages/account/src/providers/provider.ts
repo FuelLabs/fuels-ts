@@ -35,10 +35,6 @@ import type {
   Requester,
   GqlBlockFragment,
   GqlEstimatePredicatesQuery,
-  GqlStatusChangeSubscription,
-  GqlSubmitAndAwaitStatusSubscription,
-  GqlGetTransactionWithReceiptsQuery,
-  GqlGetTransactionsByOwnerQuery,
   GqlExcludeInput,
 } from './__generated__/operations';
 import { resolveAccountForAssembleTxParams } from './assemble-tx-helpers';
@@ -417,7 +413,6 @@ export type EstimateTxGasAndFeeParams = {
  * Provider Call transaction params
  */
 export type ProviderCallParams = UTXOValidationParams & EstimateTransactionParams;
-
 /**
  * Provider Send transaction params
  */
@@ -426,6 +421,10 @@ export type ProviderSendTxParams = EstimateTransactionParams & {
    * Whether to enable asset burn for the transaction.
    */
   enableAssetBurn?: boolean;
+  /**
+   * Whether to include the pre-confirmation status for the transaction.
+   */
+  includePreConfirmation?: boolean;
 };
 
 /**
@@ -440,65 +439,13 @@ type NodeInfoCache = Record<string, NodeInfo>;
 
 type Operations = ReturnType<typeof getOperationsSdk>;
 
-/**
- * TODO: remove this once pre-confirmation status support lands.
- *
- * Because of the way graphql-codegen works, an empty object is added to the generated status types
- * in place of the pre-confirmation statuses we don't declare in our operations.graphql.
- * Codegen converts these ignored statuses into `{}` types, and that messes up our TS code compilation,
- * because it's not written with this `{}` type in mind.
- * This utility and its application on the types below removes those empty objects from the affected operations,
- * thereby leaving their types unchanged from the perspective of their consumers.
- */
-type RemoveCodegenEmptyObject<T> = T extends object ? (keyof T extends never ? never : T) : T;
-
-type StatusChangeSubscription = {
-  statusChange: RemoveCodegenEmptyObject<GqlStatusChangeSubscription['statusChange']>;
-};
-
-type SubmitAndAwaitStatusSubscription = {
-  submitAndAwaitStatus: RemoveCodegenEmptyObject<
-    GqlSubmitAndAwaitStatusSubscription['submitAndAwaitStatus']
-  >;
-};
-
-type TransactionWithReceipts = NonNullable<GqlGetTransactionWithReceiptsQuery['transaction']>;
-
-type GetTransactionWithReceiptsQuery = {
-  transaction?: Omit<TransactionWithReceipts, 'status'> & {
-    status?: RemoveCodegenEmptyObject<TransactionWithReceipts['status']>;
-  };
-};
-
-type TransactionsByOwnerNode =
-  GqlGetTransactionsByOwnerQuery['transactionsByOwner']['edges'][number]['node'];
-
-type GetTransactionsByOwnerQuery = {
-  transactionsByOwner: Omit<GqlGetTransactionsByOwnerQuery['transactionsByOwner'], 'edges'> & {
-    edges: Array<{
-      node: Omit<TransactionsByOwnerNode, 'status'> & {
-        status?: RemoveCodegenEmptyObject<TransactionsByOwnerNode['status']>;
-      };
-    }>;
-  };
-};
-
-type SdkOperations = Omit<
-  Operations,
-  'statusChange' | 'submitAndAwaitStatus' | 'getTransactionWithReceipts' | 'getTransactionsByOwner'
-> & {
+type SdkOperations = Omit<Operations, 'statusChange' | 'submitAndAwaitStatus'> & {
   statusChange: (
     ...args: Parameters<Operations['statusChange']>
-  ) => Promise<AsyncIterable<StatusChangeSubscription>>;
+  ) => Promise<ReturnType<Operations['statusChange']>>;
   submitAndAwaitStatus: (
     ...args: Parameters<Operations['submitAndAwaitStatus']>
-  ) => Promise<AsyncIterable<SubmitAndAwaitStatusSubscription>>;
-  getTransactionWithReceipts: (
-    ...args: Parameters<Operations['getTransactionWithReceipts']>
-  ) => Promise<GetTransactionWithReceiptsQuery>;
-  getTransactionsByOwner: (
-    ...args: Parameters<Operations['getTransactionsByOwner']>
-  ) => Promise<GetTransactionsByOwnerQuery>;
+  ) => Promise<ReturnType<Operations['submitAndAwaitStatus']>>;
   getBlobs: (variables: { blobIds: string[] }) => Promise<{ blob: { id: string } | null }[]>;
 };
 
@@ -1163,7 +1110,11 @@ export default class Provider {
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true, enableAssetBurn }: ProviderSendTxParams = {}
+    {
+      enableAssetBurn,
+      estimateTxDependencies = true,
+      includePreConfirmation: _includePreConfirmation = true,
+    }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     validateTransactionForAssetBurn(
@@ -1185,7 +1136,10 @@ export default class Provider {
     if (isTransactionTypeScript(transactionRequest)) {
       abis = transactionRequest.abis;
     }
-    const subscription = await this.operations.submitAndAwaitStatus({ encodedTransaction });
+    const subscription = await this.operations.submitAndAwaitStatus({
+      encodedTransaction,
+      includePreConfirmation: true,
+    });
 
     this.#cacheInputs(
       transactionRequest.inputs,
