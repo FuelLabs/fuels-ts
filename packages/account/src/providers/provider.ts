@@ -750,6 +750,8 @@ export default class Provider {
    * Returns some helpful parameters related to gas fees.
    */
   async getGasConfig() {
+    await this.init();
+
     const {
       txParameters: { maxGasPerTx },
       predicateParameters: { maxGasPerPredicate },
