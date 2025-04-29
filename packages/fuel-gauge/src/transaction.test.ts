@@ -25,6 +25,10 @@ describe('Transaction', () => {
         loggingEnabled: false,
       },
     });
+
+    // Wait 1ms for the transaction to be added
+    await sleep(1);
+
     const { provider } = launched;
 
     const {
