@@ -1470,7 +1470,9 @@ export default class Provider {
     const chainInfo = Provider.chainInfoCache[this.urlWithoutAuth];
 
     const {
-      consensusParameters: { version: previous },
+      latestBlock: {
+        header: { consensusParametersVersion: previous },
+      },
     } = chainInfo;
 
     const {
