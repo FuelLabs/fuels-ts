@@ -591,6 +591,11 @@ fragment chainInfoFragment on ChainInfo {
   consensusParameters {
     ...consensusParametersFragment
   }
+  latestBlock {
+    header {
+      consensusParametersVersion
+    }
+  }
 }
 
 fragment contractBalanceFragment on ContractBalance {
