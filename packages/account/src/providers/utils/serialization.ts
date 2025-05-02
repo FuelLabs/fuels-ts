@@ -80,7 +80,7 @@ export type TransactionSummaryJsonPartial = Omit<TransactionSummaryJson, 'id' | 
 
 /** @hidden */
 export const deserializeChain = (chain: ChainInfoJson): ChainInfo => {
-  const { name, daHeight, consensusParameters } = chain;
+  const { name, daHeight, consensusParameters, latestBlock } = chain;
 
   const {
     contractParams,
@@ -134,12 +134,13 @@ export const deserializeChain = (chain: ChainInfoJson): ChainInfo => {
       },
       gasCosts,
     },
+    latestBlock,
   };
 };
 
 /** @hidden */
 export const serializeChain = (chain: ChainInfo): ChainInfoJson => {
-  const { name, baseChainHeight, consensusParameters } = chain;
+  const { name, baseChainHeight, consensusParameters, latestBlock } = chain;
 
   const {
     contractParameters,
@@ -193,6 +194,7 @@ export const serializeChain = (chain: ChainInfo): ChainInfoJson => {
       },
       gasCosts,
     },
+    latestBlock,
   };
 };
 

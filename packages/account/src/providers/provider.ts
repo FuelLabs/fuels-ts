@@ -249,6 +249,11 @@ export type ChainInfo = {
   name: string;
   baseChainHeight: BN;
   consensusParameters: ConsensusParameters;
+  latestBlock: {
+    header: {
+      consensusParametersVersion: string;
+    };
+  };
 };
 
 /**
