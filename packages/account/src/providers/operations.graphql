@@ -1065,7 +1065,7 @@ query assembleTx(
   }
 }
 
-mutation dryRun(
+query dryRun(
   $encodedTransactions: [HexString!]!
   $utxoValidation: Boolean
   $gasPrice: U64
