@@ -2312,10 +2312,23 @@ describe('Provider', () => {
     const provider = new Provider(launched.provider.url);
     const fetchChainAndNodeInfo = vi.spyOn(provider, 'fetchChainAndNodeInfo');
 
-    // calling twice
+    // calling once to perform the first fetch
     await provider.autoRefetchConfigs();
+
+    // reset timestamp to force a refetch
     provider.consensusParametersTimestamp = 0;
 
+    // mock the `getConsensusParametersVersion` to return a different value,
+    // thus forcing a refetch (the first value will be zero)
+    vi.spyOn(provider.operations, 'getConsensusParametersVersion').mockResolvedValue({
+      chain: {
+        latestBlock: {
+          header: { consensusParametersVersion: '1' },
+        },
+      },
+    });
+
+    // calling again to perform the second fetch
     await provider.autoRefetchConfigs();
 
     expect(fetchChainAndNodeInfo).toHaveBeenCalledTimes(2);

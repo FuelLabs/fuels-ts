@@ -72,4 +72,9 @@ export const MOCK_CHAIN: GqlChainInfoFragment = {
       newStoragePerByte: '1',
     },
   },
+  latestBlock: {
+    header: {
+      consensusParametersVersion: '0',
+    },
+  },
 };
