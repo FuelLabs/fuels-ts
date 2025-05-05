@@ -44,7 +44,9 @@ export function getAllDecodedLogs<T = unknown>(opts: {
       (r) => r.type === ReceiptType.Call && r.id === ZeroBytes32
     ) as TransactionResultCallReceipt;
 
-    mainContract = firstCallReceipt.to;
+    if (firstCallReceipt) {
+      mainContract = firstCallReceipt.to;
+    }
   }
 
   return receipts.reduce(
