@@ -325,7 +325,7 @@ describe('Revert Error Testing', () => {
 
     contract.account = wallet;
 
-    // Contract call required an amount of asset A
+    // Contract call requires an amount of asset A
     const scope = contract.functions.return_context_amount().callParams({
       forward: [transferAmount, TestAssetId.A.value],
     });
