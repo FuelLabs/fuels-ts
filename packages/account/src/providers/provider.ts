@@ -927,6 +927,14 @@ export default class Provider {
               this.urlWithoutAuth,
               event.extensions?.current_fuel_block_height as number
             );
+
+            console.log('before', event);
+
+            this.autoRefetchConfigs(
+              event.extensions?.current_consensus_parameters_version as number
+            )
+              .then(() => console.log('after'))
+              .catch((err) => console.log('err', err));
           },
         });
       }
@@ -1453,11 +1461,11 @@ export default class Provider {
     return results;
   }
 
-  public async autoRefetchConfigs() {
+  public async autoRefetchConfigs(consensusParametersVersion?: number) {
     const now = Date.now();
     const diff = now - (this.consensusParametersTimestamp ?? 0);
 
-    if (diff < 60000) {
+    if (diff < 60000 && consensusParametersVersion === undefined) {
       return;
     }
 
@@ -1468,12 +1476,9 @@ export default class Provider {
     }
 
     const chainInfo = Provider.chainInfoCache[this.urlWithoutAuth];
+    const chainConsensusVersion = chainInfo.latestBlock.header.consensusParametersVersion;
 
-    const {
-      latestBlock: {
-        header: { consensusParametersVersion: previous },
-      },
-    } = chainInfo;
+    const previous = consensusParametersVersion ?? chainConsensusVersion;
 
     const {
       chain: {

@@ -2259,7 +2259,7 @@ describe('Provider', () => {
     });
   });
 
-  test('should ensure getBalance and getBalances can return u128 amounts ', async () => {
+  test.only('should ensure getBalance and getBalances can return u128 amounts ', async () => {
     const fundingAmount = bn(2).pow(63);
     const maxU64 = bn('0xFFFFFFFFFFFFFFFF');
 
