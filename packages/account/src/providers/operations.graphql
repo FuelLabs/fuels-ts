@@ -591,6 +591,11 @@ fragment chainInfoFragment on ChainInfo {
   consensusParameters {
     ...consensusParametersFragment
   }
+  latestBlock {
+    header {
+      consensusParametersVersion
+    }
+  }
 }
 
 fragment contractBalanceFragment on ContractBalance {
@@ -995,12 +1000,6 @@ query getAssetDetails($assetId: AssetId!) {
   }
 }
 
-query daCompressedBlock($height: U32!) {
-  daCompressedBlock(height: $height) {
-    bytes
-  }
-}
-
 query assembleTx(
   $tx: HexString!
   $blockHorizon: U32!
@@ -1071,7 +1070,7 @@ query assembleTx(
   }
 }
 
-mutation dryRun(
+query dryRun(
   $encodedTransactions: [HexString!]!
   $utxoValidation: Boolean
   $gasPrice: U64
