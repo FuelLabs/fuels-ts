@@ -12,7 +12,7 @@ The `launchTestNode` creates a temporary snapshot directory and configurations e
 
 The default snapshot used is that of the current testnet network iteration.
 
-Click [here](https://github.com/FuelLabs/fuels-ts/blob/master/.fuel-core/configs) to see what it looks like.
+Click [here](https://github.com/FuelLabs/fuels-ts/tree/master/.fuel-core/configs) to see what it looks like.
 
 ## Custom Snapshot
 
