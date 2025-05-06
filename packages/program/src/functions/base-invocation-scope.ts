@@ -429,12 +429,19 @@ export class BaseInvocationScope<TReturn = any> {
    * containing the transaction ID and a function to wait for the result. The promise will resolve
    * as soon as the transaction is submitted to the node.
    *
+   * @param params - Optional parameters for the call.
+   * - `skipAssembleTx`: A boolean indicating whether to skip assembling the transaction. This is useful
+   *   when customizations were made to the transaction request using the `assembleTx` method.
+   *
    * @returns A promise that resolves to an object containing:
    * - `transactionId`: The ID of the submitted transaction.
    * - `waitForResult`: A function that waits for the transaction result.
+   * - `waitForPreConfirmation`: A function that waits for the transaction pre-confirmation.
    * @template T - The type of the return value.
    */
-  async call<T = TReturn>(): Promise<{
+  async call<T = TReturn>(params?: {
+    skipAssembleTx?: boolean;
+  }): Promise<{
     transactionId: string;
     waitForResult: () => Promise<FunctionResult<T>>;
     waitForPreConfirmation: () => Promise<PreConfirmationFunctionResult<T>>;
@@ -443,10 +450,29 @@ export class BaseInvocationScope<TReturn = any> {
 
     let transactionRequest = await this.getTransactionRequest();
 
-    if (this.addSignersCallback) {
-      transactionRequest = await this.legacyFundWithRequiredCoins();
-    } else {
-      transactionRequest = await this.fundWithRequiredCoins();
+    const skipAssembleTx = params?.skipAssembleTx;
+
+    if (!skipAssembleTx) {
+      if (this.addSignersCallback) {
+        transactionRequest = await this.legacyFundWithRequiredCoins();
+      } else if (this.customAssembleTxParams) {
+        const provider = this.getProvider();
+        const { assembledRequest, gasPrice } = await provider.assembleTx({
+          request: transactionRequest,
+          ...this.customAssembleTxParams,
+        });
+        transactionRequest = assembledRequest as ScriptTransactionRequest;
+
+        await setAndValidateGasAndFeeForAssembledTx({
+          gasPrice,
+          provider,
+          transactionRequest: assembledRequest,
+          setGasLimit: this.txParameters?.gasLimit,
+          setMaxFee: this.txParameters?.maxFee,
+        });
+      } else {
+        transactionRequest = await this.fundWithRequiredCoins();
+      }
     }
 
     const response = (await this.program.account.sendTransaction(transactionRequest, {
