@@ -1,4 +1,5 @@
 import Provider from '../provider';
+import { transactionRequestify } from '../transaction-request';
 import type { TransactionResponseJson } from '../transaction-response';
 import { TransactionResponse } from '../transaction-response';
 
@@ -16,7 +17,7 @@ export const serializeTransactionResponseJson = async (
     id,
     status,
     abis,
-    requestJson: JSON.stringify(request),
+    requestJson: request ? JSON.stringify(request.toJSON()) : undefined,
     providerUrl: provider.url,
     providerCache: await serializeProviderCache(provider),
     gqlTransaction,
@@ -42,7 +43,7 @@ export const deserializeTransactionResponseJson = (json: TransactionResponseJson
   const response = new TransactionResponse(id, provider, Number(chainId), abis);
 
   if (requestJson) {
-    response.request = JSON.parse(requestJson);
+    response.request = transactionRequestify(JSON.parse(requestJson));
   }
 
   response.status = status;
