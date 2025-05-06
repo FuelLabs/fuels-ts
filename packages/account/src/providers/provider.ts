@@ -280,7 +280,6 @@ export type NodeInfoAndConsensusParameters = {
   maxGasPerTx: BN;
 };
 
-// #region cost-estimation-1
 export type TransactionCost = {
   gasPrice: BN;
   gasUsed: BN;
@@ -299,7 +298,6 @@ export type TransactionCost = {
   updateMaxFee?: boolean;
   transactionSummary?: TransactionSummaryJsonPartial;
 };
-// #endregion cost-estimation-1
 
 /**
  * @hidden
