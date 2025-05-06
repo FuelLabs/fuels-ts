@@ -6,6 +6,10 @@ import {
   deserializeTransactionResponseJson,
 } from './transaction-response-serialization';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('Transaction Response Serialization', () => {
   it('should serialize and deserialize a transaction response correctly [W/ TX REQUEST]', async () => {
     using launched = await setupTestProviderAndWallets();
