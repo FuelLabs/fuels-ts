@@ -225,10 +225,6 @@ export default defineConfig({
                 link: '/guide/contracts/contract-balance',
               },
               {
-                text: 'Cost Estimation',
-                link: '/guide/contracts/cost-estimation',
-              },
-              {
                 text: 'Dependency Estimation',
                 link: '/guide/contracts/dependency-estimation',
               },
