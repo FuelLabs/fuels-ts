@@ -22,7 +22,7 @@ import type {
 import { TransactionCoder, TxPointerCoder } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
 
-import Provider from '../provider';
+import type Provider from '../provider';
 import type { TransactionRequest, JsonAbisFromAllCalls } from '../transaction-request';
 import {
   assemblePreConfirmationTransactionSummary,
@@ -37,11 +37,7 @@ import type {
 } from '../transaction-summary/types';
 import { extractTxError } from '../utils';
 import type { ProviderCacheJson } from '../utils/serialization';
-import {
-  deserializeProcessedTxOutput,
-  deserializeReceipt,
-  serializeProviderCache,
-} from '../utils/serialization';
+import { deserializeProcessedTxOutput, deserializeReceipt } from '../utils/serialization';
 
 import { type DecodedLogs, getAllDecodedLogs } from './getAllDecodedLogs';
 
@@ -130,13 +126,14 @@ export class TransactionResponse {
   /** Gas used on the transaction */
   gasUsed: BN = bn(0);
   /** The graphql Transaction with receipts object. */
-  private gqlTransaction?: GqlTransaction;
-  private request?: TransactionRequest;
-  private status?: StatusChangeSubscription['statusChange'];
+  gqlTransaction?: GqlTransaction;
+  request?: TransactionRequest;
+  status?: StatusChangeSubscription['statusChange'];
   abis?: JsonAbisFromAllCalls;
+  preConfirmationStatus?: StatusChangeSubscription['statusChange'];
+
   private waitingForStreamData = false;
   private statusResolvers: Map<StatusType, (() => void)[]> = new Map();
-  private preConfirmationStatus?: StatusChangeSubscription['statusChange'];
 
   /**
    * Constructor for `TransactionResponse`.
@@ -576,46 +573,5 @@ export class TransactionResponse {
 
   private getTransactionStatus() {
     return this.status ?? this.gqlTransaction?.status;
-  }
-
-  async toJson(): Promise<TransactionResponseJson> {
-    return {
-      id: this.id,
-      status: this.status,
-      abis: this.abis,
-      requestJson: JSON.stringify(this.request),
-      providerUrl: this.provider.url,
-      providerCache: await serializeProviderCache(this.provider),
-      gqlTransaction: this.gqlTransaction,
-      preConfirmationStatus: this.preConfirmationStatus,
-    };
-  }
-
-  static fromJson(json: TransactionResponseJson): TransactionResponse {
-    const {
-      id,
-      abis,
-      status,
-      providerUrl,
-      requestJson,
-      providerCache,
-      gqlTransaction,
-      preConfirmationStatus,
-    } = json;
-
-    const provider = new Provider(providerUrl, { cache: providerCache });
-    const { chainId } = providerCache.chain.consensusParameters;
-
-    const response = new TransactionResponse(id, provider, Number(chainId), abis);
-
-    if (requestJson) {
-      response.request = JSON.parse(requestJson);
-    }
-
-    response.status = status;
-    response.gqlTransaction = gqlTransaction;
-    response.preConfirmationStatus = preConfirmationStatus;
-
-    return response;
   }
 }
