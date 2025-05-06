@@ -31,11 +31,12 @@ import type {
   GetBalancesResponse,
   Coin,
   TransactionCostParams,
-  TransactionResponse,
   ProviderSendTxParams,
   TransactionSummaryJson,
   TransactionResult,
   TransactionType,
+  TransactionResponseJson,
+  TransactionResponse,
 } from './providers';
 import {
   withdrawScript,
@@ -54,6 +55,7 @@ import {
 } from './providers/transaction-request/helpers';
 import { mergeQuantities } from './providers/utils/merge-quantities';
 import { serializeProviderCache } from './providers/utils/serialization';
+import { deserializeTransactionResponseJson } from './providers/utils/transaction-response-serialization';
 import { AbstractAccount } from './types';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
 import { splitCoinsIntoBatches } from './utils/split-coins-into-batches';
@@ -926,7 +928,7 @@ export class Account extends AbstractAccount implements WithAddress {
         transactionSummary: await this.prepareTransactionSummary(transactionRequest),
       };
 
-      const transaction: string | TransactionResponse = await this._connector.sendTransaction(
+      const transaction: string | TransactionResponseJson = await this._connector.sendTransaction(
         this.address.toString(),
         transactionRequest,
         params
@@ -934,7 +936,7 @@ export class Account extends AbstractAccount implements WithAddress {
 
       return typeof transaction === 'string'
         ? this.provider.getTransactionResponse(transaction)
-        : transaction;
+        : deserializeTransactionResponseJson(transaction);
     }
 
     if (estimateTxDependencies) {
