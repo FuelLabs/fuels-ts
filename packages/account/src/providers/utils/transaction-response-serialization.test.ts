@@ -49,10 +49,7 @@ describe('Transaction Response Serialization', () => {
     expect(deserialized.preConfirmationStatus).toBeDefined();
     expect(deserialized.request).toBeDefined();
 
-    delete request.abis;
-    delete request.maturity;
-
-    expect(request).toStrictEqual(deserialized.request);
+    expect(request.toJSON()).toEqual(deserialized.request?.toJSON());
   });
 
   it('should serialize and deserialize a transaction response correctly [W/O TX REQUEST]', async () => {
@@ -134,5 +131,7 @@ describe('Transaction Response Serialization', () => {
 
     expect(deserialized.preConfirmationStatus).toBeUndefined();
     expect(deserialized.gqlTransaction).toBeUndefined();
+
+    expect(request.toJSON()).toEqual(deserialized.request?.toJSON());
   });
 });
