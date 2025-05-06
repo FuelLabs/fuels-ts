@@ -88,6 +88,8 @@ export interface BaseTransactionRequestLike {
   outputs?: TransactionRequestOutput[];
   /** List of witnesses */
   witnesses?: TransactionRequestWitness[];
+  /** The state of the transaction */
+  flag?: TransactionStateFlag;
 }
 
 type ToBaseTransactionResponse = Pick<
@@ -134,8 +136,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   witnesses: TransactionRequestWitness[] = [];
 
   /**
-   * @hidden
-   *
    * The current status of the transaction
    */
   flag: TransactionStateFlag = { state: undefined, transactionId: undefined, summary: undefined };
@@ -154,6 +154,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     inputs,
     outputs,
     witnesses,
+    flag,
   }: BaseTransactionRequestLike = {}) {
     this.tip = tip ? bn(tip) : undefined;
     this.maturity = maturity && maturity > 0 ? maturity : undefined;
@@ -163,6 +164,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     this.inputs = inputs ?? [];
     this.outputs = outputs ?? [];
     this.witnesses = witnesses ?? [];
+    this.flag = flag ?? { state: undefined, transactionId: undefined, summary: undefined };
   }
 
   static getPolicyMeta(req: BaseTransactionRequest) {
