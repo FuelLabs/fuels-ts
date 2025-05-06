@@ -11,7 +11,7 @@ import type {
   Network,
   SelectNetworkArguments,
   AccountSendTxParams,
-  TransactionResponse,
+  TransactionResponseJson,
 } from '../../src';
 import type { Asset } from '../../src/assets/types';
 import { FuelConnector } from '../../src/connectors/fuel-connector';
@@ -112,7 +112,7 @@ export class MockConnector extends FuelConnector {
     _address: string,
     _transaction: TransactionRequestLike,
     _params: AccountSendTxParams
-  ): Promise<string | TransactionResponse> {
+  ): Promise<string | TransactionResponseJson> {
     const wallet = this._wallets.find((w) => w.address.toString() === _address);
     if (!wallet) {
       throw new Error('Wallet is not found!');
