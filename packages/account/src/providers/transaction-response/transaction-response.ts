@@ -591,22 +591,22 @@ export class TransactionResponse {
     };
   }
 
-  static async fromJson(json: TransactionResponseJson): Promise<TransactionResponse> {
+  static fromJson(json: TransactionResponseJson): TransactionResponse {
     const {
       id,
-      gqlTransaction,
-      status,
-      preConfirmationStatus,
       abis,
-      providerCache,
+      status,
       providerUrl,
       requestJson,
+      providerCache,
+      gqlTransaction,
+      preConfirmationStatus,
     } = json;
 
     const provider = new Provider(providerUrl, { cache: providerCache });
-    const chainId = await provider.getChainId();
+    const { chainId } = providerCache.chain.consensusParameters;
 
-    const response = new TransactionResponse(id, provider, chainId, abis);
+    const response = new TransactionResponse(id, provider, Number(chainId), abis);
 
     if (requestJson) {
       response.request = JSON.parse(requestJson);
