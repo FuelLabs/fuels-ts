@@ -10,6 +10,7 @@ import type {
   TransactionResponse,
   TransactionCost,
   AbstractAccount,
+  AssembleTxParams,
 } from '@fuel-ts/account';
 import {
   mergeQuantities,
@@ -253,6 +254,28 @@ export class BaseInvocationScope<TReturn = any> {
     });
   }
 
+  /**
+   * This method is used to customize the parameters for the assembleTx method that will be called
+   * after invoking the `call` method. This is useful when you want to customize the transaction
+   * assembly process without having to manually assemble the transaction.
+   *
+   * @param params - The parameters to customize the transaction assembly, excluding the request.
+   * @returns The current instance of the class for method chaining.
+   */
+  assembleTx(params: Omit<AssembleTxParams, 'request'>) {
+    this.customAssembleTxParams = params;
+    return this;
+  }
+
+  /**
+   * Funds the transaction request with the required coins and returns it.
+   *
+   * @returns The transaction request.
+   *
+   * @deprecated The method is deprecated and will be removed in a future version.
+   * You should use `contract.functions.xyz().assembleTx(...)` instead if you need to customize the transaction funding process.
+   * Customizing the transaction funding process https://docs.fuel.network/guide/assembling-transactions/migration-guide.html for more information.
+   */
   async fundWithRequiredCoins(): Promise<ScriptTransactionRequest> {
     let request = await this.getTransactionRequest();
     request = clone(request);
