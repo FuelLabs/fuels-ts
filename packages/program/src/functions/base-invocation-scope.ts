@@ -77,6 +77,7 @@ export class BaseInvocationScope<TReturn = any> {
   protected isMultiCall: boolean = false;
   protected hasCallParamsGasLimit: boolean = false; // flag to check if any of the callParams has gasLimit set
   protected externalAbis: Record<string, JsonAbi> = {};
+  protected customAssembleTxParams?: Omit<AssembleTxParams, 'request'>;
   /**
    * @deprecated - Should be removed with `addSigners`
    */
@@ -453,6 +454,9 @@ export class BaseInvocationScope<TReturn = any> {
     })) as TransactionResponse;
 
     const transactionId = response.id;
+
+    // Reset custom assemble tx params
+    this.customAssembleTxParams = undefined;
 
     return {
       transactionId,
