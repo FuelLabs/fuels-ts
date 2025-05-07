@@ -1,11 +1,17 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { TransactionResultReceipt } from 'fuels';
-import { bn, getRandomB256, ContractFactory } from 'fuels';
-import { launchTestNode } from 'fuels/test-utils';
+import { bn, getRandomB256, ContractFactory, Wallet } from 'fuels';
+import { launchTestNode, TestAssetId } from 'fuels/test-utils';
 
-import { RevertErrorFactory, TokenContract, TokenContractFactory } from '../test/typegen';
+import {
+  CallTestContractFactory,
+  RevertErrorFactory,
+  TokenContract,
+  TokenContractFactory,
+} from '../test/typegen';
 
+import { fundAccount } from './predicate/utils/predicate';
 import { launchTestContract } from './utils';
 
 function launchContract() {
@@ -298,5 +304,49 @@ describe('Revert Error Testing', () => {
         }
       )
     );
+  });
+
+  it('should properly decode error when contract CALL receipt is not available', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [{ factory: CallTestContractFactory }],
+    });
+    const {
+      provider,
+      wallets: [adminWallet],
+      contracts: [contract],
+    } = launched;
+
+    const transferAmount = 100;
+    const baseAssetId = await provider.getBaseAssetId();
+
+    const wallet = Wallet.generate({ provider });
+
+    await fundAccount(adminWallet, wallet, 500_000);
+
+    contract.account = wallet;
+
+    // Contract call requires an amount of asset A
+    const scope = contract.functions.return_context_amount().callParams({
+      forward: [transferAmount, TestAssetId.A.value],
+    });
+
+    const request = await scope.getTransactionRequest();
+
+    request.gasLimit = bn(100_000);
+    request.maxFee = bn(100_000);
+
+    const baseAssetResources = await wallet.getResourcesToSpend([
+      { amount: transferAmount, assetId: baseAssetId },
+    ]);
+
+    // Funding the transaction only with the base asset
+    request.addResources(baseAssetResources);
+
+    const res = await wallet.sendTransaction(request);
+
+    await expectToThrowFuelError(() => res.waitForResult(), {
+      code: ErrorCode.SCRIPT_REVERTED,
+      message: expect.stringMatching(`The transaction reverted with reason: "NotEnoughBalance".`),
+    });
   });
 });
