@@ -1,5 +1,21 @@
 # Change Log
 
+## 0.100.6
+
+### Patch Changes
+
+- Updated dependencies [303379c]
+  - @fuel-ts/account@0.100.6
+  - @fuel-ts/program@0.100.6
+  - @fuel-ts/abi-coder@0.100.6
+  - @fuel-ts/crypto@0.100.6
+  - @fuel-ts/errors@0.100.6
+  - @fuel-ts/hasher@0.100.6
+  - @fuel-ts/math@0.100.6
+  - @fuel-ts/merkle@0.100.6
+  - @fuel-ts/transactions@0.100.6
+  - @fuel-ts/utils@0.100.6
+
 ## 0.100.5
 
 ### Patch Changes
