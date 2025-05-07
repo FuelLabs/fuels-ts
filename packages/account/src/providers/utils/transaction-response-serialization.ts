@@ -1,12 +1,13 @@
 import Provider from '../provider';
 import { transactionRequestify } from '../transaction-request';
-import type { TransactionResponseJson } from '../transaction-response';
 import { TransactionResponse } from '../transaction-response';
+import type { TransactionResponseJson } from '../transaction-response';
 
 import { serializeProviderCache } from './serialization';
 
 /**
- * NOTE: This is defined within a new file to avoid circular dependencies.
+ * NOTE: These helpers are defined here instead of in "serialization.ts"
+ * to avoid circular dependencies.
  */
 
 export const serializeTransactionResponseJson = async (

@@ -4,7 +4,7 @@ import type {
   AccountSendTxParams,
   ScriptTransactionRequest,
   TransactionStateFlag,
-  TransactionResponseJson,
+  TransactionResponse,
 } from '../../src';
 
 import { MockConnector } from './mocked-connector';
@@ -14,7 +14,7 @@ export class MockSendTransactionConnector extends MockConnector {
     _address: string,
     _transaction: TransactionRequestLike,
     _params: AccountSendTxParams
-  ): Promise<string | TransactionResponseJson> {
+  ): Promise<string | TransactionResponse> {
     const wallet = this._wallets.find((w) => w.address.toString() === _address);
     if (!wallet) {
       throw new Error('Wallet is not found!');
