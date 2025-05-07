@@ -1,5 +1,21 @@
 # Change Log
 
+## 0.100.6
+
+### Patch Changes
+
+- 303379c: chore: made connector returns `TransactionResponse` type
+  - @fuel-ts/abi-coder@0.100.6
+  - @fuel-ts/address@0.100.6
+  - @fuel-ts/crypto@0.100.6
+  - @fuel-ts/errors@0.100.6
+  - @fuel-ts/hasher@0.100.6
+  - @fuel-ts/math@0.100.6
+  - @fuel-ts/merkle@0.100.6
+  - @fuel-ts/transactions@0.100.6
+  - @fuel-ts/utils@0.100.6
+  - @fuel-ts/versions@0.100.6
+
 ## 0.100.5
 
 ### Patch Changes
