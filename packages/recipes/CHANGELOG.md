@@ -1,5 +1,35 @@
 # Change Log
 
+## 0.100.6
+
+### Patch Changes
+
+- Updated dependencies [303379c]
+  - @fuel-ts/account@0.100.6
+  - @fuel-ts/contract@0.100.6
+  - @fuel-ts/program@0.100.6
+  - @fuel-ts/abi-coder@0.100.6
+  - @fuel-ts/abi-typegen@0.100.6
+  - @fuel-ts/address@0.100.6
+  - @fuel-ts/transactions@0.100.6
+  - @fuel-ts/utils@0.100.6
+
+## 0.100.5
+
+### Patch Changes
+
+- Updated dependencies [0a8b276]
+- Updated dependencies [03b151b]
+- Updated dependencies [416e9e7]
+  - @fuel-ts/account@0.100.5
+  - @fuel-ts/contract@0.100.5
+  - @fuel-ts/program@0.100.5
+  - @fuel-ts/abi-coder@0.100.5
+  - @fuel-ts/abi-typegen@0.100.5
+  - @fuel-ts/address@0.100.5
+  - @fuel-ts/transactions@0.100.5
+  - @fuel-ts/utils@0.100.5
+
 ## 0.100.4
 
 ### Patch Changes

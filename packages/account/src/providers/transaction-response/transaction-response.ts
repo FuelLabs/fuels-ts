@@ -23,7 +23,7 @@ import { TransactionCoder, TxPointerCoder } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
 
 import type Provider from '../provider';
-import type { JsonAbisFromAllCalls, TransactionRequest } from '../transaction-request';
+import type { TransactionRequest, JsonAbisFromAllCalls } from '../transaction-request';
 import {
   assemblePreConfirmationTransactionSummary,
   assembleTransactionSummary,
@@ -36,6 +36,7 @@ import type {
   PreConfirmationTransactionSummary,
 } from '../transaction-summary/types';
 import { extractTxError } from '../utils';
+import type { ProviderCacheJson } from '../utils/serialization';
 import { deserializeProcessedTxOutput, deserializeReceipt } from '../utils/serialization';
 
 import { type DecodedLogs, getAllDecodedLogs } from './getAllDecodedLogs';
@@ -103,6 +104,17 @@ type StatusChangeSubscription =
 
 type StatusType = 'confirmation' | 'preConfirmation';
 
+export type TransactionResponseJson = {
+  id: string;
+  providerUrl: string;
+  abis?: JsonAbisFromAllCalls;
+  status?: StatusChangeSubscription['statusChange'];
+  preConfirmationStatus?: StatusChangeSubscription['statusChange'];
+  providerCache: ProviderCacheJson;
+  gqlTransaction?: GqlTransaction;
+  requestJson?: string;
+};
+
 /**
  * Represents a response for a transaction.
  */
@@ -114,13 +126,14 @@ export class TransactionResponse {
   /** Gas used on the transaction */
   gasUsed: BN = bn(0);
   /** The graphql Transaction with receipts object. */
-  private gqlTransaction?: GqlTransaction;
-  private request?: TransactionRequest;
-  private status?: StatusChangeSubscription['statusChange'];
+  gqlTransaction?: GqlTransaction;
+  request?: TransactionRequest;
+  status?: StatusChangeSubscription['statusChange'];
   abis?: JsonAbisFromAllCalls;
+  preConfirmationStatus?: StatusChangeSubscription['statusChange'];
+
   private waitingForStreamData = false;
   private statusResolvers: Map<StatusType, (() => void)[]> = new Map();
-  private preConfirmationStatus?: StatusChangeSubscription['statusChange'];
 
   /**
    * Constructor for `TransactionResponse`.

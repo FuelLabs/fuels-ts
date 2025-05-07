@@ -31,11 +31,11 @@ import type {
   GetBalancesResponse,
   Coin,
   TransactionCostParams,
-  TransactionResponse,
   ProviderSendTxParams,
   TransactionSummaryJson,
   TransactionResult,
   TransactionType,
+  TransactionResponse,
 } from './providers';
 import {
   withdrawScript,
