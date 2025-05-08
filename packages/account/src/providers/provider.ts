@@ -1610,7 +1610,7 @@ export default class Provider {
    * @returns A promise that resolves to the transaction cost object.
    *
    * @deprecated Use provider.assembleTx instead
-   * Check the migration guide https://docs.fuel.network/guide/assembling-transactions/migration-guide.html for more information.
+   * Check the migration guide https://docs.fuel.network/docs/fuels-ts/transactions/assemble-tx-migration-guide/ for more information.
    */
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,

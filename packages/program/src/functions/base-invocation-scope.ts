@@ -240,7 +240,7 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The transaction cost details.
    *
    * @deprecated Use contract.fundWithRequiredCoins instead
-   * Check the migration guide https://docs.fuel.network/guide/transactions/assemble-tx-migration-guide.html for more information.
+   * Check the migration guide https://docs.fuel.network/docs/fuels-ts/transactions/assemble-tx-migration-guide/ for more information.
    */
   async getTransactionCost(): Promise<TransactionCost> {
     const request = clone(await this.getTransactionRequest());
@@ -258,7 +258,7 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The transaction request.
    *
    * @deprecated The method is deprecated and will be removed in a future version.
-   * Checkout this guide for more information https://docs.fuel.network/guide/contracts/custom-contract-calls.html
+   * Checkout this guide for more information https://docs.fuel.network/docs/fuels-ts/contracts/custom-contract-calls/
    */
   async fundWithRequiredCoins(): Promise<ScriptTransactionRequest> {
     let request = await this.getTransactionRequest();
@@ -412,7 +412,7 @@ export class BaseInvocationScope<TReturn = any> {
    * @deprecated This method is deprecated and will be removed in a future versions.
    * All signatures should be manually added to the transaction request witnesses. If your
    * Sway program relies on in-code signature validation, visit this guide:
-   * https://docs.fuel.network/guides/cookbook/sway-script-with-signature-validation.html
+   * https://docs.fuel.network/docs/fuels-ts/cookbook/sway-script-with-signature-validation/
    */
   addSigners(signers: Account | Account[]) {
     this.addSignersCallback = (transactionRequest) =>
