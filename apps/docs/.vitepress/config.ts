@@ -265,6 +265,10 @@ export default defineConfig({
                 link: '/guide/contracts/configurable-constants',
               },
               {
+                text: 'Custom Contract Calls',
+                link: '/guide/contracts/custom-contract-calls',
+              },
+              {
                 text: 'Minted Token Asset ID',
                 link: '/guide/contracts/minted-token-asset-id',
               },
