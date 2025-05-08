@@ -38,7 +38,6 @@ export default defineConfig({
       "**/node_modules/**",
       "**/dist/**",
       "apps/demo-nextjs",
-      "apps/demo-react-cra",
       "apps/demo-react-vite",
     ],
     globals: true,
