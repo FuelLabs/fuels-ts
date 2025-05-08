@@ -78,7 +78,6 @@ export class BaseInvocationScope<TReturn = any> {
   protected isMultiCall: boolean = false;
   protected hasCallParamsGasLimit: boolean = false; // flag to check if any of the callParams has gasLimit set
   protected externalAbis: Record<string, JsonAbi> = {};
-  protected customAssembleTxParams?: Omit<AssembleTxParams, 'request'>;
   /**
    * @deprecated - Should be removed with `addSigners`
    */
@@ -252,19 +251,6 @@ export class BaseInvocationScope<TReturn = any> {
       quantities: this.getRequiredCoins(),
       signatureCallback: this.addSignersCallback,
     });
-  }
-
-  /**
-   * This method is used to customize the parameters for the assembleTx method that will be called
-   * after invoking the `call` method. This is useful when you want to customize the transaction
-   * assembly process without having to manually assemble the transaction.
-   *
-   * @param params - The parameters to customize the transaction assembly, excluding the request.
-   * @returns The current instance of the class for method chaining.
-   */
-  assembleTx(params: Omit<AssembleTxParams, 'request'>) {
-    this.customAssembleTxParams = params;
-    return this;
   }
 
   /**
@@ -478,21 +464,6 @@ export class BaseInvocationScope<TReturn = any> {
     if (!skipAssembleTx) {
       if (this.addSignersCallback) {
         transactionRequest = await this.legacyFundWithRequiredCoins();
-      } else if (this.customAssembleTxParams) {
-        const provider = this.getProvider();
-        const { assembledRequest, gasPrice } = await provider.assembleTx({
-          request: transactionRequest,
-          ...this.customAssembleTxParams,
-        });
-        transactionRequest = assembledRequest as ScriptTransactionRequest;
-
-        await setAndValidateGasAndFeeForAssembledTx({
-          gasPrice,
-          provider,
-          transactionRequest: assembledRequest,
-          setGasLimit: this.txParameters?.gasLimit,
-          setMaxFee: this.txParameters?.maxFee,
-        });
       } else {
         transactionRequest = await this.fundWithRequiredCoins();
       }
@@ -503,9 +474,6 @@ export class BaseInvocationScope<TReturn = any> {
     })) as TransactionResponse;
 
     const transactionId = response.id;
-
-    // Reset custom assemble tx params
-    this.customAssembleTxParams = undefined;
 
     return {
       transactionId,
