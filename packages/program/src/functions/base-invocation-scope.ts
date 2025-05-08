@@ -10,7 +10,6 @@ import type {
   TransactionResponse,
   TransactionCost,
   AbstractAccount,
-  AssembleTxParams,
 } from '@fuel-ts/account';
 import {
   mergeQuantities,
@@ -241,7 +240,7 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The transaction cost details.
    *
    * @deprecated Use contract.fundWithRequiredCoins instead
-   * Check the migration guide https://docs.fuel.network/guide/assembling-transactions/migration-guide.html for more information.
+   * Check the migration guide https://docs.fuel.network/guide/transactions/assemble-tx-migration-guide.html for more information.
    */
   async getTransactionCost(): Promise<TransactionCost> {
     const request = clone(await this.getTransactionRequest());
@@ -259,8 +258,7 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The transaction request.
    *
    * @deprecated The method is deprecated and will be removed in a future version.
-   * You should use `contract.functions.xyz().assembleTx(...)` instead if you need to customize the transaction funding process.
-   * Customizing the transaction funding process https://docs.fuel.network/guide/assembling-transactions/migration-guide.html for more information.
+   * Checkout this guide for more information https://docs.fuel.network/guide/contracts/custom-contract-calls.html
    */
   async fundWithRequiredCoins(): Promise<ScriptTransactionRequest> {
     let request = await this.getTransactionRequest();
