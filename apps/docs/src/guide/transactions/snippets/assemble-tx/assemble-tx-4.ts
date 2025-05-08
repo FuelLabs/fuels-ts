@@ -17,32 +17,36 @@ const transferAmountB = 600;
 
 const script = new ScriptTransferToContract(account);
 
-const { waitForResult } = await script.functions
-  .main(
-    contractId,
-    { bits: TestAssetId.A.value },
-    transferAmountA,
-    { bits: TestAssetId.B.value },
-    transferAmountB
-  )
-  .assembleTx({
-    feePayerAccount: account,
-    accountCoinQuantities: [
-      {
-        amount: transferAmountA,
-        assetId: TestAssetId.A.value,
-        account,
-        changeOutputAccount: account,
-      },
-      {
-        amount: transferAmountB,
-        assetId: TestAssetId.B.value,
-        account,
-        changeOutputAccount: account,
-      },
-    ],
-  })
-  .call();
+const scope = script.functions.main(
+  contractId,
+  { bits: TestAssetId.A.value },
+  transferAmountA,
+  { bits: TestAssetId.B.value },
+  transferAmountB
+);
+
+const request = await scope.getTransactionRequest();
+
+await provider.assembleTx({
+  request,
+  feePayerAccount: account,
+  accountCoinQuantities: [
+    {
+      amount: transferAmountA,
+      assetId: TestAssetId.A.value,
+      account,
+      changeOutputAccount: account,
+    },
+    {
+      amount: transferAmountB,
+      assetId: TestAssetId.B.value,
+      account,
+      changeOutputAccount: account,
+    },
+  ],
+});
+
+const { waitForResult } = await scope.call({ skipAssembleTx: true });
 
 const {
   transactionResult: { isStatusSuccess },
