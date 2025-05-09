@@ -240,7 +240,7 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The transaction cost details.
    *
    * @deprecated Use contract.fundWithRequiredCoins instead
-   * Check the migration guide https://docs.fuel.network/guide/assembling-transactions/migration-guide.html for more information.
+   * Check the migration guide https://docs.fuel.network/docs/fuels-ts/transactions/assemble-tx-migration-guide/ for more information.
    */
   async getTransactionCost(): Promise<TransactionCost> {
     const request = clone(await this.getTransactionRequest());
@@ -252,6 +252,14 @@ export class BaseInvocationScope<TReturn = any> {
     });
   }
 
+  /**
+   * Funds the transaction request with the required coins and returns it.
+   *
+   * @returns The transaction request.
+   *
+   * @deprecated The method is deprecated and will be removed in a future version.
+   * Checkout this guide for more information https://docs.fuel.network/docs/fuels-ts/contracts/custom-contract-calls/
+   */
   async fundWithRequiredCoins(): Promise<ScriptTransactionRequest> {
     let request = await this.getTransactionRequest();
     request = clone(request);
@@ -404,7 +412,7 @@ export class BaseInvocationScope<TReturn = any> {
    * @deprecated This method is deprecated and will be removed in a future versions.
    * All signatures should be manually added to the transaction request witnesses. If your
    * Sway program relies on in-code signature validation, visit this guide:
-   * https://docs.fuel.network/guides/cookbook/sway-script-with-signature-validation.html
+   * https://docs.fuel.network/docs/fuels-ts/cookbook/sway-script-with-signature-validation/
    */
   addSigners(signers: Account | Account[]) {
     this.addSignersCallback = (transactionRequest) =>
@@ -428,12 +436,19 @@ export class BaseInvocationScope<TReturn = any> {
    * containing the transaction ID and a function to wait for the result. The promise will resolve
    * as soon as the transaction is submitted to the node.
    *
+   * @param params - Optional parameters for the call.
+   * - `skipAssembleTx`: A boolean indicating whether to skip assembling the transaction. This is useful
+   *   when customizations were made to the transaction request using the `assembleTx` method.
+   *
    * @returns A promise that resolves to an object containing:
    * - `transactionId`: The ID of the submitted transaction.
    * - `waitForResult`: A function that waits for the transaction result.
+   * - `waitForPreConfirmation`: A function that waits for the transaction pre-confirmation.
    * @template T - The type of the return value.
    */
-  async call<T = TReturn>(): Promise<{
+  async call<T = TReturn>(params?: {
+    skipAssembleTx?: boolean;
+  }): Promise<{
     transactionId: string;
     waitForResult: () => Promise<FunctionResult<T>>;
     waitForPreConfirmation: () => Promise<PreConfirmationFunctionResult<T>>;
@@ -442,10 +457,14 @@ export class BaseInvocationScope<TReturn = any> {
 
     let transactionRequest = await this.getTransactionRequest();
 
-    if (this.addSignersCallback) {
-      transactionRequest = await this.legacyFundWithRequiredCoins();
-    } else {
-      transactionRequest = await this.fundWithRequiredCoins();
+    const skipAssembleTx = params?.skipAssembleTx;
+
+    if (!skipAssembleTx) {
+      if (this.addSignersCallback) {
+        transactionRequest = await this.legacyFundWithRequiredCoins();
+      } else {
+        transactionRequest = await this.fundWithRequiredCoins();
+      }
     }
 
     const response = (await this.program.account.sendTransaction(transactionRequest, {

@@ -1396,7 +1396,7 @@ describe('Contract', () => {
     });
   });
 
-  it.skip('should customize the TX request and still use the scope invocation[ADD WITNESS]', async () => {
+  it('should customize the TX request and still use the scope invocation[ADD WITNESS]', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
@@ -1412,7 +1412,6 @@ describe('Contract', () => {
     } = launched;
 
     const fooValue = 1000;
-    const baseAssetId = await provider.getBaseAssetId();
 
     const predicate = new PredicateSigning({
       provider,
@@ -1422,31 +1421,25 @@ describe('Contract', () => {
 
     await fundAccount(wallet, predicate, 500_000);
 
-    const predicateResources = await predicate.getResourcesToSpend([
-      { amount: bn(1), assetId: baseAssetId },
-    ]);
-
     contract.account = wallet;
 
-    /**
-     * GasLimit and maxFee need to be set to avoid using optimal values from `getTransactionCost`
-     * resulting in invalidating the added signature.
-     */
-    const scope = contract.functions.foo(fooValue).txParams({
-      gasLimit: 20000,
-      maxFee: 1200,
+    const scope = contract.functions.foo(fooValue);
+
+    const request = await scope.getTransactionRequest();
+
+    const witnessIndex = request.addEmptyWitness();
+
+    const { assembledRequest } = await provider.assembleTx({
+      request,
+      feePayerAccount: predicate,
+      estimatePredicates: false,
     });
 
-    let request = await scope.getTransactionRequest();
-    request.addResources(predicateResources);
-    request.addWitness(await wallet.signTransaction(request));
+    request.updateWitness(witnessIndex, await wallet.signTransaction(assembledRequest));
 
-    /**
-     * Estimating predicates now to avoid estimating later at `getTransactionCost`
-     */
-    request = await provider.estimatePredicates(request);
+    await provider.estimatePredicates(request);
 
-    const call = await scope.call();
+    const call = await scope.call({ skipAssembleTx: true });
 
     const {
       value,
@@ -1457,7 +1450,7 @@ describe('Contract', () => {
     expect(value.toNumber()).toBe(fooValue + 1);
   });
 
-  it.skip('should customize the TX request and still use the scope invocation [COIN]', async () => {
+  it('should customize the TX request and still use the scope invocation [COIN]', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
@@ -1477,18 +1470,24 @@ describe('Contract', () => {
 
     const predicate = new PredicateTrue({ provider });
 
-    await fundAccount(wallet, predicate, 500_000);
-
-    const predicateResources = await predicate.getResourcesToSpend([
-      { amount: bn(1), assetId: baseAssetId },
-    ]);
+    await fundAccount(wallet, predicate, 2_000_000);
 
     contract.account = wallet;
     const scope = contract.functions.foo(fooValue);
     const request = await scope.getTransactionRequest();
+
+    const predicateResources = await predicate.getResourcesToSpend([
+      { amount: bn(2_000_000), assetId: baseAssetId },
+    ]);
+
     request.addResources(predicateResources);
 
-    const call = await scope.call();
+    request.maxFee = bn(15_000);
+    request.gasLimit = bn(100_000);
+
+    await provider.estimatePredicates(request);
+
+    const call = await scope.call({ skipAssembleTx: true });
 
     const {
       value,
@@ -1507,7 +1506,7 @@ describe('Contract', () => {
     });
   });
 
-  it.skip('should customize the TX request and still use the scope invocation [MESSAGE]', async () => {
+  it('should customize the TX request and still use the scope invocation [MESSAGE]', async () => {
     const testMessage = new TestMessage({
       data: hexlify(InputMessageCoder.encodeData(randomBytes(10))),
     });
@@ -1524,20 +1523,32 @@ describe('Contract', () => {
     });
 
     const {
-      wallets: [recipient],
+      provider,
+      wallets: [wallet],
       contracts: [contract],
     } = launched;
 
     const fooValue = 1000;
-    const {
-      messages: [message],
-    } = await recipient.getMessages();
+    const baseAssetId = await provider.getBaseAssetId();
 
     const scope = contract.functions.foo(fooValue);
     const request = await scope.getTransactionRequest();
+
+    const resources = await wallet.getResourcesToSpend([
+      { amount: bn(10_000), assetId: baseAssetId },
+    ]);
+
+    request.addResources(resources);
+
+    const {
+      messages: [message],
+    } = await wallet.getMessages();
     request.addMessageInput(message);
 
-    const call = await scope.call();
+    request.gasLimit = bn(100_000);
+    request.maxFee = bn(15_000);
+
+    const call = await scope.call({ skipAssembleTx: true });
 
     const {
       value,

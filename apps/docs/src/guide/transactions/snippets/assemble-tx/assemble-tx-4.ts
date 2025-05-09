@@ -7,8 +7,8 @@ import { CounterFactory, ScriptTransferToContract } from '../../../../typegend';
 const provider = new Provider(LOCAL_NETWORK_URL);
 const account = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
-const { waitForResult } = await new CounterFactory(account).deploy();
-const { contract } = await waitForResult();
+const contractDeploy = await new CounterFactory(account).deploy();
+const { contract } = await contractDeploy.waitForResult();
 const contractId = contract.id.toB256();
 
 // #region assemble-tx-4
@@ -17,17 +17,17 @@ const transferAmountB = 600;
 
 const script = new ScriptTransferToContract(account);
 
-const request = await script.functions
-  .main(
-    contractId,
-    { bits: TestAssetId.A.value },
-    transferAmountA,
-    { bits: TestAssetId.B.value },
-    transferAmountB
-  )
-  .getTransactionRequest();
+const scope = script.functions.main(
+  contractId,
+  { bits: TestAssetId.A.value },
+  transferAmountA,
+  { bits: TestAssetId.B.value },
+  transferAmountB
+);
 
-const { assembledRequest } = await provider.assembleTx({
+const request = await scope.getTransactionRequest();
+
+await provider.assembleTx({
   request,
   feePayerAccount: account,
   accountCoinQuantities: [
@@ -46,8 +46,11 @@ const { assembledRequest } = await provider.assembleTx({
   ],
 });
 
-const tx = await account.sendTransaction(assembledRequest);
-const { isStatusSuccess } = await tx.waitForResult();
+const { waitForResult } = await scope.call({ skipAssembleTx: true });
+
+const {
+  transactionResult: { isStatusSuccess },
+} = await waitForResult();
 // #endregion assemble-tx-4
 
 console.log('isStatusSuccess', isStatusSuccess);

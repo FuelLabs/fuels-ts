@@ -11,11 +11,12 @@ const { contract } = await deploy.waitForResult();
 
 // #region forward
 const amountToForward = 10;
+const baseAssetId = await provider.getBaseAssetId();
 
 const { waitForResult } = await contract.functions
   .return_context_amount()
   .callParams({
-    forward: [amountToForward, await provider.getBaseAssetId()],
+    forward: [amountToForward, baseAssetId],
   })
   .call();
 
