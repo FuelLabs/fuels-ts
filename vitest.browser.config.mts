@@ -36,7 +36,17 @@ const config: ViteUserConfig = {
       "@vitest/coverage-istanbul",
       "chromium-bidi",
     ],
-    include: ["events", "timers/promises"],
+    include: [
+      "events",
+      "timers/promises",
+      "vite-plugin-node-polyfills/shims/buffer",
+      "vite-plugin-node-polyfills/shims/global",
+      "vite-plugin-node-polyfills/shims/process",
+      "memfs",
+      "path",
+      "os",
+      "crypto",
+    ],
     entries: ["**/*.test.ts"],
   },
   test: {
@@ -51,9 +61,14 @@ const config: ViteUserConfig = {
       provider: "playwright",
       headless: true,
       enabled: true,
-      name: "chromium",
       // Avoids taking screenshots
       screenshotFailures: false,
+      instances: [
+        {
+          browser: "chromium",
+          headless: true,
+        },
+      ],
     },
   },
 };
