@@ -420,6 +420,12 @@ export class TransactionResponse {
       ) {
         this.preConfirmationStatus = statusChange;
         this.resolveStatus('preConfirmation');
+        // We should end the subscription here if we are not waiting for the confirmation status
+        const pendingConfirmationResolvers = this.statusResolvers.get('confirmation');
+        if (!pendingConfirmationResolvers) {
+          this.waitingForStreamData = false;
+          break;
+        }
       }
 
       if (statusChange.type === 'SuccessStatus' || statusChange.type === 'FailureStatus') {
