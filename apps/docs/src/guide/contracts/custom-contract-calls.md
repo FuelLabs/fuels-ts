@@ -4,7 +4,19 @@ In certain scenarios, your use case may require more control over how contract c
 
 For instance, imagine a liquidity pool contract where users can deposit a specific asset to receive some form of benefit. To enhance the experience and make it more attractive, one could use a predicate to cover the transaction fees. This way, users only need to provide the asset they wish to deposit without worrying about the fees.
 
-Here’s how you can prepare and submit a customizable contract call in such a setup:
+There are two main ways to customize a contract call:
+
+## Approach 1: Customize `assembleTx` Parameters
+
+In most cases, this isn’t necessary. However, if you need precise control, you can specify the parameters passed to `assembleTx`, which is used internally to estimate and fund the transaction.
+
+Here’s how it works:
+
+<<< @./snippets/custom-contract-calls/assemble-tx-parameters.ts#assemble-tx-parameters-1{ts:line-numbers}
+
+## Approach 2: Manually Call `assembleTx`
+
+You can also retrieve the transaction request from the invocation scope and manually call `assembleTx` on it. Just like the approach 1 this gives you full control over how the transaction is assembled and funded.
 
 <<< @./snippets/custom-contract-calls/call.ts#custom-contract-call-1{ts:line-numbers}
 
