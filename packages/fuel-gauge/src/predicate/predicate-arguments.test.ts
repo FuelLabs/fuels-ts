@@ -117,6 +117,9 @@ describe('Predicate', () => {
         wallets: [fundingWallet],
       } = launched;
 
+      const baseAssetId = await provider.getBaseAssetId();
+
+      // Setting wrong data
       const predicate = new PredicateU32({ provider, data: [100] });
 
       // fund predicate
@@ -128,10 +131,19 @@ describe('Predicate', () => {
       expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
       await expect(
-        predicate.transfer(receiver.address, amountToPredicate, await provider.getBaseAssetId(), {
+        predicate.transfer(receiver.address, amountToPredicate, baseAssetId, {
           gasLimit: 1000,
         })
       ).rejects.toThrow(/PredicateVerificationFailed/);
+
+      // Setting correct data
+      predicate.setData([1078]);
+
+      const transfer = await predicate.transfer(receiver.address, amountToPredicate, baseAssetId);
+
+      const { isStatusSuccess } = await transfer.waitForResult();
+
+      expect(isStatusSuccess).toBeTruthy();
     });
 
     it('calls a predicate with a valid struct argument and returns true', async () => {

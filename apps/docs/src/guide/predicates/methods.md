@@ -26,6 +26,20 @@ You may want to use this method when using a predicate in an existing transactio
 
 ## Transactions
 
+### `setData`
+
+The `setData` method can be used to update the predicate data (i.e., predicate arguments) after the predicate has already been instantiated. Since the predicate data is initially set during instantiation, `setData` provides a way to modify it afterward if needed.
+
+<<< @./snippets/methods/set-predicate-new-data.ts#set-predicate-new-data{ts:line-numbers}
+
+> Note: Using `setData` only updates the predicate data inside the predicate instance itself. It does not affect predicate data already embedded in a transaction request that includes predicate UTXOs. This is because each predicate UTXO carries its own copy of the predicate data.
+
+<<< @./snippets/methods/no-modified-data.ts#no-modified-data{ts:line-numbers}
+
+If you need to modify the predicate data within a transaction request, use the `populateTransactionPredicateData` method after setting the new data.
+
+<<< @./snippets/methods/modified-data.ts#modified-data{ts:line-numbers}
+
 ### `sendTransaction`
 
 This is used to send a transaction to the node.

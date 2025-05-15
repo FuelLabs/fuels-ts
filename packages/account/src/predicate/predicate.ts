@@ -173,6 +173,15 @@ export class Predicate<
   }
 
   /**
+   * Sets the predicate data.
+   *
+   * @param data - The data to be set for the predicate.
+   */
+  setData(data: TData) {
+    this.predicateData = data;
+  }
+
+  /**
    * Processes the predicate data and returns the altered bytecode and interface.
    *
    * @param bytes - The bytes of the predicate.
