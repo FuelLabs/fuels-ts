@@ -15,6 +15,7 @@ import {
 import { expectToThrowFuelError, launchTestNode, TestAssetId, TestMessage } from 'fuels/test-utils';
 
 import {
+  ConditionalLoopContractFactory,
   PredicateFalseConfigurable,
   Predicate as PredicatePassword,
   PredicateTrue,
@@ -682,6 +683,48 @@ describe('assembleTx', () => {
       payerAccount: predicate1,
       baseAssetId,
     });
+  });
+
+  it('should consider reserveGas when assembling at BaseInvocationScope', async () => {
+    using launch = await launchTestNode({
+      walletsConfig: {
+        count: 2,
+      },
+      contractsConfigs: [{ factory: ConditionalLoopContractFactory }],
+    });
+
+    const {
+      wallets: [correctWallet],
+      contracts: [conditionalContract],
+    } = launch;
+
+    conditionalContract.account = correctWallet;
+
+    const failureCall = await conditionalContract.functions.loop().call();
+
+    /**
+     * The contract checks whether the witness is a zeroed B512. If it is, the contract
+     * loops 5 times; otherwise, it loops 10 times. Since the transaction is unsigned
+     * during `assembleTx` estimation, this condition evaluates to 5 loops, resulting in a
+     * lower estimated gas used. However, when the transaction is submitted with a valid
+     * witness, it takes the longer path with 10 loops, consuming more gas than
+     * initially estimated.
+     */
+    await expectToThrowFuelError(() => failureCall.waitForResult(), {
+      code: FuelError.CODES.SCRIPT_REVERTED,
+      message: expect.stringMatching('OutOfGas'),
+    });
+
+    const successCall = await conditionalContract.functions
+      .loop()
+      .assembleTxParams({ reserveGas: 10000 })
+      .call();
+
+    const {
+      transactionResult: { isStatusSuccess },
+    } = await successCall.waitForResult();
+
+    expect(isStatusSuccess).toBe(true);
   });
 
   const extractAddress = (gqlAccount: GqlAccount) =>
