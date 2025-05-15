@@ -1819,7 +1819,7 @@ export default class Provider {
       requiredBalances,
       estimatePredicates,
       excludeInput,
-      reserveGas: reserveGas ? reserveGas.toString(10) : undefined,
+      reserveGas: reserveGas ? bn(reserveGas).toString(10) : undefined,
     });
 
     if (status.type === 'DryRunFailureStatus') {
@@ -1837,8 +1837,8 @@ export default class Provider {
       request.maxFee = bn(gqlTransaction.policies.maxFee);
     }
 
-    if (gqlTransaction.scriptGasLimit) {
-      (request as ScriptTransactionRequest).gasLimit = bn(gqlTransaction.scriptGasLimit);
+    if (request.type === TransactionType.Script) {
+      request.gasLimit = bn(gqlTransaction.scriptGasLimit).add(bn(reserveGas));
     }
 
     const rawReceipts = status.receipts;
