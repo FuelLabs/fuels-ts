@@ -11,4 +11,4 @@ Here’s how you can prepare and submit a customizable contract call in such a s
 The `{ skipAssembleTx: true }` option is essential in this flow.
 It tells the SDK to skip the automatic `assembleTx` step during the `.call()` execution, since we’ve already manually assembled and funded the transaction earlier using `provider.assembleTx()`.
 
-Skipping this step prevents the SDK from overwriting the prepared transaction and ensures the custom logic—such as using a predicate as the fee payer—remains intact.
+Skipping this step prevents the SDK from overwriting the prepared transaction and ensures the custom logic remains intact, such as using a predicate as the fee payer.
