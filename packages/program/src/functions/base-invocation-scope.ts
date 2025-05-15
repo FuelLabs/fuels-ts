@@ -258,13 +258,14 @@ export class BaseInvocationScope<TReturn = any> {
    * Funds the transaction request with the required coins and returns it.
    *
    * @returns The transaction request.
-   *
-   * @deprecated The method is deprecated and will be removed in a future version.
-   * Checkout this guide for more information https://docs.fuel.network/docs/fuels-ts/contracts/custom-contract-calls/
    */
   async fundWithRequiredCoins(): Promise<ScriptTransactionRequest> {
     let request = await this.getTransactionRequest();
     request = clone(request);
+
+    // eslint-disable-next-line prefer-const
+    let { feePayerAccount, accountCoinQuantities, ...restAssembleTxParams } =
+      this.assembleTxParameters ?? {};
 
     request.maxFee = bn(0);
     request.gasLimit = bn(0);
@@ -273,21 +274,28 @@ export class BaseInvocationScope<TReturn = any> {
     const account = (this.program.account ?? Wallet.generate({ provider })) as Account;
     const baseAssetId = await provider.getBaseAssetId();
 
-    const outputQuantities = request.outputs
-      .filter((o) => o.type === OutputType.Coin)
-      .map(({ amount, assetId }) => ({ assetId: String(assetId), amount: bn(amount) }));
+    if (!feePayerAccount) {
+      feePayerAccount = account;
+    }
 
-    const accountCoinQuantities = mergeQuantities(outputQuantities, this.requiredCoins);
+    if (!accountCoinQuantities) {
+      const outputQuantities = request.outputs
+        .filter((o) => o.type === OutputType.Coin)
+        .map(({ amount, assetId }) => ({ assetId: String(assetId), amount: bn(amount) }));
 
-    if (!accountCoinQuantities.length) {
-      accountCoinQuantities.push({ assetId: baseAssetId, amount: bn(0) });
+      accountCoinQuantities = mergeQuantities(outputQuantities, this.requiredCoins);
+
+      if (!accountCoinQuantities.length) {
+        accountCoinQuantities.push({ assetId: baseAssetId, amount: bn(0) });
+      }
     }
 
     // eslint-disable-next-line prefer-const
     let { assembledRequest, gasPrice } = await provider.assembleTx({
       request,
-      feePayerAccount: account,
+      feePayerAccount,
       accountCoinQuantities,
+      ...restAssembleTxParams,
     });
 
     assembledRequest = assembledRequest as ScriptTransactionRequest;
