@@ -161,7 +161,7 @@ export type AssembleTxParams<T extends TransactionRequest = TransactionRequest> 
   // Resources to be ignored when funding the transaction (optional)
   resourcesIdsToIgnore?: ResourcesIdsToIgnore;
   // Amount of gas to reserve (optional)
-  reserveGas?: number;
+  reserveGas?: BigNumberish;
 };
 
 export type AssembleTxResponse<T extends TransactionRequest = TransactionRequest> = {
