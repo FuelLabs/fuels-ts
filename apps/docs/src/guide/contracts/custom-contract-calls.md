@@ -2,7 +2,7 @@
 
 In certain scenarios, your use case may require more control over how contract calls are prepared and submitted.
 
-For instance, imagine a liquidity pool contract where users can deposit a specific asset to receive some form of benefit. To make the experience smoother and more attractive, you might use a predicate to cover the transaction fees. This way, users only need to provide the asset they wish to deposit—without worrying about the fees.
+For instance, imagine a liquidity pool contract where users can deposit a specific asset to receive some form of benefit. To enhance the experience and make it more attractive, one could use a predicate to cover the transaction fees. This way, users only need to provide the asset they wish to deposit without worrying about the fees.
 
 Here’s how you can prepare and submit a customizable contract call in such a setup:
 
