@@ -10,6 +10,7 @@ import type {
   TransactionResponse,
   TransactionCost,
   AbstractAccount,
+  AssembleTxParams,
 } from '@fuel-ts/account';
 import {
   mergeQuantities,
@@ -73,6 +74,7 @@ export class BaseInvocationScope<TReturn = any> {
   protected program: AbstractProgram;
   protected functionInvocationScopes: Array<InvocationScopeLike> = [];
   protected txParameters?: TxParams;
+  protected assembleTxParameters?: Partial<Omit<AssembleTxParams, 'request'>>;
   protected requiredCoins: CoinQuantity[] = [];
   protected isMultiCall: boolean = false;
   protected hasCallParamsGasLimit: boolean = false; // flag to check if any of the callParams has gasLimit set
@@ -347,6 +349,17 @@ export class BaseInvocationScope<TReturn = any> {
 
     request.addVariableOutputs(this.txParameters?.variableOutputs || 0);
 
+    return this;
+  }
+
+  /**
+   * Sets the transaction parameters.
+   *
+   * @param assembleTxParams - The assembleTx parameters to set when invoking the `provider.assembleTx` method.
+   * @returns The current instance of the class.
+   */
+  assembleTxParams(txParams: Partial<Omit<AssembleTxParams, 'request'>>) {
+    this.assembleTxParameters = txParams;
     return this;
   }
 
