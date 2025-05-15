@@ -453,6 +453,18 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
+   * Sets the transaction request. Useful when you have used `getTransactionRequest` from the scope
+   * to apply customizations to the transaction request.
+   *
+   * @param request - The transaction request to set.
+   * @returns The current instance of the class.
+   */
+  fromRequest(request: ScriptTransactionRequest) {
+    this.transactionRequest = request;
+    return this;
+  }
+
+  /**
    * Submits the contract call transaction and returns a promise that resolves to an object
    * containing the transaction ID and a function to wait for the result. The promise will resolve
    * as soon as the transaction is submitted to the node.
