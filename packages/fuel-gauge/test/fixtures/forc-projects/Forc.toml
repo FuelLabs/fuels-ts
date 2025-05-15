@@ -19,6 +19,7 @@ members = [
   "large-contract",
   "multi-token-contract",
   "smo-contract",
+  "conditional-loop-contract",
   "options",
   "payable-annotation",
   "predicate",
