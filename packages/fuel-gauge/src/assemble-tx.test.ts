@@ -12,9 +12,12 @@ import {
   ErrorCode,
   FuelError,
 } from 'fuels';
+import type { DeployContractConfig } from 'fuels/test-utils';
 import { expectToThrowFuelError, launchTestNode, TestAssetId, TestMessage } from 'fuels/test-utils';
 
+import type { CallTestContract } from '../test/typegen';
 import {
+  CallTestContractFactory,
   ConditionalLoopContractFactory,
   PredicateFalseConfigurable,
   Predicate as PredicatePassword,
@@ -35,18 +38,26 @@ describe('assembleTx', () => {
     vi.restoreAllMocks();
   });
 
-  const setupTest = async (params: { transferAmount?: number; mock?: boolean } = {}) => {
-    const { transferAmount = bn(0), mock = true } = params;
+  const setupTest = async (
+    params: {
+      transferAmount?: number;
+      mock?: boolean;
+      contractsConfigs?: DeployContractConfig[];
+    } = {}
+  ) => {
+    const { transferAmount = bn(0), mock = true, contractsConfigs } = params;
     const message = new TestMessage({ data: '0x', amount: 1_000_000_000 });
     const launched = await launchTestNode({
       walletsConfig: {
         count: 3,
         messages: [message],
       },
+      contractsConfigs,
     });
     const {
       provider,
       wallets: [wallet1, wallet2, wallet3],
+      contracts,
     } = launched;
 
     cleanup = launched.cleanup;
@@ -74,6 +85,7 @@ describe('assembleTx', () => {
       request,
       spy,
       transferAmount,
+      contracts,
     };
   };
 
@@ -590,6 +602,107 @@ describe('assembleTx', () => {
     });
   });
 
+  it('should handle multiple assets with mixed change output configurations [BaseInvocationScope]', async () => {
+    const { provider, wallet1, wallet2, wallet3, baseAssetId, spy, contracts } = await setupTest({
+      transferAmount: 1000,
+      contractsConfigs: [{ factory: CallTestContractFactory }],
+    });
+
+    const contract = contracts[0] as CallTestContract;
+    contract.account = wallet1;
+
+    const amountA = 300;
+    const amountB = 500;
+
+    const receiver = Wallet.generate({ provider });
+
+    const scope = contract.functions
+      .foo(10)
+      .addTransfer({
+        destination: receiver.address,
+        amount: amountA,
+        assetId: TestAssetId.B.value,
+      })
+      .addTransfer({
+        destination: receiver.address,
+        amount: amountB,
+        assetId: TestAssetId.A.value,
+      })
+      .assembleTxParams({
+        feePayerAccount: wallet1,
+        estimatePredicates: false,
+        accountCoinQuantities: [
+          {
+            account: wallet3,
+            amount: 500,
+            assetId: TestAssetId.A.value,
+            changeOutputAccount: wallet1,
+          },
+          {
+            account: wallet2,
+            amount: 300,
+            assetId: TestAssetId.B.value,
+            changeOutputAccount: wallet3,
+          },
+          {
+            amount: 0,
+            assetId: baseAssetId,
+            changeOutputAccount: receiver,
+          },
+        ],
+      });
+
+    let assembledRequest = await scope.fundWithRequiredCoins();
+
+    assembledRequest = await wallet2.populateTransactionWitnessesSignature(assembledRequest);
+    assembledRequest = await wallet3.populateTransactionWitnessesSignature(assembledRequest);
+
+    const tx = await scope.fromRequest(assembledRequest).call({ skipAssembleTx: true });
+    const {
+      transactionResult: { isStatusSuccess },
+    } = await tx.waitForResult();
+
+    expect(isStatusSuccess).toBeTruthy();
+
+    const call = spy.mock.calls[0][0];
+
+    validateRequiredBalance({
+      requiredBalance: call.requiredBalances,
+      index: 0,
+      account: wallet3,
+      amount: amountB,
+      assetId: TestAssetId.A.value,
+      changeAccount: wallet1,
+    });
+
+    validateRequiredBalance({
+      requiredBalance: call.requiredBalances,
+      index: 1,
+      account: wallet2,
+      amount: amountA,
+      assetId: TestAssetId.B.value,
+      changeAccount: wallet3,
+    });
+
+    validateRequiredBalance({
+      requiredBalance: call.requiredBalances,
+      index: 2,
+      account: wallet1,
+      amount: 0,
+      assetId: baseAssetId,
+      changeAccount: receiver,
+    });
+
+    validateFeePayer({
+      requiredBalance: call.requiredBalances,
+      feePayerIndex: call.feeAddressIndex,
+      payerAccount: wallet1,
+      baseAssetId,
+    });
+
+    expect(call.estimatePredicates).toBeFalsy();
+  });
+
   it('should handle multiple predicates with different asset types', async () => {
     const { provider, wallet1, baseAssetId, wallet2 } = await setupTest({
       transferAmount: 1000,
@@ -683,6 +796,127 @@ describe('assembleTx', () => {
       payerAccount: predicate1,
       baseAssetId,
     });
+  });
+
+  it('should handle multiple predicates with different asset types [BaseInvocationScope]', async () => {
+    const {
+      provider,
+      wallet1,
+      baseAssetId,
+      wallet2,
+      contracts: [contract],
+    } = await setupTest({
+      transferAmount: 1000,
+      mock: false,
+      contractsConfigs: [{ factory: CallTestContractFactory }],
+    });
+
+    const amountA = 333;
+    const amountB = 111;
+
+    const predicate1 = new PredicatePassword({ provider, data: [1000, 337] });
+    const predicate2 = new PredicateTrue({ provider });
+    const predicate3 = new PredicateFalseConfigurable({
+      provider,
+      data: [99],
+      configurableConstants: { SECRET_NUMBER: 99 },
+    });
+
+    // Fund predicates
+    await fundAccount(wallet1, predicate1, 100_000);
+    await fundAccount(wallet1, predicate2, 100_000);
+    await fundAccount(wallet1, predicate3, 100_000);
+
+    const spy = vi.spyOn(provider.operations, 'assembleTx');
+
+    const blockHorizon = 5;
+
+    const tx = await (contract as CallTestContract).functions
+      .return_context_amount()
+      .callParams({
+        forward: [1000, baseAssetId],
+      })
+      .addTransfer({
+        destination: wallet1.address,
+        amount: 1000,
+        assetId: baseAssetId,
+      })
+      .addTransfer({
+        destination: wallet2.address,
+        amount: 300,
+        assetId: baseAssetId,
+      })
+      .assembleTxParams({
+        blockHorizon,
+        estimatePredicates: true,
+        feePayerAccount: predicate1,
+        accountCoinQuantities: [
+          {
+            account: predicate3,
+            amount: amountA,
+            assetId: baseAssetId,
+            changeOutputAccount: wallet2,
+          },
+          {
+            account: predicate2,
+            amount: amountB,
+            assetId: baseAssetId,
+            changeOutputAccount: wallet2,
+          },
+          {
+            account: predicate1,
+            amount: 0,
+            assetId: baseAssetId,
+            changeOutputAccount: wallet2,
+          },
+        ],
+      })
+      .call();
+
+    const {
+      transactionResult: { isStatusSuccess },
+    } = await tx.waitForResult();
+
+    expect(isStatusSuccess).toBeTruthy();
+
+    const call = spy.mock.calls[0][0];
+
+    validateRequiredBalance({
+      requiredBalance: call.requiredBalances,
+      index: 0,
+      account: predicate3,
+      amount: amountA,
+      assetId: baseAssetId,
+      changeAccount: wallet2,
+    });
+
+    validateRequiredBalance({
+      requiredBalance: call.requiredBalances,
+      index: 1,
+      account: predicate2,
+      amount: amountB,
+      assetId: baseAssetId,
+      changeAccount: wallet2,
+    });
+
+    validateRequiredBalance({
+      requiredBalance: call.requiredBalances,
+      index: 2,
+      account: predicate1,
+      amount: 0,
+      assetId: baseAssetId,
+      changeAccount: wallet2,
+    });
+
+    validateFeePayer({
+      requiredBalance: call.requiredBalances,
+      feePayerIndex: call.feeAddressIndex,
+      payerAccount: predicate1,
+      baseAssetId,
+    });
+
+    expect(call.estimatePredicates).toBeTruthy();
+    expect(call.blockHorizon).toBe(String(blockHorizon));
   });
 
   it('should consider reserveGas when assembling at BaseInvocationScope', async () => {
