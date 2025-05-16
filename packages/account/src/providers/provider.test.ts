@@ -25,6 +25,7 @@ import { mockIncompatibleVersions } from '../../test/utils/mockIncompabileVersio
 import { setupTestProviderAndWallets, launchNode, TestMessage, TestAssetId } from '../test-utils';
 
 import type { GqlPageInfo } from './__generated__/operations';
+import { FuelGraphqlSubscriber } from './fuel-graphql-subscriber';
 import type { Block, ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
 import Provider, {
   BALANCES_PAGE_SIZE_LIMIT,
@@ -2647,5 +2648,144 @@ describe('Provider', () => {
     );
 
     vi.restoreAllMocks();
+  });
+
+  describe('Waiting for transaction statuses', () => {
+    const PreconfirmationSuccessStatus = 'PreconfirmationSuccessStatus';
+    const SuccessStatus = 'SuccessStatus';
+
+    it('should wait only for Preconfirmation status and close subscription', async () => {
+      using launched = await setupTestProviderAndWallets({
+        nodeOptions: {
+          args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+        },
+      });
+      const {
+        wallets: [wallet],
+      } = launched;
+
+      const readEventSpy = vi.spyOn(FuelGraphqlSubscriber, 'readEvent');
+
+      const res = await wallet.transfer(wallet.address, 100_000);
+      await res.waitForPreConfirmation();
+
+      expect(readEventSpy.mock.results.length).toBeGreaterThan(0);
+
+      let readSuccessStatus = false;
+      let readPreconfirmationStatus = false;
+
+      // Loop through all the read events and ensure SuccessStatus was never read
+      for (let i = 0; i < readEventSpy.mock.results.length; i += 1) {
+        const {
+          event: {
+            data: { submitAndAwaitStatus },
+          },
+        } = await readEventSpy.mock.results[i].value;
+        if (submitAndAwaitStatus.type === SuccessStatus) {
+          readSuccessStatus = true;
+        }
+
+        if (submitAndAwaitStatus.type === PreconfirmationSuccessStatus) {
+          readPreconfirmationStatus = true;
+        }
+
+        expect(submitAndAwaitStatus.type).not.toBe(SuccessStatus);
+      }
+
+      expect(readSuccessStatus).toBeFalsy();
+      expect(readPreconfirmationStatus).toBeTruthy();
+    });
+
+    it('should wait for both preconfirmation and confirmation statuses', async () => {
+      using launched = await setupTestProviderAndWallets({
+        nodeOptions: {
+          args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+        },
+      });
+      const {
+        wallets: [wallet],
+      } = launched;
+
+      const readEventSpy = vi.spyOn(FuelGraphqlSubscriber, 'readEvent');
+
+      const { waitForResult, waitForPreConfirmation } = await wallet.transfer(
+        wallet.address,
+        100_000
+      );
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      waitForResult();
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      waitForPreConfirmation();
+
+      await sleep(2500);
+
+      expect(readEventSpy.mock.results.length).toBeGreaterThan(0);
+
+      let readSuccessStatus = false;
+      let readPreconfirmationStatus = false;
+
+      // Loop through all the read events and ensure SuccessStatus was never read
+      for (let i = 0; i < readEventSpy.mock.results.length; i += 1) {
+        const {
+          event: {
+            data: { submitAndAwaitStatus },
+          },
+        } = await readEventSpy.mock.results[i].value;
+
+        if (submitAndAwaitStatus.type === PreconfirmationSuccessStatus) {
+          readPreconfirmationStatus = true;
+        }
+
+        if (submitAndAwaitStatus.type === SuccessStatus) {
+          readSuccessStatus = true;
+        }
+      }
+
+      expect(readPreconfirmationStatus).toBeTruthy();
+      expect(readSuccessStatus).toBeTruthy();
+    });
+
+    it('should wait for confirmation statuses', async () => {
+      using launched = await setupTestProviderAndWallets({
+        nodeOptions: {
+          args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+        },
+      });
+      const {
+        wallets: [wallet],
+      } = launched;
+
+      const readEventSpy = vi.spyOn(FuelGraphqlSubscriber, 'readEvent');
+
+      const { waitForResult } = await wallet.transfer(wallet.address, 100_000);
+
+      await waitForResult();
+
+      expect(readEventSpy.mock.results.length).toBeGreaterThan(0);
+
+      let readSuccessStatus = false;
+      let readPreconfirmationStatus = false;
+
+      // Loop through all the read events and ensure SuccessStatus was never read
+      for (let i = 0; i < readEventSpy.mock.results.length; i += 1) {
+        const {
+          event: {
+            data: { submitAndAwaitStatus },
+          },
+        } = await readEventSpy.mock.results[i].value;
+
+        if (submitAndAwaitStatus.type === PreconfirmationSuccessStatus) {
+          readPreconfirmationStatus = true;
+        }
+
+        if (submitAndAwaitStatus.type === SuccessStatus) {
+          readSuccessStatus = true;
+        }
+      }
+
+      expect(readPreconfirmationStatus).toBeTruthy();
+      expect(readSuccessStatus).toBeTruthy();
+    });
   });
 });
