@@ -453,8 +453,8 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
-   * Sets the transaction request. Useful when you have used `getTransactionRequest` from the scope
-   * to apply customizations to the transaction request.
+   * Sets the transaction request. Useful when you have used `getTransactionRequest` or
+   * `fundWithRequiredCoins` from the scope to apply customizations to the transaction request.
    *
    * @param request - The transaction request to set.
    * @returns The current instance of the class.
