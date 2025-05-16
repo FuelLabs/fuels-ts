@@ -35,7 +35,10 @@ export default function Predicate() {
 
   useEffect(() => {
     if (wallet) {
-      const testPredicate = new TestPredicate(wallet);
+      const testPredicate = new TestPredicate({
+        provider: wallet.provider,
+        data: [0],
+      });
       setPredicate(testPredicate);
     }
   }, [wallet]);

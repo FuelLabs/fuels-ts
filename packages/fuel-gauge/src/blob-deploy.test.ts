@@ -18,7 +18,7 @@ import {
 describe('deploying blobs', () => {
   function decodeConfigurables(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    program: Predicate | Script<any, any>
+    program: Predicate<any, any> | Script<any, any>
   ): Record<string, unknown> {
     const configurables: Record<string, unknown> = {};
 
@@ -225,10 +225,6 @@ describe('deploying blobs', () => {
 
     const receiver = Wallet.generate({ provider });
 
-    const loaderPredicate = await (
-      await new PredicateWithMoreConfigurables({ provider }).deploy(wallet)
-    ).waitForResult();
-
     const configurable = {
       FEE: 99,
       ADDRESS: getRandomB256(),
@@ -237,6 +233,13 @@ describe('deploying blobs', () => {
       U64: 1000000,
       BOOL: false,
     };
+
+    const loaderPredicate = await (
+      await new PredicateWithMoreConfigurables({
+        provider,
+        data: [configurable.FEE, configurable.ADDRESS],
+      }).deploy(wallet)
+    ).waitForResult();
 
     const predicate = new Predicate({
       data: [configurable.FEE, configurable.ADDRESS],

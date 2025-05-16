@@ -27,14 +27,26 @@ import { deployScriptOrPredicate } from '../utils/deployScriptOrPredicate';
 
 import { getPredicateRoot } from './utils';
 
+// Helper type to check if T is a tuple with a fixed, non-zero length
+type IsNonEmptyTuple<T extends unknown[]> = number extends T['length']
+  ? false
+  : T['length'] extends 0
+    ? false
+    : true;
+
+// Type for the 'data' property, required if TData is a non-empty tuple
+export type PredicateDataParam<TData extends InputValue[]> =
+  IsNonEmptyTuple<TData> extends true
+    ? { data: TData } // If TData is a non-empty tuple, 'data' is required
+    : { data?: TData }; // Otherwise (TData is []), 'data' is optional
+
 export type PredicateParams<
   TData extends InputValue[] = InputValue[],
   TConfigurables extends { [name: string]: unknown } | undefined = { [name: string]: unknown },
-> = {
+> = PredicateDataParam<TData> & {
   bytecode: BytesLike;
   provider: Provider;
   abi: JsonAbi;
-  data?: TData;
   configurableConstants?: TConfigurables;
 };
 
@@ -161,7 +173,9 @@ export class Predicate<
    * @returns A new Predicate instance with the same bytecode, ABI and provider but with the ability to set the data and configurable constants.
    */
   toNewInstance(
-    overrides: Pick<PredicateParams<TData, TConfigurables>, 'data' | 'configurableConstants'> = {}
+    overrides: Partial<
+      Pick<PredicateParams<TData, TConfigurables>, 'data' | 'configurableConstants'>
+    > = {}
   ) {
     return new Predicate<TData, TConfigurables>({
       bytecode: this.initialBytecode,

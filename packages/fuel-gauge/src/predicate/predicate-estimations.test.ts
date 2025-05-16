@@ -46,6 +46,12 @@ describe('Predicate', () => {
         bytecode: PredicateMainArgsStruct.bytecode,
         abi: PredicateMainArgsStruct.abi,
         provider,
+        data: [
+          {
+            has_account: true,
+            total_complete: 100,
+          },
+        ],
       });
 
       await fundAccount(wallet, predicateStruct, fundingAmount);
@@ -53,13 +59,14 @@ describe('Predicate', () => {
       const tx = new ScriptTransactionRequest();
 
       // Get resources from the predicate struct
-      const ressources = await predicateStruct.getResourcesToSpend([
+      const resources = await predicateStruct.getResourcesToSpend([
         {
           assetId: await provider.getBaseAssetId(),
           amount: bn(10_000),
         },
       ]);
-      tx.addResource(ressources[0]);
+
+      tx.addResource(resources[0]);
       // Add predicate bytecode to the input predicate
       (<CoinTransactionRequestInput>tx.inputs[0]).predicate = predicateStruct.bytes;
 
@@ -167,6 +174,12 @@ describe('Predicate', () => {
         abi: PredicateMainArgsStruct.abi,
         bytecode: PredicateMainArgsStruct.bytecode,
         provider,
+        data: [
+          {
+            has_account: true,
+            total_complete: 100,
+          },
+        ],
       });
 
       await fundAccount(wallet, predicateTrue, fundingAmount);
@@ -254,6 +267,12 @@ describe('Predicate', () => {
           abi: PredicateMainArgsStruct.abi,
           bytecode: PredicateMainArgsStruct.bytecode,
           provider,
+          data: [
+            {
+              has_account: true,
+              total_complete: 100,
+            },
+          ],
         });
 
         await fundAccount(wallet, predicateStruct, fundingAmount);
@@ -288,6 +307,12 @@ describe('Predicate', () => {
           abi: PredicateMainArgsStruct.abi,
           bytecode: PredicateMainArgsStruct.bytecode,
           provider,
+          data: [
+            {
+              has_account: true,
+              total_complete: 100,
+            },
+          ],
         });
 
         await fundAccount(wallet, predicateStruct, fundingAmount);
