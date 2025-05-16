@@ -20,7 +20,10 @@ You can also retrieve the transaction request from the invocation scope and manu
 
 <<< @./snippets/custom-contract-calls/call.ts#custom-contract-call-1{ts:line-numbers}
 
-The `{ skipAssembleTx: true }` option is essential in this flow.
-It tells the SDK to skip the automatic `assembleTx` step during the `.call()` execution, since we’ve already manually assembled and funded the transaction using `provider.assembleTx()`.
+There are 2 details here that there are essential in this flow
 
-Skipping this step prevents the SDK from overwriting the prepared transaction and ensures the custom logic remains intact, such as using a predicate as the fee payer.
+1. `fromRequest`:
+   This sets the transaction request extracted from the invocation scope. It ensures that any manual changes you’ve applied persist and are used when the transaction is executed.
+
+1. `{ skipAssembleTx: true }` option:
+   It tells the SDK to skip the automatic `assembleTx` step during the `.call()` execution, since we’ve already manually assembled and funded the transaction using `provider.assembleTx()`. Skipping this step prevents the SDK from re-estimating the transaction and ensures the custom logic remains intact, such as using a predicate as the fee payer.
