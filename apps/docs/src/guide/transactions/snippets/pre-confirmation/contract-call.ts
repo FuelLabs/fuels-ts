@@ -33,14 +33,14 @@ if (isStatusPreConfirmationSuccess) {
   if (resolvedChangeOutput) {
     const { output, utxoId } = resolvedChangeOutput;
 
-    // Create a new transaction request for a new contract call
-    const request = await contract.functions
-      .increment_count(1)
-      .txParams({
-        maxFee: 100_000,
-        gasLimit: 100_000,
-      })
-      .getTransactionRequest();
+    // Creates a new scope invocation for another contract call
+    const scope = contract.functions.increment_count(1).txParams({
+      maxFee: 100_000,
+      gasLimit: 100_000,
+    });
+
+    // Get the transaction request from the scope invocation
+    const request = await scope.getTransactionRequest();
 
     // Add the change output as an input resource for the new transaction
     request.addResource({
@@ -52,8 +52,11 @@ if (isStatusPreConfirmationSuccess) {
       txCreatedIdx: bn(0),
     });
 
-    // Send the new transaction
-    await wallet.sendTransaction(request);
+    /**
+     * Call the scope invocation and skip the assembleTx step since the transaction
+     * request is already funded
+     */
+    await scope.call({ skipAssembleTx: true });
   }
 }
 // #endregion pre-confirmation-contract-call-1

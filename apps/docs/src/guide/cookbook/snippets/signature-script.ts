@@ -18,9 +18,10 @@ const script = new ScriptSigning(signer);
 const witnessIndex = 0;
 
 // Creating the scope invocation to be used later
-const request = await script.functions
-  .main(signer.address.toB256(), witnessIndex)
-  .getTransactionRequest();
+const scope = script.functions.main(signer.address.toB256(), witnessIndex);
+
+// Creating the scope invocation to be used later
+const request = await scope.getTransactionRequest();
 
 // Signing the transaction request before estimation
 let signature = await signer.signTransaction(request);
@@ -44,10 +45,12 @@ signature = await signer.signTransaction(assembledRequest);
 assembledRequest.updateWitness(witnessIndex, signature);
 
 // Sending the transaction request
-const submit = await signer.sendTransaction(assembledRequest);
+const { waitForResult } = await scope.call({ skipAssembleTx: true });
 
 // Getting the result of the transaction
-const { isStatusSuccess } = await submit.waitForResult();
+const {
+  transactionResult: { isStatusSuccess },
+} = await waitForResult();
 // #endregion signature-script
 
 console.log('isStatusSuccess', isStatusSuccess);
