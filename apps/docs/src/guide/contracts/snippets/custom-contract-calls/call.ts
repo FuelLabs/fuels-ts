@@ -41,8 +41,7 @@ const scope = liquidityPoolContract.functions
 const request = await scope.getTransactionRequest();
 
 /**
- * Using "assembleTx" to estimate and fund the transaction. The estimated and funded values
- * are going to be persisted in the transaction request object inside the scope instance
+ * Using "assembleTx" to estimate and fund the transaction.
  */
 await provider.assembleTx({
   request,
@@ -58,7 +57,9 @@ await provider.assembleTx({
 });
 
 // Use the "call" method to submit the transaction, skipping the "assembleTx" step
-const response = await scope.call({ skipAssembleTx: true });
+const response = await scope
+  .fromRequest(request)
+  .call({ skipAssembleTx: true });
 
 const {
   transactionResult: { isStatusSuccess },
