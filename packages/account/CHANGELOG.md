@@ -1,5 +1,27 @@
 # Change Log
 
+## 0.101.0
+
+### Minor Changes
+
+- 4cbd72c: fix!: enforce `predicateData` when predicate has arguments
+
+### Patch Changes
+
+- 388ad98: feat: add `Predicate` method `setData`
+- e91eb6c: feat: support TX customization at BaseInvocationScope
+- 842e0f3: fix: close subscription after `Preconfirmation` status when applicable
+  - @fuel-ts/abi-coder@0.101.0
+  - @fuel-ts/address@0.101.0
+  - @fuel-ts/crypto@0.101.0
+  - @fuel-ts/errors@0.101.0
+  - @fuel-ts/hasher@0.101.0
+  - @fuel-ts/math@0.101.0
+  - @fuel-ts/merkle@0.101.0
+  - @fuel-ts/transactions@0.101.0
+  - @fuel-ts/utils@0.101.0
+  - @fuel-ts/versions@0.101.0
+
 ## 0.100.6
 
 ### Patch Changes
