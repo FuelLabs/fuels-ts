@@ -23,6 +23,12 @@ describe('Predicate', () => {
         abi: PredicateMainArgsStruct.abi,
         bytecode: PredicateMainArgsStruct.bytecode,
         provider,
+        data: [
+          {
+            has_account: true,
+            total_complete: 100,
+          },
+        ],
       });
 
       await fundAccount(wallet, predicate, 1000);
@@ -57,6 +63,12 @@ describe('Predicate', () => {
         abi: PredicateMainArgsStruct.abi,
         bytecode: PredicateMainArgsStruct.bytecode,
         provider,
+        data: [
+          {
+            has_account: true,
+            total_complete: 100,
+          },
+        ],
       });
 
       await fundAccount(wallet, predicate, 10_000);

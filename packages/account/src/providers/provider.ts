@@ -161,7 +161,7 @@ export type AssembleTxParams<T extends TransactionRequest = TransactionRequest> 
   // Resources to be ignored when funding the transaction (optional)
   resourcesIdsToIgnore?: ResourcesIdsToIgnore;
   // Amount of gas to reserve (optional)
-  reserveGas?: number;
+  reserveGas?: BigNumberish;
 };
 
 export type AssembleTxResponse<T extends TransactionRequest = TransactionRequest> = {
@@ -280,7 +280,6 @@ export type NodeInfoAndConsensusParameters = {
   maxGasPerTx: BN;
 };
 
-// #region cost-estimation-1
 export type TransactionCost = {
   gasPrice: BN;
   gasUsed: BN;
@@ -299,7 +298,6 @@ export type TransactionCost = {
   updateMaxFee?: boolean;
   transactionSummary?: TransactionSummaryJsonPartial;
 };
-// #endregion cost-estimation-1
 
 /**
  * @hidden
@@ -1612,7 +1610,7 @@ export default class Provider {
    * @returns A promise that resolves to the transaction cost object.
    *
    * @deprecated Use provider.assembleTx instead
-   * Check the migration guide https://docs.fuel.network/guide/assembling-transactions/migration-guide.html for more information.
+   * Check the migration guide https://docs.fuel.network/docs/fuels-ts/transactions/assemble-tx-migration-guide/ for more information.
    */
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
@@ -1821,7 +1819,7 @@ export default class Provider {
       requiredBalances,
       estimatePredicates,
       excludeInput,
-      reserveGas: reserveGas ? reserveGas.toString(10) : undefined,
+      reserveGas: reserveGas ? bn(reserveGas).toString(10) : undefined,
     });
 
     if (status.type === 'DryRunFailureStatus') {
@@ -1839,8 +1837,8 @@ export default class Provider {
       request.maxFee = bn(gqlTransaction.policies.maxFee);
     }
 
-    if (gqlTransaction.scriptGasLimit) {
-      (request as ScriptTransactionRequest).gasLimit = bn(gqlTransaction.scriptGasLimit);
+    if (request.type === TransactionType.Script) {
+      request.gasLimit = bn(gqlTransaction.scriptGasLimit).add(bn(reserveGas));
     }
 
     const rawReceipts = status.receipts;
