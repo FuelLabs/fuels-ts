@@ -18,7 +18,7 @@ Consider the following Sway script
 
 <<< @/../../docs/sway/script-transfer-to-contract/src/main.sw#custom-transactions-1{rust:line-numbers}
 
-This script will transfer 2 assets amount to the same contract address.
+This script transfers two asset amounts to the same contract address. To ensure the transaction succeeds, it must be properly funded with the required amounts. This means we need to explicitly define how the transaction should be funded.
 
 ### Old Approach (Deprecated)
 
@@ -27,6 +27,8 @@ This script will transfer 2 assets amount to the same contract address.
 ### New Approach
 
 <<< @./snippets/assemble-tx/assemble-tx-4.ts#assemble-tx-4{ts:line-numbers}
+
+By specifying which parameters `assembleTx` should use, we gain control over how the script call is estimated and funded.
 
 ## Migrating from `estimateAndFund`
 

@@ -10,6 +10,7 @@ import type {
   TransactionResponse,
   TransactionCost,
   AbstractAccount,
+  AssembleTxParams,
 } from '@fuel-ts/account';
 import {
   mergeQuantities,
@@ -73,6 +74,7 @@ export class BaseInvocationScope<TReturn = any> {
   protected program: AbstractProgram;
   protected functionInvocationScopes: Array<InvocationScopeLike> = [];
   protected txParameters?: TxParams;
+  protected assembleTxParameters?: Partial<Omit<AssembleTxParams, 'request'>>;
   protected requiredCoins: CoinQuantity[] = [];
   protected isMultiCall: boolean = false;
   protected hasCallParamsGasLimit: boolean = false; // flag to check if any of the callParams has gasLimit set
@@ -240,7 +242,7 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The transaction cost details.
    *
    * @deprecated Use contract.fundWithRequiredCoins instead
-   * Check the migration guide https://docs.fuel.network/guide/assembling-transactions/migration-guide.html for more information.
+   * Check the migration guide https://docs.fuel.network/docs/fuels-ts/transactions/assemble-tx-migration-guide/ for more information.
    */
   async getTransactionCost(): Promise<TransactionCost> {
     const request = clone(await this.getTransactionRequest());
@@ -252,9 +254,18 @@ export class BaseInvocationScope<TReturn = any> {
     });
   }
 
+  /**
+   * Funds the transaction request with the required coins and returns it.
+   *
+   * @returns The transaction request.
+   */
   async fundWithRequiredCoins(): Promise<ScriptTransactionRequest> {
     let request = await this.getTransactionRequest();
     request = clone(request);
+
+    // eslint-disable-next-line prefer-const
+    let { feePayerAccount, accountCoinQuantities, ...restAssembleTxParams } =
+      this.assembleTxParameters ?? {};
 
     request.maxFee = bn(0);
     request.gasLimit = bn(0);
@@ -263,21 +274,28 @@ export class BaseInvocationScope<TReturn = any> {
     const account = (this.program.account ?? Wallet.generate({ provider })) as Account;
     const baseAssetId = await provider.getBaseAssetId();
 
-    const outputQuantities = request.outputs
-      .filter((o) => o.type === OutputType.Coin)
-      .map(({ amount, assetId }) => ({ assetId: String(assetId), amount: bn(amount) }));
+    if (!feePayerAccount) {
+      feePayerAccount = account;
+    }
 
-    const accountCoinQuantities = mergeQuantities(outputQuantities, this.requiredCoins);
+    if (!accountCoinQuantities) {
+      const outputQuantities = request.outputs
+        .filter((o) => o.type === OutputType.Coin)
+        .map(({ amount, assetId }) => ({ assetId: String(assetId), amount: bn(amount) }));
 
-    if (!accountCoinQuantities.length) {
-      accountCoinQuantities.push({ assetId: baseAssetId, amount: bn(0) });
+      accountCoinQuantities = mergeQuantities(outputQuantities, this.requiredCoins);
+
+      if (!accountCoinQuantities.length) {
+        accountCoinQuantities.push({ assetId: baseAssetId, amount: bn(0) });
+      }
     }
 
     // eslint-disable-next-line prefer-const
     let { assembledRequest, gasPrice } = await provider.assembleTx({
       request,
-      feePayerAccount: account,
+      feePayerAccount,
       accountCoinQuantities,
+      ...restAssembleTxParams,
     });
 
     assembledRequest = assembledRequest as ScriptTransactionRequest;
@@ -343,6 +361,17 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
+   * Sets the transaction parameters.
+   *
+   * @param assembleTxParams - The assembleTx parameters to set when invoking the `provider.assembleTx` method.
+   * @returns The current instance of the class.
+   */
+  assembleTxParams(txParams: Partial<Omit<AssembleTxParams, 'request'>>) {
+    this.assembleTxParameters = txParams;
+    return this;
+  }
+
+  /**
    * Adds contracts to the invocation scope.
    *
    * @param contracts - An array of contracts to add.
@@ -404,7 +433,7 @@ export class BaseInvocationScope<TReturn = any> {
    * @deprecated This method is deprecated and will be removed in a future versions.
    * All signatures should be manually added to the transaction request witnesses. If your
    * Sway program relies on in-code signature validation, visit this guide:
-   * https://docs.fuel.network/guides/cookbook/sway-script-with-signature-validation.html
+   * https://docs.fuel.network/docs/fuels-ts/cookbook/sway-script-with-signature-validation/
    */
   addSigners(signers: Account | Account[]) {
     this.addSignersCallback = (transactionRequest) =>
@@ -424,16 +453,35 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
+   * Sets the transaction request. Useful when you have used `getTransactionRequest` or
+   * `fundWithRequiredCoins` from the scope to apply customizations to the transaction request.
+   *
+   * @param request - The transaction request to set.
+   * @returns The current instance of the class.
+   */
+  fromRequest(request: ScriptTransactionRequest) {
+    this.transactionRequest = request;
+    return this;
+  }
+
+  /**
    * Submits the contract call transaction and returns a promise that resolves to an object
    * containing the transaction ID and a function to wait for the result. The promise will resolve
    * as soon as the transaction is submitted to the node.
    *
+   * @param params - Optional parameters for the call.
+   * - `skipAssembleTx`: A boolean indicating whether to skip assembling the transaction. This is useful
+   *   when customizations were made to the transaction request using the `assembleTx` method.
+   *
    * @returns A promise that resolves to an object containing:
    * - `transactionId`: The ID of the submitted transaction.
    * - `waitForResult`: A function that waits for the transaction result.
+   * - `waitForPreConfirmation`: A function that waits for the transaction pre-confirmation.
    * @template T - The type of the return value.
    */
-  async call<T = TReturn>(): Promise<{
+  async call<T = TReturn>(params?: {
+    skipAssembleTx?: boolean;
+  }): Promise<{
     transactionId: string;
     waitForResult: () => Promise<FunctionResult<T>>;
     waitForPreConfirmation: () => Promise<PreConfirmationFunctionResult<T>>;
@@ -442,10 +490,14 @@ export class BaseInvocationScope<TReturn = any> {
 
     let transactionRequest = await this.getTransactionRequest();
 
-    if (this.addSignersCallback) {
-      transactionRequest = await this.legacyFundWithRequiredCoins();
-    } else {
-      transactionRequest = await this.fundWithRequiredCoins();
+    const skipAssembleTx = params?.skipAssembleTx;
+
+    if (!skipAssembleTx) {
+      if (this.addSignersCallback) {
+        transactionRequest = await this.legacyFundWithRequiredCoins();
+      } else {
+        transactionRequest = await this.fundWithRequiredCoins();
+      }
     }
 
     const response = (await this.program.account.sendTransaction(transactionRequest, {

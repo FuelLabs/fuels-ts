@@ -7,8 +7,8 @@ import { CounterFactory, ScriptTransferToContract } from '../../../../typegend';
 const provider = new Provider(LOCAL_NETWORK_URL);
 const account = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
-const { waitForResult } = await new CounterFactory(account).deploy();
-const { contract } = await waitForResult();
+const contractDeploy = await new CounterFactory(account).deploy();
+const { contract } = await contractDeploy.waitForResult();
 const contractId = contract.id.toB256();
 
 // #region assemble-tx-4
@@ -17,7 +17,7 @@ const transferAmountB = 600;
 
 const script = new ScriptTransferToContract(account);
 
-const request = await script.functions
+const scope = script.functions
   .main(
     contractId,
     { bits: TestAssetId.A.value },
@@ -25,29 +25,29 @@ const request = await script.functions
     { bits: TestAssetId.B.value },
     transferAmountB
   )
-  .getTransactionRequest();
+  .assembleTxParams({
+    feePayerAccount: account,
+    accountCoinQuantities: [
+      {
+        amount: transferAmountA,
+        assetId: TestAssetId.A.value,
+        account,
+        changeOutputAccount: account,
+      },
+      {
+        amount: transferAmountB,
+        assetId: TestAssetId.B.value,
+        account,
+        changeOutputAccount: account,
+      },
+    ],
+  });
 
-const { assembledRequest } = await provider.assembleTx({
-  request,
-  feePayerAccount: account,
-  accountCoinQuantities: [
-    {
-      amount: transferAmountA,
-      assetId: TestAssetId.A.value,
-      account,
-      changeOutputAccount: account,
-    },
-    {
-      amount: transferAmountB,
-      assetId: TestAssetId.B.value,
-      account,
-      changeOutputAccount: account,
-    },
-  ],
-});
+const { waitForResult } = await scope.call();
 
-const tx = await account.sendTransaction(assembledRequest);
-const { isStatusSuccess } = await tx.waitForResult();
+const {
+  transactionResult: { isStatusSuccess },
+} = await waitForResult();
 // #endregion assemble-tx-4
 
 console.log('isStatusSuccess', isStatusSuccess);
