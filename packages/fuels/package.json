@@ -13,7 +13,7 @@
   ],
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
-    "fuels": "fuels.js"
+    "fuels": "fuels.ts"
   },
   "main": "src/index.ts",
   "module": "src/index.ts",
@@ -47,6 +47,9 @@
     "main": "dist/index.js",
     "module": "dist/index.mjs",
     "types": "dist/index.d.ts",
+    "bin": {
+      "fuels": "fuels.js"
+    },
     "exports": {
       ".": {
         "types": "./dist/index.d.ts",

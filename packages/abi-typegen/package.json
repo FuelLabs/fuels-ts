@@ -4,7 +4,7 @@
   "description": "Generates Typescript definitions from Sway ABI Json files",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
-    "fuels-typegen": "typegen.js"
+    "fuels-typegen": "typegen.ts"
   },
   "main": "src/index.ts",
   "module": "src/index.ts",
@@ -33,6 +33,9 @@
     "main": "dist/index.js",
     "module": "dist/index.mjs",
     "types": "dist/index.d.ts",
+    "bin": {
+      "fuels-typegen": "typegen.js"
+    },
     "exports": {
       ".": {
         "types": "./dist/index.d.ts",
