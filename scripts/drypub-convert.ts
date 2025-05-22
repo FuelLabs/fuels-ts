@@ -96,6 +96,7 @@ for (const path of paths) {
     scripts: currentPkgJson.scripts,
     license: currentPkgJson.license,
     dependencies: currentPkgJson.dependencies,
+    peerDependencies: currentPkgJson.peerDependencies,
     devDependencies: currentPkgJson.devDependencies,
   };
 
@@ -113,6 +114,11 @@ for (const path of paths) {
 
     delete newPkgJson.exports;
     delete newPkgJson.publishConfig.exports;
+  }
+
+  if (Object.keys(newPkgJson?.peerDependencies ?? {}).length === 0) {
+    newPkgJson.peerDependencies = undefined;
+    delete newPkgJson.peerDependencies;
   }
 
   const newPkgJsonStr = JSON.stringify(newPkgJson, null, 2);
