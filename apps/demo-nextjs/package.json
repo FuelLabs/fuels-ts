@@ -7,7 +7,7 @@
     "original:build": "next build",
     "original:start": "next start",
     "original:lint": "next lint",
-    "xpretest": "pnpm original:build"
+    "pretest": "pnpm original:build"
   },
   "dependencies": {
     "@fuels/vm-asm": "0.60.2",

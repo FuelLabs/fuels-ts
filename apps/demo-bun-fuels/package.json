@@ -5,7 +5,7 @@
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "version": "0.0.0",
   "scripts": {
-    "xpretest": "bun fuels build"
+    "pretest": "bun fuels build"
   },
   "license": "Apache-2.0",
   "dependencies": {

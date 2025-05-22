@@ -8,7 +8,7 @@
     "original:build": "tsc && vite build",
     "original:lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "original:preview": "vite preview",
-    "xpretest": "pnpm original:build"
+    "pretest": "pnpm original:build"
   },
   "dependencies": {
     "@fuels/vm-asm": "0.60.2",
