@@ -31,6 +31,9 @@ for (const path of paths) {
     const newPkgJsonStr = JSON.stringify(newPkgJson, null, 2);
 
     writeFileSync(fullpath, `${newPkgJsonStr}\n`);
-    log(path);
+    log(`=== ${path} ===`);
+    log(newPkgJsonStr);
   }
+
+  log();
 }
