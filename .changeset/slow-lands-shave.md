@@ -1,2 +1,4 @@
 ---
 ---
+
+chore: update CODEOWNERS file
