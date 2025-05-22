@@ -5,7 +5,7 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
-    "pretest": "pnpm build:forc",
+    "xpretest": "pnpm build:forc",
     "build:forc": "pnpm fuels build --deploy",
     "type:check": "tsc --noEmit"
   },
