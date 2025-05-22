@@ -2,48 +2,97 @@
   "name": "fuels",
   "version": "0.101.0",
   "description": "Fuel TS SDK",
+  "keywords": [
+    "ethereum",
+    "forc",
+    "fuel",
+    "fuels",
+    "fuel-vm",
+    "sway",
+    "typescript"
+  ],
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
     "fuels": "fuels.js"
   },
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
   "engines": {
     "node": "^18.20.3 || ^20.0.0 || ^22.0.0"
   },
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
+      "types": "./src/index.ts",
+      "require": "./src/index.ts",
+      "import": "./src/index.ts"
     },
     "./cli": {
-      "types": "./dist/cli.d.ts",
-      "require": "./dist/cli.js",
-      "import": "./dist/cli.mjs"
+      "types": "./src/cli.ts",
+      "require": "./src/cli.ts",
+      "import": "./src/cli.ts"
     },
     "./test-utils": {
-      "types": "./dist/test-utils.d.ts",
-      "require": "./dist/test-utils.js",
-      "import": "./dist/test-utils.mjs"
+      "types": "./src/test-utils.ts",
+      "require": "./src/test-utils.ts",
+      "import": "./src/test-utils.ts"
     },
     "./cli-utils": {
-      "types": "./dist/cli-utils.d.ts",
-      "require": "./dist/cli-utils.js",
-      "import": "./dist/cli-utils.mjs"
+      "types": "./src/cli-utils.ts",
+      "require": "./src/cli-utils.ts",
+      "import": "./src/cli-utils.ts"
+    }
+  },
+  "publishConfig": {
+    "main": "dist/index.js",
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "require": "./dist/index.js",
+        "import": "./dist/index.mjs"
+      },
+      "./cli": {
+        "types": "./dist/cli.d.ts",
+        "require": "./dist/cli.js",
+        "import": "./dist/cli.mjs"
+      },
+      "./test-utils": {
+        "types": "./dist/test-utils.d.ts",
+        "require": "./dist/test-utils.js",
+        "import": "./dist/test-utils.mjs"
+      },
+      "./cli-utils": {
+        "types": "./dist/cli-utils.d.ts",
+        "require": "./dist/cli-utils.js",
+        "import": "./dist/cli-utils.mjs"
+      }
+    },
+    "typesVersions": {
+      "*": {
+        "cli": [
+          "./dist/cli.d.ts"
+        ],
+        "test-utils": [
+          "./dist/test-utils.d.ts"
+        ],
+        "./cli-utils": [
+          "/dist/cli-utils.d.ts"
+        ]
+      }
     }
   },
   "typesVersions": {
     "*": {
       "cli": [
-        "./dist/cli.d.ts"
+        "./src/cli.ts"
       ],
       "test-utils": [
-        "./dist/test-utils.d.ts"
+        "./src/test-utils.ts"
       ],
       "./cli-utils": [
-        "/dist/cli-utils.d.ts"
+        "/src/cli-utils.ts"
       ]
     }
   },
@@ -96,14 +145,5 @@
     "@types/lodash.camelcase": "4.3.9",
     "@types/rimraf": "3.0.2",
     "vite": "6.1.3"
-  },
-  "keywords": [
-    "ethereum",
-    "forc",
-    "fuel",
-    "fuels",
-    "fuel-vm",
-    "sway",
-    "typescript"
-  ]
+  }
 }

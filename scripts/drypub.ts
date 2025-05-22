@@ -3,7 +3,7 @@ import { log } from 'node:console';
 import { writeFileSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const paths = await globSync(['**/*package.json', '!node_modules']);
+const paths = globSync(['**/*package.json', '!node_modules']);
 
 /**
  * Will override all `package.json` files, spreading the

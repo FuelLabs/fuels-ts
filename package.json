@@ -20,6 +20,7 @@
     "depsync:fix": "syncpack fix-mismatches",
     "test": "vitest --run --coverage --config vitest.node.config.mts --project node $(scripts/tests-find.sh --node)",
     "test:node": "vitest --run --coverage --config vitest.node.config.mts --project node $(scripts/tests-find.sh --node)",
+    "drypub": "pnpm tsx scripts/drypub.ts",
     "test:browser": "vitest --run --coverage --config vitest.browser.config.mts --project browser $(scripts/tests-find.sh --browser)",
     "test:drypub": "pnpm drypub && pnpm build && pnpm test",
     "test:all": "run-p test:node test:browser",
