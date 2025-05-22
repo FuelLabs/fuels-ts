@@ -4,7 +4,7 @@
   "description": "Validates supported versions of the Fuel toolchain",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
-    "fuels-versions": "versions.js"
+    "fuels-versions": "versions.ts"
   },
   "main": "src/index.ts",
   "module": "src/index.ts",
@@ -28,6 +28,9 @@
     "main": "dist/index.js",
     "module": "dist/index.mjs",
     "types": "dist/index.d.ts",
+    "bin": {
+      "fuels-versions": "versions.js"
+    },
     "exports": {
       ".": {
         "types": "./dist/index.d.ts",

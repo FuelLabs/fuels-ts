@@ -4,7 +4,12 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
-    "create-fuels": "create-fuels.js"
+    "create-fuels": "create-fuels.mts"
+  },
+  "publishConfig": {
+    "bin": {
+      "create-fuels": "create-fuels.js"
+    }
   },
   "files": [
     "dist",
