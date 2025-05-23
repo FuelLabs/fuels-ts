@@ -62,7 +62,7 @@ jobs:
           echo "CHANGESET_PR_TITLE=$(echo "ci(release): \`${{ env.RELEASE_VERSION }}\` @ \`${{ github.ref_name }}\`")" >> $GITHUB_ENV
 
       - name: DryPub - expand "publishConfig" inro package.json root
-        run: pnpm drypub
+        run: pnpm drypub && pnpm install
         shell: bash
 
       - name: Build

@@ -57,7 +57,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_DEPLOY_TOKEN }}
 
       - name: DryPub - expand "publishConfig" inro package.json root
-        run: pnpm drypub
+        run: pnpm drypub && pnpm install
         shell: bash
 
       - name: Build
