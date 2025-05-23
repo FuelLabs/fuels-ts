@@ -39,6 +39,11 @@ runs:
       with:
         bun-version: ${{ inputs.bun-version }}
 
+    # Reconfigure `package.json` files to use JS instead of TS
+    - name: DryPub - expand "publishConfig" inro package.json root
+      run: pnpm drypub && pnpm install
+      shell: bash
+
     - name: Build
       run: pnpm build
       shell: bash
