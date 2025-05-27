@@ -885,7 +885,9 @@ export class Account extends AbstractAccount implements WithAddress {
    * @param transactionRequestLike - The transaction request to sign.
    * @returns A promise that resolves to the signature of the transaction.
    */
-  async signTransaction(transactionRequestLike: TransactionRequestLike): Promise<string> {
+  async signTransaction(
+    transactionRequestLike: TransactionRequestLike
+  ): Promise<string | TransactionRequest> {
     if (!this._connector) {
       throw new FuelError(
         ErrorCode.MISSING_CONNECTOR,
