@@ -270,6 +270,23 @@ export function getWithdrawFromFuelOperations({
 }
 
 /** @hidden */
+function findBytesSegmentIndex(whole: Uint8Array, segment: Uint8Array) {
+  for (let i = 0; i <= whole.length - segment.length; i++) {
+    let match = true;
+    for (let j = 0; j < segment.length; j++) {
+      if (whole[i + j] !== segment[j]) {
+        match = false;
+        break;
+      }
+    }
+    if (match) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+/** @hidden */
 function getContractCalls(
   contractInput: InputContract,
   abiMap: AbiMap | undefined,
