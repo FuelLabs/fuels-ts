@@ -1,5 +1,5 @@
 ---
-"@fuel-ts/account": minor
+"@fuel-ts/account": patch
 ---
 
-chore!: made `Account.signTransaction` returns `TransactionRequest`
+chore: made `Account.signTransaction` returns `TransactionRequest`
