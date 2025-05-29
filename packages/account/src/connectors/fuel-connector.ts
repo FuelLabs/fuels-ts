@@ -43,7 +43,8 @@ interface Connector {
   // #region fuel-connector-method-signTransaction
   signTransaction(
     address: string,
-    transaction: TransactionRequestLike
+    transaction: TransactionRequestLike,
+    params?: FuelConnectorSendTxParams
   ): Promise<string | TransactionRequest>;
   // #endregion fuel-connector-method-signTransaction
   // #region fuel-connector-method-sendTransaction
@@ -190,7 +191,8 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    */
   async signTransaction(
     _address: string,
-    _transaction: TransactionRequestLike
+    _transaction: TransactionRequestLike,
+    _params?: FuelConnectorSendTxParams
   ): Promise<string | TransactionRequest> {
     throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }

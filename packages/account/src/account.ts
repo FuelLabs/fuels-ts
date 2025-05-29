@@ -886,7 +886,8 @@ export class Account extends AbstractAccount implements WithAddress {
    * @returns A promise that resolves to the signature of the transaction.
    */
   async signTransaction(
-    transactionRequestLike: TransactionRequestLike
+    transactionRequestLike: TransactionRequestLike,
+    connectorOptions: AccountSendTxParams = {}
   ): Promise<string | TransactionRequest> {
     if (!this._connector) {
       throw new FuelError(
@@ -894,7 +895,20 @@ export class Account extends AbstractAccount implements WithAddress {
         'A connector is required to sign transactions.'
       );
     }
-    return this._connector.signTransaction(this.address.toString(), transactionRequestLike);
+
+    const transactionRequest = transactionRequestify(transactionRequestLike);
+
+    const { transactionRequest: requestToSign, connectorsSendTxParams } =
+      await this.setTransactionStateForConnectors({
+        transactionRequest,
+        connectorOptions,
+      });
+
+    return this._connector.signTransaction(
+      this.address.toString(),
+      requestToSign,
+      connectorsSendTxParams
+    );
   }
 
   /**
@@ -908,30 +922,20 @@ export class Account extends AbstractAccount implements WithAddress {
     transactionRequestLike: TransactionRequestLike,
     { estimateTxDependencies = true, ...connectorOptions }: AccountSendTxParams = {}
   ): Promise<TransactionResponse> {
-    let transactionRequest = transactionRequestify(transactionRequestLike);
+    const transactionRequest = transactionRequestify(transactionRequestLike);
 
     // Check if the account is using a connector, and therefore we do not have direct access to the
     // private key.
     if (this._connector) {
-      const { onBeforeSend, skipCustomFee = false } = connectorOptions;
-
-      transactionRequest = await this.prepareTransactionForSend(transactionRequest);
-
-      const params: FuelConnectorSendTxParams = {
-        onBeforeSend,
-        skipCustomFee,
-        provider: {
-          url: this.provider.url,
-          cache: await serializeProviderCache(this.provider),
-        },
-        transactionState: transactionRequest.flag.state,
-        transactionSummary: await this.prepareTransactionSummary(transactionRequest),
-      };
+      const response = await this.setTransactionStateForConnectors({
+        transactionRequest,
+        connectorOptions,
+      });
 
       const transaction: string | TransactionResponse = await this._connector.sendTransaction(
         this.address.toString(),
-        transactionRequest,
-        params
+        response.transactionRequest,
+        response.connectorsSendTxParams
       );
 
       return typeof transaction === 'string'
@@ -942,6 +946,7 @@ export class Account extends AbstractAccount implements WithAddress {
     if (estimateTxDependencies) {
       await this.provider.estimateTxDependencies(transactionRequest);
     }
+
     return this.provider.sendTransaction(transactionRequest, {
       estimateTxDependencies: false,
     });
@@ -1114,5 +1119,33 @@ export class Account extends AbstractAccount implements WithAddress {
         'All coins to consolidate must be from the same asset id.'
       );
     }
+  }
+
+  /** @hidden * */
+  private async setTransactionStateForConnectors(params: {
+    transactionRequest: TransactionRequest;
+    connectorOptions: AccountSendTxParams;
+  }): Promise<{
+    transactionRequest: TransactionRequest;
+    connectorsSendTxParams: FuelConnectorSendTxParams;
+  }> {
+    const { transactionRequest: requestToPrepare, connectorOptions } = params;
+
+    const { onBeforeSend, skipCustomFee = false } = connectorOptions;
+
+    const transactionRequest = await this.prepareTransactionForSend(requestToPrepare);
+
+    const connectorsSendTxParams: FuelConnectorSendTxParams = {
+      onBeforeSend,
+      skipCustomFee,
+      provider: {
+        url: this.provider.url,
+        cache: await serializeProviderCache(this.provider),
+      },
+      transactionState: requestToPrepare.flag.state,
+      transactionSummary: await this.prepareTransactionSummary(requestToPrepare),
+    };
+
+    return { transactionRequest, connectorsSendTxParams };
   }
 }
