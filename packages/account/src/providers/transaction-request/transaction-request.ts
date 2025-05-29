@@ -324,7 +324,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     const accounts = Array.isArray(account) ? account : [account];
     await Promise.all(
       accounts.map(async (acc) => {
-        this.addWitness(await acc.signTransaction(<TransactionRequestLike>this));
+        this.addWitness((await acc.signTransaction(<TransactionRequestLike>this)) as string);
       })
     );
 

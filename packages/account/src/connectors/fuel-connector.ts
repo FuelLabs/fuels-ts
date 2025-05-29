@@ -4,7 +4,7 @@ import type { HashableMessage } from '@fuel-ts/hasher';
 import { EventEmitter } from 'events';
 
 import type { Asset } from '../assets/types';
-import type { TransactionRequestLike, TransactionResponse } from '../providers';
+import type { TransactionRequest, TransactionRequestLike, TransactionResponse } from '../providers';
 
 import { FuelConnectorEventTypes } from './types';
 import type {
@@ -41,7 +41,11 @@ interface Connector {
   signMessage(address: string, message: HashableMessage): Promise<string>;
   // #endregion fuel-connector-method-signMessage
   // #region fuel-connector-method-signTransaction
-  signTransaction(address: string, transaction: TransactionRequestLike): Promise<string>;
+  signTransaction(
+    address: string,
+    transaction: TransactionRequestLike,
+    params?: FuelConnectorSendTxParams
+  ): Promise<string | TransactionRequest>;
   // #endregion fuel-connector-method-signTransaction
   // #region fuel-connector-method-sendTransaction
   sendTransaction(
@@ -185,7 +189,11 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    *
    * @returns Transaction signature
    */
-  async signTransaction(_address: string, _transaction: TransactionRequestLike): Promise<string> {
+  async signTransaction(
+    _address: string,
+    _transaction: TransactionRequestLike,
+    _params?: FuelConnectorSendTxParams
+  ): Promise<string | TransactionRequest> {
     throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
