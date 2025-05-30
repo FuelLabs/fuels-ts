@@ -1,5 +1,21 @@
 # Change Log
 
+## 0.101.1
+
+### Patch Changes
+
+- 52dfa5b: chore: made `Account.signTransaction` returns `TransactionRequest`
+  - @fuel-ts/abi-coder@0.101.1
+  - @fuel-ts/address@0.101.1
+  - @fuel-ts/crypto@0.101.1
+  - @fuel-ts/errors@0.101.1
+  - @fuel-ts/hasher@0.101.1
+  - @fuel-ts/math@0.101.1
+  - @fuel-ts/merkle@0.101.1
+  - @fuel-ts/transactions@0.101.1
+  - @fuel-ts/utils@0.101.1
+  - @fuel-ts/versions@0.101.1
+
 ## 0.101.0
 
 ### Minor Changes
