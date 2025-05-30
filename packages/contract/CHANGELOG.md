@@ -1,5 +1,21 @@
 # Change Log
 
+## 0.101.2
+
+### Patch Changes
+
+- Updated dependencies [ec2ac46]
+  - @fuel-ts/account@0.101.2
+  - @fuel-ts/program@0.101.2
+  - @fuel-ts/abi-coder@0.101.2
+  - @fuel-ts/crypto@0.101.2
+  - @fuel-ts/errors@0.101.2
+  - @fuel-ts/hasher@0.101.2
+  - @fuel-ts/math@0.101.2
+  - @fuel-ts/merkle@0.101.2
+  - @fuel-ts/transactions@0.101.2
+  - @fuel-ts/utils@0.101.2
+
 ## 0.101.1
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @fuel-ts/utils
 
+## 0.101.2
+
+### Patch Changes
+
+- @fuel-ts/errors@0.101.2
+- @fuel-ts/math@0.101.2
+- @fuel-ts/versions@0.101.2
+
 ## 0.101.1
 
 ### Patch Changes
