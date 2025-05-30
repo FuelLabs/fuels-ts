@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 
 /*
-  Fuels version: 0.101.1
+  Fuels version: 0.101.2
 */
 
 import { Contract as __Contract, type InvokeFunction } from '@fuel-ts/program';

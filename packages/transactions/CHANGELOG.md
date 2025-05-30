@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.101.2
+
+### Patch Changes
+
+- @fuel-ts/abi-coder@0.101.2
+- @fuel-ts/address@0.101.2
+- @fuel-ts/errors@0.101.2
+- @fuel-ts/hasher@0.101.2
+- @fuel-ts/math@0.101.2
+- @fuel-ts/utils@0.101.2
+
 ## 0.101.1
 
 ### Patch Changes
