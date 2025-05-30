@@ -1,9 +1,10 @@
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
-import { bn } from '@fuel-ts/math';
-import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import { bn, toBytes } from '@fuel-ts/math';
+import { ReceiptType, TransactionCoder, TransactionType } from '@fuel-ts/transactions';
 import type { InputContract, Output, OutputChange, Input } from '@fuel-ts/transactions';
+import { arrayify, concat } from '@fuel-ts/utils';
 
 import type {
   TransactionResultReceipt,
@@ -13,7 +14,7 @@ import type {
   TransactionResultTransferReceipt,
 } from '../transaction-response';
 
-import type { FunctionCall } from './call';
+import { getFunctionCall, type FunctionCall } from './call';
 import {
   getInputFromAssetId,
   getInputAccountAddress,
@@ -270,23 +271,67 @@ export function getWithdrawFromFuelOperations({
 }
 
 /** @hidden */
+function findBytesSegmentIndex(whole: Uint8Array, segment: Uint8Array) {
+  for (let i = 0; i <= whole.length - segment.length; i++) {
+    let match = true;
+    for (let j = 0; j < segment.length; j++) {
+      if (whole[i + j] !== segment[j]) {
+        match = false;
+        break;
+      }
+    }
+    if (match) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+/** @hidden */
 function getContractCalls(
   contractInput: InputContract,
   abiMap: AbiMap | undefined,
-  _receipt: TransactionResultCallReceipt,
-  _rawPayload: string,
-  _maxInputs: BN
+  receipt: TransactionResultCallReceipt,
+  scriptData?: Uint8Array
 ): FunctionCall[] {
+  const calls: FunctionCall[] = [];
+
   const abi = abiMap?.[contractInput.contractID];
-  if (!abi) {
-    return [];
+  if (!abi || !scriptData) {
+    return calls;
   }
 
-  // Until we can successfully decode all operations, including multicall we
-  // will just return an empty. This should then be reintroduced in
-  // https://github.com/FuelLabs/fuels-ts/issues/3733
-  return [];
-  // return [ getFunctionCall({ abi, receipt, rawPayload, maxInputs }) ];
+  const bytesSegment = concat([
+    arrayify(receipt.to), // Contract ID (32 bytes)
+    toBytes(receipt.param1.toHex(), 8), // Function selector offset (8 bytes)
+    toBytes(receipt.param2.toHex(), 8), // Function args offset (8 bytes)
+  ]);
+
+  const segmentIndex = findBytesSegmentIndex(scriptData, bytesSegment);
+
+  /**
+   * If the byte segment is not found, it likely indicates a non-standard contract call, such as:
+   *
+   * 1. Manual External Call: A direct call from a Sway script or contract using
+   *    `abi(abi_interface, contract_id)` built-in Sway function.
+   *
+   * 2. Inline ASM Call: A call made using the ASM `call` instruction in Sway,
+   *    without setting `param1` and `param2` offsets just like the SDKs do.
+   *
+   * In these cases, the function call cannot be decoded.
+   */
+  const canDecodeFunctionCall = segmentIndex !== -1;
+
+  if (!canDecodeFunctionCall) {
+    return calls;
+  }
+
+  const offset = segmentIndex + bytesSegment.length;
+
+  const call = getFunctionCall({ abi, receipt, offset, scriptData });
+  calls.push(call);
+
+  return calls;
 }
 
 /** @hidden */
@@ -307,8 +352,7 @@ function processCallReceipt(
   contractInput: InputContract,
   inputs: Input[],
   abiMap: AbiMap | undefined,
-  rawPayload: string,
-  maxInputs: BN,
+  scriptData: Uint8Array | undefined,
   baseAssetId: string
 ): Operation[] {
   const assetId = receipt.assetId === ZeroBytes32 ? baseAssetId : receipt.assetId;
@@ -318,7 +362,7 @@ function processCallReceipt(
   }
 
   const inputAddress = getInputAccountAddress(input);
-  const calls = getContractCalls(contractInput, abiMap, receipt, rawPayload, maxInputs);
+  const calls = getContractCalls(contractInput, abiMap, receipt, scriptData);
 
   return [
     {
@@ -345,7 +389,6 @@ export function getContractCallOperations({
   receipts,
   abiMap,
   rawPayload,
-  maxInputs,
   baseAssetId,
 }: InputOutputParam &
   ReceiptParam &
@@ -360,18 +403,19 @@ export function getContractCallOperations({
       return [];
     }
 
+    let scriptData: Uint8Array | undefined;
+
+    if (rawPayload) {
+      const [transaction] = new TransactionCoder().decode(arrayify(rawPayload), 0);
+      if (transaction.type === TransactionType.Script) {
+        scriptData = arrayify(transaction.scriptData as string);
+      }
+    }
+
     return contractCallReceipts
       .filter((receipt) => receipt.to === contractInput.contractID)
       .flatMap((receipt) =>
-        processCallReceipt(
-          receipt,
-          contractInput,
-          inputs,
-          abiMap,
-          rawPayload as string,
-          maxInputs,
-          baseAssetId
-        )
+        processCallReceipt(receipt, contractInput, inputs, abiMap, scriptData, baseAssetId)
       );
   });
 }

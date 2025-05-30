@@ -5,7 +5,6 @@ import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 
 import {
-  CONTRACT_CALL_ABI,
   MOCK_INPUT_COIN,
   MOCK_INPUT_CONTRACT,
   MOCK_INPUT_MESSAGE,
@@ -21,7 +20,6 @@ import {
   MOCK_RECEIPT_RETURN_DATA_2,
   MOCK_RECEIPT_SCRIPT_RESULT,
   MOCK_RECEIPT_TRANSFER_OUT,
-  MOCK_TRANSACTION_RAWPAYLOAD,
 } from '../../../test/fixtures/transaction-summary';
 import type {
   TransactionResultMessageOutReceipt,
@@ -94,69 +92,6 @@ describe('operations', () => {
 
       expect(operations.length).toEqual(1);
 
-      expect(operations[0]).toStrictEqual(expected);
-    });
-
-    // TODO: Make getOperation tests to be e2e
-    it.skip('should ensure getContractCallOperations return contract call operations with calls details', () => {
-      const expected: Operation = {
-        name: OperationName.contractCall,
-        calls: [
-          {
-            functionName: 'mint_to_address',
-            functionSignature: 'mint_to_address(u64,s(b256),u64)',
-            argumentsProvided: {
-              address: {
-                value: '0xa5a77a7d97c6708b08de873528ae6879ef5e9900fbc2e3f3cb74e28917bf7038',
-              },
-              amount: '0x64',
-              amount2: '0x64',
-            },
-            amount: bn('0x5f5e100'),
-            assetId: ZeroBytes32,
-          },
-        ],
-        from: {
-          type: AddressType.account,
-          address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
-        },
-        to: {
-          type: AddressType.contract,
-          address: '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1',
-        },
-        assetsSent: [
-          {
-            amount: bn(100000000),
-            assetId: ZeroBytes32,
-          },
-        ],
-      };
-
-      const receipts: TransactionResultReceipt[] = [
-        MOCK_RECEIPT_CALL,
-        {
-          ...MOCK_RECEIPT_CALL,
-          to: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        },
-        MOCK_RECEIPT_TRANSFER_OUT,
-        MOCK_RECEIPT_RETURN_DATA_1,
-        MOCK_RECEIPT_RETURN_DATA_2,
-        MOCK_RECEIPT_SCRIPT_RESULT,
-      ];
-
-      const operations = getContractCallOperations({
-        inputs: [MOCK_INPUT_CONTRACT, MOCK_INPUT_COIN],
-        outputs: [MOCK_OUTPUT_CONTRACT, MOCK_OUTPUT_VARIABLE, MOCK_OUTPUT_CHANGE],
-        receipts,
-        abiMap: {
-          '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1': CONTRACT_CALL_ABI,
-        },
-        rawPayload: MOCK_TRANSACTION_RAWPAYLOAD,
-        maxInputs: bn(255),
-        baseAssetId: ZeroBytes32,
-      });
-
-      expect(operations.length).toEqual(1);
       expect(operations[0]).toStrictEqual(expected);
     });
 
