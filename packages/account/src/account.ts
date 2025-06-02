@@ -358,7 +358,7 @@ export class Account extends AbstractAccount implements WithAddress {
     // If the transaction still needs to be funded after the maximum number of attempts
     if (needsToBeFunded) {
       throw new FuelError(
-        ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
+        ErrorCode.INSUFFICIENT_FUNDS,
         `The account ${this.address} does not have enough base asset funds to cover the transaction execution.`
       );
     }

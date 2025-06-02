@@ -63,8 +63,8 @@ describe('Predicate', () => {
       await expectToThrowFuelError(
         () => contract.functions.mint_coins(200).call(),
         new FuelError(
-          ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-          `Insufficient funds or too many small value coins. Consider combining UTXOs.`
+          ErrorCode.INSUFFICIENT_FUNDS,
+          `The account(s) sending the transaction don't have enough funds to cover the transaction.`
         )
       );
 

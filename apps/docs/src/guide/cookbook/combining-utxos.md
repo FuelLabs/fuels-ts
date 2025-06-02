@@ -1,6 +1,6 @@
 # Combining UTXOs
 
-When performing a funding operation or calling `getResourcesToSpend`, you may encounter the `INSUFFICIENT_FUNDS_OR_MAX_COINS` error if the number of coins fetched per asset exceeds the maximum limit allowed by the chain.
+When performing a funding operation or calling `getResourcesToSpend`, you may encounter the `MAX_COINS_REACHED` error if the number of coins fetched per asset exceeds the maximum limit allowed by the chain.
 
 You may also want to do this if you want to reduce the number of inputs in your transaction, which can be useful if you are trying to reduce the size of your transaction or you are receiving the `MAX_INPUTS_EXCEEDED` error.
 

@@ -276,19 +276,17 @@ When the Fuel Node info cache is empty; This is usually caused by not being conn
 
 Ensure that the provider has connected to a Fuel Node successfully.
 
-### `INSUFFICIENT_FUNDS_OR_MAX_COINS`
+### `INSUFFICIENT_FUNDS`
 
-This error can occur during a funding operation or when calling the `getResourcesToSpend` method. It indicates one of the following issues:
+This error can occur during a funding operation or when calling the `getResourcesToSpend` method. It indicates the specified account does not have enough balance to cover the required amount.
 
-`Insufficient Balance`: The specified account does not have enough balance to cover the required amount.
+Acquire additional funds in the required asset to meet the amount needed.
 
-`UTXO Limit Exceeded`: Although the account has enough total funds, the funds are spread across too many UTXOs (coins). The blockchain limits how many UTXOs can be used in a single transaction, and exceeding this limit prevents the transaction from being processed.
+### `MAX_COINS_REACHED`
 
-First, to be sure what the real reason is, you can fetch the [balance](../wallets/checking-balances.md) of the `assetId` to ensure that the account has enough funds to cover the amount. After knowing the reason, to solve you can:
+This error can occur during a funding operation or when calling the `getResourcesToSpend` method. It indicates although the account has enough total funds, the funds are spread across too many UTXOs (coins). The blockchain limits how many UTXOs can be used in a single transaction, and exceeding this limit prevents the transaction from being processed.
 
-`For Insufficient Balance`: Acquire additional funds in the required asset to meet the amount needed.
-
-`For UTXO Limit Exceeded`: Combine UTXOs to reduce their number and meet the network's requirements. You can follow [this guide](../cookbook/combining-utxos.md) to learn how to combine UTXOs effectively.
+Combine UTXOs to reduce their number and meet the network's requirements. You can follow [this guide](../cookbook/combining-utxos.md) to learn how to combine UTXOs effectively.
 
 ### `TIMEOUT_EXCEEDED`
 
