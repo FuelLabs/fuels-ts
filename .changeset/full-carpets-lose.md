@@ -5,4 +5,4 @@
 "@fuel-ts/errors": minor
 ---
 
-chore!: upgrade `fuel-core` to `0.44.0`
+chore: upgrade `fuel-core` to `0.44.0`
