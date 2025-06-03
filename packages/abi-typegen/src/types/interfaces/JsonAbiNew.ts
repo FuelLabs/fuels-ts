@@ -12,6 +12,7 @@ export interface JsonAbi {
   readonly loggedTypes: readonly LoggedType[];
   readonly messagesTypes: readonly MessageType[];
   readonly configurables: readonly Configurable[];
+  readonly errorCodes?: Record<string, ErrorCodes>;
 }
 
 export interface ConcreteType {
@@ -98,4 +99,16 @@ export interface Configurable {
   readonly name: string;
   readonly concreteTypeId: string;
   readonly offset: number;
+}
+
+export interface ErrorPosition {
+  file: string;
+  line: number;
+  col: number;
+}
+
+export interface ErrorCodes {
+  readonly pos: ErrorPosition;
+  readonly logId: string | null;
+  readonly msg: string | null;
 }
