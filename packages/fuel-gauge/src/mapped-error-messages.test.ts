@@ -12,6 +12,7 @@ import { launchTestContract } from './utils';
 describe('mapped error messages', () => {
   it('should throw not enough coins error', async () => {
     using contract = await launchTestContract({ factory: CallTestContractFactory });
+    const expectedAssetId = await contract.provider.getBaseAssetId();
 
     const emptyWallet = Wallet.generate({ provider: contract.provider });
 
@@ -20,6 +21,7 @@ describe('mapped error messages', () => {
     await expectToThrowFuelError(() => emptyWalletContract.functions.return_void().call(), {
       code: ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
       message: `Insufficient funds or too many small value coins. Consider combining UTXOs.`,
+      metadata: { assetId: expectedAssetId }
     });
   });
 
@@ -31,8 +33,10 @@ describe('mapped error messages', () => {
       },
     });
     const {
+      provider,
       wallets: [wallet],
     } = launched;
+    const expectedAssetId = await provider.getBaseAssetId();
 
     const request = new ScriptTransactionRequest();
     request.addCoinOutput(wallet.address, 256, await wallet.provider.getBaseAssetId());
@@ -44,6 +48,7 @@ describe('mapped error messages', () => {
     await expectToThrowFuelError(() => wallet.fund(request, txCost), {
       code: ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
       message: 'Insufficient funds or too many small value coins. Consider combining UTXOs.',
+      metadata: { assetId: expectedAssetId }
     });
   });
 });
