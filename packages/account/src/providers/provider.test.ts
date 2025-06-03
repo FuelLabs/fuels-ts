@@ -1005,9 +1005,9 @@ describe('Provider', () => {
     const receiver = Wallet.generate({ provider });
 
     await expectToThrowFuelError(() => sender.transfer(receiver.address, 1), {
-      code: ErrorCode.INSUFFICIENT_FUNDS,
+      code: ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
       message: [
-        `The account(s) sending the transaction don't have enough funds to cover the transaction.`,
+        `Insufficient funds or too many small value coins. Consider combining UTXOs.`,
         ``,
         `The Fuel Node that you are trying to connect to is using fuel-core version ${current.FUEL_CORE}.`,
         `The TS SDK currently supports fuel-core version ${supported.FUEL_CORE}.`,
@@ -1032,9 +1032,9 @@ describe('Provider', () => {
     const receiver = Wallet.generate({ provider });
 
     await expectToThrowFuelError(() => sender.transfer(receiver.address, 1), {
-      code: ErrorCode.INSUFFICIENT_FUNDS,
+      code: ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
       message: [
-        `The account(s) sending the transaction don't have enough funds to cover the transaction.`,
+        `Insufficient funds or too many small value coins. Consider combining UTXOs.`,
         ``,
         `The Fuel Node that you are trying to connect to is using fuel-core version ${current.FUEL_CORE}.`,
         `The TS SDK currently supports fuel-core version ${supported.FUEL_CORE}.`,
