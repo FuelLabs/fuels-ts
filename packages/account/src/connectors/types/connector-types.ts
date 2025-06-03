@@ -10,6 +10,7 @@ export enum FuelConnectorMethods {
   accounts = 'accounts',
   currentAccount = 'currentAccount',
   // Signature methods
+  signTransaction = 'signTransaction',
   signMessage = 'signMessage',
   sendTransaction = 'sendTransaction',
   // Assets metadata methods

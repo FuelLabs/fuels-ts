@@ -1,6 +1,6 @@
 {
   "name": "create-fuels",
-  "version": "0.101.0",
+  "version": "0.101.1",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -11,7 +11,7 @@
     "templates"
   ],
   "engines": {
-    "node": "^18.20.3 || ^20.0.0 || ^22.0.0"
+    "node": "^20.0.0 || ^22.0.0 || ^24.0.0"
   },
   "license": "Apache-2.0",
   "scripts": {

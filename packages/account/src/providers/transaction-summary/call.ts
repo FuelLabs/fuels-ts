@@ -1,16 +1,13 @@
-import { type JsonAbi, decodeScriptData } from '@fuel-ts/abi-coder';
+import { type JsonAbi, StdStringCoder } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
-import { FuelError, ErrorCode } from '@fuel-ts/errors';
-import type { BN } from '@fuel-ts/math';
+import { type BN } from '@fuel-ts/math';
 import type { ReceiptCall } from '@fuel-ts/transactions';
-import { TransactionCoder } from '@fuel-ts/transactions';
-import { arrayify } from '@fuel-ts/utils';
 
 type GetFunctionCallProps = {
   abi: JsonAbi;
   receipt: ReceiptCall;
-  rawPayload: string;
-  maxInputs: BN;
+  offset: number;
+  scriptData: Uint8Array;
 };
 
 export interface FunctionCall {
@@ -23,39 +20,29 @@ export interface FunctionCall {
 
 /**
  * Builds a FunctionCall object from a call receipt.
- *
- * Currently only supports the first function call, multicall is not supported.
- * This should be https://github.com/FuelLabs/fuels-ts/issues/3733.
  */
 export const getFunctionCall = ({
   abi,
   receipt,
-  rawPayload,
+  offset,
+  scriptData,
 }: GetFunctionCallProps): FunctionCall => {
-  const [transaction] = new TransactionCoder().decode(arrayify(rawPayload), 0);
-
-  if (!transaction.scriptData) {
-    throw new FuelError(
-      ErrorCode.NOT_SUPPORTED,
-      'Cannot get function calls for this transaction type.'
-    );
-  }
-
-  const { functionArgs, functionSelector } = decodeScriptData(
-    arrayify(transaction.scriptData),
-    abi
-  );
+  const [functionSelector, argumentsOffset] = new StdStringCoder().decode(scriptData, offset);
 
   const abiInterface = new Interface(abi);
   const functionFragment = abiInterface.getFunction(functionSelector);
   const inputs = functionFragment.jsonFn.inputs;
 
-  let argumentsProvided;
+  let argumentsProvided: Record<string, unknown> | undefined;
 
-  if (functionArgs) {
-    // put together decoded data with input names from abi
+  // Validate if the function has arguments before attempting to decode them
+  if (inputs.length) {
+    const functionArgsBytes = scriptData.slice(argumentsOffset);
+    const decodedArguments = functionFragment.decodeArguments(functionArgsBytes);
+
+    // Put together decoded data with input names from abi
     argumentsProvided = inputs.reduce((prev, input, index) => {
-      const value = functionArgs[index];
+      const value = decodedArguments?.[index];
       const name = input.name;
 
       if (name) {

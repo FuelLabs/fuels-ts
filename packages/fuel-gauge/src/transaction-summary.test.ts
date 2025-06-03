@@ -4,6 +4,7 @@ import type {
   TransactionSummary,
   TransactionResult,
   OutputChange,
+  BigNumberish,
 } from 'fuels';
 import {
   Address,
@@ -22,17 +23,34 @@ import {
   TRANSACTIONS_PAGE_SIZE_LIMIT,
   FuelError,
   ErrorCode,
+  sha256,
+  concat,
+  ZeroBytes32,
 } from 'fuels';
 import {
   ASSET_A,
   ASSET_B,
   expectToThrowFuelError,
   launchTestNode,
+  TestAssetId,
   TestMessage,
 } from 'fuels/test-utils';
 
-import { MultiTokenContractFactory, TokenContractFactory, TokenContract } from '../test/typegen';
+import {
+  MultiTokenContractFactory,
+  TokenContractFactory,
+  TokenContract,
+  AbiContractFactory,
+  OptionsFactory,
+  AdvancedLoggingFactory,
+  AdvancedLoggingOtherContractFactory,
+  ScriptCallLoggingContracts,
+  CallTestContractFactory,
+} from '../test/typegen';
+import type { StructDoubleGenericInput } from '../test/typegen/contracts/AbiContract';
 import type { ContractIdInput, TransferParamsInput } from '../test/typegen/contracts/TokenContract';
+
+import { U8_MAX, U32_MAX } from './abi/constants';
 
 function convertBnsToHex(value: unknown): unknown {
   if (value instanceof BN) {
@@ -302,8 +320,6 @@ describe('TransactionSummary', () => {
     });
   });
 
-  // We can remove this test once https://github.com/FuelLabs/fuels-ts/issues/3733 has been resolved as the
-  // below tests are more verbose. But this ensures the method does not throw with an ABI map provided.
   it('should ensure getTransactionsSummaries executes just fine [w/ ABI map]', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
@@ -331,9 +347,7 @@ describe('TransactionSummary', () => {
     });
   });
 
-  // Test disabled due to unsupported call ops in tx summaries. We should re-enable this via
-  // https://github.com/FuelLabs/fuels-ts/issues/3733
-  it.skip('should ensure getTransactionsSummaries executes just fine [w/ ABI & call op]', async () => {
+  it('should ensure getTransactionsSummaries executes just fine [w/ ABI & call op]', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
@@ -371,9 +385,7 @@ describe('TransactionSummary', () => {
     });
   });
 
-  // Test disabled due to unsupported call ops in tx summaries. We should re-enable this via
-  // https://github.com/FuelLabs/fuels-ts/issues/3733
-  it.skip('should ensure getTransactionsSummaries executes just fine [w/ ABI & call w/ transfer op]', async () => {
+  it('should ensure getTransactionsSummaries executes just fine [w/ ABI & call w/ transfer op]', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
@@ -429,9 +441,7 @@ describe('TransactionSummary', () => {
     });
   });
 
-  // Test disabled due to unsupported call ops in tx summaries. We should re-enable this via
-  // https://github.com/FuelLabs/fuels-ts/issues/3733
-  it.skip('should ensure getTransactionSummary fn executes just fine [w/ ABI & call op]', async () => {
+  it('should ensure getTransactionSummary fn executes just fine [w/ ABI & call op]', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
@@ -478,15 +488,9 @@ describe('TransactionSummary', () => {
     });
 
     expect(summary.operations).toStrictEqual(responseSummary.operations);
-
-    // TODO: Contract txId not set correctly in`transactionResponse.getTransactionSummary`
-    // https://github.com/FuelLabs/fuels-ts/issues/3708
-    // expect(summary).toStrictEqual(responseSummary);
   });
 
-  // Test disabled due to unsupported call ops in tx summaries. We should re-enable this via
-  // https://github.com/FuelLabs/fuels-ts/issues/3733
-  it.skip('should ensure getTransactionSummary fn executes just fine [w/ ABI & call w/ transfer op]', async () => {
+  it('should ensure getTransactionSummary fn executes just fine [w/ ABI & call w/ transfer op]', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
@@ -550,49 +554,97 @@ describe('TransactionSummary', () => {
     });
 
     expect(summary.operations).toStrictEqual(responseSummary.operations);
-
-    // TODO: Contract txId not set correctly in`transactionResponse.getTransactionSummary`
-    // https://github.com/FuelLabs/fuels-ts/issues/3708
-    // expect(summary).toStrictEqual(responseSummary);
   });
 
-  // Tx summary with multicall does not set contract operations correctly
-  // https://github.com/FuelLabs/fuels-ts/issues/3706
-  it.skip('should ensure getTransactionsSummaries executes just fine [w/ ABI & multicall]', async () => {
+  it('should ensure getTransactionsSummaries executes just fine [w/ ABI & multicall]', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
           factory: TokenContractFactory,
         },
+        {
+          factory: AbiContractFactory,
+        },
+        {
+          factory: OptionsFactory,
+        },
+        {
+          factory: CallTestContractFactory,
+        },
       ],
     });
 
     const {
-      contracts: [contract],
+      contracts: [tokenContract, abiContract, optionsContract, callTestContract],
       provider,
     } = launched;
 
-    const contractId = contract.id.toB256();
+    // Call 3 Parameters
+    const inputX: StructDoubleGenericInput<[string, string, string], number> = {
+      a: [
+        '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+        '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+        '0xcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc',
+      ],
+      b: 10,
+    };
+
+    const inputY: [
+      StructDoubleGenericInput<BigNumberish, boolean>,
+      StructDoubleGenericInput<BigNumberish, boolean>,
+      StructDoubleGenericInput<BigNumberish, boolean>,
+      StructDoubleGenericInput<BigNumberish, boolean>,
+    ] = [
+      { a: '0x63', b: false },
+      { a: '0xc7', b: false },
+      { a: '0x7d0', b: false },
+      { a: '0x1f', b: true },
+    ];
+
+    const inputZ: [string, boolean] = ['Input', true];
+
+    const inputA = { a: true, b: 10 };
+
+    // Call 4 Parameters
+    const someInput = {
+      one: {
+        a: U8_MAX,
+      },
+      two: U32_MAX,
+    };
+
     const recipient = Wallet.generate({ provider });
 
-    const setupCall = await contract.functions.mint_coins(100000).call();
-    const setupRes = await setupCall.waitForResult();
-    const { assetId } = setupRes.transactionResult.mintedAssets[0];
+    // Asset Sub ID used by the contract is a zeroed out b256
+    const assetId = sha256(concat([tokenContract.id.toB256(), ZeroBytes32]));
 
     const calls = [
-      contract.functions.mint_coins(100000),
-      contract.functions.transfer_to_address(
+      tokenContract.functions.mint_coins(100000), // Call 1
+      tokenContract.functions.transfer_to_address(
         { bits: recipient.address.toB256() },
         { bits: assetId },
         1000
-      ),
+      ), // Call 2
+      abiContract.functions.multi_arg_complex(inputX, inputY, inputZ, inputA), // Call 3
+      optionsContract.functions.echo_struct_enum_option(someInput), // Call 4
+      callTestContract.functions.return_context_amount().callParams({
+        forward: { amount: bn(100000), assetId: TestAssetId.A.value },
+      }), // Call 5
     ];
 
-    const multiCall = await contract.multiCall(calls).call();
+    const multiCall = await tokenContract.multiCall(calls).call();
     const res = await multiCall.waitForResult();
 
+    const tokenId = tokenContract.id.toB256();
+    const abiId = abiContract.id.toB256();
+    const optionId = optionsContract.id.toB256();
+    const callTestId = callTestContract.id.toB256();
+
     const summary = await res.transactionResponse.getTransactionSummary({
-      [contractId]: TokenContract.abi,
+      [tokenId]: tokenContract.interface.jsonAbi,
+      [abiId]: abiContract.interface.jsonAbi,
+      [optionId]: optionsContract.interface.jsonAbi,
+      [callTestId]: callTestContract.interface.jsonAbi,
     });
 
     validateTxSummary({
@@ -600,26 +652,32 @@ describe('TransactionSummary', () => {
     });
 
     const { operations } = summary;
-    const transferOperation = operations[0];
-    const callOperation = operations[1];
+    const transferOperation = operations[0]; // Exists because contract fn performs a transfer
+    const callOperation1 = operations[1];
     const callOperation2 = operations[2];
+    const callOperation3 = operations[3];
+    const callOperation4 = operations[4];
+    const callOperation5 = operations[5];
 
     expect(transferOperation.name).toBe(OperationName.transfer);
     expect(transferOperation.to?.address).toBe(recipient.address.toB256());
     expect(transferOperation.assetsSent?.[0].assetId).toBe(assetId);
     expect(transferOperation.assetsSent?.[0].amount).toStrictEqual(bn(1000));
 
-    expect(callOperation.name).toBe(OperationName.contractCall);
-    expect(callOperation.to?.address).toBe(contractId);
-    expect(callOperation.calls?.[0].functionName).toBe('mint_coins');
-    expect(callOperation.calls?.[0].functionSignature).toBe('mint_coins(u64)');
-    expect(callOperation.calls?.[0].argumentsProvided).toStrictEqual({
+    // Contract Call 1
+    expect(callOperation1.name).toBe(OperationName.contractCall);
+    expect(callOperation1.to?.address).toBe(tokenId);
+    expect(callOperation1.calls?.[0].functionName).toBe('mint_coins');
+    expect(callOperation1.calls?.[0].functionSignature).toBe('mint_coins(u64)');
+    expect(callOperation1.calls?.[0].argumentsProvided).toStrictEqual({
       mint_amount: bn(100000).toHex(),
     });
+    expect(callOperation1.calls?.[0].amount).toBeUndefined();
+    expect(callOperation1.calls?.[0].assetId).toBeUndefined();
 
-    // Second contract operation (multicall not set correctly)
+    // Contract Call 2
     expect(callOperation2.name).toBe(OperationName.contractCall);
-    expect(callOperation2.to?.address).toBe(contractId);
+    expect(callOperation2.to?.address).toBe(tokenId);
     expect(callOperation2.calls?.[0].functionName).toBe('transfer_to_address');
     expect(callOperation2.calls?.[0].functionSignature).toBe(
       'transfer_to_address(s(b256),s(b256),u64)'
@@ -629,6 +687,91 @@ describe('TransactionSummary', () => {
       asset_id: { bits: assetId },
       amount: bn(1000).toHex(),
     });
+    expect(callOperation2.calls?.[0].amount).toBeUndefined();
+    expect(callOperation2.calls?.[0].assetId).toBeUndefined();
+
+    // Contract Call 3
+    expect(callOperation3.name).toBe(OperationName.contractCall);
+    expect(callOperation3.to?.address).toBe(abiId);
+    expect(callOperation3.calls?.[0].functionName).toBe('multi_arg_complex');
+    expect(callOperation3.calls?.[0].functionSignature).toBe(
+      'multi_arg_complex(s<a[b256;3],u8>(a[b256;3],u8),a[s<u64,bool>(u64,bool);4],(str[5],bool),s(bool,u32))'
+    );
+    expect(callOperation3.calls?.[0].argumentsProvided).toStrictEqual({
+      x: inputX,
+      y: inputY,
+      z: inputZ,
+      a: inputA,
+    });
+    expect(callOperation3.calls?.[0].amount).toBeUndefined();
+    expect(callOperation3.calls?.[0].assetId).toBeUndefined();
+
+    // Contract Call 4
+    expect(callOperation4.name).toBe(OperationName.contractCall);
+    expect(callOperation4.to?.address).toBe(optionId);
+    expect(callOperation4.calls?.[0].functionName).toBe('echo_struct_enum_option');
+    expect(callOperation4.calls?.[0].functionSignature).toBe(
+      'echo_struct_enum_option(s(e(e<u8>((),u8),e<u16>((),u16)),e<u32>((),u32)))'
+    );
+    expect(callOperation4.calls?.[0].argumentsProvided).toStrictEqual({
+      arg: someInput,
+    });
+    expect(callOperation4.calls?.[0].amount).toBeUndefined();
+    expect(callOperation4.calls?.[0].assetId).toBeUndefined();
+
+    // Contract Call 5
+    expect(callOperation5.name).toBe(OperationName.contractCall);
+    expect(callOperation5.to?.address).toBe(callTestId);
+    expect(callOperation5.calls?.[0].functionName).toBe('return_context_amount');
+    expect(callOperation5.calls?.[0].functionSignature).toBe('return_context_amount()');
+    expect(callOperation5.calls?.[0].argumentsProvided).toBeUndefined();
+    expect(callOperation5.calls?.[0].amount?.toString()).equal('100000');
+    expect(callOperation5.calls?.[0].assetId).equal(TestAssetId.A.value);
+  });
+
+  it('should ensure getTransactionsSummaries does not attempt to decode external call', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        { factory: AdvancedLoggingFactory },
+        { factory: AdvancedLoggingOtherContractFactory },
+      ],
+    });
+
+    const {
+      provider,
+      contracts: [advancedLogContract, otherAdvancedLogContract],
+      wallets: [wallet],
+    } = launched;
+
+    const script = new ScriptCallLoggingContracts(wallet);
+
+    const call = await script.functions
+      .main(advancedLogContract.id.toB256(), otherAdvancedLogContract.id.toB256())
+      .addContracts([advancedLogContract, otherAdvancedLogContract])
+      .call();
+
+    const {
+      transactionId,
+      transactionResult: { operations },
+    } = await call.waitForResult();
+
+    /**
+     * Attempting to decode call receipt from an external contract call made by the Sway
+     * built-in fn `abi` will result in error
+     */
+    const summary = await getTransactionSummary({
+      id: transactionId,
+      provider,
+      abiMap: {
+        [advancedLogContract.id.toB256()]: advancedLogContract.interface.jsonAbi,
+      },
+    });
+
+    expect(summary.operations).toHaveLength(2);
+    expect(summary.operations[0].calls?.length).toBe(0);
+    expect(summary.operations[1].calls?.length).toBe(0);
+
+    expect(operations).toStrictEqual(summary.operations);
   });
 
   describe('Transfer Operations', () => {
