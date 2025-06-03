@@ -6,8 +6,10 @@ const ASSET_ID_REGEX = /[0-9a-fA-F]{32,64}/;
 const gqlErrorMessage = {
   RPC_CONSISTENCY:
     /The required fuel block height is higher than the current block height. Required: \d+, Current: \d+/,
-  INSUFFICIENT_FUNDS: /the target cannot be met due to insufficient coins available for [0-9a-fA-F]{32,64}. Collected: \d+/,
-  MAX_COINS_REACHED: /the target for [0-9a-fA-F]{32,64} cannot be met due to exceeding the \d+ coin limit. Collected: \d+./,
+  INSUFFICIENT_FUNDS:
+    /the target cannot be met due to insufficient coins available for [0-9a-fA-F]{32,64}. Collected: \d+/,
+  MAX_COINS_REACHED:
+    /the target for [0-9a-fA-F]{32,64} cannot be met due to exceeding the \d+ coin limit. Collected: \d+./,
   ASSET_NOT_FOUND: /resource was not found in table/,
   MULTIPLE_CHANGE_POLICIES: /The asset ([a-fA-F0-9]{64}) has multiple change policies/,
   DUPLICATE_CHANGE_OUTPUT_ACCOUNT: /required balances contain duplicate \(asset, account\) pair/,
@@ -17,7 +19,10 @@ const gqlErrorMessage = {
 type GqlError = { message: string } | GraphQLError;
 
 const mapGqlErrorMessage = (error: GqlError): FuelError => {
-  if (gqlErrorMessage.INSUFFICIENT_FUNDS.test(error.message) || gqlErrorMessage.MAX_COINS_REACHED.test(error.message)) {
+  if (
+    gqlErrorMessage.INSUFFICIENT_FUNDS.test(error.message) ||
+    gqlErrorMessage.MAX_COINS_REACHED.test(error.message)
+  ) {
     const match = error.message.match(ASSET_ID_REGEX);
     const assetId = match ? `0x${match[0]}` : null;
     return new FuelError(

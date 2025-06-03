@@ -21,7 +21,7 @@ describe('mapped error messages', () => {
     await expectToThrowFuelError(() => emptyWalletContract.functions.return_void().call(), {
       code: ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
       message: `Insufficient funds or too many small value coins. Consider combining UTXOs.`,
-      metadata: { assetId: expectedAssetId }
+      metadata: { assetId: expectedAssetId },
     });
   });
 
@@ -48,7 +48,7 @@ describe('mapped error messages', () => {
     await expectToThrowFuelError(() => wallet.fund(request, txCost), {
       code: ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
       message: 'Insufficient funds or too many small value coins. Consider combining UTXOs.',
-      metadata: { assetId: expectedAssetId }
+      metadata: { assetId: expectedAssetId },
     });
   });
 });
