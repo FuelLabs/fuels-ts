@@ -4,8 +4,8 @@ import type { GraphQLError } from 'graphql';
 const gqlErrorMessage = {
   RPC_CONSISTENCY:
     /The required fuel block height is higher than the current block height. Required: \d+, Current: \d+/,
-  NOT_ENOUGH_COINS_MAX_COINS:
-    /the target cannot be met due to no coins available or exceeding the \d+ coin limit./,
+  INSUFFICIENT_FUNDS: /the target cannot be met due to insufficient coins available for [0-9a-fA-F]{32,64}. Collected: \d+/,
+  MAX_COINS_REACHED: /the target for [0-9a-fA-F]{32,64} cannot be met due to exceeding the \d+ coin limit. Collected: \d+./,
   ASSET_NOT_FOUND: /resource was not found in table/,
   MULTIPLE_CHANGE_POLICIES: /The asset ([a-fA-F0-9]{64}) has multiple change policies/,
   DUPLICATE_CHANGE_OUTPUT_ACCOUNT: /required balances contain duplicate \(asset, account\) pair/,
@@ -15,7 +15,7 @@ const gqlErrorMessage = {
 type GqlError = { message: string } | GraphQLError;
 
 const mapGqlErrorMessage = (error: GqlError): FuelError => {
-  if (gqlErrorMessage.NOT_ENOUGH_COINS_MAX_COINS.test(error.message)) {
+  if (gqlErrorMessage.INSUFFICIENT_FUNDS.test(error.message) || gqlErrorMessage.MAX_COINS_REACHED.test(error.message)) {
     return new FuelError(
       ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
       `Insufficient funds or too many small value coins. Consider combining UTXOs.`,
