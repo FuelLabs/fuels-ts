@@ -8,10 +8,7 @@
   Fuels version: 0.101.1
 */
 
-import {
-  ContractFactory as __ContractFactory,
-  type DeployContractOptions,
-} from '@fuel-ts/contract';
+import { ContractFactory as __ContractFactory, type DeployContractOptions } from '@fuel-ts/program';
 import { decompressBytecode } from '@fuel-ts/utils';
 import { type Provider, type Account } from '@fuel-ts/account';
 import { Src14OwnedProxy } from './Src14OwnedProxy';

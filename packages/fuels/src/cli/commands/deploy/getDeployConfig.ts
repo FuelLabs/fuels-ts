@@ -1,4 +1,4 @@
-import type { DeployContractOptions } from '@fuel-ts/contract';
+import type { DeployContractOptions } from '@fuel-ts/program';
 
 import type { ContractDeployOptions, OptionsFunction } from '../../types';
 

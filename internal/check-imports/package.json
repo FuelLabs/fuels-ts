@@ -12,7 +12,6 @@
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/abi-typegen": "workspace:*",
     "@fuel-ts/address": "workspace:*",
-    "@fuel-ts/contract": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",

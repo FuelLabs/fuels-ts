@@ -14,13 +14,12 @@ import {
   Provider,
 } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
-import { ContractFactory } from '@fuel-ts/contract';
 import { encrypt, decrypt } from '@fuel-ts/crypto';
 import { hashMessage } from '@fuel-ts/hasher';
 import { BN } from '@fuel-ts/math';
 import { DEFAULT_PRECISION, DEFAULT_MIN_PRECISION } from '@fuel-ts/math/configs';
 import { SparseMerkleTree, constructTree } from '@fuel-ts/merkle';
-import { FunctionInvocationScope, Script } from '@fuel-ts/program';
+import { FunctionInvocationScope, Script, ContractFactory } from '@fuel-ts/program';
 import { InputCoinCoder } from '@fuel-ts/transactions';
 import { PANIC_REASONS } from '@fuel-ts/transactions/configs';
 import { versions } from '@fuel-ts/versions';

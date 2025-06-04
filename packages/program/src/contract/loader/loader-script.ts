@@ -1,5 +1,5 @@
 import { BYTES_32 } from '@fuel-ts/abi-coder';
-import { InstructionSet } from '@fuel-ts/program';
+import { InstructionSet } from '../../instruction-set';
 import { arrayify, concat } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
 

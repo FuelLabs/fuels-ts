@@ -34,7 +34,6 @@
     "@fuel-ts/account": "workspace:*",
     "@fuel-ts/program": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
-    "@fuel-ts/utils": "workspace:*",
-    "@fuel-ts/contract": "workspace:*"
+    "@fuel-ts/utils": "workspace:*"
   }
 }

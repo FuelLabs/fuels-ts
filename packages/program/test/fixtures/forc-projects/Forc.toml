@@ -1,2 +1,2 @@
 [workspace]
-members = ["./call-test-script"]
+members = ["./call-test-script", "simple-contract"]

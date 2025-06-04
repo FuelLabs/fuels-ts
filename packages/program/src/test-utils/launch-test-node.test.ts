@@ -11,7 +11,7 @@ import { writeFile, copyFile } from 'fs/promises';
 import os from 'os';
 import { join } from 'path';
 
-import ContractFactory from '../contract-factory';
+import ContractFactory from '../contract/contract-factory';
 
 import { launchTestNode } from './launch-test-node';
 

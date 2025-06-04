@@ -10,7 +10,7 @@ import { readFileSync } from 'fs';
 import * as path from 'path';
 import { mergeDeepRight } from 'ramda';
 
-import type { DeployContractOptions, DeployContractResult } from '../contract-factory';
+import type { DeployContractOptions, DeployContractResult } from '../contract/contract-factory';
 
 export interface DeployableContractFactory {
   deploy(wallet: Account, options?: DeployContractOptions): Promise<DeployContractResult>;

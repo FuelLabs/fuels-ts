@@ -14,6 +14,18 @@
       "types": "./dist/index.d.ts",
       "require": "./dist/index.js",
       "import": "./dist/index.mjs"
+    },
+    "./test-utils": {
+      "types": "./dist/test-utils.d.ts",
+      "require": "./dist/test-utils.js",
+      "import": "./dist/test-utils.mjs"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "test-utils": [
+        "./dist/test-utils.d.ts"
+      ]
     }
   },
   "files": [
@@ -38,6 +50,8 @@
     "@fuels/vm-asm": "0.60.2"
   },
   "devDependencies": {
-    "@types/ramda": "0.30.2"
+    "@types/ramda": "0.30.2",
+    "@fuel-ts/utils": "workspace:*",
+    "@internal/forc": "workspace:*"
   }
 }

@@ -2,7 +2,6 @@ import * as abiCoder from '@fuel-ts/abi-coder';
 import * as abiTypegen from '@fuel-ts/abi-typegen';
 import * as account from '@fuel-ts/account';
 import * as address from '@fuel-ts/address';
-import * as contract from '@fuel-ts/contract';
 import * as crypto from '@fuel-ts/crypto';
 import * as errors from '@fuel-ts/errors';
 // forc-bin
@@ -22,7 +21,6 @@ log([
   abiCoder,
   abiTypegen,
   address,
-  contract,
   errors,
   fuels,
   hasher,
