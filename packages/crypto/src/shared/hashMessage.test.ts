@@ -1,5 +1,9 @@
 import { hashMessage } from './hashMessage';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('hashMessage', () => {
   it('should hash a message [string]', () => {
     const message: string = 'my message';
