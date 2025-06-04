@@ -8,12 +8,12 @@ import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import { ScriptRequest } from '../script-request';
 import { ReceiptType } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
 
 import { getScriptForcProject, ScriptProjectsEnum } from '../../test/fixtures';
 import { jsonAbiMock } from '../../test/mocks';
+import { ScriptRequest } from '../script-request';
 
 import { Script } from './index';
 

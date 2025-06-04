@@ -1,7 +1,8 @@
 import { BYTES_32 } from '@fuel-ts/abi-coder';
-import { InstructionSet } from '../../instruction-set';
 import { arrayify, concat } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
+
+import { InstructionSet } from '../../instruction-set';
 
 export const getLoaderInstructions = (blobIds: string[]): Uint8Array => {
   const { RegId, Instruction } = asm;

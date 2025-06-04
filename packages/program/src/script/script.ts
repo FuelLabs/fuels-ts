@@ -7,7 +7,7 @@ import type { BN } from '@fuel-ts/math';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify } from '@fuel-ts/utils';
 
-import { ScriptRequest } from '../script-request';
+import type { ScriptRequest } from '../script-request';
 
 import { ScriptInvocationScope } from './script-invocation-scope';
 import { AbstractScript } from './types';

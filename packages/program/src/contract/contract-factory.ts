@@ -20,10 +20,11 @@ import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { hash } from '@fuel-ts/hasher';
 import { bn } from '@fuel-ts/math';
-import { Contract } from '../contract';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, isDefined } from '@fuel-ts/utils';
+
+import { Contract } from '../contract';
 
 import { getLoaderInstructions, getContractChunks } from './loader';
 import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './utils';
