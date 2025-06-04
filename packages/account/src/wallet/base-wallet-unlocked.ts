@@ -1,5 +1,5 @@
-import type { HashableMessage } from '@fuel-ts/hasher';
-import { hashMessage } from '@fuel-ts/hasher';
+import { hashMessage } from '@fuel-ts/crypto';
+import type { HashableMessage } from '@fuel-ts/crypto';
 import type { BytesLike } from '@fuel-ts/utils';
 import { hexlify } from '@fuel-ts/utils';
 

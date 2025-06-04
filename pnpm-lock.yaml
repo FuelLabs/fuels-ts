@@ -892,9 +892,9 @@ importers:
 
   packages/merkle:
     dependencies:
-      '@fuel-ts/hasher':
+      '@fuel-ts/crypto':
         specifier: workspace:*
-        version: link:../hasher
+        version: link:../crypto
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -977,12 +977,12 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
+      '@fuel-ts/crypto':
+        specifier: workspace:*
+        version: link:../crypto
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
-      '@fuel-ts/hasher':
-        specifier: workspace:*
-        version: link:../hasher
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math

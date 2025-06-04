@@ -1,5 +1,5 @@
 import { BigNumberCoder } from '@fuel-ts/abi-coder';
-import { sha256 } from '@fuel-ts/hasher';
+import { sha256 } from '@fuel-ts/crypto';
 import { concat } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
 

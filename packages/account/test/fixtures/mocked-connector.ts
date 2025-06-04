@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/require-await */
 
-import type { HashableMessage } from '@fuel-ts/hasher';
+import type { HashableMessage } from '@fuel-ts/crypto';
 import { setTimeout } from 'timers/promises';
 
 import type {

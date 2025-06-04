@@ -1,5 +1,4 @@
-import { randomBytes } from '@fuel-ts/crypto';
-import { hashMessage } from '@fuel-ts/hasher';
+import { randomBytes, hashMessage } from '@fuel-ts/crypto';
 import type { BytesLike } from '@fuel-ts/utils';
 
 import walletSpec from '../../test/fixtures/wallet-spec';

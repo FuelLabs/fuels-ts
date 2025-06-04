@@ -1,4 +1,4 @@
-import { hash } from '@fuel-ts/hasher';
+import { hash } from '@fuel-ts/crypto';
 import { calcRoot } from '@fuel-ts/merkle';
 import { chunkAndPadBytes, hexlify, concat, arrayify } from '@fuel-ts/utils';
 import type { BytesLike } from '@fuel-ts/utils';
