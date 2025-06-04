@@ -21,6 +21,5 @@
 - [hasher](modules/_fuel_ts_hasher.html)
 - [math](modules/_fuel_ts_math.html)
 - [program](modules/_fuel_ts_program.html)
-- [script](modules/_fuel_ts_script.html)
 - [transactions](modules/_fuel_ts_transactions.html)
 - [utils](modules/_fuel_ts_utils.html)

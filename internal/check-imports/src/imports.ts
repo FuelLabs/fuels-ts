@@ -11,7 +11,6 @@ import * as hasher from '@fuel-ts/hasher';
 import * as math from '@fuel-ts/math';
 import * as merkle from '@fuel-ts/merkle';
 import * as program from '@fuel-ts/program';
-import * as script from '@fuel-ts/script';
 import * as transactions from '@fuel-ts/transactions';
 import * as utils from '@fuel-ts/utils';
 import * as versions from '@fuel-ts/versions';
@@ -31,7 +30,6 @@ log([
   math,
   merkle,
   program,
-  script,
   transactions,
   utils,
   versions,

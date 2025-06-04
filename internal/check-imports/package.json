@@ -19,7 +19,6 @@
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/program": "workspace:*",
-    "@fuel-ts/script": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",

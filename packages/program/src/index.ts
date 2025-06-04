@@ -6,3 +6,4 @@ export { default as Contract } from './contract';
 export { ScriptRequest } from './script-request';
 export { InstructionSet } from './instruction-set';
 export * from './response';
+export { Script } from './script';

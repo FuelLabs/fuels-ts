@@ -504,9 +504,6 @@ importers:
       '@fuel-ts/program':
         specifier: workspace:*
         version: link:../../packages/program
-      '@fuel-ts/script':
-        specifier: workspace:*
-        version: link:../../packages/script
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../../packages/transactions
@@ -843,9 +840,6 @@ importers:
       '@fuel-ts/recipes':
         specifier: workspace:*
         version: link:../recipes
-      '@fuel-ts/script':
-        specifier: workspace:*
-        version: link:../script
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
@@ -1017,34 +1011,6 @@ importers:
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
-
-  packages/script:
-    dependencies:
-      '@fuel-ts/abi-coder':
-        specifier: workspace:*
-        version: link:../abi-coder
-      '@fuel-ts/account':
-        specifier: workspace:*
-        version: link:../account
-      '@fuel-ts/errors':
-        specifier: workspace:*
-        version: link:../errors
-      '@fuel-ts/math':
-        specifier: workspace:*
-        version: link:../math
-      '@fuel-ts/program':
-        specifier: workspace:*
-        version: link:../program
-      '@fuel-ts/transactions':
-        specifier: workspace:*
-        version: link:../transactions
-      '@fuel-ts/utils':
-        specifier: workspace:*
-        version: link:../utils
-    devDependencies:
-      '@internal/forc':
-        specifier: workspace:*
-        version: link:../../internal/forc
 
   packages/transactions:
     dependencies:
