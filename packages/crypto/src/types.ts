@@ -51,6 +51,9 @@ export interface CryptoApi {
   ): string;
   ripemd160(data: BytesLike): Uint8Array;
   sha256(data: BytesLike): string;
+  /**
+   * @deprecated use `sha256` instead
+   */
   hash(data: BytesLike): string;
   hashMessage(data: HashableMessage): string;
 }
