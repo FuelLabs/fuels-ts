@@ -18,7 +18,6 @@
 - [address](modules/_fuel_ts_address.html)
 - [crypto](modules/_fuel_ts_crypto.html)
 - [errors](modules/_fuel_ts_errors.html)
-- [hasher](modules/_fuel_ts_hasher.html)
 - [math](modules/_fuel_ts_math.html)
 - [program](modules/_fuel_ts_program.html)
 - [transactions](modules/_fuel_ts_transactions.html)

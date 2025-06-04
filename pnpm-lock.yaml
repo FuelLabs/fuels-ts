@@ -489,9 +489,6 @@ importers:
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../../packages/errors
-      '@fuel-ts/hasher':
-        specifier: workspace:*
-        version: link:../../packages/hasher
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../../packages/math
@@ -538,9 +535,6 @@ importers:
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
-      '@fuel-ts/hasher':
-        specifier: workspace:*
-        version: link:../hasher
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -605,9 +599,6 @@ importers:
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
-      '@fuel-ts/hasher':
-        specifier: workspace:*
-        version: link:../hasher
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -776,9 +767,6 @@ importers:
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
-      '@fuel-ts/hasher':
-        specifier: workspace:*
-        version: link:../hasher
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -850,18 +838,6 @@ importers:
         specifier: 6.1.6
         version: 6.1.6(@types/node@22.13.5)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.40.0)(tsx@4.19.3)(yaml@2.8.0)
 
-  packages/hasher:
-    dependencies:
-      '@fuel-ts/crypto':
-        specifier: workspace:*
-        version: link:../crypto
-      '@fuel-ts/utils':
-        specifier: workspace:*
-        version: link:../utils
-      '@noble/hashes':
-        specifier: 1.7.1
-        version: 1.7.1
-
   packages/logger:
     dependencies:
       '@fuel-ts/address':
@@ -916,9 +892,6 @@ importers:
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
-      '@fuel-ts/hasher':
-        specifier: workspace:*
-        version: link:../hasher
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
