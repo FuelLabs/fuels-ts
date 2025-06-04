@@ -10,5 +10,4 @@
 "fuels": minor
 ---
 
-chore!: consolidated `hasher` package into `crypto` 
-
+chore!: consolidated `hasher` package into `crypto`
