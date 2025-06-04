@@ -9,8 +9,6 @@
     "../../packages/predicate",
     "../../packages/account",
     "../../packages/program",
-    "../../packages/contract",
-    "../../packages/script",
     "../../packages/utils",
     "../../packages/crypto",
     "../../packages/errors",

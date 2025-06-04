@@ -20,13 +20,14 @@ import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { hash } from '@fuel-ts/hasher';
 import { bn } from '@fuel-ts/math';
-import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, isDefined } from '@fuel-ts/utils';
 
+import { Contract } from '../contract';
+
 import { getLoaderInstructions, getContractChunks } from './loader';
-import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
+import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './utils';
 
 /** Amount of percentage override for chunk sizes in blob transactions */
 const CHUNK_SIZE_MULTIPLIER = 0.95;

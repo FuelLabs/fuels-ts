@@ -1,5 +1,5 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
-import type { DeployContractOptions } from '@fuel-ts/contract';
+import type { DeployContractOptions } from '@fuel-ts/program';
 
 export enum Commands {
   build = 'build',

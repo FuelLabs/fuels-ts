@@ -1,4 +1,4 @@
-import { Script } from '@fuel-ts/script';
+import { Script } from '@fuel-ts/program';
 import { debug, log } from 'console';
 import { readFileSync } from 'fs';
 

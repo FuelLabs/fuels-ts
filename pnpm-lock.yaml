@@ -92,7 +92,7 @@ importers:
         version: 3.2.0(eslint@8.57.0)
       eslint-plugin-import:
         specifier: 2.31.0
-        version: 2.31.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
+        version: 2.31.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint@8.57.0)
       eslint-plugin-jsdoc:
         specifier: 50.6.3
         version: 50.6.3(eslint@8.57.0)
@@ -483,9 +483,6 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../../packages/address
-      '@fuel-ts/contract':
-        specifier: workspace:*
-        version: link:../../packages/contract
       '@fuel-ts/crypto':
         specifier: workspace:*
         version: link:../../packages/crypto
@@ -504,9 +501,6 @@ importers:
       '@fuel-ts/program':
         specifier: workspace:*
         version: link:../../packages/program
-      '@fuel-ts/script':
-        specifier: workspace:*
-        version: link:../../packages/script
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../../packages/transactions
@@ -688,52 +682,6 @@ importers:
         specifier: 1.7.1
         version: 1.7.1
 
-  packages/contract:
-    dependencies:
-      '@fuel-ts/abi-coder':
-        specifier: workspace:*
-        version: link:../abi-coder
-      '@fuel-ts/account':
-        specifier: workspace:*
-        version: link:../account
-      '@fuel-ts/crypto':
-        specifier: workspace:*
-        version: link:../crypto
-      '@fuel-ts/errors':
-        specifier: workspace:*
-        version: link:../errors
-      '@fuel-ts/hasher':
-        specifier: workspace:*
-        version: link:../hasher
-      '@fuel-ts/math':
-        specifier: workspace:*
-        version: link:../math
-      '@fuel-ts/merkle':
-        specifier: workspace:*
-        version: link:../merkle
-      '@fuel-ts/program':
-        specifier: workspace:*
-        version: link:../program
-      '@fuel-ts/transactions':
-        specifier: workspace:*
-        version: link:../transactions
-      '@fuel-ts/utils':
-        specifier: workspace:*
-        version: link:../utils
-      '@fuels/vm-asm':
-        specifier: 0.60.2
-        version: 0.60.2
-      ramda:
-        specifier: 0.30.1
-        version: 0.30.1
-    devDependencies:
-      '@internal/forc':
-        specifier: workspace:*
-        version: link:../../internal/forc
-      '@types/ramda':
-        specifier: 0.30.2
-        version: 0.30.2
-
   packages/create-fuels:
     dependencies:
       '@fuel-ts/errors':
@@ -822,9 +770,6 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
-      '@fuel-ts/contract':
-        specifier: workspace:*
-        version: link:../contract
       '@fuel-ts/crypto':
         specifier: workspace:*
         version: link:../crypto
@@ -843,9 +788,6 @@ importers:
       '@fuel-ts/recipes':
         specifier: workspace:*
         version: link:../recipes
-      '@fuel-ts/script':
-        specifier: workspace:*
-        version: link:../script
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
@@ -968,12 +910,21 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
+      '@fuel-ts/crypto':
+        specifier: workspace:*
+        version: link:../crypto
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
+      '@fuel-ts/hasher':
+        specifier: workspace:*
+        version: link:../hasher
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
+      '@fuel-ts/merkle':
+        specifier: workspace:*
+        version: link:../merkle
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
@@ -987,6 +938,9 @@ importers:
         specifier: 0.30.1
         version: 0.30.1
     devDependencies:
+      '@internal/forc':
+        specifier: workspace:*
+        version: link:../../internal/forc
       '@types/ramda':
         specifier: 0.30.2
         version: 0.30.2
@@ -1005,9 +959,6 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
-      '@fuel-ts/contract':
-        specifier: workspace:*
-        version: link:../contract
       '@fuel-ts/program':
         specifier: workspace:*
         version: link:../program
@@ -1017,34 +968,6 @@ importers:
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
-
-  packages/script:
-    dependencies:
-      '@fuel-ts/abi-coder':
-        specifier: workspace:*
-        version: link:../abi-coder
-      '@fuel-ts/account':
-        specifier: workspace:*
-        version: link:../account
-      '@fuel-ts/errors':
-        specifier: workspace:*
-        version: link:../errors
-      '@fuel-ts/math':
-        specifier: workspace:*
-        version: link:../math
-      '@fuel-ts/program':
-        specifier: workspace:*
-        version: link:../program
-      '@fuel-ts/transactions':
-        specifier: workspace:*
-        version: link:../transactions
-      '@fuel-ts/utils':
-        specifier: workspace:*
-        version: link:../utils
-    devDependencies:
-      '@internal/forc':
-        specifier: workspace:*
-        version: link:../../internal/forc
 
   packages/transactions:
     dependencies:
@@ -6408,7 +6331,6 @@ packages:
 
   bun@1.2.3:
     resolution: {integrity: sha512-i8F+I3wxmt9omnLh3lOg0APQtqxZaMU0x6xuC+9YH4Eg/7fu8SM4YbdwyvV8Z6sy3OMtGFB0SYOjU2STuId4FQ==}
-    cpu: [arm64, x64, aarch64]
     os: [darwin, linux, win32]
     hasBin: true
 
@@ -21756,7 +21678,7 @@ snapshots:
     dependencies:
       confusing-browser-globals: 1.0.11
       eslint: 8.57.0
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint@8.57.0)
       object.assign: 4.1.5
       object.entries: 1.1.8
       semver: 6.3.1
@@ -21778,7 +21700,7 @@ snapshots:
       '@typescript-eslint/parser': 6.21.0(eslint@8.57.0)(typescript@5.7.3)
       eslint: 8.57.0
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.31.0)(eslint@8.57.0)
+      eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.31.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint@8.57.0))(eslint@8.57.0)
       eslint-plugin-import: 2.31.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@8.57.0)
       eslint-plugin-react: 7.37.4(eslint@8.57.0)
@@ -21801,6 +21723,23 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.31.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint@8.57.0))(eslint@8.57.0):
+    dependencies:
+      debug: 4.4.0(supports-color@5.5.0)
+      enhanced-resolve: 5.18.1
+      eslint: 8.57.0
+      eslint-module-utils: 2.12.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.31.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
+      fast-glob: 3.3.3
+      get-tsconfig: 4.7.6
+      is-core-module: 2.16.1
+      is-glob: 4.0.3
+    transitivePeerDependencies:
+      - '@typescript-eslint/parser'
+      - eslint-import-resolver-node
+      - eslint-import-resolver-webpack
+      - supports-color
+
   eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.31.0)(eslint@8.57.0):
     dependencies:
       debug: 4.4.0(supports-color@5.5.0)
@@ -21816,6 +21755,18 @@ snapshots:
       - '@typescript-eslint/parser'
       - eslint-import-resolver-node
       - eslint-import-resolver-webpack
+      - supports-color
+    optional: true
+
+  eslint-module-utils@2.12.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.31.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0):
+    dependencies:
+      debug: 3.2.7
+    optionalDependencies:
+      '@typescript-eslint/parser': 6.21.0(eslint@8.57.0)(typescript@5.7.3)
+      eslint: 8.57.0
+      eslint-import-resolver-node: 0.3.9
+      eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.31.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint@8.57.0))(eslint@8.57.0)
+    transitivePeerDependencies:
       - supports-color
 
   eslint-module-utils@2.12.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.31.0)(eslint@8.57.0))(eslint@8.57.0):
@@ -21836,6 +21787,35 @@ snapshots:
       ignore: 5.3.2
 
   eslint-plugin-import@2.31.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0):
+    dependencies:
+      '@rtsao/scc': 1.1.0
+      array-includes: 3.1.8
+      array.prototype.findlastindex: 1.2.5
+      array.prototype.flat: 1.3.2
+      array.prototype.flatmap: 1.3.2
+      debug: 3.2.7
+      doctrine: 2.1.0
+      eslint: 8.57.0
+      eslint-import-resolver-node: 0.3.9
+      eslint-module-utils: 2.12.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.31.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
+      hasown: 2.0.2
+      is-core-module: 2.15.1
+      is-glob: 4.0.3
+      minimatch: 3.1.2
+      object.fromentries: 2.0.8
+      object.groupby: 1.0.3
+      object.values: 1.2.0
+      semver: 6.3.1
+      string.prototype.trimend: 1.0.8
+      tsconfig-paths: 3.15.0
+    optionalDependencies:
+      '@typescript-eslint/parser': 6.21.0(eslint@8.57.0)(typescript@5.7.3)
+    transitivePeerDependencies:
+      - eslint-import-resolver-typescript
+      - eslint-import-resolver-webpack
+      - supports-color
+
+  eslint-plugin-import@2.31.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.7.3))(eslint@8.57.0):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.8

@@ -12,7 +12,7 @@ import type { AbstractContract, InvokeFunction, InvokeFunctions } from './types'
 /**
  * `Contract` provides a way to interact with the contract program type.
  */
-export default class Contract implements AbstractContract {
+export class Contract implements AbstractContract {
   /**
    * The unique contract identifier.
    */

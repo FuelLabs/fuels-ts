@@ -3,4 +3,4 @@ export {
   DeployContractOptions,
   DeployContractResult,
 } from './contract-factory';
-export { getContractRoot, getContractStorageRoot, getContractId, hexlifyWithPrefix } from './util';
+export { getContractRoot, getContractStorageRoot, getContractId, hexlifyWithPrefix } from './utils';

@@ -1,4 +1,4 @@
-import { AbstractProgram } from '@fuel-ts/program';
+import { AbstractProgram } from '../types';
 
 /**
  * @hidden

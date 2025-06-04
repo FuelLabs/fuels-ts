@@ -1,7 +1,5 @@
 import type { WalletUnlocked } from '@fuel-ts/account';
-import { ContractFactory } from '@fuel-ts/contract';
-import type { DeployContractOptions } from '@fuel-ts/contract';
-import { Contract } from '@fuel-ts/program';
+import { Contract, ContractFactory, type DeployContractOptions } from '@fuel-ts/program';
 import { Src14OwnedProxy, Src14OwnedProxyFactory } from '@fuel-ts/recipes';
 import { existsSync, readFileSync } from 'fs';
 
