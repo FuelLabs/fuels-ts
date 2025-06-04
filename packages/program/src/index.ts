@@ -12,4 +12,4 @@ export * from './response';
 export { Script } from './script';
 
 // Contract
-export * from './contract-factory'
+export * from './contract-factory';
