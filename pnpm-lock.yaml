@@ -910,12 +910,21 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
+      '@fuel-ts/crypto':
+        specifier: workspace:*
+        version: link:../crypto
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
+      '@fuel-ts/hasher':
+        specifier: workspace:*
+        version: link:../hasher
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
+      '@fuel-ts/merkle':
+        specifier: workspace:*
+        version: link:../merkle
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
