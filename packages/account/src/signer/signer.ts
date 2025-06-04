@@ -1,6 +1,5 @@
 import { Address } from '@fuel-ts/address';
-import { randomBytes } from '@fuel-ts/crypto';
-import { hash } from '@fuel-ts/hasher';
+import { randomBytes, hash } from '@fuel-ts/crypto';
 import { toBytes } from '@fuel-ts/math';
 import type { BytesLike } from '@fuel-ts/utils';
 import { hexlify, concat, arrayify } from '@fuel-ts/utils';

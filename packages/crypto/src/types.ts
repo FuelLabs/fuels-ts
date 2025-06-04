@@ -15,6 +15,18 @@ export interface IScryptParams {
   dklen: number;
 }
 
+/**
+ * - When a string is provided, we hash as a UTF-8 string using SHA-256.
+ *
+ * - When an object with `personalSign` property is provided, we hash using SHA-256 of the following format:
+ * ```console
+ * 0x19 <0x46 (F)> <uel Signed Message:\n" + len(message)> <message>
+ * ```
+ *
+ * Following a similar approach to that of [EIP-191](https://eips.ethereum.org/EIPS/eip-191).
+ */
+export type HashableMessage = string | { personalSign: BytesLike };
+
 export type Encoding = 'utf-8' | 'base64' | 'hex';
 
 export interface CryptoApi {
@@ -38,4 +50,10 @@ export interface CryptoApi {
     algo: 'sha256' | 'sha512'
   ): string;
   ripemd160(data: BytesLike): Uint8Array;
+  sha256(data: BytesLike): string;
+  /**
+   * @deprecated use `sha256` instead
+   */
+  hash(data: BytesLike): string;
+  hashMessage(data: HashableMessage): string;
 }

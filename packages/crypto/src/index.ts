@@ -17,4 +17,7 @@ export const {
   pbkdf2,
   ripemd160,
   randomUUID,
+  sha256,
+  hash,
+  hashMessage,
 } = cryptoApi;

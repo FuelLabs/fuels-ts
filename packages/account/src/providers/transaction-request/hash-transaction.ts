@@ -1,5 +1,5 @@
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
-import { uint64ToBytesBE, sha256 } from '@fuel-ts/hasher';
+import { sha256 } from '@fuel-ts/crypto';
 import { bn } from '@fuel-ts/math';
 import { TransactionType, InputType, OutputType, TransactionCoder } from '@fuel-ts/transactions';
 import { concat } from '@fuel-ts/utils';
@@ -85,7 +85,7 @@ export function hashTransaction(transactionRequest: TransactionRequest, chainId:
   transaction.witnessesCount = 0;
   transaction.witnesses = [];
 
-  const chainIdBytes = uint64ToBytesBE(chainId);
+  const chainIdBytes = bn(chainId).toBytes(8);
   const concatenatedData = concat([chainIdBytes, new TransactionCoder().encode(transaction)]);
   return sha256(concatenatedData);
 }

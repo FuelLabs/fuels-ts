@@ -17,4 +17,7 @@ export const {
   computeHmac,
   ripemd160,
   randomUUID,
+  sha256,
+  hash,
+  hashMessage,
 } = cryptoApi;

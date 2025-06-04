@@ -1,6 +1,5 @@
-import { bufferFromString } from '@fuel-ts/crypto';
+import { bufferFromString, sha256 } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { sha256 } from '@fuel-ts/hasher';
 import { bn } from '@fuel-ts/math';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify } from '@fuel-ts/utils';

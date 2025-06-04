@@ -14,8 +14,7 @@ import {
   Provider,
 } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
-import { encrypt, decrypt } from '@fuel-ts/crypto';
-import { hashMessage } from '@fuel-ts/hasher';
+import { encrypt, decrypt, sha256, hashMessage } from '@fuel-ts/crypto';
 import { BN } from '@fuel-ts/math';
 import { DEFAULT_PRECISION, DEFAULT_MIN_PRECISION } from '@fuel-ts/math/configs';
 import { SparseMerkleTree, constructTree } from '@fuel-ts/merkle';
@@ -78,18 +77,14 @@ export const z: DeployContractOptions | undefined = undefined;
 log(createConfig);
 
 /**
- * hasher
- */
-log(hashMessage);
-
-/**
  * hdwallet
  */
 log(HDWallet);
 
 /**
- * keystore
+ * crypto
  */
+log(hashMessage, sha256);
 log(encrypt, decrypt);
 
 /**

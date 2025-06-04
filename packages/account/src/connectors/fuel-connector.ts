@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/require-await */
+import type { HashableMessage } from '@fuel-ts/crypto';
 import { FuelError } from '@fuel-ts/errors';
-import type { HashableMessage } from '@fuel-ts/hasher';
 import { EventEmitter } from 'events';
 
 import type { Asset } from '../assets/types';

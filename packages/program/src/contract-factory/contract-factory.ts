@@ -16,9 +16,8 @@ import {
   calculateGasFee,
   setAndValidateGasAndFeeForAssembledTx,
 } from '@fuel-ts/account';
-import { randomBytes } from '@fuel-ts/crypto';
+import { randomBytes, hash } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { hash } from '@fuel-ts/hasher';
 import { bn } from '@fuel-ts/math';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';

@@ -1,5 +1,5 @@
 import { Address } from '@fuel-ts/address';
-import { hashMessage } from '@fuel-ts/hasher';
+import { hashMessage } from '@fuel-ts/crypto';
 
 import WalletManagerSpec from '../../test/fixtures/wallet-manager-spec';
 import { Signer } from '../signer';

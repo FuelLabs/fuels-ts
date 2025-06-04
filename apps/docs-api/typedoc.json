@@ -12,7 +12,6 @@
     "../../packages/utils",
     "../../packages/crypto",
     "../../packages/errors",
-    "../../packages/hasher",
     "../../packages/math",
     "../../packages/transactions",
     "../../packages/recipes"
