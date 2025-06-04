@@ -12,14 +12,4 @@ export * from './response';
 export { Script } from './script';
 
 // Contract
-export {
-  default as ContractFactory,
-  DeployContractOptions,
-  DeployContractResult,
-} from './contract/contract-factory';
-export {
-  getContractRoot,
-  getContractStorageRoot,
-  getContractId,
-  hexlifyWithPrefix,
-} from './contract/utils';
+export * from './contract-factory'
