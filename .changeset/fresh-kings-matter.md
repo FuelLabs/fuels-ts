@@ -10,7 +10,6 @@
 "@fuel-ts/recipes": patch
 "@fuel-ts/crypto": patch
 "@fuel-ts/errors": patch
-"@fuel-ts/hasher": patch
 "@fuel-ts/logger": patch
 "@fuel-ts/merkle": patch
 "fuels": patch
