@@ -3,7 +3,7 @@
 "@fuel-ts/account": patch
 "@fuel-ts/contract": patch
 "fuels": patch
-"@fuel-ts/programs": patch
+"@fuel-ts/program": patch
 "@fuel-ts/utils": patch
 "@fuel-ts/versions": patch
 ---
