@@ -6,4 +6,6 @@ import { spawn } from 'child_process';
 import { binPath } from './shared.js';
 
 const args = process.argv.slice(2);
-spawn(binPath, args, { stdio: 'inherit' }).on('exit', process.exit);
+console.log(args);
+process.exit(0);
+// spawn(binPath, args, { stdio: 'inherit' }).on('exit', process.exit);
