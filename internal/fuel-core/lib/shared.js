@@ -29,6 +29,9 @@ const platforms = {
 };
 
 export const getPkgPlatform = () => {
+  // Hardcoded for Vercel + GH Actions
+  return 'aarch64-unknown-linux-gnu';
+
   if (process.platform !== 'darwin' && process.platform !== 'linux') {
     throw new Error(
       `Unsupported platform ${process.platform}.${
