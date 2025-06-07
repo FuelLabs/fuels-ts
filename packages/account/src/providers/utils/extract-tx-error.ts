@@ -1,6 +1,6 @@
+import type { ErrorCodes, JsonAbi } from '@fuel-ts/abi-coder/dist/types/JsonAbiNew';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
-import type { ReceiptRevert } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
 import {
   FAILED_REQUIRE_SIGNAL,
@@ -10,8 +10,10 @@ import {
   FAILED_TRANSFER_TO_ADDRESS_SIGNAL,
   PANIC_REASONS,
   PANIC_DOC_URL,
+  SwaySignalErrors,
 } from '@fuel-ts/transactions/configs';
 
+import type { JsonAbisFromAllCalls } from '../transaction-request';
 import type { DecodedLogs, TransactionResultReceipt } from '../transaction-response';
 
 /**
@@ -117,6 +119,38 @@ export const assembleRevertError = (
     reason,
   });
 };
+
+function buildAbiErrorMessage(
+  abiError: ErrorCodes,
+  logs: Array<unknown>,
+  metadata: Record<string, unknown>,
+  reason: string
+): FuelError {
+  const { pos, msg } = abiError;
+
+  let errorMessage = '';
+
+  // The property `pos` is always present within the error ABI entry.
+  const positionMessage = pos ? `\n\nThis error originated at ${JSON.stringify(pos, null, 2)}` : '';
+
+  if (msg) {
+    errorMessage = `A sway "panic" expression was invoked with the message: "${msg}".${positionMessage}`;
+  } else {
+    /**
+     * If the "msg" property is undefined, it means that a log was produced with the corresponding
+     * "logId" value. Also, at this point we can also be sure that the log was decoded since the
+     * error ABI, which was extracted from the JSON ABI, is present.
+     */
+    const value = logs[logs.length - 1];
+    errorMessage = `A sway "panic" expression was invoked with the value: ${JSON.stringify(value)}.${positionMessage}`;
+  }
+
+  return new FuelError(ErrorCode.SCRIPT_REVERTED, errorMessage, {
+    ...metadata,
+    reason,
+  });
+}
+
 
 interface IExtractTxError<T = unknown> extends DecodedLogs<T> {
   receipts: Array<TransactionResultReceipt>;
