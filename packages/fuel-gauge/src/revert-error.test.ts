@@ -1,12 +1,13 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { TransactionResultReceipt } from 'fuels';
-import { bn, getRandomB256, ContractFactory, Wallet } from 'fuels';
+import { bn, getRandomB256, ContractFactory, Wallet, ZeroBytes32 } from 'fuels';
 import { launchTestNode, TestAssetId } from 'fuels/test-utils';
 
 import {
   CallTestContractFactory,
   RevertErrorFactory,
+  ScriptError,
   TokenContract,
   TokenContractFactory,
 } from '../test/typegen';
@@ -267,18 +268,18 @@ describe('Revert Error Testing', () => {
     );
   });
 
-  it('should throw UNKNOWN Error for revert', async () => {
+  it('should throw when using Sway built-in revert', async () => {
     using contractInstance = await launchContract();
 
     await expectToThrowFuelError(
       () => contractInstance.functions.revert_with_0().call(),
-      new FuelError(ErrorCode.UNKNOWN, `The transaction reverted with an unknown reason: 0`, {
+      new FuelError(ErrorCode.SCRIPT_REVERTED, `The transaction reverted with reason: 0.`, {
         logs: [],
         groupedLogs: {},
         receipts: expect.any(Array<TransactionResultReceipt>),
         panic: false,
         revert: true,
-        reason: 'unknown',
+        reason: '0',
       })
     );
   });
@@ -348,5 +349,155 @@ describe('Revert Error Testing', () => {
       code: ErrorCode.SCRIPT_REVERTED,
       message: expect.stringMatching(`The transaction reverted with reason: "NotEnoughBalance".`),
     });
+  });
+
+  it('should throw for "revert_with_log" Sway built-in revert', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [adminWallet],
+    } = launched;
+
+    const script = new ScriptError(adminWallet);
+
+    await expectToThrowFuelError(
+      async () => {
+        const { waitForResult } = await script.functions.main(4).call();
+        await waitForResult();
+      },
+      new FuelError(
+        ErrorCode.SCRIPT_REVERTED,
+        `The transaction reverted because a "revert_with_log" statement has thrown "0x63".`,
+        {
+          receipts: expect.any(Array<TransactionResultReceipt>),
+          panic: false,
+          revert: true,
+          reason: 'revert_with_log',
+        }
+      )
+    );
+  });
+
+  it('should throw with appropriate ABI error code with message "a str panic"', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [adminWallet],
+    } = launched;
+
+    const script = new ScriptError(adminWallet);
+    const errorCode = Object.values(ScriptError.abi.errorCodes)[0];
+
+    await expectToThrowFuelError(
+      async () => {
+        const { waitForResult } = await script.functions.main(6).call();
+        await waitForResult();
+      },
+      new FuelError(
+        ErrorCode.SCRIPT_REVERTED,
+        `A sway "panic" expression was invoked with the message: "a str panic".\n\nThis error originated at ${JSON.stringify(errorCode.pos, null, 2)}`,
+        {
+          logs: [],
+          groupedLogs: {},
+          receipts: expect.any(Array<TransactionResultReceipt>),
+          panic: false,
+          revert: true,
+          reason: '18446744069414584320',
+        }
+      )
+    );
+  });
+
+  it('should throw with appropriate ABI error code with logged string "A"', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [adminWallet],
+    } = launched;
+
+    const script = new ScriptError(adminWallet);
+    const errorCode = Object.values(ScriptError.abi.errorCodes)[1];
+
+    await expectToThrowFuelError(
+      async () => {
+        const { waitForResult } = await script.functions.main(7).call();
+        await waitForResult();
+      },
+      new FuelError(
+        ErrorCode.SCRIPT_REVERTED,
+        `A sway "panic" expression was invoked with the value: "A".\n\nThis error originated at ${JSON.stringify(errorCode.pos, null, 2)}`,
+        {
+          groupedLogs: {
+            [ZeroBytes32]: ['A'],
+          },
+          logs: ['A'],
+          receipts: expect.any(Array<TransactionResultReceipt>),
+          panic: false,
+          revert: true,
+          reason: '18446744069414584321',
+        }
+      )
+    );
+  });
+
+  it('should throw with appropriate ABI error code with logged string "{B:[bn(0x400),42]}"', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [adminWallet],
+    } = launched;
+
+    const script = new ScriptError(adminWallet);
+
+    const errorCode = Object.values(ScriptError.abi.errorCodes)[2];
+
+    const decodedValue = { B: [bn('0x400'), 42] };
+
+    await expectToThrowFuelError(
+      async () => {
+        const { waitForResult } = await script.functions.main(8).call();
+        await waitForResult();
+      },
+      new FuelError(
+        ErrorCode.SCRIPT_REVERTED,
+        `A sway "panic" expression was invoked with the value: ${JSON.stringify(decodedValue)}.\n\nThis error originated at ${JSON.stringify(errorCode.pos, null, 2)}`,
+        {
+          receipts: expect.any(Array<TransactionResultReceipt>),
+          panic: false,
+          revert: true,
+          reason: '18446744069414584322',
+        }
+      )
+    );
+  });
+
+  it('should throw with appropriate ABI error code with logged string "{B:[0x0,16]}"', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [adminWallet],
+    } = launched;
+
+    const script = new ScriptError(adminWallet);
+    const errorCode = Object.values(ScriptError.abi.errorCodes)[3];
+
+    const decodedValue = { B: [bn('0x0'), 16] };
+
+    await expectToThrowFuelError(
+      async () => {
+        const { waitForResult } = await script.functions.main(9).call();
+        await waitForResult();
+      },
+      new FuelError(
+        ErrorCode.SCRIPT_REVERTED,
+        `A sway "panic" expression was invoked with the value: ${JSON.stringify(decodedValue)}.\n\nThis error originated at ${JSON.stringify(errorCode.pos, null, 2)}`,
+        {
+          receipts: expect.any(Array<TransactionResultReceipt>),
+          panic: false,
+          revert: true,
+          reason: '18446744069414584323',
+        }
+      )
+    );
   });
 });

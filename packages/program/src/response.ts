@@ -1,11 +1,12 @@
+import { getGasUsedFromReceipts } from '@fuel-ts/account';
 import type {
   TransactionResultReceipt,
   TransactionResponse,
   TransactionResult,
   CallResult,
   DecodedLogs,
+  JsonAbisFromAllCalls,
 } from '@fuel-ts/account';
-import { getGasUsedFromReceipts } from '@fuel-ts/account';
 import type { BN } from '@fuel-ts/math';
 import type { TransactionType } from '@fuel-ts/transactions';
 
@@ -19,7 +20,7 @@ import type {
   DryRunResult,
   PreConfirmationFunctionResult,
 } from './types';
-import { getAllResultLogs } from './utils';
+import { getAbisFromAllCalls, getAllResultLogs } from './utils';
 
 /** @hidden */
 export const extractInvocationResult = <T>(
@@ -29,18 +30,20 @@ export const extractInvocationResult = <T>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   logs: DecodedLogs<any>['logs'],
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  groupedLogs: DecodedLogs<any>['groupedLogs'] = {}
+  groupedLogs: DecodedLogs<any>['groupedLogs'] = {},
+  abis?: JsonAbisFromAllCalls
 ) => {
   const mainCallConfig = functionScopes[0]?.getCallConfig();
 
   if (functionScopes.length === 1 && mainCallConfig && 'bytes' in mainCallConfig.program) {
-    return callResultToInvocationResult<T>({ receipts }, mainCallConfig, logs, groupedLogs);
+    return callResultToInvocationResult<T>({ receipts }, mainCallConfig, logs, groupedLogs, abis);
   }
   const encodedResults = decodeContractCallScriptResult(
     { receipts },
     (mainCallConfig?.program as AbstractContract).id,
     logs,
-    groupedLogs
+    groupedLogs,
+    abis
   );
 
   const decodedResults = encodedResults.map((encodedResult, i) => {
@@ -71,13 +74,17 @@ export const buildFunctionResult = async <T>(
   const functionScopes = Array.isArray(funcScope) ? funcScope : [funcScope];
   const mainCallConfig = functionScopes[0]?.getCallConfig();
 
+  const { main, otherContractsAbis } = getAbisFromAllCalls(functionScopes);
+  const abis = { main, otherContractsAbis };
+
   const { logs, groupedLogs } = getAllResultLogs({ receipts, mainCallConfig, functionScopes });
   const value = extractInvocationResult<T>(
     functionScopes,
     receipts,
     isMultiCall,
     logs,
-    groupedLogs
+    groupedLogs,
+    abis
   );
   const gasUsed = getGasUsedFromReceipts(receipts);
 

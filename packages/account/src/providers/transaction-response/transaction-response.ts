@@ -482,6 +482,7 @@ export class TransactionResponse {
     };
 
     let { logs, groupedLogs }: DecodedLogs = { logs: [], groupedLogs: {} };
+    let abis: JsonAbisFromAllCalls | undefined;
 
     if (this.abis) {
       ({ logs, groupedLogs } = getAllDecodedLogs({
@@ -492,6 +493,8 @@ export class TransactionResponse {
 
       transactionResult.logs = logs;
       transactionResult.groupedLogs = groupedLogs;
+
+      abis = this.abis;
     }
 
     const { receipts } = transactionResult;
@@ -505,6 +508,7 @@ export class TransactionResponse {
         statusReason: reason,
         logs,
         groupedLogs,
+        abis,
       });
     }
 

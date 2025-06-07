@@ -3,10 +3,12 @@ import { normalizeString } from '@fuel-ts/utils';
 
 import type { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 import type { IConfigurable } from '../types/interfaces/IConfigurable';
+import type { IErrorCode } from '../types/interfaces/IErrorCode';
 import type { IFunction } from '../types/interfaces/IFunction';
 import type { IType } from '../types/interfaces/IType';
 import type { JsonAbiOld } from '../types/interfaces/JsonAbi';
 import type { JsonAbi } from '../types/interfaces/JsonAbiNew';
+import { parseErrorCodes } from '../utils/parseErrorCodes';
 import { parseFunctions } from '../utils/parseFunctions';
 import { parseTypes } from '../utils/parseTypes';
 import { transpileAbi } from '../utils/transpile-abi';
@@ -33,6 +35,7 @@ export class Abi {
   public types: IType[];
   public functions: IFunction[];
   public configurables: IConfigurable[];
+  public errorCodes?: IErrorCode[];
 
   constructor(params: {
     filepath: string;
@@ -73,11 +76,12 @@ export class Abi {
     this.storageSlotsContents = storageSlotsContents;
     this.outputDir = outputDir;
 
-    const { types, functions, configurables } = this.parse();
+    const { types, functions, configurables, errorCodes } = this.parse();
 
     this.types = types;
     this.functions = functions;
     this.configurables = configurables;
+    this.errorCodes = errorCodes;
 
     this.computeCommonTypesInUse();
   }
@@ -88,6 +92,7 @@ export class Abi {
       types: rawAbiTypes,
       functions: rawAbiFunctions,
       configurables: rawAbiConfigurables,
+      errorCodes: rawErrorCodes,
     } = transpiled;
 
     const types = parseTypes({ rawAbiTypes });
@@ -95,11 +100,13 @@ export class Abi {
     const configurables = rawAbiConfigurables.map(
       (rawAbiConfigurable) => new Configurable({ types, rawAbiConfigurable })
     );
+    const errorCodes = parseErrorCodes({ rawErrorCodes, types });
 
     return {
       types,
       functions,
       configurables,
+      errorCodes,
     };
   }
 

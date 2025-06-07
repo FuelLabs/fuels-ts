@@ -11,7 +11,7 @@ for forc_toml in $forc_tomls; do
     cd ${forc_toml/Forc.toml/''}
 
     # fix forc formatting
-    eval "$forc_fmt"
+    eval "$forc_fmt --experimental error_type"
 
     # fix TOML `authors` (for projects only, ignores workspace)
     if [ "$(head -n 1 Forc.toml)" == "[project]" ]; then

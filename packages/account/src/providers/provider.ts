@@ -2615,6 +2615,7 @@ export default class Provider {
   ): FuelError {
     let logs: DecodedLogs['logs'] = [];
     let groupedLogs: DecodedLogs['groupedLogs'] = {};
+    let abis: JsonAbisFromAllCalls | undefined;
 
     if (transactionRequest.type === TransactionType.Script && transactionRequest.abis) {
       ({ logs, groupedLogs } = getAllDecodedLogs({
@@ -2622,6 +2623,8 @@ export default class Provider {
         mainAbi: transactionRequest.abis.main,
         externalAbis: transactionRequest.abis.otherContractsAbis,
       }));
+
+      abis = transactionRequest.abis;
     }
 
     return extractTxError({
@@ -2629,6 +2632,7 @@ export default class Provider {
       groupedLogs,
       receipts,
       statusReason: reason,
+      abis,
     });
   }
 
