@@ -59,9 +59,10 @@ export interface JsonAbiConfigurable {
 
 export interface JsonAbiErrorCode {
   pos: {
+    pkg: string;
     file: string;
     line: number;
-    col: number;
+    column: number;
   };
   logId: string | null;
   msg: string | null;

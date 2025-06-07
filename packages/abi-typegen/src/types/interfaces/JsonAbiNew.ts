@@ -102,9 +102,10 @@ export interface Configurable {
 }
 
 export interface ErrorPosition {
+  pkg: string;
   file: string;
   line: number;
-  col: number;
+  column: number;
 }
 
 export interface ErrorCode {
