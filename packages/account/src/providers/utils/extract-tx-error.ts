@@ -142,6 +142,53 @@ function buildAbiErrorMessage(
   });
 }
 
+function findErrorInAbis(statusReason: string, abis: JsonAbi[] = []): ErrorCodes | undefined {
+  for (const abi of abis) {
+    if (abi.errorCodes?.[statusReason]) {
+      return abi.errorCodes[statusReason];
+    }
+  }
+  return undefined;
+}
+
+/**
+ * Assembles an error message for a revert status.
+ * @param receipts - The transaction result processed receipts.
+ * @param logs - The transaction decoded logs.
+ * @returns The error message.
+ */
+export const assembleRevertError = (
+  statusReason: string,
+  logs: Array<unknown>,
+  metadata: Record<string, unknown>,
+  abis?: JsonAbisFromAllCalls
+): FuelError => {
+  const match = statusReason.match(/Revert\((\d+)\)/);
+  const reason = match?.[1] ?? statusReason;
+  const reasonHex = bn(reason).toHex();
+
+  if (Object.values(SwaySignalErrors).includes(reasonHex)) {
+    return assembleSignalErrorMessage(reasonHex, logs, metadata);
+  }
+
+  let abiError: ErrorCodes | undefined;
+
+  if (abis) {
+    const abisArr = [abis.main, ...Object.values(abis.otherContractsAbis)];
+    abiError = findErrorInAbis(reason, abisArr);
+  }
+
+  if (abiError) {
+    return buildAbiErrorMessage(abiError, logs, metadata, reason);
+  }
+
+  const errorMessage = `The transaction reverted with reason: ${reason}.`;
+
+  return new FuelError(ErrorCode.SCRIPT_REVERTED, errorMessage, {
+    ...metadata,
+    reason,
+  });
+};
 
 interface IExtractTxError<T = unknown> extends DecodedLogs<T> {
   receipts: Array<TransactionResultReceipt>;
@@ -157,7 +204,7 @@ interface IExtractTxError<T = unknown> extends DecodedLogs<T> {
  * @returns The FuelError object.
  */
 export const extractTxError = (params: IExtractTxError): FuelError => {
-  const { receipts, statusReason, logs, groupedLogs } = params;
+  const { receipts, statusReason, logs, groupedLogs, abis } = params;
 
   const isPanic = receipts.some(({ type }) => type === ReceiptType.Panic);
   const isRevert = receipts.some(({ type }) => type === ReceiptType.Revert);
@@ -173,5 +220,5 @@ export const extractTxError = (params: IExtractTxError): FuelError => {
   if (isPanic) {
     return assemblePanicError(statusReason, metadata);
   }
-  return assembleRevertError(receipts, logs, metadata);
+  return assembleRevertError(statusReason, logs, metadata, abis);
 };
