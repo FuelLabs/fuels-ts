@@ -1,4 +1,4 @@
-import { ErrorCode } from '../abi/errors/errorCode';
+import { ErrorCode } from '../abi/errors/ErrorCode';
 import type { IType } from '../types/interfaces/IType';
 import type { JsonAbiErrorCode } from '../types/interfaces/JsonAbi';
 
