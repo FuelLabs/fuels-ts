@@ -15,6 +15,7 @@ import type {
   TransactionResultScriptResultReceipt,
   DryRunFailureStatusFragment,
   DecodedLogs,
+  JsonAbisFromAllCalls,
 } from '@fuel-ts/account';
 import { extractTxError } from '@fuel-ts/account';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -102,7 +103,8 @@ export function decodeCallResult<TResult>(
   callResult: CallResult,
   decoder: (scriptResult: ScriptResult) => TResult,
   logs: DecodedLogs['logs'] = [],
-  groupedLogs: DecodedLogs['groupedLogs'] = {}
+  groupedLogs: DecodedLogs['groupedLogs'] = {},
+  abis?: JsonAbisFromAllCalls
 ): TResult {
   try {
     const scriptResult = callResultToScriptResult(callResult);
@@ -115,6 +117,7 @@ export function decodeCallResult<TResult>(
         groupedLogs,
         receipts: callResult.receipts,
         statusReason,
+        abis,
       });
     }
 
@@ -134,7 +137,8 @@ export function callResultToInvocationResult<TReturn>(
   callResult: CallResult,
   call: CallConfig,
   logs?: DecodedLogs<unknown>['logs'],
-  groupedLogs?: DecodedLogs<unknown>['groupedLogs']
+  groupedLogs?: DecodedLogs<unknown>['groupedLogs'],
+  abis?: JsonAbisFromAllCalls
 ): TReturn {
   return decodeCallResult(
     callResult,
@@ -172,7 +176,9 @@ export function callResultToInvocationResult<TReturn>(
 
       return value as TReturn;
     },
-    logs
+    logs,
+    groupedLogs,
+    abis
   );
 }
 
