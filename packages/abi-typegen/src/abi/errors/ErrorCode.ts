@@ -1,11 +1,11 @@
 import type { IErrorCode } from '../../types/interfaces/IErrorCode';
 
 export class ErrorCode {
-  public errorCode: string;
-  public errorValue: IErrorCode['errorValue'];
+  public code: string;
+  public value: IErrorCode['value'];
 
   constructor(params: IErrorCode) {
-    this.errorCode = params.errorCode;
-    this.errorValue = params.errorValue;
+    this.code = params.code;
+    this.value = params.value;
   }
 }

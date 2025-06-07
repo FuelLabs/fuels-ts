@@ -1,6 +1,6 @@
-import type { JsonAbiErrorCodes } from './JsonAbi';
+import type { JsonAbiErrorCode } from './JsonAbi';
 
 export interface IErrorCode {
-  errorCode: string;
-  errorValue: JsonAbiErrorCodes;
+  code: string;
+  value: JsonAbiErrorCode;
 }
