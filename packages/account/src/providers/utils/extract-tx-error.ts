@@ -1,4 +1,4 @@
-import type { ErrorCodes, JsonAbi } from '@fuel-ts/abi-coder/dist/types/JsonAbiNew';
+import type { JsonAbi, JsonAbiErrorCode } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 import { ReceiptType } from '@fuel-ts/transactions';
@@ -112,7 +112,7 @@ export const assembleSignalErrorMessage = (
 };
 
 function buildAbiErrorMessage(
-  abiError: ErrorCodes,
+  abiError: JsonAbiErrorCode,
   logs: Array<unknown>,
   metadata: Record<string, unknown>,
   reason: string
@@ -142,7 +142,7 @@ function buildAbiErrorMessage(
   });
 }
 
-function findErrorInAbis(statusReason: string, abis: JsonAbi[] = []): ErrorCodes | undefined {
+function findErrorInAbis(statusReason: string, abis: JsonAbi[] = []): JsonAbiErrorCode | undefined {
   for (const abi of abis) {
     if (abi.errorCodes?.[statusReason]) {
       return abi.errorCodes[statusReason];
@@ -171,7 +171,7 @@ export const assembleRevertError = (
     return assembleSignalErrorMessage(reasonHex, logs, metadata);
   }
 
-  let abiError: ErrorCodes | undefined;
+  let abiError: JsonAbiErrorCode | undefined;
 
   if (abis) {
     const abisArr = [abis.main, ...Object.values(abis.otherContractsAbis)];
