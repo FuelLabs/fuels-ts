@@ -41,77 +41,68 @@ export const assemblePanicError = (
 const stringify = (obj: unknown) => JSON.stringify(obj, null, 2);
 
 /**
- * Assembles an error message for a revert status.
+ * Assembles an error message for Sway signal errors.
  * @param receipts - The transaction result processed receipts.
  * @param logs - The transaction decoded logs.
  * @returns The error message.
  */
-export const assembleRevertError = (
-  receipts: Array<TransactionResultReceipt>,
+export const assembleSignalErrorMessage = (
+  reasonHex: string,
   logs: Array<unknown>,
   metadata: Record<string, unknown>
-): FuelError => {
+) => {
   let errorMessage = 'The transaction reverted with an unknown reason.';
-
-  const revertReceipt = receipts.find(({ type }) => type === ReceiptType.Revert) as ReceiptRevert;
   let reason = '';
+  const lastLog = logs[logs.length - 1];
+  const lastButOneLog = logs[logs.length - 2];
 
-  if (revertReceipt) {
-    const reasonHex = bn(revertReceipt.val).toHex();
-    const lastLog = logs[logs.length - 1];
-    const lastButOneLog = logs[logs.length - 2];
-
-    switch (reasonHex) {
-      case FAILED_REQUIRE_SIGNAL: {
-        reason = 'require';
-        errorMessage = `The transaction reverted because a "require" statement has thrown ${
-          logs.length ? stringify(lastLog) : 'an error.'
-        }.`;
-        break;
-      }
-
-      case FAILED_ASSERT_EQ_SIGNAL: {
-        const suffix =
-          logs.length >= 2
-            ? ` comparing ${stringify(lastLog)} and ${stringify(lastButOneLog)}.`
-            : '.';
-
-        reason = 'assert_eq';
-        errorMessage = `The transaction reverted because of an "assert_eq" statement${suffix}`;
-        break;
-      }
-
-      case FAILED_ASSERT_NE_SIGNAL: {
-        const suffix =
-          logs.length >= 2
-            ? ` comparing ${stringify(lastButOneLog)} and ${stringify(lastLog)}.`
-            : '.';
-
-        reason = 'assert_ne';
-        errorMessage = `The transaction reverted because of an "assert_ne" statement${suffix}`;
-        break;
-      }
-
-      case FAILED_ASSERT_SIGNAL:
-        reason = 'assert';
-        errorMessage = `The transaction reverted because an "assert" statement failed to evaluate to true.`;
-        break;
-
-      case FAILED_TRANSFER_TO_ADDRESS_SIGNAL:
-        reason = 'MissingOutputVariable';
-        errorMessage = `The transaction reverted because it's missing an "OutputVariable".`;
-        break;
-
-      default:
-        throw new FuelError(
-          ErrorCode.UNKNOWN,
-          `The transaction reverted with an unknown reason: ${revertReceipt.val}`,
-          {
-            ...metadata,
-            reason: 'unknown',
-          }
-        );
+  switch (reasonHex) {
+    case FAILED_REQUIRE_SIGNAL: {
+      reason = 'require';
+      errorMessage = `The transaction reverted because a "require" statement has thrown ${
+        logs.length ? stringify(lastLog) : 'an error.'
+      }.`;
+      break;
     }
+
+    case FAILED_ASSERT_EQ_SIGNAL: {
+      const suffix =
+        logs.length >= 2
+          ? ` comparing ${stringify(lastLog)} and ${stringify(lastButOneLog)}.`
+          : '.';
+
+      reason = 'assert_eq';
+      errorMessage = `The transaction reverted because of an "assert_eq" statement${suffix}`;
+      break;
+    }
+
+    case FAILED_ASSERT_NE_SIGNAL: {
+      const suffix =
+        logs.length >= 2
+          ? ` comparing ${stringify(lastButOneLog)} and ${stringify(lastLog)}.`
+          : '.';
+
+      reason = 'assert_ne';
+      errorMessage = `The transaction reverted because of an "assert_ne" statement${suffix}`;
+      break;
+    }
+
+    case FAILED_ASSERT_SIGNAL:
+      reason = 'assert';
+      errorMessage = `The transaction reverted because an "assert" statement failed to evaluate to true.`;
+      break;
+
+    case FAILED_TRANSFER_TO_ADDRESS_SIGNAL:
+      reason = 'MissingOutputVariable';
+      errorMessage = `The transaction reverted because it's missing an "OutputVariable".`;
+      break;
+
+    default:
+      reason = `revert_with_log`;
+      errorMessage = `The transaction reverted because a "revert_with_log" statement has thrown ${
+        logs.length ? stringify(lastLog) : 'an error.'
+      }.`;
+      break;
   }
 
   return new FuelError(ErrorCode.SCRIPT_REVERTED, errorMessage, {
