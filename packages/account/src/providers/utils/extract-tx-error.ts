@@ -123,6 +123,7 @@ interface IExtractTxError<T = unknown> extends DecodedLogs<T> {
   statusReason: string;
   logs: T[];
   groupedLogs: Record<string, T[]>;
+  abis?: JsonAbisFromAllCalls;
 }
 
 /**
