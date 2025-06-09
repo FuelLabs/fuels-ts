@@ -39,6 +39,5 @@ jobs:
           mkdir -p apps/docs/.vercel/output
           mv apps/docs/dist/* apps/docs/.vercel/output
           vercel deploy \
-            --cwd apps/docs \
             --prebuilt \
             --token=${{ secrets.VERCEL_TOKEN }}
