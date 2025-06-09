@@ -38,5 +38,5 @@ jobs:
         run: |
           vercel deploy \
             --cwd apps/docs \
-            --prebuild \
+            --prebuilt \
             --token=${{ secrets.VERCEL_TOKEN }}
