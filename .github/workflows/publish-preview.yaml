@@ -37,7 +37,7 @@ jobs:
           VERCEL_PROJECT_ID: ${{ env.VERCEL_TS_DOCS_PROJECT_ID }}
         run: |
           cd apps/docs
-          vercel build --yes
+          vercel build --yes --token=${{ secrets.VERCEL_TOKEN }}
           vercel deploy \
             --prebuilt \
             --token=${{ secrets.VERCEL_TOKEN }}
