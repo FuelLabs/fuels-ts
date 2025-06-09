@@ -1,0 +1,39 @@
+name: "Publish to Vercel"
+
+on:
+  pull_request:
+    branches:
+      - master
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_TS_DOCS_PROJECT_ID: 'prj_iBhTlkv2hj2E6BiA3GeacxgNHIEL'
+  VERCEL_TS_DOCS_API_PROJECT_ID: ''
+  VERCEL_TS_TEMPLATE_PROJECT_ID: ''
+
+jobs:
+  publish-to-vercel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Install Vercel
+        run: pnpm install --global vercel@latest
+
+      - name: Build
+        run: pnpm build
+
+      - name: Publish `docs`
+        env:
+          VERCEL_PROJECT_ID: ${{ envs.VERCEL_TS_DOCS_PROJECT_ID }}
+        run: |
+          vercel --cwd apps/docs --prebuild --token=${{ secrets.VERCEL_TOKEN }}
