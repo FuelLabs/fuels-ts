@@ -37,8 +37,7 @@ jobs:
           VERCEL_PROJECT_ID: ${{ env.VERCEL_TS_DOCS_PROJECT_ID }}
         run: |
           cd apps/docs
-          mkdir -p .vercel/output
-          mv dist/* .vercel/output
+          vercel build --yes
           vercel deploy \
             --prebuilt \
             --token=${{ secrets.VERCEL_TOKEN }}
