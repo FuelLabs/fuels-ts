@@ -68,3 +68,10 @@ jobs:
             | **fuels-template** | ${{ steps.deploy-template.outcome == 'success' && 'Success ✅ ([Preview](${{steps.deploy-template.outputs.deployment-url}}))' || 'Failed ❌' }}  |
             | **ts-docs** | ${{ steps.deploy-docs.outcome == 'success' && 'Success ✅ ([Preview](${{steps.deploy-template.outputs.deployment-url}}))' || 'Failed ❌' }} |
             | **ts-docs-api** | ${{ steps.deploy-docs-api.outcome == 'success' && 'Success ✅ ([Preview](${{steps.deploy-template.outputs.deployment-url}}))' || 'Failed ❌' }} |
+
+      - name: Ensure all deployments successful
+        if: ${{ steps.deploy-template.outcome != 'success' || steps.deploy-docs.outcome != 'success' || steps.deploy-docs-api.outcome != 'success' }}
+        uses: actions/github-script@v3
+        with:
+          script: |
+              core.setFailed('One of the Vercel deployments failed')
