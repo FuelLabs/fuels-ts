@@ -158,9 +158,10 @@ function findErrorInAbis(statusReason: string, abis: JsonAbi[] = []): JsonAbiErr
  * @returns The error message.
  */
 export const assembleRevertError = (
-  statusReason: string,
+  _receipts: Array<TransactionResultReceipt>,
   logs: Array<unknown>,
   metadata: Record<string, unknown>,
+  statusReason: string,
   abis?: JsonAbisFromAllCalls
 ): FuelError => {
   const match = statusReason.match(/Revert\((\d+)\)/);
@@ -220,5 +221,5 @@ export const extractTxError = (params: IExtractTxError): FuelError => {
   if (isPanic) {
     return assemblePanicError(statusReason, metadata);
   }
-  return assembleRevertError(statusReason, logs, metadata, abis);
+  return assembleRevertError(receipts, logs, metadata, statusReason, abis);
 };
