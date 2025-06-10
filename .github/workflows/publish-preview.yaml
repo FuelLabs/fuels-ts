@@ -11,7 +11,7 @@ env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_TS_DOCS_PROJECT_ID: 'prj_iBhTlkv2hj2E6BiA3GeacxgNHIEL'
   VERCEL_TS_DOCS_API_PROJECT_ID: ''
-  VERCEL_TS_TEMPLATE_PROJECT_ID: ''
+  VERCEL_TS_TEMPLATE_PROJECT_ID: 'prj_syuKtl2KTIU4OvO2mRccdbIt55BN'
 
 jobs:
   publish-to-vercel:
@@ -29,6 +29,9 @@ jobs:
       - name: Install Vercel
         run: pnpm install --global vercel@latest
 
+      - name: Build project
+        run: pnpm build
+
       - name: Deploy `docs` to Vercel
         uses: ./.github/actions/vercel-deploy
         with:
@@ -39,4 +42,4 @@ jobs:
         uses: ./.github/actions/vercel-deploy
         with:
           token: ${{ secrets.VERCEL_TOKEN }}
-          project-id: ${{ env.VERCEL_TS_DOCS_PROJECT_ID }}
+          project-id: ${{ env.VERCEL_TS_TEMPLATE_PROJECT_ID }}
