@@ -25,6 +25,12 @@ jobs:
 
       - name: CI Setup
         uses: ./.github/actions/ci-setup
+      
+      - name: Check corepack version
+        run: |
+          echo "corepack version => $(corepack --version || echo 'not installed')"
+          echo "pnpm version => $(pnpm --version)"
+
 
       - name: Install Vercel
         run: pnpm install --global vercel@latest
