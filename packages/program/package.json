@@ -14,13 +14,27 @@
       "types": "./dist/index.d.ts",
       "require": "./dist/index.js",
       "import": "./dist/index.mjs"
+    },
+    "./test-utils": {
+      "types": "./dist/test-utils.d.ts",
+      "require": "./dist/test-utils.js",
+      "import": "./dist/test-utils.mjs"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "test-utils": [
+        "./dist/test-utils.d.ts"
+      ]
     }
   },
   "files": [
     "dist"
   ],
   "scripts": {
+    "pretest": "pnpm build:forc",
     "build": "tsup",
+    "build:forc": "pnpm fuels-forc build -p test/fixtures/forc-projects --release",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
   "license": "Apache-2.0",
@@ -29,13 +43,18 @@
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/account": "workspace:*",
     "@fuel-ts/address": "workspace:*",
+    "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
+    "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/math": "workspace:*",
+    "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuels/vm-asm": "0.60.2"
   },
   "devDependencies": {
-    "@types/ramda": "0.30.2"
+    "@types/ramda": "0.30.2",
+    "@fuel-ts/utils": "workspace:*",
+    "@internal/forc": "workspace:*"
   }
 }

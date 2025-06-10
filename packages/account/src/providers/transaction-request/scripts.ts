@@ -2,7 +2,7 @@ import { arrayify } from '@fuel-ts/utils';
 
 import type { AbstractScriptRequest } from './types';
 
-// We can't import this from `@fuel-ts/script` because it causes
+// We can't import this from `@fuel-ts/program` because it causes
 // cyclic dependency errors so we duplicate it here.
 /** @hidden */
 export const returnZeroScript: AbstractScriptRequest<void> = {

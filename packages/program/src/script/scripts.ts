@@ -1,4 +1,4 @@
-import { ScriptRequest } from '@fuel-ts/program';
+import { ScriptRequest } from '../script-request';
 
 /**
  * @hidden
