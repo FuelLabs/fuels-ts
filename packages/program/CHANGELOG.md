@@ -1,5 +1,22 @@
 # Change Log
 
+## 0.101.2
+
+### Patch Changes
+
+- 8c19d93: chore: support Node 24 - depreciate Node 18
+- bfb62ad: feat: implement support for new ABI error codes
+- Updated dependencies [ec2ac46]
+- Updated dependencies [8c19d93]
+- Updated dependencies [bfb62ad]
+  - @fuel-ts/account@0.101.2
+  - @fuel-ts/transactions@0.101.2
+  - @fuel-ts/abi-coder@0.101.2
+  - @fuel-ts/address@0.101.2
+  - @fuel-ts/errors@0.101.2
+  - @fuel-ts/utils@0.101.2
+  - @fuel-ts/math@0.101.2
+
 ## 0.101.1
 
 ### Patch Changes

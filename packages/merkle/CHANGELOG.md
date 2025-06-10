@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.101.2
+
+### Patch Changes
+
+- 8c19d93: chore: support Node 24 - depreciate Node 18
+- Updated dependencies [8c19d93]
+  - @fuel-ts/hasher@0.101.2
+  - @fuel-ts/math@0.101.2
+
 ## 0.101.1
 
 ### Patch Changes
