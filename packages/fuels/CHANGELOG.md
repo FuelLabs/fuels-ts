@@ -1,5 +1,31 @@
 # Change Log
 
+## 0.101.2
+
+### Patch Changes
+
+- d807385: chore: updated dependencies
+- 8c19d93: chore: support Node 24 - depreciate Node 18
+- Updated dependencies [ec2ac46]
+- Updated dependencies [8c19d93]
+- Updated dependencies [bfb62ad]
+- Updated dependencies [0d71065]
+  - @fuel-ts/account@0.101.2
+  - @fuel-ts/transactions@0.101.2
+  - @fuel-ts/abi-typegen@0.101.2
+  - @fuel-ts/abi-coder@0.101.2
+  - @fuel-ts/contract@0.101.2
+  - @fuel-ts/versions@0.101.2
+  - @fuel-ts/address@0.101.2
+  - @fuel-ts/program@0.101.2
+  - @fuel-ts/recipes@0.101.2
+  - @fuel-ts/crypto@0.101.2
+  - @fuel-ts/errors@0.101.2
+  - @fuel-ts/hasher@0.101.2
+  - @fuel-ts/script@0.101.2
+  - @fuel-ts/utils@0.101.2
+  - @fuel-ts/math@0.101.2
+
 ## 0.101.1
 
 ### Patch Changes
