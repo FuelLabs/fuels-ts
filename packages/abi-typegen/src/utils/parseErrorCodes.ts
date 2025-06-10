@@ -11,8 +11,7 @@ export function parseErrorCodes(params: {
   // const { types, rawErrorCodes } = params;
   const { rawErrorCodes } = params;
   const errorCodes: ErrorCode[] = Object.entries(rawErrorCodes ?? {}).map(([code, value]) => {
-    const error = makeErrorCode({ code, value });
-    return new ErrorCode(error);
+    return makeErrorCode({ code, value });
   });
 
   return errorCodes;
