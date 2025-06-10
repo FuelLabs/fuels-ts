@@ -8,6 +8,7 @@ export interface JsonAbiOld {
   readonly functions: readonly JsonAbiFunction[];
   readonly messagesTypes: readonly JsonAbiMessagesType[];
   readonly configurables: readonly JsonAbiConfigurable[];
+  readonly errorCodes?: Record<string, JsonAbiErrorCode>;
   readonly encoding?: string;
 }
 
@@ -54,4 +55,15 @@ export interface JsonAbiConfigurable {
   name: string;
   configurableType: JsonAbiArgument;
   offset: number;
+}
+
+export interface JsonAbiErrorCode {
+  pos: {
+    pkg: string;
+    file: string;
+    line: number;
+    column: number;
+  };
+  logId: string | null;
+  msg: string | null;
 }
