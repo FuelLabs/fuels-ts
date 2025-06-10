@@ -15,11 +15,11 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Pull Vercel Environment Information
-      env:
-        VERCEL_PROJECT_ID: ${{ inputs.project-id }}
-      shell: bash
-      run: vercel pull --yes --environment=preview --token=${{ inputs.token }}
+    # - name: Pull Vercel Environment Information
+    #   env:
+    #     VERCEL_PROJECT_ID: ${{ inputs.project-id }}
+    #   shell: bash
+    #   run: vercel pull --yes --environment=preview --token=${{ inputs.token }}
 
     - name: Build Project Artifacts
       env:
