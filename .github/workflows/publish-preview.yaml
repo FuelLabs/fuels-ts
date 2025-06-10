@@ -33,13 +33,21 @@ jobs:
         run: pnpm build
 
       - name: Deploy `docs` to Vercel
+        id: deploy-docs
         uses: ./.github/actions/vercel-deploy
         with:
           token: ${{ secrets.VERCEL_TOKEN }}
           project-id: ${{ env.VERCEL_TS_DOCS_PROJECT_ID }}
 
       - name: Deploy `template` to Vercel
+        id: deploy-template
         uses: ./.github/actions/vercel-deploy
         with:
           token: ${{ secrets.VERCEL_TOKEN }}
           project-id: ${{ env.VERCEL_TS_TEMPLATE_PROJECT_ID }}
+
+      - name: Echo out deployment URL's
+        shell: bash
+        run: |
+          echo "${{steps.deploy-docs.outputs.deployment-url}}"
+          echo "${{steps.deploy-template.outputs.deployment-url}}"
