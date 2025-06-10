@@ -1,4 +1,4 @@
-import { ErrorCode } from '../abi/errors/ErrorCode';
+import type { ErrorCode } from '../abi/errors/ErrorCode';
 import type { IType } from '../types/interfaces/IType';
 import type { JsonAbiErrorCode } from '../types/interfaces/JsonAbi';
 
@@ -10,9 +10,9 @@ export function parseErrorCodes(params: {
 }) {
   // const { types, rawErrorCodes } = params;
   const { rawErrorCodes } = params;
-  const errorCodes: ErrorCode[] = Object.entries(rawErrorCodes ?? {}).map(([code, value]) => {
-    return makeErrorCode({ code, value });
-  });
+  const errorCodes: ErrorCode[] = Object.entries(rawErrorCodes ?? {}).map(([code, value]) =>
+    makeErrorCode({ code, value })
+  );
 
   return errorCodes;
 }
