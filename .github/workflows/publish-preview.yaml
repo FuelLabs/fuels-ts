@@ -29,10 +29,13 @@ jobs:
       - name: Install Vercel
         run: pnpm install --global vercel@latest
 
-      - name: Build
-        run: pnpm build
-
       - name: Deploy `docs` to Vercel
+        uses: ./.github/actions/vercel-deploy
+        with:
+          token: ${{ secrets.VERCEL_TOKEN }}
+          project-id: ${{ env.VERCEL_TS_DOCS_PROJECT_ID }}
+
+      - name: Deploy `template` to Vercel
         uses: ./.github/actions/vercel-deploy
         with:
           token: ${{ secrets.VERCEL_TOKEN }}
