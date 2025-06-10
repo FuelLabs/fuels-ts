@@ -32,12 +32,8 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Publish `docs`
-        env:
-          VERCEL_PROJECT_ID: ${{ env.VERCEL_TS_DOCS_PROJECT_ID }}
-        run: |
-          cd apps/docs
-          vercel build --yes --token=${{ secrets.VERCEL_TOKEN }}
-          vercel deploy \
-            --prebuilt \
-            --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Deploy `docs` to Vercel
+        uses: ./.github/actions/vercel-deploy
+        with:
+          token: ${{ secrets.VERCEL_TOKEN }}
+          project-id: ${{ env.VERCEL_TS_DOCS_PROJECT_ID }}

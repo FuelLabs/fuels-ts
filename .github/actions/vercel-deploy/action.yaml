@@ -1,0 +1,31 @@
+name: "CI Setup"
+inputs:
+  token:
+    description: "The Vercel authentication token"
+    type: string
+    required: true
+  # org-id:
+  #   description: "The Vercel organization ID"
+  #   type: string
+  #   required: true  
+  project-id:
+    description: "The Vercel project ID"
+    type: string
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Pull Vercel Environment Information
+      env:
+        VERCEL_PROJECT_ID: ${{ inputs.project-id }}
+      run: vercel pull --yes --environment=preview --token=${{ inputs.token }}
+
+    - name: Build Project Artifacts
+      env:
+        VERCEL_PROJECT_ID: ${{ inputs.project-id }}
+      run: vercel build --yes --token=${{ inputs.token }}
+
+    - name: Publish `docs`
+      env:
+        VERCEL_PROJECT_ID: ${{ inputs.project-id }}
+      run: vercel deploy --prebuilt --token=${{ inputs.token }}
