@@ -40,7 +40,8 @@ export const FAILED_ASSERT_SIGNAL = '0xffffffffffff0004';
 // Revert with this value for a failing call to `std::assert::assert_ne`.
 export const FAILED_ASSERT_NE_SIGNAL = '0xffffffffffff0005';
 
-export const FAILED_UNKNOWN_SIGNAL = '0x0';
+// A revert with this value signals that it was caused by a call to `std::revert::revert_with_log`.
+export const REVERT_WITH_LOG_SIGNAL = '0xffffffffffff0006';
 
 export const PANIC_REASONS = [
   'ArithmeticError',
@@ -111,3 +112,12 @@ export const PANIC_REASONS = [
 ];
 
 export const PANIC_DOC_URL = 'https://docs.rs/fuel-asm/latest/fuel_asm/enum.PanicReason.html';
+
+export const SwaySignalErrors = {
+  FAILED_REQUIRE_SIGNAL,
+  FAILED_TRANSFER_TO_ADDRESS_SIGNAL,
+  FAILED_ASSERT_EQ_SIGNAL,
+  FAILED_ASSERT_SIGNAL,
+  FAILED_ASSERT_NE_SIGNAL,
+  REVERT_WITH_LOG_SIGNAL,
+};
