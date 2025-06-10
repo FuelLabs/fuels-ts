@@ -34,20 +34,37 @@ jobs:
 
       - name: Deploy `docs` to Vercel
         id: deploy-docs
+        continue-on-error: true
         uses: ./.github/actions/vercel-deploy
         with:
           token: ${{ secrets.VERCEL_TOKEN }}
           project-id: ${{ env.VERCEL_TS_DOCS_PROJECT_ID }}
 
+      - name: Deploy `docs-api` to Vercel
+        id: deploy-docs
+        continue-on-error: true
+        uses: ./.github/actions/vercel-deploy
+        with:
+          token: ${{ secrets.VERCEL_TOKEN }}
+          project-id: ${{ env.VERCEL_TS_DOCS_API_PROJECT_ID }}
+
       - name: Deploy `template` to Vercel
         id: deploy-template
+        continue-on-error: true
         uses: ./.github/actions/vercel-deploy
         with:
           token: ${{ secrets.VERCEL_TOKEN }}
           project-id: ${{ env.VERCEL_TS_TEMPLATE_PROJECT_ID }}
 
-      - name: Echo out deployment URL's
-        shell: bash
-        run: |
-          echo "${{steps.deploy-docs.outputs.deployment-url}}"
-          echo "${{steps.deploy-template.outputs.deployment-url}}"
+      - name: Add PR comment
+        uses: mshick/add-pr-comment@v2
+        with:
+          refresh-message-position: false
+          message: |
+            # Vercel Deployment
+
+            | Name | Preview |
+            | :--- | :------ |
+            | **fuels-template** | ([Preview](${{steps.deploy-template.outputs.deployment-url}})) |
+            | **ts-docs** | ([Preview](${{steps.deploy-docs.outputs.deployment-url}})) |
+            | **ts-docs-api** | ([Preview](${{steps.deploy-docs-api.outputs.deployment-url}})) |
