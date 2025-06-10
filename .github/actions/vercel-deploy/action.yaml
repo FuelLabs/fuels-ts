@@ -1,4 +1,5 @@
-name: "CI Setup"
+name: "Vercel Deploy"
+
 inputs:
   token:
     description: "The Vercel authentication token"
@@ -12,6 +13,12 @@ inputs:
     description: "The Vercel project ID"
     type: string
     required: true
+
+outputs:
+  deployment-url:
+    description: "The Vercel deployment URL"
+    value: ${{ steps.deployment.outputs.deployment-url }}
+
 runs:
   using: "composite"
   steps:
@@ -28,7 +35,8 @@ runs:
       run: vercel build --yes --token=${{ inputs.token }}
 
     - name: Publish `docs`
+      id: deployment
       env:
         VERCEL_PROJECT_ID: ${{ inputs.project-id }}
       shell: bash
-      run: vercel deploy --prebuilt --token=${{ inputs.token }}
+      run: echo "deployment-url=$(vercel deploy --prebuilt --token=${{ inputs.token }})" >> $GITHUB_OUTPUT
