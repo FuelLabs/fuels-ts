@@ -18,14 +18,17 @@ runs:
     - name: Pull Vercel Environment Information
       env:
         VERCEL_PROJECT_ID: ${{ inputs.project-id }}
+      shell: bash
       run: vercel pull --yes --environment=preview --token=${{ inputs.token }}
 
     - name: Build Project Artifacts
       env:
         VERCEL_PROJECT_ID: ${{ inputs.project-id }}
+      shell: bash
       run: vercel build --yes --token=${{ inputs.token }}
 
     - name: Publish `docs`
       env:
         VERCEL_PROJECT_ID: ${{ inputs.project-id }}
+      shell: bash
       run: vercel deploy --prebuilt --token=${{ inputs.token }}
