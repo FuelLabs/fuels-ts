@@ -41,7 +41,7 @@ jobs:
           project-id: ${{ env.VERCEL_TS_DOCS_PROJECT_ID }}
 
       - name: Deploy `docs-api` to Vercel
-        id: deploy-docs
+        id: deploy-docs-api
         continue-on-error: true
         uses: ./.github/actions/vercel-deploy
         with:
