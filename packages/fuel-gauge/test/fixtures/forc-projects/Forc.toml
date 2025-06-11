@@ -80,4 +80,5 @@ members = [
   "vector-types-script",
   "vectors",
   "void",
+  "script-error",
 ]

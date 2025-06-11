@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
@@ -115,6 +117,14 @@ export type TransactionResponseJson = {
   requestJson?: string;
 };
 
+export type TransactionResponseParams = {
+  transactionRequestOrId: string | TransactionRequest;
+  provider: Provider;
+  chainId: number;
+  abis?: JsonAbisFromAllCalls;
+  submitAndAwaitSubscription?: SubmitAndAwaitStatusSubscriptionIterable;
+};
+
 /**
  * Represents a response for a transaction.
  */
@@ -130,35 +140,85 @@ export class TransactionResponse {
   request?: TransactionRequest;
   status?: StatusChangeSubscription['statusChange'];
   abis?: JsonAbisFromAllCalls;
+  private submitTxSubscription?: SubmitAndAwaitStatusSubscriptionIterable;
   preConfirmationStatus?: StatusChangeSubscription['statusChange'];
 
   private waitingForStreamData = false;
   private statusResolvers: Map<StatusType, (() => void)[]> = new Map();
 
   /**
-   * Constructor for `TransactionResponse`.
+   * Creates a new TransactionResponse instance.
    *
-   * @param tx - The transaction ID or TransactionRequest.
+   * @param transactionRequestOrId - The transaction ID or TransactionRequest.
    * @param provider - The provider.
+   * @param chainId - The chain ID.
+   * @param abis - The ABIs.
+   * @param submitAndAwaitSubscription - The submit and await subscription.
+   *
+   * @deprecated Use the object-style constructor instead:
+   * `new TransactionResponse({ ... })`
    */
   constructor(
-    tx: string | TransactionRequest,
+    transactionRequestOrId: string | TransactionRequest,
     provider: Provider,
     chainId: number,
     abis?: JsonAbisFromAllCalls,
-    private submitTxSubscription?: SubmitAndAwaitStatusSubscriptionIterable
+    submitAndAwaitSubscription?: SubmitAndAwaitStatusSubscriptionIterable
+  );
+
+  /**
+   * Creates a new TransactionResponse instance.
+   *
+   * @param constructorParams - The constructor parameters.
+   */
+  constructor(constructorParams: TransactionResponseParams);
+
+  /**
+   * Constructor for `TransactionResponse`.
+   */
+  constructor(
+    constructorParams: string | TransactionRequest | TransactionResponseParams,
+    provider?: Provider,
+    chainId?: number,
+    abis?: JsonAbisFromAllCalls,
+    submitTxSubscription?: SubmitAndAwaitStatusSubscriptionIterable
   ) {
+    let tx: string | TransactionRequest;
+    let _provider: Provider;
+    let _chainId: number;
+    let _abis: JsonAbisFromAllCalls | undefined;
+
+    if (
+      typeof constructorParams === 'object' &&
+      'provider' in constructorParams &&
+      arguments.length === 1
+    ) {
+      // Object-style usage
+      tx = constructorParams.transactionRequestOrId;
+      _provider = constructorParams.provider;
+      _chainId = constructorParams.chainId;
+      _abis = constructorParams.abis;
+      this.submitTxSubscription = constructorParams.submitAndAwaitSubscription;
+    } else {
+      // Deprecated positional usage
+      tx = constructorParams as string | TransactionRequest;
+      _provider = provider as Provider;
+      _chainId = chainId as number;
+      _abis = abis;
+      this.submitTxSubscription = submitTxSubscription;
+    }
+
     // Transaction Request was not provided
     if (typeof tx === 'string') {
       this.id = tx;
     } else {
       // Transaction Request was provided
-      this.id = tx.getTransactionId(chainId);
+      this.id = tx.getTransactionId(_chainId);
       this.request = tx;
     }
 
-    this.provider = provider;
-    this.abis = abis;
+    this.provider = _provider;
+    this.abis = _abis;
     this.waitForResult = this.waitForResult.bind(this);
     this.waitForPreConfirmation = this.waitForPreConfirmation.bind(this);
   }
@@ -482,6 +542,7 @@ export class TransactionResponse {
     };
 
     let { logs, groupedLogs }: DecodedLogs = { logs: [], groupedLogs: {} };
+    let abis: JsonAbisFromAllCalls | undefined;
 
     if (this.abis) {
       ({ logs, groupedLogs } = getAllDecodedLogs({
@@ -492,6 +553,8 @@ export class TransactionResponse {
 
       transactionResult.logs = logs;
       transactionResult.groupedLogs = groupedLogs;
+
+      abis = this.abis;
     }
 
     const { receipts } = transactionResult;
@@ -505,6 +568,7 @@ export class TransactionResponse {
         statusReason: reason,
         logs,
         groupedLogs,
+        abis,
       });
     }
 

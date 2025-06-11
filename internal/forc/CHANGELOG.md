@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.89.9
+
+### Patch Changes
+
+- bfb62ad: feat: implement support for new ABI error codes
+- 0d71065: chore: Upgraded `forc` to `0.66.8`
+
 ## 0.89.8
 
 ### Patch Changes

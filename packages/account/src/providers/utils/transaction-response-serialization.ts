@@ -41,7 +41,12 @@ export const deserializeTransactionResponseJson = (json: TransactionResponseJson
   const provider = new Provider(providerUrl, { cache: providerCache });
   const { chainId } = providerCache.chain.consensusParameters;
 
-  const response = new TransactionResponse(id, provider, Number(chainId), abis);
+  const response = new TransactionResponse({
+    transactionRequestOrId: id,
+    provider,
+    chainId: Number(chainId),
+    abis,
+  });
 
   if (requestJson) {
     response.request = transactionRequestify(JSON.parse(requestJson));
