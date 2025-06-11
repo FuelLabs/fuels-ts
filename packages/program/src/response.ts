@@ -22,29 +22,89 @@ import type {
 } from './types';
 import { getAbisFromAllCalls, getAllResultLogs } from './utils';
 
-/** @hidden */
-export const extractInvocationResult = <T>(
+export type ExtractInvocationResultParams = {
+  functionScopes: Array<InvocationScopeLike>;
+  receipts: TransactionResultReceipt[];
+  isMultiCall: boolean;
+  logs?: DecodedLogs<unknown>['logs'];
+  groupedLogs?: DecodedLogs<unknown>['groupedLogs'];
+  abis?: JsonAbisFromAllCalls;
+};
+
+/**
+ * Extracts the invocation result from an invocation call.
+ *
+ * @template T - The type of the result to be extracted.
+ * @param functionScopes - An array of invocation scopes.
+ * @param receipts - The transaction result receipts.
+ * @param isMultiCall - A boolean indicating if the call is a multi-call.
+ * @param logs - Optional logs associated with the transaction.
+ * @param groupedLogs - Optional grouped logs associated with the transaction.
+ * @param abis - Optional ABIs associated with the transaction.
+ * @returns The extracted invocation result of type T.
+ *
+ * @deprecated Use the object-based approach for parameters instead.
+ */
+export function extractInvocationResult<T>(
   functionScopes: Array<InvocationScopeLike>,
   receipts: TransactionResultReceipt[],
   isMultiCall: boolean,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  logs: DecodedLogs<any>['logs'],
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  groupedLogs: DecodedLogs<any>['groupedLogs'] = {},
+  logs?: DecodedLogs<unknown>['logs'],
+  groupedLogs?: DecodedLogs<unknown>['groupedLogs'],
   abis?: JsonAbisFromAllCalls
-) => {
+): T;
+
+/**
+ * Extracts the invocation result from a invocation call.
+ *
+ * @template T - The type of the result to be extracted.
+ * @param params - Object of type `ExtractInvocationResultParams` containing extraction parameters
+ */
+export function extractInvocationResult<T>(params: ExtractInvocationResultParams): T;
+
+export function extractInvocationResult<T>(
+  paramsOrFunctionScopes: ExtractInvocationResultParams | Array<InvocationScopeLike>,
+  _receipts?: TransactionResultReceipt[],
+  _isMultiCall?: boolean,
+  _logs?: DecodedLogs<unknown>['logs'],
+  _groupedLogs?: DecodedLogs<unknown>['groupedLogs'],
+  _abis?: JsonAbisFromAllCalls
+): T {
+  let functionScopes: Array<InvocationScopeLike>;
+  let receipts: TransactionResultReceipt[];
+  let isMultiCall: boolean;
+  let logs: DecodedLogs<unknown>['logs'];
+  let groupedLogs: DecodedLogs<unknown>['groupedLogs'];
+  let abis: JsonAbisFromAllCalls | undefined;
+
+  if (typeof paramsOrFunctionScopes === 'object' && !Array.isArray(paramsOrFunctionScopes)) {
+    functionScopes = paramsOrFunctionScopes.functionScopes;
+    receipts = paramsOrFunctionScopes.receipts;
+    isMultiCall = paramsOrFunctionScopes.isMultiCall;
+    logs = paramsOrFunctionScopes.logs ?? [];
+    groupedLogs = paramsOrFunctionScopes.groupedLogs ?? {};
+    abis = paramsOrFunctionScopes.abis;
+  } else {
+    functionScopes = paramsOrFunctionScopes;
+    receipts = _receipts as TransactionResultReceipt[];
+    isMultiCall = _isMultiCall as boolean;
+    logs = _logs ?? [];
+    groupedLogs = _groupedLogs ?? {};
+    abis = _abis;
+  }
+
   const mainCallConfig = functionScopes[0]?.getCallConfig();
 
   if (functionScopes.length === 1 && mainCallConfig && 'bytes' in mainCallConfig.program) {
     return callResultToInvocationResult<T>({ receipts }, mainCallConfig, logs, groupedLogs, abis);
   }
-  const encodedResults = decodeContractCallScriptResult(
-    { receipts },
-    (mainCallConfig?.program as AbstractContract).id,
+  const encodedResults = decodeContractCallScriptResult({
+    callResult: { receipts },
+    contractId: (mainCallConfig?.program as AbstractContract).id,
     logs,
     groupedLogs,
-    abis
-  );
+    abis,
+  });
 
   const decodedResults = encodedResults.map((encodedResult, i) => {
     const { func } = functionScopes[i].getCallConfig();
@@ -52,7 +112,7 @@ export const extractInvocationResult = <T>(
   });
 
   return (isMultiCall ? decodedResults : decodedResults?.[0]) as T;
-};
+}
 
 type BuiltFunctionResultParams = {
   funcScope: InvocationScopeLike | Array<InvocationScopeLike>;

@@ -90,25 +90,83 @@ function callResultToScriptResult(callResult: CallResult): ScriptResult {
   return scriptResult;
 }
 
+function isDecodeCallResultOptions<TResult>(value: any): value is DecodeCallResultParams<TResult> {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'callResult' in value &&
+    'scriptResultDecoder' in value
+  );
+}
+
+type DecodeCallResultParams<TResult> = {
+  callResult: CallResult;
+  scriptResultDecoder: (scriptResult: ScriptResult) => TResult;
+  logs?: DecodedLogs['logs'];
+  groupedLogs?: DecodedLogs['groupedLogs'];
+  abis?: JsonAbisFromAllCalls;
+};
+
 /**
- * Decodes a CallResult using the provided decoder function.
+ * Decodes a CallResult using the provided options.
+ *
+ * @param params - The options to decode the CallResult.
+ * @returns The decoded result.
+ * @throws Throws an error if decoding fails.
+ */
+export function decodeCallResult<TResult>(params: DecodeCallResultParams<TResult>): TResult;
+
+/**
+ * Decodes a CallResult using the provided options.
  *
  * @param callResult - The CallResult to decode.
  * @param decoder - The decoding function to apply on the ScriptResult.
  * @param logs - Optional logs associated with the decoding.
+ * @param groupedLogs - Optional grouped logs associated with the decoding.
+ * @param abis - Optional abis associated with the decoding.
  * @returns The decoded result.
  * @throws Throws an error if decoding fails.
+ *
+ * @deprecated Use the object-based approach for parameters instead.
  */
 export function decodeCallResult<TResult>(
   callResult: CallResult,
   decoder: (scriptResult: ScriptResult) => TResult,
-  logs: DecodedLogs['logs'] = [],
-  groupedLogs: DecodedLogs['groupedLogs'] = {},
+  logs?: DecodedLogs['logs'],
+  groupedLogs?: DecodedLogs['groupedLogs'],
   abis?: JsonAbisFromAllCalls
+): TResult;
+
+export function decodeCallResult<TResult>(
+  callResultOrParams: CallResult | DecodeCallResultParams<TResult>,
+  _scriptResultDecoder?: (scriptResult: ScriptResult) => TResult,
+  _logs?: DecodedLogs['logs'],
+  _groupedLogs?: DecodedLogs['groupedLogs'],
+  _abis?: JsonAbisFromAllCalls
 ): TResult {
+  let callResult: CallResult;
+  let scriptResultDecoder: (scriptResult: ScriptResult) => TResult;
+  let logs: DecodedLogs['logs'];
+  let groupedLogs: DecodedLogs['groupedLogs'];
+  let abis: JsonAbisFromAllCalls | undefined;
+
+  if (isDecodeCallResultOptions(callResultOrParams)) {
+    callResult = callResultOrParams.callResult;
+    scriptResultDecoder = callResultOrParams.scriptResultDecoder;
+    logs = callResultOrParams.logs ?? [];
+    groupedLogs = callResultOrParams.groupedLogs ?? {};
+    abis = callResultOrParams.abis;
+  } else {
+    callResult = callResultOrParams;
+    scriptResultDecoder = _scriptResultDecoder as (scriptResult: ScriptResult) => TResult;
+    logs = _logs ?? [];
+    groupedLogs = _groupedLogs ?? {};
+    abis = _abis;
+  }
+
   try {
     const scriptResult = callResultToScriptResult(callResult);
-    return decoder(scriptResult);
+    return scriptResultDecoder(scriptResult);
   } catch (error) {
     if ((<FuelError>error).code === ErrorCode.SCRIPT_REVERTED) {
       const statusReason = (<DryRunFailureStatusFragment>callResult?.dryRunStatus)?.reason;
@@ -125,13 +183,25 @@ export function decodeCallResult<TResult>(
   }
 }
 
+export type CallResultToInvocationResultParams = {
+  callResult: CallResult;
+  call: CallConfig;
+  logs?: DecodedLogs<unknown>['logs'];
+  groupedLogs?: DecodedLogs<unknown>['groupedLogs'];
+  abis?: JsonAbisFromAllCalls;
+};
+
 /**
  * Converts a CallResult to an invocation result based on the provided call configuration.
  *
  * @param callResult - The CallResult from the script call.
  * @param call - The call configuration.
  * @param logs - Optional logs associated with the decoding.
+ * @param groupedLogs - Optional logs associated with the decoding.
+ * @param abis - Optional abis associated with the decoding.
  * @returns The decoded invocation result.
+ *
+ * @deprecated Use the object-based approach for parameters instead.
  */
 export function callResultToInvocationResult<TReturn>(
   callResult: CallResult,
@@ -139,10 +209,52 @@ export function callResultToInvocationResult<TReturn>(
   logs?: DecodedLogs<unknown>['logs'],
   groupedLogs?: DecodedLogs<unknown>['groupedLogs'],
   abis?: JsonAbisFromAllCalls
+): TReturn;
+
+/**
+ * Decodes a CallResult using the provided options.
+ *
+ * @param params - The parameters to decode the CallResult.
+ * @returns The decoded invocation result.
+ */
+export function callResultToInvocationResult<TResult>(
+  params: CallResultToInvocationResultParams
+): TResult;
+
+export function callResultToInvocationResult<TReturn>(
+  callResultOrParams: CallResult | CallResultToInvocationResultParams,
+  _call?: CallConfig,
+  _logs?: DecodedLogs<unknown>['logs'],
+  _groupedLogs?: DecodedLogs<unknown>['groupedLogs'],
+  _abis?: JsonAbisFromAllCalls
 ): TReturn {
-  return decodeCallResult(
+  let callResult: CallResult;
+  let call: CallConfig;
+  let logs: DecodedLogs<unknown>['logs'];
+  let groupedLogs: DecodedLogs<unknown>['groupedLogs'];
+  let abis: JsonAbisFromAllCalls | undefined;
+
+  if (
+    typeof callResultOrParams === 'object' &&
+    'callResult' in callResultOrParams &&
+    'call' in callResultOrParams
+  ) {
+    callResult = callResultOrParams.callResult;
+    call = callResultOrParams.call;
+    logs = callResultOrParams.logs ?? [];
+    groupedLogs = callResultOrParams.groupedLogs ?? {};
+    abis = callResultOrParams.abis;
+  } else {
+    callResult = callResultOrParams as CallResult;
+    call = _call as CallConfig;
+    logs = _logs ?? [];
+    groupedLogs = _groupedLogs ?? {};
+    abis = _abis;
+  }
+
+  return decodeCallResult({
     callResult,
-    (scriptResult: ScriptResult) => {
+    scriptResultDecoder: (scriptResult: ScriptResult) => {
       if (scriptResult.returnReceipt.type === ReceiptType.Revert) {
         throw new FuelError(
           ErrorCode.SCRIPT_REVERTED,
@@ -178,8 +290,8 @@ export function callResultToInvocationResult<TReturn>(
     },
     logs,
     groupedLogs,
-    abis
-  );
+    abis,
+  });
 }
 
 export type EncodedScriptCall = Uint8Array | { data: Uint8Array; script: Uint8Array };
@@ -266,11 +378,52 @@ export class ScriptRequest<TData = void, TResult = void> {
   /**
    * Decodes the result of a script call.
    *
-   * @param callResult - The CallResult from the script call.
+   * @param callResultOrParams - The CallResult from the script call.
    * @param logs - Optional logs associated with the decoding.
+   * @param groupedLogs - Optional grouped logs associated with the decoding.
+   * @param abis - Optional abis associated with the decoding.
+   * @returns The decoded result.
+   *
+   * @deprecated Use the object-based approach for parameters instead.
+   */
+  decodeCallResult(
+    callResult: CallResult,
+    logs?: Array<any>,
+    groupedLogs?: DecodedLogs['groupedLogs'],
+    abis?: JsonAbisFromAllCalls
+  ): TResult;
+
+  /**
+   * Decodes the result of a script call.
+   *
+   * @param params - The parameters to decode the CallResult.
    * @returns The decoded result.
    */
-  decodeCallResult(callResult: CallResult, logs: Array<any> = []): TResult {
-    return decodeCallResult(callResult, this.scriptResultDecoder, logs);
+  decodeCallResult(params: Omit<DecodeCallResultParams<TResult>, 'scriptResultDecoder'>): TResult;
+
+  decodeCallResult(
+    callResultOrParams: CallResult | Omit<DecodeCallResultParams<TResult>, 'scriptResultDecoder'>,
+    _logs?: Array<any>,
+    _groupedLogs?: DecodedLogs['groupedLogs'],
+    _abis?: JsonAbisFromAllCalls
+  ): TResult {
+    let callResult: CallResult;
+    let logs: Array<any>;
+    let groupedLogs: DecodedLogs['groupedLogs'];
+    let abis: JsonAbisFromAllCalls | undefined;
+
+    if (typeof callResultOrParams === 'object' && 'callResult' in callResultOrParams) {
+      callResult = callResultOrParams.callResult as CallResult;
+      logs = callResultOrParams.logs ?? [];
+      groupedLogs = callResultOrParams.groupedLogs ?? {};
+      abis = callResultOrParams.abis;
+    } else {
+      callResult = callResultOrParams as CallResult;
+      logs = _logs ?? [];
+      groupedLogs = _groupedLogs ?? {};
+      abis = _abis;
+    }
+
+    return decodeCallResult(callResult, this.scriptResultDecoder, logs, groupedLogs, abis);
   }
 }
