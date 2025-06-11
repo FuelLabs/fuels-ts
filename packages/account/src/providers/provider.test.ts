@@ -247,8 +247,8 @@ describe('Provider', () => {
           id: '0x1234567890abcdef',
           rawPayload: MOCK_TX_UNKNOWN_RAW_PAYLOAD, // Unknown transaction type
         },
-      }
-    })
+      },
+    });
     const mockProvider = new Provider(provider.url, {
       fetch: getCustomFetch('getTransaction', expectedBody),
     });
@@ -297,8 +297,8 @@ describe('Provider', () => {
             endCursor: null,
           },
         },
-      }
-    })
+      },
+    });
 
     // Create a mock provider with custom getTransactions operation
     const mockProvider = new Provider(nodeProvider.url, {
@@ -480,7 +480,10 @@ describe('Provider', () => {
     const providerUrl = providerForUrl.url;
 
     const provider = new Provider(providerUrl, {
-      fetch: getCustomFetch('getVersion', JSON.stringify({ data: { nodeInfo: { nodeVersion: '0.30.0' } } })),
+      fetch: getCustomFetch(
+        'getVersion',
+        JSON.stringify({ data: { nodeInfo: { nodeVersion: '0.30.0' } } })
+      ),
     });
 
     expect(await provider.getVersion()).toEqual('0.30.0');
@@ -519,7 +522,10 @@ describe('Provider', () => {
     fetchChainAndNodeInfo.mockRestore();
 
     await provider.connect(providerUrl, {
-      fetch: getCustomFetch('getVersion', JSON.stringify({ data: { nodeInfo: { nodeVersion: '0.30.0' } } })),
+      fetch: getCustomFetch(
+        'getVersion',
+        JSON.stringify({ data: { nodeInfo: { nodeVersion: '0.30.0' } } })
+      ),
     });
 
     expect(await provider.getVersion()).toEqual('0.30.0');
@@ -855,10 +861,10 @@ describe('Provider', () => {
 
     const provider = new Provider(nodeProvider.url, {
       fetch: async (url, options) =>
-        getCustomFetch('getMessageProof', JSON.stringify({ data: { messageProof: MESSAGE_PROOF_RAW_RESPONSE } }))(
-          url,
-          options
-        ),
+        getCustomFetch(
+          'getMessageProof',
+          JSON.stringify({ data: { messageProof: MESSAGE_PROOF_RAW_RESPONSE } })
+        )(url, options),
     });
 
     const transactionId = '0x79c54219a5c910979e5e4c2728df163fa654a1fe03843e6af59daa2c3fcd42ea';
@@ -878,7 +884,10 @@ describe('Provider', () => {
 
     const provider = new Provider(nodeProvider.url, {
       fetch: async (url, options) =>
-        getCustomFetch('getMessageStatus', JSON.stringify({ data: { messageStatus: messageStatusResponse } }))(url, options),
+        getCustomFetch(
+          'getMessageStatus',
+          JSON.stringify({ data: { messageStatus: messageStatusResponse } })
+        )(url, options),
     });
     const messageStatus = await provider.getMessageStatus(
       '0x0000000000000000000000000000000000000000000000000000000000000008'
@@ -2652,6 +2661,137 @@ describe('Provider', () => {
     );
 
     vi.restoreAllMocks();
+  });
+
+  describe('Non-populated response body', () => {
+    // Reset back to default
+    afterAll(() => {
+      Provider.ENABLE_RPC_CONSISTENCY = true;
+    });
+
+    describe('ENABLE_RPC_CONSISTENCY = false', () => {
+      beforeAll(() => {
+        Provider.ENABLE_RPC_CONSISTENCY = false;
+      });
+
+      it(
+        'should not fall over if the response body is null [non-subscription]',
+        { timeout: 20000 },
+        async () => {
+          using launched = await setupTestProviderAndWallets();
+          const {
+            provider: { url },
+          } = launched;
+          const provider = new Provider(url, {
+            fetch: getCustomFetch('estimateGasPrice', null),
+          });
+
+          await expectToThrowFuelError(() => provider.estimateGasPrice(10), {
+            code: ErrorCode.RESPONSE_BODY_EMPTY,
+            message: 'The response from the server is missing the body',
+            metadata: {
+              timestamp: expect.any(String),
+              request: expect.any(Object),
+              response: expect.any(Object),
+            },
+          });
+        }
+      );
+
+      it(
+        'should not fall over if the response body is null [subscription]',
+        { timeout: 20000 },
+        async () => {
+          using launched = await setupTestProviderAndWallets();
+          const {
+            provider: { url },
+          } = launched;
+          const provider = new Provider(url, {
+            fetch: getCustomFetch('submitAndAwaitStatus', null),
+          });
+
+          const request = new ScriptTransactionRequest();
+
+          await expectToThrowFuelError(
+            () =>
+              provider.operations.submitAndAwaitStatus({
+                encodedTransaction: hexlify(request.toTransactionBytes()),
+              }),
+            {
+              code: ErrorCode.RESPONSE_BODY_EMPTY,
+              message: 'The response from the server is missing the body',
+              metadata: {
+                timestamp: expect.any(String),
+                request: expect.any(Object),
+                response: expect.any(Object),
+              },
+            }
+          );
+        }
+      );
+    });
+
+    describe('ENABLE_RPC_CONSISTENCY = true', () => {
+      beforeAll(() => {
+        Provider.ENABLE_RPC_CONSISTENCY = true;
+      });
+
+      it(
+        'should not fall over if the response body is null [non-subscription]',
+        { timeout: 20000 },
+        async () => {
+          using launched = await setupTestProviderAndWallets();
+          const {
+            provider: { url },
+          } = launched;
+          const provider = new Provider(url, {
+            fetch: getCustomFetch('estimateGasPrice', null),
+          });
+
+          await expectToThrowFuelError(() => provider.estimateGasPrice(10), {
+            code: ErrorCode.RESPONSE_BODY_EMPTY,
+            message: 'The response from the server is missing the body',
+            metadata: {
+              timestamp: expect.any(String),
+              request: expect.any(Object),
+              response: expect.any(Object),
+            },
+          });
+        }
+      );
+
+      it(
+        'should not fall over if the response body is null [subscription]',
+        { timeout: 20000 },
+        async () => {
+          using launched = await setupTestProviderAndWallets();
+          const {
+            provider: { url },
+          } = launched;
+          const provider = new Provider(url, {
+            fetch: getCustomFetch('submitAndAwaitStatus', null),
+          });
+
+          const request = new ScriptTransactionRequest();
+
+          await expectToThrowFuelError(
+            () =>
+              provider.operations.submitAndAwaitStatus({
+                encodedTransaction: hexlify(request.toTransactionBytes()),
+              }),
+            {
+              code: ErrorCode.RESPONSE_BODY_EMPTY,
+              message: 'The response from the server is missing the body',
+              metadata: {
+                timestamp: expect.any(String),
+                request: expect.any(Object),
+                response: expect.any(Object),
+              },
+            }
+          );
+        }
+      );
+    });
   });
 
   describe('Waiting for transaction statuses', () => {
