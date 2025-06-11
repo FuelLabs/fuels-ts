@@ -13,6 +13,13 @@ inputs:
     description: "The Vercel project ID"
     type: string
     required: true
+  environment:
+    description: "The Vercel environment to deploy to"
+    type: choice
+    options:
+    - preview
+    - production
+    default: preview
 
 outputs:
   deployment-url:
@@ -26,7 +33,7 @@ runs:
       env:
         VERCEL_PROJECT_ID: ${{ inputs.project-id }}
       shell: bash
-      run: vercel pull --yes --environment=preview --token=${{ inputs.token }}
+      run: vercel pull --yes --environment=${{ input.environment }} --token=${{ inputs.token }}
 
     - name: Build Project Artifacts
       env:
@@ -39,4 +46,4 @@ runs:
       env:
         VERCEL_PROJECT_ID: ${{ inputs.project-id }}
       shell: bash
-      run: echo "deployment-url=$(vercel deploy --prebuilt --token=${{ inputs.token }})" >> $GITHUB_OUTPUT
+      run: echo "deployment-url=$(vercel deploy ${{ input.environment === 'production' && '--prod' || '' }} --prebuilt --token=${{ inputs.token }})" >> $GITHUB_OUTPUT
