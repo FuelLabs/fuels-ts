@@ -1116,7 +1116,11 @@ describe('Provider', () => {
     );
 
     const chainId = await provider.getChainId();
-    const response = new TransactionResponse('invalid transaction id', provider, chainId);
+    const response = new TransactionResponse({
+      transactionRequestOrId: 'invalid transaction id',
+      provider,
+      chainId,
+    });
 
     await expectToThrowFuelError(() => response.waitForResult(), {
       code: FuelError.CODES.INVALID_REQUEST,

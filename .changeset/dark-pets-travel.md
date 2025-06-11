@@ -1,4 +1,0 @@
----
----
-
-chore: update CODEOWNERS

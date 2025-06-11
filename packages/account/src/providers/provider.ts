@@ -1163,7 +1163,13 @@ export default class Provider {
     );
 
     const chainId = await this.getChainId();
-    return new TransactionResponse(transactionRequest, this, chainId, abis, subscription);
+    return new TransactionResponse({
+      transactionRequestOrId: transactionRequest,
+      provider: this,
+      chainId,
+      abis,
+      submitAndAwaitSubscription: subscription,
+    });
   }
 
   /**
@@ -2561,7 +2567,11 @@ export default class Provider {
 
   async getTransactionResponse(transactionId: string): Promise<TransactionResponse> {
     const chainId = await this.getChainId();
-    return new TransactionResponse(transactionId, this, chainId);
+    return new TransactionResponse({
+      transactionRequestOrId: transactionId,
+      provider: this,
+      chainId,
+    });
   }
 
   /**
@@ -2626,6 +2636,7 @@ export default class Provider {
   ): FuelError {
     let logs: DecodedLogs['logs'] = [];
     let groupedLogs: DecodedLogs['groupedLogs'] = {};
+    let abis: JsonAbisFromAllCalls | undefined;
 
     if (transactionRequest.type === TransactionType.Script && transactionRequest.abis) {
       ({ logs, groupedLogs } = getAllDecodedLogs({
@@ -2633,6 +2644,8 @@ export default class Provider {
         mainAbi: transactionRequest.abis.main,
         externalAbis: transactionRequest.abis.otherContractsAbis,
       }));
+
+      abis = transactionRequest.abis;
     }
 
     return extractTxError({
@@ -2640,6 +2653,7 @@ export default class Provider {
       groupedLogs,
       receipts,
       statusReason: reason,
+      abis,
     });
   }
 
