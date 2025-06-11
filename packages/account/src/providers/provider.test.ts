@@ -45,16 +45,13 @@ import { serializeChain, serializeNodeInfo, serializeProviderCache } from './uti
 import type { ProviderCacheJson } from './utils/serialization';
 
 const getCustomFetch =
-  (expectedOperationName: string, expectedResponse: object) =>
+  (expectedOperationName: string, expectedBody?: BodyInit | null) =>
   async (url: string, options: RequestInit | undefined) => {
     const graphqlRequest = JSON.parse(options?.body as string);
     const { operationName } = graphqlRequest;
 
     if (operationName === expectedOperationName) {
-      const responseText = JSON.stringify({
-        data: expectedResponse,
-      });
-      const response = Promise.resolve(new Response(responseText, options));
+      const response = Promise.resolve(new Response(expectedBody, options));
 
       return response;
     }
@@ -244,13 +241,16 @@ describe('Provider', () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
-    const mockProvider = new Provider(provider.url, {
-      fetch: getCustomFetch('getTransaction', {
+    const expectedBody = JSON.stringify({
+      data: {
         transaction: {
           id: '0x1234567890abcdef',
           rawPayload: MOCK_TX_UNKNOWN_RAW_PAYLOAD, // Unknown transaction type
         },
-      }),
+      }
+    })
+    const mockProvider = new Provider(provider.url, {
+      fetch: getCustomFetch('getTransaction', expectedBody),
     });
 
     // Spy on console.warn
@@ -273,9 +273,8 @@ describe('Provider', () => {
     using launched = await setupTestProviderAndWallets();
     const { provider: nodeProvider } = launched;
 
-    // Create a mock provider with custom getTransactions operation
-    const mockProvider = new Provider(nodeProvider.url, {
-      fetch: getCustomFetch('getTransactions', {
+    const expectedBody = JSON.stringify({
+      data: {
         transactions: {
           edges: [
             {
@@ -298,7 +297,12 @@ describe('Provider', () => {
             endCursor: null,
           },
         },
-      }),
+      }
+    })
+
+    // Create a mock provider with custom getTransactions operation
+    const mockProvider = new Provider(nodeProvider.url, {
+      fetch: getCustomFetch('getTransactions', expectedBody),
     });
 
     // Spy on console.warn
@@ -476,7 +480,7 @@ describe('Provider', () => {
     const providerUrl = providerForUrl.url;
 
     const provider = new Provider(providerUrl, {
-      fetch: getCustomFetch('getVersion', { nodeInfo: { nodeVersion: '0.30.0' } }),
+      fetch: getCustomFetch('getVersion', JSON.stringify({ data: { nodeInfo: { nodeVersion: '0.30.0' } } })),
     });
 
     expect(await provider.getVersion()).toEqual('0.30.0');
@@ -515,7 +519,7 @@ describe('Provider', () => {
     fetchChainAndNodeInfo.mockRestore();
 
     await provider.connect(providerUrl, {
-      fetch: getCustomFetch('getVersion', { nodeInfo: { nodeVersion: '0.30.0' } }),
+      fetch: getCustomFetch('getVersion', JSON.stringify({ data: { nodeInfo: { nodeVersion: '0.30.0' } } })),
     });
 
     expect(await provider.getVersion()).toEqual('0.30.0');
@@ -851,7 +855,7 @@ describe('Provider', () => {
 
     const provider = new Provider(nodeProvider.url, {
       fetch: async (url, options) =>
-        getCustomFetch('getMessageProof', { messageProof: MESSAGE_PROOF_RAW_RESPONSE })(
+        getCustomFetch('getMessageProof', JSON.stringify({ data: { messageProof: MESSAGE_PROOF_RAW_RESPONSE } }))(
           url,
           options
         ),
@@ -874,7 +878,7 @@ describe('Provider', () => {
 
     const provider = new Provider(nodeProvider.url, {
       fetch: async (url, options) =>
-        getCustomFetch('getMessageStatus', { messageStatus: messageStatusResponse })(url, options),
+        getCustomFetch('getMessageStatus', JSON.stringify({ data: { messageStatus: messageStatusResponse } }))(url, options),
     });
     const messageStatus = await provider.getMessageStatus(
       '0x0000000000000000000000000000000000000000000000000000000000000008'
