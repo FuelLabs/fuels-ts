@@ -1152,7 +1152,13 @@ export default class Provider {
     );
 
     const chainId = await this.getChainId();
-    return new TransactionResponse(transactionRequest, this, chainId, abis, subscription);
+    return new TransactionResponse({
+      transactionRequestOrId: transactionRequest,
+      provider: this,
+      chainId,
+      abis,
+      submitAndAwaitSubscription: subscription,
+    });
   }
 
   /**
@@ -2550,7 +2556,11 @@ export default class Provider {
 
   async getTransactionResponse(transactionId: string): Promise<TransactionResponse> {
     const chainId = await this.getChainId();
-    return new TransactionResponse(transactionId, this, chainId);
+    return new TransactionResponse({
+      transactionRequestOrId: transactionId,
+      provider: this,
+      chainId,
+    });
   }
 
   /**
