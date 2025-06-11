@@ -18,6 +18,7 @@ inputs:
     type: choice
     options:
     - preview
+    - nightly
     - production
     default: preview
 
