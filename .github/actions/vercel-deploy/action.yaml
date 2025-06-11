@@ -1,0 +1,50 @@
+name: "Vercel Deploy"
+
+inputs:
+  token:
+    description: "The Vercel authentication token"
+    type: string
+    required: true
+  # org-id:
+  #   description: "The Vercel organization ID"
+  #   type: string
+  #   required: true  
+  project-id:
+    description: "The Vercel project ID"
+    type: string
+    required: true
+  environment:
+    description: "The Vercel environment to deploy to"
+    type: choice
+    options:
+    - preview
+    - nightly
+    - production
+    default: preview
+
+outputs:
+  deployment-url:
+    description: "The Vercel deployment URL"
+    value: ${{ steps.deployment.outputs.deployment-url }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Pull Vercel Environment Information
+      env:
+        VERCEL_PROJECT_ID: ${{ inputs.project-id }}
+      shell: bash
+      run: vercel pull --yes --environment=${{ inputs.environment }} --token=${{ inputs.token }}
+
+    - name: Build Project Artifacts
+      env:
+        VERCEL_PROJECT_ID: ${{ inputs.project-id }}
+      shell: bash
+      run: vercel build --yes --token=${{ inputs.token }}
+
+    - name: Publish `docs`
+      id: deployment
+      env:
+        VERCEL_PROJECT_ID: ${{ inputs.project-id }}
+      shell: bash
+      run: echo "deployment-url=$(vercel deploy ${{ inputs.environment == 'production' && '--prod' || '' }} --prebuilt --token=${{ inputs.token }})" >> $GITHUB_OUTPUT
