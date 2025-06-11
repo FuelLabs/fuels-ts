@@ -33,7 +33,7 @@ runs:
       env:
         VERCEL_PROJECT_ID: ${{ inputs.project-id }}
       shell: bash
-      run: vercel pull --yes --environment=${{ input.environment }} --token=${{ inputs.token }}
+      run: vercel pull --yes --environment=${{ inputs.environment }} --token=${{ inputs.token }}
 
     - name: Build Project Artifacts
       env:
@@ -46,4 +46,4 @@ runs:
       env:
         VERCEL_PROJECT_ID: ${{ inputs.project-id }}
       shell: bash
-      run: echo "deployment-url=$(vercel deploy ${{ input.environment === 'production' && '--prod' || '' }} --prebuilt --token=${{ inputs.token }})" >> $GITHUB_OUTPUT
+      run: echo "deployment-url=$(vercel deploy ${{ inputs.environment === 'production' && '--prod' || '' }} --prebuilt --token=${{ inputs.token }})" >> $GITHUB_OUTPUT
