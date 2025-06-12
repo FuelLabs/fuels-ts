@@ -1,23 +1,47 @@
 #!/usr/bin/env node
-import { execSync } from 'child_process';
+import type { ChildProcessWithoutNullStreams } from 'child_process';
+import { execSync, spawn } from 'child_process';
 import { globSync } from 'glob';
 
-const { log } = console;
+const { error } = console;
 
-(() => {
-  const mdFiles = globSync('**/*.md', {
-    ignore: ['**/node_modules/**', 'apps/demo-*/**', '.changeset/**', '**/CHANGELOG.md'],
+let docsApi: ChildProcessWithoutNullStreams;
+let exitCode = 0;
+
+// eslint-disable-next-line no-void
+void (async () => {
+  docsApi = spawn(`pnpm vite preview --port 9876 --outDir apps/docs-api/src/api`, {
+    shell: true,
   });
 
-  // TODO: Stop ignoring doc links in `link-check.config.json`
-  // The above requires this to be merged and deployed:
-  //  - https://github.com/FuelLabs/fuels-ts/pull/3500
-  try {
-    execSync(`pnpm markdown-link-check -q -c ./link-check.config.json ${mdFiles.join(' ')}`, {
-      stdio: 'inherit',
+  await new Promise((resolve) => {
+    docsApi.stdout.on('data', () => {
+      resolve(undefined);
     });
-  } catch {
-    log('Some files have broken links. Please fix them.');
-    process.exit(1);
-  }
-})();
+  });
+
+  const mdFiles = globSync('**/*.md', {
+    ignore: [
+      '**/node_modules/**',
+      'apps/demo-*/**',
+      '.changeset/**',
+      '**/CHANGELOG.md',
+      'internal/**',
+    ],
+  });
+
+  execSync(`pnpm markdown-link-check -q -c ./link-check.config.json ${mdFiles.join(' ')}`, {
+    stdio: 'inherit',
+  });
+})()
+  .catch((e) => {
+    error('Some files have broken links. Please fix them.');
+    error(e);
+    exitCode = 1;
+  })
+  .finally(() => {
+    if (docsApi.pid) {
+      process.kill(docsApi.pid);
+    }
+    process.exit(exitCode);
+  });

@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/require-await */
 import { FuelError } from '@fuel-ts/errors';
+import type { HashableMessage } from '@fuel-ts/hasher';
 import { EventEmitter } from 'events';
 
 import type { Asset } from '../assets/types';
-import type { TransactionRequestLike } from '../providers';
+import type { TransactionRequest, TransactionRequestLike, TransactionResponse } from '../providers';
 
 import { FuelConnectorEventTypes } from './types';
 import type {
@@ -37,17 +38,21 @@ interface Connector {
   disconnect(): Promise<boolean>;
   // #endregion fuel-connector-method-disconnect
   // #region fuel-connector-method-signMessage
-  signMessage(address: string, message: string): Promise<string>;
+  signMessage(address: string, message: HashableMessage): Promise<string>;
   // #endregion fuel-connector-method-signMessage
   // #region fuel-connector-method-signTransaction
-  signTransaction(address: string, transaction: TransactionRequestLike): Promise<string>;
+  signTransaction(
+    address: string,
+    transaction: TransactionRequestLike,
+    params?: FuelConnectorSendTxParams
+  ): Promise<string | TransactionRequest>;
   // #endregion fuel-connector-method-signTransaction
   // #region fuel-connector-method-sendTransaction
   sendTransaction(
     address: string,
     transaction: TransactionRequestLike,
     params?: FuelConnectorSendTxParams
-  ): Promise<string>;
+  ): Promise<string | TransactionResponse>;
   // #endregion fuel-connector-method-sendTransaction
   // #region fuel-connector-method-currentAccount
   currentAccount(): Promise<string | null>;
@@ -171,7 +176,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    *
    * @returns Message signature
    */
-  async signMessage(_address: string, _message: string): Promise<string> {
+  async signMessage(_address: string, _message: HashableMessage): Promise<string> {
     throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
@@ -184,7 +189,11 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    *
    * @returns Transaction signature
    */
-  async signTransaction(_address: string, _transaction: TransactionRequestLike): Promise<string> {
+  async signTransaction(
+    _address: string,
+    _transaction: TransactionRequestLike,
+    _params?: FuelConnectorSendTxParams
+  ): Promise<string | TransactionRequest> {
     throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
@@ -199,13 +208,13 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @param address - The address to sign the transaction
    * @param transaction - The transaction to send
    * @param params - Optional parameters to send the transaction
-   * @returns The transaction id
+   * @returns The transaction id or transaction response
    */
   async sendTransaction(
     _address: string,
     _transaction: TransactionRequestLike,
     _params?: FuelConnectorSendTxParams
-  ): Promise<string> {
+  ): Promise<string | TransactionResponse> {
     throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 

@@ -8,9 +8,15 @@ import { configureLogging, debug, error, log, loggingConfig, warn } from './logg
  */
 describe('logger', () => {
   const loggingBackup = structuredClone(loggingConfig);
+
   beforeEach(() => {
     configureLogging(loggingBackup);
   });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('should configure logging', () => {
     configureLogging({ isLoggingEnabled: true, isDebugEnabled: false });
     expect(loggingConfig.isLoggingEnabled).toEqual(true);

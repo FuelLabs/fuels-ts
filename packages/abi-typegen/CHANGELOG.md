@@ -1,5 +1,104 @@
 # @fuel-ts/abi-typegen
 
+## 0.101.2
+
+### Patch Changes
+
+- 8c19d93: chore: support Node 24 - depreciate Node 18
+- bfb62ad: feat: implement support for new ABI error codes
+- 0d71065: chore: Upgraded `forc` to `0.66.8`
+- Updated dependencies [8c19d93]
+- Updated dependencies [bfb62ad]
+- Updated dependencies [0d71065]
+  - @fuel-ts/versions@0.101.2
+  - @fuel-ts/errors@0.101.2
+  - @fuel-ts/utils@0.101.2
+
+## 0.101.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.101.1
+- @fuel-ts/utils@0.101.1
+- @fuel-ts/versions@0.101.1
+
+## 0.101.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.101.0
+- @fuel-ts/utils@0.101.0
+- @fuel-ts/versions@0.101.0
+
+## 0.100.6
+
+### Patch Changes
+
+- @fuel-ts/errors@0.100.6
+- @fuel-ts/utils@0.100.6
+- @fuel-ts/versions@0.100.6
+
+## 0.100.5
+
+### Patch Changes
+
+- @fuel-ts/errors@0.100.5
+- @fuel-ts/utils@0.100.5
+- @fuel-ts/versions@0.100.5
+
+## 0.100.4
+
+### Patch Changes
+
+- Updated dependencies [efcce41]
+- Updated dependencies [5a57b97]
+- Updated dependencies [f534210]
+- Updated dependencies [dbed315]
+  - @fuel-ts/errors@0.100.4
+  - @fuel-ts/versions@0.100.4
+  - @fuel-ts/utils@0.100.4
+
+## 0.100.3
+
+### Patch Changes
+
+- @fuel-ts/errors@0.100.3
+- @fuel-ts/utils@0.100.3
+- @fuel-ts/versions@0.100.3
+
+## 0.100.2
+
+### Patch Changes
+
+- Updated dependencies [e909d54]
+  - @fuel-ts/errors@0.100.2
+  - @fuel-ts/utils@0.100.2
+  - @fuel-ts/versions@0.100.2
+
+## 0.100.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.100.1
+- @fuel-ts/utils@0.100.1
+- @fuel-ts/versions@0.100.1
+
+## 0.100.0
+
+### Patch Changes
+
+- f254f3a: chore: upgraded various dependencies
+- 6f32228: fix: favour `.ts` over `.d.ts` files in `@fuel-ts/abi-typegen`
+- Updated dependencies [1277ae6]
+- Updated dependencies [b42f056]
+- Updated dependencies [6eb113c]
+- Updated dependencies [f41887f]
+- Updated dependencies [521292a]
+- Updated dependencies [ff97a6e]
+  - @fuel-ts/utils@0.100.0
+  - @fuel-ts/versions@0.100.0
+  - @fuel-ts/errors@0.100.0
+
 ## 0.99.0
 
 ### Patch Changes

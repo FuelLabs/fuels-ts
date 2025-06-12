@@ -2,8 +2,8 @@
   "aliveStatusCodes": [200, 206],
   "timeout": "10s",
   "retryOn429": true,
-  "retryCount": 2,
-  "fallbackRetryDelay": "5s",
+  "retryCount": 10,
+  "fallbackRetryDelay": "10s",
   "ignorePatterns": [
     {
       "pattern": "^http://localhost:3000"
@@ -13,6 +13,19 @@
     },
     {
       "pattern": "https://explorer-indexer-testnet.fuel.network"
+    },
+    {
+      "pattern": "https://crates.io/crates/fuel-asm"
+    }
+  ],
+  "replacementPatterns": [
+    {
+      "pattern": "DOCS_API_URL",
+      "replacement": "http://localhost:9876"
+    },
+    {
+      "pattern": "^modules/_fuel_ts",
+      "replacement": "http://localhost:9876/modules/_fuel_ts"
     }
   ]
 }

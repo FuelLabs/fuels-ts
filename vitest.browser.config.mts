@@ -1,10 +1,10 @@
 import { nodePolyfills } from "vite-plugin-node-polyfills";
-import type { UserConfig } from "vitest/config";
+import type { ViteUserConfig } from "vitest/config";
 import { mergeConfig, defineProject } from "vitest/config";
 
 import sharedConfig from "./vitest.shared.config.mts";
 
-const config: UserConfig = {
+const config: ViteUserConfig = {
   plugins: [
     nodePolyfills({
       globals: {
@@ -36,7 +36,17 @@ const config: UserConfig = {
       "@vitest/coverage-istanbul",
       "chromium-bidi",
     ],
-    include: ["events", "timers/promises"],
+    include: [
+      "events",
+      "timers/promises",
+      "vite-plugin-node-polyfills/shims/buffer",
+      "vite-plugin-node-polyfills/shims/global",
+      "vite-plugin-node-polyfills/shims/process",
+      "memfs",
+      "path",
+      "os",
+      "crypto",
+    ],
     entries: ["**/*.test.ts"],
   },
   test: {
@@ -51,7 +61,14 @@ const config: UserConfig = {
       provider: "playwright",
       headless: true,
       enabled: true,
-      name: "chromium",
+      // Avoids taking screenshots
+      screenshotFailures: false,
+      instances: [
+        {
+          browser: "chromium",
+          headless: true,
+        },
+      ],
     },
   },
 };

@@ -8,6 +8,8 @@ import {
 } from '@fuel-ts/abi-coder';
 import type {
   CallResult,
+  DecodedLogs,
+  JsonAbisFromAllCalls,
   TransactionResultCallReceipt,
   TransactionResultReturnDataReceipt,
   TransactionResultReturnReceipt,
@@ -141,8 +143,11 @@ const scriptResultDecoder = (contractId: Address) => (result: ScriptResult) => {
 export const decodeContractCallScriptResult = (
   callResult: CallResult,
   contractId: Address,
-  logs: Array<any> = []
-): Uint8Array[] => decodeCallResult(callResult, scriptResultDecoder(contractId), logs);
+  logs: DecodedLogs<any>['logs'] = [],
+  groupedLogs: DecodedLogs<any>['groupedLogs'] = {},
+  abis?: JsonAbisFromAllCalls
+): Uint8Array[] =>
+  decodeCallResult(callResult, scriptResultDecoder(contractId), logs, groupedLogs, abis);
 
 const getCallInstructionsLength = (contractCalls: ContractCall[]): number =>
   contractCalls.reduce(

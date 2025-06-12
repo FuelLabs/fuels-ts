@@ -6,6 +6,9 @@ inputs:
   pnpm-version:
     description: "PNPM version"
     default: 9.4.0
+  registry-url:
+    description: "Registry URL"
+    default: "https://registry.npmjs.org"
 runs:
   using: "composite"
   steps:
@@ -19,10 +22,16 @@ runs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
-        registry-url: "https://registry.npmjs.org"
+        registry-url: ${{ inputs.registry-url }}
 
     - name: Setup PNPM
       uses: pnpm/action-setup@v4
       with:
         version: ${{ inputs.pnpm-version }}
         run_install: true
+
+    - name: Use latest corepack
+      shell: bash
+      run: |
+        npm install -g corepack@latest
+        corepack enable

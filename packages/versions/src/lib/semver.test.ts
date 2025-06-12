@@ -1,4 +1,4 @@
-import { eq, gt, majorEq, minorEq, patchEq } from './semver';
+import { eq, gt, gte, majorEq, minorEq, patchEq } from './semver';
 
 /**
  * @group node
@@ -39,5 +39,14 @@ describe('semver', () => {
     expect(eq('1.2.3', '1.3.3')).toBe(false);
     expect(eq('1.2.3', '1.2.2')).toBe(false);
     expect(eq('1.2.3', '1.2.4')).toBe(false);
+  });
+  test('gte', () => {
+    expect(gte('1.2.3', '1.2.3')).toBe(true);
+    expect(gte('1.2.3', '0.2.3')).toBe(true);
+    expect(gte('1.2.3', '2.2.3')).toBe(false);
+    expect(gte('1.2.3', '1.1.3')).toBe(true);
+    expect(gte('1.2.3', '1.3.3')).toBe(false);
+    expect(gte('1.2.3', '1.2.2')).toBe(true);
+    expect(gte('1.2.3', '1.2.4')).toBe(false);
   });
 });

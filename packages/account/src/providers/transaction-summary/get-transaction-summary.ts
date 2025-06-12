@@ -3,20 +3,18 @@ import { bn } from '@fuel-ts/math';
 import { TransactionCoder } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
 
-import type {
-  GqlGetTransactionsByOwnerQueryVariables,
-  GqlReceiptFragment,
-} from '../__generated__/operations';
+import type { GqlGetTransactionsByOwnerQueryVariables } from '../__generated__/operations';
+import { TRANSACTIONS_PAGE_SIZE_LIMIT } from '../provider';
 import type Provider from '../provider';
-import { TRANSACTIONS_PAGE_SIZE_LIMIT, type PageInfo } from '../provider';
+import type { TransactionReceiptJson, PageInfo } from '../provider';
 import type { TransactionRequest } from '../transaction-request';
 import type { TransactionResult } from '../transaction-response';
+import { deserializeReceipt } from '../utils/serialization';
 import { validatePaginationArgs } from '../utils/validate-pagination-args';
 
 import { assembleTransactionSummary } from './assemble-transaction-summary';
-import { processGqlReceipt } from './receipt';
 import { getTotalFeeFromStatus } from './status';
-import type { AbiMap, TransactionSummary } from './types';
+import type { AbiMap, GraphqlTransactionStatus, TransactionSummary } from './types';
 /** @hidden */
 export interface GetTransactionSummaryParams {
   id: string;
@@ -45,13 +43,13 @@ export async function getTransactionSummary<TTransactionType = void>(
     0
   );
 
-  let txReceipts: GqlReceiptFragment[] = [];
+  let txReceipts: TransactionReceiptJson[] = [];
 
   if (gqlTransaction?.status && 'receipts' in gqlTransaction.status) {
     txReceipts = gqlTransaction.status.receipts;
   }
 
-  const receipts = txReceipts.map(processGqlReceipt);
+  const receipts = txReceipts.map(deserializeReceipt);
 
   const {
     consensusParameters: {
@@ -183,20 +181,20 @@ export async function getTransactionsSummaries(
 
     const [decodedTransaction] = new TransactionCoder().decode(arrayify(rawPayload), 0);
 
-    let txReceipts: GqlReceiptFragment[] = [];
+    let txReceipts: TransactionReceiptJson[] = [];
 
     if (gqlTransaction?.status && 'receipts' in gqlTransaction.status) {
       txReceipts = gqlTransaction.status.receipts;
     }
 
-    const receipts = txReceipts.map(processGqlReceipt);
+    const receipts = txReceipts.map(deserializeReceipt);
 
     const transactionSummary = assembleTransactionSummary({
       id,
       receipts,
       transaction: decodedTransaction,
       transactionBytes: arrayify(rawPayload),
-      gqlTransactionStatus: status,
+      gqlTransactionStatus: status as GraphqlTransactionStatus,
       abiMap,
       gasPerByte,
       gasPriceFactor,

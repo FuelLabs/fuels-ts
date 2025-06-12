@@ -129,11 +129,9 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
 
   it('should test u8 variable type', async () => {
     using contractInstance = await setupContract();
-    // #region U8
     const { waitForResult } = await contractInstance.functions.echo_u8(3).call();
     const { value } = await waitForResult();
     expect(value).toBe(3);
-    // #endregion U8
   });
 
   it('should test u8 variable type multiple params', async () => {
@@ -702,14 +700,19 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
     using contractInstance = await setupContract();
 
     const { waitForResult } = await contractInstance.functions.produce_logs_variables().call();
-    const { logs } = await waitForResult();
+    const { logs, groupedLogs } = await waitForResult();
 
-    expect(logs[0].toHex()).toEqual(bn(64).toHex());
-    expect(logs[1]).toEqual('0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a');
-    expect(logs[2]).toEqual('Fuel');
-    expect(logs[3]).toEqual([1, 2, 3]);
+    const expectedLogs = [
+      expect.toEqualBn(64),
+      '0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a',
+      'Fuel',
+      [1, 2, 3],
+    ];
+    expect(logs).toStrictEqual(expectedLogs);
+    expect(groupedLogs).toStrictEqual({
+      [contractInstance.id.toB256()]: expectedLogs,
+    });
   });
-
   it('should test native enum [Red->Green]', async () => {
     using contractInstance = await setupContract();
 

@@ -1,6 +1,8 @@
 import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'fs';
+import { globSync } from 'glob';
 import { join, basename } from 'path';
 
+import type { FuelsConfig } from '../../src';
 import { Commands } from '../../src';
 import { run } from '../../src/run';
 
@@ -18,6 +20,8 @@ export type Paths = {
   contractsDir: string;
   contractsFooDir: string;
   scriptsDir: string;
+  scriptDir: string;
+  predicatesDir: string;
   predicateDir: string;
   fooContractMainPath: string;
   fuelsConfigPath: string;
@@ -47,7 +51,10 @@ export function bootstrapProject(testFilepath: string) {
   const upgradableChunkedContractPath = join(contractsDir, 'upgradable-chunked');
 
   const scriptsDir = join(workspaceDir, 'scripts');
-  const predicateDir = join(workspaceDir, 'predicates');
+  const scriptDir = join(scriptsDir, 'script');
+
+  const predicatesDir = join(workspaceDir, 'predicates');
+  const predicateDir = join(predicatesDir, 'predicate');
 
   const outputDir = join(root, 'output');
   const outputContractsDir = join(outputDir, 'contracts');
@@ -67,6 +74,8 @@ export function bootstrapProject(testFilepath: string) {
     upgradableContractPath,
     upgradableChunkedContractPath,
     scriptsDir,
+    scriptDir,
+    predicatesDir,
     predicateDir,
     fooContractMainPath,
     fuelsConfigPath,
@@ -103,6 +112,7 @@ export type InitParams = BaseParams & {
   build?: boolean;
   privateKey?: string;
   fuelCorePort?: string;
+  providerUrl?: string;
 };
 
 export type BuildParams = BaseParams & {
@@ -112,22 +122,28 @@ export type BuildParams = BaseParams & {
 export async function runInit(params: InitParams) {
   const {
     autoStartFuelCore,
-    contracts,
     output,
-    predicates,
     root,
-    scripts,
     forcPath,
     fuelCorePath,
     workspace,
     privateKey,
     fuelCorePort,
+    providerUrl,
   } = params;
 
   const flag = (
     flags: (string | string[] | undefined)[],
     value?: string | string[] | boolean
   ): string[] => (value ? (flags.flat() as string[]) : []);
+
+  // The OS auto-magically expands glob patterns before passing them to the CLI
+  // We mimic this behavior here, as we by-pass the OS for our tests
+  const expandGlob = (value: undefined | string | string[]) =>
+    value ? globSync(value, { cwd: root }) : undefined;
+  const contracts = expandGlob(params.contracts);
+  const scripts = expandGlob(params.scripts);
+  const predicates = expandGlob(params.predicates);
 
   const flags = [
     flag(['--path', root], root),
@@ -144,12 +160,14 @@ export async function runInit(params: InitParams) {
 
   const command = await runCommand(Commands.init, flags);
 
-  if (privateKey) {
+  if (privateKey || providerUrl) {
     const configPath = join(root, 'fuels.config.ts');
     const config = readFileSync(configPath, 'utf-8');
 
     const search = /(^.*fuelCorePath:.*$)/m;
-    const replace = `$1\n  privateKey: '${privateKey}',`;
+    const privateKeyField = privateKey ? `\n  privateKey: '${privateKey}',` : '';
+    const providerUrlField = providerUrl ? `\n  providerUrl: '${providerUrl}',` : '';
+    const replace = `$1${privateKeyField}${providerUrlField}`;
 
     writeFileSync(configPath, config.replace(search, replace));
   }
@@ -186,4 +204,13 @@ export function resetDiskAndMocks(dirPath: string) {
     rmSync(dirPath, { recursive: true });
   }
   vi.restoreAllMocks();
+}
+
+/**
+ * Loaders
+ */
+export async function loadFuelsConfig(configPath: string): Promise<FuelsConfig> {
+  const configPathWithCacheBust = `${configPath}?update=${Date.now()}`;
+  const { default: fuelsConfig } = await import(configPathWithCacheBust);
+  return fuelsConfig;
 }

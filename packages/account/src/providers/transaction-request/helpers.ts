@@ -2,8 +2,9 @@ import type { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 import { InputType, OutputType } from '@fuel-ts/transactions';
+import { hexlify } from '@fuel-ts/utils';
 
-import type { ExcludeResourcesOption } from '../resource';
+import type { ResourcesIdsToIgnore } from '../provider';
 
 import type {
   TransactionRequestInput,
@@ -44,6 +45,19 @@ export const isRequestInputResourceFromOwner = (
   owner: Address
 ) => getRequestInputResourceOwner(input) === owner.toB256();
 
+/**
+ * @hidden
+ *
+ * Checks if the given `TransactionRequestInput` is a predicate.
+ *
+ * @param input - The `TransactionRequestInput` to check.
+ * @returns `true` if the input is a predicate, otherwise `false`.
+ */
+export const isPredicate = (
+  input: TransactionRequestInput
+): input is Required<CoinTransactionRequestInput | MessageTransactionRequestInput> =>
+  isRequestInputCoinOrMessage(input) && !!input.predicate && hexlify(input.predicate) !== '0x';
+
 export const getAssetAmountInRequestInputs = (
   inputs: TransactionRequestInput[],
   assetId: string,
@@ -74,13 +88,13 @@ export const cacheRequestInputsResources = (inputs: TransactionRequestInput[]) =
     {
       utxos: [],
       messages: [],
-    } as Required<ExcludeResourcesOption>
+    } as Required<ResourcesIdsToIgnore>
   );
 
 export const cacheRequestInputsResourcesFromOwner = (
   inputs: TransactionRequestInput[],
   owner: Address
-): ExcludeResourcesOption =>
+): ResourcesIdsToIgnore =>
   inputs.reduce(
     (acc, input) => {
       if (isRequestInputCoin(input) && input.owner === owner.toB256()) {
@@ -93,7 +107,7 @@ export const cacheRequestInputsResourcesFromOwner = (
     {
       utxos: [],
       messages: [],
-    } as Required<ExcludeResourcesOption>
+    } as Required<ResourcesIdsToIgnore>
   );
 
 /**

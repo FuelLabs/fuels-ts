@@ -1,5 +1,82 @@
 # Change Log
 
+## 0.101.2
+
+### Patch Changes
+
+- 8c19d93: chore: support Node 24 - depreciate Node 18
+- Updated dependencies [8c19d93]
+  - @fuel-ts/crypto@0.101.2
+  - @fuel-ts/utils@0.101.2
+
+## 0.101.1
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.101.1
+- @fuel-ts/utils@0.101.1
+
+## 0.101.0
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.101.0
+- @fuel-ts/utils@0.101.0
+
+## 0.100.6
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.100.6
+- @fuel-ts/utils@0.100.6
+
+## 0.100.5
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.100.5
+- @fuel-ts/utils@0.100.5
+
+## 0.100.4
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.100.4
+- @fuel-ts/utils@0.100.4
+
+## 0.100.3
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.100.3
+- @fuel-ts/utils@0.100.3
+
+## 0.100.2
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.100.2
+- @fuel-ts/utils@0.100.2
+
+## 0.100.1
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.100.1
+- @fuel-ts/utils@0.100.1
+
+## 0.100.0
+
+### Patch Changes
+
+- fc18871: feat: enable arbitrary data signing
+- 6eb113c: chore: upgrade NPM package versions
+- Updated dependencies [1277ae6]
+- Updated dependencies [6eb113c]
+- Updated dependencies [f41887f]
+  - @fuel-ts/utils@0.100.0
+  - @fuel-ts/crypto@0.100.0
+
 ## 0.99.0
 
 ### Patch Changes

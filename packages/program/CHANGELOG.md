@@ -1,5 +1,181 @@
 # Change Log
 
+## 0.101.2
+
+### Patch Changes
+
+- 8c19d93: chore: support Node 24 - depreciate Node 18
+- bfb62ad: feat: implement support for new ABI error codes
+- Updated dependencies [ec2ac46]
+- Updated dependencies [8c19d93]
+- Updated dependencies [bfb62ad]
+  - @fuel-ts/account@0.101.2
+  - @fuel-ts/transactions@0.101.2
+  - @fuel-ts/abi-coder@0.101.2
+  - @fuel-ts/address@0.101.2
+  - @fuel-ts/errors@0.101.2
+  - @fuel-ts/utils@0.101.2
+  - @fuel-ts/math@0.101.2
+
+## 0.101.1
+
+### Patch Changes
+
+- Updated dependencies [52dfa5b]
+  - @fuel-ts/account@0.101.1
+  - @fuel-ts/abi-coder@0.101.1
+  - @fuel-ts/address@0.101.1
+  - @fuel-ts/errors@0.101.1
+  - @fuel-ts/math@0.101.1
+  - @fuel-ts/transactions@0.101.1
+  - @fuel-ts/utils@0.101.1
+
+## 0.101.0
+
+### Minor Changes
+
+- 68df54a: chore!: remove `BaseInvocationScope.getTransactionId()`
+
+### Patch Changes
+
+- e91eb6c: feat: support TX customization at BaseInvocationScope
+- Updated dependencies [388ad98]
+- Updated dependencies [e91eb6c]
+- Updated dependencies [4cbd72c]
+- Updated dependencies [842e0f3]
+  - @fuel-ts/account@0.101.0
+  - @fuel-ts/abi-coder@0.101.0
+  - @fuel-ts/address@0.101.0
+  - @fuel-ts/errors@0.101.0
+  - @fuel-ts/math@0.101.0
+  - @fuel-ts/transactions@0.101.0
+  - @fuel-ts/utils@0.101.0
+
+## 0.100.6
+
+### Patch Changes
+
+- Updated dependencies [303379c]
+  - @fuel-ts/account@0.100.6
+  - @fuel-ts/abi-coder@0.100.6
+  - @fuel-ts/address@0.100.6
+  - @fuel-ts/errors@0.100.6
+  - @fuel-ts/math@0.100.6
+  - @fuel-ts/transactions@0.100.6
+  - @fuel-ts/utils@0.100.6
+
+## 0.100.5
+
+### Patch Changes
+
+- Updated dependencies [0a8b276]
+- Updated dependencies [03b151b]
+- Updated dependencies [416e9e7]
+  - @fuel-ts/account@0.100.5
+  - @fuel-ts/abi-coder@0.100.5
+  - @fuel-ts/address@0.100.5
+  - @fuel-ts/errors@0.100.5
+  - @fuel-ts/math@0.100.5
+  - @fuel-ts/transactions@0.100.5
+  - @fuel-ts/utils@0.100.5
+
+## 0.100.4
+
+### Patch Changes
+
+- efcce41: feat: integrate with new `AssembleTx` GQL end-point
+- 04fc7b5: chore: upgrading `@fuels/vm-asm` package
+- dbed315: chore: upgrade `fuel-core` to `0.43.1`
+- Updated dependencies [efcce41]
+- Updated dependencies [04fc7b5]
+- Updated dependencies [5a57b97]
+- Updated dependencies [f534210]
+- Updated dependencies [ec13d29]
+- Updated dependencies [3bb0eb7]
+- Updated dependencies [dbed315]
+  - @fuel-ts/account@0.100.4
+  - @fuel-ts/errors@0.100.4
+  - @fuel-ts/transactions@0.100.4
+  - @fuel-ts/abi-coder@0.100.4
+  - @fuel-ts/address@0.100.4
+  - @fuel-ts/math@0.100.4
+  - @fuel-ts/utils@0.100.4
+
+## 0.100.3
+
+### Patch Changes
+
+- 5c40eb9: feat: added `groupedLogs`
+- Updated dependencies [5c40eb9]
+- Updated dependencies [e677921]
+  - @fuel-ts/account@0.100.3
+  - @fuel-ts/abi-coder@0.100.3
+  - @fuel-ts/address@0.100.3
+  - @fuel-ts/errors@0.100.3
+  - @fuel-ts/math@0.100.3
+  - @fuel-ts/transactions@0.100.3
+  - @fuel-ts/utils@0.100.3
+
+## 0.100.2
+
+### Patch Changes
+
+- Updated dependencies [e909d54]
+  - @fuel-ts/account@0.100.2
+  - @fuel-ts/errors@0.100.2
+  - @fuel-ts/abi-coder@0.100.2
+  - @fuel-ts/address@0.100.2
+  - @fuel-ts/math@0.100.2
+  - @fuel-ts/transactions@0.100.2
+  - @fuel-ts/utils@0.100.2
+
+## 0.100.1
+
+### Patch Changes
+
+- fdefaba: fix: skip decoding external contract logs without JSON ABI
+- Updated dependencies [fdefaba]
+- Updated dependencies [bb6a76c]
+  - @fuel-ts/account@0.100.1
+  - @fuel-ts/abi-coder@0.100.1
+  - @fuel-ts/address@0.100.1
+  - @fuel-ts/errors@0.100.1
+  - @fuel-ts/math@0.100.1
+  - @fuel-ts/transactions@0.100.1
+  - @fuel-ts/utils@0.100.1
+
+## 0.100.0
+
+### Minor Changes
+
+- f41887f: chore!: upgrade `fuel-core` to `0.41.7`
+
+### Patch Changes
+
+- 6b3753d: feat: support customizing TX request from `BaseInvocationScope`
+- Updated dependencies [3af8692]
+- Updated dependencies [6668336]
+- Updated dependencies [1277ae6]
+- Updated dependencies [68877c3]
+- Updated dependencies [260f64f]
+- Updated dependencies [0fd8a82]
+- Updated dependencies [fc18871]
+- Updated dependencies [6eb113c]
+- Updated dependencies [da33ca5]
+- Updated dependencies [c5c8403]
+- Updated dependencies [f41887f]
+- Updated dependencies [e48b0e9]
+- Updated dependencies [817bf13]
+- Updated dependencies [6d3cafb]
+- Updated dependencies [194e31f]
+  - @fuel-ts/account@0.100.0
+  - @fuel-ts/utils@0.100.0
+  - @fuel-ts/abi-coder@0.100.0
+  - @fuel-ts/address@0.100.0
+  - @fuel-ts/transactions@0.100.0
+  - @fuel-ts/errors@0.100.0
+  - @fuel-ts/math@0.100.0
+
 ## 0.99.0
 
 ### Patch Changes

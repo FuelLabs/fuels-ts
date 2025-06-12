@@ -38,17 +38,9 @@ Including `OutputCoin`s in the transaction request specifies the UTXOs that will
 
 ### Estimating and Funding the Transaction Request
 
-Before submitting a transaction, it is essential to ensure it is properly funded to meet its requirements and cover the associated fee. The SDK offers two approaches for this, one is to use the `estimateAndFund` helper:
+Before submitting a transaction, ensure it is fully funded to meet its requirements and cover the associated fees. The `assembleTx` method handles this by returning a fully funded and estimated transaction, ready for submission.
 
 <<< @./snippets/transaction-request/estimate-and-fund.ts#estimate-and-fund{ts:line-numbers}
-
-This approach provides a simple one-liner for estimating and funding the transaction request. Ensuring that the `gasLimit` and `maxFee` are accurately calculated and that the required amounts for `OutputCoin`s are fulfilled, as well as fetching and adding any missing resources from the calling account.
-
-The other more manual approach is as so:
-
-<<< @./snippets/transaction-request/get-transaction-cost.ts#transaction-request-4{ts:line-numbers}
-
-This approach provides the same behaviour as the `estimateAndFund` helper, but gives more granular control over the transaction request. The `getTransactionCost` method also returns various information about the simulated request that you may want to use to further modify the transaction request, more on that can be found in the [API reference](https://fuels-ts-docs-api.vercel.app/types/_fuel_ts_account.TransactionCost.html).
 
 ### Manually Fetching Resources
 
@@ -86,7 +78,7 @@ The SDK provides a way of either modifying the witnesses for a transaction reque
 
 <<< @./snippets/transaction-request/add-witness.ts#transaction-request-10{ts:line-numbers}
 
-A more complex example of adding multiple witnesses to a transaction request can be seen in the multiple signers guide [here](../cookbook/transactions-with-multiple-signers.md), which validates the signatures inside the script itself.
+A more complex example would when signatures are validated inside the script itself, like this guide [here](../cookbook/sway-script-with-signature-validation.md), .
 
 > **Note**: Once `addAccountWitnesses` has been called, any additional modifications to the transaction request will invalidate the signature as the transaction ID changes. Therefore, it is recommended to add witnesses last.
 

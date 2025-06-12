@@ -1,10 +1,13 @@
+import { getGasUsedFromReceipts } from '@fuel-ts/account';
 import type {
   TransactionResultReceipt,
   TransactionResponse,
   TransactionResult,
   CallResult,
+  DecodedLogs,
+  JsonAbisFromAllCalls,
 } from '@fuel-ts/account';
-import { getGasUsedFromReceipts } from '@fuel-ts/account';
+import type { BN } from '@fuel-ts/math';
 import type { TransactionType } from '@fuel-ts/transactions';
 
 import { decodeContractCallScriptResult } from './contract-call-script';
@@ -15,8 +18,9 @@ import type {
   InvocationScopeLike,
   FunctionResult,
   DryRunResult,
+  PreConfirmationFunctionResult,
 } from './types';
-import { getResultLogs } from './utils';
+import { getAbisFromAllCalls, getAllResultLogs } from './utils';
 
 /** @hidden */
 export const extractInvocationResult = <T>(
@@ -24,17 +28,22 @@ export const extractInvocationResult = <T>(
   receipts: TransactionResultReceipt[],
   isMultiCall: boolean,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  logs: any[]
+  logs: DecodedLogs<any>['logs'],
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  groupedLogs: DecodedLogs<any>['groupedLogs'] = {},
+  abis?: JsonAbisFromAllCalls
 ) => {
   const mainCallConfig = functionScopes[0]?.getCallConfig();
 
   if (functionScopes.length === 1 && mainCallConfig && 'bytes' in mainCallConfig.program) {
-    return callResultToInvocationResult<T>({ receipts }, mainCallConfig, logs);
+    return callResultToInvocationResult<T>({ receipts }, mainCallConfig, logs, groupedLogs, abis);
   }
   const encodedResults = decodeContractCallScriptResult(
     { receipts },
     (mainCallConfig?.program as AbstractContract).id,
-    logs
+    logs,
+    groupedLogs,
+    abis
   );
 
   const decodedResults = encodedResults.map((encodedResult, i) => {
@@ -65,8 +74,18 @@ export const buildFunctionResult = async <T>(
   const functionScopes = Array.isArray(funcScope) ? funcScope : [funcScope];
   const mainCallConfig = functionScopes[0]?.getCallConfig();
 
-  const logs = getResultLogs(receipts, mainCallConfig, functionScopes);
-  const value = extractInvocationResult<T>(functionScopes, receipts, isMultiCall, logs);
+  const { main, otherContractsAbis } = getAbisFromAllCalls(functionScopes);
+  const abis = { main, otherContractsAbis };
+
+  const { logs, groupedLogs } = getAllResultLogs({ receipts, mainCallConfig, functionScopes });
+  const value = extractInvocationResult<T>(
+    functionScopes,
+    receipts,
+    isMultiCall,
+    logs,
+    groupedLogs,
+    abis
+  );
   const gasUsed = getGasUsedFromReceipts(receipts);
 
   const submitResult: FunctionResult<T> = {
@@ -78,7 +97,48 @@ export const buildFunctionResult = async <T>(
     transactionResponse,
     transactionId: transactionResponse.id,
     logs,
+    groupedLogs,
     gasUsed,
+  };
+
+  return submitResult;
+};
+
+/** @hidden */
+export const buildPreConfirmationFunctionResult = async <T>(
+  params: BuiltFunctionResultParams
+): Promise<PreConfirmationFunctionResult<T>> => {
+  const { funcScope, isMultiCall, program, transactionResponse } = params;
+
+  const transactionResult = await transactionResponse.waitForPreConfirmation();
+
+  const { receipts } = transactionResult;
+
+  const functionScopes = Array.isArray(funcScope) ? funcScope : [funcScope];
+  const mainCallConfig = functionScopes[0]?.getCallConfig();
+
+  let logs: DecodedLogs<unknown>['logs'] | undefined;
+  let groupedLogs: DecodedLogs<unknown>['groupedLogs'] | undefined;
+  let gasUsed: BN | undefined;
+  let value: T | undefined;
+
+  if (receipts) {
+    ({ logs, groupedLogs } = getAllResultLogs({ receipts, mainCallConfig, functionScopes }));
+    value = extractInvocationResult<T>(functionScopes, receipts, isMultiCall, logs, groupedLogs);
+    gasUsed = getGasUsedFromReceipts(receipts);
+  }
+
+  const submitResult: PreConfirmationFunctionResult<T> = {
+    isMultiCall,
+    functionScopes,
+    program,
+    transactionResult,
+    transactionResponse,
+    transactionId: transactionResponse.id,
+    logs,
+    groupedLogs,
+    gasUsed,
+    value,
   };
 
   return submitResult;
@@ -97,8 +157,14 @@ export const buildDryRunResult = <T>(params: BuiltDryRunResultParams): DryRunRes
   const functionScopes = Array.isArray(funcScopes) ? funcScopes : [funcScopes];
   const mainCallConfig = functionScopes[0]?.getCallConfig();
 
-  const logs = getResultLogs(receipts, mainCallConfig, functionScopes);
-  const value = extractInvocationResult<T>(functionScopes, receipts, isMultiCall, logs);
+  const { logs, groupedLogs } = getAllResultLogs({ receipts, mainCallConfig, functionScopes });
+  const value = extractInvocationResult<T>(
+    functionScopes,
+    receipts,
+    isMultiCall,
+    logs,
+    groupedLogs
+  );
   const gasUsed = getGasUsedFromReceipts(receipts);
 
   const submitResult: DryRunResult<T> = {

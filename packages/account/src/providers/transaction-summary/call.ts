@@ -1,12 +1,13 @@
-import { Interface, type JsonAbi } from '@fuel-ts/abi-coder';
-import type { BN } from '@fuel-ts/math';
+import { type JsonAbi, StdStringCoder } from '@fuel-ts/abi-coder';
+import { Interface } from '@fuel-ts/abi-coder';
+import { type BN } from '@fuel-ts/math';
 import type { ReceiptCall } from '@fuel-ts/transactions';
 
 type GetFunctionCallProps = {
   abi: JsonAbi;
   receipt: ReceiptCall;
-  rawPayload?: string;
-  maxInputs: BN;
+  offset: number;
+  scriptData: Uint8Array;
 };
 
 export interface FunctionCall {
@@ -17,21 +18,31 @@ export interface FunctionCall {
   argumentsProvided: Record<string, unknown> | undefined;
 }
 
-export const getFunctionCall = ({ abi, receipt }: GetFunctionCallProps): FunctionCall => {
+/**
+ * Builds a FunctionCall object from a call receipt.
+ */
+export const getFunctionCall = ({
+  abi,
+  receipt,
+  offset,
+  scriptData,
+}: GetFunctionCallProps): FunctionCall => {
+  const [functionSelector, argumentsOffset] = new StdStringCoder().decode(scriptData, offset);
+
   const abiInterface = new Interface(abi);
-  const callFunctionSelector = receipt.param1.toHex(8);
-  const functionFragment = abiInterface.getFunction(callFunctionSelector);
+  const functionFragment = abiInterface.getFunction(functionSelector);
   const inputs = functionFragment.jsonFn.inputs;
 
-  const encodedArgs = receipt.param2.toHex();
-  let argumentsProvided;
+  let argumentsProvided: Record<string, unknown> | undefined;
 
-  // use bytes got from rawPayload to decode function params
-  const data = functionFragment.decodeArguments(encodedArgs);
-  if (data) {
-    // put together decoded data with input names from abi
+  // Validate if the function has arguments before attempting to decode them
+  if (inputs.length) {
+    const functionArgsBytes = scriptData.slice(argumentsOffset);
+    const decodedArguments = functionFragment.decodeArguments(functionArgsBytes);
+
+    // Put together decoded data with input names from abi
     argumentsProvided = inputs.reduce((prev, input, index) => {
-      const value = data[index];
+      const value = decodedArguments?.[index];
       const name = input.name;
 
       if (name) {
@@ -46,12 +57,10 @@ export const getFunctionCall = ({ abi, receipt }: GetFunctionCallProps): Functio
     }, {});
   }
 
-  const call = {
+  return {
     functionSignature: functionFragment.signature,
     functionName: functionFragment.name,
     argumentsProvided,
     ...(receipt.amount?.isZero() ? {} : { amount: receipt.amount, assetId: receipt.assetId }),
   };
-
-  return call;
 };

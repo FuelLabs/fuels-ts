@@ -1,5 +1,45 @@
 # @fuel-ts/versions
 
+## 0.101.2
+
+### Patch Changes
+
+- 8c19d93: chore: support Node 24 - depreciate Node 18
+- bfb62ad: feat: implement support for new ABI error codes
+- 0d71065: chore: Upgraded `forc` to `0.66.8`
+
+## 0.101.1
+
+## 0.101.0
+
+## 0.100.6
+
+## 0.100.5
+
+## 0.100.4
+
+### Patch Changes
+
+- dbed315: chore: upgrade `fuel-core` to `0.43.1`
+
+## 0.100.3
+
+## 0.100.2
+
+## 0.100.1
+
+## 0.100.0
+
+### Minor Changes
+
+- f41887f: chore!: upgrade `fuel-core` to `0.41.7`
+
+### Patch Changes
+
+- b42f056: chore: bump `fuel-core` to `0.41.9`
+- 521292a: chore: updated `forc` to `0.67.0`
+- ff97a6e: chore: upgrade `forc` to `0.66.7`
+
 ## 0.99.0
 
 ### Patch Changes

@@ -1,5 +1,102 @@
 # create-fuels
 
+## 0.101.2
+
+### Patch Changes
+
+- d807385: chore: updated dependencies
+- 8c19d93: chore: support Node 24 - depreciate Node 18
+- Updated dependencies [8c19d93]
+- Updated dependencies [bfb62ad]
+- Updated dependencies [0d71065]
+  - @fuel-ts/versions@0.101.2
+  - @fuel-ts/errors@0.101.2
+
+## 0.101.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.101.1
+- @fuel-ts/versions@0.101.1
+
+## 0.101.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.101.0
+- @fuel-ts/versions@0.101.0
+
+## 0.100.6
+
+### Patch Changes
+
+- @fuel-ts/errors@0.100.6
+- @fuel-ts/versions@0.100.6
+
+## 0.100.5
+
+### Patch Changes
+
+- @fuel-ts/errors@0.100.5
+- @fuel-ts/versions@0.100.5
+
+## 0.100.4
+
+### Patch Changes
+
+- dbed315: chore: upgrade `fuel-core` to `0.43.1`
+- Updated dependencies [efcce41]
+- Updated dependencies [5a57b97]
+- Updated dependencies [f534210]
+- Updated dependencies [dbed315]
+  - @fuel-ts/errors@0.100.4
+  - @fuel-ts/versions@0.100.4
+
+## 0.100.3
+
+### Patch Changes
+
+- 3d3b597: build(deps): bump @eslint/js from 9.20.0 to 9.24.0
+- 74d65a7: fix: connector detection of correct chain
+  - @fuel-ts/errors@0.100.3
+  - @fuel-ts/versions@0.100.3
+
+## 0.100.2
+
+### Patch Changes
+
+- f9c31e4: chore: upgrade `@fuels/connectors` to `0.39.2`
+- Updated dependencies [e909d54]
+  - @fuel-ts/errors@0.100.2
+  - @fuel-ts/versions@0.100.2
+
+## 0.100.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.100.1
+- @fuel-ts/versions@0.100.1
+
+## 0.100.0
+
+### Patch Changes
+
+- 1277ae6: chore: upgrade `vite` related dependencies
+- f254f3a: chore: upgraded various dependencies
+- 022d76e: build(deps): bump the npm_and_yarn group with 2 updates
+- 6eb113c: chore: upgrade NPM package versions
+- 4b122dc: build(deps): bump postcss from 8.5.2 to 8.5.3 in the npm_and_yarn group
+- 5c6c659: chore: add missing turbo cache
+- 521292a: chore: updated `forc` to `0.67.0`
+- ff97a6e: chore: upgrade `forc` to `0.66.7`
+- f8f324b: chore: upgrade frontend dependencies
+- Updated dependencies [b42f056]
+- Updated dependencies [f41887f]
+- Updated dependencies [521292a]
+- Updated dependencies [ff97a6e]
+  - @fuel-ts/versions@0.100.0
+  - @fuel-ts/errors@0.100.0
+
 ## 0.99.0
 
 ### Patch Changes

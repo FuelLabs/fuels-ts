@@ -108,8 +108,8 @@ it('should throw when simulating via contract factory with wallet with no resour
   await expectToThrowFuelError(
     () => contractInstance.functions.return_input(1337).simulate(),
     new FuelError(
-      ErrorCode.NOT_ENOUGH_FUNDS,
-      `The account(s) sending the transaction don't have enough funds to cover the transaction.`
+      ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
+      `Insufficient funds or too many small value coins. Consider combining UTXOs.`
     )
   );
 });

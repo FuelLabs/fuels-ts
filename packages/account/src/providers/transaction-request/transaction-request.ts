@@ -32,6 +32,7 @@ import { isMessageCoin, type Message, type MessageCoin } from '../message';
 import type { ChainInfo, GasCosts } from '../provider';
 import type { Resource } from '../resource';
 import { isCoin } from '../resource';
+import type { TransactionSummaryJsonPartial } from '../utils';
 import { normalizeJSON } from '../utils';
 import { getMaxGas, getMinGas } from '../utils/gas';
 
@@ -75,6 +76,8 @@ export interface BaseTransactionRequestLike {
   tip?: BigNumberish;
   /** Block until which tx cannot be included */
   maturity?: number;
+  /** The block number after which the transaction is no longer valid. */
+  expiration?: number;
   /** The maximum fee payable by this transaction using BASE_ASSET. */
   maxFee?: BigNumberish;
   /** The maximum amount of witness data allowed for the transaction */
@@ -85,6 +88,8 @@ export interface BaseTransactionRequestLike {
   outputs?: TransactionRequestOutput[];
   /** List of witnesses */
   witnesses?: TransactionRequestWitness[];
+  /** The state of the transaction */
+  flag?: TransactionStateFlag;
 }
 
 type ToBaseTransactionResponse = Pick<
@@ -99,6 +104,14 @@ type ToBaseTransactionResponse = Pick<
   | 'policyTypes'
 >;
 
+export type TransactionStateFlag =
+  | { state: undefined; transactionId: undefined; summary: undefined }
+  | {
+      state: 'funded';
+      transactionId: string;
+      summary: TransactionSummaryJsonPartial | undefined;
+    };
+
 /**
  * Abstract class to define the functionalities of a transaction request transaction request.
  */
@@ -109,6 +122,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   tip?: BN;
   /** Block until which tx cannot be included */
   maturity?: number;
+  /** The block number after which the transaction is no longer valid. */
+  expiration?: number;
   /** The maximum fee payable by this transaction using BASE_ASSET. */
   maxFee: BN;
   /** The maximum amount of witness data allowed for the transaction */
@@ -121,6 +136,11 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   witnesses: TransactionRequestWitness[] = [];
 
   /**
+   * The current status of the transaction
+   */
+  flag: TransactionStateFlag = { state: undefined, transactionId: undefined, summary: undefined };
+
+  /**
    * Constructor for initializing a base transaction request.
    *
    * @param baseTransactionRequest - Optional object containing properties to initialize the transaction request.
@@ -128,26 +148,30 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   constructor({
     tip,
     maturity,
+    expiration,
     maxFee,
     witnessLimit,
     inputs,
     outputs,
     witnesses,
+    flag,
   }: BaseTransactionRequestLike = {}) {
     this.tip = tip ? bn(tip) : undefined;
     this.maturity = maturity && maturity > 0 ? maturity : undefined;
+    this.expiration = expiration && expiration > 0 ? expiration : undefined;
     this.witnessLimit = isDefined(witnessLimit) ? bn(witnessLimit) : undefined;
     this.maxFee = bn(maxFee);
     this.inputs = inputs ?? [];
     this.outputs = outputs ?? [];
     this.witnesses = witnesses ?? [];
+    this.flag = flag ?? { state: undefined, transactionId: undefined, summary: undefined };
   }
 
   static getPolicyMeta(req: BaseTransactionRequest) {
     let policyTypes = 0;
     const policies: Policy[] = [];
 
-    const { tip, witnessLimit, maturity } = req;
+    const { tip, witnessLimit, maturity, expiration } = req;
 
     if (bn(tip).gt(0)) {
       policyTypes += PolicyType.Tip;
@@ -164,6 +188,11 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
     policyTypes += PolicyType.MaxFee;
     policies.push({ data: req.maxFee, type: PolicyType.MaxFee });
+
+    if (expiration && expiration > 0) {
+      policyTypes += PolicyType.Expiration;
+      policies.push({ data: expiration, type: PolicyType.Expiration });
+    }
 
     return {
       policyTypes,
@@ -254,8 +283,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    */
   addEmptyWitness(): number {
     // Push a dummy witness with same byte size as a real witness signature
-    this.addWitness(concat([ZeroBytes32, ZeroBytes32]));
-    return this.witnesses.length - 1;
+    return this.addWitness(concat([ZeroBytes32, ZeroBytes32]));
   }
 
   /**
@@ -296,7 +324,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     const accounts = Array.isArray(account) ? account : [account];
     await Promise.all(
       accounts.map(async (acc) => {
-        this.addWitness(await acc.signTransaction(<TransactionRequestLike>this));
+        this.addWitness((await acc.signTransaction(<TransactionRequestLike>this)) as string);
       })
     );
 
@@ -705,5 +733,26 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
   byteLength(): number {
     return this.toTransactionBytes().byteLength;
+  }
+
+  /**
+   * @hidden
+   *
+   * Used internally to update the state of a transaction request.
+   *
+   * @param state - The state to update.
+   */
+  public updateState(
+    chainId: number,
+    state?: TransactionStateFlag['state'],
+    summary?: TransactionSummaryJsonPartial
+  ) {
+    if (!state) {
+      this.flag = { state: undefined, transactionId: undefined, summary: undefined };
+      return;
+    }
+
+    const transactionId = this.getTransactionId(chainId);
+    this.flag = { state, transactionId, summary };
   }
 }

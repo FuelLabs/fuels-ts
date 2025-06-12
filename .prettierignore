@@ -7,7 +7,6 @@ docs/examples/
 apps/demo-fuels/src/sway-programs-api
 apps/demo-bun-fuels/src/sway-programs-api
 apps/demo-nextjs
-apps/demo-react-cra
 apps/demo-react-vite
 apps/demo-typegen/src/contract-types
 apps/demo-typegen/src/script-types

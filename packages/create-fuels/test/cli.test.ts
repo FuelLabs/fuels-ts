@@ -1,3 +1,4 @@
+import { versions } from '@fuel-ts/versions';
 import toml from '@iarna/toml';
 import { mkdirSync, readFileSync } from 'fs';
 import { join } from 'path';
@@ -86,8 +87,8 @@ describe('CLI', { timeout: 15_000 }, () => {
 
     expect(toolchain).toEqual({ channel: 'testnet' });
     expect(components).toEqual({
-      forc: '0.66.6',
-      'fuel-core': '0.40.4',
+      forc: versions.FORC,
+      'fuel-core': versions.FUEL_CORE,
     });
   });
 

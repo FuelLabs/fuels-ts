@@ -20,6 +20,7 @@ members = [
   "large-contract",
   "multi-token-contract",
   "smo-contract",
+  "conditional-loop-contract",
   "options",
   "payable-annotation",
   "predicate",
@@ -34,6 +35,7 @@ members = [
   "predicate-main-args-vector",
   "predicate-multi-args",
   "predicate-raw-slice",
+  "predicate-signing",
   "predicate-std-lib-string",
   "predicate-str-slice",
   "predicate-triple-sig",
@@ -53,6 +55,7 @@ members = [
   "revert-error",
   "script-bytes",
   "script-call-contract",
+  "script-call-logging-contracts",
   "script-main-arg-bool",
   "script-main-args",
   "script-main-return-struct",
@@ -80,6 +83,7 @@ members = [
   "vector-types-script",
   "vectors",
   "void",
+  "script-error",
 ]
 
 [patch.'https://github.com/fuellabs/sway']

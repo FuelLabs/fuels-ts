@@ -88,7 +88,7 @@ export function getNewAbiTypegen(
   ];
 
   const stubAbi = JSON.stringify({ types, functions, configurables }, null, 2);
-  const stubBin = '0x000';
+  const stubBin = '0x0000';
   const stubSlot = '[]';
 
   const abiFiles: IFile[] = [

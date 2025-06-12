@@ -25,5 +25,7 @@
   "navigationLinks": {
     "Docs": "https://docs.fuel.network/docs/intro/what-is-fuel/",
     "GitHub": "https://github.com/FuelLabs/fuels-ts"
-  }
+  },
+  // Suppress all the warnings that are being thrown by typedoc.
+  "logLevel": "Error"
 }

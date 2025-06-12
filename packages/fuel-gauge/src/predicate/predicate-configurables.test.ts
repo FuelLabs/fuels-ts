@@ -239,6 +239,7 @@ describe('Predicate', () => {
 
       const predicate = new PredicateWithConfigurable({
         provider,
+        data: [99, getRandomB256()],
       });
 
       const destination = WalletUnlocked.generate({

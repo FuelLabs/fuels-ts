@@ -1,11 +1,13 @@
+/* eslint-disable no-param-reassign */
 import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
 import type { AddressInput, WithAddress } from '@fuel-ts/address';
 import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { BigNumberish, BN } from '@fuel-ts/math';
+import type { HashableMessage } from '@fuel-ts/hasher';
 import { bn } from '@fuel-ts/math';
-import { InputType } from '@fuel-ts/transactions';
+import type { BigNumberish, BN } from '@fuel-ts/math';
+import { InputType, OutputType } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, isDefined } from '@fuel-ts/utils';
 import { clone } from 'ramda';
@@ -16,7 +18,7 @@ import type {
   CoinQuantityLike,
   CoinQuantity,
   Resource,
-  ExcludeResourcesOption,
+  ResourcesIdsToIgnore,
   Provider,
   ScriptTransactionRequestLike,
   TransactionCost,
@@ -29,14 +31,19 @@ import type {
   GetBalancesResponse,
   Coin,
   TransactionCostParams,
-  TransactionResponse,
   ProviderSendTxParams,
+  TransactionSummaryJson,
+  TransactionResult,
+  TransactionType,
+  TransactionResponse,
 } from './providers';
 import {
   withdrawScript,
   ScriptTransactionRequest,
   transactionRequestify,
   addAmountToCoinQuantities,
+  calculateGasFee,
+  setAndValidateGasAndFeeForAssembledTx,
 } from './providers';
 import {
   cacheRequestInputsResourcesFromOwner,
@@ -46,12 +53,14 @@ import {
   isRequestInputResource,
 } from './providers/transaction-request/helpers';
 import { mergeQuantities } from './providers/utils/merge-quantities';
+import { serializeProviderCache } from './providers/utils/serialization';
 import { AbstractAccount } from './types';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
+import { splitCoinsIntoBatches } from './utils/split-coins-into-batches';
 
 export type TxParamsType = Pick<
   ScriptTransactionRequestLike,
-  'gasLimit' | 'tip' | 'maturity' | 'maxFee' | 'witnessLimit'
+  'gasLimit' | 'tip' | 'maturity' | 'maxFee' | 'witnessLimit' | 'expiration'
 >;
 
 export type TransferParams = {
@@ -70,8 +79,40 @@ export type AccountSendTxParams = ProviderSendTxParams & FuelConnectorSendTxPara
 
 export type EstimatedTxParams = Pick<
   TransactionCost,
-  'estimatedPredicates' | 'addedSignatures' | 'requiredQuantities' | 'updateMaxFee' | 'gasPrice'
+  | 'estimatedPredicates'
+  | 'addedSignatures'
+  | 'requiredQuantities'
+  | 'updateMaxFee'
+  | 'gasPrice'
+  | 'transactionSummary'
 >;
+
+export type SubmitAllMode = 'sequential' | 'parallel';
+
+export type PrepareSubmitAllParams = {
+  txs: ScriptTransactionRequest[];
+  mode?: SubmitAllMode;
+};
+
+export type SubmitAllCallbackResponse = {
+  txResponses: TransactionResult<TransactionType.Script>[];
+  errors: FuelError[];
+};
+
+export type SubmitAllCallback = () => Promise<SubmitAllCallbackResponse>;
+
+export type AssembleConsolidationTxsParams = {
+  coins: Coin[];
+  mode?: SubmitAllMode;
+  outputNum?: number;
+};
+
+export type ConsolidateCoins = {
+  assetId: string;
+  mode?: SubmitAllMode;
+  outputNum?: number;
+};
+
 const MAX_FUNDING_ATTEMPTS = 5;
 
 export type FakeResources = Partial<Coin> & Required<Pick<Coin, 'amount' | 'assetId'>>;
@@ -148,14 +189,14 @@ export class Account extends AbstractAccount implements WithAddress {
    * Retrieves resources satisfying the spend query for the account.
    *
    * @param quantities - Quantities of resources to be obtained.
-   * @param excludedIds - IDs of resources to be excluded from the query (optional).
+   * @param resourcesIdsToIgnore - IDs of resources to be excluded from the query (optional).
    * @returns A promise that resolves to an array of Resources.
    */
   async getResourcesToSpend(
     quantities: CoinQuantityLike[],
-    excludedIds?: ExcludeResourcesOption
+    resourcesIdsToIgnore?: ResourcesIdsToIgnore
   ): Promise<Resource[]> {
-    return this.provider.getResourcesToSpend(this.address, quantities, excludedIds);
+    return this.provider.getResourcesToSpend(this.address, quantities, resourcesIdsToIgnore);
   }
 
   /**
@@ -208,10 +249,21 @@ export class Account extends AbstractAccount implements WithAddress {
    * @param request - The transaction request to fund.
    * @param params - The estimated transaction parameters.
    * @returns A promise that resolves to the funded transaction request.
+   *
+   * @deprecated Use provider.assembleTx instead
+   * Check the migration guide https://docs.fuel.network/docs/fuels-ts/transactions/assemble-tx-migration-guide/ for more information.
    */
   async fund<T extends TransactionRequest>(request: T, params: EstimatedTxParams): Promise<T> {
-    const { addedSignatures, estimatedPredicates, requiredQuantities, updateMaxFee, gasPrice } =
-      params;
+    const {
+      addedSignatures,
+      estimatedPredicates,
+      requiredQuantities,
+      updateMaxFee,
+      gasPrice,
+      transactionSummary,
+    } = params;
+
+    const chainId = await this.provider.getChainId();
 
     const fee = request.maxFee;
     const baseAssetId = await this.provider.getBaseAssetId();
@@ -306,10 +358,12 @@ export class Account extends AbstractAccount implements WithAddress {
     // If the transaction still needs to be funded after the maximum number of attempts
     if (needsToBeFunded) {
       throw new FuelError(
-        ErrorCode.NOT_ENOUGH_FUNDS,
+        ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
         `The account ${this.address} does not have enough base asset funds to cover the transaction execution.`
       );
     }
+
+    request.updateState(chainId, 'funded', transactionSummary);
 
     await this.provider.validateTransaction(request);
 
@@ -357,7 +411,15 @@ export class Account extends AbstractAccount implements WithAddress {
       assetId: assetId || (await this.provider.getBaseAssetId()),
     });
 
-    request = await this.estimateAndFundTransaction(request, txParams);
+    const { gasPrice, transactionRequest } = await this.assembleTx(request);
+
+    request = await setAndValidateGasAndFeeForAssembledTx({
+      gasPrice,
+      provider: this.provider,
+      transactionRequest,
+      setGasLimit: txParams?.gasLimit,
+      setMaxFee: txParams?.maxFee,
+    });
 
     return request;
   }
@@ -394,7 +456,16 @@ export class Account extends AbstractAccount implements WithAddress {
   ): Promise<TransactionResponse> {
     let request = new ScriptTransactionRequest(txParams);
     request = this.addBatchTransfer(request, transferParams);
-    request = await this.estimateAndFundTransaction(request, txParams);
+
+    const { gasPrice, transactionRequest } = await this.assembleTx(request);
+
+    request = await setAndValidateGasAndFeeForAssembledTx({
+      gasPrice,
+      provider: this.provider,
+      transactionRequest,
+      setGasLimit: txParams?.gasLimit,
+      setMaxFee: txParams?.maxFee,
+    });
     return this.sendTransaction(request, { estimateTxDependencies: false });
   }
 
@@ -488,7 +559,15 @@ export class Account extends AbstractAccount implements WithAddress {
     request.script = script;
     request.scriptData = scriptData;
 
-    request = await this.estimateAndFundTransaction(request, txParams, { quantities });
+    const { gasPrice, transactionRequest } = await this.assembleTx(request, quantities);
+
+    request = await setAndValidateGasAndFeeForAssembledTx({
+      gasPrice,
+      provider: this.provider,
+      transactionRequest,
+      setGasLimit: txParams?.gasLimit,
+      setMaxFee: txParams?.maxFee,
+    });
 
     return this.sendTransaction(request);
   }
@@ -526,19 +605,189 @@ export class Account extends AbstractAccount implements WithAddress {
     let request = new ScriptTransactionRequest(params);
     const quantities = [{ amount: bn(amount), assetId: baseAssetId }];
 
-    const txCost = await this.getTransactionCost(request, { quantities });
+    const { gasPrice, transactionRequest } = await this.assembleTx(request, quantities);
 
-    request = this.validateGasLimitAndMaxFee({
-      transactionRequest: request,
-      gasUsed: txCost.gasUsed,
-      maxFee: txCost.maxFee,
-      txParams,
+    request = await setAndValidateGasAndFeeForAssembledTx({
+      gasPrice,
+      provider: this.provider,
+      transactionRequest,
+      setGasLimit: txParams?.gasLimit,
+      setMaxFee: txParams?.maxFee,
     });
-
-    await this.fund(request, txCost);
 
     return this.sendTransaction(request);
   }
+
+  /**
+   * Consolidates base asset UTXOs into fewer, larger ones.
+   *
+   * Retrieves a limited number of base asset coins (as defined by `Provider.RESOURCES_PAGE_SIZE_LIMIT`),
+   * assembles consolidation transactions, and submits them to the network.
+   *
+   * Note: This method currently supports only the base asset.
+   *
+   * @param params - The parameters for coin consolidation, including the asset ID, mode, and output number.
+   * @returns A promise that resolves to the response of the submitted transactions.
+   * @throws Will throw an error if the asset is not a base asset as non-base asset consolidation is not implemented.
+   */
+  async consolidateCoins(params: ConsolidateCoins): Promise<SubmitAllCallbackResponse> {
+    const { assetId } = params;
+
+    const { coins } = await this.getCoins(assetId);
+
+    const baseAssetId = await this.provider.getBaseAssetId();
+    const isBaseAsset = baseAssetId === assetId;
+
+    let submitAll: SubmitAllCallback;
+    const consolidationParams: AssembleConsolidationTxsParams = {
+      coins,
+      mode: params.mode,
+      outputNum: params.outputNum,
+    };
+
+    if (isBaseAsset) {
+      ({ submitAll } = await this.assembleBaseAssetConsolidationTxs(consolidationParams));
+    } else {
+      throw new FuelError(
+        ErrorCode.UNSUPPORTED_FEATURE,
+        'Consolidation for non-base assets is not supported yet.'
+      );
+    }
+
+    return submitAll();
+  }
+
+  /**
+   * Assembles transactions for consolidating base asset coins into fewer UTXOs.
+   *
+   * This method splits the provided coins into batches and creates transaction requests
+   * to consolidate them. It calculates the necessary fee and sets up the transactions
+   * to be submitted either in parallel (default) or sequentially.
+   *
+   * @param params - The parameters for assembling base asset consolidation transactions.
+   *
+   * @returns An object containing the assembled transactions, the total fee cost, and a callback to submit all transactions.
+   */
+  async assembleBaseAssetConsolidationTxs(params: AssembleConsolidationTxsParams) {
+    const { coins, mode = 'parallel', outputNum = 1 } = params;
+
+    const baseAssetId = await this.provider.getBaseAssetId();
+
+    this.validateConsolidationTxsCoins(coins, baseAssetId);
+
+    const chainInfo = await this.provider.getChain();
+    const maxInputsNumber = chainInfo.consensusParameters.txParameters.maxInputs.toNumber();
+
+    let totalFeeCost = bn(0);
+    const txs: ScriptTransactionRequest[] = [];
+    const coinsBatches = splitCoinsIntoBatches(coins, maxInputsNumber);
+    const gasPrice = await this.provider.estimateGasPrice(10);
+    const consolidateMoreThanOneCoin = outputNum > 1;
+
+    coinsBatches
+      // Skip batches with just one Coin to avoid consolidate just one coin
+      .filter((batch) => batch.length > 1)
+      .forEach((coinBatch) => {
+        const request = new ScriptTransactionRequest({
+          script: '0x',
+        });
+
+        request.addResources(coinBatch);
+
+        if (consolidateMoreThanOneCoin) {
+          // We decrease one because the change output will also create one UTXO
+          Array.from({ length: outputNum - 1 }).forEach(() => {
+            // Real value will be added later after having fee calculated
+            request.addCoinOutput(this.address, 0, baseAssetId);
+          });
+        }
+
+        const minGas = request.calculateMinGas(chainInfo);
+
+        const fee = calculateGasFee({
+          gasPrice,
+          gas: minGas,
+          priceFactor: chainInfo.consensusParameters.feeParameters.gasPriceFactor,
+          tip: request.tip,
+        });
+
+        request.maxFee = fee;
+
+        if (consolidateMoreThanOneCoin) {
+          const total = request.inputs
+            .filter(isRequestInputCoin)
+            .reduce((acc, input) => acc.add(input.amount), bn(0));
+
+          // We add a +1 as the change output will also include one part of the total amount
+          const amountPerNewUtxo = total.div(outputNum + 1);
+
+          request.outputs.forEach((output) => {
+            if (output.type === OutputType.Coin) {
+              output.amount = amountPerNewUtxo;
+            }
+          });
+        }
+
+        totalFeeCost = totalFeeCost.add(fee);
+
+        txs.push(request);
+      });
+
+    const submitAll = this.prepareSubmitAll({ txs, mode });
+
+    return { txs, totalFeeCost, submitAll };
+  }
+
+  /**
+   * Prepares a function to submit all transactions either sequentially or in parallel.
+   *
+   * @param params - The parameters for preparing the submitAll callback.
+   *
+   * @returns A callback that, when called, submits all transactions and returns their results and any errors encountered.
+   */
+  prepareSubmitAll = (params: PrepareSubmitAllParams): SubmitAllCallback => {
+    // Default to 'sequential' if mode is not provided
+    const { txs, mode = 'sequential' } = params;
+
+    return async () => {
+      const txResponses: TransactionResult<TransactionType.Script>[] = [];
+      const errors: FuelError[] = [];
+
+      if (mode === 'sequential') {
+        // Sequential execution
+        for (const tx of txs) {
+          try {
+            const submit = await this.sendTransaction(tx);
+            const response = await submit.waitForResult<TransactionType.Script>();
+            txResponses.push(response);
+          } catch (error) {
+            errors.push(error as FuelError);
+          }
+        }
+      } else {
+        // Parallel execution
+        const results = await Promise.allSettled(
+          txs.map(async (tx) => {
+            // Chain the transaction sending and result waiting
+            const submit = await this.sendTransaction(tx);
+            return submit.waitForResult<TransactionType.Script>();
+          })
+        );
+
+        // Process results from Promise.allSettled
+        results.forEach((result) => {
+          if (result.status === 'fulfilled') {
+            txResponses.push(result.value);
+          } else {
+            // Ensure the rejected reason is treated as FuelError
+            errors.push(result.reason as FuelError);
+          }
+        });
+      }
+
+      return { txResponses, errors };
+    };
+  };
 
   /**
    * Returns a transaction cost to enable user
@@ -549,6 +798,9 @@ export class Account extends AbstractAccount implements WithAddress {
    * @param transactionCostParams - The transaction cost parameters (optional).
    *
    * @returns A promise that resolves to the transaction cost object.
+   *
+   * @deprecated Use provider.assembleTx instead
+   * Check the migration guide https://docs.fuel.network/docs/fuels-ts/transactions/assemble-tx-migration-guide/ for more information.
    */
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
@@ -620,7 +872,7 @@ export class Account extends AbstractAccount implements WithAddress {
    *
    * @hidden
    */
-  async signMessage(message: string): Promise<string> {
+  async signMessage(message: HashableMessage): Promise<string> {
     if (!this._connector) {
       throw new FuelError(ErrorCode.MISSING_CONNECTOR, 'A connector is required to sign messages.');
     }
@@ -633,14 +885,30 @@ export class Account extends AbstractAccount implements WithAddress {
    * @param transactionRequestLike - The transaction request to sign.
    * @returns A promise that resolves to the signature of the transaction.
    */
-  async signTransaction(transactionRequestLike: TransactionRequestLike): Promise<string> {
+  async signTransaction(
+    transactionRequestLike: TransactionRequestLike,
+    connectorOptions: AccountSendTxParams = {}
+  ): Promise<string | TransactionRequest> {
     if (!this._connector) {
       throw new FuelError(
         ErrorCode.MISSING_CONNECTOR,
         'A connector is required to sign transactions.'
       );
     }
-    return this._connector.signTransaction(this.address.toString(), transactionRequestLike);
+
+    const transactionRequest = transactionRequestify(transactionRequestLike);
+
+    const { transactionRequest: requestToSign, connectorsSendTxParams } =
+      await this.setTransactionStateForConnectors({
+        transactionRequest,
+        connectorOptions,
+      });
+
+    return this._connector.signTransaction(
+      this.address.toString(),
+      requestToSign,
+      connectorsSendTxParams
+    );
   }
 
   /**
@@ -652,20 +920,33 @@ export class Account extends AbstractAccount implements WithAddress {
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true, onBeforeSend, skipCustomFee = false }: AccountSendTxParams = {}
+    { estimateTxDependencies = true, ...connectorOptions }: AccountSendTxParams = {}
   ): Promise<TransactionResponse> {
-    if (this._connector) {
-      return this.provider.getTransactionResponse(
-        await this._connector.sendTransaction(this.address.toString(), transactionRequestLike, {
-          onBeforeSend,
-          skipCustomFee,
-        })
-      );
-    }
     const transactionRequest = transactionRequestify(transactionRequestLike);
+
+    // Check if the account is using a connector, and therefore we do not have direct access to the
+    // private key.
+    if (this._connector) {
+      const response = await this.setTransactionStateForConnectors({
+        transactionRequest,
+        connectorOptions,
+      });
+
+      const transaction: string | TransactionResponse = await this._connector.sendTransaction(
+        this.address.toString(),
+        response.transactionRequest,
+        response.connectorsSendTxParams
+      );
+
+      return typeof transaction === 'string'
+        ? this.provider.getTransactionResponse(transaction)
+        : transaction;
+    }
+
     if (estimateTxDependencies) {
       await this.provider.estimateTxDependencies(transactionRequest);
     }
+
     return this.provider.sendTransaction(transactionRequest, {
       estimateTxDependencies: false,
     });
@@ -703,6 +984,64 @@ export class Account extends AbstractAccount implements WithAddress {
       txCreatedIdx: bn(1),
       ...coin,
     }));
+  }
+
+  /** @hidden */
+  private async prepareTransactionForSend(
+    request: TransactionRequest
+  ): Promise<TransactionRequest> {
+    const { transactionId } = request.flag;
+
+    // If there is no transaction id, then no status is set.
+    if (!isDefined(transactionId)) {
+      return request;
+    }
+
+    const chainId = await this.provider.getChainId();
+    const currentTransactionId = request.getTransactionId(chainId);
+
+    // If the transaction id does not match the transaction id on the request.
+    // Then we need to invalidate the transaction status
+    if (transactionId !== currentTransactionId) {
+      request.updateState(chainId);
+    }
+    return request;
+  }
+
+  /** @hidden */
+  private async prepareTransactionSummary(
+    request: TransactionRequest
+  ): Promise<TransactionSummaryJson | undefined> {
+    const chainId = await this.provider.getChainId();
+
+    return isDefined(request.flag.summary)
+      ? {
+          ...request.flag.summary,
+          id: request.getTransactionId(chainId),
+          transactionBytes: hexlify(request.toTransactionBytes()),
+        }
+      : undefined;
+  }
+
+  /** @hidden * */
+  private async assembleTx(
+    transactionRequest: ScriptTransactionRequest,
+    quantities: CoinQuantity[] = []
+  ): Promise<{ transactionRequest: ScriptTransactionRequest; gasPrice: BN }> {
+    const outputQuantities = transactionRequest.outputs
+      .filter((o) => o.type === OutputType.Coin)
+      .map(({ amount, assetId }) => ({ assetId: String(assetId), amount: bn(amount) }));
+
+    transactionRequest.gasLimit = bn(0);
+    transactionRequest.maxFee = bn(0);
+
+    const { assembledRequest, gasPrice } = await this.provider.assembleTx({
+      request: transactionRequest,
+      accountCoinQuantities: mergeQuantities(outputQuantities, quantities),
+      feePayerAccount: this,
+    });
+
+    return { transactionRequest: assembledRequest as ScriptTransactionRequest, gasPrice };
   }
 
   /** @hidden * */
@@ -766,5 +1105,47 @@ export class Account extends AbstractAccount implements WithAddress {
     }
 
     return request;
+  }
+
+  /** @hidden * */
+  private validateConsolidationTxsCoins(coins: Coin[], assetId: string) {
+    if (coins.length <= 1) {
+      throw new FuelError(ErrorCode.NO_COINS_TO_CONSOLIDATE, 'No coins to consolidate.');
+    }
+
+    if (!coins.every((c) => c.assetId === assetId)) {
+      throw new FuelError(
+        ErrorCode.COINS_ASSET_ID_MISMATCH,
+        'All coins to consolidate must be from the same asset id.'
+      );
+    }
+  }
+
+  /** @hidden * */
+  private async setTransactionStateForConnectors(params: {
+    transactionRequest: TransactionRequest;
+    connectorOptions: AccountSendTxParams;
+  }): Promise<{
+    transactionRequest: TransactionRequest;
+    connectorsSendTxParams: FuelConnectorSendTxParams;
+  }> {
+    const { transactionRequest: requestToPrepare, connectorOptions } = params;
+
+    const { onBeforeSend, skipCustomFee = false } = connectorOptions;
+
+    const transactionRequest = await this.prepareTransactionForSend(requestToPrepare);
+
+    const connectorsSendTxParams: FuelConnectorSendTxParams = {
+      onBeforeSend,
+      skipCustomFee,
+      provider: {
+        url: this.provider.url,
+        cache: await serializeProviderCache(this.provider),
+      },
+      transactionState: requestToPrepare.flag.state,
+      transactionSummary: await this.prepareTransactionSummary(requestToPrepare),
+    };
+
+    return { transactionRequest, connectorsSendTxParams };
   }
 }

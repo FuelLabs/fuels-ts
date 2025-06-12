@@ -1,5 +1,133 @@
 # Change Log
 
+## 0.101.2
+
+### Patch Changes
+
+- 8c19d93: chore: support Node 24 - depreciate Node 18
+- bfb62ad: feat: implement support for new ABI error codes
+- Updated dependencies [8c19d93]
+- Updated dependencies [bfb62ad]
+  - @fuel-ts/abi-coder@0.101.2
+  - @fuel-ts/address@0.101.2
+  - @fuel-ts/errors@0.101.2
+  - @fuel-ts/hasher@0.101.2
+  - @fuel-ts/utils@0.101.2
+  - @fuel-ts/math@0.101.2
+
+## 0.101.1
+
+### Patch Changes
+
+- @fuel-ts/abi-coder@0.101.1
+- @fuel-ts/address@0.101.1
+- @fuel-ts/errors@0.101.1
+- @fuel-ts/hasher@0.101.1
+- @fuel-ts/math@0.101.1
+- @fuel-ts/utils@0.101.1
+
+## 0.101.0
+
+### Patch Changes
+
+- @fuel-ts/abi-coder@0.101.0
+- @fuel-ts/address@0.101.0
+- @fuel-ts/errors@0.101.0
+- @fuel-ts/hasher@0.101.0
+- @fuel-ts/math@0.101.0
+- @fuel-ts/utils@0.101.0
+
+## 0.100.6
+
+### Patch Changes
+
+- @fuel-ts/abi-coder@0.100.6
+- @fuel-ts/address@0.100.6
+- @fuel-ts/errors@0.100.6
+- @fuel-ts/hasher@0.100.6
+- @fuel-ts/math@0.100.6
+- @fuel-ts/utils@0.100.6
+
+## 0.100.5
+
+### Patch Changes
+
+- @fuel-ts/abi-coder@0.100.5
+- @fuel-ts/address@0.100.5
+- @fuel-ts/errors@0.100.5
+- @fuel-ts/hasher@0.100.5
+- @fuel-ts/math@0.100.5
+- @fuel-ts/utils@0.100.5
+
+## 0.100.4
+
+### Patch Changes
+
+- dbed315: chore: upgrade `fuel-core` to `0.43.1`
+- Updated dependencies [efcce41]
+- Updated dependencies [5a57b97]
+- Updated dependencies [f534210]
+  - @fuel-ts/errors@0.100.4
+  - @fuel-ts/abi-coder@0.100.4
+  - @fuel-ts/address@0.100.4
+  - @fuel-ts/math@0.100.4
+  - @fuel-ts/utils@0.100.4
+  - @fuel-ts/hasher@0.100.4
+
+## 0.100.3
+
+### Patch Changes
+
+- @fuel-ts/abi-coder@0.100.3
+- @fuel-ts/address@0.100.3
+- @fuel-ts/errors@0.100.3
+- @fuel-ts/hasher@0.100.3
+- @fuel-ts/math@0.100.3
+- @fuel-ts/utils@0.100.3
+
+## 0.100.2
+
+### Patch Changes
+
+- Updated dependencies [e909d54]
+  - @fuel-ts/errors@0.100.2
+  - @fuel-ts/abi-coder@0.100.2
+  - @fuel-ts/address@0.100.2
+  - @fuel-ts/math@0.100.2
+  - @fuel-ts/utils@0.100.2
+  - @fuel-ts/hasher@0.100.2
+
+## 0.100.1
+
+### Patch Changes
+
+- @fuel-ts/abi-coder@0.100.1
+- @fuel-ts/address@0.100.1
+- @fuel-ts/errors@0.100.1
+- @fuel-ts/hasher@0.100.1
+- @fuel-ts/math@0.100.1
+- @fuel-ts/utils@0.100.1
+
+## 0.100.0
+
+### Minor Changes
+
+- f41887f: chore!: upgrade `fuel-core` to `0.41.7`
+
+### Patch Changes
+
+- Updated dependencies [1277ae6]
+- Updated dependencies [fc18871]
+- Updated dependencies [6eb113c]
+- Updated dependencies [f41887f]
+- Updated dependencies [194e31f]
+  - @fuel-ts/utils@0.100.0
+  - @fuel-ts/hasher@0.100.0
+  - @fuel-ts/abi-coder@0.100.0
+  - @fuel-ts/address@0.100.0
+  - @fuel-ts/errors@0.100.0
+  - @fuel-ts/math@0.100.0
+
 ## 0.99.0
 
 ### Patch Changes

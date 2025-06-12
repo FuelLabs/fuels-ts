@@ -1,0 +1,93 @@
+name: "Publish to `pr` or `next` tag"
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+env:
+  NPM_DIST_TAG: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'next' }}
+
+jobs:
+  publish-pr-or-next:
+    runs-on: ubuntu-latest
+    permissions: write-all
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Build
+        run: pnpm build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_S3_REGION }}
+
+      - name: Create .npmrc
+        run: |
+          TOKEN=$(aws codeartifact get-authorization-token \
+            --domain fuel \
+            --domain-owner 024848458133 \
+            --query authorizationToken \
+            --output text)
+
+          echo "//fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/npm/:always-auth=true" >> $HOME/.npmrc
+          echo "//fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/npm/:_authToken=${TOKEN}" >> $HOME/.npmrc
+        env:
+          HOME: ${{ github.workspace }}
+
+      - name: Publish `$NPM_DIST_TAG` tag on AWS CodeArtifact
+        run: |
+          echo "Publish to: $NPM_DIST_TAG"
+
+          pnpm changeset:next
+          pnpm changeset version --snapshot $NPM_DIST_TAG
+          pnpm changeset publish --tag $NPM_DIST_TAG
+        env:
+          HOME: ${{ github.workspace }}
+          npm_config_registry: "https://fuel-024848458133.d.codeartifact.us-east-1.amazonaws.com/npm/npm/"
+
+      - name: Add PR comment
+        uses: mshick/add-pr-comment@v2
+        with:
+          refresh-message-position: false
+          message: |
+            # Temporary PR
+
+            This PR is published in AWS CodeArtifact with version: `${{ env.NPM_DIST_TAG }}`
+
+            Install using the below commands — `create-fuels` variations are commented out.
+
+            ## PNPM
+
+            ```bash
+            pnpm config set registry https://npm-packages.fuel.network/ --global
+            pnpm install fuels@${{ env.NPM_DIST_TAG }}
+            # pnpm create fuels@${{ env.NPM_DIST_TAG }}
+            ```
+
+            ## NPM
+
+            ```bash
+            npm --registry=https://npm-packages.fuel.network/ install fuels@${{ env.NPM_DIST_TAG }}
+            # npm --registry=https://npm-packages.fuel.network/ create fuels@${{ env.NPM_DIST_TAG }}
+            ```
+
+            ## Bun
+
+            ```bash
+            npm_config_registry=https://npm-packages.fuel.network/ bun install fuels@${{ env.NPM_DIST_TAG }}
+            # npm_config_registry=https://npm-packages.fuel.network/ bun create fuels@${{ env.NPM_DIST_TAG }}
+            ```

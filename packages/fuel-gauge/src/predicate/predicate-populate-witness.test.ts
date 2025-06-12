@@ -1,4 +1,4 @@
-import type { CoinQuantityLike, ExcludeResourcesOption, Resource } from 'fuels';
+import type { CoinQuantityLike, ResourcesIdsToIgnore, Resource } from 'fuels';
 import { Predicate, ScriptTransactionRequest, bn, isCoin, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
@@ -27,7 +27,7 @@ describe('Predicate', () => {
         {
           utxos: [],
           messages: [],
-        } as Required<ExcludeResourcesOption>
+        } as Required<ResourcesIdsToIgnore>
       );
 
     it('should properly populate predicate data and remove placeholder witness [CASE 1]', async () => {

@@ -197,7 +197,7 @@ export class Address {
    * Takes a dynamic string or `Address` and creates an `Address`
    *
    * @param addressId - A string containing B256, or Public Key
-   * @throws Error - Unknown address if the format is not recognised
+   * @throws Error - Unknown address if the format is not recognized
    * @returns A new `Address` instance
    *
    * @deprecated Use `new Address` instead

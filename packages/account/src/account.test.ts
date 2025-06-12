@@ -311,7 +311,12 @@ describe('Account', () => {
     const estimateTxDependencies = vi
       .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
       .mockImplementation(() =>
-        Promise.resolve({ receipts: [], missingContractIds: [], outputVariables: 0 })
+        Promise.resolve({
+          rawReceipts: [],
+          receipts: [],
+          missingContractIds: [],
+          outputVariables: 0,
+        })
       );
 
     const sendTransaction = vi
@@ -335,6 +340,9 @@ describe('Account', () => {
 
     expect(sendTransaction.mock.calls.length).toEqual(1);
     expect(sendTransaction.mock.calls[0][0]).toEqual(transactionRequest);
+    expect(sendTransaction.mock.calls[0][1], 'Should have default parameters').toEqual({
+      estimateTxDependencies: false,
+    });
   });
 
   it('should execute simulateTransaction just fine', async () => {
@@ -353,7 +361,12 @@ describe('Account', () => {
     const estimateTxDependencies = vi
       .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
       .mockImplementation(() =>
-        Promise.resolve({ receipts: [], missingContractIds: [], outputVariables: 0 })
+        Promise.resolve({
+          rawReceipts: [],
+          receipts: [],
+          missingContractIds: [],
+          outputVariables: 0,
+        })
       );
 
     const simulate = vi
@@ -587,10 +600,10 @@ describe('Account', () => {
 
     // Test excludes the UTXO where the assetIdA gets added to the senders wallet
     await expectToThrowFuelError(
-      () => user.getResourcesToSpend([[1, ASSET_A, 500_000]], { utxos: [assetAUTXO.id] }),
+      () => user.getResourcesToSpend([[1, ASSET_A]], { utxos: [assetAUTXO.id] }),
       new FuelError(
-        ErrorCode.NOT_ENOUGH_FUNDS,
-        `The account(s) sending the transaction don't have enough funds to cover the transaction.`
+        ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
+        `Insufficient funds or too many small value coins. Consider combining UTXOs.`
       )
     );
   });
@@ -685,7 +698,6 @@ describe('Account', () => {
     const recipient = Address.fromB256(RECIPIENT_ID);
 
     const tx = await sender.withdrawToBaseLayer(recipient.toB256(), AMOUNT);
-    // #region Message-getMessageProof
     const result = await tx.waitForResult();
 
     // Wait for the next block to be minter on out case we are using a local provider
@@ -701,7 +713,6 @@ describe('Account', () => {
       messageOutReceipt.nonce,
       nextBlock.blockId
     );
-    // #endregion Message-getMessageProof
 
     expect(messageProof?.amount.toNumber()).toEqual(AMOUNT);
     expect(messageProof?.sender.toHexString()).toEqual(result.id);
@@ -969,9 +980,8 @@ describe('Account', () => {
     request.addCoinOutput(wallet.address, 30_000, await provider.getBaseAssetId());
 
     await expectToThrowFuelError(() => request.estimateAndFund(wallet), {
-      code: ErrorCode.MAX_COINS_REACHED,
-      message:
-        'The account retrieving coins has exceeded the maximum number of coins per asset. Please consider combining your coins into a single UTXO.',
+      code: ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
+      message: 'Insufficient funds or too many small value coins. Consider combining UTXOs.',
     });
   });
 

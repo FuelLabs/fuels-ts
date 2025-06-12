@@ -16,7 +16,7 @@ import {
 import type {
   CallResult,
   CoinQuantityLike,
-  ExcludeResourcesOption,
+  ResourcesIdsToIgnore,
   Provider,
   Resource,
   TransactionRequest,
@@ -28,14 +28,26 @@ import { deployScriptOrPredicate } from '../utils/deployScriptOrPredicate';
 
 import { getPredicateRoot } from './utils';
 
+// Helper type to check if T is a tuple with a fixed, non-zero length
+type IsNonEmptyTuple<T extends unknown[]> = number extends T['length']
+  ? false
+  : T['length'] extends 0
+    ? false
+    : true;
+
+// Type for the 'data' property, required if TData is a non-empty tuple
+export type PredicateDataParam<TData extends InputValue[]> =
+  IsNonEmptyTuple<TData> extends true
+    ? { data: TData } // If TData is a non-empty tuple, 'data' is required
+    : { data?: TData }; // Otherwise (TData is []), 'data' is optional
+
 export type PredicateParams<
   TData extends InputValue[] = InputValue[],
   TConfigurables extends { [name: string]: unknown } | undefined = { [name: string]: unknown },
-> = {
+> = PredicateDataParam<TData> & {
   bytecode: BytesLike;
   provider: Provider;
   abi: JsonAbi;
-  data?: TData;
   configurableConstants?: TConfigurables;
 };
 
@@ -142,7 +154,12 @@ export class Predicate<
     return super.simulateTransaction(transactionRequest, { estimateTxDependencies: false });
   }
 
-  private getPredicateData(): Uint8Array {
+  /**
+   * Retrieves the properly encoded predicate data.
+   *
+   * @returns A Uint8Array containing the encoded predicate data. If no predicate data is available, returns an empty Uint8Array.
+   */
+  getPredicateData(): Uint8Array {
     if (!this.predicateData.length) {
       return new Uint8Array();
     }
@@ -157,7 +174,9 @@ export class Predicate<
    * @returns A new Predicate instance with the same bytecode, ABI and provider but with the ability to set the data and configurable constants.
    */
   toNewInstance(
-    overrides: Pick<PredicateParams<TData, TConfigurables>, 'data' | 'configurableConstants'> = {}
+    overrides: Partial<
+      Pick<PredicateParams<TData, TConfigurables>, 'data' | 'configurableConstants'>
+    > = {}
   ) {
     return new Predicate<TData, TConfigurables>({
       bytecode: this.initialBytecode,
@@ -166,6 +185,15 @@ export class Predicate<
       data: overrides.data ?? this.predicateData,
       configurableConstants: overrides.configurableConstants ?? this.configurableConstants,
     });
+  }
+
+  /**
+   * Sets the predicate data.
+   *
+   * @param data - The data to be set for the predicate.
+   */
+  setData(data: TData) {
+    this.predicateData = data;
   }
 
   /**
@@ -209,17 +237,17 @@ export class Predicate<
    * Retrieves resources satisfying the spend query for the account.
    *
    * @param quantities - IDs of coins to exclude.
-   * @param excludedIds - IDs of resources to be excluded from the query.
+   * @param resourcesIdsToIgnore - IDs of resources to be excluded from the query.
    * @returns A promise that resolves to an array of Resources.
    */
   override async getResourcesToSpend(
-    quantities: CoinQuantityLike[] /** IDs of coins to exclude */,
-    excludedIds?: ExcludeResourcesOption
+    quantities: CoinQuantityLike[],
+    resourcesIdsToIgnore?: ResourcesIdsToIgnore
   ): Promise<Resource[]> {
     const resources = await this.provider.getResourcesToSpend(
       this.address,
       quantities,
-      excludedIds
+      resourcesIdsToIgnore
     );
     return resources.map((resource) => ({
       ...resource,

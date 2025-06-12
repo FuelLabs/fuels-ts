@@ -75,6 +75,9 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
    * @param account - The account to fund the transaction.
    * @param params - The parameters for the transaction cost.
    * @returns The current instance of the `ScriptTransactionRequest` funded.
+   *
+   * @deprecated Use `provider.assembleTx` instead.
+   * Check the migration guide https://docs.fuel.network/guide/assembling-transactions/migration-guide.html for more information.
    */
   async estimateAndFund(
     account: Account,
@@ -171,6 +174,22 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     }
 
     return this.outputs.length - 1;
+  }
+
+  /**
+   * Adds a variable output to the transaction request.
+   *
+   * @param to - The recipient address as a BytesLike object. Defaults to ZeroBytes32 if not provided.
+   * @param amount - The amount to be transferred as a BigNumberish object. Defaults to 0 if not provided.
+   * @param assetId - The asset ID as a BytesLike object. Defaults to ZeroBytes32 if not provided.
+   */
+  addVariableOutput(to?: BytesLike, amount?: BigNumberish, assetId?: BytesLike) {
+    this.pushOutput({
+      type: OutputType.Variable,
+      to,
+      amount,
+      assetId,
+    });
   }
 
   /**

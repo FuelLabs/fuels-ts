@@ -14,8 +14,21 @@ export default defineConfig({
       md.use(snippetPlugin);
       md.use(codeInContextPlugin);
       md.block.ruler.disable('snippet');
+      md.core.ruler.before('normalize', 'replace-docs-api-url', (state) => {
+        const apiUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:5174' : '/api';
+        state.src = state.src.replace(/DOCS_API_URL/g, apiUrl);
+      });
     },
   },
+  transformHtml: (code) => {
+    // make the API links open in a new tab
+    // because opening in the same tab doesn't work in the preview
+    return code.replace(/(<a\s+[^>]*href="\/api\/[^"]*")/g, '$1 target="_blank" rel="noreferrer"');
+  },
+  // Finds dead DOCS_API_URL links and fails,
+  // but they get replaced later in the markdown transformer.
+  // We have the md link checker workflow which covers this.
+  ignoreDeadLinks: true,
   head: [
     ['link', { rel: 'icon', href: '/fuels-ts/favicon.ico', type: 'image/png' }],
     ['meta', { property: 'og:type', content: 'website' }],
@@ -141,6 +154,10 @@ export default defineConfig({
                 text: 'Querying the Chain',
                 link: '/guide/provider/querying-the-chain',
               },
+              {
+                text: 'RPC Consistency',
+                link: '/guide/provider/rpc-consistency',
+              },
             ],
           },
           {
@@ -208,10 +225,6 @@ export default defineConfig({
                 link: '/guide/contracts/contract-balance',
               },
               {
-                text: 'Cost Estimation',
-                link: '/guide/contracts/cost-estimation',
-              },
-              {
                 text: 'Dependency Estimation',
                 link: '/guide/contracts/dependency-estimation',
               },
@@ -250,6 +263,10 @@ export default defineConfig({
               {
                 text: 'Configurable Constants',
                 link: '/guide/contracts/configurable-constants',
+              },
+              {
+                text: 'Custom Contract Calls',
+                link: '/guide/contracts/custom-contract-calls',
               },
               {
                 text: 'Minted Token Asset ID',
@@ -294,6 +311,10 @@ export default defineConfig({
                 text: 'Custom script Call',
                 link: '/guide/scripts/custom-script-call',
               },
+              {
+                text: 'Logs',
+                link: '/guide/scripts/logs',
+              },
             ],
           },
           {
@@ -333,6 +354,14 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
+                text: 'Assemble TX',
+                link: '/guide/transactions/assemble-tx',
+              },
+              {
+                text: 'Assemble TX Migration Guide',
+                link: '/guide/transactions/assemble-tx-migration-guide',
+              },
+              {
                 text: 'Modifying the Request',
                 link: '/guide/transactions/modifying-the-request',
               },
@@ -351,6 +380,10 @@ export default defineConfig({
               {
                 text: 'Optimizing Frontend Apps',
                 link: '/guide/transactions/optimizing-frontend-apps',
+              },
+              {
+                text: 'Pre-Confirmations',
+                link: '/guide/transactions/pre-confirmations',
               },
             ],
           },
@@ -422,8 +455,8 @@ export default defineConfig({
                 link: '/guide/cookbook/generate-fake-resources',
               },
               {
-                text: 'Transactions with Multiple Signers',
-                link: '/guide/cookbook/transactions-with-multiple-signers',
+                text: 'Sway Script with Signature Validation',
+                link: '/guide/cookbook/sway-script-with-signature-validation',
               },
               {
                 text: 'GraphQL Integration',
@@ -564,6 +597,12 @@ export default defineConfig({
           {
             text: 'Errors',
             link: '/guide/errors/',
+            collapsed: false,
+            items: [],
+          },
+          {
+            text: 'Fuel ASM',
+            link: '/guide/fuel-asm/',
             collapsed: false,
             items: [],
           },

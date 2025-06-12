@@ -13,6 +13,10 @@ import {
   PolicyType,
   buildFunctionResult,
   ReceiptType,
+  InputMessageCoder,
+  hexlify,
+  InputType,
+  randomBytes,
 } from 'fuels';
 import type {
   ContractTransferParams,
@@ -27,18 +31,22 @@ import {
   ASSET_B,
   launchTestNode,
   TestAssetId,
+  TestMessage,
 } from 'fuels/test-utils';
 
+import { PredicateSigning } from '../test/typegen';
 import {
   CallTestContract,
   CallTestContractFactory,
   SmoContractFactory,
   StorageTestContract,
   StorageTestContractFactory,
+  TokenContractFactory,
   VoidFactory,
 } from '../test/typegen/contracts';
 import { PredicateTrue } from '../test/typegen/predicates/PredicateTrue';
 
+import { fundAccount } from './predicate/utils/predicate';
 import { launchTestContract } from './utils';
 
 const contractsConfigs = [CallTestContractFactory, CallTestContractFactory];
@@ -112,7 +120,7 @@ describe('Contract', () => {
     expect(value.toHex()).toEqual(toHex(1338));
   });
 
-  it('adds multiple contracts on multicalls', async () => {
+  it('adds multiple contracts on multi-calls', async () => {
     using launched = await launchTestNode({
       contractsConfigs,
     });
@@ -227,7 +235,7 @@ describe('Contract', () => {
     expect(failed).toEqual(true);
   });
 
-  it('adds multiple contracts on multicalls', async () => {
+  it('adds multiple contracts on multi-calls', async () => {
     using launched = await launchTestNode({
       contractsConfigs,
     });
@@ -354,7 +362,7 @@ describe('Contract', () => {
     );
   });
 
-  it('can forward gas to multicall calls', async () => {
+  it('can forward gas to multi-call calls', async () => {
     using contract = await setupTestContract();
 
     const { waitForResult } = await contract
@@ -611,7 +619,7 @@ describe('Contract', () => {
     expect(result.status).toBe('success');
   });
 
-  it('should ensure multicall allows multiple heap types', async () => {
+  it('should ensure multi-call allows multiple heap types', async () => {
     using contract = await setupTestContract();
 
     const vector = [5, 4, 3, 2, 1];
@@ -891,7 +899,7 @@ describe('Contract', () => {
     expect(bn(maxFeePolicy?.data).toNumber()).toBe(maxFee);
   });
 
-  it('should ensure gas price and gas limit are validated when transfering to contract', async () => {
+  it('should ensure gas price and gas limit are validated when transferring to contract', async () => {
     using launched = await launchTestNode({
       contractsConfigs,
     });
@@ -915,7 +923,7 @@ describe('Contract', () => {
     }).rejects.toThrowError(/Gas limit '1' is lower than the required: ./);
   });
 
-  it('should tranfer asset to a deployed contract just fine (NOT NATIVE ASSET)', async () => {
+  it('should transfer asset to a deployed contract just fine (NOT NATIVE ASSET)', async () => {
     const asset = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
     using launched = await launchTestNode({
@@ -939,7 +947,7 @@ describe('Contract', () => {
     expect(finalBalance).toBe(initialBalance + amountToContract);
   });
 
-  it('should tranfer asset to a deployed contract just fine (FROM PREDICATE)', async () => {
+  it('should transfer asset to a deployed contract just fine (FROM PREDICATE)', async () => {
     using launched = await launchTestNode({
       contractsConfigs,
     });
@@ -994,7 +1002,7 @@ describe('Contract', () => {
     );
   });
 
-  it('should ensure assets can be transfered to wallets (SINGLE TRANSFER)', async () => {
+  it('should ensure assets can be transferred to wallets (SINGLE TRANSFER)', async () => {
     using contract = await setupTestContract();
     const { provider } = contract;
 
@@ -1017,7 +1025,7 @@ describe('Contract', () => {
     expect(finalBalance.toNumber()).toBe(amountToTransfer);
   });
 
-  it('should ensure assets can be transfered to wallets (MULTI TRANSFER)', async () => {
+  it('should ensure assets can be transferred to wallets (MULTI TRANSFER)', async () => {
     using launched = await launchTestNode();
     const {
       provider,
@@ -1109,8 +1117,8 @@ describe('Contract', () => {
           })
           .simulate(),
       new FuelError(
-        ErrorCode.NOT_ENOUGH_FUNDS,
-        `The account(s) sending the transaction don't have enough funds to cover the transaction.`
+        ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
+        `Insufficient funds or too many small value coins. Consider combining UTXOs.`
       )
     );
   });
@@ -1271,7 +1279,45 @@ describe('Contract', () => {
     expect(bn(maxFeePolicy?.data).toNumber()).toBe(maxFee);
   });
 
-  it('should ensure "maxFee" and "gasLimit" can be set on a multicall', async () => {
+  it('can get asset details just fine', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: TokenContractFactory,
+        },
+      ],
+    });
+    const {
+      contracts: [tokenContract],
+      provider,
+    } = launched;
+
+    const totalSupply = 100_000_000;
+    const { waitForResult } = await tokenContract.functions.mint_coins(totalSupply).call();
+
+    const {
+      transactionResult: { mintedAssets },
+    } = await waitForResult();
+
+    const { subId, contractId } = mintedAssets[0];
+
+    const assetDetails = await provider.getAssetDetails(mintedAssets[0].assetId);
+
+    expect(assetDetails.contractId).toBe(contractId);
+    expect(assetDetails.subId).toBe(subId);
+    expect(assetDetails.totalSupply.toNumber()).toBe(totalSupply);
+  });
+
+  it('should throw an error if asset details are not found', async () => {
+    using launched = await launchTestNode();
+    const { provider } = launched;
+
+    await expectToThrowFuelError(() => provider.getAssetDetails(getRandomB256()), {
+      code: ErrorCode.ASSET_NOT_FOUND,
+    });
+  });
+
+  it('should ensure "maxFee" and "gasLimit" can be set on a multi-call', async () => {
     using contract = await setupTestContract();
 
     const gasLimit = 500_000;
@@ -1348,5 +1394,173 @@ describe('Contract', () => {
     messageOutReceipts.forEach((receipt) => {
       expect(receipt.recipient).toBe(recipient.address.toB256());
     });
+  });
+
+  it('should customize the TX request and still use the scope invocation[ADD WITNESS]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: CallTestContractFactory,
+        },
+      ],
+    });
+
+    const {
+      provider,
+      wallets: [wallet],
+      contracts: [contract],
+    } = launched;
+
+    const fooValue = 1000;
+
+    const predicate = new PredicateSigning({
+      provider,
+      data: [0],
+      configurableConstants: { SIGNER: wallet.address.toB256() },
+    });
+
+    await fundAccount(wallet, predicate, 500_000);
+
+    contract.account = wallet;
+
+    const scope = contract.functions.foo(fooValue);
+
+    const request = await scope.getTransactionRequest();
+
+    const witnessIndex = request.addEmptyWitness();
+
+    const { assembledRequest } = await provider.assembleTx({
+      request,
+      feePayerAccount: predicate,
+      estimatePredicates: false,
+    });
+
+    request.updateWitness(witnessIndex, await wallet.signTransaction(assembledRequest));
+
+    await provider.estimatePredicates(request);
+
+    const call = await scope.call({ skipAssembleTx: true });
+
+    const {
+      value,
+      transactionResult: { isStatusSuccess },
+    } = await call.waitForResult();
+
+    expect(isStatusSuccess).toBeTruthy();
+    expect(value.toNumber()).toBe(fooValue + 1);
+  });
+
+  it('should customize the TX request and still use the scope invocation [COIN]', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: CallTestContractFactory,
+        },
+      ],
+    });
+
+    const {
+      provider,
+      wallets: [wallet],
+      contracts: [contract],
+    } = launched;
+
+    const fooValue = 1000;
+    const baseAssetId = await provider.getBaseAssetId();
+
+    const predicate = new PredicateTrue({ provider });
+
+    await fundAccount(wallet, predicate, 2_000_000);
+
+    contract.account = wallet;
+    const scope = contract.functions.foo(fooValue);
+    const request = await scope.getTransactionRequest();
+
+    const predicateResources = await predicate.getResourcesToSpend([
+      { amount: bn(2_000_000), assetId: baseAssetId },
+    ]);
+
+    request.addResources(predicateResources);
+
+    request.maxFee = bn(15_000);
+    request.gasLimit = bn(100_000);
+
+    await provider.estimatePredicates(request);
+
+    const call = await scope.call({ skipAssembleTx: true });
+
+    const {
+      value,
+      transactionResult: { transaction, isStatusSuccess },
+    } = await call.waitForResult();
+
+    expect(isStatusSuccess).toBeTruthy();
+    expect(value.toNumber()).toBe(fooValue + 1);
+
+    const allSpentCoins = transaction.inputs.filter((input) => input.type === InputType.Coin);
+
+    expect(allSpentCoins.length).toBeGreaterThan(0);
+
+    allSpentCoins.forEach((coin) => {
+      expect(coin.owner).toBe(predicate.address.toB256());
+    });
+  });
+
+  it('should customize the TX request and still use the scope invocation [MESSAGE]', async () => {
+    const testMessage = new TestMessage({
+      data: hexlify(InputMessageCoder.encodeData(randomBytes(10))),
+    });
+
+    using launched = await launchTestNode({
+      walletsConfig: {
+        messages: [testMessage],
+      },
+      contractsConfigs: [
+        {
+          factory: CallTestContractFactory,
+        },
+      ],
+    });
+
+    const {
+      provider,
+      wallets: [wallet],
+      contracts: [contract],
+    } = launched;
+
+    const fooValue = 1000;
+    const baseAssetId = await provider.getBaseAssetId();
+
+    const scope = contract.functions.foo(fooValue);
+    const request = await scope.getTransactionRequest();
+
+    const resources = await wallet.getResourcesToSpend([
+      { amount: bn(10_000), assetId: baseAssetId },
+    ]);
+
+    request.addResources(resources);
+
+    const {
+      messages: [message],
+    } = await wallet.getMessages();
+    request.addMessageInput(message);
+
+    request.gasLimit = bn(100_000);
+    request.maxFee = bn(15_000);
+
+    const call = await scope.call({ skipAssembleTx: true });
+
+    const {
+      value,
+      transactionResult: { transaction, isStatusSuccess },
+    } = await call.waitForResult();
+
+    expect(isStatusSuccess).toBeTruthy();
+    expect(value.toNumber()).toBe(fooValue + 1);
+
+    const messageInput = transaction.inputs.find((input) => input.type === InputType.Message);
+
+    expect(messageInput).toBeDefined();
+    expect(messageInput?.nonce).toBe(message.nonce);
   });
 });

@@ -1,5 +1,215 @@
 # Change Log
 
+## 0.101.2
+
+### Patch Changes
+
+- ec2ac46: fix: contract operation summary for multi-calls
+- 8c19d93: chore: support Node 24 - depreciate Node 18
+- bfb62ad: feat: implement support for new ABI error codes
+- Updated dependencies [8c19d93]
+- Updated dependencies [bfb62ad]
+- Updated dependencies [0d71065]
+  - @fuel-ts/transactions@0.101.2
+  - @fuel-ts/abi-coder@0.101.2
+  - @fuel-ts/versions@0.101.2
+  - @fuel-ts/address@0.101.2
+  - @fuel-ts/crypto@0.101.2
+  - @fuel-ts/errors@0.101.2
+  - @fuel-ts/hasher@0.101.2
+  - @fuel-ts/merkle@0.101.2
+  - @fuel-ts/utils@0.101.2
+  - @fuel-ts/math@0.101.2
+
+## 0.101.1
+
+### Patch Changes
+
+- 52dfa5b: chore: made `Account.signTransaction` returns `TransactionRequest`
+  - @fuel-ts/abi-coder@0.101.1
+  - @fuel-ts/address@0.101.1
+  - @fuel-ts/crypto@0.101.1
+  - @fuel-ts/errors@0.101.1
+  - @fuel-ts/hasher@0.101.1
+  - @fuel-ts/math@0.101.1
+  - @fuel-ts/merkle@0.101.1
+  - @fuel-ts/transactions@0.101.1
+  - @fuel-ts/utils@0.101.1
+  - @fuel-ts/versions@0.101.1
+
+## 0.101.0
+
+### Minor Changes
+
+- 4cbd72c: fix!: enforce `predicateData` when predicate has arguments
+
+### Patch Changes
+
+- 388ad98: feat: add `Predicate` method `setData`
+- e91eb6c: feat: support TX customization at BaseInvocationScope
+- 842e0f3: fix: close subscription after `Preconfirmation` status when applicable
+  - @fuel-ts/abi-coder@0.101.0
+  - @fuel-ts/address@0.101.0
+  - @fuel-ts/crypto@0.101.0
+  - @fuel-ts/errors@0.101.0
+  - @fuel-ts/hasher@0.101.0
+  - @fuel-ts/math@0.101.0
+  - @fuel-ts/merkle@0.101.0
+  - @fuel-ts/transactions@0.101.0
+  - @fuel-ts/utils@0.101.0
+  - @fuel-ts/versions@0.101.0
+
+## 0.100.6
+
+### Patch Changes
+
+- 303379c: chore: made connector returns `TransactionResponse` type
+  - @fuel-ts/abi-coder@0.100.6
+  - @fuel-ts/address@0.100.6
+  - @fuel-ts/crypto@0.100.6
+  - @fuel-ts/errors@0.100.6
+  - @fuel-ts/hasher@0.100.6
+  - @fuel-ts/math@0.100.6
+  - @fuel-ts/merkle@0.100.6
+  - @fuel-ts/transactions@0.100.6
+  - @fuel-ts/utils@0.100.6
+  - @fuel-ts/versions@0.100.6
+
+## 0.100.5
+
+### Patch Changes
+
+- 0a8b276: fix: ensure contract call receipt exists when decoding logs
+- 03b151b: fix: provider auto-refetch
+- 416e9e7: feat: implement methods to serialize/deserialize `TransactionResponse`
+  - @fuel-ts/abi-coder@0.100.5
+  - @fuel-ts/address@0.100.5
+  - @fuel-ts/crypto@0.100.5
+  - @fuel-ts/errors@0.100.5
+  - @fuel-ts/hasher@0.100.5
+  - @fuel-ts/math@0.100.5
+  - @fuel-ts/merkle@0.100.5
+  - @fuel-ts/transactions@0.100.5
+  - @fuel-ts/utils@0.100.5
+  - @fuel-ts/versions@0.100.5
+
+## 0.100.4
+
+### Patch Changes
+
+- efcce41: feat: integrate with new `AssembleTx` GQL end-point
+- 04fc7b5: chore: upgrading `@fuels/vm-asm` package
+- 5a57b97: chore: support RPC consistency mechanism
+- f534210: feat: add method for base asset coins consolidation
+- ec13d29: fix: provider async methods and tests
+- 3bb0eb7: chore: renaming method for consistency
+- dbed315: chore: upgrade `fuel-core` to `0.43.1`
+- Updated dependencies [efcce41]
+- Updated dependencies [5a57b97]
+- Updated dependencies [f534210]
+- Updated dependencies [dbed315]
+  - @fuel-ts/errors@0.100.4
+  - @fuel-ts/transactions@0.100.4
+  - @fuel-ts/versions@0.100.4
+  - @fuel-ts/abi-coder@0.100.4
+  - @fuel-ts/address@0.100.4
+  - @fuel-ts/crypto@0.100.4
+  - @fuel-ts/math@0.100.4
+  - @fuel-ts/utils@0.100.4
+  - @fuel-ts/hasher@0.100.4
+  - @fuel-ts/merkle@0.100.4
+
+## 0.100.3
+
+### Patch Changes
+
+- 5c40eb9: feat: added `groupedLogs`
+- e677921: fix: silent chain fetch request failures
+  - @fuel-ts/abi-coder@0.100.3
+  - @fuel-ts/address@0.100.3
+  - @fuel-ts/crypto@0.100.3
+  - @fuel-ts/errors@0.100.3
+  - @fuel-ts/hasher@0.100.3
+  - @fuel-ts/math@0.100.3
+  - @fuel-ts/merkle@0.100.3
+  - @fuel-ts/transactions@0.100.3
+  - @fuel-ts/utils@0.100.3
+  - @fuel-ts/versions@0.100.3
+
+## 0.100.2
+
+### Patch Changes
+
+- e909d54: fix: adjust feature detection for balances
+- Updated dependencies [e909d54]
+  - @fuel-ts/errors@0.100.2
+  - @fuel-ts/abi-coder@0.100.2
+  - @fuel-ts/address@0.100.2
+  - @fuel-ts/crypto@0.100.2
+  - @fuel-ts/math@0.100.2
+  - @fuel-ts/transactions@0.100.2
+  - @fuel-ts/utils@0.100.2
+  - @fuel-ts/hasher@0.100.2
+  - @fuel-ts/merkle@0.100.2
+  - @fuel-ts/versions@0.100.2
+
+## 0.100.1
+
+### Patch Changes
+
+- fdefaba: fix: skip decoding external contract logs without JSON ABI
+- bb6a76c: chore: eliminate chain requests across concurrent provider instances
+  - @fuel-ts/abi-coder@0.100.1
+  - @fuel-ts/address@0.100.1
+  - @fuel-ts/crypto@0.100.1
+  - @fuel-ts/errors@0.100.1
+  - @fuel-ts/hasher@0.100.1
+  - @fuel-ts/math@0.100.1
+  - @fuel-ts/merkle@0.100.1
+  - @fuel-ts/transactions@0.100.1
+  - @fuel-ts/utils@0.100.1
+  - @fuel-ts/versions@0.100.1
+
+## 0.100.0
+
+### Minor Changes
+
+- 260f64f: chore!: made `ResourceCache` consider resource owner
+- f41887f: chore!: upgrade `fuel-core` to `0.41.7`
+
+### Patch Changes
+
+- 3af8692: fix: ensure is possible to forward 0 amount to contract
+- 6668336: chore: merge gas price and predicate estimation requests
+- 68877c3: chore: revert "fix: ignored subscriptions not being read"
+- 0fd8a82: feat: consider `assetId` in check account utility
+- fc18871: feat: enable arbitrary data signing
+- 6eb113c: chore: upgrade NPM package versions
+- da33ca5: chore: remove call ops in tx summary
+- c5c8403: feat: improved connector JSON RPC interface
+- e48b0e9: feat: add receipts with the operations summary
+- 817bf13: fix: correct revert error name
+- 6d3cafb: chore: support BN input in block fetch methods
+- 194e31f: fix: contract operations in transaction summary
+- Updated dependencies [1277ae6]
+- Updated dependencies [b42f056]
+- Updated dependencies [fc18871]
+- Updated dependencies [6eb113c]
+- Updated dependencies [f41887f]
+- Updated dependencies [521292a]
+- Updated dependencies [ff97a6e]
+- Updated dependencies [194e31f]
+  - @fuel-ts/utils@0.100.0
+  - @fuel-ts/versions@0.100.0
+  - @fuel-ts/hasher@0.100.0
+  - @fuel-ts/abi-coder@0.100.0
+  - @fuel-ts/address@0.100.0
+  - @fuel-ts/crypto@0.100.0
+  - @fuel-ts/transactions@0.100.0
+  - @fuel-ts/errors@0.100.0
+  - @fuel-ts/merkle@0.100.0
+  - @fuel-ts/math@0.100.0
+
 ## 0.99.0
 
 ### Minor Changes

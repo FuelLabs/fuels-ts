@@ -1,5 +1,72 @@
 # Change Log
 
+## 0.101.2
+
+### Patch Changes
+
+- 8c19d93: chore: support Node 24 - depreciate Node 18
+- Updated dependencies [8c19d93]
+  - @fuel-ts/errors@0.101.2
+
+## 0.101.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.101.1
+
+## 0.101.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.101.0
+
+## 0.100.6
+
+### Patch Changes
+
+- @fuel-ts/errors@0.100.6
+
+## 0.100.5
+
+### Patch Changes
+
+- @fuel-ts/errors@0.100.5
+
+## 0.100.4
+
+### Patch Changes
+
+- Updated dependencies [efcce41]
+- Updated dependencies [5a57b97]
+- Updated dependencies [f534210]
+  - @fuel-ts/errors@0.100.4
+
+## 0.100.3
+
+### Patch Changes
+
+- @fuel-ts/errors@0.100.3
+
+## 0.100.2
+
+### Patch Changes
+
+- Updated dependencies [e909d54]
+  - @fuel-ts/errors@0.100.2
+
+## 0.100.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.100.1
+
+## 0.100.0
+
+### Patch Changes
+
+- Updated dependencies [f41887f]
+  - @fuel-ts/errors@0.100.0
+
 ## 0.99.0
 
 ### Patch Changes

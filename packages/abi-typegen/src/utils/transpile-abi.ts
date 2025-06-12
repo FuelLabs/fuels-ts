@@ -140,6 +140,7 @@ export function transpileAbi(abi) {
     loggedTypes,
     messagesTypes: abi.messagesTypes,
     configurables,
+    errorCodes: abi.errorCodes,
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

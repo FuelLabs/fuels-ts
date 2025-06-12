@@ -36,6 +36,8 @@ export enum ErrorCode {
   INVALID_PROVIDER = 'invalid-provider',
   CONNECTION_REFUSED = 'connection-refused',
   INVALID_URL = 'invalid-url',
+  UNSUPPORTED_FEATURE = 'unsupported-feature',
+  RESPONSE_BODY_EMPTY = 'response-body-empty',
 
   // wallet
   INVALID_PUBLIC_KEY = 'invalid-public-key',
@@ -57,7 +59,7 @@ export enum ErrorCode {
   MISSING_REQUIRED_PARAMETER = 'missing-required-parameter',
   INVALID_REQUEST = 'invalid-request',
   INVALID_TRANSFER_AMOUNT = 'invalid-transfer-amount',
-  NOT_ENOUGH_FUNDS = 'not-enough-funds',
+  INSUFFICIENT_FUNDS_OR_MAX_COINS = 'not-enough-funds-or-max-coins-reached',
 
   // crypto
   INVALID_CREDENTIALS = 'invalid-credentials',
@@ -85,8 +87,9 @@ export enum ErrorCode {
   MAX_INPUTS_EXCEEDED = 'max-inputs-exceeded',
   FUNDS_TOO_LOW = 'funds-too-low',
   MAX_OUTPUTS_EXCEEDED = 'max-outputs-exceeded',
-  MAX_COINS_REACHED = 'max-coins-reached',
   ASSET_BURN_DETECTED = 'asset-burn-detected',
+  CHANGE_OUTPUT_COLLISION = 'change-output-collision',
+  DUPLICATE_CHANGE_OUTPUT_ACCOUNT = 'duplicate-change-output-account',
 
   // receipt
   INVALID_RECEIPT_TYPE = 'invalid-receipt-type',
@@ -102,12 +105,18 @@ export enum ErrorCode {
   INVALID_PASSWORD = 'invalid-password',
   ACCOUNT_REQUIRED = 'account-required',
   UNLOCKED_WALLET_REQUIRED = 'unlocked-wallet-required',
+  NO_COINS_TO_CONSOLIDATE = 'no-coins-to-consolidate',
+  COINS_ASSET_ID_MISMATCH = 'coins-asset-id-mismatch',
+
+  // asset
+  ASSET_NOT_FOUND = 'asset-not-found',
 
   // bn
   NUMBER_TOO_BIG = 'number-too-big',
 
   // chain
   ERROR_BUILDING_BLOCK_EXPLORER_URL = 'error-building-block-explorer-url',
+  RPC_CONSISTENCY = 'rpc-consistency',
 
   // docs
   VITEPRESS_PLUGIN_ERROR = 'vitepress-plugin-error',

@@ -414,20 +414,26 @@ cp .env.example .env
 ```env
 PERFORMANCE_ANALYSIS_TEST_URL=https://testnet.fuel.network/v1/graphql
 PERFORMANCE_ANALYSIS_PVT_KEY=...
-PERFORMANCE_ANALYSIS_CONTRACT_ADDRESS=...
 ```
 
 - `PERFORMANCE_ANALYSIS_TEST_URL`: The URL of which network the test should run (e.g., Fuel Testnet endpoint).
 - `PERFORMANCE_ANALYSIS_PVT_KEY`: Your private key for the network.
-- `PERFORMANCE_ANALYSIS_CONTRACT_ADDRESS`: The address of the contract used by the script. If this variable is left empty, the script will deploy the contract before running the time measurement tests. The deployed contract address will be logged, allowing you to add it here for subsequent test runs to avoid re-deployment.
 
 ### Running the Test Suite
 
-Once the environment is set up, run the network tests using the following command:
+Once your environment is configured, run the operations with:
 
 ```sh
 pnpm tx:perf
 ```
+
+By default, each operation is executed once. To run the operation multiple times and calculate an average execution time, use the `--execution-count` flag:
+
+```sh
+pnpm tx:perf -- --execution-count 10
+```
+
+In this example, each operation will be executed 10 times, and the reported time will be the average across all runs.
 
 ### Output and Results
 
@@ -439,19 +445,19 @@ The test results are saved in the snapshots directory as a CSV file. The filenam
 
 A sample of the results is shown below:
 
-| Tag                          | Time (in seconds) |
-| ---------------------------- | ----------------- |
-| `script`                     | 1.907             |
-| `missing-output-variable`    | 2.159             |
-| `missing-4x-output-variable` | 3.072             |
-| `script-with-predicate`      | 1.997             |
+| Tag                              | Time (in seconds) |
+| -------------------------------- | ----------------- |
+| `simple-transfer`                | 1.907             |
+| `missing-4x-output-variable`     | 2.866             |
+| `inter-contract-call`            | 2.159             |
+| `predicate-signature-validation` | 2.142             |
 
 ### Notes on Transaction Types
 
-- `script`: Represents a script transaction, such as a simple contract call performing one asset transfer.
-- `missing-output-variable`: A similar contract call as the `script` case, but without specifying the `OutputVariable`, resulting in one additional dry run.
-- `missing-4x-output-variable`: Executes an asset transfer transaction to four destinations without specifying `OutputVariable`, leading to four additional dry runs.
-- `script-with-predicate`: Performs the contract asset transfer transaction to one address and adds the `OutputVariable` before hand. The account submitting the transaction is a predicate, which it will result in the additional request to `estimatePredicates`.
+- `simple-transfer`: A basic transfer between two accounts.
+- `missing-4x-output-variable`: Transfers assets to four recipients without specifying `OutputVariable`, resulting in four additional dry runs during estimation.
+- `inter-contract-call`: Executes a script that calls a contract function, which then calls another contract function. Contracts inputs and outputs are not explicitly provided and are going to be resolved during estimation.
+- `predicate-signature-validation`: Executes a transfer using a predicate that verifies a signature included in the transaction's witnesses. This mimics how non-native wallet connectors operate.
 
 # FAQ
 

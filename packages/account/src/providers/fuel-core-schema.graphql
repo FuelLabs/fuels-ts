@@ -14,13 +14,31 @@ directive @specifiedBy(
   url: String!
 ) on SCALAR
 
+input Account {
+  address: Address
+  predicate: Predicate
+}
+
 scalar Address
 
+type AssembleTransactionResult {
+  transaction: Transaction!
+  status: DryRunTransactionStatus!
+  gasPrice: U64!
+}
+
 scalar AssetId
+
+type AssetInfoDetails {
+  contractId: ContractId!
+  subId: SubId!
+  totalSupply: U128!
+}
 
 type Balance {
   owner: Address!
   amount: U64!
+  amountU128: U128!
   assetId: AssetId!
 }
 
@@ -140,6 +158,19 @@ type ChangeOutput {
   to: Address!
   amount: U64!
   assetId: AssetId!
+}
+
+input ChangePolicy {
+  """
+  Adds `Output::Change` to the transaction if it is not already present.
+  Sending remaining assets to the provided address.
+  """
+  change: Address
+
+  """
+  Destroys the remaining assets by the transaction for provided address.
+  """
+  destroy: Destroy
 }
 
 type Coin {
@@ -320,12 +351,21 @@ type DaCompressedBlock {
 
 union DependentCost = LightOperation | HeavyOperation
 
+enum Destroy {
+  DESTROY
+}
+
 type DryRunFailureStatus {
   programState: ProgramState
   reason: String!
   receipts: [Receipt!]!
   totalGas: U64!
   totalFee: U64!
+}
+
+type DryRunStorageReads {
+  txStatuses: [DryRunTransactionExecutionStatus!]!
+  storageReads: [StorageReadReplayEvent!]!
 }
 
 type DryRunSuccessStatus {
@@ -472,6 +512,7 @@ type GasCosts {
   wqmm: U64!
   xor: U64!
   xori: U64!
+  ecop: U64
   alocDependentCost: DependentCost!
   bldd: DependentCost
   bsiz: DependentCost
@@ -496,6 +537,7 @@ type GasCosts {
   smo: DependentCost!
   srwq: DependentCost!
   swwq: DependentCost!
+  epar: DependentCost
   contractRoot: DependentCost!
   stateRoot: DependentCost!
   vmInitialization: DependentCost!
@@ -604,10 +646,16 @@ type Header {
   Hash of the application header.
   """
   applicationHash: Bytes32!
+
+  """
+  Transaction ID Commitment
+  """
+  txIdCommitment: Bytes32
 }
 
 enum HeaderVersion {
   V1
+  V2
 }
 
 type HeavyOperation {
@@ -617,6 +665,23 @@ type HeavyOperation {
 
 scalar HexString
 
+type IndexationFlags {
+  """
+  Is balances indexation enabled
+  """
+  balances: Boolean!
+
+  """
+  Is coins to spend indexation enabled
+  """
+  coinsToSpend: Boolean!
+
+  """
+  Is asset metadata indexation enabled
+  """
+  assetMetadata: Boolean!
+}
+
 union Input = InputCoin | InputContract | InputMessage
 
 type InputCoin {
@@ -625,7 +690,7 @@ type InputCoin {
   amount: U64!
   assetId: AssetId!
   txPointer: TxPointer!
-  witnessIndex: Int!
+  witnessIndex: U16!
   predicateGasUsed: U64!
   predicate: HexString!
   predicateData: HexString!
@@ -791,14 +856,18 @@ type Mutation {
     txs: [HexString!]!
     utxoValidation: Boolean
     gasPrice: U64
+    blockHeight: U32
   ): [DryRunTransactionExecutionStatus!]!
+    @deprecated(
+      reason: "This doesn't need to be a mutation. Use query of the same name instead."
+    )
 
   """
   Submits transaction to the `TxPool`.
 
   Returns submitted transaction if the transaction is included in the `TxPool` without problems.
   """
-  submit(tx: HexString!): Transaction!
+  submit(tx: HexString!, estimatePredicates: Boolean): Transaction!
 
   """
   Sequentially produces `blocks_to_produce` blocks. The first block starts with
@@ -817,6 +886,7 @@ type NodeInfo {
   maxSize: U64!
   maxDepth: U64!
   nodeVersion: String!
+  indexation: IndexationFlags!
   txPoolStats: TxPoolStats!
   peers: [PeerInfo!]!
 }
@@ -910,6 +980,33 @@ type Policies {
   maxFee: U64
 }
 
+type PreconfirmationFailureStatus {
+  reason: String!
+  txPointer: TxPointer!
+  totalGas: U64!
+  totalFee: U64!
+  transactionId: TransactionId!
+  transaction: Transaction
+  receipts: [Receipt!]
+  resolvedOutputs: [ResolvedOutput!]
+}
+
+type PreconfirmationSuccessStatus {
+  txPointer: TxPointer!
+  totalGas: U64!
+  totalFee: U64!
+  transactionId: TransactionId!
+  transaction: Transaction
+  receipts: [Receipt!]
+  resolvedOutputs: [ResolvedOutput!]
+}
+
+input Predicate {
+  predicateAddress: Address!
+  predicate: HexString!
+  predicateData: HexString!
+}
+
 type PredicateParameters {
   version: PredicateParametersVersion!
   maxPredicateLength: U64!
@@ -928,6 +1025,13 @@ type ProgramState {
 }
 
 type Query {
+  assetDetails(
+    """
+    ID of the Asset
+    """
+    id: AssetId!
+  ): AssetInfoDetails!
+
   """
   Read register value by index.
   """
@@ -995,9 +1099,103 @@ type Query {
   ): TransactionConnection!
 
   """
+  Assembles the transaction based on the provided requirements.
+  The return transaction contains:
+  - Input coins to cover `required_balances`
+  - Input coins to cover the fee of the transaction based on the gas price from `block_horizon`
+  - `Change` or `Destroy` outputs for all assets from the inputs
+  - `Variable` outputs in the case they are required during the execution
+  - `Contract` inputs and outputs in the case they are required during the execution
+  - Reserved witness slots for signed coins filled with `64` zeroes
+  - Set script gas limit(unless `script` is empty)
+  - Estimated predicates, if `estimate_predicates == true`
+
+  Returns an error if:
+  - The number of required balances exceeds the maximum number of inputs allowed.
+  - The fee address index is out of bounds.
+  - The same asset has multiple change policies(either the receiver of
+  the change is different, or one of the policies states about the destruction
+  of the token while the other does not). The `Change` output from the transaction
+  also count as a `ChangePolicy`.
+  - The number of excluded coin IDs exceeds the maximum number of inputs allowed.
+  - Required assets have multiple entries.
+  - If accounts don't have sufficient amounts to cover the transaction requirements in assets.
+  - If a constructed transaction breaks the rules defined by consensus parameters.
+  """
+  assembleTx(
+    """
+    The original transaction that contains application level logic only
+    """
+    tx: HexString!
+
+    """
+    Number of blocks into the future to estimate the gas price for
+    """
+    blockHorizon: U32!
+
+    """
+    The list of required balances for the transaction to include as inputs. The
+    list should be created based on the application-required assets. The base
+    asset requirement should not require assets to cover the transaction fee,
+    which will be calculated and added automatically at the end of the assembly process.
+    """
+    requiredBalances: [RequiredBalance!]!
+
+    """
+    The index from the `required_balances` list that points to the address who
+    pays fee for the transaction. If you only want to cover the fee of
+    transaction, you can set the required balance to 0, set base asset and point
+    to this required address.
+    """
+    feeAddressIndex: U16!
+
+    """
+    The list of resources to exclude from the selection for the inputs
+    """
+    excludeInput: ExcludeInput
+
+    """
+    Perform the estimation of the predicates before cover fee of the transaction
+    """
+    estimatePredicates: Boolean
+
+    """
+    During the phase of the fee calculation, adds `reserve_gas` to the total gas
+    used by the transaction and fetch assets to cover the fee.
+    """
+    reserveGas: U64
+  ): AssembleTransactionResult!
+
+  """
   Estimate the predicate gas for the provided transaction
   """
   estimatePredicates(tx: HexString!): Transaction!
+
+  """
+  Execute a dry-run of multiple transactions using a fork of current state, no changes are committed.
+  """
+  dryRun(
+    txs: [HexString!]!
+    utxoValidation: Boolean
+    gasPrice: U64
+    blockHeight: U32
+  ): [DryRunTransactionExecutionStatus!]!
+
+  """
+  Execute a dry-run of multiple transactions using a fork of current state, no changes are committed.
+  Also records accesses, so the execution can be replicated locally.
+  """
+  dryRunRecordStorageReads(
+    txs: [HexString!]!
+    utxoValidation: Boolean
+    gasPrice: U64
+    blockHeight: U32
+  ): DryRunStorageReads!
+
+  """
+  Get execution trace for an already-executed block.
+  """
+  storageReadReplay(height: U32!): [StorageReadReplayEvent!]!
 
   """
   Returns true when the GraphQL API is serving requests.
@@ -1105,7 +1303,7 @@ type Query {
     nonce: Nonce!
     commitBlockId: BlockId
     commitBlockHeight: U32
-  ): MessageProof
+  ): MessageProof!
   messageStatus(nonce: Nonce!): MessageStatus!
   relayedTransactionStatus(
     """
@@ -1116,6 +1314,28 @@ type Query {
   consensusParameters(version: Int!): ConsensusParameters!
   stateTransitionBytecodeByVersion(version: Int!): StateTransitionBytecode
   stateTransitionBytecodeByRoot(root: HexString!): StateTransitionBytecode!
+
+  """
+  Get storage slot values for a contract at a specific block height.
+  Use the latest block height if not provided.
+  Requires historical execution config to be enabled.
+  """
+  contractSlotValues(
+    contractId: ContractId!
+    blockHeight: U32
+    storageSlots: [Bytes32!]!
+  ): [StorageSlot!]!
+
+  """
+  Get balance values for a contract at a specific block height.
+  Use the latest block height if not provided.
+  Requires historical execution config to be enabled.
+  """
+  contractBalanceValues(
+    contractId: ContractId!
+    blockHeight: U32
+    assets: [AssetId!]!
+  ): [ContractBalance!]!
 }
 
 type Receipt {
@@ -1178,6 +1398,18 @@ scalar RelayedTransactionId
 
 union RelayedTransactionStatus = RelayedTransactionFailed
 
+input RequiredBalance {
+  assetId: AssetId!
+  amount: U64!
+  account: Account!
+  changePolicy: ChangePolicy!
+}
+
+type ResolvedOutput {
+  utxoId: UtxoId!
+  output: Output!
+}
+
 enum ReturnType {
   RETURN
   RETURN_DATA
@@ -1225,15 +1457,21 @@ input SpendQueryElementInput {
   """
   Target amount for the query.
   """
-  amount: U64!
+  amount: U128!
 
   """
   The maximum number of currencies for selection.
   """
-  max: U32
+  max: U16
+
+  """
+  If true, returns available coins instead of failing when the requested amount is unavailable.
+  """
+  allowPartial: Boolean
 }
 
 type SqueezedOutStatus {
+  transactionId: TransactionId!
   reason: String!
 }
 
@@ -1246,6 +1484,19 @@ type StateTransitionPurpose {
   root: Bytes32!
 }
 
+type StorageReadReplayEvent {
+  column: U32!
+  key: HexString!
+  value: HexString
+}
+
+type StorageSlot {
+  key: Bytes32!
+  value: HexString!
+}
+
+scalar SubId
+
 type SubmittedStatus {
   time: Tai64Timestamp!
 }
@@ -1253,10 +1504,10 @@ type SubmittedStatus {
 type Subscription {
   """
   Returns a stream of status updates for the given transaction id.
-  If the current status is [`TransactionStatus::Success`], [`TransactionStatus::SqueezedOut`]
-  or [`TransactionStatus::Failed`] the stream will return that and end immediately.
-  If the current status is [`TransactionStatus::Submitted`] this will be returned
-  and the stream will wait for a future update.
+  If the current status is [`TransactionStatus::Success`], [`TransactionStatus::Failed`],
+  or [`TransactionStatus::SqueezedOut`] the stream will return that and end immediately.
+  Other, intermediate statuses will also be returned but the stream will remain active
+  and wait for a future updates.
 
   This stream will wait forever so it's advised to use within a timeout.
 
@@ -1270,19 +1521,33 @@ type Subscription {
     The ID of the transaction
     """
     id: TransactionId!
+
+    """
+    If true, accept to receive the preconfirmation status
+    """
+    includePreconfirmation: Boolean
   ): TransactionStatus!
 
   """
-  Submits transaction to the `TxPool` and await either confirmation or failure.
+  Submits transaction to the `TxPool` and await either success or failure.
   """
-  submitAndAwait(tx: HexString!): TransactionStatus!
+  submitAndAwait(
+    tx: HexString!
+    estimatePredicates: Boolean
+  ): TransactionStatus!
 
   """
   Submits the transaction to the `TxPool` and returns a stream of events.
-  Compared to the `submitAndAwait`, the stream also contains `
-  SubmittedStatus` as an intermediate state.
+  Compared to the `submitAndAwait`, the stream also contains
+  `SubmittedStatus` and potentially preconfirmation as an intermediate state.
   """
-  submitAndAwaitStatus(tx: HexString!): TransactionStatus!
+  submitAndAwaitStatus(
+    tx: HexString!
+    estimatePredicates: Boolean
+    includePreconfirmation: Boolean
+  ): TransactionStatus!
+  contractStorageSlots(contractId: ContractId!): StorageSlot!
+  contractStorageBalances(contractId: ContractId!): ContractBalance!
 }
 
 type SuccessStatus {
@@ -1322,7 +1587,7 @@ type Transaction {
   outputContract: ContractOutput
   witnesses: [HexString!]
   receiptsRoot: Bytes32
-  status: TransactionStatus
+  status(includePreconfirmation: Boolean): TransactionStatus
   script: HexString
   scriptData: HexString
   bytecodeWitnessIndex: U16
@@ -1378,8 +1643,10 @@ scalar TransactionId
 union TransactionStatus =
   | SubmittedStatus
   | SuccessStatus
+  | PreconfirmationSuccessStatus
   | SqueezedOutStatus
   | FailureStatus
+  | PreconfirmationFailureStatus
 
 type TxParameters {
   version: TxParametersVersion!
@@ -1413,6 +1680,8 @@ type TxPoolStats {
   """
   totalGas: U64!
 }
+
+scalar U128
 
 scalar U16
 

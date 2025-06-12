@@ -1,5 +1,25 @@
 # Change Log
 
+## 0.89.9
+
+### Patch Changes
+
+- bfb62ad: feat: implement support for new ABI error codes
+- 0d71065: chore: Upgraded `forc` to `0.66.8`
+
+## 0.89.8
+
+### Patch Changes
+
+- dbed315: chore: upgrade `fuel-core` to `0.43.1`
+
+## 0.89.7
+
+### Patch Changes
+
+- 521292a: chore: updated `forc` to `0.67.0`
+- ff97a6e: chore: upgrade `forc` to `0.66.7`
+
 ## 0.89.6
 
 ### Patch Changes

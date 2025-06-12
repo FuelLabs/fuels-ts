@@ -14,12 +14,6 @@ describe('Hasher', () => {
     );
   });
 
-  it('Hash message', () => {
-    const message = 'my message';
-    const hashedMessage = '0xea38e30f75767d7e6c21eba85b14016646a3b60ade426ca966dac940a5db1bab';
-    expect(hashMessage(message)).toEqual(hashedMessage);
-  });
-
   it('Hash "20"', () => {
     expect(hash(Buffer.from('20'))).toEqual(
       '0xf5ca38f748a1d6eaf726b8a42fb575c3c71f1864a8143301782de13da2d9202b'
@@ -30,5 +24,28 @@ describe('Hasher', () => {
     const value = 1234567890;
     const expectedBytes = new Uint8Array([0, 0, 0, 0, 73, 150, 2, 210]);
     expect(uint64ToBytesBE(value)).toEqual(expectedBytes);
+  });
+
+  describe('hashMessage', () => {
+    it('should hash a message [string]', () => {
+      const message: string = 'my message';
+      const expectHashedMessage =
+        '0xea38e30f75767d7e6c21eba85b14016646a3b60ade426ca966dac940a5db1bab';
+      expect(hashMessage(message)).toEqual(expectHashedMessage);
+    });
+
+    it('should hash a raw message [{ personalSign: string }]', () => {
+      const data: string = 'my message';
+      const expectHashedMessage =
+        '0x615128eb1ecd44765ac3dae437fa144e58f934f01ba73260c1b84e30271cfb1e';
+      expect(hashMessage({ personalSign: data })).toEqual(expectHashedMessage);
+    });
+
+    it('should hash a raw message [{ personalSign: Uint8Array }]', () => {
+      const data: Uint8Array = new TextEncoder().encode('my message');
+      const expectHashedMessage =
+        '0x615128eb1ecd44765ac3dae437fa144e58f934f01ba73260c1b84e30271cfb1e';
+      expect(hashMessage({ personalSign: data })).toEqual(expectHashedMessage);
+    });
   });
 });

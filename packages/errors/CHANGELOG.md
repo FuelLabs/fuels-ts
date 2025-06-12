@@ -1,5 +1,82 @@
 # @fuel-ts/errors
 
+## 0.101.2
+
+### Patch Changes
+
+- 8c19d93: chore: support Node 24 - depreciate Node 18
+- Updated dependencies [8c19d93]
+- Updated dependencies [bfb62ad]
+- Updated dependencies [0d71065]
+  - @fuel-ts/versions@0.101.2
+
+## 0.101.1
+
+### Patch Changes
+
+- @fuel-ts/versions@0.101.1
+
+## 0.101.0
+
+### Patch Changes
+
+- @fuel-ts/versions@0.101.0
+
+## 0.100.6
+
+### Patch Changes
+
+- @fuel-ts/versions@0.100.6
+
+## 0.100.5
+
+### Patch Changes
+
+- @fuel-ts/versions@0.100.5
+
+## 0.100.4
+
+### Patch Changes
+
+- efcce41: feat: integrate with new `AssembleTx` GQL end-point
+- 5a57b97: chore: support RPC consistency mechanism
+- f534210: feat: add method for base asset coins consolidation
+- Updated dependencies [dbed315]
+  - @fuel-ts/versions@0.100.4
+
+## 0.100.3
+
+### Patch Changes
+
+- @fuel-ts/versions@0.100.3
+
+## 0.100.2
+
+### Patch Changes
+
+- e909d54: fix: adjust feature detection for balances
+  - @fuel-ts/versions@0.100.2
+
+## 0.100.1
+
+### Patch Changes
+
+- @fuel-ts/versions@0.100.1
+
+## 0.100.0
+
+### Minor Changes
+
+- f41887f: chore!: upgrade `fuel-core` to `0.41.7`
+
+### Patch Changes
+
+- Updated dependencies [b42f056]
+- Updated dependencies [f41887f]
+- Updated dependencies [521292a]
+- Updated dependencies [ff97a6e]
+  - @fuel-ts/versions@0.100.0
+
 ## 0.99.0
 
 ### Patch Changes

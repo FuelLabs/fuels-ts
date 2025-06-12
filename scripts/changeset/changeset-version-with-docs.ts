@@ -2,6 +2,7 @@
 
 import { execSync } from 'child_process';
 import { error } from 'console';
+import { existsSync } from 'fs';
 
 (() => {
   try {
@@ -23,25 +24,34 @@ import { error } from 'console';
      */
     execSync(`pnpm -C packages/versions build`);
 
-    // Invoke fuels' build:proxy script (will rewrite header versions in generated files)
-    execSync(`pnpm -C packages/fuels build:proxy`);
+    // Invoke recipes build script (will rewrite header versions in generated files)
+    execSync(`pnpm -C packages/recipes build`);
 
     // Checks if the commands above generated git changes
     const versionsFilePath = `packages/versions/src/lib/getBuiltinVersions.ts`;
-    const proxyDirPath = `packages/fuels/src/cli/commands/deploy/proxy`;
+    const recipeDirPath = `packages/recipes/src`;
+
+    // Ensure paths exist
+    const paths = [versionsFilePath, recipeDirPath];
+    if (!paths.every(existsSync)) {
+      throw new Error(
+        `Paths do not exist: ${paths.filter((path) => !existsSync(path)).join(', ')}`
+      );
+    }
 
     const versionsChanged = !!execSync(`git status --porcelain ${versionsFilePath}`)
       .toString()
       .trim();
 
-    const proxyChanged = !!execSync(`git status --porcelain ${proxyDirPath}`).toString().trim();
+    const proxyChanged = !!execSync(`git status --porcelain ${recipeDirPath}`).toString().trim();
 
     // If they did, add and commit the changes
     if (versionsChanged || proxyChanged) {
-      execSync(`git add ${versionsFilePath} ${proxyDirPath}`);
+      execSync(`git add ${versionsFilePath} ${recipeDirPath}`);
       execSync(`git commit -m"ci(scripts): update versions"`);
     }
   } catch (err) {
     error(err.toString());
+    process.exit(1);
   }
 })();

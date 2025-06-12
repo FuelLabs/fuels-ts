@@ -23,6 +23,12 @@ describe('Predicate', () => {
         abi: PredicateMainArgsStruct.abi,
         bytecode: PredicateMainArgsStruct.bytecode,
         provider,
+        data: [
+          {
+            has_account: true,
+            total_complete: 100,
+          },
+        ],
       });
 
       await fundAccount(wallet, predicate, 1000);
@@ -40,8 +46,8 @@ describe('Predicate', () => {
             }
           ),
         new FuelError(
-          ErrorCode.NOT_ENOUGH_FUNDS,
-          `The account(s) sending the transaction don't have enough funds to cover the transaction.`
+          ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
+          `Insufficient funds or too many small value coins. Consider combining UTXOs.`
         )
       );
     });
@@ -57,9 +63,15 @@ describe('Predicate', () => {
         abi: PredicateMainArgsStruct.abi,
         bytecode: PredicateMainArgsStruct.bytecode,
         provider,
+        data: [
+          {
+            has_account: true,
+            total_complete: 100,
+          },
+        ],
       });
 
-      await fundAccount(wallet, predicate, 1000);
+      await fundAccount(wallet, predicate, 10_000);
 
       const receiver = Wallet.generate({ provider });
 
