@@ -58,10 +58,6 @@ jobs:
 
       - name: Add PR comment
         uses: mshick/add-pr-comment@v2
-        env:
-          TEMPLATE_DEPLOYMENT_URL: ${{ steps.deploy-template.outputs.deployment-url }}
-          DOCS_DEPLOYMENT_URL: ${{ steps.deploy-docs.outputs.deployment-url }}
-          DOCS_API_DEPLOYMENT_URL: ${{ steps.deploy-docs-api.outputs.deployment-url }}
         with:
           refresh-message-position: false
           message: |
@@ -70,8 +66,8 @@ jobs:
             | Name | Preview |
             | :--- | :------ |
             | **fuels-template** | ${{ steps.deploy-template.outcome == 'success' && format('Success ✅ ([Preview]({0}))', steps.deploy-template.outputs.deployment-url) || 'Failed ❌' }}  |
-            | **ts-docs** | ${{ steps.deploy-docs.outcome == 'success' && 'Success ✅ ([Preview]($DOCS_DEPLOYMENT_URL))' || 'Failed ❌' }} |
-            | **ts-docs-api** | ${{ steps.deploy-docs-api.outcome == 'success' && 'Success ✅ ([Preview]($DOCS_API_DEPLOYMENT_URL))' || 'Failed ❌' }} |
+            | **ts-docs** | ${{ steps.deploy-docs.outcome == 'success' && format('Success ✅ ([Preview]({0}))', steps.deploy-docs.outputs.deployment-url) || 'Failed ❌' }} |
+            | **ts-docs-api** | ${{ steps.deploy-docs-api.outcome == 'success' && format('Success ✅ ([Preview]({0}))', steps.deploy-docs-api.outputs.deployment-url) || 'Failed ❌' }} |
 
       - name: Ensure all deployments successful
         if: ${{ steps.deploy-template.outcome != 'success' || steps.deploy-docs.outcome != 'success' || steps.deploy-docs-api.outcome != 'success' }}
