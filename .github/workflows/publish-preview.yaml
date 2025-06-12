@@ -69,7 +69,7 @@ jobs:
 
             | Name | Preview |
             | :--- | :------ |
-            | **fuels-template** | ${{ steps.deploy-template.outcome == 'success' && 'Success ✅ ([Preview]($TEMPLATE_DEPLOYMENT_URL))' || 'Failed ❌' }}  |
+            | **fuels-template** | ${{ steps.deploy-template.outcome == 'success' && format('Success ✅ ([Preview]({0}))', steps.deploy-template.outputs.deployment-url) || 'Failed ❌' }}  |
             | **ts-docs** | ${{ steps.deploy-docs.outcome == 'success' && 'Success ✅ ([Preview]($DOCS_DEPLOYMENT_URL))' || 'Failed ❌' }} |
             | **ts-docs-api** | ${{ steps.deploy-docs-api.outcome == 'success' && 'Success ✅ ([Preview]($DOCS_API_DEPLOYMENT_URL))' || 'Failed ❌' }} |
 
