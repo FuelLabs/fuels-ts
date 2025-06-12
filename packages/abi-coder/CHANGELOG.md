@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.101.3
+
+### Patch Changes
+
+- Updated dependencies [4e018a5]
+  - @fuel-ts/errors@0.101.3
+  - @fuel-ts/crypto@0.101.3
+  - @fuel-ts/math@0.101.3
+  - @fuel-ts/utils@0.101.3
+  - @fuel-ts/hasher@0.101.3
+
 ## 0.101.2
 
 ### Patch Changes
