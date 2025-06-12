@@ -1,5 +1,28 @@
 # Change Log
 
+## 0.101.3
+
+### Patch Changes
+
+- c73a417: chore: upgrade `esbuild` dependency
+- Updated dependencies [4e018a5]
+- Updated dependencies [b0aa106]
+  - @fuel-ts/account@0.101.3
+  - @fuel-ts/errors@0.101.3
+  - @fuel-ts/contract@0.101.3
+  - @fuel-ts/program@0.101.3
+  - @fuel-ts/recipes@0.101.3
+  - @fuel-ts/script@0.101.3
+  - @fuel-ts/abi-coder@0.101.3
+  - @fuel-ts/abi-typegen@0.101.3
+  - @fuel-ts/address@0.101.3
+  - @fuel-ts/crypto@0.101.3
+  - @fuel-ts/math@0.101.3
+  - @fuel-ts/transactions@0.101.3
+  - @fuel-ts/utils@0.101.3
+  - @fuel-ts/hasher@0.101.3
+  - @fuel-ts/versions@0.101.3
+
 ## 0.101.2
 
 ### Patch Changes

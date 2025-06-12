@@ -1,5 +1,7 @@
 # @fuel-ts/versions
 
+## 0.101.3
+
 ## 0.101.2
 
 ### Patch Changes

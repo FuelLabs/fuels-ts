@@ -1,5 +1,12 @@
 # @fuel-ts/errors
 
+## 0.101.3
+
+### Patch Changes
+
+- 4e018a5: chore: handling for malformed response body
+  - @fuel-ts/versions@0.101.3
+
 ## 0.101.2
 
 ### Patch Changes

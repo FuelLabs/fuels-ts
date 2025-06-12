@@ -1,5 +1,13 @@
 # create-fuels
 
+## 0.101.3
+
+### Patch Changes
+
+- Updated dependencies [4e018a5]
+  - @fuel-ts/errors@0.101.3
+  - @fuel-ts/versions@0.101.3
+
 ## 0.101.2
 
 ### Patch Changes

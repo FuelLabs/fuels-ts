@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.101.3
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.101.3
+- @fuel-ts/utils@0.101.3
+
 ## 0.101.2
 
 ### Patch Changes
