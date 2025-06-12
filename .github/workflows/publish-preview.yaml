@@ -65,9 +65,9 @@ jobs:
 
             | Name | Preview |
             | :--- | :------ |
-            | **fuels-template** | ${{ steps.deploy-template.outcome == 'success' && 'Success ✅ ([Preview](${{steps.deploy-template.outputs.deployment-url}}))' || 'Failed ❌' }}  |
-            | **ts-docs** | ${{ steps.deploy-docs.outcome == 'success' && 'Success ✅ ([Preview](${{steps.deploy-template.outputs.deployment-url}}))' || 'Failed ❌' }} |
-            | **ts-docs-api** | ${{ steps.deploy-docs-api.outcome == 'success' && 'Success ✅ ([Preview](${{steps.deploy-template.outputs.deployment-url}}))' || 'Failed ❌' }} |
+            | **fuels-template** | ${{ steps.deploy-template.outcome == 'success' && 'Success ✅ ([Preview](steps.deploy-template.outputs.deployment-url))' || 'Failed ❌' }}  |
+            | **ts-docs** | ${{ steps.deploy-docs.outcome == 'success' && 'Success ✅ ([Preview](steps.deploy-template.outputs.deployment-url))' || 'Failed ❌' }} |
+            | **ts-docs-api** | ${{ steps.deploy-docs-api.outcome == 'success' && 'Success ✅ ([Preview](steps.deploy-template.outputs.deployment-url))' || 'Failed ❌' }} |
 
       - name: Ensure all deployments successful
         if: ${{ steps.deploy-template.outcome != 'success' || steps.deploy-docs.outcome != 'success' || steps.deploy-docs-api.outcome != 'success' }}
