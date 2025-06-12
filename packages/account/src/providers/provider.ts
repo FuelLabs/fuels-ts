@@ -566,7 +566,16 @@ export default class Provider {
         Provider.applyBlockHeight(fullRequest, url);
       }
 
-      return Provider.fetchAndProcessBlockHeight(url, fullRequest, options);
+      const response = await Provider.fetchAndProcessBlockHeight(url, fullRequest, options);
+      if (response.body === null) {
+        throw new FuelError(
+          ErrorCode.RESPONSE_BODY_EMPTY,
+          'The response from the server is missing the body',
+          { timestamp: new Date().toISOString(), request, response }
+        );
+      }
+
+      return response;
     }, retryOptions);
   }
 
@@ -607,14 +616,16 @@ export default class Provider {
     };
 
     for (let retriesLeft = retryOptions.maxRetries; retriesLeft > 0; --retriesLeft) {
-      const { extensions } = await parseGraphqlResponse({
-        response,
-        isSubscription: url.endsWith('-sub'),
-      });
-      Provider.setCurrentBlockHeight(url, extensions?.current_fuel_block_height);
+      if (response.body) {
+        const { extensions } = await parseGraphqlResponse({
+          response,
+          isSubscription: url.endsWith('-sub'),
+        });
+        Provider.setCurrentBlockHeight(url, extensions?.current_fuel_block_height);
 
-      if (!extensions?.fuel_block_height_precondition_failed) {
-        break;
+        if (!extensions?.fuel_block_height_precondition_failed) {
+          break;
+        }
       }
 
       const retryAttempt = retryOptions.maxRetries - retriesLeft + 1;
