@@ -98,7 +98,7 @@ jobs:
         if: github.ref_name == 'master'
         uses: ./.github/actions/vercel-deploy
         with:
-          environment: ${{ envs.RELEASE_VERSION_HIGHER_THAN_LATEST && 'production' || 'nightly' }}
+          environment: ${{ env.RELEASE_VERSION_HIGHER_THAN_LATEST && 'production' || 'nightly' }}
           token: ${{ secrets.VERCEL_TOKEN }}
           project-id: ${{ env.VERCEL_TS_DOCS_PROJECT_ID }}
 
@@ -107,7 +107,7 @@ jobs:
         if: github.ref_name == 'master'
         uses: ./.github/actions/vercel-deploy
         with:
-          environment: ${{ envs.RELEASE_VERSION_HIGHER_THAN_LATEST && 'production' || 'nightly' }}
+          environment: ${{ env.RELEASE_VERSION_HIGHER_THAN_LATEST && 'production' || 'nightly' }}
           token: ${{ secrets.VERCEL_TOKEN }}
           project-id: ${{ env.VERCEL_TS_DOCS_API_PROJECT_ID }}
 
@@ -116,7 +116,7 @@ jobs:
         if: github.ref_name == 'master'
         uses: ./.github/actions/vercel-deploy
         with:
-          environment: ${{ envs.RELEASE_VERSION_HIGHER_THAN_LATEST && 'production' || 'nightly' }}
+          environment: ${{ env.RELEASE_VERSION_HIGHER_THAN_LATEST && 'production' || 'nightly' }}
           token: ${{ secrets.VERCEL_TOKEN }}
           project-id: ${{ env.VERCEL_TS_TEMPLATE_PROJECT_ID }}
 
