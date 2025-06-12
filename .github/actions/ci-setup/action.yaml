@@ -29,3 +29,9 @@ runs:
       with:
         version: ${{ inputs.pnpm-version }}
         run_install: true
+
+    - name: Use latest corepack
+      shell: bash
+      run: |
+        npm install -g corepack@latest
+        corepack enable
