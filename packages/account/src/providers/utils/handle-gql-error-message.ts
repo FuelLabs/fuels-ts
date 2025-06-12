@@ -25,9 +25,10 @@ const mapGqlErrorMessage = (error: GqlError): FuelError => {
   ) {
     const match = error.message.match(ASSET_ID_REGEX);
     const assetId = match ? `0x${match[0]}` : null;
+    const suffix = assetId ? `\nFor the following asset ID: '${assetId}'.` : '';
     return new FuelError(
       ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-      `Insufficient funds or too many small value coins. Consider combining UTXOs.`,
+      `Insufficient funds or too many small value coins. Consider combining UTXOs.${suffix}`,
       { assetId },
       error
     );
