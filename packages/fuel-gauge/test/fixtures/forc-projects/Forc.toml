@@ -85,6 +85,3 @@ members = [
   "void",
   "script-error",
 ]
-
-[patch.'https://github.com/fuellabs/sway']
-std = { git = "https://github.com/fuellabs/sway", branch = "xunilrj/dynamic-types-configurables" }
