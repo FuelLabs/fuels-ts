@@ -51,17 +51,17 @@ export async function deployScriptOrPredicate<T>({
   const dataOffset = getBytecodeDataOffset(arrayify(bytecode));
   const byteCodeWithoutConfigurableSection = bytecode.slice(0, configurableOffset);
 
-  // Adjust the indirect configurable offsets to point to the new data offsets for the loader
-  const newIndirectConfigurableOffsetDiff = configurableOffset - dataOffset;
-  const dynamicOffsetCoder = new BigNumberCoder('u64');
-  abi.configurables
-    .filter((configurable) => configurable.indirect ?? false)
-    .forEach((configurable) => {
-      const [existingOffset] = dynamicOffsetCoder.decode(bytecode, configurable.offset);
-      const newOffset = existingOffset.sub(newIndirectConfigurableOffsetDiff);
-      const newOffsetBytes = dynamicOffsetCoder.encode(newOffset);
-      bytecode.set(newOffsetBytes, configurable.offset);
-    });
+  // // Adjust the indirect configurable offsets to point to the new data offsets for the loader
+  // const newIndirectConfigurableOffsetDiff = configurableOffset - dataOffset;
+  // const dynamicOffsetCoder = new BigNumberCoder('u64');
+  // abi.configurables
+  //   .filter((configurable) => configurable.indirect ?? false)
+  //   .forEach((configurable) => {
+  //     const [existingOffset] = dynamicOffsetCoder.decode(bytecode, configurable.offset);
+  //     const newOffset = existingOffset.sub(newIndirectConfigurableOffsetDiff);
+  //     const newOffsetBytes = dynamicOffsetCoder.encode(newOffset);
+  //     bytecode.set(newOffsetBytes, configurable.offset);
+  //   });
 
   const blobTxRequest = new BlobTransactionRequest({
     blobId,

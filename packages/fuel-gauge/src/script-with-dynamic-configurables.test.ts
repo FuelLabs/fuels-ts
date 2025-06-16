@@ -74,43 +74,40 @@ describe('Script with dynamic configurables', () => {
         wallets: [deployer],
       } = launched;
 
-      const scriptLoader = new ScriptWithDynamicConfigurables(deployer);
-      const { waitForResult: waitForDeploy } = await scriptLoader.deploy(deployer);
-      const script = await waitForDeploy();
+      const script = new ScriptWithDynamicConfigurables(deployer);
+      const loader = await script.deploy(deployer).then(({ waitForResult }) => waitForResult());
 
-      const { waitForResult } = await script.functions
+      const { waitForResult } = await loader.functions
         .main(true, 8, 'sway', 'forc', 'fuel', 16)
         .call();
-      const { value, logs } = await waitForResult();
+      const { value } = await waitForResult();
 
-      console.log({
-        logs,
-      });
       expect(value).toBe(true);
     });
 
-    it('should allow setting of dynamic configurables', async () => {
+    // TODO: this requires changes on the compiler to allow.
+    it.todo('should allow setting of dynamic configurables', async () => {
       using launched = await launchTestNode();
       const {
         wallets: [deployer],
       } = launched;
 
-      const script = new ScriptWithDynamicConfigurables(deployer);
-      const { waitForResult: waitForDeploy } = await script.deploy(deployer);
-      const loader = await waitForDeploy();
+      const script = new ScriptWithDynamicConfigurables(deployer)
+      const loader = await script.deploy(deployer).then(({ waitForResult }) => waitForResult());
 
-      console.log({
-        configurableConstants: loader.getConfigurableConstants(),
+      loader.setConfigurableConstants({
+        BOOL: false,
+        U8: 0,
+        STR: 'STR',
+        STR_2: 'STR_2',
+        STR_3: 'STR_3',
+        LAST_U8: 0,
       });
 
       const { waitForResult } = await loader.functions
         .main(false, 0, 'STR', 'STR_2', 'STR_3', 0)
         .call();
-      const { value, logs } = await waitForResult();
-
-      console.log({
-        logs,
-      });
+      const { value } = await waitForResult();
 
       expect(value).toBe(true);
     });
@@ -121,11 +118,10 @@ describe('Script with dynamic configurables', () => {
         wallets: [deployer],
       } = launched;
 
-      const scriptLoader = new ScriptWithDynamicConfigurables(deployer);
-      const { waitForResult: waitForDeploy } = await scriptLoader.deploy(deployer);
-      const script = await waitForDeploy();
+      const script = new ScriptWithDynamicConfigurables(deployer)
+      const loader = await script.deploy(deployer).then(({ waitForResult }) => waitForResult());
 
-      const { waitForResult } = await script.functions
+      const { waitForResult } = await loader.functions
         .main(true, 8, 'sway', 'forc', 'fuel-incorrect', 16)
         .call();
 

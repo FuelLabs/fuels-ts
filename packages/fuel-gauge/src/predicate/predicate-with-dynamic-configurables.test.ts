@@ -20,7 +20,7 @@ describe('Predicate with dynamic configurables', () => {
 
       const predicate = new PredicateWithDynamicConfigurable({
         provider,
-        // data: [true, 8, 'sway', 'forc', 'fuel', 16],
+        data: [true, 8, 'sway', 'forc', 'fuel', 16],
       });
 
       // Fund predicate
@@ -107,7 +107,7 @@ describe('Predicate with dynamic configurables', () => {
 
       const predicate = new PredicateWithDynamicConfigurable({
         provider,
-        // data: [true, 8, 'sway', 'forc', 'fuel', 16],
+        data: [true, 8, 'sway', 'forc', 'fuel', 16],
       });
       const { waitForResult: waitForDeploy } = await predicate.deploy(deployer);
       const loader = await waitForDeploy();
@@ -162,7 +162,8 @@ describe('Predicate with dynamic configurables', () => {
       expect(balance).toEqual(expect.toEqualBn(100));
     });
 
-    it('should allow setting of dynamic configurables', async () => {
+    // TODO: this requires changes on the compiler to allow.
+    it.todo('should allow setting of dynamic configurables', async () => {
       using launched = await launchTestNode();
 
       const {
@@ -173,13 +174,14 @@ describe('Predicate with dynamic configurables', () => {
 
       const predicate = new PredicateWithDynamicConfigurable({
         provider,
+        data: [true, 8, 'sway', 'forc', 'fuel', 16]
       });
       const { waitForResult: waitForDeploy } = await predicate.deploy(deployer);
       const loader = await waitForDeploy();
 
       const newLoader = await loader.toNewInstance({
-        data: [true, 8, 'sway', 'forc', 'fuel', 16],
-      });
+        data: [false, 0, 'STR', 'STR_2', 'STR_3', 0],
+      }).deploy(deployer).then(({ waitForResult: waitForNewLoaderDeploy }) => waitForNewLoaderDeploy())
 
       // Fund predicate
       await funder.transfer(newLoader.address, 1000);
@@ -189,9 +191,9 @@ describe('Predicate with dynamic configurables', () => {
       const { isStatusSuccess } = await waitForTransfer();
       expect(isStatusSuccess).toBe(true);
 
-      // // Check balance
-      // const balance = await receiver.getBalance();
-      // expect(balance).toEqual(expect.toEqualBn(100));
+      // Check balance
+      const balance = await receiver.getBalance();
+      expect(balance).toEqual(expect.toEqualBn(100));
     });
 
     it('should fail predicate with incorrect data', async () => {
