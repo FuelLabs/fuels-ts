@@ -353,3 +353,7 @@ This error occurs when there are duplicate entries for the same asset ID with di
 
 1. The `accountCoinQuantities` parameter contains multiple entries for the same asset ID
 2. Each entry specifies a different `changeOutputAccount` for the same asset ID
+
+### `RESPONSE_BODY_EMPTY`
+
+This error occurs when the response from the server has an empty body. The issue will generally lie with the connection setup from your environment and the RPC.

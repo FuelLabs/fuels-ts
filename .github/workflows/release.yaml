@@ -90,19 +90,35 @@ jobs:
           LATEST_RELEASE: ${{ env.LATEST_RELEASE }}
           RELEASE_VERSION_HIGHER_THAN_LATEST: ${{ env.RELEASE_VERSION_HIGHER_THAN_LATEST }}
 
-      # nightly docs API gets updated on every merge to master
-      # and is configured in the vercel dashboard
-      # stable docs API gets updated only when a new release is published
-      - name: Update Docs API (stable)
-        if: |
-          github.ref_name == 'master' &&
-          env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_TS_DOCS_API_PROJECT_ID }}
-        run: |
-          pnpm install --global vercel@latest
-          vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Install Vercel
+        run: pnpm install --global vercel@latest
+
+      - name: Deploy `docs` to Vercel
+        id: deploy-docs
+        if: github.ref_name == 'master'
+        uses: ./.github/actions/vercel-deploy
+        with:
+          environment: ${{ envs.RELEASE_VERSION_HIGHER_THAN_LATEST && 'production' || 'nightly' }}
+          token: ${{ secrets.VERCEL_TOKEN }}
+          project-id: ${{ env.VERCEL_TS_DOCS_PROJECT_ID }}
+
+      - name: Deploy `docs-api` to Vercel
+        id: deploy-docs-api
+        if: github.ref_name == 'master'
+        uses: ./.github/actions/vercel-deploy
+        with:
+          environment: ${{ envs.RELEASE_VERSION_HIGHER_THAN_LATEST && 'production' || 'nightly' }}
+          token: ${{ secrets.VERCEL_TOKEN }}
+          project-id: ${{ env.VERCEL_TS_DOCS_API_PROJECT_ID }}
+
+      - name: Deploy `template` to Vercel
+        id: deploy-template
+        if: github.ref_name == 'master'
+        uses: ./.github/actions/vercel-deploy
+        with:
+          environment: ${{ envs.RELEASE_VERSION_HIGHER_THAN_LATEST && 'production' || 'nightly' }}
+          token: ${{ secrets.VERCEL_TOKEN }}
+          project-id: ${{ env.VERCEL_TS_TEMPLATE_PROJECT_ID }}
 
       - name: Update docs
         if: github.ref_name == 'master'

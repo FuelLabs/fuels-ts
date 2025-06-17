@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.101.1",
+  "version": "0.101.2",
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -82,7 +82,7 @@
     "chalk": "4",
     "chokidar": "3.6.0",
     "commander": "13.1.0",
-    "esbuild": "0.25.2",
+    "esbuild": "0.25.3",
     "glob": "10.4.5",
     "handlebars": "4.7.8",
     "joycon": "3.1.1",
