@@ -96,7 +96,13 @@ export function extractInvocationResult<T>(
   const mainCallConfig = functionScopes[0]?.getCallConfig();
 
   if (functionScopes.length === 1 && mainCallConfig && 'bytes' in mainCallConfig.program) {
-    return callResultToInvocationResult<T>({ receipts }, mainCallConfig, logs, groupedLogs, abis);
+    return callResultToInvocationResult<T>({
+      callResult: { receipts },
+      call: mainCallConfig,
+      logs,
+      groupedLogs,
+      abis,
+    });
   }
   const encodedResults = decodeContractCallScriptResult({
     callResult: { receipts },
