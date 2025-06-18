@@ -103,6 +103,15 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
     return this;
   }
 
+  getConfigurables(): Record<string, unknown> {
+    const configurables = createConfigurables({
+      bytecode: this.bytes,
+      abi: this.interface,
+    });
+
+    return configurables.all();
+  }
+
   /**
    *
    * @param account - The account used to pay the deployment costs.

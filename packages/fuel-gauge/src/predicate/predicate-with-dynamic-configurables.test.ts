@@ -93,6 +93,49 @@ describe('Predicate with dynamic configurables', () => {
         /PredicateVerificationFailed/
       );
     });
+
+    it('should allow getting of dynamic configurables [initial configurables]', async () => {
+      const expectedConfigurables = {
+        BOOL: true,
+        U8: 8,
+        STR: 'sway',
+        STR_2: 'forc',
+        STR_3: 'fuel',
+        LAST_U8: 16,
+      };
+      using launched = await launchTestNode();
+      const { provider } = launched;
+      const predicate = new PredicateWithDynamicConfigurable({
+        provider,
+        data: [true, 8, 'sway', 'forc', 'fuel-incorrect', 16],
+      });
+
+      const actualConfigurables = predicate.getConfigurables();
+
+      expect(actualConfigurables).toEqual(expectedConfigurables);
+    });
+
+    it('should allow getting of dynamic configurables [updated configurables]', async () => {
+      const expectedConfigurables = {
+        BOOL: false,
+        U8: 0,
+        STR: 'STR3123123123123123123123',
+        STR_2: 'STR_2123123123123123123',
+        STR_3: 'STR_3123123123123123123123',
+        LAST_U8: 0,
+      };
+      using launched = await launchTestNode();
+      const { provider } = launched;
+      const predicate = new PredicateWithDynamicConfigurable({
+        provider,
+        configurableConstants: expectedConfigurables,
+        data: [true, 8, 'sway', 'forc', 'fuel-incorrect', 16],
+      });
+
+      const actualConfigurables = predicate.getConfigurables();
+
+      expect(actualConfigurables).toEqual(expectedConfigurables);
+    });
   });
 
   describe('PredicateLoader', () => {
@@ -174,14 +217,17 @@ describe('Predicate with dynamic configurables', () => {
 
       const predicate = new PredicateWithDynamicConfigurable({
         provider,
-        data: [true, 8, 'sway', 'forc', 'fuel', 16]
+        data: [true, 8, 'sway', 'forc', 'fuel', 16],
       });
       const { waitForResult: waitForDeploy } = await predicate.deploy(deployer);
       const loader = await waitForDeploy();
 
-      const newLoader = await loader.toNewInstance({
-        data: [false, 0, 'STR', 'STR_2', 'STR_3', 0],
-      }).deploy(deployer).then(({ waitForResult: waitForNewLoaderDeploy }) => waitForNewLoaderDeploy())
+      const newLoader = await loader
+        .toNewInstance({
+          data: [false, 0, 'STR', 'STR_2', 'STR_3', 0],
+        })
+        .deploy(deployer)
+        .then(({ waitForResult: waitForNewLoaderDeploy }) => waitForNewLoaderDeploy());
 
       // Fund predicate
       await funder.transfer(newLoader.address, 1000);
@@ -219,6 +265,57 @@ describe('Predicate with dynamic configurables', () => {
       await expect(() => loader.transfer(receiver.address, 100)).rejects.toThrow(
         /PredicateVerificationFailed/
       );
+    });
+
+    it('should allow getting of dynamic configurables [initial configurables]', async () => {
+      const expectedConfigurables = {
+        BOOL: true,
+        U8: 8,
+        STR: 'sway',
+        STR_2: 'forc',
+        STR_3: 'fuel',
+        LAST_U8: 16,
+      };
+      using launched = await launchTestNode();
+      const {
+        provider,
+        wallets: [deployer],
+      } = launched;
+      const predicate = new PredicateWithDynamicConfigurable({
+        provider,
+        data: [true, 8, 'sway', 'forc', 'fuel-incorrect', 16],
+      });
+      const loader = await predicate.deploy(deployer).then(({ waitForResult }) => waitForResult());
+
+      const actualConfigurables = loader.getConfigurables();
+
+      expect(actualConfigurables).toEqual(expectedConfigurables);
+    });
+
+    it('should allow getting of dynamic configurables [updated configurables]', async () => {
+      const expectedConfigurables = {
+        BOOL: false,
+        U8: 0,
+        STR: 'STR3123123123123123123123',
+        STR_2: 'STR_2123123123123123123',
+        STR_3: 'STR_3123123123123123123123',
+        LAST_U8: 0,
+      };
+      using launched = await launchTestNode();
+      const {
+        provider,
+        wallets: [deployer],
+      } = launched;
+      const predicate = new PredicateWithDynamicConfigurable({
+        provider,
+        configurableConstants: expectedConfigurables,
+        data: [true, 8, 'sway', 'forc', 'fuel-incorrect', 16],
+      });
+      const loader = await predicate.deploy(deployer).then(({ waitForResult }) => waitForResult());
+
+      const actualConfigurables = loader.getConfigurables();
+
+      expect(actualConfigurables).toEqual(expectedConfigurables);
     });
   });
 });

@@ -1,5 +1,5 @@
 import { Interface, WORD_SIZE } from '@fuel-ts/abi-coder';
-import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
+import type { JsonAbi } from '@fuel-ts/abi-coder';
 import type {
   Account,
   CreateTransactionRequestLike,

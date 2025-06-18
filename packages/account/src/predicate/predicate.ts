@@ -233,6 +233,15 @@ export class Predicate<
     };
   }
 
+  getConfigurables(): Record<string, unknown> {
+    const configurables = createConfigurables({
+      bytecode: this.bytes,
+      abi: this.interface,
+    });
+
+    return configurables.all();
+  }
+
   /**
    * Retrieves resources satisfying the spend query for the account.
    *
@@ -329,7 +338,7 @@ export class Predicate<
           abi: newAbi,
           provider: this.provider,
           data: this.predicateData,
-          configurableConstants: this.configurableConstants,
+          configurableConstants: undefined,
         }) as T,
     });
   }

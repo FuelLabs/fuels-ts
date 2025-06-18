@@ -1,4 +1,4 @@
-import { BigNumberCoder, type JsonAbi } from '@fuel-ts/abi-coder';
+import { type JsonAbi } from '@fuel-ts/abi-coder';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { arrayify } from '@fuel-ts/utils';
 
@@ -7,7 +7,6 @@ import { BlobTransactionRequest, TransactionStatus } from '../providers';
 
 import {
   getBytecodeConfigurableOffset,
-  getBytecodeDataOffset,
   getBytecodeId,
   getPredicateScriptLoaderInstructions,
 } from './predicate-script-loader-instructions';
@@ -48,10 +47,15 @@ export async function deployScriptOrPredicate<T>({
   const blobId = getBytecodeId(arrayify(bytecode));
 
   const configurableOffset = getBytecodeConfigurableOffset(arrayify(bytecode));
-  const dataOffset = getBytecodeDataOffset(arrayify(bytecode));
   const byteCodeWithoutConfigurableSection = bytecode.slice(0, configurableOffset);
 
+  /**
+   * Expected to have to shift the indirect "dynamic offsets" to point to new values.
+   * However, the Sway code compiles and runs with the pre-existing values.
+   * Check that this is the case once everything is merged and ready
+   */
   // // Adjust the indirect configurable offsets to point to the new data offsets for the loader
+  // const dataOffset = getBytecodeDataOffset(arrayify(bytecode));
   // const newIndirectConfigurableOffsetDiff = configurableOffset - dataOffset;
   // const dynamicOffsetCoder = new BigNumberCoder('u64');
   // abi.configurables

@@ -237,7 +237,7 @@ export function getPredicateScriptLoaderInstructions(
   // Combine the instruction bytes and blob bytes
   const loaderBytecode = new Uint8Array([...instructionBytes, ...blobBytes]);
 
-  return { loaderBytecode };
+  return { loaderBytecode, blobOffset: 0 };
 }
 
 /**
