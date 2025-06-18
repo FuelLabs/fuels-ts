@@ -386,7 +386,7 @@ describe('Revert Error Testing', () => {
     } = launched;
 
     const script = new ScriptError(adminWallet);
-    const errorCode = Object.values(ScriptError.abi.errorCodes)[0];
+    const abiError = Object.values(ScriptError.abi.errorCodes)[0];
 
     await expectToThrowFuelError(
       async () => {
@@ -395,7 +395,7 @@ describe('Revert Error Testing', () => {
       },
       new FuelError(
         ErrorCode.SCRIPT_REVERTED,
-        `A sway "panic" expression was invoked with the message: "a str panic".\n\nThis error originated at ${JSON.stringify(errorCode.pos, null, 2)}`,
+        `A sway "panic" expression was invoked with the message: "a str panic".\n\nThis error originated at ${JSON.stringify(abiError.pos, null, 2)}`,
         {
           logs: [],
           groupedLogs: {},
@@ -403,6 +403,7 @@ describe('Revert Error Testing', () => {
           panic: false,
           revert: true,
           reason: '18446744069414584320',
+          abiError,
         }
       )
     );
@@ -416,7 +417,7 @@ describe('Revert Error Testing', () => {
     } = launched;
 
     const script = new ScriptError(adminWallet);
-    const errorCode = Object.values(ScriptError.abi.errorCodes)[1];
+    const abiError = Object.values(ScriptError.abi.errorCodes)[1];
 
     await expectToThrowFuelError(
       async () => {
@@ -425,7 +426,7 @@ describe('Revert Error Testing', () => {
       },
       new FuelError(
         ErrorCode.SCRIPT_REVERTED,
-        `A sway "panic" expression was invoked with the value: "A".\n\nThis error originated at ${JSON.stringify(errorCode.pos, null, 2)}`,
+        `A sway "panic" expression was invoked with the value: "A".\n\nThis error originated at ${JSON.stringify(abiError.pos, null, 2)}`,
         {
           groupedLogs: {
             [ZeroBytes32]: ['A'],
@@ -435,6 +436,7 @@ describe('Revert Error Testing', () => {
           panic: false,
           revert: true,
           reason: '18446744069414584321',
+          abiError,
         }
       )
     );
@@ -449,7 +451,7 @@ describe('Revert Error Testing', () => {
 
     const script = new ScriptError(adminWallet);
 
-    const errorCode = Object.values(ScriptError.abi.errorCodes)[2];
+    const abiError = Object.values(ScriptError.abi.errorCodes)[2];
 
     const decodedValue = { B: [bn('0x400'), 42] };
 
@@ -460,12 +462,13 @@ describe('Revert Error Testing', () => {
       },
       new FuelError(
         ErrorCode.SCRIPT_REVERTED,
-        `A sway "panic" expression was invoked with the value: ${JSON.stringify(decodedValue)}.\n\nThis error originated at ${JSON.stringify(errorCode.pos, null, 2)}`,
+        `A sway "panic" expression was invoked with the value: ${JSON.stringify(decodedValue)}.\n\nThis error originated at ${JSON.stringify(abiError.pos, null, 2)}`,
         {
           receipts: expect.any(Array<TransactionResultReceipt>),
           panic: false,
           revert: true,
           reason: '18446744069414584322',
+          abiError,
         }
       )
     );
@@ -479,7 +482,7 @@ describe('Revert Error Testing', () => {
     } = launched;
 
     const script = new ScriptError(adminWallet);
-    const errorCode = Object.values(ScriptError.abi.errorCodes)[3];
+    const abiError = Object.values(ScriptError.abi.errorCodes)[3];
 
     const decodedValue = { B: [bn('0x0'), 16] };
 
@@ -490,12 +493,13 @@ describe('Revert Error Testing', () => {
       },
       new FuelError(
         ErrorCode.SCRIPT_REVERTED,
-        `A sway "panic" expression was invoked with the value: ${JSON.stringify(decodedValue)}.\n\nThis error originated at ${JSON.stringify(errorCode.pos, null, 2)}`,
+        `A sway "panic" expression was invoked with the value: ${JSON.stringify(decodedValue)}.\n\nThis error originated at ${JSON.stringify(abiError.pos, null, 2)}`,
         {
           receipts: expect.any(Array<TransactionResultReceipt>),
           panic: false,
           revert: true,
           reason: '18446744069414584323',
+          abiError,
         }
       )
     );
