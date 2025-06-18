@@ -27,6 +27,7 @@ export enum TransactionType /* u8 */ {
   Upgrade = 3,
   Upload = 4,
   Blob = 5,
+  ScriptV2 = 6,
 }
 
 /** @hidden */
@@ -578,20 +579,108 @@ export class TransactionBlobCoder extends Coder<TransactionBlob, TransactionBlob
   }
 }
 
+export type TransactionScriptV2 = Omit<TransactionScript, 'type'> & {
+  type: TransactionType.ScriptV2;
+}
+
+export class TransactionScriptV2Coder extends Coder<TransactionScriptV2, TransactionScriptV2> {
+  constructor() {
+    super('TransactionScriptV2', 'struct TransactionScriptV2', 0);
+  }
+
+  encode(value: TransactionScriptV2): Uint8Array {
+    const parts: Uint8Array[] = [];
+
+    parts.push(new BigNumberCoder('u64').encode(value.scriptGasLimit));
+    parts.push(new B256Coder().encode(value.receiptsRoot));
+    parts.push(new BigNumberCoder('u64').encode(value.scriptLength));
+    parts.push(new BigNumberCoder('u64').encode(value.scriptDataLength));
+    parts.push(new NumberCoder('u32', { padToWordSize: true }).encode(value.policyTypes));
+    parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.inputsCount));
+    parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.outputsCount));
+    parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.witnessesCount));
+    parts.push(new ByteArrayCoder(value.scriptLength.toNumber()).encode(value.script));
+    parts.push(new ByteArrayCoder(value.scriptDataLength.toNumber()).encode(value.scriptData));
+    parts.push(new PoliciesCoder().encode(value.policies));
+    parts.push(new ArrayCoder(new InputCoder(), value.inputsCount).encode(value.inputs));
+    parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
+    parts.push(new ArrayCoder(new WitnessCoder(), value.witnessesCount).encode(value.witnesses));
+
+    return concat(parts);
+  }
+
+  decode(data: Uint8Array, offset: number): [TransactionScriptV2, number] {
+    let decoded;
+    let o = offset;
+
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
+    const scriptGasLimit = decoded;
+    [decoded, o] = new B256Coder().decode(data, o);
+    const receiptsRoot = decoded;
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
+    const scriptLength = decoded;
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
+    const scriptDataLength = decoded;
+    [decoded, o] = new NumberCoder('u32', { padToWordSize: true }).decode(data, o);
+    const policyTypes = decoded;
+    [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
+    const inputsCount = decoded;
+    [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
+    const outputsCount = decoded;
+    [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
+    const witnessesCount = decoded;
+    [decoded, o] = new ByteArrayCoder(scriptLength.toNumber()).decode(data, o);
+    const script = decoded;
+    [decoded, o] = new ByteArrayCoder(scriptDataLength.toNumber()).decode(data, o);
+    const scriptData = decoded;
+    [decoded, o] = new PoliciesCoder().decode(data, o, policyTypes);
+    const policies = decoded;
+    [decoded, o] = new ArrayCoder(new InputCoder(), inputsCount).decode(data, o);
+    const inputs = decoded;
+    [decoded, o] = new ArrayCoder(new OutputCoder(), outputsCount).decode(data, o);
+    const outputs = decoded;
+    [decoded, o] = new ArrayCoder(new WitnessCoder(), witnessesCount).decode(data, o);
+    const witnesses = decoded;
+
+    return [
+      {
+        type: TransactionType.ScriptV2,
+        scriptGasLimit,
+        scriptLength,
+        scriptDataLength,
+        policyTypes,
+        inputsCount,
+        outputsCount,
+        witnessesCount,
+        receiptsRoot,
+        script,
+        scriptData,
+        policies,
+        inputs,
+        outputs,
+        witnesses,
+      },
+      o,
+    ];
+  }
+}
+
 type PossibleTransactions =
   | TransactionScript
   | TransactionCreate
   | TransactionMint
   | TransactionUpgrade
   | TransactionUpload
-  | TransactionBlob;
+  | TransactionBlob
+  | TransactionScriptV2;
 
 export type SubmittableTransactions =
   | TransactionScript
   | TransactionCreate
   | TransactionUpgrade
   | TransactionUpload
-  | TransactionBlob;
+  | TransactionBlob
+  | TransactionScriptV2;
 
 export type Transaction<TTransactionType = void> = TTransactionType extends TransactionType
   ? Extract<PossibleTransactions, { type: TTransactionType }>
@@ -600,7 +689,8 @@ export type Transaction<TTransactionType = void> = TTransactionType extends Tran
       Partial<Omit<TransactionMint, 'type'>> &
       Partial<Omit<TransactionUpgrade, 'type'>> &
       Partial<Omit<TransactionUpload, 'type'>> &
-      Partial<Omit<TransactionBlob, 'type'>> & {
+      Partial<Omit<TransactionBlob, 'type'>> &
+      Partial<Omit<TransactionScriptV2, 'type'>> & {
         type: TransactionType;
       };
 
@@ -649,6 +739,10 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
         parts.push(new TransactionBlobCoder().encode(value as Transaction<TransactionType.Blob>));
         break;
       }
+      case TransactionType.ScriptV2: {
+        parts.push(new TransactionScriptV2Coder().encode(value as Transaction<TransactionType.ScriptV2>));
+        break;
+      }
       default: {
         throw new FuelError(
           ErrorCode.UNSUPPORTED_TRANSACTION_TYPE,
@@ -690,6 +784,10 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
       }
       case TransactionType.Blob: {
         [decoded, o] = new TransactionBlobCoder().decode(data, o);
+        return [decoded, o];
+      }
+      case TransactionType.ScriptV2: {
+        [decoded, o] = new TransactionScriptV2Coder().decode(data, o);
         return [decoded, o];
       }
       default: {

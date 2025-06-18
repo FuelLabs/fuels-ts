@@ -567,4 +567,38 @@ describe('TransactionCoder', () => {
       JSON.parse(JSON.stringify(transaction))
     );
   });
+
+  it('Can encode/decode TransactionScriptV2 without inputs, outputs and witnesses', () => {
+    const transaction: Transaction<TransactionType.ScriptV2> = {
+      type: TransactionType.ScriptV2,
+      scriptGasLimit: bn(U32),
+      scriptLength: U64,
+      scriptDataLength: U64,
+      policyTypes: 5,
+      inputsCount: 0,
+      outputsCount: 0,
+      witnessesCount: 0,
+      receiptsRoot: B256,
+      script: B256,
+      scriptData: B256,
+      policies: [
+        { type: PolicyType.Tip, data: bn(U32) },
+        { type: PolicyType.Maturity, data: U32 },
+      ],
+      inputs: [],
+      outputs: [],
+      witnesses: [],
+    };
+
+    const encoded = hexlify(new TransactionCoder().encode(transaction));
+
+    expect(encoded).toEqual(
+      '0x000000000000000600000000000003e8d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b000000000000002000000000000000200000000000000005000000000000000000000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000003e800000000000003e8'
+    );
+
+    const [decoded, offset] = new TransactionCoder().decode(arrayify(encoded), 0);
+
+    expect(offset).toEqual((encoded.length - 2) / 2);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(transaction));
+  });
 });
