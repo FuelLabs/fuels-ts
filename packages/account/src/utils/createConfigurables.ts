@@ -109,9 +109,8 @@ export const createConfigurables = (opts: { bytecode: Uint8Array; abi: Interface
      *
      * @returns An object of all configurables
      */
-    all: (): Record<string, unknown> => Object.fromEntries(
-      configurables.map(read).map(({ name, value }) => ([name, value]))
-    ),
+    all: (): Record<string, unknown> =>
+      Object.fromEntries(configurables.map(read).map(({ name, value }) => [name, value])),
     /**
      * Updates the bytecode with the new configurable values.
      *
