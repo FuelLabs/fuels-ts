@@ -135,66 +135,15 @@ export type CallResultToInvocationResultParams = {
 };
 
 /**
- * Converts a CallResult to an invocation result based on the provided call configuration.
- *
- * @param callResult - The CallResult from the script call.
- * @param call - The call configuration.
- * @param logs - Optional logs associated with the decoding.
- * @param groupedLogs - Optional logs associated with the decoding.
- * @param abis - Optional abis associated with the decoding.
- * @returns The decoded invocation result.
- *
- * @deprecated Use the object-based approach for parameters instead.
- */
-export function callResultToInvocationResult<TReturn>(
-  callResult: CallResult,
-  call: CallConfig,
-  logs?: DecodedLogs<unknown>['logs'],
-  groupedLogs?: DecodedLogs<unknown>['groupedLogs'],
-  abis?: JsonAbisFromAllCalls
-): TReturn;
-
-/**
  * Decodes a CallResult using the provided options.
  *
  * @param params - The parameters to decode the CallResult.
  * @returns The decoded invocation result.
  */
-export function callResultToInvocationResult<TResult>(
-  params: CallResultToInvocationResultParams
-): TResult;
-
 export function callResultToInvocationResult<TReturn>(
-  callResultOrParams: CallResult | CallResultToInvocationResultParams,
-  _call?: CallConfig,
-  _logs?: DecodedLogs<unknown>['logs'],
-  _groupedLogs?: DecodedLogs<unknown>['groupedLogs'],
-  _abis?: JsonAbisFromAllCalls
+  params: CallResultToInvocationResultParams
 ): TReturn {
-  let callResult: CallResult;
-  let call: CallConfig;
-  let logs: DecodedLogs<unknown>['logs'];
-  let groupedLogs: DecodedLogs<unknown>['groupedLogs'];
-  let abis: JsonAbisFromAllCalls | undefined;
-
-  if (
-    typeof callResultOrParams === 'object' &&
-    'callResult' in callResultOrParams &&
-    'call' in callResultOrParams
-  ) {
-    callResult = callResultOrParams.callResult;
-    call = callResultOrParams.call;
-    logs = callResultOrParams.logs ?? [];
-    groupedLogs = callResultOrParams.groupedLogs ?? {};
-    abis = callResultOrParams.abis;
-  } else {
-    callResult = callResultOrParams as CallResult;
-    call = _call as CallConfig;
-    logs = _logs ?? [];
-    groupedLogs = _groupedLogs ?? {};
-    abis = _abis;
-  }
-
+  const { callResult, call, logs = [], groupedLogs = {}, abis } = params;
   return decodeCallResult({
     callResult,
     scriptResultDecoder: (scriptResult: ScriptResult) => {
