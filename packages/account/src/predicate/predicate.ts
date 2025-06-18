@@ -338,7 +338,7 @@ export class Predicate<
           abi: newAbi,
           provider: this.provider,
           data: this.predicateData,
-          configurableConstants: undefined,
+          configurableConstants: this.configurableConstants,
         }) as T,
     });
   }
