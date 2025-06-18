@@ -568,7 +568,7 @@ describe('TransactionCoder', () => {
     );
   });
 
-  it('Can encode/decode TransactionScriptV2 without inputs, outputs and witnesses', () => {
+  it('Can encode/decode TransactionScriptV2 without inputs, outputs, witnesses and static witnesses', () => {
     const transaction: Transaction<TransactionType.ScriptV2> = {
       type: TransactionType.ScriptV2,
       scriptGasLimit: bn(U32),
@@ -578,6 +578,7 @@ describe('TransactionCoder', () => {
       inputsCount: 0,
       outputsCount: 0,
       witnessesCount: 0,
+      staticWitnessesCount: 0,
       receiptsRoot: B256,
       script: B256,
       scriptData: B256,
@@ -588,12 +589,13 @@ describe('TransactionCoder', () => {
       inputs: [],
       outputs: [],
       witnesses: [],
+      staticWitnesses: [],
     };
 
     const encoded = hexlify(new TransactionCoder().encode(transaction));
 
     expect(encoded).toEqual(
-      '0x000000000000000600000000000003e8d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b000000000000002000000000000000200000000000000005000000000000000000000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000003e800000000000003e8'
+      '0x000000000000000600000000000003e8d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000020000000000000002000000000000000050000000000000000000000000000000000000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000003e800000000000003e8'
     );
 
     const [decoded, offset] = new TransactionCoder().decode(arrayify(encoded), 0);

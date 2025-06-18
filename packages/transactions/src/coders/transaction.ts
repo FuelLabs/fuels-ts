@@ -581,6 +581,12 @@ export class TransactionBlobCoder extends Coder<TransactionBlob, TransactionBlob
 
 export type TransactionScriptV2 = Omit<TransactionScript, 'type'> & {
   type: TransactionType.ScriptV2;
+
+  /** List of static witnesses (Witness[]) */
+  staticWitnesses: Witness[];
+
+  /** Number of static witnesses (u16) */
+  staticWitnessesCount: number;
 }
 
 export class TransactionScriptV2Coder extends Coder<TransactionScriptV2, TransactionScriptV2> {
@@ -599,12 +605,14 @@ export class TransactionScriptV2Coder extends Coder<TransactionScriptV2, Transac
     parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.inputsCount));
     parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.outputsCount));
     parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.witnessesCount));
+    parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.staticWitnessesCount));
     parts.push(new ByteArrayCoder(value.scriptLength.toNumber()).encode(value.script));
     parts.push(new ByteArrayCoder(value.scriptDataLength.toNumber()).encode(value.scriptData));
     parts.push(new PoliciesCoder().encode(value.policies));
     parts.push(new ArrayCoder(new InputCoder(), value.inputsCount).encode(value.inputs));
     parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
     parts.push(new ArrayCoder(new WitnessCoder(), value.witnessesCount).encode(value.witnesses));
+    parts.push(new ArrayCoder(new WitnessCoder(), value.staticWitnessesCount).encode(value.staticWitnesses));
 
     return concat(parts);
   }
@@ -629,6 +637,8 @@ export class TransactionScriptV2Coder extends Coder<TransactionScriptV2, Transac
     const outputsCount = decoded;
     [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
     const witnessesCount = decoded;
+    [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
+    const staticWitnessesCount = decoded;
     [decoded, o] = new ByteArrayCoder(scriptLength.toNumber()).decode(data, o);
     const script = decoded;
     [decoded, o] = new ByteArrayCoder(scriptDataLength.toNumber()).decode(data, o);
@@ -641,6 +651,8 @@ export class TransactionScriptV2Coder extends Coder<TransactionScriptV2, Transac
     const outputs = decoded;
     [decoded, o] = new ArrayCoder(new WitnessCoder(), witnessesCount).decode(data, o);
     const witnesses = decoded;
+    [decoded, o] = new ArrayCoder(new WitnessCoder(), staticWitnessesCount).decode(data, o);
+    const staticWitnesses = decoded;
 
     return [
       {
@@ -652,6 +664,7 @@ export class TransactionScriptV2Coder extends Coder<TransactionScriptV2, Transac
         inputsCount,
         outputsCount,
         witnessesCount,
+        staticWitnessesCount,
         receiptsRoot,
         script,
         scriptData,
@@ -659,6 +672,7 @@ export class TransactionScriptV2Coder extends Coder<TransactionScriptV2, Transac
         inputs,
         outputs,
         witnesses,
+        staticWitnesses,
       },
       o,
     ];
