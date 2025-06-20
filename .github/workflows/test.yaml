@@ -191,7 +191,7 @@ jobs:
           path: coverage/report
 
       - name: Download Master Coverage Artifact
-        uses: dawidd6/action-download-artifact@v10
+        uses: dawidd6/action-download-artifact@v11
         if: ${{ steps.findPr.outputs.number }}
         with:
           workflow: test.yaml
