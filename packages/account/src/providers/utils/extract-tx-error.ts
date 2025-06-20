@@ -138,6 +138,7 @@ function buildAbiErrorMessage(
 
   return new FuelError(ErrorCode.SCRIPT_REVERTED, errorMessage, {
     ...metadata,
+    abiError,
     reason,
   });
 }
