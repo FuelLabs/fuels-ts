@@ -736,7 +736,9 @@ export class Account extends AbstractAccount implements WithAddress {
     return { txs, totalFeeCost, submitAll };
   }
 
-  async assembleNonBaseAssetConsolidationTxs(params: AssembleConsolidationTxsParams & { assetId: string }) {
+  async assembleNonBaseAssetConsolidationTxs(
+    params: AssembleConsolidationTxsParams & { assetId: string }
+  ) {
     const { assetId, coins, mode = 'parallel', outputNum = 1 } = params;
 
     this.validateConsolidationTxsCoins(coins, assetId);
@@ -800,7 +802,7 @@ export class Account extends AbstractAccount implements WithAddress {
 
         totalFeeCost = totalFeeCost.add(fee);
 
-        const baseAssetResources: Coin[] = []
+        const baseAssetResources: Coin[] = [];
         let fundingFeeTotal: BN = bn(0);
 
         while (fundingFeeTotal.lt(fee)) {
@@ -821,10 +823,10 @@ export class Account extends AbstractAccount implements WithAddress {
         // Add our base assets
         request.addResources(baseAssetResources);
 
-        const lastCoinBatch = assetCoinBatches[assetCoinBatches.length - 1]
+        const lastCoinBatch = assetCoinBatches[assetCoinBatches.length - 1];
         lastCoinBatch.push(...removedCoins);
         if (lastCoinBatch.length > maxInputsNumber) {
-          assetCoinBatches.push(lastCoinBatch.slice(maxInputsNumber))
+          assetCoinBatches.push(lastCoinBatch.slice(maxInputsNumber));
         }
 
         txs.push(request);
