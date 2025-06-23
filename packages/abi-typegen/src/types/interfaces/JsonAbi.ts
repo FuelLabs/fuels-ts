@@ -55,6 +55,7 @@ export interface JsonAbiConfigurable {
   name: string;
   configurableType: JsonAbiArgument;
   offset: number;
+  indirect?: boolean;
 }
 
 export interface JsonAbiErrorCode {

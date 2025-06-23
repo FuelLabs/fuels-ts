@@ -123,6 +123,7 @@ export function transpileAbi(abi) {
     name: conf.name,
     configurableType: parseConcreteType(abi, types, conf.concreteTypeId),
     offset: conf.offset,
+    indirect: conf.indirect ?? false,
   }));
 
   // 5. loggedTypes

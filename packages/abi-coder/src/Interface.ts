@@ -5,7 +5,7 @@ import { arrayify } from '@fuel-ts/utils';
 
 import { AbiCoder } from './AbiCoder';
 import { FunctionFragment } from './FunctionFragment';
-import type { DecodedValue, InputValue } from './encoding/coders/AbstractCoder';
+import type { Coder, DecodedValue, InputValue } from './encoding/coders/AbstractCoder';
 import type { JsonAbiArgument, JsonAbiOld } from './types/JsonAbi';
 import type { Configurable, JsonAbi } from './types/JsonAbiNew';
 import { type EncodingVersion } from './utils/constants';
@@ -88,26 +88,23 @@ export class Interface {
     });
   }
 
-  encodeType(concreteTypeId: string, value: InputValue): Uint8Array {
+  getCoder(concreteTypeId: string): Coder {
     const typeArg = parseConcreteType(
       this.jsonAbi,
       this.jsonAbiOld.types,
       concreteTypeId,
       ''
     ) as JsonAbiArgument;
-    return AbiCoder.encode(this.jsonAbiOld, typeArg, value, {
-      encoding: this.encoding,
-    });
+    return AbiCoder.getCoder(this.jsonAbiOld, typeArg, { encoding: this.encoding });
+  }
+
+  encodeType(concreteTypeId: string, value: InputValue): Uint8Array {
+    const coder = this.getCoder(concreteTypeId);
+    return coder.encode(value);
   }
 
   decodeType(concreteTypeId: string, data: Uint8Array): [DecodedValue | undefined, number] {
-    const typeArg = parseConcreteType(
-      this.jsonAbi,
-      this.jsonAbiOld.types,
-      concreteTypeId,
-      ''
-    ) as JsonAbiArgument;
-
-    return AbiCoder.decode(this.jsonAbiOld, typeArg, data, 0, { encoding: this.encoding });
+    const coder = this.getCoder(concreteTypeId);
+    return coder.decode(data, 0) as [DecodedValue | undefined, number];
   }
 }

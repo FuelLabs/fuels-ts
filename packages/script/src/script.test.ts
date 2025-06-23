@@ -127,7 +127,7 @@ describe('Script', () => {
       () => newScript.setConfigurableConstants({ FEE: 8 }),
       new FuelError(
         FuelError.CODES.INVALID_CONFIGURABLE_CONSTANTS,
-        'Error setting configurable constants: The script does not have configurable constants to be set.'
+        'Error setting configurable constants, the program does not have configurable constants to be set.'
       )
     );
   });
@@ -156,7 +156,7 @@ describe('Script', () => {
       () => script.setConfigurableConstants({ NOT_DEFINED: 8 }),
       new FuelError(
         FuelError.CODES.INVALID_CONFIGURABLE_CONSTANTS,
-        `Error setting configurable constants: The script does not have a configurable constant named: 'NOT_DEFINED'.`
+        `Error setting configurable constants, unknown keys supplied:\n- 'NOT_DEFINED'`
       )
     );
   });

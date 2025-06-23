@@ -99,6 +99,7 @@ export interface Configurable {
   readonly name: string;
   readonly concreteTypeId: string;
   readonly offset: number;
+  readonly indirect?: boolean;
 }
 
 export interface ErrorPosition {

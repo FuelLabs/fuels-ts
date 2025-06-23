@@ -271,7 +271,7 @@ describe('Predicate', () => {
           }),
         new FuelError(
           FuelError.CODES.INVALID_CONFIGURABLE_CONSTANTS,
-          'Error setting configurable constants: Predicate has no configurable constants to be set.'
+          'Error setting configurable constants, the program does not have configurable constants to be set.'
         )
       );
     });
@@ -292,7 +292,7 @@ describe('Predicate', () => {
           }),
         new FuelError(
           FuelError.CODES.INVALID_CONFIGURABLE_CONSTANTS,
-          `Error setting configurable constants: No configurable constant named 'NOPE' found in the Predicate.`
+          `Error setting configurable constants, unknown keys supplied:\n- 'NOPE'`
         )
       );
     });

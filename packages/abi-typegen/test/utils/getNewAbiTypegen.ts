@@ -83,6 +83,7 @@ export function getNewAbiTypegen(
         typeArguments: null,
       },
       offset: 120,
+      indirect: false,
     },
   ];
 
