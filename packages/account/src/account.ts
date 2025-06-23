@@ -800,26 +800,32 @@ export class Account extends AbstractAccount implements WithAddress {
 
         totalFeeCost = totalFeeCost.add(fee);
 
-        const fundingFeeTotal: BN = bn(0);
         const baseAssetResources: Coin[] = []
+        let fundingFeeTotal: BN = bn(0);
 
-        for (const baseAssetCoin of baseAssetCoins) {
-          fundingFeeTotal.add(baseAssetCoin.amount);
-          baseAssetResources.push(baseAssetCoin);
-
-          // If we have enough funding fee then we break out
-          if (fee.gte(fundingFeeTotal)) {
-            break;
+        while (fundingFeeTotal.lt(fee)) {
+          const baseAssetCoin = baseAssetCoins.pop();
+          if (!baseAssetCoin) {
+            throw new Error('Run out of funds');
           }
+
+          baseAssetResources.push(baseAssetCoin);
+          fundingFeeTotal = fundingFeeTotal.add(baseAssetCoin.amount);
         }
 
+        // Need to remove the extra assets from the request input
+        const { inputs } = request;
+        request.inputs = inputs.slice(0, maxInputsNumber - baseAssetResources.length);
+        const removedCoins = coinBatch.slice(maxInputsNumber - baseAssetResources.length);
+
+        // Add our base assets
         request.addResources(baseAssetResources);
 
-        // // Need to remove the extra assets from the request input
-        // const { inputs } = request;
-        // request.inputs = inputs.slice(0, maxInputsNumber);
-        // const otherCoinBatch = coinBatch.slice(maxInputsNumber - baseAssetResources.length);
-        // assetCoinBatches[assetCoinBatches.length - 1].push(...otherCoinBatch);
+        const lastCoinBatch = assetCoinBatches[assetCoinBatches.length - 1]
+        lastCoinBatch.push(...removedCoins);
+        if (lastCoinBatch.length > maxInputsNumber) {
+          assetCoinBatches.push(lastCoinBatch.slice(maxInputsNumber))
+        }
 
         txs.push(request);
       });

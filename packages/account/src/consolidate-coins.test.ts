@@ -593,7 +593,7 @@ describe('consolidate-coins', () => {
     });
   });
 
-  describe.todo('assembleAssetConsolidationTxs', () => {
+  describe('assembleAssetConsolidationTxs', () => {
     it('should ensures it can create many consolidation TXs [PARALLEL]', async () => {
       const maxInputs = 255;
       const {
@@ -611,7 +611,7 @@ describe('consolidate-coins', () => {
       const totalConsolidationTxs = Math.ceil(utxoNum / maxInputs);
 
       await transferUTXOsToAccount(adminWallet, [
-        { utxoNum: 100, amount: 10000, assetId: baseAssetId, recipient: wallet },
+        { utxoNum, amount: 100000, assetId: baseAssetId, recipient: wallet },
         { utxoNum, amount: 1000, assetId, recipient: wallet },
       ]);
 
@@ -631,7 +631,7 @@ describe('consolidate-coins', () => {
 
       await submitAll();
 
-      const { coins } = await wallet.getCoins();
+      const { coins } = await wallet.getCoins(assetId);
 
       // Account will end-up with 10 coins since 10 consolidation TXs were submitted
       expect(coins.length).toBe(totalConsolidationTxs);
@@ -647,6 +647,7 @@ describe('consolidate-coins', () => {
       } = await setupTest({ maxInputs });
 
       const baseAssetId = await provider.getBaseAssetId();
+      const assetId = TestAssetId.A.value;
 
       const wallet = Wallet.generate({ provider });
 
@@ -655,17 +656,19 @@ describe('consolidate-coins', () => {
       const totalConsolidationTxs = Math.ceil(utxoNum / maxInputs);
 
       await transferUTXOsToAccount(adminWallet, [
-        { utxoNum, amount: 1000, assetId: baseAssetId, recipient: wallet },
+        { utxoNum, amount: 100000, assetId: baseAssetId, recipient: wallet },
+        { utxoNum, amount: 1000, assetId, recipient: wallet },
       ]);
 
-      const allCoins = await fetchAllCoinsFromAccount(wallet);
+      const allCoins = await fetchAllCoinsFromAccount(wallet, assetId);
 
       expect(allCoins.length).toBe(utxoNum);
       expect(totalConsolidationTxs).toBeGreaterThan(0);
 
       const allSettled = vi.spyOn(Promise, 'allSettled');
 
-      const { submitAll, txs } = await wallet.assembleBaseAssetConsolidationTxs({
+      const { submitAll, txs } = await wallet.assembleNonBaseAssetConsolidationTxs({
+        assetId,
         coins: allCoins,
         mode: 'sequential',
       });
@@ -674,7 +677,7 @@ describe('consolidate-coins', () => {
 
       await submitAll();
 
-      const { coins } = await wallet.getCoins();
+      const { coins } = await wallet.getCoins(assetId);
 
       // Account will end-up with 10 coins since 10 consolidation TXs were submitted
       expect(coins.length).toBe(totalConsolidationTxs);
@@ -690,6 +693,7 @@ describe('consolidate-coins', () => {
       } = await setupTest({ maxInputs });
 
       const baseAssetId = await provider.getBaseAssetId();
+      const assetId = TestAssetId.A.value;
 
       const wallet = Wallet.generate({ provider });
 
@@ -699,15 +703,17 @@ describe('consolidate-coins', () => {
       const totalConsolidationTxs = Math.ceil(utxoNum / maxInputs);
 
       await transferUTXOsToAccount(adminWallet, [
-        { utxoNum, amount: 1000, assetId: baseAssetId, recipient: wallet },
+        { utxoNum, amount: 100000, assetId: baseAssetId, recipient: wallet },
+        { utxoNum, amount: 1000, assetId, recipient: wallet },
       ]);
 
-      const allCoins = await fetchAllCoinsFromAccount(wallet);
+      const allCoins = await fetchAllCoinsFromAccount(wallet, assetId);
 
       expect(allCoins.length).toBe(utxoNum);
       expect(totalConsolidationTxs).toBeGreaterThan(0);
 
-      const { submitAll, txs } = await wallet.assembleBaseAssetConsolidationTxs({
+      const { submitAll, txs } = await wallet.assembleNonBaseAssetConsolidationTxs({
+        assetId,
         coins: allCoins,
         outputNum: 4, // each consolidation will produce 4 new UTXOs each
       });
@@ -716,7 +722,7 @@ describe('consolidate-coins', () => {
 
       await submitAll();
 
-      const { coins } = await wallet.getCoins();
+      const { coins } = await wallet.getCoins(assetId);
 
       // Account will end-up with 10 coins since 10 consolidation TXs were submitted
       expect(coins.length).toBe(expectedTxsNum * 4);
@@ -729,14 +735,15 @@ describe('consolidate-coins', () => {
       } = await setupTest();
 
       const baseAssetId = await provider.getBaseAssetId();
+      const assetId = TestAssetId.A.value;
 
+      const { coins } = await wallet.getCoins(assetId);
       const { coins: baseAssetCoins } = await wallet.getCoins(baseAssetId);
-      const { coins: otherCoins } = await wallet.getCoins(TestAssetId.A.value);
 
-      baseAssetCoins.push(otherCoins[0]);
+      coins.push(baseAssetCoins[0]);
 
       await expectToThrowFuelError(
-        () => wallet.assembleBaseAssetConsolidationTxs({ coins: baseAssetCoins }),
+        () => wallet.assembleNonBaseAssetConsolidationTxs({ assetId, coins }),
         new FuelError(
           ErrorCode.COINS_ASSET_ID_MISMATCH,
           'All coins to consolidate must be from the same asset id.'
