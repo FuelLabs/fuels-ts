@@ -14,15 +14,12 @@ The SDK provides a built-in method to consolidate your base asset UTXOs:
 
 The `consolidateCoins` method accepts the following parameters:
 
-- `assetId`: The ID of the asset to consolidate (currently supports only the base asset)
+- `assetId`: The ID of the asset to consolidate
+
 - `mode` (optional): How to submit consolidation transactions
   - `'parallel'` (default): Submit all transactions simultaneously for faster processing
   - `'sequential'`: Submit transactions one after another, waiting for each to complete
 - `outputNum` (optional): Number of output UTXOs to create (default is 1)
-
-### Limitations
-
-- Currently only supports consolidating the base asset
 
 ## Max Inputs and Outputs
 
