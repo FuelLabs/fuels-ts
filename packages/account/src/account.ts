@@ -808,7 +808,7 @@ export class Account extends AbstractAccount implements WithAddress {
         while (fundingFeeTotal.lt(fee)) {
           const baseAssetCoin = baseAssetCoins.pop();
           if (!baseAssetCoin) {
-            throw new Error('Run out of funds');
+            break;
           }
 
           baseAssetResources.push(baseAssetCoin);

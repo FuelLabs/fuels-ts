@@ -465,17 +465,18 @@ describe('consolidate-coins', () => {
 
     it('should consolidate asset just fine [ACCOUNT HAS EXACTLY MAX INPUTS]', async () => {
       const maxInputs = 255;
-      const totalCoins = maxInputs; // Expected to be 1 consolidation tx
-      const { provider, wallets } = await setupTest({ maxInputs, coinsPerAsset: totalCoins });
+      const numberOfBaseAssetInputs = 1; // We need to minus one from the inputs to account for base asset inputs.
+      const totalCoins = maxInputs - numberOfBaseAssetInputs; // Expected to be 1 consolidation tx
+      const { wallets } = await setupTest({ maxInputs, coinsPerAsset: totalCoins });
       const [wallet] = wallets;
 
-      const baseAssetId = await provider.getBaseAssetId();
+      const assetId = TestAssetId.A.value;
 
-      let { coins } = await wallet.getCoins(baseAssetId);
+      let { coins } = await wallet.getCoins(assetId);
 
       expect(coins.length).toBe(totalCoins);
 
-      const { txResponses, errors } = await wallet.consolidateCoins({ assetId: baseAssetId });
+      const { txResponses, errors } = await wallet.consolidateCoins({ assetId });
 
       expect(txResponses.length).toBe(1);
       expect(errors.length).toBe(0);
@@ -484,24 +485,24 @@ describe('consolidate-coins', () => {
 
       expect(tx.isStatusSuccess).toBeTruthy();
 
-      ({ coins } = await wallet.getCoins(baseAssetId));
+      ({ coins } = await wallet.getCoins(assetId));
 
       expect(coins.length).toBe(1);
     });
 
     it('should consolidate base asset just fine [ACCOUNT HAS MORE THAN MAX INPUTS]', async () => {
       const maxInputs = 5;
-      const totalCoins = 12; // Expected to be 3 consolidation txs [5, 5, 2]
+      const totalCoins = 12; // Expected to be 3 consolidation txs [4, 4, 4] (4 non-base asset + 1 base asset)
       const { provider, wallets } = await setupTest({ maxInputs, coinsPerAsset: totalCoins });
       const [wallet] = wallets;
 
-      const baseAssetId = await provider.getBaseAssetId();
+      const assetId = await provider.getBaseAssetId();
 
-      let { coins } = await wallet.getCoins(baseAssetId);
+      let { coins } = await wallet.getCoins(assetId);
 
       expect(coins.length).toBe(totalCoins);
 
-      const { txResponses, errors } = await wallet.consolidateCoins({ assetId: baseAssetId });
+      const { txResponses, errors } = await wallet.consolidateCoins({ assetId });
 
       expect(txResponses.length).toBe(3);
       expect(errors.length).toBe(0);
@@ -510,7 +511,7 @@ describe('consolidate-coins', () => {
         expect(tx.isStatusSuccess).toBeTruthy();
       }
 
-      ({ coins } = await wallet.getCoins(baseAssetId));
+      ({ coins } = await wallet.getCoins(assetId));
 
       // 3 consolidation txs, 3 coins
       expect(coins.length).toBe(3);
@@ -546,7 +547,7 @@ describe('consolidate-coins', () => {
 
     it('should ensure fee error is thrown when insufficient funds', async () => {
       const maxInputs = 5;
-      const { provider, wallets } = await setupTest({
+      const { wallets } = await setupTest({
         coinsPerAsset: maxInputs + 2,
         maxInputs,
         amountPerCoin: 700,
@@ -567,9 +568,9 @@ describe('consolidate-coins', () => {
 
       const [wallet] = wallets;
 
-      const baseAssetId = await provider.getBaseAssetId();
+      const assetId = TestAssetId.A.value;
 
-      const { txResponses, errors } = await wallet.consolidateCoins({ assetId: baseAssetId });
+      const { txResponses, errors } = await wallet.consolidateCoins({ assetId });
 
       expect(txResponses.length).toBe(1);
       expect(errors.length).toBe(1);
@@ -583,13 +584,13 @@ describe('consolidate-coins', () => {
       using launched = await setupTestProviderAndWallets();
       const { provider } = launched;
 
-      const baseAssetId = await provider.getBaseAssetId();
+      const assetId = TestAssetId.A.value;
 
       const wallet = Wallet.generate({ provider });
 
       const error = new FuelError(ErrorCode.NO_COINS_TO_CONSOLIDATE, 'No coins to consolidate.');
 
-      await expectToThrowFuelError(() => wallet.consolidateCoins({ assetId: baseAssetId }), error);
+      await expectToThrowFuelError(() => wallet.consolidateCoins({ assetId }), error);
     });
   });
 
