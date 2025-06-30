@@ -42,8 +42,8 @@ describe('Predicate', () => {
             gasLimit: 100_000_000,
           }),
         new FuelError(
-          ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-          `Insufficient funds or too many small value coins. Consider combining UTXOs.\nFor the following asset ID: '${baseAssetId}'.`
+          ErrorCode.INSUFFICIENT_FUNDS,
+          `Insufficient funds.\nFor the following asset ID: '${baseAssetId}'.`
         )
       );
     });

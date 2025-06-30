@@ -602,8 +602,8 @@ describe('Account', () => {
     await expectToThrowFuelError(
       () => user.getResourcesToSpend([[1, ASSET_A]], { utxos: [assetAUTXO.id] }),
       new FuelError(
-        ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-        `Insufficient funds or too many small value coins. Consider combining UTXOs.\nFor the following asset ID: '${ASSET_A}'.`
+        ErrorCode.INSUFFICIENT_FUNDS,
+        `Insufficient funds.\nFor the following asset ID: '${ASSET_A}'.`
       )
     );
   });
@@ -981,8 +981,8 @@ describe('Account', () => {
     request.addCoinOutput(wallet.address, 30_000, baseAssetId);
 
     await expectToThrowFuelError(() => request.estimateAndFund(wallet), {
-      code: ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-      message: `Insufficient funds or too many small value coins. Consider combining UTXOs.\nFor the following asset ID: '${baseAssetId}'.`,
+      code: ErrorCode.MAX_COINS_REACHED,
+      message: `You have too many small value coins - consider combining UTXOs.\nFor the following asset ID: '${baseAssetId}'.`,
     });
   });
 

@@ -22,7 +22,7 @@ const { error } = await safeExec(() =>
 );
 
 // #region send-and-spend-funds-from-predicates-6
-const errorMessage = `Insufficient funds or too many small value coins. Consider combining UTXOs.\nFor the following asset ID: '${baseAssetId}'.`;
+const errorMessage = `Insufficient funds.\nFor the following asset ID: '${baseAssetId}'.`;
 // #endregion send-and-spend-funds-from-predicates-6
 
 const actualErrorMessage = (<Error>error).message;
