@@ -16,16 +16,13 @@ const predicate = new SimplePredicate({
 
 // Any amount coins will fail as the predicate is unfunded
 const amountOfCoinsToFail = 1000;
-const { error } = await safeExec(async () =>
-  predicate.transfer(
-    receiver.address,
-    amountOfCoinsToFail,
-    await provider.getBaseAssetId()
-  )
+const baseAssetId = await provider.getBaseAssetId();
+const { error } = await safeExec(() =>
+  predicate.transfer(receiver.address, amountOfCoinsToFail, baseAssetId)
 );
 
 // #region send-and-spend-funds-from-predicates-6
-const errorMessage = `Insufficient funds or too many small value coins. Consider combining UTXOs.`;
+const errorMessage = `Insufficient funds or too many small value coins. Consider combining UTXOs.\nFor the following asset ID: '${baseAssetId}'.`;
 // #endregion send-and-spend-funds-from-predicates-6
 
 const actualErrorMessage = (<Error>error).message;
