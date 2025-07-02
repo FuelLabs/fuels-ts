@@ -110,7 +110,7 @@ it('should throw when simulating via contract factory with wallet with no resour
     () => contractInstance.functions.return_input(1337).simulate(),
     new FuelError(
         ErrorCode.INSUFFICIENT_FUNDS,
-        `Insufficient funds.\nFor the following asset ID: '${baseAssetId}'.`
+        `Insufficient funds.\n\tAsset ID: '${baseAssetId}'.\n\tOwner: '${unfundedWallet.address.toB256()}'.`
     )
   );
 });

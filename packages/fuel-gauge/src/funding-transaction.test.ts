@@ -266,7 +266,7 @@ describe('Funding Transactions', () => {
       () => sender.fund(request, txCost),
       new FuelError(
         FuelError.CODES.INSUFFICIENT_FUNDS,
-        `Insufficient funds.\nFor the following asset ID: '${baseAssetId}'.`
+        `Insufficient funds.\n\tAsset ID: '${baseAssetId}'.\n\tOwner: '${sender.address.toB256()}'.`
       )
     );
 

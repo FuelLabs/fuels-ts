@@ -65,7 +65,7 @@ describe('Predicate', () => {
         () => contract.functions.mint_coins(200).call(),
         new FuelError(
           ErrorCode.INSUFFICIENT_FUNDS,
-          `Insufficient funds.\nFor the following asset ID: '${baseAssetId}'.`
+          `Insufficient funds.\n\tAsset ID: '${baseAssetId}'.\n\tOwner: '${receiver.address.toB256()}'.`
         )
       );
 

@@ -43,7 +43,7 @@ describe('Predicate', () => {
           }),
         new FuelError(
           ErrorCode.INSUFFICIENT_FUNDS,
-          `Insufficient funds.\nFor the following asset ID: '${baseAssetId}'.`
+          `Insufficient funds.\n\tAsset ID: '${baseAssetId}'.\n\tOwner: '${predicate.address.toB256()}'.`
         )
       );
     });
