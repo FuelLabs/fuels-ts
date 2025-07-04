@@ -1055,59 +1055,6 @@ export class Account extends AbstractAccount implements WithAddress {
   }
 
   /** @hidden * */
-  private async estimateAndFundTransaction(
-    transactionRequest: ScriptTransactionRequest,
-    txParams: TxParamsType,
-    costParams?: TransactionCostParams
-  ) {
-    let request = transactionRequest;
-    const txCost = await this.getTransactionCost(request, costParams);
-    request = this.validateGasLimitAndMaxFee({
-      transactionRequest: request,
-      gasUsed: txCost.gasUsed,
-      maxFee: txCost.maxFee,
-      txParams,
-    });
-    request = await this.fund(request, txCost);
-    return request;
-  }
-
-  /** @hidden * */
-  private validateGasLimitAndMaxFee({
-    gasUsed,
-    maxFee,
-    transactionRequest,
-    txParams: { gasLimit: setGasLimit, maxFee: setMaxFee },
-  }: {
-    gasUsed: BN;
-    maxFee: BN;
-    transactionRequest: ScriptTransactionRequest;
-    txParams: Pick<TxParamsType, 'gasLimit' | 'maxFee'>;
-  }) {
-    const request = transactionRequestify(transactionRequest) as ScriptTransactionRequest;
-
-    if (!isDefined(setGasLimit)) {
-      request.gasLimit = gasUsed;
-    } else if (gasUsed.gt(setGasLimit)) {
-      throw new FuelError(
-        ErrorCode.GAS_LIMIT_TOO_LOW,
-        `Gas limit '${setGasLimit}' is lower than the required: '${gasUsed}'.`
-      );
-    }
-
-    if (!isDefined(setMaxFee)) {
-      request.maxFee = maxFee;
-    } else if (maxFee.gt(setMaxFee)) {
-      throw new FuelError(
-        ErrorCode.MAX_FEE_TOO_LOW,
-        `Max fee '${setMaxFee}' is lower than the required: '${maxFee}'.`
-      );
-    }
-
-    return request;
-  }
-
-  /** @hidden * */
   private validateConsolidationTxsCoins(coins: Coin[], assetId: string) {
     if (coins.length <= 1) {
       throw new FuelError(ErrorCode.NO_COINS_TO_CONSOLIDATE, 'No coins to consolidate.');
