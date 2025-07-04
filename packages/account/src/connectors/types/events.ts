@@ -74,10 +74,13 @@ export type NetworkEvent = {
  * @event NetworksEvent
  * @property type - The event type.
  * @property data - The network information
+ * 
+ * @TODO This appears unused within `fuel-connectors`, is this still needed?
+ *        The types were incorrect as well.
  */
 export type NetworksEvent = {
   type: FuelConnectorEventTypes.networks;
-  data: Network;
+  data: Network[];
 };
 
 /**
