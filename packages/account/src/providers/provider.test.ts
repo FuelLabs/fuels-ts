@@ -1049,7 +1049,7 @@ describe('Provider', () => {
     await expectToThrowFuelError(() => sender.transfer(receiver.address, 1), {
       code: ErrorCode.INSUFFICIENT_FUNDS,
       message: [
-        `Insufficient funds.\n\tAsset ID: '${assetId}'.\n\tOwner: '${sender.address.toB256()}'.`,
+        `Insufficient funds.\n\tAsset ID: '${baseAssetId}'.\n\tOwner: '${sender.address.toB256()}'.`,
         ``,
         `The Fuel Node that you are trying to connect to is using fuel-core version ${current.FUEL_CORE}.`,
         `The TS SDK currently supports fuel-core version ${supported.FUEL_CORE}.`,
@@ -2938,4 +2938,8 @@ describe('Provider', () => {
       expect(readSuccessStatus).toBeTruthy();
     });
   });
+
+  it('should be able to calculate the UTXO ID', async () => {
+    using launched = await setupTestProviderAndWallets();
+  })
 });
