@@ -14,7 +14,7 @@ import type { Network } from './data-type';
  * Extract the event argument type from the event type.
  */
 export type FuelEventArg<T extends FuelConnectorEvents['type']> = Extract<
-  FuelConnectorEventTypes,
+  FuelConnectorEvents,
   { type: T }
 >['data'];
 
@@ -74,10 +74,13 @@ export type NetworkEvent = {
  * @event NetworksEvent
  * @property type - The event type.
  * @property data - The network information
+ *
+ * @TODO This appears unused within `fuel-connectors`, is this still needed?
+ *        The types were incorrect as well.
  */
 export type NetworksEvent = {
   type: FuelConnectorEventTypes.networks;
-  data: Network;
+  data: Network[];
 };
 
 /**
@@ -116,6 +119,13 @@ export type AssetsEvent = {
   data: Array<Asset>;
 };
 
+export type ConsolidateCoinsEvent = {
+  type: FuelConnectorEventTypes.consolidateCoins;
+  data: {
+    assetId: string;
+  }
+}
+
 /**
  * All the events available to the connector.
  */
@@ -127,6 +137,7 @@ export type FuelConnectorEvents =
   | AccountsEvent
   | ConnectorsEvent
   | ConnectorEvent
-  | AssetsEvent;
+  | AssetsEvent
+  | ConsolidateCoinsEvent;
 
 export type FuelConnectorEventsType = FuelConnectorEvents['type'];

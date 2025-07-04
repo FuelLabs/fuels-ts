@@ -473,6 +473,7 @@ type GasCosts {
   mul: U64!
   muli: U64!
   mldv: U64!
+  niop: U64
   noop: U64!
   not: U64!
   or: U64!
@@ -1172,6 +1173,11 @@ type Query {
   estimatePredicates(tx: HexString!): Transaction!
 
   """
+  Returns all possible receipts for test purposes.
+  """
+  allReceipts: [Receipt!]!
+
+  """
   Execute a dry-run of multiple transactions using a fork of current state, no changes are committed.
   """
   dryRun(
@@ -1370,7 +1376,7 @@ type Receipt {
   Set in the case of a Panic receipt to indicate a missing contract input id
   """
   contractId: ContractId
-  subId: Bytes32
+  subId: SubId
 }
 
 enum ReceiptType {

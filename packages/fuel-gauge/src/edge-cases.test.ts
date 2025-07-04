@@ -75,7 +75,7 @@ describe('Edge Cases', () => {
         }),
       new FuelError(
         ErrorCode.INVALID_REQUEST,
-        'Invalid transaction data: PredicateVerificationFailed(Panic(PredicateReturnedNonOne))'
+        'Invalid transaction data: PredicateVerificationFailed(Panic { index: 0, reason: PredicateReturnedNonOne })'
       )
     );
   });

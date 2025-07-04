@@ -56,6 +56,7 @@ describe('Predicate', () => {
 
       const receiver = Wallet.generate({ provider });
       const receiverInitialBalance = await receiver.getBalance();
+      const baseAssetId = await provider.getBaseAssetId();
 
       // calling the contract with the receiver account (no resources)
       contract.account = receiver;
@@ -63,8 +64,8 @@ describe('Predicate', () => {
       await expectToThrowFuelError(
         () => contract.functions.mint_coins(200).call(),
         new FuelError(
-          ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-          `Insufficient funds or too many small value coins. Consider combining UTXOs.`
+          ErrorCode.INSUFFICIENT_FUNDS,
+          `Insufficient funds.\n\tAsset ID: '${baseAssetId}'.\n\tOwner: '${receiver.address.toB256()}'.`
         )
       );
 

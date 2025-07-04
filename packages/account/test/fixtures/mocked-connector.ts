@@ -149,7 +149,10 @@ export class MockConnector extends FuelConnector {
   }
 
   override async selectNetwork(_network: SelectNetworkArguments) {
-    this.emit(FuelConnectorEventTypes.currentNetwork, _network);
+    this.emit(FuelConnectorEventTypes.currentNetwork, {
+      chainId: _network.chainId ?? -1,
+      url: _network.url ?? '',
+    });
     return true;
   }
 

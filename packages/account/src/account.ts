@@ -359,7 +359,7 @@ export class Account extends AbstractAccount implements WithAddress {
     // If the transaction still needs to be funded after the maximum number of attempts
     if (needsToBeFunded) {
       throw new FuelError(
-        ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
+        ErrorCode.INSUFFICIENT_FUNDS,
         `The account ${this.address} does not have enough base asset funds to cover the transaction execution.`
       );
     }
@@ -617,6 +617,29 @@ export class Account extends AbstractAccount implements WithAddress {
     });
 
     return this.sendTransaction(request);
+  }
+
+  /**
+   * @TODO docblocks
+   */
+  async startConsolidation(opts: {
+    ownerAddress: string;
+    assetId: string;
+  }): Promise<boolean> {
+    if (this._connector) {
+      const result = this._connector.startConsolidation(opts);
+      return result;
+    }
+
+    const { ownerAddress, assetId } = opts;
+    if (ownerAddress !== this.address.toB256()) {
+      throw Error(
+        `Unable to consolidate coins. You need to consolidate via the owners account.\n\tOwner: '${ownerAddress}'`
+      );
+    }
+
+    const { errors } = await this.consolidateCoins({ assetId });
+    return errors.length === 0
   }
 
   /**
@@ -1086,6 +1109,40 @@ export class Account extends AbstractAccount implements WithAddress {
   }
 
   /** @hidden */
+  private async autoConsolidateCoin<TResponse>(params: {
+    callback: () => Promise<TResponse>;
+  }): Promise<TResponse> {
+    const { callback } = params;
+
+    try {
+      return await callback();
+    } catch (e: unknown) {
+      const error = FuelError.parse(e);
+
+      const CONSOLIDATION_CODES = [
+        ErrorCode.MAX_COINS_REACHED,
+        // TODO: plumb in for MAX_INPUTS_EXCEEDED
+        // ErrorCode.MAX_INPUTS_EXCEEDED
+      ];
+
+      if (CONSOLIDATION_CODES.includes(error.code)) {
+        const { assetId, owner: ownerAddress } = error.metadata as {
+          assetId: string;
+          owner: string;
+        };
+        const consolidationResult = await this.startConsolidation({
+          assetId,
+          ownerAddress,
+        });
+        if (consolidationResult) {
+          return await callback();
+        }
+      }
+      throw e;
+    }
+  }
+
+  /** @hidden */
   private async prepareTransactionForSend(
     request: TransactionRequest
   ): Promise<TransactionRequest> {
@@ -1134,10 +1191,13 @@ export class Account extends AbstractAccount implements WithAddress {
     transactionRequest.gasLimit = bn(0);
     transactionRequest.maxFee = bn(0);
 
-    const { assembledRequest, gasPrice } = await this.provider.assembleTx({
-      request: transactionRequest,
-      accountCoinQuantities: mergeQuantities(outputQuantities, quantities),
-      feePayerAccount: this,
+    const { assembledRequest, gasPrice } = await this.autoConsolidateCoin({
+      callback: () =>
+        this.provider.assembleTx({
+          request: transactionRequest,
+          accountCoinQuantities: mergeQuantities(outputQuantities, quantities),
+          feePayerAccount: this,
+        }),
     });
 
     return { transactionRequest: assembledRequest as ScriptTransactionRequest, gasPrice };
@@ -1151,59 +1211,6 @@ export class Account extends AbstractAccount implements WithAddress {
         'Transfer amount must be a positive number.'
       );
     }
-  }
-
-  /** @hidden * */
-  private async estimateAndFundTransaction(
-    transactionRequest: ScriptTransactionRequest,
-    txParams: TxParamsType,
-    costParams?: TransactionCostParams
-  ) {
-    let request = transactionRequest;
-    const txCost = await this.getTransactionCost(request, costParams);
-    request = this.validateGasLimitAndMaxFee({
-      transactionRequest: request,
-      gasUsed: txCost.gasUsed,
-      maxFee: txCost.maxFee,
-      txParams,
-    });
-    request = await this.fund(request, txCost);
-    return request;
-  }
-
-  /** @hidden * */
-  private validateGasLimitAndMaxFee({
-    gasUsed,
-    maxFee,
-    transactionRequest,
-    txParams: { gasLimit: setGasLimit, maxFee: setMaxFee },
-  }: {
-    gasUsed: BN;
-    maxFee: BN;
-    transactionRequest: ScriptTransactionRequest;
-    txParams: Pick<TxParamsType, 'gasLimit' | 'maxFee'>;
-  }) {
-    const request = transactionRequestify(transactionRequest) as ScriptTransactionRequest;
-
-    if (!isDefined(setGasLimit)) {
-      request.gasLimit = gasUsed;
-    } else if (gasUsed.gt(setGasLimit)) {
-      throw new FuelError(
-        ErrorCode.GAS_LIMIT_TOO_LOW,
-        `Gas limit '${setGasLimit}' is lower than the required: '${gasUsed}'.`
-      );
-    }
-
-    if (!isDefined(setMaxFee)) {
-      request.maxFee = maxFee;
-    } else if (maxFee.gt(setMaxFee)) {
-      throw new FuelError(
-        ErrorCode.MAX_FEE_TOO_LOW,
-        `Max fee '${setMaxFee}' is lower than the required: '${maxFee}'.`
-      );
-    }
-
-    return request;
   }
 
   /** @hidden * */

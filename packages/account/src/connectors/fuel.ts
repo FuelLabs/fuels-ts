@@ -12,7 +12,7 @@ import {
   FuelConnectorEventType,
   LocalStorage,
 } from './types';
-import type { Network, FuelConnectorEventsType, TargetObject } from './types';
+import type { Network, FuelConnectorEventsType, TargetObject, FuelConnectorEvents } from './types';
 import type { CacheFor } from './utils';
 import { cacheFor, deferPromise, withTimeout } from './utils';
 
@@ -169,9 +169,10 @@ export class Fuel extends FuelConnector implements FuelSdk {
     }
     const currentConnector = this._currentConnector;
     this._unsubscribes.map((unSub) => unSub());
-    this._unsubscribes = events.map((event) => {
-      const handler = (...args: unknown[]) => this.emit(event, ...args);
-      currentConnector.on(event as FuelConnectorEventsType, handler);
+    this._unsubscribes = events.map((e: string) => {
+      const event = e as FuelConnectorEventsType;
+      const handler = <T extends FuelConnectorEvents['data']>(data: T) => this.emit(event, data);
+      currentConnector.on(event, handler);
       return () => currentConnector.off(event, handler);
     });
   }

@@ -342,6 +342,16 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
     throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
+  /** @TODO docblock */
+  async startConsolidation(_opts: {
+    ownerAddress: string;
+    assetId: string;
+  }): Promise<boolean> {
+    return this.emit(FuelConnectorEventTypes.consolidateCoins, {
+      assetId: _opts.assetId
+    })
+  }
+
   /**
    * Event listener for the connector.
    *
@@ -354,5 +364,18 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
   ): this {
     super.on(eventName, listener);
     return this;
+  }
+
+  /**
+   * Emit an event from the connector
+   *
+   * @param eventName - The event name to listen
+   * @param data - The event data
+   */
+  override emit<E extends FuelConnectorEvents['type'], D extends FuelEventArg<E>>(
+    eventName: E,
+    data: D
+  ): boolean {
+    return super.emit(eventName, data);
   }
 }

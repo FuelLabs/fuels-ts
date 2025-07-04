@@ -99,6 +99,7 @@ it('should throw when simulating via contract factory with wallet with no resour
   } = launched;
 
   const unfundedWallet = Wallet.generate({ provider });
+  const baseAssetId = await provider.getBaseAssetId();
 
   const factory = new DemoContractFactory(fundedWallet);
   const { waitForResult } = await factory.deploy();
@@ -108,8 +109,8 @@ it('should throw when simulating via contract factory with wallet with no resour
   await expectToThrowFuelError(
     () => contractInstance.functions.return_input(1337).simulate(),
     new FuelError(
-      ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-      `Insufficient funds or too many small value coins. Consider combining UTXOs.`
+        ErrorCode.INSUFFICIENT_FUNDS,
+        `Insufficient funds.\n\tAsset ID: '${baseAssetId}'.\n\tOwner: '${unfundedWallet.address.toB256()}'.`
     )
   );
 });
