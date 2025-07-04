@@ -625,7 +625,7 @@ export class Account extends AbstractAccount implements WithAddress {
   async startConsolidation(opts: {
     ownerAddress: string;
     assetId: string;
-  }): Promise<SubmitAllCallbackResponse> {
+  }): Promise<boolean> {
     if (this._connector) {
       const result = this._connector.startConsolidation(opts);
       return result;
@@ -638,8 +638,8 @@ export class Account extends AbstractAccount implements WithAddress {
       );
     }
 
-    const result = await this.consolidateCoins({ assetId });
-    return result
+    const { errors } = await this.consolidateCoins({ assetId });
+    return errors.length === 0
   }
 
   /**
