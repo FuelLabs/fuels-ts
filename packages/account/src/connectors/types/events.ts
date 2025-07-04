@@ -14,7 +14,7 @@ import type { Network } from './data-type';
  * Extract the event argument type from the event type.
  */
 export type FuelEventArg<T extends FuelConnectorEvents['type']> = Extract<
-  FuelConnectorEventTypes,
+  FuelConnectorEvents,
   { type: T }
 >['data'];
 
