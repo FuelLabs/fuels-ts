@@ -619,6 +619,29 @@ export class Account extends AbstractAccount implements WithAddress {
   }
 
   /**
+   * @TODO docblocks
+   */
+  async startConsolidation(opts: {
+    ownerAddress: string;
+    assetId: string;
+  }): Promise<SubmitAllCallbackResponse> {
+    if (this._connector) {
+      const result = this._connector.startConsolidation(opts);
+      return result;
+    }
+
+    const { ownerAddress, assetId } = opts;
+    if (ownerAddress !== this.address.toB256()) {
+      throw Error(
+        `Unable to consolidate coins. You need to consolidate via the owners account.\n\tOwner: '${ownerAddress}'`
+      );
+    }
+
+    const result = await this.consolidateCoins({ assetId });
+    return result
+  }
+
+  /**
    * Consolidates base asset UTXOs into fewer, larger ones.
    *
    * Retrieves a limited number of base asset coins (as defined by `Provider.RESOURCES_PAGE_SIZE_LIMIT`),
@@ -987,6 +1010,40 @@ export class Account extends AbstractAccount implements WithAddress {
   }
 
   /** @hidden */
+  private async autoConsolidateCoin<TResponse>(params: {
+    callback: () => Promise<TResponse>;
+  }): Promise<TResponse> {
+    const { callback } = params;
+
+    try {
+      return await callback();
+    } catch (e: unknown) {
+      const error = FuelError.parse(e);
+
+      const CONSOLIDATION_CODES = [
+        ErrorCode.MAX_COINS_REACHED,
+        // TODO: plumb in for MAX_INPUTS_EXCEEDED
+        // ErrorCode.MAX_INPUTS_EXCEEDED
+      ];
+
+      if (CONSOLIDATION_CODES.includes(error.code)) {
+        const { assetId, owner: ownerAddress } = error.metadata as {
+          assetId: string;
+          owner: string;
+        };
+        const consolidationResult = await this.startConsolidation({
+          assetId,
+          ownerAddress,
+        });
+        if (consolidationResult) {
+          return await callback();
+        }
+      }
+      throw e;
+    }
+  }
+
+  /** @hidden */
   private async prepareTransactionForSend(
     request: TransactionRequest
   ): Promise<TransactionRequest> {
@@ -1035,10 +1092,13 @@ export class Account extends AbstractAccount implements WithAddress {
     transactionRequest.gasLimit = bn(0);
     transactionRequest.maxFee = bn(0);
 
-    const { assembledRequest, gasPrice } = await this.provider.assembleTx({
-      request: transactionRequest,
-      accountCoinQuantities: mergeQuantities(outputQuantities, quantities),
-      feePayerAccount: this,
+    const { assembledRequest, gasPrice } = await this.autoConsolidateCoin({
+      callback: () =>
+        this.provider.assembleTx({
+          request: transactionRequest,
+          accountCoinQuantities: mergeQuantities(outputQuantities, quantities),
+          feePayerAccount: this,
+        }),
     });
 
     return { transactionRequest: assembledRequest as ScriptTransactionRequest, gasPrice };
