@@ -102,6 +102,7 @@ export type SubmitAllCallbackResponse = {
 export type SubmitAllCallback = () => Promise<SubmitAllCallbackResponse>;
 
 export type AssembleConsolidationTxsParams = {
+  assetId: string;
   coins: Coin[];
   mode?: SubmitAllMode;
   outputNum?: number;
@@ -663,6 +664,7 @@ export class Account extends AbstractAccount implements WithAddress {
 
     let submitAll: SubmitAllCallback;
     const consolidationParams: AssembleConsolidationTxsParams = {
+      assetId,
       coins,
       mode: params.mode,
       outputNum: params.outputNum,
@@ -671,10 +673,7 @@ export class Account extends AbstractAccount implements WithAddress {
     if (isBaseAsset) {
       ({ submitAll } = await this.assembleBaseAssetConsolidationTxs(consolidationParams));
     } else {
-      throw new FuelError(
-        ErrorCode.UNSUPPORTED_FEATURE,
-        'Consolidation for non-base assets is not supported yet.'
-      );
+      ({ submitAll } = await this.assembleNonBaseAssetConsolidationTxs(consolidationParams));
     }
 
     return submitAll();
@@ -691,11 +690,10 @@ export class Account extends AbstractAccount implements WithAddress {
    *
    * @returns An object containing the assembled transactions, the total fee cost, and a callback to submit all transactions.
    */
-  async assembleBaseAssetConsolidationTxs(params: AssembleConsolidationTxsParams) {
+  async assembleBaseAssetConsolidationTxs(params: Omit<AssembleConsolidationTxsParams, 'assetId'>) {
     const { coins, mode = 'parallel', outputNum = 1 } = params;
 
     const baseAssetId = await this.provider.getBaseAssetId();
-
     this.validateConsolidationTxsCoins(coins, baseAssetId);
 
     const chainInfo = await this.provider.getChain();
@@ -752,6 +750,107 @@ export class Account extends AbstractAccount implements WithAddress {
         }
 
         totalFeeCost = totalFeeCost.add(fee);
+
+        txs.push(request);
+      });
+
+    const submitAll = this.prepareSubmitAll({ txs, mode });
+
+    return { txs, totalFeeCost, submitAll };
+  }
+
+  async assembleNonBaseAssetConsolidationTxs(
+    params: AssembleConsolidationTxsParams & { assetId: string }
+  ) {
+    const { assetId, coins, mode = 'parallel', outputNum = 1 } = params;
+
+    this.validateConsolidationTxsCoins(coins, assetId);
+
+    const chainInfo = await this.provider.getChain();
+    const maxInputsNumber = chainInfo.consensusParameters.txParameters.maxInputs.toNumber();
+
+    // Collate the base asset for funding purposes
+    const baseAssetId = chainInfo.consensusParameters.baseAssetId;
+    const { coins: baseAssetCoins } = await this.provider.getCoins(this.address, baseAssetId);
+
+    let totalFeeCost = bn(0);
+    const txs: ScriptTransactionRequest[] = [];
+    const gasPrice = await this.provider.estimateGasPrice(10);
+    const consolidateMoreThanOneCoin = outputNum > 1;
+    const assetCoinBatches = splitCoinsIntoBatches(coins, maxInputsNumber);
+
+    assetCoinBatches
+      // Skip batches with just one Coin to avoid consolidate just one coin
+      .filter((batch) => batch.length > 1)
+      .forEach((coinBatch) => {
+        const request = new ScriptTransactionRequest({
+          script: '0x',
+        });
+
+        request.addResources(coinBatch);
+
+        if (consolidateMoreThanOneCoin) {
+          // We decrease one because the change output will also create one UTXO
+          Array.from({ length: outputNum - 1 }).forEach(() => {
+            // Real value will be added later after having fee calculated
+            request.addCoinOutput(this.address, 0, assetId);
+          });
+        }
+
+        const minGas = request.calculateMinGas(chainInfo);
+
+        const fee = calculateGasFee({
+          gasPrice,
+          gas: minGas,
+          priceFactor: chainInfo.consensusParameters.feeParameters.gasPriceFactor,
+          tip: request.tip,
+        });
+
+        request.maxFee = fee;
+
+        if (consolidateMoreThanOneCoin) {
+          const total = request.inputs
+            .filter(isRequestInputCoin)
+            .reduce((acc, input) => acc.add(input.amount), bn(0));
+
+          // We add a +1 as the change output will also include one part of the total amount
+          const amountPerNewUtxo = total.div(outputNum + 1);
+
+          request.outputs.forEach((output) => {
+            if (output.type === OutputType.Coin) {
+              output.amount = amountPerNewUtxo;
+            }
+          });
+        }
+
+        totalFeeCost = totalFeeCost.add(fee);
+
+        const baseAssetResources: Coin[] = [];
+        let fundingFeeTotal: BN = bn(0);
+
+        while (fundingFeeTotal.lt(fee)) {
+          const baseAssetCoin = baseAssetCoins.pop();
+          if (!baseAssetCoin) {
+            break;
+          }
+
+          baseAssetResources.push(baseAssetCoin);
+          fundingFeeTotal = fundingFeeTotal.add(baseAssetCoin.amount);
+        }
+
+        // Need to remove the extra assets from the request input
+        const { inputs } = request;
+        request.inputs = inputs.slice(0, maxInputsNumber - baseAssetResources.length);
+        const removedCoins = coinBatch.slice(maxInputsNumber - baseAssetResources.length);
+
+        // Add our base assets
+        request.addResources(baseAssetResources);
+
+        const lastCoinBatch = assetCoinBatches[assetCoinBatches.length - 1];
+        lastCoinBatch.push(...removedCoins);
+        if (lastCoinBatch.length > maxInputsNumber) {
+          assetCoinBatches.push(lastCoinBatch.slice(maxInputsNumber));
+        }
 
         txs.push(request);
       });
