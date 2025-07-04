@@ -116,6 +116,13 @@ export type AssetsEvent = {
   data: Array<Asset>;
 };
 
+export type ConsolidateCoinsEvent = {
+  type: FuelConnectorEventTypes.consolidateCoins;
+  data: {
+    assetId: string;
+  }
+}
+
 /**
  * All the events available to the connector.
  */
@@ -127,6 +134,7 @@ export type FuelConnectorEvents =
   | AccountsEvent
   | ConnectorsEvent
   | ConnectorEvent
-  | AssetsEvent;
+  | AssetsEvent
+  | ConsolidateCoinsEvent;
 
 export type FuelConnectorEventsType = FuelConnectorEvents['type'];
