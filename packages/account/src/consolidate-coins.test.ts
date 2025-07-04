@@ -2,11 +2,12 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { BigNumberish } from '@fuel-ts/math';
 import { type SnapshotConfigs } from '@fuel-ts/utils';
+import type { PartialDeep } from 'type-fest';
 
 import { type Account } from '.';
 import type { Coin } from './providers';
 import { ScriptTransactionRequest } from './providers';
-import type { WalletsConfigOptions } from './test-utils';
+import type { LaunchNodeOptions, WalletsConfigOptions } from './test-utils';
 import { setupTestProviderAndWallets, TestAssetId } from './test-utils';
 import type { WalletUnlocked } from './wallet';
 import { Wallet } from './wallet';
@@ -94,14 +95,16 @@ describe('consolidate-coins', () => {
       feeParams?: Partial<
         SnapshotConfigs['chainConfig']['consensus_parameters']['V2']['fee_params']['V1']
       >;
+      startingGasPrice?: number;
     } = {}
   ) => {
-    const { maxInputs, coinsPerAsset, amountPerCoin, count, feeParams } = params;
-    let nodeOptions = {};
+    const { maxInputs, coinsPerAsset, amountPerCoin, count, feeParams, startingGasPrice } = params;
+    let nodeOptions: PartialDeep<LaunchNodeOptions> = {};
     let walletsConfig: Partial<WalletsConfigOptions> = {};
 
     if (maxInputs) {
       nodeOptions = {
+        args: startingGasPrice ? ['--starting-gas-price', startingGasPrice.toString() ?? '1'] : [],
         snapshotConfig: {
           chainConfig: {
             consensus_parameters: {
@@ -193,7 +196,13 @@ describe('consolidate-coins', () => {
   it('should consolidate asset just fine [ACCOUNT HAS MORE THAN MAX INPUTS]', async () => {
     const maxInputs = 5;
     const totalCoins = 12; // Expected to be 3 consolidation txs [5, 5, 2]
-    const { provider, wallets } = await setupTest({ maxInputs, coinsPerAsset: totalCoins });
+    const { provider, wallets } = await setupTest({
+      maxInputs,
+      coinsPerAsset: totalCoins,
+      // TODO: revert after release of `fuel-core` version
+      // When using built versions, the gas price starting value seems off.
+      startingGasPrice: 1000
+    });
     const [wallet] = wallets;
 
     const baseAssetId = await provider.getBaseAssetId();
@@ -264,6 +273,9 @@ describe('consolidate-coins', () => {
         gas_price_factor: 92000,
         gas_per_byte: 63,
       },
+      // TODO: revert after release of `fuel-core` version
+      // When using built versions, the gas price starting value seems off.
+      startingGasPrice: 1000
     });
 
     const [wallet] = wallets;
