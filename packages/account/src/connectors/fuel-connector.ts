@@ -3,7 +3,6 @@ import { FuelError } from '@fuel-ts/errors';
 import type { HashableMessage } from '@fuel-ts/hasher';
 import { EventEmitter } from 'events';
 
-import type { SubmitAllCallbackResponse } from '..';
 import type { Asset } from '../assets/types';
 import type { TransactionRequest, TransactionRequestLike, TransactionResponse } from '../providers';
 
@@ -347,8 +346,10 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
   async startConsolidation(_opts: {
     ownerAddress: string;
     assetId: string;
-  }): Promise<SubmitAllCallbackResponse> {
-    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
+  }): Promise<boolean> {
+    return this.emit(FuelConnectorEventTypes.consolidateCoins, {
+      assetId: _opts.assetId
+    })
   }
 
   /**
