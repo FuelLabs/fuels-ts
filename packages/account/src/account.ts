@@ -114,6 +114,11 @@ export type ConsolidateCoins = {
   outputNum?: number;
 };
 
+export type StartConsolidateCoins = {
+  owner: string;
+  assetId: string;
+};
+
 const MAX_FUNDING_ATTEMPTS = 5;
 
 export type FakeResources = Partial<Coin> & Required<Pick<Coin, 'amount' | 'assetId'>>;
@@ -620,26 +625,34 @@ export class Account extends AbstractAccount implements WithAddress {
   }
 
   /**
-   * @TODO docblocks
+   * Start the consolidation process
+   *
+   * @param owner - The B256 address of the owner.
+   * @param assetId - The asset ID that requires consolidation.
    */
-  async startConsolidation(opts: {
-    ownerAddress: string;
-    assetId: string;
-  }): Promise<boolean> {
+  async startConsolidation(opts: StartConsolidateCoins): Promise<boolean> {
     if (this._connector) {
-      const result = this._connector.startConsolidation(opts);
-      return result;
+      await this._connector.startConsolidation(opts);
+      return false;
     }
 
-    const { ownerAddress, assetId } = opts;
-    if (ownerAddress !== this.address.toB256()) {
-      throw Error(
-        `Unable to consolidate coins. You need to consolidate via the owners account.\n\tOwner: '${ownerAddress}'`
+    const { owner, assetId } = opts;
+    if (owner !== this.address.toB256()) {
+      throw new FuelError(
+        ErrorCode.UNABLE_TO_CONSOLIDATE_COINS,
+        `Unable to consolidate coins. You're attempting to consolidate assets that don't belong to this account.\n\tOwner: '${owner}'\n\tCurrent: '${this.address.toB256()}'`
       );
     }
 
     const { errors } = await this.consolidateCoins({ assetId });
-    return errors.length === 0
+    if (errors) {
+      throw new FuelError(
+        ErrorCode.UNABLE_TO_CONSOLIDATE_COINS,
+        `There were error/s while attempting to consolidate the coins.\n\tAsset: '${assetId}'.`,
+        { errors }
+      );
+    }
+    return true;
   }
 
   /**
@@ -1126,17 +1139,14 @@ export class Account extends AbstractAccount implements WithAddress {
       ];
 
       if (CONSOLIDATION_CODES.includes(error.code)) {
-        const { assetId, owner: ownerAddress } = error.metadata as {
+        const { assetId, owner } = error.metadata as {
           assetId: string;
           owner: string;
         };
-        const consolidationResult = await this.startConsolidation({
+        await this.startConsolidation({
+          owner,
           assetId,
-          ownerAddress,
         });
-        if (consolidationResult) {
-          return await callback();
-        }
       }
       throw e;
     }

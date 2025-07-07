@@ -1,3 +1,4 @@
+import type { StartConsolidateCoins } from '../../account';
 import type { Asset } from '../../assets/types';
 import type { FuelConnector } from '../fuel-connector';
 
@@ -118,11 +119,8 @@ export type AssetsEvent = {
 
 export type ConsolidateCoinsEvent = {
   type: FuelConnectorEventTypes.consolidateCoins;
-  data: {
-    owner: string;
-    assetId: string;
-  }
-}
+  data: StartConsolidateCoins;
+};
 
 /**
  * All the events available to the connector.
