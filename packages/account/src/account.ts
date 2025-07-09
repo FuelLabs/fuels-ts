@@ -645,7 +645,7 @@ export class Account extends AbstractAccount implements WithAddress {
     }
 
     const { errors } = await this.consolidateCoins({ assetId });
-    if (errors) {
+    if (errors.length > 0) {
       throw new FuelError(
         ErrorCode.UNABLE_TO_CONSOLIDATE_COINS,
         `There were error/s while attempting to consolidate the coins.\n\tAsset: '${assetId}'.`,
@@ -1143,10 +1143,13 @@ export class Account extends AbstractAccount implements WithAddress {
           assetId: string;
           owner: string;
         };
-        await this.startConsolidation({
+        const shouldRetryOperation = await this.startConsolidation({
           owner,
           assetId,
         });
+        if (shouldRetryOperation) {
+          return await callback()
+        }
       }
       throw e;
     }
