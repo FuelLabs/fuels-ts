@@ -911,4 +911,32 @@ describe('Fuel Connector', () => {
     expect(jsonSummary.transaction).toBeDefined();
     expect(jsonSummary.gasUsed).toBeDefined();
   });
+
+  it('should start consolidation process', async () => {
+    const startConsolidation = vi.fn();
+    using launched = await setupTestProviderAndWallets({
+      walletsConfig: { amountPerCoin: 1, coinsPerAsset: 2_000 },
+    });
+    const {
+      provider,
+      wallets: [connectorWallet, receiver],
+    } = launched;
+    const connector = new MockConnector({
+      wallets: [connectorWallet],
+      mocks: { startConsolidation },
+    });
+    const fuel = await new Fuel({ connectors: [connector] });
+    const account = new Account(connectorWallet.address.toB256(), provider, fuel);
+    const baseAssetId = await provider.getBaseAssetId();
+
+    // Send transfer that will trigger auto consolidation
+    // Note: we still throw an error, this is due to the nature of the connector implementation.
+    await expectToThrowFuelError(() => account.transfer(receiver.address, 1_000, baseAssetId), {
+      code: ErrorCode.MAX_COINS_REACHED,
+    });
+    expect(startConsolidation).toBeCalledWith({
+      owner: account.address.toB256(),
+      assetId: baseAssetId,
+    });
+  });
 });

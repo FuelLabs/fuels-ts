@@ -1,7 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { GraphQLError } from 'graphql';
 
-const ASSET_ID_REGEX = /[0-9a-fA-F]{32,64}/;
+const ASSET_ID_REGEX: RegExp = /[0-9a-fA-F]{32,64}/g;
 
 const gqlErrorMessage = {
   RPC_CONSISTENCY:
@@ -19,17 +19,42 @@ const gqlErrorMessage = {
 type GqlError = { message: string } | GraphQLError;
 
 const mapGqlErrorMessage = (error: GqlError): FuelError => {
-  if (
-    gqlErrorMessage.INSUFFICIENT_FUNDS.test(error.message) ||
-    gqlErrorMessage.MAX_COINS_REACHED.test(error.message)
-  ) {
-    const match = error.message.match(ASSET_ID_REGEX);
-    const assetId = match ? `0x${match[0]}` : null;
-    const suffix = assetId ? `\nFor the following asset ID: '${assetId}'.` : '';
+  if (gqlErrorMessage.MAX_COINS_REACHED.test(error.message)) {
+    const matches = error.message.match(ASSET_ID_REGEX);
+    const assetId = matches ? `0x${matches[0]}` : null;
+    const owner = matches ? `0x${matches[1]}` : null;
+    let suffix = '';
+    if (assetId) {
+      suffix += `\n\tAsset ID: '${assetId}'.`;
+    }
+    if (owner) {
+      suffix += `\n\tOwner: '${owner}'.`;
+    }
+
     return new FuelError(
-      ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-      `Insufficient funds or too many small value coins. Consider combining UTXOs.${suffix}`,
-      { assetId },
+      ErrorCode.MAX_COINS_REACHED,
+      `You have too many small value coins - consider combining UTXOs.${suffix}`,
+      { assetId, owner },
+      error
+    );
+  }
+
+  if (gqlErrorMessage.INSUFFICIENT_FUNDS.test(error.message)) {
+    const matches = error.message.match(ASSET_ID_REGEX);
+    const assetId = matches ? `0x${matches[0]}` : null;
+    const owner = matches ? `0x${matches[1]}` : null;
+    let suffix = '';
+    if (assetId) {
+      suffix += `\n\tAsset ID: '${assetId}'.`;
+    }
+    if (owner) {
+      suffix += `\n\tOwner: '${owner}'.`;
+    }
+
+    return new FuelError(
+      ErrorCode.INSUFFICIENT_FUNDS,
+      `Insufficient funds.${suffix}`,
+      { assetId, owner },
       error
     );
   }

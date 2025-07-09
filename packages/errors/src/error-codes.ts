@@ -59,7 +59,8 @@ export enum ErrorCode {
   MISSING_REQUIRED_PARAMETER = 'missing-required-parameter',
   INVALID_REQUEST = 'invalid-request',
   INVALID_TRANSFER_AMOUNT = 'invalid-transfer-amount',
-  INSUFFICIENT_FUNDS_OR_MAX_COINS = 'not-enough-funds-or-max-coins-reached',
+  INSUFFICIENT_FUNDS = 'not-enough-funds',
+  MAX_COINS_REACHED = 'max-coins-reached',
 
   // crypto
   INVALID_CREDENTIALS = 'invalid-credentials',
@@ -105,6 +106,7 @@ export enum ErrorCode {
   INVALID_PASSWORD = 'invalid-password',
   ACCOUNT_REQUIRED = 'account-required',
   UNLOCKED_WALLET_REQUIRED = 'unlocked-wallet-required',
+  UNABLE_TO_CONSOLIDATE_COINS = 'unable-to-consolidate-coins',
   NO_COINS_TO_CONSOLIDATE = 'no-coins-to-consolidate',
   COINS_ASSET_ID_MISMATCH = 'coins-asset-id-mismatch',
 

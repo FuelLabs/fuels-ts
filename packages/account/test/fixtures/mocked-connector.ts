@@ -2,6 +2,7 @@
 
 import type { HashableMessage } from '@fuel-ts/hasher';
 import { setTimeout } from 'timers/promises';
+import type { PartialDeep } from 'type-fest';
 
 import type {
   TransactionRequestLike,
@@ -12,6 +13,7 @@ import type {
   SelectNetworkArguments,
   AccountSendTxParams,
   TransactionResponse,
+  StartConsolidateCoins,
 } from '../../src';
 import type { Asset } from '../../src/assets/types';
 import { FuelConnector } from '../../src/connectors/fuel-connector';
@@ -26,6 +28,7 @@ type MockConnectorOptions = {
   wallets?: Array<WalletUnlocked>;
   pingDelay?: number;
   metadata?: Partial<ConnectorMetadata>;
+  mocks?: PartialDeep<Pick<FuelConnector, 'startConsolidation'>>;
 };
 
 export class MockConnector extends FuelConnector {
@@ -33,6 +36,7 @@ export class MockConnector extends FuelConnector {
   _networks: Array<Network>;
   _wallets: Array<WalletUnlocked>;
   _pingDelay: number;
+  _mocks: MockConnectorOptions['mocks'];
   override name = 'Fuel Wallet';
   override metadata: ConnectorMetadata = {
     image: '/connectors/fuel-wallet.svg',
@@ -64,6 +68,7 @@ export class MockConnector extends FuelConnector {
       ...this.metadata,
       ...options.metadata,
     };
+    this._mocks = options.mocks ?? {};
   }
 
   override async ping() {
@@ -171,5 +176,13 @@ export class MockConnector extends FuelConnector {
 
   override async hasABI(_id: string) {
     return true;
+  }
+
+  override async startConsolidation(_opts: StartConsolidateCoins): Promise<void> {
+    if (!this._mocks?.startConsolidation) {
+      await super.startConsolidation(_opts);
+    } else {
+      await this._mocks?.startConsolidation(_opts);
+    }
   }
 }
