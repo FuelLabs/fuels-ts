@@ -2938,8 +2938,4 @@ describe('Provider', () => {
       expect(readSuccessStatus).toBeTruthy();
     });
   });
-
-  it('should be able to calculate the UTXO ID', async () => {
-    using launched = await setupTestProviderAndWallets();
-  })
 });
