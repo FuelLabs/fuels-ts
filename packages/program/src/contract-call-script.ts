@@ -140,14 +140,19 @@ const scriptResultDecoder = (contractId: Address) => (result: ScriptResult) => {
     });
 };
 
-export const decodeContractCallScriptResult = (
-  callResult: CallResult,
-  contractId: Address,
-  logs: DecodedLogs<any>['logs'] = [],
-  groupedLogs: DecodedLogs<any>['groupedLogs'] = {},
-  abis?: JsonAbisFromAllCalls
-): Uint8Array[] =>
-  decodeCallResult(callResult, scriptResultDecoder(contractId), logs, groupedLogs, abis);
+export const decodeContractCallScriptResult = (params: {
+  callResult: CallResult;
+  contractId: Address;
+  logs?: DecodedLogs<any>['logs'];
+  groupedLogs: DecodedLogs<any>['groupedLogs'];
+  abis?: JsonAbisFromAllCalls;
+}): Uint8Array[] => {
+  const { contractId, ...rest } = params;
+  return decodeCallResult({
+    ...rest,
+    scriptResultDecoder: scriptResultDecoder(contractId),
+  });
+};
 
 const getCallInstructionsLength = (contractCalls: ContractCall[]): number =>
   contractCalls.reduce(
