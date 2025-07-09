@@ -71,7 +71,7 @@ jobs:
 
       - name: Ensure all deployments successful
         if: ${{ steps.deploy-template.outcome != 'success' || steps.deploy-docs.outcome != 'success' || steps.deploy-docs-api.outcome != 'success' }}
-        uses: actions/github-script@v3
+        uses: actions/github-script@v7
         with:
           script: |
               core.setFailed('One of the Vercel deployments failed')
