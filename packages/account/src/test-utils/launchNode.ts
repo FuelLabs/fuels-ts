@@ -156,7 +156,7 @@ export const launchNode = async ({
       '--poa-instant',
       '--native-executor-version',
       '--min-gas-price',
-      '--starting-gas-price'
+      '--starting-gas-price',
     ]);
 
     const snapshotDir = getFlagValueFromArgs(args, '--snapshot');

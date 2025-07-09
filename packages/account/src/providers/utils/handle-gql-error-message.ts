@@ -25,10 +25,10 @@ const mapGqlErrorMessage = (error: GqlError): FuelError => {
     const owner = matches ? `0x${matches[1]}` : null;
     let suffix = '';
     if (assetId) {
-      suffix += `\n\tAsset ID: '${assetId}'.`
+      suffix += `\n\tAsset ID: '${assetId}'.`;
     }
     if (owner) {
-      suffix += `\n\tOwner: '${owner}'.`
+      suffix += `\n\tOwner: '${owner}'.`;
     }
 
     return new FuelError(
@@ -45,10 +45,10 @@ const mapGqlErrorMessage = (error: GqlError): FuelError => {
     const owner = matches ? `0x${matches[1]}` : null;
     let suffix = '';
     if (assetId) {
-      suffix += `\n\tAsset ID: '${assetId}'.`
+      suffix += `\n\tAsset ID: '${assetId}'.`;
     }
     if (owner) {
-      suffix += `\n\tOwner: '${owner}'.`
+      suffix += `\n\tOwner: '${owner}'.`;
     }
 
     return new FuelError(

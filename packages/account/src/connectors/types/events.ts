@@ -1,3 +1,4 @@
+import type { StartConsolidateCoins } from '../../account';
 import type { Asset } from '../../assets/types';
 import type { FuelConnector } from '../fuel-connector';
 
@@ -116,6 +117,11 @@ export type AssetsEvent = {
   data: Array<Asset>;
 };
 
+export type ConsolidateCoinsEvent = {
+  type: FuelConnectorEventTypes.consolidateCoins;
+  data: StartConsolidateCoins;
+};
+
 /**
  * All the events available to the connector.
  */
@@ -127,6 +133,7 @@ export type FuelConnectorEvents =
   | AccountsEvent
   | ConnectorsEvent
   | ConnectorEvent
-  | AssetsEvent;
+  | AssetsEvent
+  | ConsolidateCoinsEvent;
 
 export type FuelConnectorEventsType = FuelConnectorEvents['type'];
