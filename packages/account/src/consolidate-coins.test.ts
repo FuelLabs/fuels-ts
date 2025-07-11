@@ -757,7 +757,7 @@ describe('consolidate-coins', () => {
   });
 
   describe('Automatic consolidation', () => {
-    it('should automatically consolidate coins and re-trigger operation [owner]', async () => {
+    it('should automatically consolidate coins and re-trigger operation [transfer]', async () => {
       const maxInputs = 255;
       const totalCoins = maxInputs + 100;
       const {
@@ -776,6 +776,28 @@ describe('consolidate-coins', () => {
       const startConsolidationSpy = vi.spyOn(sender, 'startConsolidation');
       const sendAmount = (maxInputs + 1) * 1_000;
       await sender.transfer(recipient.address.toB256(), sendAmount);
+      expect(startConsolidationSpy).toBeCalledTimes(1);
+    });
+
+    it('should automatically consolidate coins and re-trigger operation [getResourcesToSpend]', async () => {
+      const maxInputs = 255;
+      const totalCoins = maxInputs + 100;
+      const {
+        provider,
+        wallets: [sender],
+      } = await setupTest({
+        maxInputs,
+        coinsPerAsset: totalCoins,
+        amountPerCoin: 1_000,
+      });
+      const baseAssetId = await provider.getBaseAssetId();
+
+      const { coins } = await sender.getCoins(baseAssetId);
+      expect(coins.length).toEqual(totalCoins);
+
+      const startConsolidationSpy = vi.spyOn(sender, 'startConsolidation');
+      const sendAmount = (maxInputs + 1) * 1_000;
+      await sender.getResourcesToSpend([{ amount: sendAmount, assetId: baseAssetId }]);
       expect(startConsolidationSpy).toBeCalledTimes(1);
     });
   });

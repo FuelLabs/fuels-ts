@@ -202,7 +202,9 @@ export class Account extends AbstractAccount implements WithAddress {
     quantities: CoinQuantityLike[],
     resourcesIdsToIgnore?: ResourcesIdsToIgnore
   ): Promise<Resource[]> {
-    return this.provider.getResourcesToSpend(this.address, quantities, resourcesIdsToIgnore);
+    return this.autoConsolidateCoin({
+      callback: () => this.provider.getResourcesToSpend(this.address, quantities, resourcesIdsToIgnore),
+    });
   }
 
   /**
