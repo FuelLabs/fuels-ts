@@ -55,6 +55,7 @@ import {
 import { mergeQuantities } from './providers/utils/merge-quantities';
 import { serializeProviderCache } from './providers/utils/serialization';
 import { AbstractAccount } from './types';
+import { consolidateCoins } from './utils/consolidate-coins';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
 import { splitCoinsIntoBatches } from './utils/split-coins-into-batches';
 
@@ -646,14 +647,8 @@ export class Account extends AbstractAccount implements WithAddress {
       );
     }
 
-    const { errors } = await this.consolidateCoins({ assetId });
-    if (errors.length > 0) {
-      throw new FuelError(
-        ErrorCode.UNABLE_TO_CONSOLIDATE_COINS,
-        `There were error/s while attempting to consolidate the coins.\n\tAsset: '${assetId}'.`,
-        { errors }
-      );
-    }
+    const { submitAll } = await consolidateCoins({ account: this, assetId });
+    await submitAll();
     return true;
   }
 
@@ -1124,10 +1119,11 @@ export class Account extends AbstractAccount implements WithAddress {
   }
 
   /** @hidden */
-  private async autoConsolidateCoin<TResponse>(params: {
+  public async autoConsolidateCoin<TResponse>(params: {
     callback: () => Promise<TResponse>;
+    shouldAutoConsolidate?: boolean
   }): Promise<TResponse> {
-    const { callback } = params;
+    const { callback, shouldAutoConsolidate = true } = params;
 
     try {
       return await callback();
@@ -1140,7 +1136,7 @@ export class Account extends AbstractAccount implements WithAddress {
         // ErrorCode.MAX_INPUTS_EXCEEDED
       ];
 
-      if (CONSOLIDATION_CODES.includes(error.code)) {
+      if (shouldAutoConsolidate && CONSOLIDATION_CODES.includes(error.code)) {
         const { assetId, owner } = error.metadata as {
           assetId: string;
           owner: string;
@@ -1197,8 +1193,10 @@ export class Account extends AbstractAccount implements WithAddress {
   /** @hidden * */
   private async assembleTx(
     transactionRequest: ScriptTransactionRequest,
-    quantities: CoinQuantity[] = []
+    quantities: CoinQuantity[] = [],
+    options: { shouldAutoConsolidate?: boolean } = {},
   ): Promise<{ transactionRequest: ScriptTransactionRequest; gasPrice: BN }> {
+    const { shouldAutoConsolidate } = options;
     const outputQuantities = transactionRequest.outputs
       .filter((o) => o.type === OutputType.Coin)
       .map(({ amount, assetId }) => ({ assetId: String(assetId), amount: bn(amount) }));
@@ -1207,13 +1205,13 @@ export class Account extends AbstractAccount implements WithAddress {
     transactionRequest.maxFee = bn(0);
 
     const { assembledRequest, gasPrice } = await this.autoConsolidateCoin({
-      callback: () =>
-        this.provider.assembleTx({
-          request: transactionRequest,
-          accountCoinQuantities: mergeQuantities(outputQuantities, quantities),
-          feePayerAccount: this,
-        }),
-    });
+      shouldAutoConsolidate,
+      callback: () => this.provider.assembleTx({
+        request: transactionRequest,
+        accountCoinQuantities: mergeQuantities(outputQuantities, quantities),
+        feePayerAccount: this,
+      }),
+    })
 
     return { transactionRequest: assembledRequest as ScriptTransactionRequest, gasPrice };
   }
