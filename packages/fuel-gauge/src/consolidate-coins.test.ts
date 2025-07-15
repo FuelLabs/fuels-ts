@@ -1,11 +1,17 @@
 import { randomInt } from 'crypto';
-import { bn, ErrorCode, ScriptTransactionRequest, Wallet, getAllCoins, consolidateCoins } from 'fuels';
+import {
+  bn,
+  ErrorCode,
+  ScriptTransactionRequest,
+  Wallet,
+  getAllCoins,
+  consolidateCoins,
+} from 'fuels';
 import type { Account, CoinQuantity, Provider, WalletUnlocked } from 'fuels';
 import { expectToThrowFuelError, launchTestNode, TestAssetId } from 'fuels/test-utils';
 
 import {
   CallTestContractFactory,
-  ConditionalLoopContractFactory,
   PredicateMultiArgs,
   ScriptMainArgBool,
   TokenContractFactory,
@@ -381,7 +387,7 @@ describe('Consolidate coins', { timeout: 1000000 }, () => {
             },
           ])
           .callParams({ forward: { amount: 200_000, assetId: baseAssetId } })
-          .call()
+          .call();
         const {
           transactionResult: { isStatusSuccess },
         } = await waitForResult();
@@ -444,7 +450,11 @@ describe('Consolidate coins', { timeout: 1000000 }, () => {
         const { contract } = await deploy.waitForResult();
         const startConsolidationSpy = vi.spyOn(accountToConsolidate, 'startConsolidation');
 
-        const tx = await accountToConsolidate.transferToContract(contract.id, 200_000, nonBaseAssetId);
+        const tx = await accountToConsolidate.transferToContract(
+          contract.id,
+          200_000,
+          nonBaseAssetId
+        );
         const { isStatusSuccess } = await tx.waitForResult();
 
         expect(isStatusSuccess).toBe(true);
@@ -471,7 +481,7 @@ describe('Consolidate coins', { timeout: 1000000 }, () => {
             },
           ])
           .callParams({ forward: { amount: 200_000, assetId: nonBaseAssetId } })
-          .call()
+          .call();
         const {
           transactionResult: { isStatusSuccess },
         } = await waitForResult();

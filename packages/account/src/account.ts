@@ -204,7 +204,8 @@ export class Account extends AbstractAccount implements WithAddress {
     resourcesIdsToIgnore?: ResourcesIdsToIgnore
   ): Promise<Resource[]> {
     return this.autoConsolidateCoin({
-      callback: () => this.provider.getResourcesToSpend(this.address, quantities, resourcesIdsToIgnore),
+      callback: () =>
+        this.provider.getResourcesToSpend(this.address, quantities, resourcesIdsToIgnore),
     });
   }
 
@@ -1121,7 +1122,7 @@ export class Account extends AbstractAccount implements WithAddress {
   /** @hidden */
   public async autoConsolidateCoin<TResponse>(params: {
     callback: () => Promise<TResponse>;
-    shouldAutoConsolidate?: boolean
+    shouldAutoConsolidate?: boolean;
   }): Promise<TResponse> {
     const { callback, shouldAutoConsolidate = true } = params;
 
@@ -1146,7 +1147,7 @@ export class Account extends AbstractAccount implements WithAddress {
           assetId,
         });
         if (shouldRetryOperation) {
-          return await callback()
+          return await callback();
         }
       }
       throw e;
@@ -1194,7 +1195,7 @@ export class Account extends AbstractAccount implements WithAddress {
   private async assembleTx(
     transactionRequest: ScriptTransactionRequest,
     quantities: CoinQuantity[] = [],
-    options: { shouldAutoConsolidate?: boolean } = {},
+    options: { shouldAutoConsolidate?: boolean } = {}
   ): Promise<{ transactionRequest: ScriptTransactionRequest; gasPrice: BN }> {
     const { shouldAutoConsolidate } = options;
     const outputQuantities = transactionRequest.outputs
@@ -1206,12 +1207,13 @@ export class Account extends AbstractAccount implements WithAddress {
 
     const { assembledRequest, gasPrice } = await this.autoConsolidateCoin({
       shouldAutoConsolidate,
-      callback: () => this.provider.assembleTx({
-        request: transactionRequest,
-        accountCoinQuantities: mergeQuantities(outputQuantities, quantities),
-        feePayerAccount: this,
-      }),
-    })
+      callback: () =>
+        this.provider.assembleTx({
+          request: transactionRequest,
+          accountCoinQuantities: mergeQuantities(outputQuantities, quantities),
+          feePayerAccount: this,
+        }),
+    });
 
     return { transactionRequest: assembledRequest as ScriptTransactionRequest, gasPrice };
   }

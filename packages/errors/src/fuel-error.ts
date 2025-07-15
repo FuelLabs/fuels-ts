@@ -28,12 +28,7 @@ export class FuelError extends Error {
       );
     }
 
-    return new FuelError(
-      error.code,
-      error.message,
-      error.metadata,
-      error.rawError
-    );
+    return new FuelError(error.code, error.message, error.metadata, error.rawError);
   }
 
   code: ErrorCode;
