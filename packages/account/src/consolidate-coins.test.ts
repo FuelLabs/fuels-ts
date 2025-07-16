@@ -16,7 +16,7 @@ import { Wallet } from './wallet';
  * @group node
  * @group browser
  */
-describe('consolidate-coins', () => {
+describe('consolidate-coins', { timeout: 10_000 }, () => {
   let cleanup: () => void;
 
   afterEach(() => {

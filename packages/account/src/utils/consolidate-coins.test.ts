@@ -1,7 +1,6 @@
 import { ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
-import { randomInt } from 'crypto';
 
 import type { CoinQuantity, Provider } from '..';
 import { Account, Fuel, ScriptTransactionRequest } from '..';
@@ -44,6 +43,8 @@ const seedWallet = async (opts: {
     }
   }
 };
+
+const randomInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
 
 /**
  * @group node
