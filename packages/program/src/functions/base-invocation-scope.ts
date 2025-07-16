@@ -291,11 +291,14 @@ export class BaseInvocationScope<TReturn = any> {
     }
 
     // eslint-disable-next-line prefer-const
-    let { assembledRequest, gasPrice } = await provider.assembleTx({
-      request,
-      feePayerAccount,
-      accountCoinQuantities,
-      ...restAssembleTxParams,
+    let { assembledRequest, gasPrice } = await feePayerAccount.autoConsolidateCoin({
+      callback: () =>
+        provider.assembleTx({
+          request,
+          feePayerAccount,
+          accountCoinQuantities,
+          ...restAssembleTxParams,
+        }),
     });
 
     assembledRequest = assembledRequest as ScriptTransactionRequest;
