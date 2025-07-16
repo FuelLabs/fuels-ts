@@ -602,8 +602,8 @@ describe('Account', () => {
     await expectToThrowFuelError(
       () => user.getResourcesToSpend([[1, ASSET_A]], { utxos: [assetAUTXO.id] }),
       new FuelError(
-        ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-        `Insufficient funds or too many small value coins. Consider combining UTXOs.\nFor the following asset ID: '${ASSET_A}'.`
+        ErrorCode.INSUFFICIENT_FUNDS,
+        `Insufficient funds.\n\tAsset ID: '${ASSET_A}'.\n\tOwner: '${user.address.toB256()}'.`
       )
     );
   });
@@ -981,8 +981,37 @@ describe('Account', () => {
     request.addCoinOutput(wallet.address, 30_000, baseAssetId);
 
     await expectToThrowFuelError(() => request.estimateAndFund(wallet), {
-      code: ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-      message: `Insufficient funds or too many small value coins. Consider combining UTXOs.\nFor the following asset ID: '${baseAssetId}'.`,
+      code: ErrorCode.MAX_COINS_REACHED,
+      message: `You have too many small value coins - consider combining UTXOs.\n\tAsset ID: '${baseAssetId}'.\n\tOwner: '${wallet.address.toB256()}'.`,
+    });
+  });
+
+  it('throws when funding with more than 255 coins for an input', async () => {
+    using launched = await setupTestProviderAndWallets({
+      walletsConfig: {
+        amountPerCoin: 100,
+        coinsPerAsset: 400,
+      },
+    });
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+    const baseAssetId = await provider.getBaseAssetId();
+
+    const request = new ScriptTransactionRequest();
+    request.addCoinOutput(wallet.address, 30_000, baseAssetId);
+
+    const assembleTx = () =>
+      provider.assembleTx({
+        request,
+        feePayerAccount: wallet,
+        accountCoinQuantities: [{ amount: 30_000, assetId: baseAssetId }],
+      });
+
+    await expectToThrowFuelError(assembleTx, {
+      code: ErrorCode.MAX_COINS_REACHED,
+      message: `You have too many small value coins - consider combining UTXOs.\n\tAsset ID: '${baseAssetId}'.\n\tOwner: '${wallet.address.toB256()}'.`,
     });
   });
 

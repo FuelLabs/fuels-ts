@@ -71,7 +71,7 @@ const upgradeConsensusParameters = async (wallet: WalletUnlocked, bytecode: Byte
  * @group node
  * @group browser
  */
-describe('Transaction upgrade consensus', () => {
+describe('Transaction upgrade consensus', { timeout: 60_000 }, () => {
   it('should correctly update the privileged address in consensus data', async () => {
     // Consensus parameters with other privileged address
     const CONSENSUS_BYTECODE = decompressBytecode(

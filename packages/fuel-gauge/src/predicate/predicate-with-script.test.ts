@@ -37,8 +37,8 @@ describe('Predicate', () => {
       await expectToThrowFuelError(
         () => scriptInstance.functions.main(scriptInput).call(),
         new FuelError(
-          ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-          `Insufficient funds or too many small value coins. Consider combining UTXOs.\nFor the following asset ID: '${baseAssetId}'.`
+          ErrorCode.INSUFFICIENT_FUNDS,
+          `Insufficient funds.\n\tAsset ID: '${baseAssetId}'.\n\tOwner: '${receiver.address.toB256()}'.`
         )
       );
 

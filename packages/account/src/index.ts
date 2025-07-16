@@ -10,6 +10,7 @@ export * from './wallet-manager';
 export * from './predicate';
 export * from './providers';
 export * from './connectors';
+export { consolidateCoins, getAllCoins } from './utils/consolidate-coins';
 export { deployScriptOrPredicate } from './utils/deployScriptOrPredicate';
 export {
   getBytecodeId,
