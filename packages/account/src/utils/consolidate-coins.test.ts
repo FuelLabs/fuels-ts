@@ -45,7 +45,11 @@ const seedWallet = async (opts: {
   }
 };
 
-describe('Consolidate coins', { timeout: 1000000 }, () => {
+/**
+ * @group node
+ * @group browser
+ */
+describe('Consolidate coins', { timeout: 10_000 }, () => {
   const MIN_COINS = 500;
   const MAX_COINS = 1000;
 
