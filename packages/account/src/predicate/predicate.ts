@@ -23,6 +23,7 @@ import type {
   TransactionRequestLike,
   TransactionResponse,
 } from '../providers';
+import { createConfigurables } from '../utils/createConfigurables';
 import { deployScriptOrPredicate } from '../utils/deployScriptOrPredicate';
 
 import { getPredicateRoot } from './utils';
@@ -219,17 +220,26 @@ export class Predicate<
     }
 
     if (configurableConstants && Object.keys(configurableConstants).length) {
-      predicateBytes = Predicate.setConfigurableConstants(
-        predicateBytes,
-        configurableConstants,
-        abiInterface
-      );
+      const configurables = createConfigurables({
+        bytecode: predicateBytes,
+        abi: abiInterface,
+      });
+      predicateBytes = configurables.set(configurableConstants);
     }
 
     return {
       predicateBytes,
       predicateInterface: abiInterface,
     };
+  }
+
+  getConfigurables(): Record<string, unknown> {
+    const configurables = createConfigurables({
+      bytecode: this.bytes,
+      abi: this.interface,
+    });
+
+    return configurables.all();
   }
 
   /**
@@ -267,53 +277,6 @@ export class Predicate<
       predicate: hexlify(this.bytes),
       predicateData: hexlify(this.getPredicateData()),
     }));
-  }
-
-  /**
-   * Sets the configurable constants for the predicate.
-   *
-   * @param bytes - The bytes of the predicate.
-   * @param configurableConstants - Configurable constants to be set.
-   * @param abiInterface - The ABI interface of the predicate.
-   * @returns The mutated bytes with the configurable constants set.
-   */
-  private static setConfigurableConstants(
-    bytes: Uint8Array,
-    configurableConstants: { [name: string]: unknown },
-    abiInterface: Interface
-  ) {
-    const mutatedBytes = bytes;
-
-    try {
-      if (Object.keys(abiInterface.configurables).length === 0) {
-        throw new FuelError(
-          ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
-          'Predicate has no configurable constants to be set'
-        );
-      }
-
-      Object.entries(configurableConstants).forEach(([key, value]) => {
-        if (!abiInterface?.configurables[key]) {
-          throw new FuelError(
-            ErrorCode.CONFIGURABLE_NOT_FOUND,
-            `No configurable constant named '${key}' found in the Predicate`
-          );
-        }
-
-        const { offset } = abiInterface.configurables[key];
-
-        const encoded = abiInterface.encodeConfigurable(key, value as InputValue);
-
-        mutatedBytes.set(encoded, offset);
-      });
-    } catch (err) {
-      throw new FuelError(
-        ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
-        `Error setting configurable constants: ${(<Error>err).message}.`
-      );
-    }
-
-    return mutatedBytes;
   }
 
   /**
@@ -375,6 +338,7 @@ export class Predicate<
           abi: newAbi,
           provider: this.provider,
           data: this.predicateData,
+          configurableConstants: this.configurableConstants,
         }) as T,
     });
   }
