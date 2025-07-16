@@ -4,4 +4,4 @@
 "@fuel-ts/errors": patch
 ---
 
-feat: auto-consolidate assets process
+feat: added auto-consolidation of coins
