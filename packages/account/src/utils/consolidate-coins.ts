@@ -1,11 +1,13 @@
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
-import { type OutputChange, OutputType } from '@fuel-ts/transactions';
+import { OutputType } from '@fuel-ts/transactions';
+import type { TransactionType, OutputChange } from '@fuel-ts/transactions';
 import { splitEvery } from 'ramda';
 
-import { type Account } from '../account';
-import { type Coin, ScriptTransactionRequest, type TransactionResult } from '../providers';
+import { type SubmitAllCallback, type Account } from '../account';
+import { calculateGasFee, ScriptTransactionRequest } from '../providers';
+import type { TransactionRequest, Coin, TransactionResult } from '../providers';
 
 export const getAllCoins = async (account: Account, assetId?: string) => {
   const all: Coin[] = [];
@@ -25,15 +27,37 @@ export const getAllCoins = async (account: Account, assetId?: string) => {
   return { coins: all };
 };
 
-type StepResult = { tx: ScriptTransactionRequest; result: TransactionResult };
-type Opts = {
-  coins: { funding: Coin[] };
-  results: StepResult[];
-};
+const sortCoins = ({ coins }: { coins: Coin[] }) => coins.sort((a, b) => b.amount.cmp(a.amount));
 
-export interface SequentialRequestOptions {
-  onStepComplete?: (result: StepResult, stepIndex: number) => void;
-}
+const createOuputCoin = (opts: {
+  request: TransactionRequest;
+  baseAssetId: string;
+  chainId: number;
+}): Coin => {
+  const { request, baseAssetId, chainId } = opts;
+
+  const outputChangeIndex = request.outputs.findIndex(
+    (output) => output.type === OutputType.Change && output.assetId === baseAssetId
+  );
+  if (outputChangeIndex === -1) {
+    throw new FuelError(ErrorCode.UNKNOWN, 'No change output found');
+  }
+
+  const outputCoin = request.outputs[outputChangeIndex] as OutputChange;
+
+  // Format the UTXO ID
+  const transactionId = request.getTransactionId(chainId);
+  const outputIndexPadded = Number(outputChangeIndex).toString().padStart(4, '0');
+
+  return {
+    id: `${transactionId}${outputIndexPadded}`,
+    assetId: outputCoin.assetId,
+    amount: outputCoin.amount,
+    owner: new Address(outputCoin.to),
+    blockCreated: bn(0),
+    txCreatedIdx: bn(0),
+  };
+};
 
 export const consolidateCoins = async ({
   account,
@@ -42,10 +66,14 @@ export const consolidateCoins = async ({
   account: Account;
   assetId: string;
 }) => {
+  const chainInfo = await account.provider.getChain();
+  const chainId = chainInfo.consensusParameters.chainId.toNumber();
   const gasPrice = await account.provider.estimateGasPrice(10);
+  const maxInputs = chainInfo.consensusParameters.txParameters.maxInputs.toNumber();
   const baseAssetId = await account.provider.getBaseAssetId();
   const isBaseAsset = assetId === baseAssetId;
-  const maxInputs = 255;
+
+  const batchSize = maxInputs;
   const numberOfFundingCoins = maxInputs;
 
   let funding: Coin[] = [];
@@ -53,25 +81,17 @@ export const consolidateCoins = async ({
 
   // We get the largest coin/s for funding purposes
   if (isBaseAsset) {
-    const baseAssetCoins = await getAllCoins(account, baseAssetId).then(({ coins }) =>
-      coins.sort((a, b) => b.amount.cmp(a.amount))
-    );
-
-    funding = baseAssetCoins.slice(0, numberOfFundingCoins);
-    dust = baseAssetCoins.slice(numberOfFundingCoins);
+    const coins = await getAllCoins(account, baseAssetId).then(sortCoins);
+    funding = coins.slice(0, numberOfFundingCoins);
+    dust = coins.slice(numberOfFundingCoins);
   } else {
-    const baseAssetCoins = await getAllCoins(account, baseAssetId).then(({ coins }) =>
-      coins.sort((a, b) => a.amount.cmp(b.amount))
-    );
-    const nonBaseAssetCoins = await getAllCoins(account, assetId).then(({ coins }) =>
-      coins.sort((a, b) => a.amount.cmp(b.amount))
-    );
-
-    funding = baseAssetCoins.slice(0, numberOfFundingCoins);
-    dust = nonBaseAssetCoins;
+    funding = await getAllCoins(account, baseAssetId)
+      .then(sortCoins)
+      .then((coins) => coins.slice(0, numberOfFundingCoins));
+    dust = await getAllCoins(account, assetId).then(({ coins }) => coins);
   }
 
-  // TODO: Is there a better way of detecting whether the account has enough funds to consolidate
+  // There a better way of detecting whether the account has enough funds to consolidate
   if (funding.length === 0) {
     throw new FuelError(
       ErrorCode.INSUFFICIENT_FUNDS,
@@ -79,176 +99,88 @@ export const consolidateCoins = async ({
     );
   }
 
-  const batches: Coin[][] = [
-    // The first batch will add all the funding coins - the highest value base assets for consolidation
-    [],
-    // The rest of the batches will add the dust coins + the new funding coin (for consolidation)
-    ...splitEvery(maxInputs - 1, dust),
+  const batches = [
+    ...splitEvery(batchSize, funding),
+    // We leave one coin for the funding coin
+    ...splitEvery(batchSize - 1, dust),
   ];
 
-  const steps = batches.map((batch) => async (opts: Opts) => {
-    let request = new ScriptTransactionRequest({
+  const txs: ScriptTransactionRequest[] = batches.map((batch) => {
+    const request = new ScriptTransactionRequest({
       scriptData: '0x',
     });
-
-    // Add change output (index 0)
-    request.addChangeOutput(account.address, baseAssetId);
 
     // Add our dust coins as inputs
     request.addResources(batch);
 
-    // Add our funding coins as inputs
-    request.addResources(opts.coins.funding);
-
-    if (
-      'populateTransactionPredicateData' in account &&
-      typeof account.populateTransactionPredicateData === 'function'
-    ) {
-      // populating predicates inputs with predicate data
-      request = account.populateTransactionPredicateData(request);
-      request = await account.provider.estimatePredicates(request);
-    }
-
-    const { gasLimit, maxFee } = await account.provider.estimateTxGasAndFee({
-      transactionRequest: request,
-      gasPrice,
-    });
-    request.gasLimit = gasLimit;
-    request.maxFee = maxFee;
-
-    // Send the request
-    const { id, waitForResult } = await account.sendTransaction(request);
-    const result = await waitForResult();
-
-    // Get the output UTXO for the next funding coins
-    const outputs = result.transaction.outputs ?? [];
-    const outputChangeIndex = outputs.findIndex(
-      (output) => output.type === OutputType.Change && output.assetId === baseAssetId
-    );
-    const outputChange = outputs[outputChangeIndex] as OutputChange;
-    const outputChangeIndexFormated = Number(outputChangeIndex).toString().padStart(4, '0');
-    const outputChangeCoin: Coin = {
-      id: `${id}${outputChangeIndexFormated}`,
-      assetId: outputChange.assetId,
-      amount: outputChange.amount,
-      owner: new Address(outputChange.to),
-      blockCreated: bn(0),
-      txCreatedIdx: bn(0),
-    };
-
-    opts.results.push({ tx: request, result });
-
-    return {
-      coins: { funding: [outputChangeCoin] },
-      results: opts.results,
-    };
+    return request;
   });
 
-  const submitAll = async (opts: SequentialRequestOptions = {}) => {
-    const { onStepComplete } = opts;
-    let current: Opts = { coins: { funding }, results: [] };
+  const submitAll: SubmitAllCallback = async (opts = {}) => {
+    const txResponses: TransactionResult<TransactionType.Script>[] = [];
+    let previousTx: ScriptTransactionRequest | undefined;
 
-    for (let i = 0; i < steps.length; i++) {
-      const step = steps[i];
+    for (let i = 0; i < txs.length; i++) {
+      let currentTx = txs[i];
+      const step = i + 1;
 
-      current = await step(current);
+      if (previousTx) {
+        const coin = createOuputCoin({
+          request: previousTx,
+          baseAssetId,
+          chainId,
+        });
 
-      const result = current.results[i];
-      onStepComplete?.(result, i);
+        // Add the funding coin to the current tx
+        currentTx.addResource(coin);
+      }
+
+      // Populate the tx with predicate data
+      if (
+        'populateTransactionPredicateData' in account &&
+        typeof account.populateTransactionPredicateData === 'function'
+      ) {
+        currentTx = account.populateTransactionPredicateData(currentTx);
+        currentTx = await account.provider.estimatePredicates(currentTx);
+      }
+
+      // Calculate gas and fee
+      const fee = calculateGasFee({
+        gasPrice,
+        gas: currentTx.calculateMinGas(chainInfo),
+        priceFactor: chainInfo.consensusParameters.feeParameters.gasPriceFactor,
+        tip: currentTx.tip,
+      });
+
+      currentTx.maxFee = fee;
+      currentTx.gasLimit = bn(1000);
+
+      opts.onTransactionStart?.({
+        tx: currentTx,
+        step,
+        assetId,
+        transactionId: currentTx.getTransactionId(chainId),
+      });
+
+      // Send the tx
+      const { waitForResult } = await account.sendTransaction(currentTx);
+      const response = await waitForResult<TransactionType.Script>();
+      txResponses.push(response);
+
+      // Update the previous tx
+      previousTx = currentTx;
+      previousTx.outputs = response.transaction.outputs;
     }
 
     return {
-      results: current.results,
+      txResponses,
+      errors: [],
     };
   };
 
   return {
+    txs,
+    totalFeeCost: txs.reduce((acc, request) => acc.add(request.maxFee), bn(0)),
     submitAll,
-    steps,
   };
 };
-
-// const consolidate = async (opts: { account: Account; assetId: string }) => {
-//   const NUMBER_OF_FUNDING_COINS = 1;
-//   const { account, assetId } = opts;
-
-//   const chainInfo = await account.provider.getChain();
-//   const gasPrice = await account.provider.estimateGasPrice(10);
-//   const baseAssetId = await account.provider.getBaseAssetId();
-//   const isBaseAsset = assetId === baseAssetId;
-
-//   let funding: Coin[] = [];
-//   let dust: Coin[] = [];
-
-//   // We get the largest coin/s for funding purposes
-//   if (isBaseAsset) {
-//     const baseAssetCoins = await getAllCoins(account, baseAssetId).then(({ coins }) =>
-//       coins.sort((a, b) => a.amount.cmp(b.amount))
-//     );
-
-//     funding = baseAssetCoins.slice(-NUMBER_OF_FUNDING_COINS);
-//     dust = baseAssetCoins.slice(0, -NUMBER_OF_FUNDING_COINS);
-//   } else {
-//     const baseAssetCoins = await getAllCoins(account, baseAssetId).then(({ coins }) =>
-//       coins.sort((a, b) => a.amount.cmp(b.amount))
-//     );
-//     const nonBaseAssetCoins = await getAllCoins(account, assetId).then(({ coins }) =>
-//       coins.sort((a, b) => a.amount.cmp(b.amount))
-//     );
-
-//     funding = baseAssetCoins.slice(-NUMBER_OF_FUNDING_COINS);
-//     dust = nonBaseAssetCoins;
-//   }
-
-//   const maxInputs = 255;
-//   const batches: Coin[][] = splitEvery(maxInputs - funding.length - 1, dust);
-
-//   for (const batch of batches) {
-//     let request = new ScriptTransactionRequest({
-//       scriptData: '0x',
-//     });
-
-//     // Add change output (index 0)
-//     request.addChangeOutput(account.address, baseAssetId);
-
-//     // Add our dust coins as inputs
-//     request.addResources(batch);
-
-//     // Add our funding coins as inputs
-//     request.addResources(funding);
-
-//     if ('populateTransactionPredicateData' in account && typeof account.populateTransactionPredicateData === 'function') {
-//       // populating predicates inputs with predicate data
-//       request = account.populateTransactionPredicateData(request);
-//       request = await account.provider.estimatePredicates(request);
-//     }
-
-//     const { gasLimit, maxFee } = await account.provider.estimateTxGasAndFee({
-//       transactionRequest: request,
-//       gasPrice,
-//     });
-//     request.gasLimit = gasLimit;
-//     request.maxFee = maxFee;
-
-//     // Send the request
-//     const { id, waitForResult } = await account.sendTransaction(request);
-//     const result = await waitForResult();
-
-//     // Get the output UTXO for the next funding coins
-//     const outputs = result.transaction.outputs ?? [];
-//     const outputChangeIndex = outputs.findIndex(
-//       (output) => output.type === OutputType.Change && output.assetId === baseAssetId
-//     );
-//     const outputChange = outputs[outputChangeIndex] as OutputChange;
-//     const outputChangeIndexFormated = Number(outputChangeIndex).toString().padStart(4, '0');
-//     const outputChangeCoin: Coin = {
-//       id: `${id}${outputChangeIndexFormated}`,
-//       assetId: outputChange.assetId,
-//       amount: outputChange.amount,
-//       owner: new Address(outputChange.to),
-//       blockCreated: bn(0),
-//       txCreatedIdx: bn(0),
-//     };
-//     funding = [outputChangeCoin];
-//   }
-// };

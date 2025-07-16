@@ -133,12 +133,14 @@ describe('Consolidate coins', { timeout: 1000000 }, () => {
         expect(beforeConsolidation.length).toBeGreaterThan(maxInputs);
 
         // When we consolidate
-        const steps = await consolidateCoins({
+        const { submitAll } = await consolidateCoins({
           account: accountToConsolidate,
           assetId: baseAssetId,
         });
-        await steps.submitAll();
+        const { txResponses } = await submitAll();
 
+        // Then we should be successful
+        expect(txResponses.length).toBeGreaterThan(0);
         // Then we should have less than the max inputs
         const { coins: afterConsolidation } = await getAllCoins(accountToConsolidate, baseAssetId);
         expect(afterConsolidation.length).toBeLessThan(maxInputs);
@@ -165,12 +167,14 @@ describe('Consolidate coins', { timeout: 1000000 }, () => {
         expect(beforeConsolidation.length).toBeGreaterThan(maxInputs);
 
         // When we consolidate
-        const collection = await consolidateCoins({
+        const { submitAll } = await consolidateCoins({
           account: accountToConsolidate,
           assetId: nonBaseAssetId,
         });
-        await collection.submitAll();
+        const { txResponses } = await submitAll();
 
+        // Then we should be successful
+        expect(txResponses.length).toBeGreaterThan(0);
         // Then we should have less than the max inputs
         const { coins: afterConsolidation } = await getAllCoins(
           accountToConsolidate,
@@ -192,15 +196,12 @@ describe('Consolidate coins', { timeout: 1000000 }, () => {
         });
         const { account: accountToConsolidate, baseAssetId } = launched;
 
-        const collection = await consolidateCoins({
+        const { submitAll } = await consolidateCoins({
           account: accountToConsolidate,
           assetId: baseAssetId,
         });
-        const call = () => collection.submitAll();
 
-        await expectToThrowFuelError(call, {
-          code: ErrorCode.FUNDS_TOO_LOW,
-        });
+        await expectToThrowFuelError(() => submitAll(), { code: ErrorCode.FUNDS_TOO_LOW });
       });
     }
   );
@@ -222,16 +223,16 @@ describe('Consolidate coins', { timeout: 1000000 }, () => {
       });
       const { account: accountToConsolidate, baseAssetId } = launched;
 
-      const collection = await consolidateCoins({
+      const { submitAll } = await consolidateCoins({
         account: accountToConsolidate,
         assetId: baseAssetId,
       });
-      const call = () => collection.submitAll();
 
-      await expect(call).rejects.toThrowError(/PredicateVerificationFailed|InputInvalidSignature/);
+      const call = () => submitAll();
+      await expect(call).rejects.toThrowError(/InputInvalidSignature|PredicateReturnedNonOne/);
     });
 
-    it('Should throw if unable to consolidate non-base assets', async () => {
+    it('Should throw error if unable to consolidate non-base assets', async () => {
       using launched = await setupTest({
         account,
         coins: ({ nonBaseAssetId, baseAssetId }) => [
@@ -247,47 +248,13 @@ describe('Consolidate coins', { timeout: 1000000 }, () => {
       });
       const { account: accountToConsolidate, nonBaseAssetId } = launched;
 
-      const collection = await consolidateCoins({
+      const { submitAll } = await consolidateCoins({
         account: accountToConsolidate,
         assetId: nonBaseAssetId,
       });
-      const call = () => collection.submitAll();
 
-      await expect(call).rejects.toThrowError(/PredicateVerificationFailed|InputInvalidSignature/);
+      const call = () => submitAll();
+      await expect(call).rejects.toThrowError(/InputInvalidSignature|PredicateReturnedNonOne/);
     });
-  });
-
-  const automaticConsolidationCalls = [
-    // Contract call
-    // Contract call with forwarded assets
-    // Script call
-    // Script call with forwarded assets
-    // Transfer of funds
-    (account: Account, opts: { assetId: string }) =>
-      account.transfer(account.address, 100, opts.assetId),
-  ];
-
-  describe.each(Object.entries(happyAccounts))('[Automatic consolidations: %s]', (_, account) => {
-    it.each(automaticConsolidationCalls)(
-      'Should automatically consolidate base assets',
-      async (call) => {
-        using launched = await setupTest({
-          account,
-          coins: ({ baseAssetId }) => [
-            ...Array.from({ length: randomInt(MIN_COINS, MAX_COINS) }, () => ({
-              assetId: baseAssetId,
-              amount: bn(1),
-            })),
-            ...Array.from({ length: 1 }, () => ({ assetId: baseAssetId, amount: bn(1_000_000) })),
-          ],
-        });
-
-        const { account: accountToConsolidate, baseAssetId } = launched;
-
-        const result = await call(accountToConsolidate, { assetId: baseAssetId });
-
-        expect(result).toBeDefined();
-      }
-    );
   });
 });

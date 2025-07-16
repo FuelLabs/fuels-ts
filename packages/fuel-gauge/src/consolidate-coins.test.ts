@@ -1,11 +1,11 @@
 import { randomInt } from 'crypto';
 import {
   bn,
-  ErrorCode,
   ScriptTransactionRequest,
   Wallet,
   getAllCoins,
   consolidateCoins,
+  ErrorCode,
 } from 'fuels';
 import type { Account, CoinQuantity, Provider, WalletUnlocked } from 'fuels';
 import { expectToThrowFuelError, launchTestNode, TestAssetId } from 'fuels/test-utils';
@@ -109,14 +109,6 @@ describe('Consolidate coins', { timeout: 1000000 }, () => {
     // Predicate Fuel Connector
   };
 
-  const unhappyAccounts: Record<string, (opts: { provider: Provider }) => Account> = {
-    // Locked wallet
-    'wallet-locked': (opts) => Wallet.generate({ provider: opts.provider }).lock(),
-    // Invalid predicate with multi args
-    'predicate-multi-args-invalid': (opts) =>
-      new PredicateMultiArgs({ provider: opts.provider, data: [12, 12] }),
-  };
-
   // Simple manual consolidations
   describe.each(Object.entries(happyAccounts))(
     '[Simple manual consolidations: %s]',
@@ -199,71 +191,15 @@ describe('Consolidate coins', { timeout: 1000000 }, () => {
         });
         const { account: accountToConsolidate, baseAssetId } = launched;
 
-        const collection = await consolidateCoins({
+        const { submitAll } = await consolidateCoins({
           account: accountToConsolidate,
           assetId: baseAssetId,
         });
-        const call = () => collection.submitAll();
 
-        await expectToThrowFuelError(call, {
-          code: ErrorCode.FUNDS_TOO_LOW,
-        });
+        await expectToThrowFuelError(() => submitAll(), { code: ErrorCode.FUNDS_TOO_LOW });
       });
     }
   );
-
-  // Failure cases
-  describe.each(Object.entries(unhappyAccounts))('[Failure cases: %s]', (_, account) => {
-    it('Should throw if unable to consolidate base assets', async () => {
-      using launched = await setupTest({
-        account,
-        coins: ({ baseAssetId }) => [
-          ...Array.from({ length: randomInt(MIN_COINS, MAX_COINS) }, () => ({
-            assetId: baseAssetId,
-            amount: bn(100),
-          })),
-          ...Array.from({ length: 1 }, () => ({
-            assetId: baseAssetId,
-            amount: bn(1_000_000),
-          })),
-        ],
-      });
-      const { account: accountToConsolidate, baseAssetId } = launched;
-
-      const collection = await consolidateCoins({
-        account: accountToConsolidate,
-        assetId: baseAssetId,
-      });
-      const call = () => collection.submitAll();
-
-      await expect(call).rejects.toThrowError(/PredicateVerificationFailed|InputInvalidSignature/);
-    });
-
-    it('Should throw if unable to consolidate non-base assets', async () => {
-      using launched = await setupTest({
-        account,
-        coins: ({ nonBaseAssetId, baseAssetId }) => [
-          ...Array.from({ length: randomInt(MIN_COINS, MAX_COINS) }, () => ({
-            assetId: nonBaseAssetId,
-            amount: bn(100),
-          })),
-          ...Array.from({ length: 1 }, () => ({
-            assetId: baseAssetId,
-            amount: bn(1_000_000),
-          })),
-        ],
-      });
-      const { account: accountToConsolidate, nonBaseAssetId } = launched;
-
-      const collection = await consolidateCoins({
-        account: accountToConsolidate,
-        assetId: nonBaseAssetId,
-      });
-      const call = () => collection.submitAll();
-
-      await expect(call).rejects.toThrowError(/PredicateVerificationFailed|InputInvalidSignature/);
-    });
-  });
 
   // Automatic consolidations for base assets
   describe.each(Object.entries(happyAccounts))(

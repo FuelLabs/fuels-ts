@@ -180,7 +180,11 @@ export class MockConnector extends FuelConnector {
 
   override async startConsolidation(_opts: StartConsolidateCoins): Promise<void> {
     if (!this._mocks?.startConsolidation) {
-      await super.startConsolidation(_opts);
+      const wallet = this._wallets.find((w) => w.address.toB256() === _opts.owner);
+      if (!wallet) {
+        throw new Error('Wallet is not found!');
+      }
+      await wallet.startConsolidation(_opts);
     } else {
       await this._mocks?.startConsolidation(_opts);
     }

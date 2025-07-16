@@ -100,7 +100,18 @@ export type SubmitAllCallbackResponse = {
   errors: FuelError[];
 };
 
-export type SubmitAllCallback = () => Promise<SubmitAllCallbackResponse>;
+export type SubmitAllListenerTransactionStartData = {
+  tx: ScriptTransactionRequest;
+  step: number;
+  transactionId: string;
+  assetId: string;
+};
+
+export type SubmitAllListener = {
+  onTransactionStart?: (data: SubmitAllListenerTransactionStartData) => void;
+};
+
+export type SubmitAllCallback = (opts?: SubmitAllListener) => Promise<SubmitAllCallbackResponse>;
 
 export type AssembleConsolidationTxsParams = {
   assetId: string;
@@ -650,6 +661,7 @@ export class Account extends AbstractAccount implements WithAddress {
 
     const { submitAll } = await consolidateCoins({ account: this, assetId });
     await submitAll();
+
     return true;
   }
 
