@@ -163,7 +163,8 @@ export const consolidateCoins = async ({
 
       // Send the tx
       const response: TransactionResponse = await account.sendTransaction(currentTx);
-      const result: TransactionResult<TransactionType.Script> = await response.waitForResult<TransactionType.Script>();
+      const result: TransactionResult<TransactionType.Script> =
+        await response.waitForResult<TransactionType.Script>();
       txResponses.push(result);
 
       // Update the previous tx
