@@ -2,12 +2,12 @@ import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 import { OutputType } from '@fuel-ts/transactions';
-import type { TransactionType, OutputChange } from '@fuel-ts/transactions';
+import type { TransactionType, OutputChange, Output } from '@fuel-ts/transactions';
 import { splitEvery } from 'ramda';
 
 import { type SubmitAllCallback, type Account } from '../account';
 import { calculateGasFee, ScriptTransactionRequest } from '../providers';
-import type { TransactionRequest, Coin, TransactionResult } from '../providers';
+import type { Coin, TransactionResult, TransactionResponse } from '../providers';
 
 export const getAllCoins = async (account: Account, assetId?: string) => {
   const all: Coin[] = [];
@@ -30,23 +30,22 @@ export const getAllCoins = async (account: Account, assetId?: string) => {
 const sortCoins = ({ coins }: { coins: Coin[] }) => coins.sort((a, b) => b.amount.cmp(a.amount));
 
 const createOuputCoin = (opts: {
-  request: TransactionRequest;
+  transactionId: string;
+  outputs: Output[];
   baseAssetId: string;
-  chainId: number;
 }): Coin => {
-  const { request, baseAssetId, chainId } = opts;
+  const { transactionId, outputs, baseAssetId } = opts;
 
-  const outputChangeIndex = request.outputs.findIndex(
+  const outputChangeIndex = outputs.findIndex(
     (output) => output.type === OutputType.Change && output.assetId === baseAssetId
   );
   if (outputChangeIndex === -1) {
     throw new FuelError(ErrorCode.UNKNOWN, 'No change output found');
   }
 
-  const outputCoin = request.outputs[outputChangeIndex] as OutputChange;
+  const outputCoin = outputs[outputChangeIndex] as OutputChange;
 
   // Format the UTXO ID
-  const transactionId = request.getTransactionId(chainId);
   const outputIndexPadded = Number(outputChangeIndex).toString().padStart(4, '0');
 
   return {
@@ -118,7 +117,7 @@ export const consolidateCoins = async ({
 
   const submitAll: SubmitAllCallback = async (opts = {}) => {
     const txResponses: TransactionResult<TransactionType.Script>[] = [];
-    let previousTx: ScriptTransactionRequest | undefined;
+    let previousTx: { transactionId: string; outputs: Output[] } | undefined;
 
     for (let i = 0; i < txs.length; i++) {
       let currentTx = txs[i];
@@ -126,9 +125,9 @@ export const consolidateCoins = async ({
 
       if (previousTx) {
         const coin = createOuputCoin({
-          request: previousTx,
+          transactionId: previousTx.transactionId,
+          outputs: previousTx.outputs,
           baseAssetId,
-          chainId,
         });
 
         // Add the funding coin to the current tx
@@ -163,13 +162,15 @@ export const consolidateCoins = async ({
       });
 
       // Send the tx
-      const { waitForResult } = await account.sendTransaction(currentTx);
-      const response = await waitForResult<TransactionType.Script>();
-      txResponses.push(response);
+      const response: TransactionResponse = await account.sendTransaction(currentTx);
+      const result: TransactionResult<TransactionType.Script> = await response.waitForResult<TransactionType.Script>();
+      txResponses.push(result);
 
       // Update the previous tx
-      previousTx = currentTx;
-      previousTx.outputs = response.transaction.outputs;
+      previousTx = {
+        transactionId: response.id,
+        outputs: result.transaction.outputs,
+      };
     }
 
     return {
