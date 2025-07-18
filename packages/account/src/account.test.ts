@@ -290,7 +290,7 @@ describe('Account', () => {
     expect(getResourcesToSpendSpy).toBeCalledWith(expectedTotalResources, {
       messages: [],
       utxos: [],
-    });
+    }, { shouldAutoConsolidate: undefined });
 
     expect(addResourcesSpy).toHaveBeenCalled();
     expect(addResourcesSpy).toHaveBeenCalledWith(resourcesToSpend);

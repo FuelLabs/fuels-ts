@@ -333,7 +333,9 @@ export class BaseInvocationScope<TReturn = any> {
   /**
    * @deprecated - Should be removed with `addSigners`
    */
-  private async legacyFundWithRequiredCoins(): Promise<ScriptTransactionRequest> {
+  private async legacyFundWithRequiredCoins({
+    shouldAutoConsolidate,
+  }: ShouldConsolidateCoinsParams = {}): Promise<ScriptTransactionRequest> {
     let transactionRequest = await this.getTransactionRequest();
     transactionRequest = clone(transactionRequest);
 
@@ -349,7 +351,7 @@ export class BaseInvocationScope<TReturn = any> {
     // Adding required number of OutputVariables
     transactionRequest.addVariableOutputs(outputVariables);
 
-    await this.program.account?.fund(transactionRequest, txCost);
+    await this.program.account?.fund(transactionRequest, txCost, { shouldAutoConsolidate });
 
     if (this.addSignersCallback) {
       await this.addSignersCallback(transactionRequest);
@@ -500,6 +502,7 @@ export class BaseInvocationScope<TReturn = any> {
    */
   async call<T = TReturn>(params?: {
     skipAssembleTx?: boolean;
+    shouldAutoConsolidate?: boolean;
   }): Promise<{
     transactionId: string;
     waitForResult: () => Promise<FunctionResult<T>>;
@@ -510,12 +513,13 @@ export class BaseInvocationScope<TReturn = any> {
     let transactionRequest = await this.getTransactionRequest();
 
     const skipAssembleTx = params?.skipAssembleTx;
+    const shouldAutoConsolidate = params?.shouldAutoConsolidate;
 
     if (!skipAssembleTx) {
       if (this.addSignersCallback) {
-        transactionRequest = await this.legacyFundWithRequiredCoins();
+        transactionRequest = await this.legacyFundWithRequiredCoins({ shouldAutoConsolidate });
       } else {
-        transactionRequest = await this.fundWithRequiredCoins();
+        transactionRequest = await this.fundWithRequiredCoins({ shouldAutoConsolidate });
       }
     }
 
