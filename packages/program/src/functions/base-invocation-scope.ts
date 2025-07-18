@@ -11,8 +11,10 @@ import type {
   TransactionCost,
   AbstractAccount,
   AssembleTxParams,
+  ShouldConsolidateCoinsParams,
 } from '@fuel-ts/account';
 import {
+  consolidateCoinsIfRequired,
   mergeQuantities,
   ScriptTransactionRequest,
   Wallet,
@@ -259,7 +261,7 @@ export class BaseInvocationScope<TReturn = any> {
    *
    * @returns The transaction request.
    */
-  async fundWithRequiredCoins(): Promise<ScriptTransactionRequest> {
+  async fundWithRequiredCoins({ shouldAutoConsolidate }: ShouldConsolidateCoinsParams = {}): Promise<ScriptTransactionRequest> {
     let request = await this.getTransactionRequest();
     request = clone(request);
 
@@ -290,15 +292,26 @@ export class BaseInvocationScope<TReturn = any> {
       }
     }
 
+    const assembleTx = () => provider.assembleTx({
+      request,
+      feePayerAccount,
+      accountCoinQuantities,
+      ...restAssembleTxParams,
+    })
+
     // eslint-disable-next-line prefer-const
-    let { assembledRequest, gasPrice } = await feePayerAccount.autoConsolidateCoin({
-      callback: () =>
-        provider.assembleTx({
-          request,
-          feePayerAccount,
-          accountCoinQuantities,
-          ...restAssembleTxParams,
-        }),
+    let { assembledRequest, gasPrice } = await assembleTx().catch(async (error) => {
+      const shouldRetry = await consolidateCoinsIfRequired({
+        error,
+        account,
+        shouldAutoConsolidate,
+      });
+
+      if (!shouldRetry) {
+        throw error;
+      }
+
+      return assembleTx()
     });
 
     assembledRequest = assembledRequest as ScriptTransactionRequest;

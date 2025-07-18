@@ -55,7 +55,7 @@ import {
 import { mergeQuantities } from './providers/utils/merge-quantities';
 import { serializeProviderCache } from './providers/utils/serialization';
 import { AbstractAccount } from './types';
-import { consolidateCoins } from './utils/consolidate-coins';
+import { consolidateCoins, consolidateCoinsIfRequired, type ShouldConsolidateCoinsParams } from './utils/consolidate-coins';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
 import { splitCoinsIntoBatches } from './utils/split-coins-into-batches';
 
@@ -208,15 +208,29 @@ export class Account extends AbstractAccount implements WithAddress {
    *
    * @param quantities - Quantities of resources to be obtained.
    * @param resourcesIdsToIgnore - IDs of resources to be excluded from the query (optional).
+   * @param shouldAutoConsolidate - Whether to automatically consolidate coins. Defaults to true.
    * @returns A promise that resolves to an array of Resources.
    */
   async getResourcesToSpend(
     quantities: CoinQuantityLike[],
-    resourcesIdsToIgnore?: ResourcesIdsToIgnore
+    resourcesIdsToIgnore?: ResourcesIdsToIgnore,
+    { shouldAutoConsolidate }: ShouldConsolidateCoinsParams = {}
   ): Promise<Resource[]> {
-    return this.autoConsolidateCoin({
-      callback: () =>
-        this.provider.getResourcesToSpend(this.address, quantities, resourcesIdsToIgnore),
+    const getResourcesToSpend = () =>
+      this.provider.getResourcesToSpend(this.address, quantities, resourcesIdsToIgnore);
+
+    return getResourcesToSpend().catch(async (error) => {
+      const shouldRetry = await consolidateCoinsIfRequired({
+        error,
+        account: this,
+        shouldAutoConsolidate
+      });
+
+      if (!shouldRetry) {
+        return Promise.reject(error);
+      }
+
+      return getResourcesToSpend();
     });
   }
 
@@ -1132,41 +1146,6 @@ export class Account extends AbstractAccount implements WithAddress {
   }
 
   /** @hidden */
-  public async autoConsolidateCoin<TResponse>(params: {
-    callback: () => Promise<TResponse>;
-    shouldAutoConsolidate?: boolean;
-  }): Promise<TResponse> {
-    const { callback, shouldAutoConsolidate = true } = params;
-
-    try {
-      return await callback();
-    } catch (e: unknown) {
-      const error = FuelError.parse(e);
-
-      const CONSOLIDATION_CODES = [
-        ErrorCode.MAX_COINS_REACHED,
-        // TODO: plumb in for MAX_INPUTS_EXCEEDED
-        // ErrorCode.MAX_INPUTS_EXCEEDED
-      ];
-
-      if (shouldAutoConsolidate && CONSOLIDATION_CODES.includes(error.code)) {
-        const { assetId, owner } = error.metadata as {
-          assetId: string;
-          owner: string;
-        };
-        const shouldRetryOperation = await this.startConsolidation({
-          owner,
-          assetId,
-        });
-        if (shouldRetryOperation) {
-          return await callback();
-        }
-      }
-      throw e;
-    }
-  }
-
-  /** @hidden */
   private async prepareTransactionForSend(
     request: TransactionRequest
   ): Promise<TransactionRequest> {
@@ -1217,14 +1196,25 @@ export class Account extends AbstractAccount implements WithAddress {
     transactionRequest.gasLimit = bn(0);
     transactionRequest.maxFee = bn(0);
 
-    const { assembledRequest, gasPrice } = await this.autoConsolidateCoin({
-      shouldAutoConsolidate,
-      callback: () =>
-        this.provider.assembleTx({
-          request: transactionRequest,
-          accountCoinQuantities: mergeQuantities(outputQuantities, quantities),
-          feePayerAccount: this,
-        }),
+    const assembleTx = () =>
+      this.provider.assembleTx({
+        request: transactionRequest,
+        accountCoinQuantities: mergeQuantities(outputQuantities, quantities),
+        feePayerAccount: this,
+      });
+
+    const { assembledRequest, gasPrice } = await assembleTx().catch(async (error) => {
+      const shouldRetry = await consolidateCoinsIfRequired({
+        error,
+        account: this,
+        shouldAutoConsolidate,
+      });
+
+      if (!shouldRetry) {
+        return Promise.reject(error);
+      }
+
+      return assembleTx();
     });
 
     return { transactionRequest: assembledRequest as ScriptTransactionRequest, gasPrice };

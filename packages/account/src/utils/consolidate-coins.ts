@@ -9,6 +9,56 @@ import { type SubmitAllCallback, type Account } from '../account';
 import { calculateGasFee, ScriptTransactionRequest } from '../providers';
 import type { Coin, TransactionResult, TransactionResponse } from '../providers';
 
+export interface ShouldConsolidateCoinsParams {
+  shouldAutoConsolidate?: boolean;
+}
+
+const CONSOLIDATABLE_ERROR_CODES = [ErrorCode.MAX_COINS_REACHED];
+
+/**
+ * @hidden
+ *
+ * Detects if a consolidation is required for a given error.
+ *
+ * @param error - The error to detect if a consolidation is required for.
+ * @param account - The account to consolidate coins for.
+ * @param shouldAutoConsolidate - Whether to automatically consolidate coins. Defaults to true.
+ *
+ * @returns true if a consolidation is required, false otherwise
+ */
+export const consolidateCoinsIfRequired = async (opts: {
+  error: unknown;
+  account: Account;
+} & ShouldConsolidateCoinsParams): Promise<boolean> => {
+  const { error: errorUnknown, account, shouldAutoConsolidate = true } = opts;
+  if (!shouldAutoConsolidate) {
+    return false;
+  }
+
+  const error = FuelError.parse(errorUnknown);
+  if (CONSOLIDATABLE_ERROR_CODES.includes(error.code)) {
+    const { assetId, owner } = error.metadata as {
+      assetId: string;
+      owner: string;
+    };
+    return account.startConsolidation({
+      owner,
+      assetId,
+    });
+  }
+
+  return false;
+};
+
+/**
+ * @hidden
+ *
+ * Gets all coins for a given asset id.
+ *
+ * @param account - The account to get coins for.
+ * @param assetId - The asset id to get coins for.
+ * @returns The coins.
+ */
 export const getAllCoins = async (account: Account, assetId?: string) => {
   const all: Coin[] = [];
   let coins: Coin[];
@@ -27,8 +77,10 @@ export const getAllCoins = async (account: Account, assetId?: string) => {
   return { coins: all };
 };
 
+/** @hidden */
 const sortCoins = ({ coins }: { coins: Coin[] }) => coins.sort((a, b) => b.amount.cmp(a.amount));
 
+/** @hidden */
 const createOuputCoin = (opts: {
   transactionId: string;
   outputs: Output[];
