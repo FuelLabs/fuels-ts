@@ -705,10 +705,7 @@ export class Account extends AbstractAccount implements WithAddress {
 
     const { owner, assetId } = opts;
     if (owner !== this.address.toB256()) {
-      throw new FuelError(
-        ErrorCode.UNABLE_TO_CONSOLIDATE_COINS,
-        `Unable to consolidate coins. You're attempting to consolidate assets that don't belong to this account.\n\tOwner: '${owner}'\n\tCurrent: '${this.address.toB256()}'`
-      );
+      return false;
     }
 
     const { submitAll } = await consolidateCoins({ account: this, assetId });
