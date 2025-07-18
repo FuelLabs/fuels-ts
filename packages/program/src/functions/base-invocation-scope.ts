@@ -261,7 +261,9 @@ export class BaseInvocationScope<TReturn = any> {
    *
    * @returns The transaction request.
    */
-  async fundWithRequiredCoins({ shouldAutoConsolidate }: ShouldConsolidateCoinsParams = {}): Promise<ScriptTransactionRequest> {
+  async fundWithRequiredCoins({
+    shouldAutoConsolidate,
+  }: ShouldConsolidateCoinsParams = {}): Promise<ScriptTransactionRequest> {
     let request = await this.getTransactionRequest();
     request = clone(request);
 
@@ -292,12 +294,13 @@ export class BaseInvocationScope<TReturn = any> {
       }
     }
 
-    const assembleTx = () => provider.assembleTx({
-      request,
-      feePayerAccount,
-      accountCoinQuantities,
-      ...restAssembleTxParams,
-    })
+    const assembleTx = () =>
+      provider.assembleTx({
+        request,
+        feePayerAccount,
+        accountCoinQuantities,
+        ...restAssembleTxParams,
+      });
 
     // eslint-disable-next-line prefer-const
     let { assembledRequest, gasPrice } = await assembleTx().catch(async (error) => {
@@ -311,7 +314,7 @@ export class BaseInvocationScope<TReturn = any> {
         throw error;
       }
 
-      return assembleTx()
+      return assembleTx();
     });
 
     assembledRequest = assembledRequest as ScriptTransactionRequest;

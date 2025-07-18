@@ -55,7 +55,11 @@ import {
 import { mergeQuantities } from './providers/utils/merge-quantities';
 import { serializeProviderCache } from './providers/utils/serialization';
 import { AbstractAccount } from './types';
-import { consolidateCoins, consolidateCoinsIfRequired, type ShouldConsolidateCoinsParams } from './utils/consolidate-coins';
+import {
+  consolidateCoins,
+  consolidateCoinsIfRequired,
+  type ShouldConsolidateCoinsParams,
+} from './utils/consolidate-coins';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
 import { splitCoinsIntoBatches } from './utils/split-coins-into-batches';
 
@@ -223,7 +227,7 @@ export class Account extends AbstractAccount implements WithAddress {
       const shouldRetry = await consolidateCoinsIfRequired({
         error,
         account: this,
-        shouldAutoConsolidate
+        shouldAutoConsolidate,
       });
 
       if (!shouldRetry) {

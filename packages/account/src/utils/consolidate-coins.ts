@@ -29,7 +29,8 @@ const CONSOLIDATABLE_ERROR_CODES = [ErrorCode.MAX_COINS_REACHED];
 export const consolidateCoinsIfRequired = async (opts: {
   error: unknown;
   account: Account;
-} & ShouldConsolidateCoinsParams): Promise<boolean> => {
+  shouldAutoConsolidate?: boolean;
+}): Promise<boolean> => {
   const { error: errorUnknown, account, shouldAutoConsolidate = true } = opts;
   if (!shouldAutoConsolidate) {
     return false;
