@@ -8,5 +8,5 @@ export abstract class AbstractAccount {
   abstract sendTransaction(transactionRequest: any, options?: any): any;
   abstract simulateTransaction(transactionRequest: any, options?: any): any;
   abstract getTransactionCost(transactionRequest: any, options?: any): Promise<any>;
-  abstract fund(transactionRequest: any, txCost: any): Promise<any>;
+  abstract fund(transactionRequest: any, txCost: any, options?: any): Promise<any>;
 }

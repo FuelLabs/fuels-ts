@@ -23,7 +23,7 @@ import { bn } from '@fuel-ts/math';
 import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';
-import { arrayify, isDefined } from '@fuel-ts/utils';
+import { arrayify } from '@fuel-ts/utils';
 
 import { getLoaderInstructions, getContractChunks } from './loader';
 import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
@@ -163,38 +163,6 @@ export default class ContractFactory<TContract extends Contract = Contract> {
       contractId,
       transactionRequest,
     };
-  }
-
-  /**
-   * Takes a transaction request, estimates it and funds it.
-   *
-   * @param request - the request to fund.
-   * @param options - options for funding the request.
-   * @returns a funded transaction request.
-   */
-  private async fundTransactionRequest(
-    request: TransactionRequest,
-    options: DeployContractOptions = {}
-  ) {
-    const account = this.getAccount();
-    const { maxFee: setMaxFee } = options;
-
-    const txCost = await account.getTransactionCost(request);
-
-    if (isDefined(setMaxFee)) {
-      if (txCost.maxFee.gt(setMaxFee)) {
-        throw new FuelError(
-          ErrorCode.MAX_FEE_TOO_LOW,
-          `Max fee '${options.maxFee}' is lower than the required: '${txCost.maxFee}'.`
-        );
-      }
-    } else {
-      request.maxFee = txCost.maxFee;
-    }
-
-    await account.fund(request, txCost);
-
-    return request;
   }
 
   private async assembleTx(request: TransactionRequest, options: DeployContractOptions = {}) {
