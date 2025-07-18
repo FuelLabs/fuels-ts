@@ -82,7 +82,11 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
    */
   async estimateAndFund(
     account: Account,
-    { signatureCallback, quantities = [], shouldAutoConsolidate }: TransactionCostParams & ShouldConsolidateCoinsParams = {}
+    {
+      signatureCallback,
+      quantities = [],
+      shouldAutoConsolidate,
+    }: TransactionCostParams & ShouldConsolidateCoinsParams = {}
   ): Promise<ScriptTransactionRequest> {
     const txCost = await account.getTransactionCost(this, { signatureCallback, quantities });
 

@@ -287,10 +287,14 @@ describe('Account', () => {
       { amount: bn(fee), assetId: await provider.getBaseAssetId() },
     ];
     expect(getResourcesToSpendSpy).toHaveBeenCalled();
-    expect(getResourcesToSpendSpy).toBeCalledWith(expectedTotalResources, {
-      messages: [],
-      utxos: [],
-    }, { shouldAutoConsolidate: undefined });
+    expect(getResourcesToSpendSpy).toBeCalledWith(
+      expectedTotalResources,
+      {
+        messages: [],
+        utxos: [],
+      },
+      { shouldAutoConsolidate: undefined }
+    );
 
     expect(addResourcesSpy).toHaveBeenCalled();
     expect(addResourcesSpy).toHaveBeenCalledWith(resourcesToSpend);
