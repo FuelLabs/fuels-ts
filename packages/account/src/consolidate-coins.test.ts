@@ -2,11 +2,12 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { BigNumberish } from '@fuel-ts/math';
 import { type SnapshotConfigs } from '@fuel-ts/utils';
+import type { PartialDeep } from 'type-fest';
 
 import { type Account } from '.';
 import type { Coin } from './providers';
 import { ScriptTransactionRequest } from './providers';
-import type { WalletsConfigOptions } from './test-utils';
+import type { LaunchNodeOptions, WalletsConfigOptions } from './test-utils';
 import { setupTestProviderAndWallets, TestAssetId } from './test-utils';
 import type { WalletUnlocked } from './wallet';
 import { Wallet } from './wallet';
@@ -15,7 +16,7 @@ import { Wallet } from './wallet';
  * @group node
  * @group browser
  */
-describe('consolidate-coins', () => {
+describe('consolidate-coins', { timeout: 10_000 }, () => {
   let cleanup: () => void;
 
   afterEach(() => {
@@ -94,14 +95,16 @@ describe('consolidate-coins', () => {
       feeParams?: Partial<
         SnapshotConfigs['chainConfig']['consensus_parameters']['V2']['fee_params']['V1']
       >;
+      startingGasPrice?: number;
     } = {}
   ) => {
-    const { maxInputs, coinsPerAsset, amountPerCoin, count, feeParams } = params;
-    let nodeOptions = {};
+    const { maxInputs, coinsPerAsset, amountPerCoin, count, feeParams, startingGasPrice } = params;
+    let nodeOptions: PartialDeep<LaunchNodeOptions> = {};
     let walletsConfig: Partial<WalletsConfigOptions> = {};
 
     if (maxInputs) {
       nodeOptions = {
+        args: startingGasPrice ? ['--starting-gas-price', startingGasPrice.toString() ?? '1'] : [],
         snapshotConfig: {
           chainConfig: {
             consensus_parameters: {
@@ -750,6 +753,53 @@ describe('consolidate-coins', () => {
           'All coins to consolidate must be from the same asset id.'
         )
       );
+    });
+  });
+
+  // TODO: re-enable this test after rollout of fuel-core 0.44.1
+  describe.todo('Automatic consolidation', () => {
+    it('should automatically consolidate coins and re-trigger operation [transfer]', async () => {
+      const maxInputs = 255;
+      const totalCoins = maxInputs + 100;
+      const {
+        provider,
+        wallets: [sender, recipient],
+      } = await setupTest({
+        maxInputs,
+        coinsPerAsset: totalCoins,
+        amountPerCoin: 1_000,
+      });
+      const baseAssetId = await provider.getBaseAssetId();
+
+      const { coins } = await sender.getCoins(baseAssetId);
+      expect(coins.length).toEqual(totalCoins);
+
+      const startConsolidationSpy = vi.spyOn(sender, 'startConsolidation');
+      const sendAmount = (maxInputs + 1) * 1_000;
+      await sender.transfer(recipient.address.toB256(), sendAmount);
+      expect(startConsolidationSpy).toBeCalledTimes(1);
+    });
+
+    it('should automatically consolidate coins and re-trigger operation [getResourcesToSpend]', async () => {
+      const maxInputs = 255;
+      const totalCoins = maxInputs + 100;
+      const {
+        provider,
+        wallets: [sender],
+      } = await setupTest({
+        maxInputs,
+        coinsPerAsset: totalCoins,
+        amountPerCoin: 1_000,
+      });
+      const baseAssetId = await provider.getBaseAssetId();
+
+      const { coins } = await sender.getCoins(baseAssetId);
+      expect(coins.length).toEqual(totalCoins);
+
+      const startConsolidationSpy = vi.spyOn(sender, 'startConsolidation');
+      const sendAmount = (maxInputs + 1) * 1_000;
+      await sender.getResourcesToSpend([{ amount: sendAmount, assetId: baseAssetId }]);
+      expect(startConsolidationSpy).toBeCalledTimes(1);
     });
   });
 });

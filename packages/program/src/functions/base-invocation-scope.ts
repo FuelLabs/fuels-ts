@@ -11,8 +11,10 @@ import type {
   TransactionCost,
   AbstractAccount,
   AssembleTxParams,
+  ShouldConsolidateCoinsParams,
 } from '@fuel-ts/account';
 import {
+  consolidateCoinsIfRequired,
   mergeQuantities,
   ScriptTransactionRequest,
   Wallet,
@@ -259,7 +261,9 @@ export class BaseInvocationScope<TReturn = any> {
    *
    * @returns The transaction request.
    */
-  async fundWithRequiredCoins(): Promise<ScriptTransactionRequest> {
+  async fundWithRequiredCoins({
+    skipAutoConsolidation,
+  }: ShouldConsolidateCoinsParams = {}): Promise<ScriptTransactionRequest> {
     let request = await this.getTransactionRequest();
     request = clone(request);
 
@@ -290,31 +294,48 @@ export class BaseInvocationScope<TReturn = any> {
       }
     }
 
-    // eslint-disable-next-line prefer-const
-    let { assembledRequest, gasPrice } = await provider.assembleTx({
-      request,
-      feePayerAccount,
-      accountCoinQuantities,
-      ...restAssembleTxParams,
-    });
+    const assembleTx = async () => {
+      const { assembledRequest, gasPrice } = await provider.assembleTx({
+        request,
+        feePayerAccount,
+        accountCoinQuantities,
+        ...restAssembleTxParams,
+      });
 
-    assembledRequest = assembledRequest as ScriptTransactionRequest;
+      await setAndValidateGasAndFeeForAssembledTx({
+        gasPrice,
+        provider,
+        transactionRequest: assembledRequest,
+        setGasLimit: this.txParameters?.gasLimit,
+        setMaxFee: this.txParameters?.maxFee,
+      });
 
-    await setAndValidateGasAndFeeForAssembledTx({
-      gasPrice,
-      provider,
-      transactionRequest: assembledRequest,
-      setGasLimit: this.txParameters?.gasLimit,
-      setMaxFee: this.txParameters?.maxFee,
-    });
+      return assembledRequest;
+    };
 
-    return assembledRequest;
+    try {
+      return await assembleTx();
+    } catch (error) {
+      const shouldRetry = await consolidateCoinsIfRequired({
+        error,
+        account,
+        skipAutoConsolidation,
+      });
+
+      if (!shouldRetry) {
+        throw error;
+      }
+
+      return await assembleTx();
+    }
   }
 
   /**
    * @deprecated - Should be removed with `addSigners`
    */
-  private async legacyFundWithRequiredCoins(): Promise<ScriptTransactionRequest> {
+  private async legacyFundWithRequiredCoins({
+    skipAutoConsolidation,
+  }: ShouldConsolidateCoinsParams = {}): Promise<ScriptTransactionRequest> {
     let transactionRequest = await this.getTransactionRequest();
     transactionRequest = clone(transactionRequest);
 
@@ -330,7 +351,7 @@ export class BaseInvocationScope<TReturn = any> {
     // Adding required number of OutputVariables
     transactionRequest.addVariableOutputs(outputVariables);
 
-    await this.program.account?.fund(transactionRequest, txCost);
+    await this.program.account?.fund(transactionRequest, txCost, { skipAutoConsolidation });
 
     if (this.addSignersCallback) {
       await this.addSignersCallback(transactionRequest);
@@ -481,6 +502,7 @@ export class BaseInvocationScope<TReturn = any> {
    */
   async call<T = TReturn>(params?: {
     skipAssembleTx?: boolean;
+    skipAutoConsolidation?: boolean;
   }): Promise<{
     transactionId: string;
     waitForResult: () => Promise<FunctionResult<T>>;
@@ -491,12 +513,13 @@ export class BaseInvocationScope<TReturn = any> {
     let transactionRequest = await this.getTransactionRequest();
 
     const skipAssembleTx = params?.skipAssembleTx;
+    const skipAutoConsolidation = params?.skipAutoConsolidation;
 
     if (!skipAssembleTx) {
       if (this.addSignersCallback) {
-        transactionRequest = await this.legacyFundWithRequiredCoins();
+        transactionRequest = await this.legacyFundWithRequiredCoins({ skipAutoConsolidation });
       } else {
-        transactionRequest = await this.fundWithRequiredCoins();
+        transactionRequest = await this.fundWithRequiredCoins({ skipAutoConsolidation });
       }
     }
 
