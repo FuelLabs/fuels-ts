@@ -293,7 +293,7 @@ describe('Account', () => {
         messages: [],
         utxos: [],
       },
-      { shouldAutoConsolidate: undefined }
+      { skipAutoConsolidation: undefined }
     );
 
     expect(addResourcesSpy).toHaveBeenCalled();

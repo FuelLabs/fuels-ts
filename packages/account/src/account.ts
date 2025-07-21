@@ -212,13 +212,13 @@ export class Account extends AbstractAccount implements WithAddress {
    *
    * @param quantities - Quantities of resources to be obtained.
    * @param resourcesIdsToIgnore - IDs of resources to be excluded from the query (optional).
-   * @param shouldAutoConsolidate - Whether to automatically consolidate coins. Defaults to true.
+   * @param skipAutoConsolidation - Whether to automatically consolidate coins. Defaults to true.
    * @returns A promise that resolves to an array of Resources.
    */
   async getResourcesToSpend(
     quantities: CoinQuantityLike[],
     resourcesIdsToIgnore?: ResourcesIdsToIgnore,
-    { shouldAutoConsolidate }: ShouldConsolidateCoinsParams = {}
+    { skipAutoConsolidation }: ShouldConsolidateCoinsParams = {}
   ): Promise<Resource[]> {
     const getResourcesToSpend = () =>
       this.provider.getResourcesToSpend(this.address, quantities, resourcesIdsToIgnore);
@@ -229,7 +229,7 @@ export class Account extends AbstractAccount implements WithAddress {
       const shouldRetry = await consolidateCoinsIfRequired({
         error,
         account: this,
-        shouldAutoConsolidate,
+        skipAutoConsolidation,
       });
 
       if (!shouldRetry) {
@@ -297,7 +297,7 @@ export class Account extends AbstractAccount implements WithAddress {
   async fund<T extends TransactionRequest>(
     request: T,
     params: EstimatedTxParams,
-    { shouldAutoConsolidate }: ShouldConsolidateCoinsParams = {}
+    { skipAutoConsolidation }: ShouldConsolidateCoinsParams = {}
   ): Promise<T> {
     const {
       addedSignatures,
@@ -354,7 +354,7 @@ export class Account extends AbstractAccount implements WithAddress {
       const resources = await this.getResourcesToSpend(
         missingQuantities,
         cacheRequestInputsResourcesFromOwner(request.inputs, this.address),
-        { shouldAutoConsolidate }
+        { skipAutoConsolidation }
       );
 
       request.addResources(resources);
@@ -441,7 +441,7 @@ export class Account extends AbstractAccount implements WithAddress {
    * @param amount - The amount of coins to transfer.
    * @param assetId - The asset ID of the coins to transfer (optional).
    * @param txParams - The transaction parameters (optional).
-   * @param shouldAutoConsolidate - Whether to automatically consolidate coins if required (optional).
+   * @param skipAutoConsolidation - Whether to automatically consolidate coins if required (optional).
    * @returns A promise that resolves to the prepared transaction request.
    */
   async createTransfer(
@@ -449,7 +449,7 @@ export class Account extends AbstractAccount implements WithAddress {
     amount: BigNumberish,
     assetId?: BytesLike,
     txParams: TxParamsType = {},
-    { shouldAutoConsolidate }: ShouldConsolidateCoinsParams = {}
+    { skipAutoConsolidation }: ShouldConsolidateCoinsParams = {}
   ): Promise<ScriptTransactionRequest> {
     let request = new ScriptTransactionRequest(txParams);
 
@@ -461,7 +461,7 @@ export class Account extends AbstractAccount implements WithAddress {
 
     const { gasPrice, transactionRequest } = await this.assembleTx({
       transactionRequest: request,
-      shouldAutoConsolidate,
+      skipAutoConsolidation,
     });
 
     request = await setAndValidateGasAndFeeForAssembledTx({
@@ -482,7 +482,7 @@ export class Account extends AbstractAccount implements WithAddress {
    * @param amount - The amount of coins to transfer.
    * @param assetId - The asset ID of the coins to transfer (optional).
    * @param txParams - The transaction parameters (optional).
-   * @param shouldAutoConsolidate - Whether to automatically consolidate coins if required (optional).
+   * @param skipAutoConsolidation - Whether to automatically consolidate coins if required (optional).
    * @returns A promise that resolves to the transaction response.
    */
   async transfer(
@@ -490,10 +490,10 @@ export class Account extends AbstractAccount implements WithAddress {
     amount: BigNumberish,
     assetId?: BytesLike,
     txParams: TxParamsType = {},
-    { shouldAutoConsolidate }: ShouldConsolidateCoinsParams = {}
+    { skipAutoConsolidation }: ShouldConsolidateCoinsParams = {}
   ): Promise<TransactionResponse> {
     const request = await this.createTransfer(destination, amount, assetId, txParams, {
-      shouldAutoConsolidate,
+      skipAutoConsolidation,
     });
     return this.sendTransaction(request, { estimateTxDependencies: false });
   }
@@ -503,20 +503,20 @@ export class Account extends AbstractAccount implements WithAddress {
    *
    * @param transferParams - An array of `TransferParams` objects representing the transfers to be made.
    * @param txParams - Optional transaction parameters.
-   * @param shouldAutoConsolidate - Whether to automatically consolidate coins if required (optional).
+   * @param skipAutoConsolidation - Whether to automatically consolidate coins if required (optional).
    * @returns A promise that resolves to a `TransactionResponse` object representing the transaction result.
    */
   async batchTransfer(
     transferParams: TransferParams[],
     txParams: TxParamsType = {},
-    { shouldAutoConsolidate }: ShouldConsolidateCoinsParams = {}
+    { skipAutoConsolidation }: ShouldConsolidateCoinsParams = {}
   ): Promise<TransactionResponse> {
     let request = new ScriptTransactionRequest(txParams);
     request = this.addBatchTransfer(request, transferParams);
 
     const { gasPrice, transactionRequest } = await this.assembleTx({
       transactionRequest: request,
-      shouldAutoConsolidate,
+      skipAutoConsolidation,
     });
 
     request = await setAndValidateGasAndFeeForAssembledTx({
@@ -568,7 +568,7 @@ export class Account extends AbstractAccount implements WithAddress {
    * @param amount - The amount of coins to transfer.
    * @param assetId - The asset ID of the coins to transfer (optional).
    * @param txParams - The transaction parameters (optional).
-   * @param shouldAutoConsolidate - Whether to automatically consolidate coins if required (optional).
+   * @param skipAutoConsolidation - Whether to automatically consolidate coins if required (optional).
    * @returns A promise that resolves to the transaction response.
    */
   async transferToContract(
@@ -576,17 +576,17 @@ export class Account extends AbstractAccount implements WithAddress {
     amount: BigNumberish,
     assetId: BytesLike,
     txParams: TxParamsType = {},
-    { shouldAutoConsolidate }: ShouldConsolidateCoinsParams = {}
+    { skipAutoConsolidation }: ShouldConsolidateCoinsParams = {}
   ): Promise<TransactionResponse> {
     return this.batchTransferToContracts([{ amount, assetId, contractId }], txParams, {
-      shouldAutoConsolidate,
+      skipAutoConsolidation,
     });
   }
 
   async batchTransferToContracts(
     contractTransferParams: ContractTransferParams[],
     txParams: TxParamsType = {},
-    { shouldAutoConsolidate }: ShouldConsolidateCoinsParams = {}
+    { skipAutoConsolidation }: ShouldConsolidateCoinsParams = {}
   ): Promise<TransactionResponse> {
     let request = new ScriptTransactionRequest({
       ...txParams,
@@ -627,7 +627,7 @@ export class Account extends AbstractAccount implements WithAddress {
     const { gasPrice, transactionRequest } = await this.assembleTx({
       transactionRequest: request,
       quantities,
-      shouldAutoConsolidate,
+      skipAutoConsolidation,
     });
 
     request = await setAndValidateGasAndFeeForAssembledTx({
@@ -647,14 +647,14 @@ export class Account extends AbstractAccount implements WithAddress {
    * @param recipient - Address of the recipient on the base chain.
    * @param amount - Amount of base asset.
    * @param txParams - The transaction parameters (optional).
-   * @param shouldAutoConsolidate - Whether to automatically consolidate coins if required (optional).
+   * @param skipAutoConsolidation - Whether to automatically consolidate coins if required (optional).
    * @returns A promise that resolves to the transaction response.
    */
   async withdrawToBaseLayer(
     recipient: AddressInput,
     amount: BigNumberish,
     txParams: TxParamsType = {},
-    { shouldAutoConsolidate }: ShouldConsolidateCoinsParams = {}
+    { skipAutoConsolidation }: ShouldConsolidateCoinsParams = {}
   ): Promise<TransactionResponse> {
     const recipientAddress = new Address(recipient);
     // add recipient and amount to the transaction script code
@@ -679,7 +679,7 @@ export class Account extends AbstractAccount implements WithAddress {
     const { gasPrice, transactionRequest } = await this.assembleTx({
       transactionRequest: request,
       quantities,
-      shouldAutoConsolidate,
+      skipAutoConsolidation,
     });
 
     request = await setAndValidateGasAndFeeForAssembledTx({
@@ -1223,9 +1223,9 @@ export class Account extends AbstractAccount implements WithAddress {
   private async assembleTx(opts: {
     transactionRequest: ScriptTransactionRequest;
     quantities?: CoinQuantity[];
-    shouldAutoConsolidate?: boolean;
+    skipAutoConsolidation?: boolean;
   }): Promise<{ transactionRequest: ScriptTransactionRequest; gasPrice: BN }> {
-    const { transactionRequest, quantities = [], shouldAutoConsolidate } = opts;
+    const { transactionRequest, quantities = [], skipAutoConsolidation } = opts;
     const outputQuantities = transactionRequest.outputs
       .filter((o) => o.type === OutputType.Coin)
       .map(({ amount, assetId }) => ({ assetId: String(assetId), amount: bn(amount) }));
@@ -1248,7 +1248,7 @@ export class Account extends AbstractAccount implements WithAddress {
       const shouldRetry = await consolidateCoinsIfRequired({
         error,
         account: this,
-        shouldAutoConsolidate,
+        skipAutoConsolidation,
       });
 
       if (!shouldRetry) {

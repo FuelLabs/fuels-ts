@@ -10,7 +10,7 @@ import { calculateGasFee, ScriptTransactionRequest } from '../providers';
 import type { Coin, TransactionResult, TransactionResponse } from '../providers';
 
 export interface ShouldConsolidateCoinsParams {
-  shouldAutoConsolidate?: boolean;
+  skipAutoConsolidation?: boolean;
 }
 
 const CONSOLIDATABLE_ERROR_CODES = [ErrorCode.MAX_COINS_REACHED];
@@ -22,17 +22,17 @@ const CONSOLIDATABLE_ERROR_CODES = [ErrorCode.MAX_COINS_REACHED];
  *
  * @param error - The error to detect if a consolidation is required for.
  * @param account - The account to consolidate coins for.
- * @param shouldAutoConsolidate - Whether to automatically consolidate coins. Defaults to true.
+ * @param skipAutoConsolidation - Whether to automatically consolidate coins. Defaults to true.
  *
  * @returns true if a consolidation is required, false otherwise
  */
 export const consolidateCoinsIfRequired = async (opts: {
   error: unknown;
   account: Account;
-  shouldAutoConsolidate?: boolean;
+  skipAutoConsolidation?: boolean;
 }): Promise<boolean> => {
-  const { error: errorUnknown, account, shouldAutoConsolidate = true } = opts;
-  if (!shouldAutoConsolidate) {
+  const { error: errorUnknown, account, skipAutoConsolidation = false } = opts;
+  if (skipAutoConsolidation) {
     return false;
   }
 

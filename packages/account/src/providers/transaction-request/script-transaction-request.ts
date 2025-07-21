@@ -85,7 +85,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     {
       signatureCallback,
       quantities = [],
-      shouldAutoConsolidate,
+      skipAutoConsolidation,
     }: TransactionCostParams & ShouldConsolidateCoinsParams = {}
   ): Promise<ScriptTransactionRequest> {
     const txCost = await account.getTransactionCost(this, { signatureCallback, quantities });
@@ -93,7 +93,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     this.maxFee = txCost.maxFee;
     this.gasLimit = txCost.gasUsed;
 
-    await account.fund(this, txCost, { shouldAutoConsolidate });
+    await account.fund(this, txCost, { skipAutoConsolidation });
 
     return this;
   }
