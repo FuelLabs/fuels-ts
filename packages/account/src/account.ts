@@ -223,7 +223,9 @@ export class Account extends AbstractAccount implements WithAddress {
     const getResourcesToSpend = () =>
       this.provider.getResourcesToSpend(this.address, quantities, resourcesIdsToIgnore);
 
-    return getResourcesToSpend().catch(async (error) => {
+    try {
+      return await getResourcesToSpend();
+    } catch (error) {
       const shouldRetry = await consolidateCoinsIfRequired({
         error,
         account: this,
@@ -231,11 +233,11 @@ export class Account extends AbstractAccount implements WithAddress {
       });
 
       if (!shouldRetry) {
-        return Promise.reject(error);
+        throw error;
       }
 
-      return getResourcesToSpend();
-    });
+      return await getResourcesToSpend();
+    }
   }
 
   /**
@@ -1231,14 +1233,18 @@ export class Account extends AbstractAccount implements WithAddress {
     transactionRequest.gasLimit = bn(0);
     transactionRequest.maxFee = bn(0);
 
-    const assembleTx = () =>
-      this.provider.assembleTx({
+    const assembleTx = async () => {
+      const { assembledRequest, gasPrice } = await this.provider.assembleTx({
         request: transactionRequest,
         accountCoinQuantities: mergeQuantities(outputQuantities, quantities),
         feePayerAccount: this,
       });
+      return { transactionRequest: assembledRequest as ScriptTransactionRequest, gasPrice };
+    }
 
-    const { assembledRequest, gasPrice } = await assembleTx().catch(async (error) => {
+    try {
+      return await assembleTx();
+    } catch (error) {
       const shouldRetry = await consolidateCoinsIfRequired({
         error,
         account: this,
@@ -1246,13 +1252,11 @@ export class Account extends AbstractAccount implements WithAddress {
       });
 
       if (!shouldRetry) {
-        return Promise.reject(error);
+        throw error;
       }
 
-      return assembleTx();
-    });
-
-    return { transactionRequest: assembledRequest as ScriptTransactionRequest, gasPrice };
+      return await assembleTx();
+    }
   }
 
   /** @hidden * */

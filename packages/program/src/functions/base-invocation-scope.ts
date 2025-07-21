@@ -294,16 +294,28 @@ export class BaseInvocationScope<TReturn = any> {
       }
     }
 
-    const assembleTx = () =>
-      provider.assembleTx({
+    const assembleTx = async () => {
+      const { assembledRequest, gasPrice } = await provider.assembleTx({
         request,
         feePayerAccount,
         accountCoinQuantities,
         ...restAssembleTxParams,
       });
 
-    // eslint-disable-next-line prefer-const
-    let { assembledRequest, gasPrice } = await assembleTx().catch(async (error) => {
+      await setAndValidateGasAndFeeForAssembledTx({
+        gasPrice,
+        provider,
+        transactionRequest: assembledRequest,
+        setGasLimit: this.txParameters?.gasLimit,
+        setMaxFee: this.txParameters?.maxFee,
+      });
+
+      return assembledRequest;
+    }
+
+    try {
+      return await assembleTx();
+    } catch (error) {
       const shouldRetry = await consolidateCoinsIfRequired({
         error,
         account,
@@ -314,20 +326,8 @@ export class BaseInvocationScope<TReturn = any> {
         throw error;
       }
 
-      return assembleTx();
-    });
-
-    assembledRequest = assembledRequest as ScriptTransactionRequest;
-
-    await setAndValidateGasAndFeeForAssembledTx({
-      gasPrice,
-      provider,
-      transactionRequest: assembledRequest,
-      setGasLimit: this.txParameters?.gasLimit,
-      setMaxFee: this.txParameters?.maxFee,
-    });
-
-    return assembledRequest;
+      return await assembleTx();
+    }
   }
 
   /**
