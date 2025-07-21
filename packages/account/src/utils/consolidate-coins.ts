@@ -22,7 +22,7 @@ const CONSOLIDATABLE_ERROR_CODES = [ErrorCode.MAX_COINS_REACHED];
  *
  * @param error - The error to detect if a consolidation is required for.
  * @param account - The account to consolidate coins for.
- * @param skipAutoConsolidation - Whether to automatically consolidate coins. Defaults to true.
+ * @param skipAutoConsolidation - Whether to skip the automatic consolidatation of coins process (optional).
  *
  * @returns true if a consolidation is required, false otherwise
  */

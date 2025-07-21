@@ -212,7 +212,7 @@ export class Account extends AbstractAccount implements WithAddress {
    *
    * @param quantities - Quantities of resources to be obtained.
    * @param resourcesIdsToIgnore - IDs of resources to be excluded from the query (optional).
-   * @param skipAutoConsolidation - Whether to automatically consolidate coins. Defaults to true.
+   * @param skipAutoConsolidation - Whether to skip the automatic consolidatation of coins process (optional).
    * @returns A promise that resolves to an array of Resources.
    */
   async getResourcesToSpend(
@@ -441,7 +441,7 @@ export class Account extends AbstractAccount implements WithAddress {
    * @param amount - The amount of coins to transfer.
    * @param assetId - The asset ID of the coins to transfer (optional).
    * @param txParams - The transaction parameters (optional).
-   * @param skipAutoConsolidation - Whether to automatically consolidate coins if required (optional).
+   * @param skipAutoConsolidation - Whether to skip the automatic consolidatation of coins process (optional).
    * @returns A promise that resolves to the prepared transaction request.
    */
   async createTransfer(
@@ -482,7 +482,7 @@ export class Account extends AbstractAccount implements WithAddress {
    * @param amount - The amount of coins to transfer.
    * @param assetId - The asset ID of the coins to transfer (optional).
    * @param txParams - The transaction parameters (optional).
-   * @param skipAutoConsolidation - Whether to automatically consolidate coins if required (optional).
+   * @param skipAutoConsolidation - Whether to skip the automatic consolidatation of coins process (optional).
    * @returns A promise that resolves to the transaction response.
    */
   async transfer(
@@ -503,7 +503,7 @@ export class Account extends AbstractAccount implements WithAddress {
    *
    * @param transferParams - An array of `TransferParams` objects representing the transfers to be made.
    * @param txParams - Optional transaction parameters.
-   * @param skipAutoConsolidation - Whether to automatically consolidate coins if required (optional).
+   * @param skipAutoConsolidation - Whether to skip the automatic consolidatation of coins process (optional).
    * @returns A promise that resolves to a `TransactionResponse` object representing the transaction result.
    */
   async batchTransfer(
@@ -568,7 +568,7 @@ export class Account extends AbstractAccount implements WithAddress {
    * @param amount - The amount of coins to transfer.
    * @param assetId - The asset ID of the coins to transfer (optional).
    * @param txParams - The transaction parameters (optional).
-   * @param skipAutoConsolidation - Whether to automatically consolidate coins if required (optional).
+   * @param skipAutoConsolidation - Whether to skip the automatic consolidatation of coins process (optional).
    * @returns A promise that resolves to the transaction response.
    */
   async transferToContract(
@@ -647,7 +647,7 @@ export class Account extends AbstractAccount implements WithAddress {
    * @param recipient - Address of the recipient on the base chain.
    * @param amount - Amount of base asset.
    * @param txParams - The transaction parameters (optional).
-   * @param skipAutoConsolidation - Whether to automatically consolidate coins if required (optional).
+   * @param skipAutoConsolidation - Whether to skip the automatic consolidatation of coins process (optional).
    * @returns A promise that resolves to the transaction response.
    */
   async withdrawToBaseLayer(
