@@ -311,7 +311,7 @@ export class BaseInvocationScope<TReturn = any> {
       });
 
       return assembledRequest;
-    }
+    };
 
     try {
       return await assembleTx();

@@ -1240,7 +1240,7 @@ export class Account extends AbstractAccount implements WithAddress {
         feePayerAccount: this,
       });
       return { transactionRequest: assembledRequest as ScriptTransactionRequest, gasPrice };
-    }
+    };
 
     try {
       return await assembleTx();
