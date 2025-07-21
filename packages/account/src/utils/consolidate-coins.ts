@@ -62,17 +62,14 @@ export const consolidateCoinsIfRequired = async (opts: {
  */
 export const getAllCoins = async (account: Account, assetId?: string) => {
   const all: Coin[] = [];
-  let coins: Coin[];
   let hasNextPage = true;
   let after: string | undefined;
 
   while (hasNextPage) {
-    ({
-      coins,
-      pageInfo: { hasNextPage },
-    } = await account.getCoins(assetId, { after }));
+    const { coins, pageInfo } = await account.getCoins(assetId, { after });
     all.push(...coins);
     after = coins.pop()?.id;
+    hasNextPage = pageInfo.hasNextPage;
   }
 
   return { coins: all };
