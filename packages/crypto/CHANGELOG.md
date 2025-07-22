@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.101.3
+
+### Patch Changes
+
+- Updated dependencies [4e018a5]
+- Updated dependencies [c8b6d0e]
+  - @fuel-ts/errors@0.101.3
+  - @fuel-ts/utils@0.101.3
+
 ## 0.101.2
 
 ### Patch Changes
