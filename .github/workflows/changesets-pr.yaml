@@ -90,7 +90,7 @@ jobs:
           token: ${{ steps.docs-token.outputs.token }}
 
       # Upload assets to S3
-      - uses: unfor19/install-aws-cli-action@v1.0.7
+      - uses: unfor19/install-aws-cli-action@1.0.8
         if: github.ref_name == 'master'
         with:
           version: 2
