@@ -1,6 +1,6 @@
 import type { FuelError } from '@fuel-ts/errors';
-import { bn, ZeroBytes32 } from 'fuels';
-import { launchTestNode } from 'fuels/test-utils';
+import { bn, Contract, ErrorCode, type JsonAbi, ZeroBytes32 } from 'fuels';
+import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
 import {
   AdvancedLoggingOtherContractFactory,
@@ -8,6 +8,7 @@ import {
   CallTestContractFactory,
   ConfigurableContractFactory,
   CoverageContractFactory,
+  AbiContractFactory,
 } from '../test/typegen/contracts';
 import { ScriptCallContract, ScriptCallLoggingContracts } from '../test/typegen/scripts';
 
@@ -503,6 +504,70 @@ describe('Advanced Logging', () => {
           'Received value from main Contract:',
           amount,
         ],
+      });
+    });
+
+    it('should not throw when unable to decode a log with a missing JSON ABI', async () => {
+      using launched = await launchTestNode({
+        contractsConfigs: [{ factory: AbiContractFactory }],
+      });
+      const {
+        wallets: [wallet],
+        contracts: [originalContract],
+      } = launched;
+      const abiWithoutLogs: JsonAbi = {
+        ...originalContract.interface.jsonAbi,
+        loggedTypes: [],
+      };
+      const contract = new Contract(originalContract.id, abiWithoutLogs, wallet);
+
+      const { waitForResult } = await contract.functions.types_u8(8).call();
+      const { logs, groupedLogs } = await waitForResult();
+
+      const expectedLogEntry = {
+        __decoded: false,
+        data: '0xff',
+        logId: '14454674236531057292',
+      };
+      expect(logs).toStrictEqual([expectedLogEntry]);
+      expect(groupedLogs).toStrictEqual({
+        [originalContract.id.toB256()]: [expectedLogEntry],
+      });
+    });
+
+    it('should not display undecoded logs in the error message', async () => {
+      using launched = await launchTestNode({
+        contractsConfigs: [{ factory: AbiContractFactory }],
+      });
+      const {
+        wallets: [wallet],
+        contracts: [originalContract],
+      } = launched;
+      const abiWithoutLogs: JsonAbi = {
+        ...originalContract.interface.jsonAbi,
+        loggedTypes: [],
+      };
+      const contract = new Contract(originalContract.id, abiWithoutLogs, wallet);
+
+      const call = () => contract.functions.types_u8(255).call();
+
+      await expectToThrowFuelError(call, {
+        code: ErrorCode.SCRIPT_REVERTED,
+        message: 'The transaction reverted because of an "assert_eq" statement.',
+        metadata: {
+          logs: [
+            {
+              __decoded: false,
+              data: '0xff',
+              logId: '14454674236531057292',
+            },
+            {
+              __decoded: false,
+              data: '0x08',
+              logId: '14454674236531057292',
+            },
+          ],
+        },
       });
     });
   });
