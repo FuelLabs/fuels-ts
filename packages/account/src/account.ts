@@ -55,6 +55,11 @@ import {
 import { mergeQuantities } from './providers/utils/merge-quantities';
 import { serializeProviderCache } from './providers/utils/serialization';
 import { AbstractAccount } from './types';
+import {
+  consolidateCoins,
+  consolidateCoinsIfRequired,
+  type ShouldConsolidateCoinsParams,
+} from './utils/consolidate-coins';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
 import { splitCoinsIntoBatches } from './utils/split-coins-into-batches';
 
@@ -99,9 +104,21 @@ export type SubmitAllCallbackResponse = {
   errors: FuelError[];
 };
 
-export type SubmitAllCallback = () => Promise<SubmitAllCallbackResponse>;
+export type SubmitAllListenerTransactionStartData = {
+  tx: ScriptTransactionRequest;
+  step: number;
+  transactionId: string;
+  assetId: string;
+};
+
+export type SubmitAllListener = {
+  onTransactionStart?: (data: SubmitAllListenerTransactionStartData) => void;
+};
+
+export type SubmitAllCallback = (opts?: SubmitAllListener) => Promise<SubmitAllCallbackResponse>;
 
 export type AssembleConsolidationTxsParams = {
+  assetId: string;
   coins: Coin[];
   mode?: SubmitAllMode;
   outputNum?: number;
@@ -111,6 +128,11 @@ export type ConsolidateCoins = {
   assetId: string;
   mode?: SubmitAllMode;
   outputNum?: number;
+};
+
+export type StartConsolidateCoins = {
+  owner: string;
+  assetId: string;
 };
 
 const MAX_FUNDING_ATTEMPTS = 5;
@@ -190,13 +212,32 @@ export class Account extends AbstractAccount implements WithAddress {
    *
    * @param quantities - Quantities of resources to be obtained.
    * @param resourcesIdsToIgnore - IDs of resources to be excluded from the query (optional).
+   * @param skipAutoConsolidation - Whether to skip the automatic consolidatation of coins process (optional).
    * @returns A promise that resolves to an array of Resources.
    */
   async getResourcesToSpend(
     quantities: CoinQuantityLike[],
-    resourcesIdsToIgnore?: ResourcesIdsToIgnore
+    resourcesIdsToIgnore?: ResourcesIdsToIgnore,
+    { skipAutoConsolidation }: ShouldConsolidateCoinsParams = {}
   ): Promise<Resource[]> {
-    return this.provider.getResourcesToSpend(this.address, quantities, resourcesIdsToIgnore);
+    const getResourcesToSpend = () =>
+      this.provider.getResourcesToSpend(this.address, quantities, resourcesIdsToIgnore);
+
+    try {
+      return await getResourcesToSpend();
+    } catch (error) {
+      const shouldRetry = await consolidateCoinsIfRequired({
+        error,
+        account: this,
+        skipAutoConsolidation,
+      });
+
+      if (!shouldRetry) {
+        throw error;
+      }
+
+      return await getResourcesToSpend();
+    }
   }
 
   /**
@@ -253,7 +294,11 @@ export class Account extends AbstractAccount implements WithAddress {
    * @deprecated Use provider.assembleTx instead
    * Check the migration guide https://docs.fuel.network/docs/fuels-ts/transactions/assemble-tx-migration-guide/ for more information.
    */
-  async fund<T extends TransactionRequest>(request: T, params: EstimatedTxParams): Promise<T> {
+  async fund<T extends TransactionRequest>(
+    request: T,
+    params: EstimatedTxParams,
+    { skipAutoConsolidation }: ShouldConsolidateCoinsParams = {}
+  ): Promise<T> {
     const {
       addedSignatures,
       estimatedPredicates,
@@ -308,7 +353,8 @@ export class Account extends AbstractAccount implements WithAddress {
     while (needsToBeFunded && fundingAttempts < MAX_FUNDING_ATTEMPTS) {
       const resources = await this.getResourcesToSpend(
         missingQuantities,
-        cacheRequestInputsResourcesFromOwner(request.inputs, this.address)
+        cacheRequestInputsResourcesFromOwner(request.inputs, this.address),
+        { skipAutoConsolidation }
       );
 
       request.addResources(resources);
@@ -358,7 +404,7 @@ export class Account extends AbstractAccount implements WithAddress {
     // If the transaction still needs to be funded after the maximum number of attempts
     if (needsToBeFunded) {
       throw new FuelError(
-        ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
+        ErrorCode.INSUFFICIENT_FUNDS,
         `The account ${this.address} does not have enough base asset funds to cover the transaction execution.`
       );
     }
@@ -395,13 +441,15 @@ export class Account extends AbstractAccount implements WithAddress {
    * @param amount - The amount of coins to transfer.
    * @param assetId - The asset ID of the coins to transfer (optional).
    * @param txParams - The transaction parameters (optional).
+   * @param skipAutoConsolidation - Whether to skip the automatic consolidatation of coins process (optional).
    * @returns A promise that resolves to the prepared transaction request.
    */
   async createTransfer(
     destination: string | Address,
     amount: BigNumberish,
     assetId?: BytesLike,
-    txParams: TxParamsType = {}
+    txParams: TxParamsType = {},
+    { skipAutoConsolidation }: ShouldConsolidateCoinsParams = {}
   ): Promise<ScriptTransactionRequest> {
     let request = new ScriptTransactionRequest(txParams);
 
@@ -411,7 +459,10 @@ export class Account extends AbstractAccount implements WithAddress {
       assetId: assetId || (await this.provider.getBaseAssetId()),
     });
 
-    const { gasPrice, transactionRequest } = await this.assembleTx(request);
+    const { gasPrice, transactionRequest } = await this.assembleTx({
+      transactionRequest: request,
+      skipAutoConsolidation,
+    });
 
     request = await setAndValidateGasAndFeeForAssembledTx({
       gasPrice,
@@ -431,15 +482,19 @@ export class Account extends AbstractAccount implements WithAddress {
    * @param amount - The amount of coins to transfer.
    * @param assetId - The asset ID of the coins to transfer (optional).
    * @param txParams - The transaction parameters (optional).
+   * @param skipAutoConsolidation - Whether to skip the automatic consolidatation of coins process (optional).
    * @returns A promise that resolves to the transaction response.
    */
   async transfer(
     destination: string | Address,
     amount: BigNumberish,
     assetId?: BytesLike,
-    txParams: TxParamsType = {}
+    txParams: TxParamsType = {},
+    { skipAutoConsolidation }: ShouldConsolidateCoinsParams = {}
   ): Promise<TransactionResponse> {
-    const request = await this.createTransfer(destination, amount, assetId, txParams);
+    const request = await this.createTransfer(destination, amount, assetId, txParams, {
+      skipAutoConsolidation,
+    });
     return this.sendTransaction(request, { estimateTxDependencies: false });
   }
 
@@ -448,16 +503,21 @@ export class Account extends AbstractAccount implements WithAddress {
    *
    * @param transferParams - An array of `TransferParams` objects representing the transfers to be made.
    * @param txParams - Optional transaction parameters.
+   * @param skipAutoConsolidation - Whether to skip the automatic consolidatation of coins process (optional).
    * @returns A promise that resolves to a `TransactionResponse` object representing the transaction result.
    */
   async batchTransfer(
     transferParams: TransferParams[],
-    txParams: TxParamsType = {}
+    txParams: TxParamsType = {},
+    { skipAutoConsolidation }: ShouldConsolidateCoinsParams = {}
   ): Promise<TransactionResponse> {
     let request = new ScriptTransactionRequest(txParams);
     request = this.addBatchTransfer(request, transferParams);
 
-    const { gasPrice, transactionRequest } = await this.assembleTx(request);
+    const { gasPrice, transactionRequest } = await this.assembleTx({
+      transactionRequest: request,
+      skipAutoConsolidation,
+    });
 
     request = await setAndValidateGasAndFeeForAssembledTx({
       gasPrice,
@@ -508,20 +568,25 @@ export class Account extends AbstractAccount implements WithAddress {
    * @param amount - The amount of coins to transfer.
    * @param assetId - The asset ID of the coins to transfer (optional).
    * @param txParams - The transaction parameters (optional).
+   * @param skipAutoConsolidation - Whether to skip the automatic consolidatation of coins process (optional).
    * @returns A promise that resolves to the transaction response.
    */
   async transferToContract(
     contractId: string | Address,
     amount: BigNumberish,
     assetId: BytesLike,
-    txParams: TxParamsType = {}
+    txParams: TxParamsType = {},
+    { skipAutoConsolidation }: ShouldConsolidateCoinsParams = {}
   ): Promise<TransactionResponse> {
-    return this.batchTransferToContracts([{ amount, assetId, contractId }], txParams);
+    return this.batchTransferToContracts([{ amount, assetId, contractId }], txParams, {
+      skipAutoConsolidation,
+    });
   }
 
   async batchTransferToContracts(
     contractTransferParams: ContractTransferParams[],
-    txParams: TxParamsType = {}
+    txParams: TxParamsType = {},
+    { skipAutoConsolidation }: ShouldConsolidateCoinsParams = {}
   ): Promise<TransactionResponse> {
     let request = new ScriptTransactionRequest({
       ...txParams,
@@ -559,7 +624,11 @@ export class Account extends AbstractAccount implements WithAddress {
     request.script = script;
     request.scriptData = scriptData;
 
-    const { gasPrice, transactionRequest } = await this.assembleTx(request, quantities);
+    const { gasPrice, transactionRequest } = await this.assembleTx({
+      transactionRequest: request,
+      quantities,
+      skipAutoConsolidation,
+    });
 
     request = await setAndValidateGasAndFeeForAssembledTx({
       gasPrice,
@@ -578,12 +647,14 @@ export class Account extends AbstractAccount implements WithAddress {
    * @param recipient - Address of the recipient on the base chain.
    * @param amount - Amount of base asset.
    * @param txParams - The transaction parameters (optional).
+   * @param skipAutoConsolidation - Whether to skip the automatic consolidatation of coins process (optional).
    * @returns A promise that resolves to the transaction response.
    */
   async withdrawToBaseLayer(
     recipient: AddressInput,
     amount: BigNumberish,
-    txParams: TxParamsType = {}
+    txParams: TxParamsType = {},
+    { skipAutoConsolidation }: ShouldConsolidateCoinsParams = {}
   ): Promise<TransactionResponse> {
     const recipientAddress = new Address(recipient);
     // add recipient and amount to the transaction script code
@@ -605,7 +676,11 @@ export class Account extends AbstractAccount implements WithAddress {
     let request = new ScriptTransactionRequest(params);
     const quantities = [{ amount: bn(amount), assetId: baseAssetId }];
 
-    const { gasPrice, transactionRequest } = await this.assembleTx(request, quantities);
+    const { gasPrice, transactionRequest } = await this.assembleTx({
+      transactionRequest: request,
+      quantities,
+      skipAutoConsolidation,
+    });
 
     request = await setAndValidateGasAndFeeForAssembledTx({
       gasPrice,
@@ -616,6 +691,29 @@ export class Account extends AbstractAccount implements WithAddress {
     });
 
     return this.sendTransaction(request);
+  }
+
+  /**
+   * Start the consolidation process
+   *
+   * @param owner - The B256 address of the owner.
+   * @param assetId - The asset ID that requires consolidation.
+   */
+  async startConsolidation(opts: StartConsolidateCoins): Promise<boolean> {
+    if (this._connector) {
+      await this._connector.startConsolidation(opts);
+      return false;
+    }
+
+    const { owner, assetId } = opts;
+    if (owner !== this.address.toB256()) {
+      return false;
+    }
+
+    const { submitAll } = await consolidateCoins({ account: this, assetId });
+    await submitAll();
+
+    return true;
   }
 
   /**
@@ -640,6 +738,7 @@ export class Account extends AbstractAccount implements WithAddress {
 
     let submitAll: SubmitAllCallback;
     const consolidationParams: AssembleConsolidationTxsParams = {
+      assetId,
       coins,
       mode: params.mode,
       outputNum: params.outputNum,
@@ -648,10 +747,7 @@ export class Account extends AbstractAccount implements WithAddress {
     if (isBaseAsset) {
       ({ submitAll } = await this.assembleBaseAssetConsolidationTxs(consolidationParams));
     } else {
-      throw new FuelError(
-        ErrorCode.UNSUPPORTED_FEATURE,
-        'Consolidation for non-base assets is not supported yet.'
-      );
+      ({ submitAll } = await this.assembleNonBaseAssetConsolidationTxs(consolidationParams));
     }
 
     return submitAll();
@@ -668,11 +764,10 @@ export class Account extends AbstractAccount implements WithAddress {
    *
    * @returns An object containing the assembled transactions, the total fee cost, and a callback to submit all transactions.
    */
-  async assembleBaseAssetConsolidationTxs(params: AssembleConsolidationTxsParams) {
+  async assembleBaseAssetConsolidationTxs(params: Omit<AssembleConsolidationTxsParams, 'assetId'>) {
     const { coins, mode = 'parallel', outputNum = 1 } = params;
 
     const baseAssetId = await this.provider.getBaseAssetId();
-
     this.validateConsolidationTxsCoins(coins, baseAssetId);
 
     const chainInfo = await this.provider.getChain();
@@ -729,6 +824,107 @@ export class Account extends AbstractAccount implements WithAddress {
         }
 
         totalFeeCost = totalFeeCost.add(fee);
+
+        txs.push(request);
+      });
+
+    const submitAll = this.prepareSubmitAll({ txs, mode });
+
+    return { txs, totalFeeCost, submitAll };
+  }
+
+  async assembleNonBaseAssetConsolidationTxs(
+    params: AssembleConsolidationTxsParams & { assetId: string }
+  ) {
+    const { assetId, coins, mode = 'parallel', outputNum = 1 } = params;
+
+    this.validateConsolidationTxsCoins(coins, assetId);
+
+    const chainInfo = await this.provider.getChain();
+    const maxInputsNumber = chainInfo.consensusParameters.txParameters.maxInputs.toNumber();
+
+    // Collate the base asset for funding purposes
+    const baseAssetId = chainInfo.consensusParameters.baseAssetId;
+    const { coins: baseAssetCoins } = await this.provider.getCoins(this.address, baseAssetId);
+
+    let totalFeeCost = bn(0);
+    const txs: ScriptTransactionRequest[] = [];
+    const gasPrice = await this.provider.estimateGasPrice(10);
+    const consolidateMoreThanOneCoin = outputNum > 1;
+    const assetCoinBatches = splitCoinsIntoBatches(coins, maxInputsNumber);
+
+    assetCoinBatches
+      // Skip batches with just one Coin to avoid consolidate just one coin
+      .filter((batch) => batch.length > 1)
+      .forEach((coinBatch) => {
+        const request = new ScriptTransactionRequest({
+          script: '0x',
+        });
+
+        request.addResources(coinBatch);
+
+        if (consolidateMoreThanOneCoin) {
+          // We decrease one because the change output will also create one UTXO
+          Array.from({ length: outputNum - 1 }).forEach(() => {
+            // Real value will be added later after having fee calculated
+            request.addCoinOutput(this.address, 0, assetId);
+          });
+        }
+
+        const minGas = request.calculateMinGas(chainInfo);
+
+        const fee = calculateGasFee({
+          gasPrice,
+          gas: minGas,
+          priceFactor: chainInfo.consensusParameters.feeParameters.gasPriceFactor,
+          tip: request.tip,
+        });
+
+        request.maxFee = fee;
+
+        if (consolidateMoreThanOneCoin) {
+          const total = request.inputs
+            .filter(isRequestInputCoin)
+            .reduce((acc, input) => acc.add(input.amount), bn(0));
+
+          // We add a +1 as the change output will also include one part of the total amount
+          const amountPerNewUtxo = total.div(outputNum + 1);
+
+          request.outputs.forEach((output) => {
+            if (output.type === OutputType.Coin) {
+              output.amount = amountPerNewUtxo;
+            }
+          });
+        }
+
+        totalFeeCost = totalFeeCost.add(fee);
+
+        const baseAssetResources: Coin[] = [];
+        let fundingFeeTotal: BN = bn(0);
+
+        while (fundingFeeTotal.lt(fee)) {
+          const baseAssetCoin = baseAssetCoins.pop();
+          if (!baseAssetCoin) {
+            break;
+          }
+
+          baseAssetResources.push(baseAssetCoin);
+          fundingFeeTotal = fundingFeeTotal.add(baseAssetCoin.amount);
+        }
+
+        // Need to remove the extra assets from the request input
+        const { inputs } = request;
+        request.inputs = inputs.slice(0, maxInputsNumber - baseAssetResources.length);
+        const removedCoins = coinBatch.slice(maxInputsNumber - baseAssetResources.length);
+
+        // Add our base assets
+        request.addResources(baseAssetResources);
+
+        const lastCoinBatch = assetCoinBatches[assetCoinBatches.length - 1];
+        lastCoinBatch.push(...removedCoins);
+        if (lastCoinBatch.length > maxInputsNumber) {
+          assetCoinBatches.push(lastCoinBatch.slice(maxInputsNumber));
+        }
 
         txs.push(request);
       });
@@ -1024,10 +1220,12 @@ export class Account extends AbstractAccount implements WithAddress {
   }
 
   /** @hidden * */
-  private async assembleTx(
-    transactionRequest: ScriptTransactionRequest,
-    quantities: CoinQuantity[] = []
-  ): Promise<{ transactionRequest: ScriptTransactionRequest; gasPrice: BN }> {
+  private async assembleTx(opts: {
+    transactionRequest: ScriptTransactionRequest;
+    quantities?: CoinQuantity[];
+    skipAutoConsolidation?: boolean;
+  }): Promise<{ transactionRequest: ScriptTransactionRequest; gasPrice: BN }> {
+    const { transactionRequest, quantities = [], skipAutoConsolidation } = opts;
     const outputQuantities = transactionRequest.outputs
       .filter((o) => o.type === OutputType.Coin)
       .map(({ amount, assetId }) => ({ assetId: String(assetId), amount: bn(amount) }));
@@ -1035,13 +1233,30 @@ export class Account extends AbstractAccount implements WithAddress {
     transactionRequest.gasLimit = bn(0);
     transactionRequest.maxFee = bn(0);
 
-    const { assembledRequest, gasPrice } = await this.provider.assembleTx({
-      request: transactionRequest,
-      accountCoinQuantities: mergeQuantities(outputQuantities, quantities),
-      feePayerAccount: this,
-    });
+    const assembleTx = async () => {
+      const { assembledRequest, gasPrice } = await this.provider.assembleTx({
+        request: transactionRequest,
+        accountCoinQuantities: mergeQuantities(outputQuantities, quantities),
+        feePayerAccount: this,
+      });
+      return { transactionRequest: assembledRequest as ScriptTransactionRequest, gasPrice };
+    };
 
-    return { transactionRequest: assembledRequest as ScriptTransactionRequest, gasPrice };
+    try {
+      return await assembleTx();
+    } catch (error) {
+      const shouldRetry = await consolidateCoinsIfRequired({
+        error,
+        account: this,
+        skipAutoConsolidation,
+      });
+
+      if (!shouldRetry) {
+        throw error;
+      }
+
+      return await assembleTx();
+    }
   }
 
   /** @hidden * */
@@ -1052,59 +1267,6 @@ export class Account extends AbstractAccount implements WithAddress {
         'Transfer amount must be a positive number.'
       );
     }
-  }
-
-  /** @hidden * */
-  private async estimateAndFundTransaction(
-    transactionRequest: ScriptTransactionRequest,
-    txParams: TxParamsType,
-    costParams?: TransactionCostParams
-  ) {
-    let request = transactionRequest;
-    const txCost = await this.getTransactionCost(request, costParams);
-    request = this.validateGasLimitAndMaxFee({
-      transactionRequest: request,
-      gasUsed: txCost.gasUsed,
-      maxFee: txCost.maxFee,
-      txParams,
-    });
-    request = await this.fund(request, txCost);
-    return request;
-  }
-
-  /** @hidden * */
-  private validateGasLimitAndMaxFee({
-    gasUsed,
-    maxFee,
-    transactionRequest,
-    txParams: { gasLimit: setGasLimit, maxFee: setMaxFee },
-  }: {
-    gasUsed: BN;
-    maxFee: BN;
-    transactionRequest: ScriptTransactionRequest;
-    txParams: Pick<TxParamsType, 'gasLimit' | 'maxFee'>;
-  }) {
-    const request = transactionRequestify(transactionRequest) as ScriptTransactionRequest;
-
-    if (!isDefined(setGasLimit)) {
-      request.gasLimit = gasUsed;
-    } else if (gasUsed.gt(setGasLimit)) {
-      throw new FuelError(
-        ErrorCode.GAS_LIMIT_TOO_LOW,
-        `Gas limit '${setGasLimit}' is lower than the required: '${gasUsed}'.`
-      );
-    }
-
-    if (!isDefined(setMaxFee)) {
-      request.maxFee = maxFee;
-    } else if (maxFee.gt(setMaxFee)) {
-      throw new FuelError(
-        ErrorCode.MAX_FEE_TOO_LOW,
-        `Max fee '${setMaxFee}' is lower than the required: '${maxFee}'.`
-      );
-    }
-
-    return request;
   }
 
   /** @hidden * */

@@ -12,6 +12,7 @@ import { arrayify, hexlify } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
 import type { Account } from '../../account';
+import type { ShouldConsolidateCoinsParams } from '../../utils/consolidate-coins';
 import type { ChainInfo, GasCosts, TransactionCostParams } from '../provider';
 import { calculateMetadataGasForTxScript, getMaxGas } from '../utils/gas';
 
@@ -81,14 +82,18 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
    */
   async estimateAndFund(
     account: Account,
-    { signatureCallback, quantities = [] }: TransactionCostParams = {}
+    {
+      signatureCallback,
+      quantities = [],
+      skipAutoConsolidation,
+    }: TransactionCostParams & ShouldConsolidateCoinsParams = {}
   ): Promise<ScriptTransactionRequest> {
     const txCost = await account.getTransactionCost(this, { signatureCallback, quantities });
 
     this.maxFee = txCost.maxFee;
     this.gasLimit = txCost.gasUsed;
 
-    await account.fund(this, txCost);
+    await account.fund(this, txCost, { skipAutoConsolidation });
 
     return this;
   }
