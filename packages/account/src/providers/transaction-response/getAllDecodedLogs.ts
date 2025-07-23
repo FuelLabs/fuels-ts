@@ -70,7 +70,7 @@ export function getAllDecodedLogs<T = unknown>(opts: {
           try {
             [logEntry] = interfaceToUse.decodeLog(data, receipt.rb.toString());
           } catch (error) {
-            logEntry = { __decoded: false, data, logId: receipt.rb.toString() }
+            logEntry = { __decoded: false, data, logId: receipt.rb.toString() };
           }
 
           logs.push(logEntry as T);
