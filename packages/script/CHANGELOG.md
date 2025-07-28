@@ -1,5 +1,23 @@
 # Change Log
 
+## 0.101.3
+
+### Patch Changes
+
+- Updated dependencies [7def0a5]
+- Updated dependencies [4e018a5]
+- Updated dependencies [eefaa74]
+- Updated dependencies [c8b6d0e]
+- Updated dependencies [b0aa106]
+- Updated dependencies [55ad003]
+  - @fuel-ts/account@0.101.3
+  - @fuel-ts/errors@0.101.3
+  - @fuel-ts/program@0.101.3
+  - @fuel-ts/abi-coder@0.101.3
+  - @fuel-ts/math@0.101.3
+  - @fuel-ts/transactions@0.101.3
+  - @fuel-ts/utils@0.101.3
+
 ## 0.101.2
 
 ### Patch Changes

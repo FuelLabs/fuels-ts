@@ -1,7 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { GraphQLError } from 'graphql';
 
-const ASSET_ID_REGEX = /[0-9a-fA-F]{32,64}/;
+const ASSET_ID_REGEX: RegExp = /[0-9a-fA-F]{32,64}/g;
 
 const gqlErrorMessage = {
   RPC_CONSISTENCY:
@@ -10,6 +10,8 @@ const gqlErrorMessage = {
     /the target cannot be met due to insufficient coins available for [0-9a-fA-F]{32,64}. Collected: \d+/,
   MAX_COINS_REACHED:
     /the target for [0-9a-fA-F]{32,64} cannot be met due to exceeding the \d+ coin limit. Collected: \d+./,
+  NOT_ENOUGH_COINS_MAX_COINS:
+    /the target cannot be met due to no coins available or exceeding the \d+ coin limit./,
   ASSET_NOT_FOUND: /resource was not found in table/,
   MULTIPLE_CHANGE_POLICIES: /The asset ([a-fA-F0-9]{64}) has multiple change policies/,
   DUPLICATE_CHANGE_OUTPUT_ACCOUNT: /required balances contain duplicate \(asset, account\) pair/,
@@ -30,6 +32,46 @@ const mapGqlErrorMessage = (error: GqlError): FuelError => {
       ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
       `Insufficient funds or too many small value coins. Consider combining UTXOs.${suffix}`,
       { assetId },
+      error
+    );
+  }
+
+  if (gqlErrorMessage.MAX_COINS_REACHED.test(error.message)) {
+    const matches = error.message.match(ASSET_ID_REGEX);
+    const assetId = matches ? `0x${matches[0]}` : null;
+    const owner = matches ? `0x${matches[1]}` : null;
+    let suffix = '';
+    if (assetId) {
+      suffix += `\n\tAsset ID: '${assetId}'.`;
+    }
+    if (owner) {
+      suffix += `\n\tOwner: '${owner}'.`;
+    }
+
+    return new FuelError(
+      ErrorCode.MAX_COINS_REACHED,
+      `You have too many small value coins - consider combining UTXOs.${suffix}`,
+      { assetId, owner },
+      error
+    );
+  }
+
+  if (gqlErrorMessage.INSUFFICIENT_FUNDS.test(error.message)) {
+    const matches = error.message.match(ASSET_ID_REGEX);
+    const assetId = matches ? `0x${matches[0]}` : null;
+    const owner = matches ? `0x${matches[1]}` : null;
+    let suffix = '';
+    if (assetId) {
+      suffix += `\n\tAsset ID: '${assetId}'.`;
+    }
+    if (owner) {
+      suffix += `\n\tOwner: '${owner}'.`;
+    }
+
+    return new FuelError(
+      ErrorCode.INSUFFICIENT_FUNDS,
+      `Insufficient funds.${suffix}`,
+      { assetId, owner },
       error
     );
   }

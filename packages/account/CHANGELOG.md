@@ -1,5 +1,27 @@
 # Change Log
 
+## 0.101.3
+
+### Patch Changes
+
+- 7def0a5: chore: add JSON ABI error entry to `FuelError.metadata`
+- 4e018a5: chore: handling for malformed response body
+- c8b6d0e: feat: added auto-consolidation of coins
+- b0aa106: chore: add object parameter support to `TransactionResponse` constructor
+- 55ad003: feat: consolidate non-base asset
+- Updated dependencies [4e018a5]
+- Updated dependencies [c8b6d0e]
+  - @fuel-ts/errors@0.101.3
+  - @fuel-ts/abi-coder@0.101.3
+  - @fuel-ts/address@0.101.3
+  - @fuel-ts/crypto@0.101.3
+  - @fuel-ts/math@0.101.3
+  - @fuel-ts/transactions@0.101.3
+  - @fuel-ts/utils@0.101.3
+  - @fuel-ts/hasher@0.101.3
+  - @fuel-ts/merkle@0.101.3
+  - @fuel-ts/versions@0.101.3
+
 ## 0.101.2
 
 ### Patch Changes
