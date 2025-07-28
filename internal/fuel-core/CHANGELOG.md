@@ -1,5 +1,15 @@
 # @internal/fuel-core
 
+## 0.91.0
+
+### Minor Changes
+
+- 5b3bb62: chore!: breaking change for `fuel-core@v0.44.0`
+
+### Patch Changes
+
+- f4be76c: chore: upgrade `fuel-core` to `0.44.0`
+
 ## 0.90.1
 
 ### Patch Changes
