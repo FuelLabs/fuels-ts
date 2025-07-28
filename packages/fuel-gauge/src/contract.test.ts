@@ -1107,18 +1107,19 @@ describe('Contract', () => {
     using contract = await setupTestContract();
 
     contract.account = Wallet.generate({ provider: contract.provider });
+    const baseAssetId = await contract.provider.getBaseAssetId();
 
     await expectToThrowFuelError(
       async () =>
         contract.functions
           .return_context_amount()
           .callParams({
-            forward: [100, await contract.provider.getBaseAssetId()],
+            forward: [100, baseAssetId],
           })
           .simulate(),
       new FuelError(
         ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-        `Insufficient funds or too many small value coins. Consider combining UTXOs.`
+        `Insufficient funds or too many small value coins. Consider combining UTXOs.\nFor the following asset ID: '${baseAssetId}'.`
       )
     );
   });
