@@ -1,5 +1,15 @@
 # @fuel-ts/utils
 
+## 0.101.4
+
+### Patch Changes
+
+- f4be76c: chore: upgrade `fuel-core` to `0.44.0`
+- Updated dependencies [f4be76c]
+  - @fuel-ts/versions@0.101.4
+  - @fuel-ts/errors@0.101.4
+  - @fuel-ts/math@0.101.4
+
 ## 0.101.3
 
 ### Patch Changes
