@@ -1,5 +1,9 @@
 import type { FuelError } from '@fuel-ts/errors';
-import { bn, ZeroBytes32 } from 'fuels';
+import {
+  bn,
+  LogDecoder,
+  ZeroBytes32,
+} from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
@@ -8,6 +12,7 @@ import {
   CallTestContractFactory,
   ConfigurableContractFactory,
   CoverageContractFactory,
+  AdvancedLogging,
 } from '../test/typegen/contracts';
 import { ScriptCallContract, ScriptCallLoggingContracts } from '../test/typegen/scripts';
 
@@ -505,5 +510,28 @@ describe('Advanced Logging', () => {
         ],
       });
     });
+  });
+
+  it.only('should decode and filter logs by type', async () => {
+    using advancedLogContract = await launchTestContract({
+      factory: AdvancedLoggingFactory,
+    });
+
+    const { waitForResult } = await advancedLogContract.functions.test_function().call();
+    const {
+      value,
+      logs,
+      transactionResult: { receipts },
+    } = await waitForResult();
+
+    // Use the filtered decoder
+    const decoder = new LogDecoder(AdvancedLogging.abi);
+    const result = decoder.decodeLogsByType(receipts, [
+      'Game',
+      'GameState',
+      'std::contract_id::ContractId',
+      'str[10]',
+    ]);
+    console.log(result);
   });
 });
