@@ -16,6 +16,7 @@ import type {
   Account,
   StorageSlot,
   Address,
+  JsonAbi,
   BigNumberish,
   BN,
   Bytes,
@@ -1147,7 +1148,7 @@ const abi = {
   "messagesTypes": [],
   "configurables": [],
   "errorCodes": {}
-};
+} as const satisfies JsonAbi;
 
 const storageSlots: StorageSlot[] = [];
 

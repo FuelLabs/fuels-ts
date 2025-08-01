@@ -18,6 +18,7 @@ const importReplacementMap = {
   InvokeFunction: '@fuel-ts/program',
   StrSlice: '@fuel-ts/abi-coder',
   decompressBytecode: '@fuel-ts/utils',
+  JsonAbi: '@fuel-ts/abi-coder',
 };
 
 for (const recipe of supportedRecipes) {

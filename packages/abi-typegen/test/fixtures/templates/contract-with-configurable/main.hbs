@@ -16,6 +16,7 @@ import type {
   Account,
   StorageSlot,
   Address,
+  JsonAbi,
   BigNumberish,
   FunctionFragment,
   InvokeFunction,
@@ -177,7 +178,7 @@ const abi = {
     }
   ],
   "errorCodes": {}
-};
+} as const satisfies JsonAbi;
 
 const storageSlots: StorageSlot[] = [];
 

@@ -34,6 +34,7 @@ export interface Component extends TypeArgument {
 }
 
 export interface TypeArgument {
+  readonly name?: string;
   readonly typeId: number | string; // the type metadata declaration ID or type concrete declaration hash based ID of the type of the component.
   readonly typeArguments?: readonly TypeArgument[];
 }
@@ -52,7 +53,7 @@ export interface AbiFunctionInput {
 
 export type AbiFunctionAttribute = {
   readonly name: string;
-  readonly arguments?: string[];
+  readonly arguments?: readonly string[];
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -99,6 +100,7 @@ export interface Configurable {
   readonly name: string;
   readonly concreteTypeId: string;
   readonly offset: number;
+  readonly indirect?: boolean;
 }
 
 export interface ErrorPosition {

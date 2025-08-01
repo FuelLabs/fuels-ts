@@ -11,6 +11,7 @@
 */
 
 import {
+  type JsonAbi,
   Account,
   BigNumberish,
   BN,
@@ -265,7 +266,7 @@ const abi = {
   "messagesTypes": [],
   "configurables": [],
   "errorCodes": {}
-};
+} as const satisfies JsonAbi;
 
 const bytecode = decompressBytecode('0x-bytecode-here');
 

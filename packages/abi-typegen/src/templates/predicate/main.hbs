@@ -2,6 +2,7 @@
 
 {{#if imports}}
 import {
+  type JsonAbi,
 {{#each imports}}
   {{this}},
 {{/each}}
@@ -57,7 +58,7 @@ export type {{capitalizedName}}Parameters = Omit<
   'abi' | 'bytecode'
 >;
 
-const abi = {{abiJsonString}};
+const abi = {{abiJsonString}} as const satisfies JsonAbi;
 
 const bytecode = decompressBytecode('{{compressedBytecode}}');
 
