@@ -34,20 +34,16 @@ describe('Predicate', () => {
       await fundAccount(wallet, predicate, 1000);
 
       const receiver = Wallet.generate({ provider });
+      const baseAssetId = await provider.getBaseAssetId();
 
       await expectToThrowFuelError(
         async () =>
-          predicate.transfer(
-            receiver.address,
-            await predicate.getBalance(),
-            await provider.getBaseAssetId(),
-            {
-              gasLimit: 100_000_000,
-            }
-          ),
+          predicate.transfer(receiver.address, await predicate.getBalance(), baseAssetId, {
+            gasLimit: 100_000_000,
+          }),
         new FuelError(
           ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-          `Insufficient funds or too many small value coins. Consider combining UTXOs.`
+          `Insufficient funds or too many small value coins. Consider combining UTXOs.\nFor the following asset ID: '${baseAssetId}'.`
         )
       );
     });
