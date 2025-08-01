@@ -9,8 +9,8 @@
 */
 
 import { Contract as __Contract, type InvokeFunction } from '@fuel-ts/program';
-import { Interface, type FunctionFragment, type StrSlice } from '@fuel-ts/abi-coder';
-import { type Provider, type Account } from '@fuel-ts/account';
+import { Interface, type JsonAbi, type FunctionFragment, type StrSlice } from '@fuel-ts/abi-coder';
+import { LogDecoder, type Provider, type Account } from '@fuel-ts/account';
 import { type StorageSlot } from '@fuel-ts/transactions';
 import { type Address } from '@fuel-ts/address';
 import type { Option, Enum } from './common';
@@ -632,7 +632,9 @@ const abi = {
       offset: 13320,
     },
   ],
-};
+} as const satisfies JsonAbi;
+
+export type Src14OwnedProxyAbi = typeof abi;
 
 const storageSlots: StorageSlot[] = [
   {
@@ -652,7 +654,13 @@ const storageSlots: StorageSlot[] = [
     value: '0000000000000000000000000000000000000000000000000000000000000000',
   },
 ];
-export class Src14OwnedProxyInterface extends Interface {
+export class Src14OwnedProxyLogDecoder extends LogDecoder<Src14OwnedProxyAbi> {
+  constructor(abis: { [key: string]: Src14OwnedProxyAbi }) {
+    super(abis);
+  }
+}
+
+export class Src14OwnedProxyInterface extends Interface<Src14OwnedProxyAbi> {
   constructor() {
     super(abi);
   }
@@ -666,7 +674,7 @@ export class Src14OwnedProxyInterface extends Interface {
   };
 }
 
-export class Src14OwnedProxy extends __Contract {
+export class Src14OwnedProxy extends __Contract<Src14OwnedProxyAbi> {
   static readonly abi = abi;
   static readonly storageSlots = storageSlots;
 
@@ -681,5 +689,11 @@ export class Src14OwnedProxy extends __Contract {
 
   constructor(id: string | Address, accountOrProvider: Account | Provider) {
     super(id, abi, accountOrProvider);
+  }
+
+  override logDecoder(): Src14OwnedProxyLogDecoder {
+    return new Src14OwnedProxyLogDecoder({
+      [this.id.toB256()]: this.interface.jsonAbi,
+    });
   }
 }

@@ -1,17 +1,28 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
-import { Interface, BigNumberCoder } from '@fuel-ts/abi-coder';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import type { Receipt, ReceiptCall } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
 
-import type {
-  TransactionResultCallReceipt,
-  TransactionResultReceipt,
-} from './transaction-response';
+import { LogDecoder } from './LogDecoder';
+import type { TransactionResultReceipt } from './transaction-response';
 
 export interface DecodedLogs<T = unknown> {
   logs: T[];
   groupedLogs: Record<string, T[]>;
 }
+
+const getMainProgramId = (abi: JsonAbi, receipts: Receipt[]) => {
+  if (abi.programType === 'contract') {
+    const firstCallReceipt = receipts.find(
+      (r) => r.type === ReceiptType.Call && r.id === ZeroBytes32
+    ) as ReceiptCall | undefined;
+
+    if (firstCallReceipt) {
+      return firstCallReceipt.to;
+    }
+  }
+  return ZeroBytes32;
+};
 
 /**
  * @hidden
@@ -38,41 +49,23 @@ export function getAllDecodedLogs<T = unknown>(opts: {
 }): DecodedLogs<T> {
   const { receipts, mainAbi, externalAbis = {} } = opts;
 
-  let mainContract = '';
-  if (mainAbi.programType === 'contract') {
-    const firstCallReceipt = receipts.find(
-      (r) => r.type === ReceiptType.Call && r.id === ZeroBytes32
-    ) as TransactionResultCallReceipt;
+  const mainProgramId = getMainProgramId(mainAbi, receipts);
+  const logDecoder = new LogDecoder({
+    [mainProgramId]: mainAbi,
+    ...externalAbis,
+  });
+  const decodeLogs = logDecoder.decodeLogs<T>(receipts);
 
-    if (firstCallReceipt) {
-      mainContract = firstCallReceipt.to;
-    }
-  }
+  return decodeLogs.reduce(
+    (acc, log) => {
+      const { isDecoded, data, origin } = log;
 
-  return receipts.reduce(
-    ({ logs, groupedLogs }, receipt) => {
-      if (receipt.type === ReceiptType.LogData || receipt.type === ReceiptType.Log) {
-        const isLogFromMainAbi = receipt.id === ZeroBytes32 || mainContract === receipt.id;
-        const isDecodable = isLogFromMainAbi || externalAbis[receipt.id];
-
-        if (isDecodable) {
-          const interfaceToUse = isLogFromMainAbi
-            ? new Interface(mainAbi)
-            : new Interface(externalAbis[receipt.id]);
-
-          const data =
-            receipt.type === ReceiptType.Log
-              ? new BigNumberCoder('u64').encode(receipt.ra)
-              : receipt.data;
-
-          const [decodedLog] = interfaceToUse.decodeLog(data, receipt.rb.toString());
-          logs.push(decodedLog);
-          // eslint-disable-next-line no-param-reassign
-          groupedLogs[receipt.id] = [...(groupedLogs[receipt.id] || []), decodedLog];
-        }
+      if (isDecoded) {
+        acc.logs.push(data as T);
+        acc.groupedLogs[origin] = [...(acc.groupedLogs[origin] || []), data as T];
       }
 
-      return { logs, groupedLogs };
+      return acc;
     },
     { logs: [], groupedLogs: {} } as DecodedLogs<T>
   );

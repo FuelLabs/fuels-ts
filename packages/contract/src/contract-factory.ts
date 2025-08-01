@@ -203,7 +203,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
     const maxContractSize = consensusParameters.contractParameters.contractMaxSize.toNumber();
 
     return this.bytecode.length > maxContractSize
-      ? this.deployAsBlobTx(deployOptions)
+      ? this.deployAsBlobTx<T>(deployOptions)
       : this.deployAsCreateTx<T>(deployOptions);
   }
 

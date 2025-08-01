@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Interface } from '@fuel-ts/abi-coder';
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
-import { deployScriptOrPredicate, type Account, type Provider } from '@fuel-ts/account';
+import { deployScriptOrPredicate, LogDecoder, type Account, type Provider } from '@fuel-ts/account';
 import { FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import type { ScriptRequest } from '@fuel-ts/program';
@@ -10,6 +10,8 @@ import { arrayify } from '@fuel-ts/utils';
 
 import { ScriptInvocationScope } from './script-invocation-scope';
 import { AbstractScript } from './types';
+
+const ZeroBytes32 = '0x0000000000000000000000000000000000000000000000000000000000000000';
 
 /**
  * Represents the result of a script execution.
@@ -29,7 +31,11 @@ type InvokeMain<TArgs extends Array<any> = Array<any>, TReturn = any> = (
 /**
  * `Script` provides a typed interface for interacting with the script program type.
  */
-export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
+export class Script<
+  TInput extends Array<any>,
+  TOutput,
+  const TAbi extends JsonAbi = JsonAbi,
+> extends AbstractScript {
   /**
    * The compiled bytecode of the script.
    */
@@ -38,7 +44,7 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
   /**
    * The ABI interface for the script.
    */
-  interface: Interface;
+  interface: Interface<TAbi>;
 
   /**
    * The account associated with the script.
@@ -67,7 +73,7 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
    * @param abi - The ABI interface for the script.
    * @param account - The account associated with the script.
    */
-  constructor(bytecode: BytesLike, abi: JsonAbi, account: Account) {
+  constructor(bytecode: BytesLike, abi: TAbi, account: Account) {
     super();
     this.bytes = arrayify(bytecode);
     this.interface = new Interface(abi);
@@ -137,6 +143,17 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
       bytecode: this.bytes,
       loaderInstanceCallback: (loaderBytecode, newAbi) =>
         new Script(loaderBytecode, newAbi, this.account) as T,
+    });
+  }
+
+  /**
+   * Get a log decoder for the contract.
+   *
+   * @returns A LogDecoder instance.
+   */
+  logDecoder(): LogDecoder<TAbi> {
+    return new LogDecoder({
+      [ZeroBytes32]: this.interface.jsonAbi,
     });
   }
 }
