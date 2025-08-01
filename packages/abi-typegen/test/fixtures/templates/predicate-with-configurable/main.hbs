@@ -87,11 +87,14 @@ const abi = {
   "errorCodes": {}
 } as const satisfies JsonAbi;
 
+type MyPredicateAbi = typeof abi;
+
 const bytecode = decompressBytecode('0x-bytecode-here');
 
 export class MyPredicate extends __Predicate<
   MyPredicateInputs,
-  MyPredicateConfigurables
+  MyPredicateConfigurables,
+  MyPredicateAbi
 > {
   static readonly abi = abi;
   static readonly bytecode = bytecode;

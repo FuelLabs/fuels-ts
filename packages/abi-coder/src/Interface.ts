@@ -12,14 +12,14 @@ import { type EncodingVersion } from './utils/constants';
 import { getEncodingVersion } from './utils/json-abi';
 import { parseConcreteType, transpileAbi } from './utils/transpile-abi';
 
-export class Interface {
+export class Interface<const Abi extends JsonAbi = JsonAbi> {
   readonly functions!: Record<string, FunctionFragment>;
   readonly configurables: Record<string, Configurable>;
-  readonly jsonAbi: JsonAbi;
+  readonly jsonAbi: Abi;
   readonly encoding: EncodingVersion;
   private readonly jsonAbiOld: JsonAbiOld;
 
-  constructor(jsonAbi: JsonAbi) {
+  constructor(jsonAbi: Abi) {
     this.jsonAbi = jsonAbi;
     this.encoding = getEncodingVersion(jsonAbi.encodingVersion);
     this.jsonAbiOld = transpileAbi(jsonAbi) as JsonAbiOld;

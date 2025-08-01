@@ -89,9 +89,11 @@ const abi = {
   "errorCodes": {}
 } as const satisfies JsonAbi;
 
+type MyScriptAbi = typeof abi;
+
 const bytecode = decompressBytecode('0x-bytecode-here');
 
-export class MyScript extends __Script<MyScriptInputs, MyScriptOutput> {
+export class MyScript extends __Script<MyScriptInputs, MyScriptOutput, MyScriptAbi> {
 
   static readonly abi = abi;
   static readonly bytecode = bytecode;

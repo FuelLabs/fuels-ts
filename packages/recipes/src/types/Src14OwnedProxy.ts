@@ -634,6 +634,8 @@ const abi = {
   ],
 } as const satisfies JsonAbi;
 
+type Src14OwnedProxyAbi = typeof abi;
+
 const storageSlots: StorageSlot[] = [
   {
     key: '7bb458adc1d118713319a5baa00a2d049dd64d2916477d2688d76970c898cd55',
@@ -652,7 +654,7 @@ const storageSlots: StorageSlot[] = [
     value: '0000000000000000000000000000000000000000000000000000000000000000',
   },
 ];
-export class Src14OwnedProxyInterface extends Interface {
+export class Src14OwnedProxyInterface extends Interface<Src14OwnedProxyAbi> {
   constructor() {
     super(abi);
   }
@@ -666,7 +668,7 @@ export class Src14OwnedProxyInterface extends Interface {
   };
 }
 
-export class Src14OwnedProxy extends __Contract {
+export class Src14OwnedProxy extends __Contract<Src14OwnedProxyAbi> {
   static readonly abi = abi;
   static readonly storageSlots = storageSlots;
 

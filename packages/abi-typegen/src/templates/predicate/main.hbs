@@ -60,11 +60,14 @@ export type {{capitalizedName}}Parameters = Omit<
 
 const abi = {{abiJsonString}} as const satisfies JsonAbi;
 
+type {{capitalizedName}}Abi = typeof abi;
+
 const bytecode = decompressBytecode('{{compressedBytecode}}');
 
 export class {{capitalizedName}} extends __Predicate<
   {{capitalizedName}}Inputs,
-  {{capitalizedName}}Configurables
+  {{capitalizedName}}Configurables,
+  {{capitalizedName}}Abi
 > {
   static readonly abi = abi;
   static readonly bytecode = bytecode;

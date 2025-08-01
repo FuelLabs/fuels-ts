@@ -12,7 +12,7 @@ import type { AbstractContract, InvokeFunction, InvokeFunctions } from './types'
 /**
  * `Contract` provides a way to interact with the contract program type.
  */
-export default class Contract implements AbstractContract {
+export default class Contract<const TAbi extends JsonAbi = JsonAbi> implements AbstractContract {
   /**
    * The unique contract identifier.
    */
@@ -26,7 +26,7 @@ export default class Contract implements AbstractContract {
   /**
    * The contract's ABI interface.
    */
-  interface!: Interface;
+  interface!: Interface<TAbi>;
 
   /**
    * The account associated with the contract, if available.
@@ -45,7 +45,7 @@ export default class Contract implements AbstractContract {
    * @param abi - The contract's ABI (JSON ABI or Interface instance).
    * @param accountOrProvider - The account or provider for interaction.
    */
-  constructor(id: AddressInput, abi: JsonAbi | Interface, accountOrProvider: Account | Provider) {
+  constructor(id: AddressInput, abi: TAbi | Interface<TAbi>, accountOrProvider: Account | Provider) {
     this.interface = abi instanceof Interface ? abi : new Interface(abi);
     this.id = new Address(id);
 

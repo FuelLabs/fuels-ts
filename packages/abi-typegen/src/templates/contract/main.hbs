@@ -56,9 +56,11 @@ export type {{capitalizedName}}Configurables = Partial<{
 
 const abi = {{abiJsonString}} as const satisfies JsonAbi;
 
+type {{capitalizedName}}Abi = typeof abi;
+
 const storageSlots: StorageSlot[] = {{storageSlotsJsonString}};
 
-export class {{capitalizedName}}Interface extends Interface {
+export class {{capitalizedName}}Interface extends Interface<{{capitalizedName}}Abi> {
   constructor() {
     super(abi);
   }
@@ -70,7 +72,7 @@ export class {{capitalizedName}}Interface extends Interface {
   };
 }
 
-export class {{capitalizedName}} extends __Contract {
+export class {{capitalizedName}} extends __Contract<{{capitalizedName}}Abi> {
   static readonly abi = abi;
   static readonly storageSlots = storageSlots;
 

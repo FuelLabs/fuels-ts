@@ -1150,9 +1150,11 @@ const abi = {
   "errorCodes": {}
 } as const satisfies JsonAbi;
 
+type MyContractAbi = typeof abi;
+
 const storageSlots: StorageSlot[] = [];
 
-export class MyContractInterface extends Interface {
+export class MyContractInterface extends Interface<MyContractAbi> {
   constructor() {
     super(abi);
   }
@@ -1201,7 +1203,7 @@ export class MyContractInterface extends Interface {
   };
 }
 
-export class MyContract extends __Contract {
+export class MyContract extends __Contract<MyContractAbi> {
   static readonly abi = abi;
   static readonly storageSlots = storageSlots;
 
