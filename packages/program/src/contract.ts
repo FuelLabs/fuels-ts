@@ -1,6 +1,6 @@
 import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
-import type { Account, Provider } from '@fuel-ts/account';
+import { LogDecoder, type Account, type Provider } from '@fuel-ts/account';
 import type { AddressInput } from '@fuel-ts/address';
 import { Address } from '@fuel-ts/address';
 import type { BytesLike } from '@fuel-ts/utils';
@@ -117,5 +117,16 @@ export default class Contract<const TAbi extends JsonAbi = JsonAbi> implements A
    */
   getBalance(assetId: BytesLike) {
     return this.provider.getContractBalance(this.id, assetId);
+  }
+
+  /**
+   * Get a log decoder for the contract.
+   *
+   * @returns A LogDecoder instance.
+   */
+  logDecoder(): LogDecoder<TAbi> {
+    return new LogDecoder<TAbi>({
+      [this.id.toB256()]: this.interface.jsonAbi,
+    });
   }
 }

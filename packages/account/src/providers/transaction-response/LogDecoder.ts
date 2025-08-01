@@ -1,9 +1,6 @@
 import { BigNumberCoder, Interface, type JsonAbi } from '@fuel-ts/abi-coder';
-import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { type Receipt, ReceiptType } from '@fuel-ts/transactions';
 import { type BytesLike } from '@fuel-ts/utils';
-
-import { type TransactionResultCallReceipt } from '../..';
 
 type StripTypeKeywords<T extends string> = T extends `${'struct' | 'enum'} ${infer Rest}`
   ? Rest
@@ -39,76 +36,71 @@ type LogOutput<T = unknown> = {
   raw: BytesLike;
 
   /**
+   * Whether the log has been decoded
+   */
+  isDecoded: boolean;
+
+  /**
    * The decoded data of the receipt
    */
-  data: T;
+  data?: T;
 };
 
-export class LogDecoder<
-  const Abi extends JsonAbi,
-  const ExternalAbis extends Record<string, JsonAbi> = Record<string, JsonAbi>,
-> {
-  constructor(
-    private readonly abi: Abi,
-    private readonly externalAbis: ExternalAbis = {} as ExternalAbis
-  ) {}
+export class LogDecoder<const MainAbi extends JsonAbi = JsonAbi> {
+  constructor(private readonly abis: { [key: string]: MainAbi }) {}
 
+  /**
+   * Decode logs from receipts
+   * @param receipts - The receipts to decode
+   * @returns The decoded logs
+   */
   public decodeLogs<T = unknown>(receipts: Receipt[]): LogOutput<T>[] {
-    let mainContract = '';
-    if (this.abi.programType === 'contract') {
-      const firstCallReceipt = receipts.find(
-        (r) => r.type === ReceiptType.Call && r.id === ZeroBytes32
-      ) as TransactionResultCallReceipt;
-
-      if (firstCallReceipt) {
-        mainContract = firstCallReceipt.to;
-      }
-    }
-
     return receipts.reduce((logs: LogOutput<T>[], receipt) => {
       if (receipt.type === ReceiptType.LogData || receipt.type === ReceiptType.Log) {
-        const isLogFromMainAbi = receipt.id === ZeroBytes32 || mainContract === receipt.id;
-        const isDecodable = isLogFromMainAbi || this.externalAbis[receipt.id];
-
-        if (isDecodable) {
-          // Get the interface to use
-          const interfaceToUse = isLogFromMainAbi
-            ? new Interface(this.abi)
-            : new Interface(this.externalAbis[receipt.id]);
-
-          // Get the raw data of the log
-          const raw =
-            receipt.type === ReceiptType.Log
-              ? new BigNumberCoder('u64').encode(receipt.ra)
-              : receipt.data;
-
-          // Decode the log
-          const logId = receipt.rb.toString();
-          const [decodedLog] = interfaceToUse.decodeLog(raw, logId);
-
-          // Create the log output
-          const log: LogOutput<T> = {
-            origin: receipt.id,
-            logId,
-            type: receipt.type,
-            raw,
-            data: decodedLog,
-          };
-
-          logs.push(log);
+        const log: LogOutput<T> = {
+          origin: receipt.id,
+          type: receipt.type,
+          logId: receipt.rb.toString(),
+          raw: receipt.type === ReceiptType.Log
+            ? new BigNumberCoder('u64').encode(receipt.ra)
+            : receipt.data,
+          isDecoded: false,
+          data: undefined,
         }
+
+        const isDecodable = Boolean(this.abis[receipt.id]);
+        if (isDecodable) {
+          try {
+            const interfaceToUse = new Interface(this.abis[receipt.id]);
+            const [decodedLog] = interfaceToUse.decodeLog(log.raw, log.logId);
+            log.isDecoded = true;
+            log.data = decodedLog as T;
+          } catch (error) {}
+        }
+
+        logs.push(log);
       }
 
       return logs;
     }, []);
   }
 
-  decodeLogsByType<T = unknown>(receipts: Receipt[], type: LogType<Abi>[]) {
-    const concreteIds = this.abi.concreteTypes
+  /**
+   * Decode logs from receipts by type
+   * @param receipts - The receipts to decode
+   * @param type - The type of the logs to decode
+   * @returns The decoded logs
+   */
+  decodeLogsByType<T = unknown>(receipts: Receipt[], type: LogType<MainAbi>) {
+    const concreteIds = Object.values(this.abis)
+      .flatMap((abi) => abi.concreteTypes)
+      // Strip out the `struct ` and `enum ` keywords
       .map((log) => ({ ...log, type: log.type.replace('struct ', '').replace('enum ', '') }))
-      .filter((log) => type.includes(log.type as LogType<Abi>))
+      .filter((log) => type === log.type)
       .map((log) => log.concreteTypeId);
-    const loggedTypeIds = this.abi.loggedTypes
+
+    const loggedTypeIds = Object.values(this.abis)
+      .flatMap((abi) => abi.loggedTypes)
       .filter((log) => concreteIds.includes(log.concreteTypeId))
       .map((log) => log.logId);
 

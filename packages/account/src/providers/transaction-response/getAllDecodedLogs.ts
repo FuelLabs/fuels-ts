@@ -1,4 +1,7 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import type { Receipt, ReceiptCall } from '@fuel-ts/transactions';
+import { ReceiptType } from '@fuel-ts/transactions';
 
 import { LogDecoder } from './LogDecoder';
 import type { TransactionResultReceipt } from './transaction-response';
@@ -7,6 +10,19 @@ export interface DecodedLogs<T = unknown> {
   logs: T[];
   groupedLogs: Record<string, T[]>;
 }
+
+const getMainProgramId = (abi: JsonAbi, receipts: Receipt[]) => {
+  if (abi.programType === 'contract') {
+    const firstCallReceipt = receipts.find(
+      (r) => r.type === ReceiptType.Call && r.id === ZeroBytes32
+    ) as ReceiptCall | undefined;
+
+    if (firstCallReceipt) {
+      return firstCallReceipt.to;
+    }
+  }
+  return ZeroBytes32;
+};
 
 /**
  * @hidden
@@ -33,13 +49,22 @@ export function getAllDecodedLogs<T = unknown>(opts: {
 }): DecodedLogs<T> {
   const { receipts, mainAbi, externalAbis = {} } = opts;
 
-  const logDecoder = new LogDecoder(mainAbi, externalAbis);
+  const mainProgramId = getMainProgramId(mainAbi, receipts);
+  const logDecoder = new LogDecoder({
+    [mainProgramId]: mainAbi,
+    ...externalAbis,
+  });
   const decodeLogs = logDecoder.decodeLogs<T>(receipts);
 
   return decodeLogs.reduce(
     (acc, log) => {
-      acc.logs.push(log.data);
-      acc.groupedLogs[log.origin] = [...(acc.groupedLogs[log.origin] || []), log.data];
+      const { isDecoded, data, origin } = log;
+
+      if (isDecoded) {
+        acc.logs.push(data as T);
+        acc.groupedLogs[origin] = [...(acc.groupedLogs[origin] || []), data as T];
+      }
+
       return acc;
     },
     { logs: [], groupedLogs: {} } as DecodedLogs<T>

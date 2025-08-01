@@ -1,6 +1,6 @@
 {{header}}
 
-import { Contract as __Contract, Interface } from "fuels";
+import { Contract as __Contract, Interface, LogDecoder } from "fuels";
 {{#if imports}}
 import type {
   Provider,
@@ -56,9 +56,15 @@ export type {{capitalizedName}}Configurables = Partial<{
 
 const abi = {{abiJsonString}} as const satisfies JsonAbi;
 
-type {{capitalizedName}}Abi = typeof abi;
+export type {{capitalizedName}}Abi = typeof abi;
 
 const storageSlots: StorageSlot[] = {{storageSlotsJsonString}};
+
+export class {{capitalizedName}}LogDecoder extends LogDecoder<{{capitalizedName}}Abi> {
+  constructor(abis: { [key: string]: {{capitalizedName}}Abi }) {
+    super(abis);
+  }
+}
 
 export class {{capitalizedName}}Interface extends Interface<{{capitalizedName}}Abi> {
   constructor() {
@@ -88,5 +94,11 @@ export class {{capitalizedName}} extends __Contract<{{capitalizedName}}Abi> {
     accountOrProvider: Account | Provider,
   ) {
     super(id, abi, accountOrProvider);
+  }
+
+  override logDecoder(): {{capitalizedName}}LogDecoder {
+    return new {{capitalizedName}}LogDecoder({
+      [this.id.toB256()]: this.interface.jsonAbi,
+    });
   }
 }

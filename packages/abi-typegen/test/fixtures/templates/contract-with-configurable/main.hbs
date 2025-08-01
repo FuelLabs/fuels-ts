@@ -10,7 +10,7 @@
   Fuel-Core version: 33.33.33
 */
 
-import { Contract as __Contract, Interface } from "fuels";
+import { Contract as __Contract, Interface, LogDecoder } from "fuels";
 import type {
   Provider,
   Account,
@@ -180,9 +180,15 @@ const abi = {
   "errorCodes": {}
 } as const satisfies JsonAbi;
 
-type MyContractAbi = typeof abi;
+export type MyContractAbi = typeof abi;
 
 const storageSlots: StorageSlot[] = [];
+
+export class MyContractLogDecoder extends LogDecoder<MyContractAbi> {
+  constructor(abis: { [key: string]: MyContractAbi }) {
+    super(abis);
+  }
+}
 
 export class MyContractInterface extends Interface<MyContractAbi> {
   constructor() {
@@ -208,5 +214,11 @@ export class MyContract extends __Contract<MyContractAbi> {
     accountOrProvider: Account | Provider,
   ) {
     super(id, abi, accountOrProvider);
+  }
+
+  override logDecoder(): MyContractLogDecoder {
+    return new MyContractLogDecoder({
+      [this.id.toB256()]: this.interface.jsonAbi,
+    });
   }
 }

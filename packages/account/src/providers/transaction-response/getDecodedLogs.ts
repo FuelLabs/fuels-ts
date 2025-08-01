@@ -1,7 +1,23 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import type { Receipt, ReceiptCall } from '@fuel-ts/transactions';
+import { ReceiptType } from '@fuel-ts/transactions';
 
 import { LogDecoder } from './LogDecoder';
 import type { TransactionResultReceipt } from './transaction-response';
+
+const getMainProgramId = (abi: JsonAbi, receipts: Receipt[]) => {
+  if (abi.programType === 'contract') {
+    const firstCallReceipt = receipts.find(
+      (r) => r.type === ReceiptType.Call && r.id === ZeroBytes32
+    ) as ReceiptCall | undefined;
+
+    if (firstCallReceipt) {
+      return firstCallReceipt.to;
+    }
+  }
+  return ZeroBytes32;
+};
 
 /**
  * @hidden
@@ -28,7 +44,14 @@ export function getDecodedLogs<T = unknown>(
   mainAbi: JsonAbi,
   externalAbis: Record<string, JsonAbi> = {}
 ): T[] {
-  const logDecoder = new LogDecoder(mainAbi, externalAbis);
+  const mainProgramId = getMainProgramId(mainAbi, receipts);
+  const logDecoder = new LogDecoder({
+    [mainProgramId]: mainAbi,
+    ...externalAbis,
+  });
+
   const logs = logDecoder.decodeLogs<T>(receipts);
-  return logs.map((log) => log.data);
+  return logs
+    .filter((log) => log.isDecoded)
+    .map((log) => log.data as T);
 }

@@ -1,7 +1,8 @@
 import type { FuelError } from '@fuel-ts/errors';
 import {
+  type BN,
   bn,
-  LogDecoder,
+  ReceiptType,
   ZeroBytes32,
 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
@@ -12,8 +13,10 @@ import {
   CallTestContractFactory,
   ConfigurableContractFactory,
   CoverageContractFactory,
-  AdvancedLogging,
 } from '../test/typegen/contracts';
+import type { ContractIdOutput } from '../test/typegen/contracts/AbiContract';
+import type { GameOutput } from '../test/typegen/contracts/AdvancedLogging';
+import type { Struct1Output } from '../test/typegen/contracts/ConfigurableContract';
 import { ScriptCallContract, ScriptCallLoggingContracts } from '../test/typegen/scripts';
 
 import { launchTestContract } from './utils';
@@ -459,7 +462,7 @@ describe('Advanced Logging', () => {
         .addContracts([advancedLogContract, otherAdvancedLogContract])
         .call();
 
-      const { logs, groupedLogs } = await waitForResult();
+      const { logs, groupedLogs, transactionResult: { receipts } } = await waitForResult();
 
       expect(logs).toStrictEqual(expectedLogs);
       expect(groupedLogs).toStrictEqual({
@@ -471,6 +474,18 @@ describe('Advanced Logging', () => {
           amount,
         ],
       });
+
+      const scriptLogs = script.logDecoder().decodeLogsByType<string>(receipts, 'str[17]');
+      expect(scriptLogs).toStrictEqual([
+        {
+          isDecoded: true,
+          origin: ZeroBytes32,
+          logId: expect.any(String),
+          type: ReceiptType.LogData,
+          raw: '0x48656c6c6f2066726f6d20736372697074',
+          data: 'Hello from script',
+        },
+      ]);
     });
 
     it('when using ScriptTransactionRequest', async () => {
@@ -497,7 +512,7 @@ describe('Advanced Logging', () => {
 
       const { waitForResult } = await wallet.sendTransaction(request);
 
-      const { logs, groupedLogs } = await waitForResult();
+      const { logs, groupedLogs, receipts } = await waitForResult();
 
       expect(logs).toStrictEqual(expectedLogs);
       expect(groupedLogs).toStrictEqual({
@@ -509,29 +524,143 @@ describe('Advanced Logging', () => {
           amount,
         ],
       });
+
+      const scriptLogs = script.logDecoder().decodeLogsByType<string>(receipts, 'str[17]');
+      expect(scriptLogs).toStrictEqual([
+        {
+          isDecoded: true,
+          origin: ZeroBytes32,
+          logId: expect.any(String),
+          type: ReceiptType.LogData,
+          raw: '0x48656c6c6f2066726f6d20736372697074',
+          data: 'Hello from script',
+        },
+      ]);
     });
   });
 
-  it.only('should decode and filter logs by type', async () => {
-    using advancedLogContract = await launchTestContract({
-      factory: AdvancedLoggingFactory,
+  describe('LogDecoder', () => {
+    it('should decode and filter logs by type', async () => {
+      using advancedLogContract = await launchTestContract({
+        factory: AdvancedLoggingFactory,
+      });
+      const { waitForResult } = await advancedLogContract.functions.test_function().call();
+      const {
+        transactionResult: { receipts },
+      } = await waitForResult();
+
+      const contractIdLogs = advancedLogContract
+        .logDecoder()
+        .decodeLogsByType<ContractIdOutput>(receipts, 'std::contract_id::ContractId');
+      expect(contractIdLogs).toStrictEqual([
+        {
+          isDecoded: true,
+          raw: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+          data: {
+            bits: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+          },
+          logId: expect.any(String),
+          origin: advancedLogContract.id.toB256(),
+          type: ReceiptType.LogData,
+        },
+      ]);
+
+      const gameStateLogs = advancedLogContract
+        .logDecoder()
+        .decodeLogsByType<GameOutput>(receipts, 'GameState');
+      expect(gameStateLogs).toStrictEqual([
+        {
+          isDecoded: true,
+          data: { Playing: 1 },
+          raw: '0x000000000000000001',
+          logId: expect.any(String),
+          origin: advancedLogContract.id.toB256(),
+          type: ReceiptType.LogData,
+        },
+      ]);
     });
 
-    const { waitForResult } = await advancedLogContract.functions.test_function().call();
-    const {
-      value,
-      logs,
-      transactionResult: { receipts },
-    } = await waitForResult();
+    it('should decode and filter multiple contracts', async () => {
+      using launched = await launchTestNode({
+        contractsConfigs: [
+          { factory: AdvancedLoggingFactory },
+          { factory: AdvancedLoggingOtherContractFactory },
+          { factory: CallTestContractFactory },
+          { factory: ConfigurableContractFactory },
+          { factory: CoverageContractFactory },
+        ],
+      });
+      const {
+        contracts: [advancedLogContract, otherAdvancedLogContract, callTest, configurable, coverage],
+        wallets: [wallet],
+      } = launched;
+      const request = await callTest
+        .multiCall([
+          advancedLogContract.functions
+            .test_log_from_other_contract(10, otherAdvancedLogContract.id.toB256())
+            .addContracts([otherAdvancedLogContract]),
+          callTest.functions.boo({
+            a: true,
+            b: 100000,
+          }),
+          configurable.functions.echo_struct(),
+          coverage.functions.echo_str_8('fuelfuel'),
+        ])
+        .getTransactionRequest();
+      await request.estimateAndFund(wallet);
+      const { waitForResult } = await wallet.sendTransaction(request, {
+        estimateTxDependencies: false,
+      });
+      const { receipts } = await waitForResult();
 
-    // Use the filtered decoder
-    const decoder = new LogDecoder(AdvancedLogging.abi);
-    const result = decoder.decodeLogsByType(receipts, [
-      'Game',
-      'GameState',
-      'std::contract_id::ContractId',
-      'str[10]',
-    ]);
-    console.log(result);
+      /**
+       * Configurable Contract
+       */
+      const configurableStruct1Logs = configurable
+        .logDecoder()
+        .decodeLogsByType<Struct1Output>(receipts, 'Struct1');
+      expect(configurableStruct1Logs).toStrictEqual([
+        {
+          isDecoded: true,
+          origin: configurable.id.toB256(),
+          logId: expect.any(String),
+          type: ReceiptType.LogData,
+          raw: '0x30303015010304',
+          data: {
+            tag: '000',
+            age: 21,
+            scores: [1, 3, 4],
+          },
+        },
+      ]);
+
+      // Call test contract
+      const callTestLogs = callTest.logDecoder().decodeLogsByType<BN>(receipts, 'u64');
+      expect(callTestLogs).toStrictEqual([
+        {
+          isDecoded: true,
+          origin: callTest.id.toB256(),
+          logId: expect.any(String),
+          type: ReceiptType.LogData,
+          raw: '0x00000000000186a0',
+          data: expect.toEqualBn(100000),
+        },
+      ]);
+
+      // Advanced logging contract
+      const advancedLoggingContractIdLogs = advancedLogContract
+        .logDecoder()
+        .decodeLogsByType<string>(receipts, 'str[24]');
+      expect(advancedLoggingContractIdLogs).toStrictEqual([
+        {
+          isDecoded: true,
+          origin: advancedLogContract.id.toB256(),
+          logId: expect.any(String),
+          type: ReceiptType.LogData,
+          raw: '0x48656c6c6f2066726f6d206d61696e20436f6e7472616374',
+          data: 'Hello from main Contract'
+        },
+      ]);
+    });
   });
 });
