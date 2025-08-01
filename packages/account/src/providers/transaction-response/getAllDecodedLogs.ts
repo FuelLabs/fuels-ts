@@ -1,12 +1,7 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
-import { Interface, BigNumberCoder } from '@fuel-ts/abi-coder';
-import { ZeroBytes32 } from '@fuel-ts/address/configs';
-import { ReceiptType } from '@fuel-ts/transactions';
 
-import type {
-  TransactionResultCallReceipt,
-  TransactionResultReceipt,
-} from './transaction-response';
+import { LogDecoder } from './LogDecoder';
+import type { TransactionResultReceipt } from './transaction-response';
 
 export interface DecodedLogs<T = unknown> {
   logs: T[];
@@ -38,41 +33,14 @@ export function getAllDecodedLogs<T = unknown>(opts: {
 }): DecodedLogs<T> {
   const { receipts, mainAbi, externalAbis = {} } = opts;
 
-  let mainContract = '';
-  if (mainAbi.programType === 'contract') {
-    const firstCallReceipt = receipts.find(
-      (r) => r.type === ReceiptType.Call && r.id === ZeroBytes32
-    ) as TransactionResultCallReceipt;
+  const logDecoder = new LogDecoder(mainAbi, externalAbis);
+  const decodeLogs = logDecoder.decodeLogs<T>(receipts);
 
-    if (firstCallReceipt) {
-      mainContract = firstCallReceipt.to;
-    }
-  }
-
-  return receipts.reduce(
-    ({ logs, groupedLogs }, receipt) => {
-      if (receipt.type === ReceiptType.LogData || receipt.type === ReceiptType.Log) {
-        const isLogFromMainAbi = receipt.id === ZeroBytes32 || mainContract === receipt.id;
-        const isDecodable = isLogFromMainAbi || externalAbis[receipt.id];
-
-        if (isDecodable) {
-          const interfaceToUse = isLogFromMainAbi
-            ? new Interface(mainAbi)
-            : new Interface(externalAbis[receipt.id]);
-
-          const data =
-            receipt.type === ReceiptType.Log
-              ? new BigNumberCoder('u64').encode(receipt.ra)
-              : receipt.data;
-
-          const [decodedLog] = interfaceToUse.decodeLog(data, receipt.rb.toString());
-          logs.push(decodedLog);
-          // eslint-disable-next-line no-param-reassign
-          groupedLogs[receipt.id] = [...(groupedLogs[receipt.id] || []), decodedLog];
-        }
-      }
-
-      return { logs, groupedLogs };
+  return decodeLogs.reduce(
+    (acc, log) => {
+      acc.logs.push(log.data);
+      acc.groupedLogs[log.origin] = [...(acc.groupedLogs[log.origin] || []), log.data];
+      return acc;
     },
     { logs: [], groupedLogs: {} } as DecodedLogs<T>
   );
