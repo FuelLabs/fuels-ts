@@ -25,5 +25,5 @@ export {
 } from './utils/predicate-script-loader-instructions';
 export {
   type AssembleTransferToContractParams,
-  assembleTransferToContractScript
+  assembleTransferToContractScript,
 } from './utils/formatTransferToContractScriptData';
