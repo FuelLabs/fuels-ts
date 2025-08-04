@@ -1,11 +1,11 @@
 ---
-"@internal/fuel-core": patch
-"@fuel-ts/account": patch
-"@fuel-ts/contract": patch
-"fuels": patch
-"@fuel-ts/program": patch
-"@fuel-ts/utils": patch
-"@fuel-ts/versions": patch
+"@internal/fuel-core": minor
+"@fuel-ts/account": minor
+"@fuel-ts/contract": minor
+"fuels": minor
+"@fuel-ts/program": minor
+"@fuel-ts/utils": minor
+"@fuel-ts/versions": minor
 ---
 
-chore: upgrade `fuel-core` to `0.44.0`
+chore!: upgrade `fuel-core` to `0.44.0`
