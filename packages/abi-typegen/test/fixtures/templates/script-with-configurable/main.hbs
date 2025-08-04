@@ -14,6 +14,8 @@
 
 import {
   type JsonAbi,
+  ZeroBytes32,
+  LogDecoder,
   Account,
   BigNumberish,
   decompressBytecode,
@@ -95,12 +97,24 @@ type MyScriptAbi = typeof abi;
 
 const bytecode = decompressBytecode('0x-bytecode-here');
 
-export class MyScript extends __Script<MyScriptInputs, MyScriptOutput, MyScriptAbi> {
+export class MyScriptLogDecoder extends LogDecoder<MyScriptAbi> {
+  constructor(abis: { [key: string]: MyScriptAbi }) {
+    super(abis);
+  }
+}
+
+export class MyScript extends __Script<MyScriptInputs, MyScriptOutput> {
 
   static readonly abi = abi;
   static readonly bytecode = bytecode;
 
   constructor(wallet: Account) {
     super(bytecode, abi, wallet);
+  }
+
+  override logDecoder(): MyScriptLogDecoder {
+    return new MyScriptLogDecoder({
+      [ZeroBytes32]: abi,
+    });
   }
 }

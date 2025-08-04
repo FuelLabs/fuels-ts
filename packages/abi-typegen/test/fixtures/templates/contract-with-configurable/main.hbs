@@ -202,7 +202,7 @@ export class MyContractInterface extends Interface<MyContractAbi> {
   };
 }
 
-export class MyContract extends __Contract<MyContractAbi> {
+export class MyContract extends __Contract {
   static readonly abi = abi;
   static readonly storageSlots = storageSlots;
 
