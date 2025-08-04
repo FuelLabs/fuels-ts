@@ -51,7 +51,5 @@ export function getDecodedLogs<T = unknown>(
   });
 
   const logs = logDecoder.decodeLogs<T>(receipts);
-  return logs
-    .filter((log) => log.isDecoded)
-    .map((log) => log.data as T);
+  return logs.filter((log) => log.isDecoded).map((log) => log.data as T);
 }

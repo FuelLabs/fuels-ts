@@ -61,12 +61,13 @@ export class LogDecoder<const MainAbi extends JsonAbi = JsonAbi> {
           origin: receipt.id,
           type: receipt.type,
           logId: receipt.rb.toString(),
-          raw: receipt.type === ReceiptType.Log
-            ? new BigNumberCoder('u64').encode(receipt.ra)
-            : receipt.data,
+          raw:
+            receipt.type === ReceiptType.Log
+              ? new BigNumberCoder('u64').encode(receipt.ra)
+              : receipt.data,
           isDecoded: false,
           data: undefined,
-        }
+        };
 
         const isDecodable = Boolean(this.abis[receipt.id]);
         if (isDecodable) {

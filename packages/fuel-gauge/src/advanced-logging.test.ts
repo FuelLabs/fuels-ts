@@ -1,10 +1,5 @@
 import type { FuelError } from '@fuel-ts/errors';
-import {
-  type BN,
-  bn,
-  ReceiptType,
-  ZeroBytes32,
-} from 'fuels';
+import { type BN, bn, ReceiptType, ZeroBytes32 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
@@ -462,7 +457,11 @@ describe('Advanced Logging', () => {
         .addContracts([advancedLogContract, otherAdvancedLogContract])
         .call();
 
-      const { logs, groupedLogs, transactionResult: { receipts } } = await waitForResult();
+      const {
+        logs,
+        groupedLogs,
+        transactionResult: { receipts },
+      } = await waitForResult();
 
       expect(logs).toStrictEqual(expectedLogs);
       expect(groupedLogs).toStrictEqual({
@@ -591,7 +590,13 @@ describe('Advanced Logging', () => {
         ],
       });
       const {
-        contracts: [advancedLogContract, otherAdvancedLogContract, callTest, configurable, coverage],
+        contracts: [
+          advancedLogContract,
+          otherAdvancedLogContract,
+          callTest,
+          configurable,
+          coverage,
+        ],
         wallets: [wallet],
       } = launched;
       const request = await callTest
@@ -658,7 +663,7 @@ describe('Advanced Logging', () => {
           logId: expect.any(String),
           type: ReceiptType.LogData,
           raw: '0x48656c6c6f2066726f6d206d61696e20436f6e7472616374',
-          data: 'Hello from main Contract'
+          data: 'Hello from main Contract',
         },
       ]);
     });

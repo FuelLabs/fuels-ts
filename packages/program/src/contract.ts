@@ -45,7 +45,11 @@ export default class Contract<const TAbi extends JsonAbi = JsonAbi> implements A
    * @param abi - The contract's ABI (JSON ABI or Interface instance).
    * @param accountOrProvider - The account or provider for interaction.
    */
-  constructor(id: AddressInput, abi: TAbi | Interface<TAbi>, accountOrProvider: Account | Provider) {
+  constructor(
+    id: AddressInput,
+    abi: TAbi | Interface<TAbi>,
+    accountOrProvider: Account | Provider
+  ) {
     this.interface = abi instanceof Interface ? abi : new Interface(abi);
     this.id = new Address(id);
 
