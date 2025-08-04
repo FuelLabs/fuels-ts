@@ -12,7 +12,7 @@ import type { AbstractContract, InvokeFunction, InvokeFunctions } from './types'
 /**
  * `Contract` provides a way to interact with the contract program type.
  */
-export default class Contract<const TAbi extends JsonAbi = JsonAbi> implements AbstractContract {
+export default class Contract implements AbstractContract {
   /**
    * The unique contract identifier.
    */
@@ -26,7 +26,7 @@ export default class Contract<const TAbi extends JsonAbi = JsonAbi> implements A
   /**
    * The contract's ABI interface.
    */
-  interface!: Interface<TAbi>;
+  interface!: Interface;
 
   /**
    * The account associated with the contract, if available.
@@ -47,7 +47,7 @@ export default class Contract<const TAbi extends JsonAbi = JsonAbi> implements A
    */
   constructor(
     id: AddressInput,
-    abi: TAbi | Interface<TAbi>,
+    abi: JsonAbi | Interface<JsonAbi>,
     accountOrProvider: Account | Provider
   ) {
     this.interface = abi instanceof Interface ? abi : new Interface(abi);
@@ -128,8 +128,8 @@ export default class Contract<const TAbi extends JsonAbi = JsonAbi> implements A
    *
    * @returns A LogDecoder instance.
    */
-  logDecoder(): LogDecoder<TAbi> {
-    return new LogDecoder<TAbi>({
+  logDecoder(): LogDecoder {
+    return new LogDecoder({
       [this.id.toB256()]: this.interface.jsonAbi,
     });
   }

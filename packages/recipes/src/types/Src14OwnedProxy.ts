@@ -676,7 +676,7 @@ export class Src14OwnedProxyInterface extends Interface<Src14OwnedProxyAbi> {
   };
 }
 
-export class Src14OwnedProxy extends __Contract<Src14OwnedProxyAbi> {
+export class Src14OwnedProxy extends __Contract {
   static readonly abi = abi;
   static readonly storageSlots = storageSlots;
 

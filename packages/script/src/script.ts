@@ -31,11 +31,7 @@ type InvokeMain<TArgs extends Array<any> = Array<any>, TReturn = any> = (
 /**
  * `Script` provides a typed interface for interacting with the script program type.
  */
-export class Script<
-  TInput extends Array<any>,
-  TOutput,
-  const TAbi extends JsonAbi = JsonAbi,
-> extends AbstractScript {
+export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
   /**
    * The compiled bytecode of the script.
    */
@@ -44,7 +40,7 @@ export class Script<
   /**
    * The ABI interface for the script.
    */
-  interface: Interface<TAbi>;
+  interface: Interface;
 
   /**
    * The account associated with the script.
@@ -73,7 +69,7 @@ export class Script<
    * @param abi - The ABI interface for the script.
    * @param account - The account associated with the script.
    */
-  constructor(bytecode: BytesLike, abi: TAbi, account: Account) {
+  constructor(bytecode: BytesLike, abi: JsonAbi, account: Account) {
     super();
     this.bytes = arrayify(bytecode);
     this.interface = new Interface(abi);
@@ -151,7 +147,7 @@ export class Script<
    *
    * @returns A LogDecoder instance.
    */
-  logDecoder(): LogDecoder<TAbi> {
+  logDecoder(): LogDecoder {
     return new LogDecoder({
       [ZeroBytes32]: this.interface.jsonAbi,
     });
