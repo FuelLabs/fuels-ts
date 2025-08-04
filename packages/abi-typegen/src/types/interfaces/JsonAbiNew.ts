@@ -31,6 +31,7 @@ export interface MetadataType {
 
 export interface Component extends TypeArgument {
   readonly name: string;
+  readonly errorMessage?: string;
 }
 
 export interface TypeArgument {
