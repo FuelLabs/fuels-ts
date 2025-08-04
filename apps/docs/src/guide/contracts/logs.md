@@ -35,3 +35,15 @@ In this example, we are making a call an inter-contract call to the [`LogSimple`
 The `log_inter_call` function makes a call to the `log_simple` function of the [`LogSimple`](#simple-logs) contract.
 
 <<< @./snippets/logs-grouped-for-inter-contract-call.ts#inter{ts:line-numbers}
+
+## Filtering logs
+
+Consider the following example contract:
+
+<<< @/../../docs/sway/log-struct/src/main.sw#full{rust:line-numbers}
+
+We can filter the logs by type by using a `LogDecoder`. This can be achieved by using the `logDecoder` method on the contract instance.
+
+<<< @./snippets/contract-log-decoder.ts#full{ts:line-numbers}
+
+The `decodeLogsByType` method returns an array of objects, each containing the decoded log `data` with all the metadata.

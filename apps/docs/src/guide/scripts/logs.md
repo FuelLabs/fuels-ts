@@ -25,3 +25,15 @@ To access the fine-grained logs for each contract, use the `groupedLogs` propert
 <<< @./snippets/script-log-with-contract.ts#full{ts:line-numbers}
 
 Although Scripts don't have IDs/addresses, they can still call contracts and generate logs, so we use a zeroed-out (hexadecimal) address as their key instead.
+
+## Filtering logs
+
+Consider the following example script:
+
+<<< @/../../docs/sway/call-test-script/src/main.sw#full{rust:line-numbers}
+
+We can filter the logs by type by using a `LogDecoder`. This can be achieved by using the `logDecoder` method on the script instance.
+
+<<< @./snippets/script-log-decoder.ts#full{ts:line-numbers}
+
+The `decodeLogsByType` method returns an array of objects, each containing the decoded log `data` with all the metadata.

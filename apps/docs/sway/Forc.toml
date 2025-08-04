@@ -20,6 +20,7 @@ members = [
   "log-simple",
   "log-simple-abi",
   "log-inter-calls",
+  "log-struct",
   "my-contract",
   "predicate-main-args-struct",
   "predicate-multi-args",
