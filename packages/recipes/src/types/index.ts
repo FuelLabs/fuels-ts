@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 
 /*
-  Fuels version: 0.101.3
+  Fuels version: 0.102.0
 */
 
 export { Src14OwnedProxy } from './Src14OwnedProxy';
