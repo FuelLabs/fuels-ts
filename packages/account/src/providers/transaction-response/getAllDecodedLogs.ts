@@ -65,10 +65,17 @@ export function getAllDecodedLogs<T = unknown>(opts: {
               ? new BigNumberCoder('u64').encode(receipt.ra)
               : receipt.data;
 
-          const [decodedLog] = interfaceToUse.decodeLog(data, receipt.rb.toString());
-          logs.push(decodedLog);
+          let logEntry: unknown;
+
+          try {
+            [logEntry] = interfaceToUse.decodeLog(data, receipt.rb.toString());
+          } catch (error) {
+            logEntry = { __decoded: false, data, logId: receipt.rb.toString() };
+          }
+
+          logs.push(logEntry as T);
           // eslint-disable-next-line no-param-reassign
-          groupedLogs[receipt.id] = [...(groupedLogs[receipt.id] || []), decodedLog];
+          groupedLogs[receipt.id] = [...(groupedLogs[receipt.id] || []), logEntry as T];
         }
       }
 
