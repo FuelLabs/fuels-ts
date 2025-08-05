@@ -19,6 +19,6 @@ impl MyContract for Contract {
     }
 
     fn compute_predicate_address(bytecode: Vec<u8>) -> Address {
-        return Address::from(0x866cb9c91362f415eadf778ab3b394c4019dc5c1430d9726fd3892e5d7708ca5);
+        return Address::from(0x16832c508c72264b102879fe6b4825ba6ad5b5c5be2b09cc24e939c0a97de6cd);
     }
 }
