@@ -43,10 +43,11 @@ export type PredicateDataParam<TData extends InputValue[]> =
 export type PredicateParams<
   TData extends InputValue[] = InputValue[],
   TConfigurables extends { [name: string]: unknown } | undefined = { [name: string]: unknown },
+  TAbi extends JsonAbi = JsonAbi,
 > = PredicateDataParam<TData> & {
   bytecode: BytesLike;
   provider: Provider;
-  abi: JsonAbi;
+  abi: TAbi;
   configurableConstants?: TConfigurables;
 };
 
@@ -56,10 +57,11 @@ export type PredicateParams<
 export class Predicate<
   TData extends InputValue[] = InputValue[],
   TConfigurables extends { [name: string]: unknown } | undefined = { [name: string]: unknown },
+  const TAbi extends JsonAbi = JsonAbi,
 > extends Account {
   bytes: Uint8Array;
   predicateData: TData = [] as unknown as TData;
-  interface: Interface;
+  interface: Interface<TAbi>;
   initialBytecode: Uint8Array;
   configurableConstants: TConfigurables | undefined;
   /**
@@ -77,7 +79,7 @@ export class Predicate<
     provider,
     data,
     configurableConstants,
-  }: PredicateParams<TData, TConfigurables>) {
+  }: PredicateParams<TData, TConfigurables, TAbi>) {
     const { predicateBytes, predicateInterface } = Predicate.processPredicateData(
       bytecode,
       abi,
@@ -203,9 +205,9 @@ export class Predicate<
    * @param configurableConstants - Optional configurable constants for the predicate.
    * @returns An object containing the new predicate bytes and interface.
    */
-  private static processPredicateData(
+  private static processPredicateData<TAbi extends JsonAbi = JsonAbi>(
     bytes: BytesLike,
-    jsonAbi: JsonAbi,
+    jsonAbi: TAbi,
     configurableConstants?: { [name: string]: unknown }
   ) {
     let predicateBytes = arrayify(bytes);
@@ -228,7 +230,7 @@ export class Predicate<
 
     return {
       predicateBytes,
-      predicateInterface: abiInterface,
+      predicateInterface: abiInterface as Interface<TAbi>,
     };
   }
 

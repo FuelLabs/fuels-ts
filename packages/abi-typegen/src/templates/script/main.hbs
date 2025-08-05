@@ -2,6 +2,9 @@
 
 {{#if imports}}
 import {
+  type JsonAbi,
+  ZeroBytes32,
+  LogDecoder,
 {{#each imports}}
   {{this}},
 {{/each}}
@@ -51,9 +54,17 @@ export type {{capitalizedName}}Configurables = Partial<{
 }>;
 {{/if}}
 
-const abi = {{abiJsonString}};
+const abi = {{abiJsonString}} as const satisfies JsonAbi;
+
+type {{capitalizedName}}Abi = typeof abi;
 
 const bytecode = decompressBytecode('{{compressedBytecode}}');
+
+export class {{capitalizedName}}LogDecoder extends LogDecoder<{{capitalizedName}}Abi> {
+  constructor(abis: { [key: string]: {{capitalizedName}}Abi }) {
+    super(abis);
+  }
+}
 
 export class {{capitalizedName}} extends __Script<{{capitalizedName}}Inputs, {{capitalizedName}}Output> {
 
@@ -62,5 +73,11 @@ export class {{capitalizedName}} extends __Script<{{capitalizedName}}Inputs, {{c
 
   constructor(wallet: Account) {
     super(bytecode, abi, wallet);
+  }
+
+  override logDecoder(): {{capitalizedName}}LogDecoder {
+    return new {{capitalizedName}}LogDecoder({
+      [ZeroBytes32]: abi,
+    });
   }
 }

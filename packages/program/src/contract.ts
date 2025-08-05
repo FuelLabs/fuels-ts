@@ -1,6 +1,6 @@
 import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
-import type { Account, Provider } from '@fuel-ts/account';
+import { LogDecoder, type Account, type Provider } from '@fuel-ts/account';
 import type { AddressInput } from '@fuel-ts/address';
 import { Address } from '@fuel-ts/address';
 import type { BytesLike } from '@fuel-ts/utils';
@@ -45,7 +45,11 @@ export default class Contract implements AbstractContract {
    * @param abi - The contract's ABI (JSON ABI or Interface instance).
    * @param accountOrProvider - The account or provider for interaction.
    */
-  constructor(id: AddressInput, abi: JsonAbi | Interface, accountOrProvider: Account | Provider) {
+  constructor(
+    id: AddressInput,
+    abi: JsonAbi | Interface<JsonAbi>,
+    accountOrProvider: Account | Provider
+  ) {
     this.interface = abi instanceof Interface ? abi : new Interface(abi);
     this.id = new Address(id);
 
@@ -117,5 +121,16 @@ export default class Contract implements AbstractContract {
    */
   getBalance(assetId: BytesLike) {
     return this.provider.getContractBalance(this.id, assetId);
+  }
+
+  /**
+   * Get a log decoder for the contract.
+   *
+   * @returns A LogDecoder instance.
+   */
+  logDecoder(): LogDecoder {
+    return new LogDecoder({
+      [this.id.toB256()]: this.interface.jsonAbi,
+    });
   }
 }

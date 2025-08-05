@@ -1,12 +1,23 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
-import { Interface, BigNumberCoder } from '@fuel-ts/abi-coder';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import type { Receipt, ReceiptCall } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
 
-import type {
-  TransactionResultCallReceipt,
-  TransactionResultReceipt,
-} from './transaction-response';
+import { LogDecoder } from './LogDecoder';
+import type { TransactionResultReceipt } from './transaction-response';
+
+const getMainProgramId = (abi: JsonAbi, receipts: Receipt[]) => {
+  if (abi.programType === 'contract') {
+    const firstCallReceipt = receipts.find(
+      (r) => r.type === ReceiptType.Call && r.id === ZeroBytes32
+    ) as ReceiptCall | undefined;
+
+    if (firstCallReceipt) {
+      return firstCallReceipt.to;
+    }
+  }
+  return ZeroBytes32;
+};
 
 /**
  * @hidden
@@ -33,35 +44,12 @@ export function getDecodedLogs<T = unknown>(
   mainAbi: JsonAbi,
   externalAbis: Record<string, JsonAbi> = {}
 ): T[] {
-  let mainContract = '';
-  if (mainAbi.programType === 'contract') {
-    const firstCallReceipt = receipts.find(
-      (r) => r.type === ReceiptType.Call && r.id === ZeroBytes32
-    ) as TransactionResultCallReceipt;
+  const mainProgramId = getMainProgramId(mainAbi, receipts);
+  const logDecoder = new LogDecoder({
+    [mainProgramId]: mainAbi,
+    ...externalAbis,
+  });
 
-    mainContract = firstCallReceipt.to;
-  }
-
-  return receipts.reduce((logs: T[], receipt) => {
-    if (receipt.type === ReceiptType.LogData || receipt.type === ReceiptType.Log) {
-      const isLogFromMainAbi = receipt.id === ZeroBytes32 || mainContract === receipt.id;
-      const isDecodable = isLogFromMainAbi || externalAbis[receipt.id];
-
-      if (isDecodable) {
-        const interfaceToUse = isLogFromMainAbi
-          ? new Interface(mainAbi)
-          : new Interface(externalAbis[receipt.id]);
-
-        const data =
-          receipt.type === ReceiptType.Log
-            ? new BigNumberCoder('u64').encode(receipt.ra)
-            : receipt.data;
-
-        const [decodedLog] = interfaceToUse.decodeLog(data, receipt.rb.toString());
-        logs.push(decodedLog);
-      }
-    }
-
-    return logs;
-  }, []);
+  const logs = logDecoder.decodeLogs<T>(receipts);
+  return logs.filter((log) => log.isDecoded).map((log) => log.data as T);
 }

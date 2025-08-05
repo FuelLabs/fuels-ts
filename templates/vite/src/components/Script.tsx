@@ -1,5 +1,4 @@
 import { useWallet } from "@fuels/react";
-import { BigNumberish, BN, Script as FuelScript } from "fuels";
 import { useEffect, useState } from "react";
 
 import { TestScript } from "../sway-api";
@@ -7,6 +6,7 @@ import Button from "./Button";
 import LocalFaucet from "./LocalFaucet";
 import { isLocal } from "../lib.tsx";
 import { useNotification } from "../hooks/useNotification.tsx";
+import { BigNumberish, BN, Script as FuelsScript } from "fuels";
 
 export default function Script() {
   const {
@@ -14,7 +14,7 @@ export default function Script() {
     transactionSubmitNotification,
     transactionSuccessNotification,
   } = useNotification();
-  const [script, setScript] = useState<FuelScript<[input: BigNumberish], BN>>();
+  const [script, setScript] = useState<FuelsScript<[input: BigNumberish], BN>>();
   const [input, setInput] = useState<number>();
   const [result, setResult] = useState<number>();
   const [isLoading, setIsLoading] = useState(false);

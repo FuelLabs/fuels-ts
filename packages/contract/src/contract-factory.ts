@@ -57,7 +57,7 @@ export type DeployContractResult<TContract extends Contract = Contract> = {
 /**
  * `ContractFactory` provides utilities for deploying and configuring contracts.
  */
-export default class ContractFactory<TContract extends Contract = Contract> {
+export default class ContractFactory<const TContract extends Contract = Contract> {
   bytecode: BytesLike;
   interface: Interface;
   provider!: Provider | null;
@@ -203,7 +203,7 @@ export default class ContractFactory<TContract extends Contract = Contract> {
     const maxContractSize = consensusParameters.contractParameters.contractMaxSize.toNumber();
 
     return this.bytecode.length > maxContractSize
-      ? this.deployAsBlobTx(deployOptions)
+      ? this.deployAsBlobTx<T>(deployOptions)
       : this.deployAsCreateTx<T>(deployOptions);
   }
 
