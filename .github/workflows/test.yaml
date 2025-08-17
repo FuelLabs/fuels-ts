@@ -28,7 +28,7 @@ jobs:
     timeout-minutes: 25
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: CI Setup
         uses: ./.github/actions/test-setup
@@ -62,7 +62,7 @@ jobs:
       NPM_DIST_TAG: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'next' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -113,7 +113,7 @@ jobs:
     timeout-minutes: 25
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Test Setup
         uses: ./.github/actions/test-setup
@@ -133,7 +133,7 @@ jobs:
     needs: [environments]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -156,7 +156,7 @@ jobs:
     needs: [environments, e2e]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: CI Setup
         uses: ./.github/actions/test-setup
