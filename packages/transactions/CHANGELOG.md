@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.102.0
+
+### Patch Changes
+
+- Updated dependencies [f4be76c]
+  - @fuel-ts/utils@0.102.0
+  - @fuel-ts/abi-coder@0.102.0
+  - @fuel-ts/address@0.102.0
+  - @fuel-ts/hasher@0.102.0
+  - @fuel-ts/errors@0.102.0
+  - @fuel-ts/math@0.102.0
+
 ## 0.101.3
 
 ### Patch Changes
