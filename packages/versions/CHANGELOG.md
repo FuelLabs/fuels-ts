@@ -1,5 +1,11 @@
 # @fuel-ts/versions
 
+## 0.102.0
+
+### Minor Changes
+
+- f4be76c: chore!: upgrade `fuel-core` to `0.44.0`
+
 ## 0.101.3
 
 ## 0.101.2

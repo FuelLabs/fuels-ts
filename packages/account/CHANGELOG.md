@@ -1,5 +1,26 @@
 # Change Log
 
+## 0.102.0
+
+### Minor Changes
+
+- f4be76c: chore!: upgrade `fuel-core` to `0.44.0`
+
+### Patch Changes
+
+- e0e4422: chore: expose `assembleTransferToContractScript` method
+- Updated dependencies [f4be76c]
+  - @fuel-ts/utils@0.102.0
+  - @fuel-ts/versions@0.102.0
+  - @fuel-ts/abi-coder@0.102.0
+  - @fuel-ts/address@0.102.0
+  - @fuel-ts/crypto@0.102.0
+  - @fuel-ts/hasher@0.102.0
+  - @fuel-ts/transactions@0.102.0
+  - @fuel-ts/errors@0.102.0
+  - @fuel-ts/merkle@0.102.0
+  - @fuel-ts/math@0.102.0
+
 ## 0.101.3
 
 ### Patch Changes
