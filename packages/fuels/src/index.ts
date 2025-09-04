@@ -1,7 +1,7 @@
 // exporting wrapped `@fuels/vm-asm` for convenience
 export * as FuelAsm from '@fuels/vm-asm';
 
-// Exporting CLI entrypoint for programatic API
+// Exporting CLI entrypoint for programmatic API
 export * from './cli/index';
 
 // Exporting all sub-packages
