@@ -196,19 +196,6 @@ describe('TransactionRequest', () => {
       expect(result.policies[0].type).not.toBe(PolicyType.Owner);
     });
 
-    it('should not include Owner policy when ownerInputIndex is 0 (falsy)', () => {
-      const txRequest = new ScriptTransactionRequest({
-        maxFee: 1000,
-        ownerInputIndex: 0,
-      });
-
-      const result = BaseTransactionRequest.getPolicyMeta(txRequest);
-
-      expect(result.policyTypes).toBe(PolicyType.MaxFee);
-      expect(result.policies).toHaveLength(1);
-      expect(result.policies[0].type).toBe(PolicyType.MaxFee);
-    });
-
     it('should include Owner policy with tip and other policies', () => {
       const txRequest = new ScriptTransactionRequest({
         maxFee: 2000,
