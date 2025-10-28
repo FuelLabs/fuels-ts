@@ -355,7 +355,6 @@ describe('Transaction', () => {
     expect(isStatusSuccess).toBe(true);
 
     const transactionFromNode = await provider.getTransaction(id);
-    console.dir(transactionFromNode, { depth: null });
     const ownerPolicyTx = transactionFromNode?.policies?.find(
       (policy) => policy.type === PolicyType.Owner
     );

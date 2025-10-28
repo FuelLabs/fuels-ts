@@ -163,6 +163,9 @@ export class PoliciesCoder extends Coder<Policy[], Policy[]> {
           policies.push({ type: PolicyType.Owner, data: owner });
           break;
         }
+        default:
+          // Unknown policy types will be handled after the loop
+          break;
       }
     }
 
@@ -170,10 +173,11 @@ export class PoliciesCoder extends Coder<Policy[], Policy[]> {
     // this allows for backwards compatibility with newer versions of the policy types.
     const leftPolicyTypes = policyTypesArray.length - policies.length;
     if (leftPolicyTypes > 0) {
+      // eslint-disable-next-line no-console
       console.warn(
         `${leftPolicyTypes} unknown policy types found in the transaction, please update fuels to the latest version`
       );
-      o = o + leftPolicyTypes * WORD_SIZE;
+      o += leftPolicyTypes * WORD_SIZE;
     }
 
     return [policies, o];

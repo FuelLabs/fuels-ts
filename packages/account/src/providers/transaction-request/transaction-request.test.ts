@@ -10,10 +10,10 @@ import { WalletUnlocked } from '../../wallet';
 import type { Coin } from '../coin';
 import type { CoinQuantity } from '../coin-quantity';
 import Provider from '../provider';
-import { BaseTransactionRequest } from './transaction-request';
 
 import type { CoinTransactionRequestInput } from './input';
 import { ScriptTransactionRequest } from './script-transaction-request';
+import { BaseTransactionRequest } from './transaction-request';
 import type { TransactionRequestLike } from './types';
 import type { UpgradeTransactionRequest } from './upgrade-transaction-request';
 import type { UploadTransactionRequest } from './upload-transaction-request';

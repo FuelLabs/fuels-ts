@@ -200,7 +200,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       policies.push({ data: expiration, type: PolicyType.Expiration });
     }
 
-    if (req.ownerInputIndex != undefined) {
+    if (isDefined(req.ownerInputIndex)) {
       policyTypes += PolicyType.Owner;
       policies.push({ data: bn(req.ownerInputIndex), type: PolicyType.Owner });
     }
