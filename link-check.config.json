@@ -26,6 +26,10 @@
     {
       "pattern": "^modules/_fuel_ts",
       "replacement": "http://localhost:9876/modules/_fuel_ts"
+    },
+    {
+      "pattern": "^https://www\\.npmjs\\.com/package/(.*)$",
+      "replacement": "https://registry.npmjs.org/$1"
     }
   ]
 }

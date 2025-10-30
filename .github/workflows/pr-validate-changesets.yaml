@@ -133,7 +133,7 @@ jobs:
             exit 0
           fi
 
-          STATUS_CODE=$(curl -s -w '%{http_code}\n' "https://www.npmjs.com/package/fuels/v/$NEW_VERSION" | tail -n1)
+          STATUS_CODE=$(curl -s -o /dev/null -w '%{http_code}\n' "https://registry.npmjs.org/fuels/$NEW_VERSION")
           if [[ $STATUS_CODE  != 404 ]]; then
             echo "Release for version $NEW_VERSION already exists or curl received an unexpected result (result is $STATUS_CODE). Exiting."
             exit 1

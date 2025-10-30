@@ -1304,18 +1304,16 @@ describe('Contract', () => {
 
     const assetDetails = await provider.getAssetDetails(mintedAssets[0].assetId);
 
-    expect(assetDetails.contractId).toBe(contractId);
-    expect(assetDetails.subId).toBe(subId);
-    expect(assetDetails.totalSupply.toNumber()).toBe(totalSupply);
+    expect(assetDetails?.contractId).toBe(contractId);
+    expect(assetDetails?.subId).toBe(subId);
+    expect(assetDetails?.totalSupply?.toNumber()).toBe(totalSupply);
   });
 
-  it('should throw an error if asset details are not found', async () => {
+  it('should return null if asset details are not found', async () => {
     using launched = await launchTestNode();
     const { provider } = launched;
 
-    await expectToThrowFuelError(() => provider.getAssetDetails(getRandomB256()), {
-      code: ErrorCode.ASSET_NOT_FOUND,
-    });
+    expect(await provider.getAssetDetails(getRandomB256())).toBeNull();
   });
 
   it('should ensure "maxFee" and "gasLimit" can be set on a multi-call', async () => {

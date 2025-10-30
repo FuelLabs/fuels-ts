@@ -5,7 +5,7 @@ import { arrayify, concat } from '@fuel-ts/utils';
 import type { BytesLike } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
 
-interface AssembleTransferToContractParams {
+export interface AssembleTransferToContractParams {
   contractId: string;
   assetId: BytesLike;
   amount: BN;

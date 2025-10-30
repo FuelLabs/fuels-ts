@@ -1,4 +1,4 @@
-import { BigNumberCoder, Coder, NumberCoder } from '@fuel-ts/abi-coder';
+import { BigNumberCoder, Coder, NumberCoder, WORD_SIZE } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
@@ -10,6 +10,7 @@ export enum PolicyType {
   Maturity = 4,
   MaxFee = 8,
   Expiration = 16,
+  Owner = 32,
 }
 
 export type Policy =
@@ -17,7 +18,8 @@ export type Policy =
   | PolicyWitnessLimit
   | PolicyMaturity
   | PolicyMaxFee
-  | PolicyExpiration;
+  | PolicyExpiration
+  | PolicyOwner;
 
 export type PolicyTip = {
   type: PolicyType.Tip;
@@ -44,6 +46,11 @@ export type PolicyMaxFee = {
   data: BN;
 };
 
+export type PolicyOwner = {
+  type: PolicyType.Owner;
+  data: BN;
+};
+
 export const sortPolicies = (policies: Policy[]): Policy[] =>
   policies.sort((a, b) => a.type - b.type);
 
@@ -61,6 +68,16 @@ function validateDuplicatedPolicies(policies: Policy[]): void {
   });
 }
 
+export function getPolicyTypesArray(policyTypes: number): number[] {
+  const out: number[] = [];
+  let m = policyTypes >>> 0;
+  while (m !== 0) {
+    const low = m & -m;
+    out.push(low);
+    m &= m - 1;
+  }
+  return out;
+}
 export class PoliciesCoder extends Coder<Policy[], Policy[]> {
   constructor() {
     super('Policies', 'array Policy', 0);
@@ -84,6 +101,9 @@ export class PoliciesCoder extends Coder<Policy[], Policy[]> {
         case PolicyType.Expiration:
           parts.push(new NumberCoder('u32', { padToWordSize: true }).encode(data));
           break;
+        case PolicyType.Owner:
+          parts.push(new BigNumberCoder('u64').encode(data));
+          break;
 
         default: {
           throw new FuelError(ErrorCode.INVALID_POLICY_TYPE, `Invalid policy type: ${type}`);
@@ -97,41 +117,67 @@ export class PoliciesCoder extends Coder<Policy[], Policy[]> {
   decode(data: Uint8Array, offset: number, policyTypes: number): [Policy[], number] {
     let o = offset;
     const policies: Policy[] = [];
+    const policyTypesArray = getPolicyTypesArray(policyTypes);
 
-    if (policyTypes & PolicyType.Tip) {
-      const [tip, nextOffset] = new BigNumberCoder('u64').decode(data, o);
-      o = nextOffset;
-      policies.push({ type: PolicyType.Tip, data: tip });
+    for (const policyType of policyTypesArray) {
+      switch (policyType) {
+        case PolicyType.Tip: {
+          const [tip, nextOffset] = new BigNumberCoder('u64').decode(data, o);
+          o = nextOffset;
+          policies.push({ type: PolicyType.Tip, data: tip });
+          break;
+        }
+        case PolicyType.WitnessLimit: {
+          const [witnessLimit, nextOffset] = new BigNumberCoder('u64').decode(data, o);
+          o = nextOffset;
+          policies.push({ type: PolicyType.WitnessLimit, data: witnessLimit });
+          break;
+        }
+        case PolicyType.Maturity: {
+          const [maturity, nextOffset] = new NumberCoder('u32', { padToWordSize: true }).decode(
+            data,
+            o
+          );
+          o = nextOffset;
+          policies.push({ type: PolicyType.Maturity, data: maturity });
+          break;
+        }
+        case PolicyType.MaxFee: {
+          const [maxFee, nextOffset] = new BigNumberCoder('u64').decode(data, o);
+          o = nextOffset;
+          policies.push({ type: PolicyType.MaxFee, data: maxFee });
+          break;
+        }
+        case PolicyType.Expiration: {
+          const [expiration, nextOffset] = new NumberCoder('u32', { padToWordSize: true }).decode(
+            data,
+            o
+          );
+          o = nextOffset;
+          policies.push({ type: PolicyType.Expiration, data: expiration });
+          break;
+        }
+        case PolicyType.Owner: {
+          const [owner, nextOffset] = new BigNumberCoder('u64').decode(data, o);
+          o = nextOffset;
+          policies.push({ type: PolicyType.Owner, data: owner });
+          break;
+        }
+        default:
+          // Unknown policy types will be handled after the loop
+          break;
+      }
     }
 
-    if (policyTypes & PolicyType.WitnessLimit) {
-      const [witnessLimit, nextOffset] = new BigNumberCoder('u64').decode(data, o);
-      o = nextOffset;
-      policies.push({ type: PolicyType.WitnessLimit, data: witnessLimit });
-    }
-
-    if (policyTypes & PolicyType.Maturity) {
-      const [maturity, nextOffset] = new NumberCoder('u32', { padToWordSize: true }).decode(
-        data,
-        o
+    // If the policy types are greater than the maximum policy type, we need to skip the remaining bits
+    // this allows for backwards compatibility with newer versions of the policy types.
+    const leftPolicyTypes = policyTypesArray.length - policies.length;
+    if (leftPolicyTypes > 0) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `${leftPolicyTypes} unknown policy types found in the transaction, please update fuels to the latest version`
       );
-      o = nextOffset;
-      policies.push({ type: PolicyType.Maturity, data: maturity });
-    }
-
-    if (policyTypes & PolicyType.MaxFee) {
-      const [maxFee, nextOffset] = new BigNumberCoder('u64').decode(data, o);
-      o = nextOffset;
-      policies.push({ type: PolicyType.MaxFee, data: maxFee });
-    }
-
-    if (policyTypes & PolicyType.Expiration) {
-      const [expiration, nextOffset] = new NumberCoder('u32', { padToWordSize: true }).decode(
-        data,
-        o
-      );
-      o = nextOffset;
-      policies.push({ type: PolicyType.Expiration, data: expiration });
+      o += leftPolicyTypes * WORD_SIZE;
     }
 
     return [policies, o];

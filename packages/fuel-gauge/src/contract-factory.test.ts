@@ -1,7 +1,7 @@
 import type { Account, TransactionResult } from '@fuel-ts/account';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import { BN, bn, toHex, Interface, ContractFactory, arrayify, concat } from 'fuels';
+import { BN, bn, toHex, Interface, ContractFactory, arrayify, concat, ZeroBytes32 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
@@ -409,6 +409,32 @@ describe('Contract Factory', () => {
     const call = await contract.functions.echo_u8().call();
     const { value } = await call.waitForResult();
     expect(value).toBe(10);
+  });
+
+  it('should return the same contract ID using deploy and createTransactionRequest', async () => {
+    using launched = await launchTestNode();
+    const [wallet] = launched.wallets;
+
+    const factory = new ConfigurableContractFactory(wallet);
+
+    const configurableConstants = {
+      U8: 1,
+      U16: 2,
+      U32: 3,
+      U64: 4,
+    };
+
+    const salt = ZeroBytes32;
+
+    const { contractId } = factory.createTransactionRequest({ configurableConstants, salt });
+    const deploy = await ConfigurableContractFactory.deploy(wallet, {
+      configurableConstants,
+      salt,
+    });
+
+    const { contract } = await deploy.waitForResult();
+
+    expect(contract.id.b256Address).to.eq(contractId);
   });
 
   it('deploys a large contract via deploy entrypoint', async () => {
