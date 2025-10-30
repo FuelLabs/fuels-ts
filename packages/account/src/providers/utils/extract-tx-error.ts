@@ -223,8 +223,13 @@ export const extractTxError = (params: IExtractTxError): FuelError => {
     return assemblePanicError(statusReason, metadata);
   }
   const decodedLogs = logs.filter((l: unknown) => {
-    const log = l as unknown as { __decoded: boolean };
-    return !(typeof log === 'object' && '__decoded' in log && log.__decoded === false);
+    const log = l as unknown;
+    return !(
+      log !== null &&
+      typeof log === 'object' &&
+      '__decoded' in log &&
+      (log as { __decoded: boolean }).__decoded === false
+    );
   });
   return assembleRevertError(receipts, decodedLogs, metadata, statusReason, abis);
 };
