@@ -85,6 +85,7 @@ interface GasCosts {
   mul: number;
   muli: number;
   mldv: number;
+  niop: number | undefined;
   noop: number;
   not: number;
   or: number;

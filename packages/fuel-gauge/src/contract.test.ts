@@ -1107,18 +1107,19 @@ describe('Contract', () => {
     using contract = await setupTestContract();
 
     contract.account = Wallet.generate({ provider: contract.provider });
+    const baseAssetId = await contract.provider.getBaseAssetId();
 
     await expectToThrowFuelError(
       async () =>
         contract.functions
           .return_context_amount()
           .callParams({
-            forward: [100, await contract.provider.getBaseAssetId()],
+            forward: [100, baseAssetId],
           })
           .simulate(),
       new FuelError(
         ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-        `Insufficient funds or too many small value coins. Consider combining UTXOs.`
+        `Insufficient funds or too many small value coins. Consider combining UTXOs.\nFor the following asset ID: '${baseAssetId}'.`
       )
     );
   });
@@ -1303,18 +1304,16 @@ describe('Contract', () => {
 
     const assetDetails = await provider.getAssetDetails(mintedAssets[0].assetId);
 
-    expect(assetDetails.contractId).toBe(contractId);
-    expect(assetDetails.subId).toBe(subId);
-    expect(assetDetails.totalSupply.toNumber()).toBe(totalSupply);
+    expect(assetDetails?.contractId).toBe(contractId);
+    expect(assetDetails?.subId).toBe(subId);
+    expect(assetDetails?.totalSupply?.toNumber()).toBe(totalSupply);
   });
 
-  it('should throw an error if asset details are not found', async () => {
+  it('should return null if asset details are not found', async () => {
     using launched = await launchTestNode();
     const { provider } = launched;
 
-    await expectToThrowFuelError(() => provider.getAssetDetails(getRandomB256()), {
-      code: ErrorCode.ASSET_NOT_FOUND,
-    });
+    expect(await provider.getAssetDetails(getRandomB256())).toBeNull();
   });
 
   it('should ensure "maxFee" and "gasLimit" can be set on a multi-call', async () => {

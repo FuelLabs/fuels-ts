@@ -9,9 +9,9 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-  VERCEL_TS_DOCS_PROJECT_ID: 'prj_iBhTlkv2hj2E6BiA3GeacxgNHIEL'
-  VERCEL_TS_DOCS_API_PROJECT_ID: 'prj_hBydWalwFfqTPkpKTIy82abixInS'
-  VERCEL_TS_TEMPLATE_PROJECT_ID: 'prj_syuKtl2KTIU4OvO2mRccdbIt55BN'
+  VERCEL_TS_DOCS_PROJECT_ID: "prj_iBhTlkv2hj2E6BiA3GeacxgNHIEL"
+  VERCEL_TS_DOCS_API_PROJECT_ID: "prj_hBydWalwFfqTPkpKTIy82abixInS"
+  VERCEL_TS_TEMPLATE_PROJECT_ID: "prj_syuKtl2KTIU4OvO2mRccdbIt55BN"
 
 jobs:
   publish-to-vercel:
@@ -25,7 +25,7 @@ jobs:
 
       - name: CI Setup
         uses: ./.github/actions/ci-setup
-      
+
       - name: Install Vercel
         run: pnpm install --global vercel@latest
 
@@ -74,4 +74,4 @@ jobs:
         uses: actions/github-script@v3
         with:
           script: |
-              core.setFailed('One of the Vercel deployments failed')
+            core.setFailed('One of the Vercel deployments failed')

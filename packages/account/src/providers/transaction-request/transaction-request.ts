@@ -78,6 +78,8 @@ export interface BaseTransactionRequestLike {
   maturity?: number;
   /** The block number after which the transaction is no longer valid. */
   expiration?: number;
+  /** The index of the owner input */
+  ownerInputIndex?: number;
   /** The maximum fee payable by this transaction using BASE_ASSET. */
   maxFee?: BigNumberish;
   /** The maximum amount of witness data allowed for the transaction */
@@ -124,6 +126,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   maturity?: number;
   /** The block number after which the transaction is no longer valid. */
   expiration?: number;
+  /** The index of the owner input */
+  ownerInputIndex?: number;
   /** The maximum fee payable by this transaction using BASE_ASSET. */
   maxFee: BN;
   /** The maximum amount of witness data allowed for the transaction */
@@ -149,6 +153,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     tip,
     maturity,
     expiration,
+    ownerInputIndex,
     maxFee,
     witnessLimit,
     inputs,
@@ -160,6 +165,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     this.maturity = maturity && maturity > 0 ? maturity : undefined;
     this.expiration = expiration && expiration > 0 ? expiration : undefined;
     this.witnessLimit = isDefined(witnessLimit) ? bn(witnessLimit) : undefined;
+    this.ownerInputIndex = ownerInputIndex ?? undefined;
     this.maxFee = bn(maxFee);
     this.inputs = inputs ?? [];
     this.outputs = outputs ?? [];
@@ -192,6 +198,11 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     if (expiration && expiration > 0) {
       policyTypes += PolicyType.Expiration;
       policies.push({ data: expiration, type: PolicyType.Expiration });
+    }
+
+    if (isDefined(req.ownerInputIndex)) {
+      policyTypes += PolicyType.Owner;
+      policies.push({ data: bn(req.ownerInputIndex), type: PolicyType.Owner });
     }
 
     return {

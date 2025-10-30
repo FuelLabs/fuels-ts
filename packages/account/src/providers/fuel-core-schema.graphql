@@ -473,6 +473,7 @@ type GasCosts {
   mul: U64!
   muli: U64!
   mldv: U64!
+  niop: U64
   noop: U64!
   not: U64!
   or: U64!
@@ -1030,7 +1031,7 @@ type Query {
     ID of the Asset
     """
     id: AssetId!
-  ): AssetInfoDetails!
+  ): AssetInfoDetails
 
   """
   Read register value by index.
@@ -1370,7 +1371,7 @@ type Receipt {
   Set in the case of a Panic receipt to indicate a missing contract input id
   """
   contractId: ContractId
-  subId: Bytes32
+  subId: SubId
 }
 
 enum ReceiptType {
@@ -1527,6 +1528,7 @@ type Subscription {
     """
     includePreconfirmation: Boolean
   ): TransactionStatus!
+  alpha__preconfirmations: TransactionStatus!
 
   """
   Submits transaction to the `TxPool` and await either success or failure.
@@ -1548,6 +1550,7 @@ type Subscription {
   ): TransactionStatus!
   contractStorageSlots(contractId: ContractId!): StorageSlot!
   contractStorageBalances(contractId: ContractId!): ContractBalance!
+  alpha__new_blocks: HexString!
 }
 
 type SuccessStatus {

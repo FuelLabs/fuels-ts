@@ -1,5 +1,7 @@
 import type { CoinTransactionRequestInput, MessageTransactionRequestInput } from 'fuels';
 import {
+  BaseTransactionRequest,
+  PolicyType,
   FuelError,
   hexlify,
   InputMessageCoder,
@@ -319,5 +321,48 @@ describe('Transaction', () => {
         assetId: await provider.getBaseAssetId(),
       })
     );
+  });
+
+  it('should send transaction with ownerInputIndex policy and retrieve from node', async () => {
+    using launched = await launchTestNode({
+      walletsConfig: {
+        count: 2,
+        amountPerCoin: 100_000,
+      },
+    });
+
+    const {
+      wallets: [sender, receiver],
+      provider,
+    } = launched;
+
+    // Create a transfer transaction
+    const request = await sender.createTransfer(receiver.address, 50_000);
+
+    // Set the ownerInputIndex to test the new policy
+    request.ownerInputIndex = 0;
+
+    // Verify that the ownerInputIndex was included in the policies
+    const { policies } = BaseTransactionRequest.getPolicyMeta(request);
+    const ownerPolicy = policies.find((policy) => policy.type === PolicyType.Owner);
+    expect(ownerPolicy).toBeDefined();
+    expect(ownerPolicy?.data.toNumber()).toBe(0);
+
+    // Send the transaction to fuel-core
+    const { waitForResult, id } = await sender.sendTransaction(request);
+    const { isStatusSuccess } = await waitForResult();
+
+    expect(isStatusSuccess).toBe(true);
+
+    const transactionFromNode = await provider.getTransaction(id);
+    const ownerPolicyTx = transactionFromNode?.policies?.find(
+      (policy) => policy.type === PolicyType.Owner
+    );
+    expect(ownerPolicyTx).toBeDefined();
+    expect(ownerPolicyTx?.data.toNumber()).toBe(0);
+
+    // Verify receiver received the coins
+    const balance = await receiver.getBalance();
+    expect(balance.toNumber()).toBeGreaterThanOrEqual(50_000);
   });
 });

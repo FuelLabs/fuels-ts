@@ -149,6 +149,10 @@ export default class ContractFactory<TContract extends Contract = Contract> {
       );
     }
 
+    if (deployOptions?.configurableConstants) {
+      this.setConfigurableConstants(deployOptions.configurableConstants);
+    }
+
     const bytecode = deployOptions?.bytecode || this.bytecode;
     const stateRoot = options.stateRoot || getContractStorageRoot(options.storageSlots);
     const contractId = getContractId(bytecode, options.salt, stateRoot);

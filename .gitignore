@@ -170,3 +170,4 @@ Forc.lock
 /playwright/.cache/
 
 FUELS_VERSION
+.aider*

@@ -2,7 +2,7 @@ import { Address } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
 import { bn, toNumber } from '@fuel-ts/math';
-import { TransactionType, UpgradePurposeTypeEnum } from '@fuel-ts/transactions';
+import { PolicyType, TransactionType, UpgradePurposeTypeEnum } from '@fuel-ts/transactions';
 import { concat, hexlify } from '@fuel-ts/utils';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 
@@ -13,6 +13,7 @@ import Provider from '../provider';
 
 import type { CoinTransactionRequestInput } from './input';
 import { ScriptTransactionRequest } from './script-transaction-request';
+import { BaseTransactionRequest } from './transaction-request';
 import type { TransactionRequestLike } from './types';
 import type { UpgradeTransactionRequest } from './upgrade-transaction-request';
 import type { UploadTransactionRequest } from './upload-transaction-request';
@@ -146,6 +147,165 @@ describe('TransactionRequest', () => {
     expect(txRequest.witnesses.length).toEqual(7);
     expect(signTxSpy).toHaveBeenCalledTimes(7);
     expect(createWitnessSpy).toHaveBeenCalledTimes(7);
+  });
+
+  describe('getPolicyMeta', () => {
+    it('should return MaxFee policy by default', () => {
+      const txRequest = new ScriptTransactionRequest({
+        maxFee: 1000,
+      });
+
+      const result = BaseTransactionRequest.getPolicyMeta(txRequest);
+
+      expect(result.policyTypes).toBe(PolicyType.MaxFee);
+      expect(result.policies).toHaveLength(1);
+      expect(result.policies[0]).toEqual({
+        type: PolicyType.MaxFee,
+        data: bn(1000),
+      });
+    });
+
+    it('should include Owner policy when ownerInputIndex is provided', () => {
+      const txRequest = new ScriptTransactionRequest({
+        maxFee: 1000,
+        ownerInputIndex: 5,
+      });
+
+      const result = BaseTransactionRequest.getPolicyMeta(txRequest);
+
+      expect(result.policyTypes).toBe(PolicyType.MaxFee + PolicyType.Owner);
+      expect(result.policies).toHaveLength(2);
+
+      const maxFeePolicy = result.policies.find((p) => p.type === PolicyType.MaxFee);
+      expect(maxFeePolicy?.data.toNumber()).toBe(1000);
+
+      const ownerPolicy = result.policies.find((p) => p.type === PolicyType.Owner);
+      expect(ownerPolicy?.data.toNumber()).toBe(5);
+    });
+
+    it('should not include Owner policy when ownerInputIndex is undefined', () => {
+      const txRequest = new ScriptTransactionRequest({
+        maxFee: 1000,
+        ownerInputIndex: undefined,
+      });
+
+      const result = BaseTransactionRequest.getPolicyMeta(txRequest);
+
+      expect(result.policyTypes).toBe(PolicyType.MaxFee);
+      expect(result.policies).toHaveLength(1);
+      expect(result.policies[0].type).not.toBe(PolicyType.Owner);
+    });
+
+    it('should include Owner policy with tip and other policies', () => {
+      const txRequest = new ScriptTransactionRequest({
+        maxFee: 2000,
+        tip: 100,
+        ownerInputIndex: 3,
+        maturity: 10,
+      });
+
+      const result = BaseTransactionRequest.getPolicyMeta(txRequest);
+
+      expect(result.policyTypes).toBe(
+        PolicyType.MaxFee + PolicyType.Tip + PolicyType.Maturity + PolicyType.Owner
+      );
+      expect(result.policies).toHaveLength(4);
+
+      const maxFeePolicy = result.policies.find((p) => p.type === PolicyType.MaxFee);
+      expect(maxFeePolicy?.data.toNumber()).toBe(2000);
+
+      const tipPolicy = result.policies.find((p) => p.type === PolicyType.Tip);
+      expect(tipPolicy?.data.toNumber()).toBe(100);
+
+      const maturityPolicy = result.policies.find((p) => p.type === PolicyType.Maturity);
+      expect(maturityPolicy?.data).toBe(10);
+
+      const ownerPolicy = result.policies.find((p) => p.type === PolicyType.Owner);
+      expect(ownerPolicy?.data.toNumber()).toBe(3);
+    });
+
+    it('should include Owner policy with all possible policies', () => {
+      const txRequest = new ScriptTransactionRequest({
+        maxFee: 2000,
+        tip: 100,
+        ownerInputIndex: 2,
+        maturity: 10,
+        expiration: 100,
+        witnessLimit: 500,
+      });
+
+      const result = BaseTransactionRequest.getPolicyMeta(txRequest);
+
+      expect(result.policyTypes).toBe(
+        PolicyType.MaxFee +
+          PolicyType.Tip +
+          PolicyType.Maturity +
+          PolicyType.Expiration +
+          PolicyType.WitnessLimit +
+          PolicyType.Owner
+      );
+      expect(result.policies).toHaveLength(6);
+
+      // Check that all policy types are present
+      const policyTypes = result.policies.map((p) => p.type);
+      expect(policyTypes).toContain(PolicyType.MaxFee);
+      expect(policyTypes).toContain(PolicyType.Tip);
+      expect(policyTypes).toContain(PolicyType.Maturity);
+      expect(policyTypes).toContain(PolicyType.Expiration);
+      expect(policyTypes).toContain(PolicyType.WitnessLimit);
+      expect(policyTypes).toContain(PolicyType.Owner);
+
+      // Check the values
+      const maxFeePolicy = result.policies.find((p) => p.type === PolicyType.MaxFee);
+      expect(maxFeePolicy?.data.toNumber()).toBe(2000);
+
+      const tipPolicy = result.policies.find((p) => p.type === PolicyType.Tip);
+      expect(tipPolicy?.data.toNumber()).toBe(100);
+
+      const maturityPolicy = result.policies.find((p) => p.type === PolicyType.Maturity);
+      expect(maturityPolicy?.data).toBe(10);
+
+      const expirationPolicy = result.policies.find((p) => p.type === PolicyType.Expiration);
+      expect(expirationPolicy?.data).toBe(100);
+
+      const witnessLimitPolicy = result.policies.find((p) => p.type === PolicyType.WitnessLimit);
+      expect(witnessLimitPolicy?.data.toNumber()).toBe(500);
+
+      const ownerPolicy = result.policies.find((p) => p.type === PolicyType.Owner);
+      expect(ownerPolicy?.data.toNumber()).toBe(2);
+    });
+
+    it('should handle ownerInputIndex with different numeric values', () => {
+      const testCases = [1, 10, 100, 255, 1000, 65535];
+
+      testCases.forEach((ownerInputIndex) => {
+        const txRequest = new ScriptTransactionRequest({
+          maxFee: 1000,
+          ownerInputIndex,
+        });
+
+        const result = BaseTransactionRequest.getPolicyMeta(txRequest);
+
+        const ownerPolicy = result.policies.find((p) => p.type === PolicyType.Owner);
+        expect(ownerPolicy).toBeDefined();
+        expect(ownerPolicy?.data.toNumber()).toBe(ownerInputIndex);
+      });
+    });
+
+    it('should serialize ownerInputIndex as BN in owner policy', () => {
+      const txRequest = new ScriptTransactionRequest({
+        maxFee: 1000,
+        ownerInputIndex: 999,
+      });
+
+      const result = BaseTransactionRequest.getPolicyMeta(txRequest);
+
+      const ownerPolicy = result.policies.find((p) => p.type === PolicyType.Owner);
+      expect(ownerPolicy).toBeDefined();
+      expect(ownerPolicy?.type).toBe(PolicyType.Owner);
+      expect(ownerPolicy?.data.toNumber()).toBe(999);
+      expect(ownerPolicy?.data.constructor.name).toBe('BN');
+    });
   });
 });
 

@@ -87,6 +87,7 @@
           "mul": 2,
           "muli": 2,
           "mldv": 3,
+          "niop": 2,
           "noop": 1,
           "not": 2,
           "or": 1,

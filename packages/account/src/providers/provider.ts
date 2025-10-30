@@ -1058,7 +1058,7 @@ export default class Provider {
    * @param assetId - The unique identifier of the asset.
    * @returns A promise that resolves to an object containing the asset details.
    */
-  async getAssetDetails(assetId: string): Promise<GetAssetDetailsResponse> {
+  async getAssetDetails(assetId: string): Promise<GetAssetDetailsResponse | null> {
     const { assetMetadata } = await this.getNodeFeatures();
 
     if (!assetMetadata) {
@@ -1070,11 +1070,15 @@ export default class Provider {
 
     const { assetDetails } = await this.operations.getAssetDetails({ assetId });
 
-    const { contractId, subId, totalSupply } = assetDetails;
+    if (!assetDetails) {
+      return null;
+    }
+
+    const { contractId, subId, totalSupply } = assetDetails ?? {};
 
     return {
-      subId,
-      contractId,
+      subId: subId ?? '',
+      contractId: contractId ?? '',
       totalSupply: bn(totalSupply),
     };
   }

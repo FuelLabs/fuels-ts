@@ -23,3 +23,7 @@ export {
   getBytecodeConfigurableOffset,
   getBytecodeDataOffset,
 } from './utils/predicate-script-loader-instructions';
+export {
+  type AssembleTransferToContractParams,
+  assembleTransferToContractScript,
+} from './utils/formatTransferToContractScriptData';

@@ -21,6 +21,7 @@ describe('Predicate', () => {
       } = launched;
 
       const receiver = Wallet.generate({ provider });
+      const baseAssetId = await provider.getBaseAssetId();
 
       const initialReceiverBalance = toNumber(await receiver.getBalance());
       const scriptInstance = new Script<BigNumberish[], BigNumberish>(
@@ -37,7 +38,7 @@ describe('Predicate', () => {
         () => scriptInstance.functions.main(scriptInput).call(),
         new FuelError(
           ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-          `Insufficient funds or too many small value coins. Consider combining UTXOs.`
+          `Insufficient funds or too many small value coins. Consider combining UTXOs.\nFor the following asset ID: '${baseAssetId}'.`
         )
       );
 

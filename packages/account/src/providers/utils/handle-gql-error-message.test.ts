@@ -20,7 +20,7 @@ describe('mapped error messages', () => {
 
     await expectToThrowFuelError(() => sender.transfer(recipient.address, 1_000_000, assetId), {
       code: ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-      message: `Insufficient funds or too many small value coins. Consider combining UTXOs.`,
+      message: `Insufficient funds or too many small value coins. Consider combining UTXOs.\nFor the following asset ID: '0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07'.`,
     });
   });
 
@@ -49,7 +49,7 @@ describe('mapped error messages', () => {
 
     await expectToThrowFuelError(assembleTx, {
       code: ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-      message: `Insufficient funds or too many small value coins. Consider combining UTXOs.`,
+      message: `Insufficient funds or too many small value coins. Consider combining UTXOs.\nFor the following asset ID: '0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07'.`,
     });
   });
 });

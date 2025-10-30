@@ -21,11 +21,17 @@ const gqlErrorMessage = {
 type GqlError = { message: string } | GraphQLError;
 
 const mapGqlErrorMessage = (error: GqlError): FuelError => {
-  if (gqlErrorMessage.NOT_ENOUGH_COINS_MAX_COINS.test(error.message)) {
+  if (
+    gqlErrorMessage.INSUFFICIENT_FUNDS.test(error.message) ||
+    gqlErrorMessage.MAX_COINS_REACHED.test(error.message)
+  ) {
+    const match = error.message.match(ASSET_ID_REGEX);
+    const assetId = match ? `0x${match[0]}` : null;
+    const suffix = assetId ? `\nFor the following asset ID: '${assetId}'.` : '';
     return new FuelError(
       ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-      `Insufficient funds or too many small value coins. Consider combining UTXOs.`,
-      {},
+      `Insufficient funds or too many small value coins. Consider combining UTXOs.${suffix}`,
+      { assetId },
       error
     );
   }

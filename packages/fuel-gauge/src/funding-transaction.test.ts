@@ -230,6 +230,7 @@ describe('Funding Transactions', () => {
     const splitIn = 254;
     const sender = Wallet.generate({ provider });
     const receiver = Wallet.generate({ provider });
+    const baseAssetId = await provider.getBaseAssetId();
 
     /**
      * Splitting funds in 254 UTXOs to result in the transaction become more expensive
@@ -239,14 +240,14 @@ describe('Funding Transactions', () => {
       account: sender,
       totalAmount: 1524,
       splitIn,
-      baseAssetId: await provider.getBaseAssetId(),
+      baseAssetId,
       mainWallet: funded,
     });
 
     const request = new ScriptTransactionRequest();
 
     const amountToTransfer = 1522;
-    request.addCoinOutput(receiver.address, amountToTransfer, await provider.getBaseAssetId());
+    request.addCoinOutput(receiver.address, amountToTransfer, baseAssetId);
 
     const txCost = await sender.getTransactionCost(request);
 
@@ -265,7 +266,7 @@ describe('Funding Transactions', () => {
       () => sender.fund(request, txCost),
       new FuelError(
         FuelError.CODES.INSUFFICIENT_FUNDS_OR_MAX_COINS,
-        `Insufficient funds or too many small value coins. Consider combining UTXOs.`
+        `Insufficient funds or too many small value coins. Consider combining UTXOs.\nFor the following asset ID: '${baseAssetId}'.`
       )
     );
 
