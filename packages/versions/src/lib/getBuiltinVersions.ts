@@ -4,6 +4,6 @@ export function getBuiltinVersions(): Versions {
   return {
     FUEL_CORE: '0.47.1',
     FORC: '0.68.7',
-    FUELS: '0.101.3',
+    FUELS: '0.102.0',
   };
 }
