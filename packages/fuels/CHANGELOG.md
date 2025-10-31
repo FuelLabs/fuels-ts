@@ -1,5 +1,34 @@
 # Change Log
 
+## 0.102.0
+
+### Minor Changes
+
+- f4be76c: chore!: upgrade `fuel-core` to `0.44.0`
+
+### Patch Changes
+
+- Updated dependencies [25bb824]
+- Updated dependencies [f4be76c]
+- Updated dependencies [e0e4422]
+- Updated dependencies [215f9f2]
+- Updated dependencies [c9e0c5a]
+  - @fuel-ts/contract@0.102.0
+  - @fuel-ts/account@0.102.0
+  - @fuel-ts/program@0.102.0
+  - @fuel-ts/utils@0.102.0
+  - @fuel-ts/versions@0.102.0
+  - @fuel-ts/transactions@0.102.0
+  - @fuel-ts/recipes@0.102.0
+  - @fuel-ts/script@0.102.0
+  - @fuel-ts/abi-coder@0.102.0
+  - @fuel-ts/abi-typegen@0.102.0
+  - @fuel-ts/address@0.102.0
+  - @fuel-ts/crypto@0.102.0
+  - @fuel-ts/hasher@0.102.0
+  - @fuel-ts/errors@0.102.0
+  - @fuel-ts/math@0.102.0
+
 ## 0.101.3
 
 ### Patch Changes
