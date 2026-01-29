@@ -9,4 +9,4 @@ export const CHAIN_IDS = {
     testnet: 0,
     mainnet: 9889,
   },
-};
+} as const;
