@@ -1,5 +1,26 @@
 # Change Log
 
+## 0.103.0
+
+### Patch Changes
+
+- Updated dependencies [014a606]
+  - @fuel-ts/account@0.103.0
+  - @fuel-ts/contract@0.103.0
+  - @fuel-ts/program@0.103.0
+  - @fuel-ts/recipes@0.103.0
+  - @fuel-ts/script@0.103.0
+  - @fuel-ts/abi-coder@0.103.0
+  - @fuel-ts/abi-typegen@0.103.0
+  - @fuel-ts/address@0.103.0
+  - @fuel-ts/crypto@0.103.0
+  - @fuel-ts/errors@0.103.0
+  - @fuel-ts/hasher@0.103.0
+  - @fuel-ts/math@0.103.0
+  - @fuel-ts/transactions@0.103.0
+  - @fuel-ts/utils@0.103.0
+  - @fuel-ts/versions@0.103.0
+
 ## 0.102.0
 
 ### Minor Changes
