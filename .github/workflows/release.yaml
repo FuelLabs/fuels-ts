@@ -13,6 +13,7 @@ env:
   VERCEL_TS_DOCS_PROJECT_ID: "prj_iBhTlkv2hj2E6BiA3GeacxgNHIEL"
   VERCEL_TS_DOCS_API_PROJECT_ID: "prj_hBydWalwFfqTPkpKTIy82abixInS"
   VERCEL_TS_TEMPLATE_PROJECT_ID: "prj_syuKtl2KTIU4OvO2mRccdbIt55BN"
+  NPM_CONFIG_PROVENANCE: "true"
 
 permissions:
   id-token: write
@@ -87,6 +88,7 @@ jobs:
           githubTagName: ${{ env.RELEASE_VERSION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_CONFIG_PROVENANCE: "true"
 
       - name: Prettify changelog
         run: pnpm changeset:update-changelog
