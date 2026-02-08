@@ -104,7 +104,7 @@ export type UserFuelsConfig = {
    */
   snapshotDir?: string;
 
-  /** Static of dyanmic deploy configs to be used when deploying contracts */
+  /** Static of dynamic deploy configs to be used when deploying contracts */
   deployConfig?: DeployContractOptions | OptionsFunction;
 
   /** If set to false, you will need to spin up a Fuel core node by yourself */
@@ -123,7 +123,7 @@ export type UserFuelsConfig = {
   fuelCorePort?: number;
 
   /**
-   * Aditional forc build flags to be used when compiling contracts.
+   * Additional forc build flags to be used when compiling contracts.
    * Default: []
    * Example:
    *  forcBuildFlags: ['--release'];
