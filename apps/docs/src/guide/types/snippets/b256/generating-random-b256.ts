@@ -1,9 +1,13 @@
 // #region full
-import { getRandomB256 } from 'fuels';
+import { Address } from 'fuels';
 
-// b256 is a hexlified string representing a 256-bit value
-const b256: string = getRandomB256();
+// B256 is a 256-bit (32-byte) value represented as a hex string
+// Example: A real Fuel wallet address
+const walletAddress: string = '0xbebd3baab326f895289ecbd4210cf886ce41952316441ae4cac35f00f0e882a6';
 
-console.log('b256', b256);
-// 0xbebd3baab326f895289ecbd4210cf886ce41952316441ae4cac35f00f0e882a6
+// You can create an Address instance from a B256
+const address = new Address(walletAddress);
+
+console.log('B256 address:', walletAddress);
+console.log('Address instance:', address.toB256());
 // #endregion full

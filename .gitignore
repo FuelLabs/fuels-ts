@@ -171,3 +171,7 @@ Forc.lock
 
 FUELS_VERSION
 .aider*
+# Internal tooling
+.claude/
+PUSH-INSTRUCTIONS.md
+*.apex.md
