@@ -427,6 +427,10 @@ export default defineConfig({
                 text: 'Asset API',
                 link: '/guide/utilities/asset-api',
               },
+              {
+                text: 'Merkle Tree',
+                link: '/guide/utilities/merkle-tree',
+              },
             ],
           },
           {
