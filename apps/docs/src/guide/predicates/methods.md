@@ -26,6 +26,14 @@ You may want to use this method when using a predicate in an existing transactio
 
 ## Transactions
 
+### `toNewInstance`
+
+The `toNewInstance` method creates a new `Predicate` instance from an existing one, preserving the original bytecode, ABI, and provider. You can optionally override the `data` (predicate arguments) and/or `configurableConstants`. If no overrides are provided, the new instance will be a copy with the same data and configurable constants.
+
+This is useful when you need multiple predicate instances that share the same bytecode and provider but differ in their input data or configurable constants—for example, when working with different users or configurations.
+
+<<< @./snippets/methods/to-new-instance.ts#to-new-instance{ts:line-numbers}
+
 ### `setData`
 
 The `setData` method can be used to update the predicate data (i.e., predicate arguments) after the predicate has already been instantiated. Since the predicate data is initially set during instantiation, `setData` provides a way to modify it afterward if needed.
