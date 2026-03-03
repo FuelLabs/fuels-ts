@@ -1,20 +1,31 @@
 # Deploying Scripts
 
-In order to optimize the cost of your recurring script executions, we recommend first deploying your script. This can be done using the [Fuels CLI](../fuels-cli/index.md) and running the [deploy command](../fuels-cli/commands.md#fuels-deploy).
+In order to optimize the cost of your recurring script executions, we recommend first deploying your script. Deploying stores the script bytecode on chain as a blob, and the SDK produces bytecode that loads the blob on demand. This far reduces the repeat execution cost of the script.
 
-By deploying the script, its bytecode is stored on chain as a blob. The SDK will then produce bytecode that can load the blob on demand to execute the original script. This far reduces the repeat execution cost of the script.
+There are two ways to deploy a script:
 
-## How to Deploy a Script
+1. **CLI deployment** — Using the [Fuels CLI](../fuels-cli/index.md) via [`fuels deploy`](../fuels-cli/commands.md#fuels-deploy)
+2. **Dynamic deployment** — Programmatically using the `deploy` method on a script instance
 
-To deploy a script, we can use the [Fuels CLI](../fuels-cli/index.md) and execute the [deploy command](../fuels-cli/commands.md#fuels-deploy).
+## The Sway Script
 
-This will perform the following actions:
+Here's an example script written in Sway:
+
+<<< @/../../sway/script-sum/src/main.sw#script-with-configurable-contants-1{rust:line-numbers}
+
+## CLI Deployment
+
+The simplest way to deploy a script is via the [Fuels CLI](../fuels-cli/index.md) using the [`fuels deploy`](../fuels-cli/commands.md#fuels-deploy) command. This will:
 
 1. Compile the script using your `forc` version
 1. Deploy the built script binary to the chain as a blob
 1. Generate a script that loads the blob that can be used to execute the script
 1. Generate types for both the script and the loader that you can use in your application
 
-We can then utilize the above generated types like so:
+## Dynamic Deployment
+
+You can also deploy a script programmatically using the `deploy` method directly on a script instance. This is useful for runtime deployments or when you need more control over the process.
+
+The following example demonstrates deploying the script dynamically and then using the generated loader types:
 
 <<< @./snippets/deploying-scripts.ts#deploying-scripts{ts:line-numbers}
