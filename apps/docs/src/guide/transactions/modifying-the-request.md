@@ -72,6 +72,30 @@ Predicates are used to define the conditions under which a transaction can be ex
 
 > **Note**: For more information on predicates, including information on configuring them, funding them and using them to unlock funds, please refer to the [predicate guide](../predicates/index.md).
 
+### Estimating Gas Price
+
+The `estimateGasPrice` method on the `Provider` estimates what the gas price will be in the near future based on a block horizon (the number of blocks to look ahead). This is useful when manually assembling transactions to ensure you set an appropriate gas price:
+
+<<< @./snippets/transaction-request/estimate-predicates-gas.ts#estimate-gas-price{ts:line-numbers}
+
+The `blockHorizon` parameter determines how far ahead the estimation looks. A larger value gives a more conservative (higher) estimate, while a smaller value reflects more immediate pricing.
+
+### Estimating Predicates Gas Usage
+
+When a transaction includes predicate inputs, the gas used by each predicate must be estimated before the transaction can be submitted. The `estimatePredicates` method evaluates all predicate inputs in the transaction and populates their `predicateGasUsed` fields:
+
+<<< @./snippets/transaction-request/estimate-predicates-gas.ts#estimate-predicates{ts:line-numbers}
+
+> **Note**: If no predicate inputs are present (or all already have non-zero `predicateGasUsed` values), this method returns the request unchanged.
+
+### Estimating Predicates and Gas Price Together
+
+The `estimatePredicatesAndGasPrice` method combines both operations into a single call, reducing the number of network round-trips. This is the recommended approach when you need both estimates:
+
+<<< @./snippets/transaction-request/estimate-predicates-gas.ts#estimate-predicates-and-gas-price{ts:line-numbers}
+
+> **Note**: When using `assembleTx`, predicate estimation and gas pricing are handled automatically. These lower-level methods are only needed when you are manually assembling a transaction request. See the [AssembleTx guide](./assemble-tx.md) for the recommended high-level approach.
+
 ### Adding a Witness and Signing a Transaction Request
 
 The SDK provides a way of either modifying the witnesses for a transaction request directly, or by passing accounts. This will then sign the transaction request with the account's private key. Below will detail how to add a witness to a transaction request:
