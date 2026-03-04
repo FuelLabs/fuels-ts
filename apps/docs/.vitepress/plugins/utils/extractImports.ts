@@ -102,7 +102,7 @@ export const validateSnippetContent = (snippetContent: string[], filepath: strin
       `Found malformed "#import" statements in code snippet.\nCorrect format: "// #import { ExampleImport };"\n\nPlease check "${filepath}".\n\n${invalidLines}`
     );
   }
-}
+};
 
 /**
  * Collects import statements from the given lines of code and extracts the imported items and their sources.

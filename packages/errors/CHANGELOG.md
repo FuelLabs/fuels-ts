@@ -1,5 +1,282 @@
 # @fuel-ts/errors
 
+## 0.103.0
+
+### Patch Changes
+
+- @fuel-ts/versions@0.103.0
+
+## 0.102.0
+
+### Patch Changes
+
+- Updated dependencies [f4be76c]
+- Updated dependencies [c9e0c5a]
+  - @fuel-ts/versions@0.102.0
+
+## 0.101.3
+
+### Patch Changes
+
+- 4e018a5: chore: handling for malformed response body
+- c8b6d0e: feat: added auto-consolidation of coins
+  - @fuel-ts/versions@0.101.3
+
+## 0.101.2
+
+### Patch Changes
+
+- 8c19d93: chore: support Node 24 - depreciate Node 18
+- Updated dependencies [8c19d93]
+- Updated dependencies [bfb62ad]
+- Updated dependencies [0d71065]
+  - @fuel-ts/versions@0.101.2
+
+## 0.101.1
+
+### Patch Changes
+
+- @fuel-ts/versions@0.101.1
+
+## 0.101.0
+
+### Patch Changes
+
+- @fuel-ts/versions@0.101.0
+
+## 0.100.6
+
+### Patch Changes
+
+- @fuel-ts/versions@0.100.6
+
+## 0.100.5
+
+### Patch Changes
+
+- @fuel-ts/versions@0.100.5
+
+## 0.100.4
+
+### Patch Changes
+
+- efcce41: feat: integrate with new `AssembleTx` GQL end-point
+- 5a57b97: chore: support RPC consistency mechanism
+- f534210: feat: add method for base asset coins consolidation
+- Updated dependencies [dbed315]
+  - @fuel-ts/versions@0.100.4
+
+## 0.100.3
+
+### Patch Changes
+
+- @fuel-ts/versions@0.100.3
+
+## 0.100.2
+
+### Patch Changes
+
+- e909d54: fix: adjust feature detection for balances
+  - @fuel-ts/versions@0.100.2
+
+## 0.100.1
+
+### Patch Changes
+
+- @fuel-ts/versions@0.100.1
+
+## 0.100.0
+
+### Minor Changes
+
+- f41887f: chore!: upgrade `fuel-core` to `0.41.7`
+
+### Patch Changes
+
+- Updated dependencies [b42f056]
+- Updated dependencies [f41887f]
+- Updated dependencies [521292a]
+- Updated dependencies [ff97a6e]
+  - @fuel-ts/versions@0.100.0
+
+## 0.99.0
+
+### Patch Changes
+
+- b3bb765: fix: improve BN unsafe numbers error handling
+- Updated dependencies [ab56ded]
+- Updated dependencies [45cc32e]
+  - @fuel-ts/versions@0.99.0
+
+## 0.98.0
+
+### Patch Changes
+
+- 4ccc628: chore!: remove Bech32 address
+- 08a31d8: feat!: prevent implicit asset burn
+- 0b4c3ab: chore!: redistributed the `@fuel-ts/interfaces` package
+- Updated dependencies [12e801e]
+- Updated dependencies [04ca73e]
+  - @fuel-ts/versions@0.98.0
+
+## 0.97.2
+
+### Patch Changes
+
+- Updated dependencies [5ec254d]
+  - @fuel-ts/versions@0.97.2
+
+## 0.97.1
+
+### Patch Changes
+
+- 27e8808: chore: deprecate bech32 addresses
+- Updated dependencies [165c49c]
+  - @fuel-ts/versions@0.97.1
+
+## 0.97.0
+
+### Patch Changes
+
+- 9dba357: chore: upgrading `fuel-core` to `0.40.0`
+- Updated dependencies [9dba357]
+- Updated dependencies [4e057d5]
+- Updated dependencies [7c162de]
+  - @fuel-ts/versions@0.97.0
+
+## 0.96.1
+
+### Patch Changes
+
+- Updated dependencies [eb3b6c9]
+  - @fuel-ts/versions@0.96.1
+
+## 0.96.0
+
+### Patch Changes
+
+- @fuel-ts/versions@0.96.0
+
+## 0.95.0
+
+### Patch Changes
+
+- Updated dependencies [d4e839f]
+- Updated dependencies [95a9650]
+- Updated dependencies [735bb1c]
+  - @fuel-ts/versions@0.95.0
+
+## 0.94.9
+
+### Patch Changes
+
+- Updated dependencies [c2f0599]
+  - @fuel-ts/versions@0.94.9
+
+## 0.94.8
+
+### Patch Changes
+
+- @fuel-ts/versions@0.94.8
+
+## 0.94.7
+
+### Patch Changes
+
+- 80df900: chore: fix exported types
+- Updated dependencies [47b5cd3]
+- Updated dependencies [431990d]
+- Updated dependencies [20d2ac2]
+- Updated dependencies [80df900]
+- Updated dependencies [127ade0]
+  - @fuel-ts/versions@0.94.7
+
+## 0.94.6
+
+### Patch Changes
+
+- aef7282: feat: `provider.url` now returns auth url
+  - @fuel-ts/versions@0.94.6
+
+## 0.94.5
+
+### Patch Changes
+
+- Updated dependencies [942b56b]
+- Updated dependencies [cffa075]
+  - @fuel-ts/versions@0.94.5
+
+## 0.94.4
+
+### Patch Changes
+
+- a059ea1: feat: map 'not enough coins' error
+- 482bbf0: chore: removed redundant crypto functionality
+- Updated dependencies [b00fd02]
+  - @fuel-ts/versions@0.94.4
+
+## 0.94.3
+
+### Patch Changes
+
+- Updated dependencies [b67ded2]
+  - @fuel-ts/versions@0.94.3
+
+## 0.94.2
+
+### Patch Changes
+
+- Updated dependencies [ccd94fc]
+  - @fuel-ts/versions@0.94.2
+
+## 0.94.1
+
+### Patch Changes
+
+- @fuel-ts/versions@0.94.1
+
+## 0.94.0
+
+### Minor Changes
+
+- 03ac550: feat!: `fuel-core@0.32.1` and large contract deployments
+
+### Patch Changes
+
+- 0110fd8: chore: handle exceeding maximum inputs when funding a transaction
+- 1d2abd7: chore: add validation for TX max outputs exceeded
+- Updated dependencies [9309598]
+- Updated dependencies [29c556d]
+- Updated dependencies [4c653d0]
+- Updated dependencies [03ac550]
+  - @fuel-ts/versions@0.94.0
+
+## 0.93.0
+
+### Minor Changes
+
+- f3453b9: feat!: deploy contract validation
+
+### Patch Changes
+
+- Updated dependencies [99794e4]
+  - @fuel-ts/versions@0.93.0
+
+## 0.92.1
+
+### Patch Changes
+
+- @fuel-ts/versions@0.92.1
+
+## 0.92.0
+
+### Patch Changes
+
+- Updated dependencies [638eae3]
+- Updated dependencies [4a3c184]
+- Updated dependencies [44d51ee]
+  - @fuel-ts/versions@0.92.0
+
 ## 0.91.0
 
 ### Patch Changes

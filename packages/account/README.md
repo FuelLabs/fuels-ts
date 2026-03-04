@@ -6,13 +6,15 @@ This module contains the class to manage a private key and signing for a standar
 
 ## Table of contents
 
-- [Documentation](#documentation)
-- [Usage](#usage)
-  - [Installation](#installation)
-  - [Full SDK Installation](#full-sdk-installation)
-- [Contributing](#contributing)
-- [Changelog](#changelog)
-- [License](#license)
+- [`@fuel-ts/account`](#fuel-tsaccount)
+  - [Table of contents](#table-of-contents)
+  - [Documentation](#documentation)
+  - [Usage](#usage)
+    - [Installation](#installation)
+    - [Full SDK Installation](#full-sdk-installation)
+  - [Contributing](#contributing)
+  - [Changelog](#changelog)
+  - [License](#license)
 
 ## Documentation
 
@@ -36,28 +38,6 @@ Alternatively, we recommend you install the [complete SDK](https://github.com/Fu
 pnpm add fuels
 # or
 npm add fuels
-```
-
-## Test Utilities
-
-These test utilities are exported to assist in testing apps using Fuels.
-
-```ts
-import { bn } from "@fuel-ts/math";
-import {
-  seedTestWallet,
-  generateTestWallet,
-} from "@fuel-ts/account/test-utils";
-
-const provider = await Provider.create("http://127.0.0.1:4000/v1/graphql");
-
-// seeding
-const wallet = Wallet.fromPrivateKey("0x...", provider);
-const baseAssetId = provider.getBaseAssetId();
-seedTestWallet(wallet, [{ assetId: baseAssetId, amount: bn(100_000) }]);
-
-// generating
-const wallet = await generateTestWallet(provider, [[1_000, baseAssetId]]);
 ```
 
 ## Contributing

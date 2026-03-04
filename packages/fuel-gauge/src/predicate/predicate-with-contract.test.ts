@@ -1,27 +1,20 @@
-import { Contract, Wallet } from 'fuels';
-import { launchTestNode } from 'fuels/test-utils';
+import { Contract, ErrorCode, FuelError, Wallet } from 'fuels';
+import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
-import {
-  CallTestContractAbi__factory,
-  TokenContractAbi__factory,
-} from '../../test/typegen/contracts';
-import contractBytes from '../../test/typegen/contracts/CallTestContractAbi.hex';
-import tokenPoolBytes from '../../test/typegen/contracts/TokenContractAbi.hex';
-import {
-  PredicateMainArgsStructAbi__factory,
-  PredicateTrueAbi__factory,
-} from '../../test/typegen/predicates';
+import { CallTestContractFactory, TokenContractFactory } from '../../test/typegen/contracts';
+import { PredicateMainArgsStruct, PredicateTrue } from '../../test/typegen/predicates';
 
-import { fundPredicate } from './utils/predicate';
+import { fundAccount } from './utils/predicate';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Predicate', () => {
   describe('With Contract', () => {
     it('calls a predicate from a contract function', async () => {
       using launched = await launchTestNode({
-        contractsConfigs: [{ deployer: CallTestContractAbi__factory, bytecode: contractBytes }],
+        contractsConfigs: [{ factory: CallTestContractFactory }],
       });
 
       const {
@@ -31,18 +24,20 @@ describe('Predicate', () => {
       } = launched;
 
       const amountToPredicate = 300_000;
-      const predicate = PredicateTrueAbi__factory.createInstance(provider);
+      const predicate = new PredicateTrue({ provider });
 
       // Create a instance of the contract with the predicate as the caller Account
       const contractPredicate = new Contract(contract.id, contract.interface, predicate);
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundAccount(wallet, predicate, amountToPredicate);
 
-      const { value, transactionResult } = await contractPredicate.functions
+      const { waitForResult } = await contractPredicate.functions
         .return_context_amount()
         .callParams({
-          forward: [500, provider.getBaseAssetId()],
+          forward: [500, await provider.getBaseAssetId()],
         })
         .call();
+
+      const { value, transactionResult } = await waitForResult();
 
       expect(value.toString()).toEqual('500');
       expect(transactionResult.isStatusSuccess).toBeTruthy();
@@ -50,7 +45,7 @@ describe('Predicate', () => {
 
     it('calls a predicate and uses proceeds for a contract call', async () => {
       using launched = await launchTestNode({
-        contractsConfigs: [{ deployer: TokenContractAbi__factory, bytecode: tokenPoolBytes }],
+        contractsConfigs: [{ factory: TokenContractFactory }],
       });
 
       const {
@@ -61,42 +56,50 @@ describe('Predicate', () => {
 
       const receiver = Wallet.generate({ provider });
       const receiverInitialBalance = await receiver.getBalance();
+      const baseAssetId = await provider.getBaseAssetId();
 
       // calling the contract with the receiver account (no resources)
       contract.account = receiver;
-      await expect(contract.functions.mint_coins(200).call()).rejects.toThrow(
-        /not enough coins to fit the target/
+
+      await expectToThrowFuelError(
+        () => contract.functions.mint_coins(200).call(),
+        new FuelError(
+          ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
+          `Insufficient funds or too many small value coins. Consider combining UTXOs.\nFor the following asset ID: '${baseAssetId}'.`
+        )
       );
 
       // setup predicate
       const amountToPredicate = 1_000_000;
       const amountToReceiver = 200_000;
-      const predicate = PredicateMainArgsStructAbi__factory.createInstance(provider, [
-        {
-          has_account: true,
-          total_complete: 100,
-        },
-      ]);
+      const predicate = new PredicateMainArgsStruct({
+        provider,
+        data: [
+          {
+            has_account: true,
+            total_complete: 100,
+          },
+        ],
+      });
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundAccount(wallet, predicate, amountToPredicate);
 
       // executing predicate to transfer resources to receiver
       const tx = await predicate.transfer(
         receiver.address,
         amountToReceiver,
-        provider.getBaseAssetId()
+        await provider.getBaseAssetId()
       );
-      let { isStatusSuccess } = await tx.waitForResult();
+      const { isStatusSuccess } = await tx.waitForResult();
       expect(isStatusSuccess).toBeTruthy();
 
       const receiverFinalBalance = await receiver.getBalance();
       expect(receiverFinalBalance.gt(receiverInitialBalance)).toBeTruthy();
 
-      ({
-        transactionResult: { isStatusSuccess },
-      } = await contract.functions.mint_coins(200).call());
+      const call = await contract.functions.mint_coins(200).call();
+      const { transactionResult } = await call.waitForResult();
 
-      expect(isStatusSuccess).toBeTruthy();
+      expect(transactionResult.isStatusSuccess).toBeTruthy();
     });
   });
 });

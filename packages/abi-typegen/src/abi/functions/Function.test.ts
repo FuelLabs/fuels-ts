@@ -14,7 +14,7 @@ describe('Function.ts', () => {
     Method: `getDeclaration`
   */
   test('should properly get function declaration', () => {
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL, { transpile: true });
 
     const { types: rawAbiTypes, functions } = project.abiContents;
 
@@ -35,7 +35,9 @@ describe('Function.ts', () => {
     Inputs / Output
   */
   test('should compute i/o types for Vector', () => {
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.VECTOR_SIMPLE);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.VECTOR_SIMPLE, {
+      transpile: true,
+    });
 
     const { types: rawAbiTypes, functions } = project.abiContents;
 
@@ -51,7 +53,9 @@ describe('Function.ts', () => {
   });
 
   test('should build i/o types for Option', () => {
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.OPTION_SIMPLE);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.OPTION_SIMPLE, {
+      transpile: true,
+    });
 
     const { types: rawAbiTypes, functions } = project.abiContents;
 
@@ -63,6 +67,6 @@ describe('Function.ts', () => {
     expect(func.name).toEqual(rawAbiFunction.name);
     expect(func.attributes.inputs).toEqual('Option<BigNumberish>');
     expect(func.attributes.output).toEqual('Option<number>');
-    expect(func.attributes.prefixedInputs).toEqual('x: Option<BigNumberish>');
+    expect(func.attributes.prefixedInputs).toEqual('x?: Option<BigNumberish>');
   });
 });

@@ -3,19 +3,18 @@ import { bn } from '@fuel-ts/math';
 import { TransactionCoder } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
 
-import type {
-  GqlGetTransactionsByOwnerQueryVariables,
-  GqlPageInfo,
-  GqlReceiptFragment,
-} from '../__generated__/operations';
+import type { GqlGetTransactionsByOwnerQueryVariables } from '../__generated__/operations';
+import { TRANSACTIONS_PAGE_SIZE_LIMIT } from '../provider';
 import type Provider from '../provider';
+import type { TransactionReceiptJson, PageInfo } from '../provider';
 import type { TransactionRequest } from '../transaction-request';
 import type { TransactionResult } from '../transaction-response';
+import { deserializeReceipt } from '../utils/serialization';
+import { validatePaginationArgs } from '../utils/validate-pagination-args';
 
 import { assembleTransactionSummary } from './assemble-transaction-summary';
-import { processGqlReceipt } from './receipt';
-import type { AbiMap, TransactionSummary } from './types';
-
+import { getTotalFeeFromStatus } from './status';
+import type { AbiMap, GraphqlTransactionStatus, TransactionSummary } from './types';
 /** @hidden */
 export interface GetTransactionSummaryParams {
   id: string;
@@ -44,13 +43,13 @@ export async function getTransactionSummary<TTransactionType = void>(
     0
   );
 
-  let txReceipts: GqlReceiptFragment[] = [];
+  let txReceipts: TransactionReceiptJson[] = [];
 
   if (gqlTransaction?.status && 'receipts' in gqlTransaction.status) {
     txReceipts = gqlTransaction.status.receipts;
   }
 
-  const receipts = txReceipts.map(processGqlReceipt);
+  const receipts = txReceipts.map(deserializeReceipt);
 
   const {
     consensusParameters: {
@@ -58,10 +57,13 @@ export async function getTransactionSummary<TTransactionType = void>(
       txParameters: { maxInputs, maxGasPerTx },
       gasCosts,
     },
-  } = provider.getChain();
+  } = await provider.getChain();
 
-  const gasPrice = await provider.getLatestGasPrice();
-  const baseAssetId = provider.getBaseAssetId();
+  // If we have the total fee, we do not need to refetch the gas price
+  const totalFee = getTotalFeeFromStatus(gqlTransaction.status);
+  const gasPrice = totalFee ? bn(0) : await provider.getLatestGasPrice();
+
+  const baseAssetId = await provider.getBaseAssetId();
 
   const transactionInfo = assembleTransactionSummary<TTransactionType>({
     id: gqlTransaction.id,
@@ -80,7 +82,6 @@ export async function getTransactionSummary<TTransactionType = void>(
   });
 
   return {
-    gqlTransaction,
     ...transactionInfo,
   };
 }
@@ -99,16 +100,17 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
 
   const { receipts } = await provider.dryRun(transactionRequest);
 
-  const { gasPerByte, gasPriceFactor, gasCosts, maxGasPerTx } = provider.getGasConfig();
-  const maxInputs = provider.getChain().consensusParameters.txParameters.maxInputs;
+  const { gasPerByte, gasPriceFactor, gasCosts, maxGasPerTx } = await provider.getGasConfig();
+  const maxInputs = (await provider.getChain()).consensusParameters.txParameters.maxInputs;
 
   const transaction = transactionRequest.toTransaction();
   const transactionBytes = transactionRequest.toTransactionBytes();
 
   const gasPrice = await provider.getLatestGasPrice();
-  const baseAssetId = provider.getBaseAssetId();
+  const baseAssetId = await provider.getBaseAssetId();
 
   const transactionSummary = assembleTransactionSummary<TTransactionType>({
+    id: transactionRequest.getTransactionId(await provider.getChainId()),
     receipts,
     transaction,
     transactionBytes,
@@ -133,16 +135,31 @@ export interface GetTransactionsSummariesParams {
 
 export interface GetTransactionsSummariesReturns {
   transactions: TransactionResult[];
-  pageInfo: GqlPageInfo;
+  pageInfo: PageInfo;
 }
 
-/** @hidden */
+/**
+ * Gets transaction summaries for a given owner/address.
+ *
+ * @param params - The filters to apply to the query.
+ * @returns The transaction summaries.
+ */
 export async function getTransactionsSummaries(
   params: GetTransactionsSummariesParams
 ): Promise<GetTransactionsSummariesReturns> {
   const { filters, provider, abiMap } = params;
 
-  const { transactionsByOwner } = await provider.operations.getTransactionsByOwner(filters);
+  const { owner, ...inputArgs } = filters;
+
+  const validPaginationParams = validatePaginationArgs({
+    inputArgs,
+    paginationLimit: TRANSACTIONS_PAGE_SIZE_LIMIT,
+  });
+
+  const { transactionsByOwner } = await provider.operations.getTransactionsByOwner({
+    ...validPaginationParams,
+    owner,
+  });
 
   const { edges, pageInfo } = transactionsByOwner;
 
@@ -152,10 +169,10 @@ export async function getTransactionsSummaries(
       txParameters: { maxInputs, maxGasPerTx },
       gasCosts,
     },
-  } = provider.getChain();
+  } = await provider.getChain();
 
   const gasPrice = await provider.getLatestGasPrice();
-  const baseAssetId = provider.getBaseAssetId();
+  const baseAssetId = await provider.getBaseAssetId();
 
   const transactions = edges.map((edge) => {
     const { node: gqlTransaction } = edge;
@@ -164,20 +181,20 @@ export async function getTransactionsSummaries(
 
     const [decodedTransaction] = new TransactionCoder().decode(arrayify(rawPayload), 0);
 
-    let txReceipts: GqlReceiptFragment[] = [];
+    let txReceipts: TransactionReceiptJson[] = [];
 
     if (gqlTransaction?.status && 'receipts' in gqlTransaction.status) {
       txReceipts = gqlTransaction.status.receipts;
     }
 
-    const receipts = txReceipts.map(processGqlReceipt);
+    const receipts = txReceipts.map(deserializeReceipt);
 
     const transactionSummary = assembleTransactionSummary({
       id,
       receipts,
       transaction: decodedTransaction,
       transactionBytes: arrayify(rawPayload),
-      gqlTransactionStatus: status,
+      gqlTransactionStatus: status as GraphqlTransactionStatus,
       abiMap,
       gasPerByte,
       gasPriceFactor,
@@ -189,7 +206,6 @@ export async function getTransactionsSummaries(
     });
 
     const output: TransactionResult = {
-      gqlTransaction,
       ...transactionSummary,
     };
 

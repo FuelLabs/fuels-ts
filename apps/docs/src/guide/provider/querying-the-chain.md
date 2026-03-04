@@ -2,68 +2,78 @@
 
 Once you have set up a provider, you're ready to interact with the Fuel blockchain.
 
-We can connect to either a _*local*_ or an _*external*_ node:
-
-> 1. _Running a [local node](../getting-started/connecting-to-a-local-node.md)_
-> 1. _Connecting to an [external node](../getting-started/connecting-to-testnet.md)_
+- [Connecting to the Network](../getting-started/connecting-to-the-network.md)
 
 Let's look at a few examples below.
 
-## Get the Base Asset ID
+## `getBaseAssetId`
 
 The base asset is the underlying asset used to perform any transaction on a chain. This should be fetched from a provider to then be used in transactions.
 
-<<< @/../../docs-snippets/src/guide/provider/provider.test.ts#provider-getBaseAssetId{ts:line-numbers}
+<<< @./snippets/functionality/get-base-asset-id.ts#getBaseAssetId{ts:line-numbers}
 
-## Get all coins from an address
+## `getCoins`
 
-This method returns all coins (of an optional given asset ID) from a wallet, including spent ones.
+Returns UTXOs coins from an account address, optionally filtered by asset ID. This method supports [pagination](./pagination.md).
 
-<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#wallet-query{ts:line-numbers}
+<<< @./snippets/functionality/get-coins-from-provider.ts#getCoins-1{ts:line-numbers}
 
-## Get spendable resources from an address
+This method is also implemented on the `Account` class and can be used without providing the `address`:
 
-The last argument says how much you want to spend. This method returns only spendable, i.e., unspent coins (of a given asset ID). If you ask for more spendable than the amount of unspent coins you have, it returns an error.
+<<< @./snippets/functionality/get-coins-from-account.ts#getCoins-2{ts:line-numbers}
 
-<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#wallet-get-spendable-resources{ts:line-numbers}
+## `getResourcesToSpend`
 
-## Get balances from an address
+Returns spendable resources (coins or messages) for a transaction request. It accepts an optional third parameter, `resourcesIdsToIgnore`, to exclude specific UTXO IDs or coin message nonces:
 
-Get all the spendable balances of all assets for an address. This is different from getting the coins because we only return the numbers (the sum of UTXOs coins amount for each asset id) and not the UTXOs coins themselves.
+<<< @./snippets/functionality/get-resources-to-spend-from-provider.ts#getResourcesToSpend-1{ts:line-numbers}
 
-<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#wallet-get-balances{ts:line-numbers}
+This method is also available in the `Account` class and can be used without providing the `address`:
 
-## Get blocks
+<<< @./snippets/functionality/get-resources-to-spend-from-account.ts#getResourcesToSpend-2{ts:line-numbers}
 
-This method returns all the blocks from the blockchain that match the given query. The below code snippet shows how to get the last 10 blocks.
+## `getBalances`
 
-<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Provider-get-blocks{ts:line-numbers}
+Returns the sum of all UTXOs coins and unspent message coins amounts for all assets. Unlike `getCoins`, it only returns the total amounts, not the individual coins:
 
-## Get a message by its nonce
+<<< @./snippets/functionality/get-balances.ts#getBalances-1{ts:line-numbers}
+
+This method is also available in the `Account` class and can be used without providing the `address` parameter:
+
+<<< @./snippets/functionality/get-balances.ts#getBalances-2{ts:line-numbers}
+
+## `getBlocks`
+
+The `getBlocks` method returns blocks from the blockchain matching the given `paginationArgs` parameter, supporting [pagination](./pagination.md). The below code snippet shows how to get the last 10 blocks.
+
+<<< @./snippets/functionality/get-blocks.ts#getBlocks{ts:line-numbers}
+
+## `getMessageByNonce`
 
 You can use the `getMessageByNonce` method to retrieve a message by its nonce.
 
-<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#getMessageByNonce{ts:line-numbers}
+<<< @./snippets/functionality/get-messages-by-nonce.ts#getMessageByNonce{ts:line-numbers}
 
-<!-- TODO: fix these examples to not reference hardcoded values after #1356 which introduces message generation tools
-### Get messages
+## `getMessages`
 
 You can use the `getMessages` method to retrieve a list of messages from the blockchain.
 
-<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Message-getMessages{ts:line-numbers}
+<<< @./snippets/functionality/get-messages.ts#getMessages{ts:line-numbers}
 
-## Get resources
-
-You can use the `getResourcesToSpend` method to retrieve a list of all the resources (coins + assets) that can be spent by a given address.
-
-<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Message-getResourcesToSpend{ts:line-numbers}
-
-## Get message proof
+## `getMessageProof`
 
 A message proof is a cryptographic proof that a message was included in a block. You can use the `getMessageProof` method to retrieve a message proof for a given transaction ID and message ID.
 
-<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Message-getMessageProof{ts:line-numbers}
+You can retrieve a message proof by either using it's block ID:
 
---->
+<<< @./snippets/functionality/get-message-proof-block-id.ts#getMessageProof-blockId{ts:line-numbers}
 
-<!-- TODO: Add docs for the two new parameters `commitBlockId` and `commitBlockHeight` -->
+Or by it's block height:
+
+<<< @./snippets/functionality/get-message-proof-block-height.ts#getMessageProof-blockHeight{ts:line-numbers}
+
+## `getTransactions`
+
+You can use the `getTransactions` method to retrieve a list of transactions from the blockchain. This is limited to 30 transactions per page.
+
+<<< @./snippets/functionality/get-transactions.ts#getTransactions{ts:line-numbers}

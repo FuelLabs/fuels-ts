@@ -1,84 +1,45 @@
+import { ContractFactory, Wallet } from 'fuels';
 import type {
   CallResult,
   DryRunStatus,
   EstimateTxDependenciesReturns,
   TransactionResultReceipt,
-  WalletUnlocked,
+  TransactionReceiptJson,
 } from 'fuels';
-import { ContractFactory, FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
-import { generateTestWallet } from 'fuels/test-utils';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
+import {
+  AdvancedLoggingFactory,
+  AdvancedLoggingOtherContractFactory,
+  MultiTokenContract,
+  MultiTokenContractFactory,
+  RevertErrorFactory,
+} from '../test/typegen/contracts';
+import type { AddressInput } from '../test/typegen/contracts/MultiTokenContract';
 
 /**
  * @group node
+ * @group browser
  */
 describe('dry-run-multiple-txs', () => {
-  const { abiContents, binHexlified } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.TOKEN_CONTRACT
-  );
-  const { abiContents: abiRevert, binHexlified: binRevert } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.REVERT_ERROR
-  );
-  const { abiContents: abiMultiToken, binHexlified: binMultiToken } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.MULTI_TOKEN_CONTRACT
-  );
-  const { abiContents: abiLog, binHexlified: binLog } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.ADVANCED_LOGGING
-  );
-  const { abiContents: abiLogOther, binHexlified: binLogOther } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.ADVANCED_LOGGING_OTHER_CONTRACT
-  );
-
-  let provider: Provider;
-  let wallet: WalletUnlocked;
-  let baseAssetId: string;
-
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = provider.getBaseAssetId();
-    wallet = await generateTestWallet(provider, [[1_000_000, baseAssetId]]);
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
-  const deployContracts = async () => {
-    const revertFactory = new ContractFactory(binRevert, abiRevert, wallet);
-
-    const revertContract = await revertFactory.deployContract({
-      maxFee: 70_000,
-    });
-
-    const multiTokenFactory = new ContractFactory(binMultiToken, abiMultiToken, wallet);
-
-    const multiTokenContract = await multiTokenFactory.deployContract({
-      maxFee: 70_000,
-    });
-
-    const logFactory = new ContractFactory(binLog, abiLog, wallet);
-
-    const logContract = await logFactory.deployContract({
-      maxFee: 70_000,
-    });
-    const logOtherFactory = new ContractFactory(binLogOther, abiLogOther, wallet);
-
-    const logOtherContract = await logOtherFactory.deployContract({
-      maxFee: 70_000,
-    });
-
-    return { revertContract, multiTokenContract, logContract, logOtherContract };
-  };
-
   it('should properly dry-run multiple TXs requests', async () => {
-    const revertFactory = new ContractFactory(binRevert, abiRevert, wallet);
-
-    const revertContract = await revertFactory.deployContract({
-      maxFee: 70_000,
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: RevertErrorFactory,
+        },
+      ],
     });
 
-    const resources = await wallet.getResourcesToSpend([[500_000, baseAssetId]]);
+    const {
+      contracts: [revertContract],
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const resources = await wallet.getResourcesToSpend([
+      [500_000, await provider.getBaseAssetId()],
+    ]);
 
     const request1 = await revertContract.functions
       .validate_inputs(10, 0)
@@ -161,23 +122,48 @@ describe('dry-run-multiple-txs', () => {
   });
 
   it('should properly estimate multiple TXs requests', async () => {
-    // preparing test data
-    const { revertContract, multiTokenContract, logContract, logOtherContract } =
-      await deployContracts();
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: RevertErrorFactory,
+        },
+        {
+          factory: MultiTokenContractFactory,
+        },
+        {
+          factory: AdvancedLoggingFactory,
+        },
+        {
+          factory: AdvancedLoggingOtherContractFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [revertContract, multiTokenContract, logContract, logOtherContract],
+      provider,
+      wallets: [wallet],
+    } = launched;
 
     // subId defined on multi-token contract
     const subId = '0x4a778acfad1abc155a009dc976d2cf0db6197d3d360194d74b1fb92b96986b00';
-    const resources = await wallet.getResourcesToSpend([[500_000, baseAssetId]]);
+    const resources = await wallet.getResourcesToSpend([
+      [500_000, await provider.getBaseAssetId()],
+    ]);
 
     // creating receives to be used by the request 2 and 3
-    const addresses = [
+    const addresses: [AddressInput, AddressInput, AddressInput] = [
       { bits: Wallet.generate({ provider }).address.toB256() },
       { bits: Wallet.generate({ provider }).address.toB256() },
       { bits: Wallet.generate({ provider }).address.toB256() },
     ];
 
     // request 1
-    const factory = new ContractFactory(binHexlified, abiContents, wallet);
+    const factory = new ContractFactory(
+      MultiTokenContractFactory.bytecode,
+      MultiTokenContract.abi,
+      wallet
+    );
     const { transactionRequest: request1 } = factory.createTransactionRequest({
       maxFee: 15000,
     });
@@ -243,6 +229,7 @@ describe('dry-run-multiple-txs', () => {
 
     // request 1 for create transaction request, we do not dry run
     expect(estimatedRequests[0]).toStrictEqual<EstimateTxDependenciesReturns>({
+      rawReceipts: [],
       receipts: [],
       missingContractIds: [],
       outputVariables: 0,
@@ -251,6 +238,7 @@ describe('dry-run-multiple-txs', () => {
 
     // request 2 we dry run it 4 times to add the 3 output variables
     expect(estimatedRequests[1]).toStrictEqual<EstimateTxDependenciesReturns>({
+      rawReceipts: expect.any(Array<TransactionReceiptJson>),
       receipts: expect.any(Array<TransactionResultReceipt>),
       missingContractIds: [],
       outputVariables: 3,
@@ -264,6 +252,7 @@ describe('dry-run-multiple-txs', () => {
 
     // request 3 we dry run it 3 times to add the 2 output variables (1 was already present)
     expect(estimatedRequests[2]).toStrictEqual<EstimateTxDependenciesReturns>({
+      rawReceipts: expect.any(Array<TransactionReceiptJson>),
       receipts: expect.any(Array<TransactionResultReceipt>),
       missingContractIds: [],
       outputVariables: 2,
@@ -275,8 +264,9 @@ describe('dry-run-multiple-txs', () => {
       },
     });
 
-    // request 4 we dry run it 1 time because it has reveted
+    // request 4 we dry run it 1 time because it has reverted
     expect(estimatedRequests[3]).toStrictEqual<EstimateTxDependenciesReturns>({
+      rawReceipts: expect.any(Array<TransactionReceiptJson>),
       receipts: expect.any(Array<TransactionResultReceipt>),
       missingContractIds: [],
       outputVariables: 0,
@@ -291,6 +281,7 @@ describe('dry-run-multiple-txs', () => {
 
     // request 5 we dry run it 2 times because to add the missing output contract
     expect(estimatedRequests[4]).toStrictEqual<EstimateTxDependenciesReturns>({
+      rawReceipts: expect.any(Array<TransactionResultReceipt>),
       receipts: expect.any(Array<TransactionResultReceipt>),
       missingContractIds: [logOtherContract.id.toB256()],
       outputVariables: 0,

@@ -1,21 +1,22 @@
+import type { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
-import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { bn, toNumber } from '@fuel-ts/math';
-import { defaultSnapshotConfigs, hexlify } from '@fuel-ts/utils';
+import { arrayify, defaultSnapshotConfigs, hexlify } from '@fuel-ts/utils';
 import { waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
 
 import { Provider } from '../providers';
 import { Signer } from '../signer';
 import { WalletUnlocked } from '../wallet';
 
-import { AssetId } from './asset-id';
 import * as launchNodeMod from './launchNode';
 import { setupTestProviderAndWallets } from './setup-test-provider-and-wallets';
+import { TestAssetId } from './test-asset-id';
+import type { ChainMessage } from './test-message';
 import { TestMessage } from './test-message';
 
-const BaseAssetId = defaultSnapshotConfigs.chainConfig.consensus_parameters.V1.base_asset_id;
+const BaseAssetId = defaultSnapshotConfigs.chainConfig.consensus_parameters.V2.base_asset_id;
 /**
  * @group node
  */
@@ -32,7 +33,7 @@ describe('setupTestProviderAndWallets', () => {
     await waitUntilUnreachable(url);
 
     const { error } = await safeExec(async () => {
-      const p = await Provider.create(url);
+      const p = new Provider(url);
       return p.getBlockNumber();
     });
 
@@ -41,12 +42,24 @@ describe('setupTestProviderAndWallets', () => {
     });
   });
 
+  test('killing the node cleans up provider cache for node url', async () => {
+    const { cleanup, provider } = await setupTestProviderAndWallets();
+
+    const clearChainAndNodeCachesSpy = vi.spyOn(Provider, 'clearChainAndNodeCaches');
+
+    cleanup();
+    await waitUntilUnreachable(provider.url);
+
+    expect(clearChainAndNodeCachesSpy).toHaveBeenCalledTimes(1);
+    expect(clearChainAndNodeCachesSpy).toHaveBeenCalledWith(provider.url);
+  });
+
   test('kills the node if provider cant connect post-launch', async () => {
     const launchNodeSpy = vi.spyOn(launchNodeMod, 'launchNode');
 
     await expectToThrowFuelError(
       async () => {
-        await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: -500 } });
+        await setupTestProviderAndWallets({ providerOptions: { resourceCacheTTL: -500 } });
       },
       { code: ErrorCode.INVALID_TTL }
     );
@@ -79,10 +92,9 @@ describe('setupTestProviderAndWallets', () => {
 
     const { provider } = launched;
 
-    const [sutCoin] = await provider.getCoins(
-      { toB256: () => coin.owner } as AbstractAddress,
-      coin.asset_id
-    );
+    const {
+      coins: [sutCoin],
+    } = await provider.getCoins({ toB256: () => coin.owner } as Address, coin.asset_id);
 
     expect(sutCoin.amount.toNumber()).toEqual(coin.amount);
     expect(sutCoin.owner.toB256()).toEqual(coin.owner);
@@ -91,15 +103,15 @@ describe('setupTestProviderAndWallets', () => {
     expect(sutCoin.blockCreated.toNumber()).toEqual(coin.tx_pointer_block_height);
   });
 
-  it('default: two wallets, three assets (BaseAssetId, AssetId.A, AssetId.B), one coin, 10_000_000_000_ amount', async () => {
+  it('default: two wallets, three assets (BaseAssetId, TestAssetId.A, TestAssetId.B), one coin, 10_000_000_000_ amount', async () => {
     using providerAndWallets = await setupTestProviderAndWallets();
     const { wallets, provider } = providerAndWallets;
 
     expect(wallets.length).toBe(2);
     wallets.forEach((w) => expect(w.provider).toBe(provider));
     const [wallet1, wallet2] = wallets;
-    const coins1 = await wallet1.getCoins();
-    const coins2 = await wallet2.getCoins();
+    const { coins: coins1 } = await wallet1.getCoins();
+    const { coins: coins2 } = await wallet2.getCoins();
 
     expect(coins1.length).toBe(3);
     expect(
@@ -119,22 +131,26 @@ describe('setupTestProviderAndWallets', () => {
     expect(baseAssetIdCoin.amount.toNumber()).toBe(10_000_000_000);
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const assetACoin = coins1.find((x) => x.assetId === AssetId.A.value)!;
+    const assetACoin = coins1.find((x) => x.assetId === TestAssetId.A.value)!;
     expect(assetACoin.amount.toNumber()).toBe(10_000_000_000);
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const assetBCoin = coins1.find((x) => x.assetId === AssetId.B.value)!;
+    const assetBCoin = coins1.find((x) => x.assetId === TestAssetId.B.value)!;
     expect(assetBCoin.amount.toNumber()).toBe(10_000_000_000);
   });
 
   it('can be given custom asset id and message', async () => {
-    const [assetId] = AssetId.random();
-    const testMessage = new TestMessage();
+    const [assetId] = TestAssetId.random();
+    const spendableMessage = new TestMessage();
+    const dataMessage = new TestMessage({
+      data: '0x2bca2aa612b304ece5b25988818dd7234e049913233eb918c11638af89d575be',
+    });
+    const testMessages = [spendableMessage, dataMessage];
     using providerAndWallets = await setupTestProviderAndWallets({
       walletsConfig: {
         count: 1,
         assets: [assetId],
-        messages: [testMessage],
+        messages: testMessages,
       },
     });
 
@@ -142,7 +158,7 @@ describe('setupTestProviderAndWallets', () => {
       wallets: [wallet],
     } = providerAndWallets;
 
-    const coins = await wallet.getCoins();
+    const { coins } = await wallet.getCoins();
     expect(coins.length).toBe(2);
     coins.sort((a) => (a.assetId === BaseAssetId ? -1 : 1));
 
@@ -156,18 +172,20 @@ describe('setupTestProviderAndWallets', () => {
     expect(coin2.assetId).toBe(assetId.value);
     expect(coin2.amount.toNumber()).toBe(10_000_000_000);
 
-    const messages = await wallet.getMessages();
-    expect(messages.length).toBe(1);
+    const { messages } = await wallet.getMessages();
+    expect(messages.length).toBe(2);
 
-    const [message] = messages;
-    const chainMessage = testMessage.toChainMessage(wallet.address);
+    messages.forEach((message) => {
+      const match = testMessages.find((tm) => tm.nonce === message.nonce);
+      const chainMessage = match?.toChainMessage(wallet.address) as ChainMessage;
 
-    expect(message.amount.toNumber()).toEqual(chainMessage.amount);
-    expect(message.recipient.toB256()).toEqual(chainMessage.recipient);
-    expect(message.sender.toB256()).toEqual(chainMessage.sender);
-    expect(toNumber(message.daHeight)).toEqual(toNumber(chainMessage.da_height));
-    expect(message.data.toString()).toEqual(toNumber(chainMessage.data).toString());
-    expect(message.nonce).toEqual(chainMessage.nonce);
+      expect(message.amount.toNumber()).toEqual(chainMessage.amount);
+      expect(message.recipient.toB256()).toEqual(chainMessage.recipient);
+      expect(message.sender.toB256()).toEqual(chainMessage.sender);
+      expect(toNumber(message.daHeight)).toEqual(toNumber(chainMessage.da_height));
+      expect(message.data).toStrictEqual(arrayify(`0x${chainMessage.data}`));
+      expect(message.nonce).toEqual(chainMessage?.nonce);
+    });
   });
 
   it('can return multiple wallets with multiple assets, coins and amounts', async () => {
@@ -189,7 +207,7 @@ describe('setupTestProviderAndWallets', () => {
     expect(wallets.length).toBe(numWallets);
 
     const promises = wallets.map(async (wallet) => {
-      const coins = await wallet.getCoins();
+      const { coins } = await wallet.getCoins();
       expect(coins.length).toBe(numOfAssets * coinsPerAsset);
 
       coins
@@ -238,7 +256,7 @@ describe('setupTestProviderAndWallets', () => {
 
     expect(wallets.length).toBe(2);
     const [wallet] = wallets;
-    const coins = await wallet.getCoins();
+    const { coins } = await wallet.getCoins();
     expect(coins.length).toBe(3);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const walletCoin = coins.find((c) => c.assetId === BaseAssetId)!;
@@ -246,8 +264,12 @@ describe('setupTestProviderAndWallets', () => {
     expect(walletCoin.amount.toNumber()).toBe(10_000_000_000);
 
     const customWallet = new WalletUnlocked(pk, provider);
-    const [customWalletCoin] = await customWallet.getCoins();
-    const [customWalletMessage] = await customWallet.getMessages();
+    const {
+      coins: [customWalletCoin],
+    } = await customWallet.getCoins();
+    const {
+      messages: [customWalletMessage],
+    } = await customWallet.getMessages();
 
     expect(customWalletCoin.amount.toNumber()).toEqual(coin.amount);
     expect(customWalletCoin.owner.toB256()).toEqual(coin.owner);
@@ -257,7 +279,7 @@ describe('setupTestProviderAndWallets', () => {
     expect(customWalletMessage.recipient.toB256()).toEqual(message.recipient);
     expect(customWalletMessage.sender.toB256()).toEqual(message.sender);
     expect(toNumber(customWalletMessage.daHeight)).toEqual(toNumber(message.da_height));
-    expect(customWalletMessage.data.toString()).toEqual(toNumber(message.data).toString());
+    expect(customWalletMessage.data.toString()).toEqual(message.data.toString());
     expect(customWalletMessage.nonce).toEqual(message.nonce);
   });
 });

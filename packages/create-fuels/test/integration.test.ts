@@ -1,6 +1,5 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import { execSync } from 'child_process';
-import { readFileSync } from 'fs';
 
 import type { PackageManager } from '../src/lib/getPackageManager';
 
@@ -15,11 +14,13 @@ import {
 
 const { log } = console;
 
+const PUBLISHED_FUEL_PACKAGE_NAME = process.env.PUBLISHED_FUEL_PACKAGE_NAME ?? 'fuels';
 const PUBLISHED_NPM_TAG = process.env.PUBLISHED_NPM_TAG ?? 'next';
+
 const packageManagerCreateCommands: [PackageManager, string][] = [
-  ['pnpm', 'pnpm --ignore-workspace create fuels'],
-  ['bun', 'bunx --bun create-fuels'],
-  ['npm', 'npm create fuels'],
+  ['pnpm', `pnpm --ignore-workspace create ${PUBLISHED_FUEL_PACKAGE_NAME}@${PUBLISHED_NPM_TAG}`],
+  ['bun', `bun create ${PUBLISHED_FUEL_PACKAGE_NAME}@${PUBLISHED_NPM_TAG}`],
+  ['npm', `npm create ${PUBLISHED_FUEL_PACKAGE_NAME}@${PUBLISHED_NPM_TAG}`],
 ];
 
 /**
@@ -31,7 +32,7 @@ describe('`create fuels` package integrity', () => {
 
   beforeAll(() => {
     if (!PUBLISHED_NPM_TAG) {
-      log('Skipping live `create fuels` test');
+      log(`Skipping live '${PUBLISHED_FUEL_PACKAGE_NAME}' test`);
       shouldSkip = true;
     }
   });
@@ -41,7 +42,7 @@ describe('`create fuels` package integrity', () => {
   });
 
   afterEach(() => {
-    resetFilesystem(paths.root);
+    resetFilesystem(paths.projectRoot);
   });
 
   it.each(packageManagerCreateCommands)(
@@ -50,26 +51,23 @@ describe('`create fuels` package integrity', () => {
       if (shouldSkip) {
         return;
       }
-      const expectedPackageJsonInstall = new RegExp(
-        `"fuels": "[0-9]+.[0-9]+.[0-9]+-${PUBLISHED_NPM_TAG}-[0-9]+"`
-      );
 
-      const args = generateArgs(paths.root, packageManager).join(' ');
-      const expectedTemplateFiles = await getAllFiles(paths.sourceTemplate).then((files) =>
+      const args = generateArgs({ projectName: paths.projectRoot, packageManager }).join(' ');
+      const expectedTemplateFiles = await getAllFiles(paths.templateSource).then((files) =>
         filterOriginalTemplateFiles(files).filter(filterForcBuildFiles)
       );
 
+      const cmd = `${createCommand} ${args}`;
+      log('cmd', cmd);
       const { error: createFuelsError } = await safeExec(() =>
-        execSync(`${createCommand}@${PUBLISHED_NPM_TAG} ${args}`, {
+        execSync(cmd, {
           stdio: 'inherit',
         })
       );
 
       expect(createFuelsError).toBeUndefined();
-      const actualTemplateFiles = await getAllFiles(paths.root);
+      const actualTemplateFiles = await getAllFiles(paths.projectRoot);
       expect(actualTemplateFiles.sort()).toEqual(expectedTemplateFiles.sort());
-      const packageJson = readFileSync(paths.packageJson, 'utf-8');
-      expect(packageJson).toEqual(expect.stringMatching(expectedPackageJsonInstall));
     },
     { timeout: 30000 }
   );

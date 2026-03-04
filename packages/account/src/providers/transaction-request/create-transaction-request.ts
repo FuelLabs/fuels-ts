@@ -1,11 +1,12 @@
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
-import type { BytesLike } from '@fuel-ts/interfaces';
 import { bn, type BN } from '@fuel-ts/math';
 import type { TransactionCreate } from '@fuel-ts/transactions';
 import { TransactionType, OutputType } from '@fuel-ts/transactions';
+import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify } from '@fuel-ts/utils';
+import { clone } from 'ramda';
 
-import type { GqlGasCosts } from '../__generated__/operations';
+import type { GasCosts } from '../provider';
 import { calculateMetadataGasForTxCreate } from '../utils/gas';
 
 import { hashTransaction } from './hash-transaction';
@@ -32,10 +33,7 @@ export interface CreateTransactionRequestLike extends BaseTransactionRequestLike
  */
 export class CreateTransactionRequest extends BaseTransactionRequest {
   static from(obj: CreateTransactionRequestLike) {
-    if (obj instanceof this) {
-      return obj;
-    }
-    return new this(obj);
+    return new this(clone(obj));
   }
 
   /** Type of the transaction */
@@ -120,7 +118,7 @@ export class CreateTransactionRequest extends BaseTransactionRequest {
     });
   }
 
-  metadataGas(gasCosts: GqlGasCosts): BN {
+  override metadataGas(gasCosts: GasCosts): BN {
     return calculateMetadataGasForTxCreate({
       contractBytesSize: bn(arrayify(this.witnesses[this.bytecodeWitnessIndex] || '0x').length),
       gasCosts,

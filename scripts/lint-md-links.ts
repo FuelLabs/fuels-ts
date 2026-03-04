@@ -1,21 +1,47 @@
 #!/usr/bin/env node
-import { execSync } from 'child_process';
+import type { ChildProcessWithoutNullStreams } from 'child_process';
+import { execSync, spawn } from 'child_process';
 import { globSync } from 'glob';
 
-(() => {
+const { error } = console;
+
+let docsApi: ChildProcessWithoutNullStreams;
+let exitCode = 0;
+
+// eslint-disable-next-line no-void
+void (async () => {
+  docsApi = spawn(`pnpm vite preview --port 9876 --outDir apps/docs-api/src/api`, {
+    shell: true,
+  });
+
+  await new Promise((resolve) => {
+    docsApi.stdout.on('data', () => {
+      resolve(undefined);
+    });
+  });
+
   const mdFiles = globSync('**/*.md', {
     ignore: [
       '**/node_modules/**',
-      'apps/docs/src/api/**', // generated api
+      'apps/demo-*/**',
+      '.changeset/**',
       '**/CHANGELOG.md',
-      'apps/demo-nextjs/**',
-      'apps/demo-react-cra/**',
-      'apps/demo-react-vite/**',
-      'templates/**',
-      'apps/demo-wallet-sdk-react/**',
-      'apps/create-fuels-counter-guide/**',
+      'internal/**',
     ],
   });
 
-  execSync(`pnpm textlint ${mdFiles.join(' ')} --parallel --debug`, { stdio: 'inherit' });
-})();
+  execSync(`pnpm markdown-link-check -q -c ./link-check.config.json ${mdFiles.join(' ')}`, {
+    stdio: 'inherit',
+  });
+})()
+  .catch((e) => {
+    error('Some files have broken links. Please fix them.');
+    error(e);
+    exitCode = 1;
+  })
+  .finally(() => {
+    if (docsApi.pid) {
+      process.kill(docsApi.pid);
+    }
+    process.exit(exitCode);
+  });

@@ -8,8 +8,6 @@ use std::{
     contract_id::ContractId,
 };
 
-use std::constants::ZERO_B256;
-
 abi MultiToken {
     fn mint_coins(sub_id: b256, mint_amount: u64);
     fn mint_to_addresses(addresses: [Address; 3], sub_id: b256, mint_amount: u64);

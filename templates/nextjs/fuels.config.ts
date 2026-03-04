@@ -1,6 +1,6 @@
 import { createConfig } from 'fuels';
 import dotenv from 'dotenv';
-import { NODE_URL } from '@/lib';
+import { providerUrl } from '@/lib';
 
 dotenv.config({
   path: ['.env.local', '.env'],
@@ -12,7 +12,7 @@ export default createConfig({
   workspace: './sway-programs',
   output: './src/sway-api',
   fuelCorePort,
-  providerUrl: NODE_URL,
+  providerUrl,
   forcPath: 'fuels-forc',
   fuelCorePath: 'fuels-core',
 });

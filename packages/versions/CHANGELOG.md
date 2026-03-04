@@ -1,5 +1,184 @@
 # @fuel-ts/versions
 
+## 0.103.0
+
+## 0.102.0
+
+### Minor Changes
+
+- f4be76c: chore!: upgrade `fuel-core` to `0.44.0`
+
+### Patch Changes
+
+- c9e0c5a: feat: add support for fuel-core v0.47.1
+
+## 0.101.3
+
+## 0.101.2
+
+### Patch Changes
+
+- 8c19d93: chore: support Node 24 - depreciate Node 18
+- bfb62ad: feat: implement support for new ABI error codes
+- 0d71065: chore: Upgraded `forc` to `0.66.8`
+
+## 0.101.1
+
+## 0.101.0
+
+## 0.100.6
+
+## 0.100.5
+
+## 0.100.4
+
+### Patch Changes
+
+- dbed315: chore: upgrade `fuel-core` to `0.43.1`
+
+## 0.100.3
+
+## 0.100.2
+
+## 0.100.1
+
+## 0.100.0
+
+### Minor Changes
+
+- f41887f: chore!: upgrade `fuel-core` to `0.41.7`
+
+### Patch Changes
+
+- b42f056: chore: bump `fuel-core` to `0.41.9`
+- 521292a: chore: updated `forc` to `0.67.0`
+- ff97a6e: chore: upgrade `forc` to `0.66.7`
+
+## 0.99.0
+
+### Patch Changes
+
+- ab56ded: chore: bump `forc` to `0.66.6`
+- 45cc32e: chore: upgrade `fuel-core` to `0.40.4`
+
+## 0.98.0
+
+### Patch Changes
+
+- 12e801e: chore: dependency pinning and auditing
+- 04ca73e: chore: upgrade `fuel-core` to `0.40.2`
+
+## 0.97.2
+
+### Patch Changes
+
+- 5ec254d: chore: updated forc version to `0.66.5`
+
+## 0.97.1
+
+### Patch Changes
+
+- 165c49c: chore: bump `fuel-core` to `0.40.1`
+
+## 0.97.0
+
+### Patch Changes
+
+- 9dba357: chore: upgrading `fuel-core` to `0.40.0`
+- 4e057d5: chore: upgrading `forc` to `0.66.4`
+- 7c162de: chore: upgrading `forc` to `0.66.2`
+
+## 0.96.1
+
+### Patch Changes
+
+- eb3b6c9: chore: upgrading `fuel-core` to `0.39.0`
+
+## 0.96.0
+
+## 0.95.0
+
+### Patch Changes
+
+- d4e839f: chore: `fuel-core@0.37.1`, `forc@0.65.1`, and `create-fuels` toolchains
+- 95a9650: chore: update to `forc@0.65.2`
+- 735bb1c: chore: update `fuel-core` to `0.38.0`
+
+## 0.94.9
+
+### Patch Changes
+
+- c2f0599: feat: deploying scripts and predicates
+
+## 0.94.8
+
+## 0.94.7
+
+### Patch Changes
+
+- 47b5cd3: chore: upgrade to forc `0.63.6`
+- 431990d: chore: inform users if their `fuels` version is outdated
+- 20d2ac2: chore: upgraded to fuel-core 0.36.0
+- 80df900: chore: fix exported types
+- 127ade0: chore: upgrade `forc@0.64.0`
+
+## 0.94.6
+
+## 0.94.5
+
+### Patch Changes
+
+- 942b56b: chore: upgrading `forc` to `0.63.5`
+- cffa075: chore: upgrading `forc` to `0.63.4`
+
+## 0.94.4
+
+### Patch Changes
+
+- b00fd02: chore: upgrade `fuel-core@0.35.0`
+
+## 0.94.3
+
+### Patch Changes
+
+- b67ded2: chore: upgraded forc to `0.63.3`
+
+## 0.94.2
+
+### Patch Changes
+
+- ccd94fc: chore: upgrade `fuel-core@0.34.0`
+
+## 0.94.1
+
+## 0.94.0
+
+### Minor Changes
+
+- 4c653d0: feat!: adding `abi` transpiler
+- 03ac550: feat!: `fuel-core@0.32.1` and large contract deployments
+
+### Patch Changes
+
+- 9309598: chore: upgrade `fuel-core@0.33.0`
+- 29c556d: fix: typegen reporting the correct versions
+
+## 0.93.0
+
+### Patch Changes
+
+- 99794e4: chore: upgrading `forc` to `0.62.0`
+
+## 0.92.1
+
+## 0.92.0
+
+### Patch Changes
+
+- 638eae3: build(deps-dev): bump the dev-deps group with 29 updates
+- 4a3c184: chore: upgrading `fuel-core` to `0.31.0`
+- 44d51ee: chore: upgrading `forc` to `0.61.2`
+
 ## 0.91.0
 
 ### Patch Changes

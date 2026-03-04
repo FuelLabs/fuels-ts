@@ -12,6 +12,7 @@
     "strict": true,
     "target": "ES2022",
     "sourceMap": true,
+    "noImplicitOverride": true,
     "types": ["vitest/globals", "node", "node-fetch", "web"]
   },
   "exclude": ["**/dist", "**/node_modules"]

@@ -1,11 +1,19 @@
 import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
 import { Address, addressify } from '@fuel-ts/address';
+import type { AddressInput, AddressLike } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
-import type { AddressLike, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
+import { FuelError } from '@fuel-ts/errors';
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import type { TransactionScript, Policy, TransactionCreate } from '@fuel-ts/transactions';
+import type {
+  TransactionScript,
+  Policy,
+  TransactionCreate,
+  TransactionBlob,
+  TransactionUpload,
+  TransactionUpgrade,
+} from '@fuel-ts/transactions';
 import {
   PolicyType,
   TransactionCoder,
@@ -13,22 +21,25 @@ import {
   OutputType,
   TransactionType,
 } from '@fuel-ts/transactions';
+import type { BytesLike } from '@fuel-ts/utils';
 import { concat, hexlify, isDefined } from '@fuel-ts/utils';
 
 import type { Account } from '../../account';
 import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
-import type { MessageCoin } from '../message';
+import { isMessageCoin, type Message, type MessageCoin } from '../message';
 import type { ChainInfo, GasCosts } from '../provider';
 import type { Resource } from '../resource';
 import { isCoin } from '../resource';
+import type { TransactionSummaryJsonPartial } from '../utils';
 import { normalizeJSON } from '../utils';
 import { getMaxGas, getMinGas } from '../utils/gas';
 
 import { NoWitnessAtIndexError } from './errors';
 import {
   getRequestInputResourceOwner,
+  isRequestInputCoinOrMessage,
   isRequestInputResource,
   isRequestInputResourceFromOwner,
 } from './helpers';
@@ -65,6 +76,10 @@ export interface BaseTransactionRequestLike {
   tip?: BigNumberish;
   /** Block until which tx cannot be included */
   maturity?: number;
+  /** The block number after which the transaction is no longer valid. */
+  expiration?: number;
+  /** The index of the owner input */
+  ownerInputIndex?: number;
   /** The maximum fee payable by this transaction using BASE_ASSET. */
   maxFee?: BigNumberish;
   /** The maximum amount of witness data allowed for the transaction */
@@ -75,6 +90,8 @@ export interface BaseTransactionRequestLike {
   outputs?: TransactionRequestOutput[];
   /** List of witnesses */
   witnesses?: TransactionRequestWitness[];
+  /** The state of the transaction */
+  flag?: TransactionStateFlag;
 }
 
 type ToBaseTransactionResponse = Pick<
@@ -89,6 +106,14 @@ type ToBaseTransactionResponse = Pick<
   | 'policyTypes'
 >;
 
+export type TransactionStateFlag =
+  | { state: undefined; transactionId: undefined; summary: undefined }
+  | {
+      state: 'funded';
+      transactionId: string;
+      summary: TransactionSummaryJsonPartial | undefined;
+    };
+
 /**
  * Abstract class to define the functionalities of a transaction request transaction request.
  */
@@ -99,6 +124,10 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   tip?: BN;
   /** Block until which tx cannot be included */
   maturity?: number;
+  /** The block number after which the transaction is no longer valid. */
+  expiration?: number;
+  /** The index of the owner input */
+  ownerInputIndex?: number;
   /** The maximum fee payable by this transaction using BASE_ASSET. */
   maxFee: BN;
   /** The maximum amount of witness data allowed for the transaction */
@@ -111,6 +140,11 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   witnesses: TransactionRequestWitness[] = [];
 
   /**
+   * The current status of the transaction
+   */
+  flag: TransactionStateFlag = { state: undefined, transactionId: undefined, summary: undefined };
+
+  /**
    * Constructor for initializing a base transaction request.
    *
    * @param baseTransactionRequest - Optional object containing properties to initialize the transaction request.
@@ -118,26 +152,32 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   constructor({
     tip,
     maturity,
+    expiration,
+    ownerInputIndex,
     maxFee,
     witnessLimit,
     inputs,
     outputs,
     witnesses,
+    flag,
   }: BaseTransactionRequestLike = {}) {
     this.tip = tip ? bn(tip) : undefined;
     this.maturity = maturity && maturity > 0 ? maturity : undefined;
+    this.expiration = expiration && expiration > 0 ? expiration : undefined;
     this.witnessLimit = isDefined(witnessLimit) ? bn(witnessLimit) : undefined;
+    this.ownerInputIndex = ownerInputIndex ?? undefined;
     this.maxFee = bn(maxFee);
     this.inputs = inputs ?? [];
     this.outputs = outputs ?? [];
     this.witnesses = witnesses ?? [];
+    this.flag = flag ?? { state: undefined, transactionId: undefined, summary: undefined };
   }
 
   static getPolicyMeta(req: BaseTransactionRequest) {
     let policyTypes = 0;
     const policies: Policy[] = [];
 
-    const { tip, witnessLimit, maturity } = req;
+    const { tip, witnessLimit, maturity, expiration } = req;
 
     if (bn(tip).gt(0)) {
       policyTypes += PolicyType.Tip;
@@ -154,6 +194,16 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
     policyTypes += PolicyType.MaxFee;
     policies.push({ data: req.maxFee, type: PolicyType.MaxFee });
+
+    if (expiration && expiration > 0) {
+      policyTypes += PolicyType.Expiration;
+      policies.push({ data: expiration, type: PolicyType.Expiration });
+    }
+
+    if (isDefined(req.ownerInputIndex)) {
+      policyTypes += PolicyType.Owner;
+      policies.push({ data: bn(req.ownerInputIndex), type: PolicyType.Owner });
+    }
 
     return {
       policyTypes,
@@ -186,7 +236,12 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     };
   }
 
-  abstract toTransaction(): TransactionCreate | TransactionScript;
+  abstract toTransaction():
+    | TransactionCreate
+    | TransactionScript
+    | TransactionBlob
+    | TransactionUpgrade
+    | TransactionUpload;
 
   /**
    * Converts the transaction request to a byte array.
@@ -239,8 +294,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    */
   addEmptyWitness(): number {
     // Push a dummy witness with same byte size as a real witness signature
-    this.addWitness(concat([ZeroBytes32, ZeroBytes32]));
-    return this.witnesses.length - 1;
+    return this.addWitness(concat([ZeroBytes32, ZeroBytes32]));
   }
 
   /**
@@ -249,8 +303,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param address - The address to get the coin input witness index for.
    * @param signature - The signature to update the witness with.
    */
-  updateWitnessByOwner(address: string | AbstractAddress, signature: BytesLike) {
-    const ownerAddress = Address.fromAddressOrString(address);
+  updateWitnessByOwner(address: AddressInput, signature: BytesLike) {
+    const ownerAddress = new Address(address);
     const witnessIndex = this.getCoinInputWitnessIndexByOwner(ownerAddress);
     if (typeof witnessIndex === 'number') {
       this.updateWitness(witnessIndex, signature);
@@ -281,7 +335,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     const accounts = Array.isArray(account) ? account : [account];
     await Promise.all(
       accounts.map(async (acc) => {
-        this.addWitness(await acc.signTransaction(<TransactionRequestLike>this));
+        this.addWitness((await acc.signTransaction(<TransactionRequestLike>this)) as string);
       })
     );
 
@@ -392,8 +446,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    *
    * @param message - Message resource.
    */
-  addMessageInput(message: MessageCoin) {
-    const { recipient, sender, amount, predicate, nonce, assetId, predicateData } = message;
+  addMessageInput(message: Message | MessageCoin) {
+    const { recipient, sender, amount, predicate, nonce, predicateData } = message;
 
     let witnessIndex;
 
@@ -413,6 +467,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       type: InputType.Message,
       sender: sender.toB256(),
       recipient: recipient.toB256(),
+      data: isMessageCoin(message) ? '0x' : message.data,
       amount,
       witnessIndex,
       predicate,
@@ -423,7 +478,9 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     this.pushInput(input);
 
     // Insert a ChangeOutput if it does not exist
-    this.addChangeOutput(recipient, assetId);
+    if (isMessageCoin(message)) {
+      this.addChangeOutput(recipient, message.assetId);
+    }
   }
 
   /**
@@ -526,7 +583,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @hidden
    */
   metadataGas(_gasCosts: GasCosts): BN {
-    throw new Error('Not implemented');
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Not implemented');
   }
 
   /**
@@ -573,12 +630,10 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    *
    * @param quantities - CoinQuantity Array.
    * @param baseAssetId - The base asset to fund the transaction.
+   * @deprecated - This method is deprecated and will be removed in future versions.
+   * Please use `Account.generateFakeResources` along with `this.addResources` instead.
    */
-  fundWithFakeUtxos(
-    quantities: CoinQuantity[],
-    baseAssetId: string,
-    resourcesOwner?: AbstractAddress
-  ) {
+  fundWithFakeUtxos(quantities: CoinQuantity[], baseAssetId: string, resourcesOwner?: Address) {
     const findAssetInput = (assetId: string) =>
       this.inputs.find((input) => {
         if ('assetId' in input) {
@@ -615,6 +670,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
     updateAssetInput(baseAssetId, bn(100_000_000_000));
     quantities.forEach((q) => updateAssetInput(q.assetId, q.amount));
+
+    return this;
   }
 
   /**
@@ -666,12 +723,12 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }
 
   updatePredicateGasUsed(inputs: TransactionRequestInput[]) {
-    const inputsToExtractGasUsed = inputs.filter(isRequestInputResource);
+    const inputsToExtractGasUsed = inputs.filter(isRequestInputCoinOrMessage);
 
     this.inputs.filter(isRequestInputResource).forEach((i) => {
       const owner = getRequestInputResourceOwner(i);
       const correspondingInput = inputsToExtractGasUsed.find((x) =>
-        isRequestInputResourceFromOwner(x, Address.fromString(String(owner)))
+        isRequestInputResourceFromOwner(x, new Address(String(owner)))
       );
 
       if (
@@ -683,5 +740,30 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
         i.predicateGasUsed = correspondingInput.predicateGasUsed;
       }
     });
+  }
+
+  byteLength(): number {
+    return this.toTransactionBytes().byteLength;
+  }
+
+  /**
+   * @hidden
+   *
+   * Used internally to update the state of a transaction request.
+   *
+   * @param state - The state to update.
+   */
+  public updateState(
+    chainId: number,
+    state?: TransactionStateFlag['state'],
+    summary?: TransactionSummaryJsonPartial
+  ) {
+    if (!state) {
+      this.flag = { state: undefined, transactionId: undefined, summary: undefined };
+      return;
+    }
+
+    const transactionId = this.getTransactionId(chainId);
+    this.flag = { state, transactionId, summary };
   }
 }

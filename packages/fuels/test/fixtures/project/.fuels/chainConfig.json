@@ -90,6 +90,7 @@
           "mul": 2,
           "muli": 2,
           "mldv": 4,
+          "niop": 2,
           "noop": 1,
           "not": 2,
           "or": 2,
@@ -132,19 +133,31 @@
           "alocDependentCost": {
             "HeavyOperation": {
               "base": 2,
-              "gasPerUnit": 0
+              "gas_per_unit": 0
+            }
+          },
+          "bsiz": {
+            "LightOperation": {
+              "base": 17,
+              "units_per_gas": 790
+            }
+          },
+          "bldd": {
+            "LightOperation": {
+              "base": 15,
+              "units_per_gas": 272
             }
           },
           "cfe": {
             "HeavyOperation": {
               "base": 2,
-              "gasPerUnit": 0
+              "gas_per_unit": 0
             }
           },
           "cfeiDependentCost": {
             "HeavyOperation": {
               "base": 2,
-              "gasPerUnit": 0
+              "gas_per_unit": 0
             }
           },
           "call": {

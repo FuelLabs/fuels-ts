@@ -1,5 +1,5 @@
 import * as asm from "@fuels/vm-asm";
-import { ZeroBytes32, decrypt, encrypt } from "fuels";
+import { ZeroBytes32, decrypt, encrypt, FuelAsm } from "fuels";
 import Image from "next/image";
 
 import styles from "./page.module.css";
@@ -8,7 +8,8 @@ export default function Home() {
   const { log } = console;
 
   log("Hello Fuels", ZeroBytes32, encrypt, decrypt);
-  log("Hello ASM", asm);
+  log("Hello ASM:standalone", asm);
+  log("Hello ASM:wrapped", FuelAsm);
 
   return (
     <main className={styles.main}>

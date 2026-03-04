@@ -1,59 +1,10 @@
 import { randomBytes } from '@fuel-ts/crypto';
 import { FuelError } from '@fuel-ts/errors';
-import { AbstractContract, AbstractAccount } from '@fuel-ts/interfaces';
-import type {
-  Bech32Address,
-  B256Address,
-  AddressLike,
-  ContractIdLike,
-  AbstractAddress,
-  B256AddressEvm,
-  BytesLike,
-} from '@fuel-ts/interfaces';
-import { arrayify, hexlify } from '@fuel-ts/utils';
-import type { Decoded } from 'bech32';
-import { bech32m } from 'bech32';
+import { arrayify, concat, hexlify } from '@fuel-ts/utils';
+import { sha256 } from '@noble/hashes/sha256';
 
-/**
- * Fuel Network HRP (human-readable part) for bech32 encoding
- *
- * @hidden
- */
-export const FUEL_BECH32_HRP_PREFIX = 'fuel';
-
-/**
- * Decodes a Bech32 address string into Decoded
- *
- * @hidden
- */
-export function fromBech32(address: Bech32Address): Decoded {
-  return bech32m.decode(address);
-}
-
-/**
- * Converts a B256 address string into Bech32
- *
- * @hidden
- */
-export function toBech32(address: B256Address): Bech32Address {
-  return bech32m.encode(
-    FUEL_BECH32_HRP_PREFIX,
-    bech32m.toWords(arrayify(hexlify(address)))
-  ) as Bech32Address;
-}
-
-/**
- * Determines if a given string is Bech32 format
- *
- * @hidden
- */
-export function isBech32(address: BytesLike): boolean {
-  return (
-    typeof address === 'string' &&
-    address.indexOf(FUEL_BECH32_HRP_PREFIX + 1) === 0 &&
-    fromBech32(address as Bech32Address).prefix === FUEL_BECH32_HRP_PREFIX
-  );
-}
+import type { Address } from './address';
+import type { AddressLike, ContractIdLike, B256Address, B256AddressEvm } from './types';
 
 /**
  * Determines if a given string is B256 format
@@ -83,41 +34,24 @@ export function isEvmAddress(address: string): boolean {
 }
 
 /**
- * Takes a Bech32 address and returns the byte data
+ * Normalizes a B256 address to lowercase
+ *
+ * @param address - The B256 address to normalize
+ * @returns The normalized B256 address
  *
  * @hidden
  */
-export function getBytesFromBech32(address: Bech32Address): Uint8Array {
-  return new Uint8Array(bech32m.fromWords(fromBech32(address).words));
+export function normalizeB256(address: B256Address): B256Address {
+  return address.toLowerCase();
 }
 
 /**
- * Converts a Bech32 address string into B256
+ * A simple type guard to check if an object is an Address
  *
  * @hidden
  */
-export function toB256(address: Bech32Address): B256Address {
-  if (!isBech32(address)) {
-    throw new FuelError(
-      FuelError.CODES.INVALID_BECH32_ADDRESS,
-      `Invalid Bech32 Address: ${address}.`
-    );
-  }
-
-  return hexlify(getBytesFromBech32(address));
-}
-
-/**
- * Takes a Bech32 address and returns a normalized (i.e. lower case) representation of it.
- *
- * The input is validated along the way, which makes this significantly safer than
- * using `address.toLowerCase()`.
- *
- * @hidden
- */
-export function normalizeBech32(address: Bech32Address): Bech32Address {
-  const { words } = fromBech32(address);
-  return bech32m.encode(FUEL_BECH32_HRP_PREFIX, words) as Bech32Address;
+export function isAddress(address: object): address is Address {
+  return 'b256Address' in address;
 }
 
 /**
@@ -125,16 +59,20 @@ export function normalizeBech32(address: Bech32Address): Bech32Address {
  *
  * @hidden
  */
-export const addressify = (addressLike: AddressLike | ContractIdLike): AbstractAddress => {
-  if (addressLike instanceof AbstractAccount) {
+export const addressify = (addressLike: AddressLike | ContractIdLike): Address => {
+  if (isAddress(addressLike)) {
+    return addressLike;
+  }
+
+  if ('address' in addressLike && isAddress(addressLike.address)) {
     return addressLike.address;
   }
 
-  if (addressLike instanceof AbstractContract) {
+  if ('id' in addressLike && isAddress(addressLike.id)) {
     return addressLike.id;
   }
 
-  return addressLike;
+  throw new FuelError(FuelError.CODES.INVALID_ADDRESS, 'Invalid address');
 };
 
 /**
@@ -150,27 +88,21 @@ export const getRandomB256 = () => hexlify(randomBytes(32));
  *
  * @hidden
  */
-export const clearFirst12BytesFromB256 = (b256: B256Address): B256AddressEvm => {
-  let bytes;
-
+export const toB256AddressEvm = (b256: B256Address): B256AddressEvm => {
   try {
     if (!isB256(b256)) {
-      throw new FuelError(
-        FuelError.CODES.INVALID_BECH32_ADDRESS,
-        `Invalid Bech32 Address: ${b256}.`
-      );
+      throw new FuelError(FuelError.CODES.INVALID_B256_ADDRESS, `Invalid B256 Address: ${b256}.`);
     }
 
-    bytes = getBytesFromBech32(toBech32(b256));
-    bytes = hexlify(bytes.fill(0, 0, 12)) as B256AddressEvm;
+    const evmBytes = arrayify(b256).slice(12);
+    const paddedBytes = new Uint8Array(12).fill(0);
+    return hexlify(concat([paddedBytes, evmBytes])) as B256AddressEvm;
   } catch (error) {
     throw new FuelError(
       FuelError.CODES.PARSE_FAILED,
       `Cannot generate EVM Address B256 from: ${b256}.`
     );
   }
-
-  return bytes;
 };
 
 /**
@@ -188,4 +120,62 @@ export const padFirst12BytesOfEvmAddress = (address: string): B256AddressEvm => 
   }
 
   return address.replace('0x', '0x000000000000000000000000') as B256AddressEvm;
+};
+
+/**
+ * Converts an EVM address to a B256 address
+ *
+ * @param address - The EVM address to convert
+ * @returns The B256 address
+ *
+ * @hidden
+ */
+export const fromEvmAddressToB256 = (address: string): B256Address =>
+  padFirst12BytesOfEvmAddress(address);
+
+/**
+ * Converts a Public Key to a B256 address
+ *
+ * @param publicKey - The Public Key to convert
+ * @returns The B256 address
+ *
+ * @hidden
+ */
+export const fromPublicKeyToB256 = (publicKey: string): B256Address => {
+  if (!isPublicKey(publicKey)) {
+    throw new FuelError(FuelError.CODES.INVALID_PUBLIC_KEY, `Invalid Public Key: ${publicKey}.`);
+  }
+
+  return hexlify(sha256(arrayify(publicKey)));
+};
+
+/**
+ * Converts a dynamic input to a B256 address
+ *
+ * @param address - The dynamic input to convert
+ * @returns The B256 address
+ *
+ * @hidden
+ */
+export const fromDynamicInputToB256 = (address: string | Address): B256Address => {
+  if (typeof address !== 'string' && 'toB256' in address) {
+    return address.toB256();
+  }
+
+  if (isB256(address)) {
+    return address;
+  }
+
+  if (isPublicKey(address)) {
+    return fromPublicKeyToB256(address);
+  }
+
+  if (isEvmAddress(address)) {
+    return fromEvmAddressToB256(address);
+  }
+
+  throw new FuelError(
+    FuelError.CODES.PARSE_FAILED,
+    `Unknown address format: only 'B256', 'Public Key (512)', or 'EVM Address' are supported.`
+  );
 };

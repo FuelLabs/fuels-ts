@@ -3,9 +3,8 @@ import type { FunctionFragment } from '@fuel-ts/abi-coder';
 import type { CoinQuantity } from '@fuel-ts/account';
 import { coinQuantityfy } from '@fuel-ts/account';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractProgram } from '@fuel-ts/interfaces';
 
-import type { CallConfig, CallParams } from '../types';
+import type { AbstractProgram, CallConfig, CallParams } from '../types';
 
 import { BaseInvocationScope } from './base-invocation-scope';
 

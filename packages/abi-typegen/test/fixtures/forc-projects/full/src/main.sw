@@ -44,6 +44,8 @@ enum MyContractError {
     DivisionByZero: (),
 }
 
+type TupleWithNativeAssets = (AssetId, AssetId, bool);
+
 fn divide(numerator: u64, denominator: u64) -> Result<u64, MyContractError> {
     if (denominator == 0) {
         return Err(MyContractError::DivisionByZero);
@@ -57,6 +59,7 @@ abi MyContract {
     fn types_empty_then_value(x: (), y: u8) -> ();
     fn types_value_then_empty(x: u8, y: ()) -> ();
     fn types_value_then_empty_then_value(x: u8, y: (), z: u8) -> ();
+    fn types_value_then_value_then_empty_then_empty(x: u8, y: u8, z: (), a: ()) -> ();
     fn types_u8(x: u8) -> u8;
     fn types_u16(x: u16) -> u16;
     fn types_u32(x: u32) -> u32;
@@ -70,6 +73,8 @@ abi MyContract {
     fn types_struct(x: MyStruct) -> MyStruct;
     fn types_array(x: [u8; 3]) -> [u8; 3];
     fn types_tuple(x: (u8, u8, u8)) -> (u8, u8, u8);
+    fn types_tuple_with_native_types(x: (AssetId, AssetId, bool)) -> (AssetId, AssetId, bool);
+    fn alias_types_tuple_with_native_types(x: TupleWithNativeAssets) -> TupleWithNativeAssets;
     fn types_enum(x: MyEnum) -> MyEnum;
     fn types_enum_with_vector(x: EnumWithVector) -> EnumWithVector;
     fn types_vector_u8(x: Vec<u8>) -> Vec<u8>;
@@ -96,13 +101,20 @@ impl MyContract for Contract {
     fn types_empty(x: ()) -> () {
         x
     }
+
     fn types_empty_then_value(x: (), y: u8) -> () {
         ()
     }
+
     fn types_value_then_empty(x: u8, y: ()) -> () {
         ()
     }
+
     fn types_value_then_empty_then_value(x: u8, y: (), z: u8) -> () {
+        ()
+    }
+
+    fn types_value_then_value_then_empty_then_empty(x: u8, y: u8, z: (), a: ()) -> () {
         ()
     }
 
@@ -140,6 +152,12 @@ impl MyContract for Contract {
         x
     }
     fn types_tuple(x: (u8, u8, u8)) -> (u8, u8, u8) {
+        (x.0, x.1, x.2)
+    }
+    fn types_tuple_with_native_types(x: (AssetId, AssetId, bool)) -> (AssetId, AssetId, bool) {
+        (x.0, x.1, x.2)
+    }
+    fn alias_types_tuple_with_native_types(x: TupleWithNativeAssets) -> TupleWithNativeAssets {
         (x.0, x.1, x.2)
     }
     fn types_struct(x: MyStruct) -> MyStruct {

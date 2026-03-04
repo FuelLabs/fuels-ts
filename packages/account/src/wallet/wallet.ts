@@ -1,4 +1,5 @@
-import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
+import type { Address } from '@fuel-ts/address';
+import type { BytesLike } from '@fuel-ts/utils';
 
 import type { Provider } from '../providers';
 
@@ -15,7 +16,7 @@ export class Wallet {
    * @param provider - A Provider instance (optional).
    * @returns A locked wallet instance.
    */
-  static fromAddress(address: string | AbstractAddress, provider?: Provider): WalletLocked {
+  static fromAddress(address: string | Address, provider?: Provider): WalletLocked {
     return new WalletLocked(address, provider);
   }
 

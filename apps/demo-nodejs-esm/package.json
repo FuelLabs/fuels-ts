@@ -3,6 +3,7 @@
   "name": "demo-node-esm",
   "description": "Simple NodeJS demo using ESM modules",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "version": "0.0.0",
   "type": "module",
   "license": "Apache-2.0",
   "scripts": {
@@ -10,6 +11,5 @@
   },
   "dependencies": {
     "fuels": "workspace:*"
-  },
-  "version": null
+  }
 }

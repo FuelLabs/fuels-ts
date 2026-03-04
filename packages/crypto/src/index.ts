@@ -16,4 +16,7 @@ export const {
   computeHmac,
   pbkdf2,
   ripemd160,
+  randomUUID,
 } = cryptoApi;
+
+export * from './hasher';

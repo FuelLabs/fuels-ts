@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/versions",
-  "version": "0.91.0",
+  "version": "0.103.0",
   "description": "Validates supported versions of the Fuel toolchain",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -10,18 +10,18 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "engines": {
-    "node": "^18.20.3 || ^20.0.0 || ^22.0.0"
+    "node": "^20.0.0 || ^22.0.0 || ^24.0.0"
   },
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "require": "./dist/index.js",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/index.mjs"
     },
     "./cli": {
+      "types": "./dist/cli.d.ts",
       "require": "./dist/cli.js",
-      "import": "./dist/cli.mjs",
-      "types": "./dist/cli.d.ts"
+      "import": "./dist/cli.mjs"
     }
   },
   "typesVersions": {
@@ -39,12 +39,16 @@
     "build": "tsup",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FuelLabs/fuels-ts.git"
+  },
   "license": "Apache-2.0",
   "dependencies": {
     "chalk": "4",
-    "cli-table": "^0.3.11"
+    "cli-table": "0.3.11"
   },
   "devDependencies": {
-    "@types/cli-table": "^0.3.4"
+    "@types/cli-table": "0.3.4"
   }
 }

@@ -1,90 +1,30 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 
-export const jsonAbiFragmentMock: JsonAbi = {
-  configurables: [],
-  loggedTypes: [],
-  messagesTypes: [],
-  types: [
-    {
-      typeId: 0,
-      type: 'bool',
-      components: null,
-      typeParameters: null,
-    },
-    {
-      typeId: 1,
-      type: 'u64',
-      components: null,
-      typeParameters: null,
-    },
-    {
-      typeId: 2,
-      type: 'struct MyStruct',
-      components: [
-        {
-          type: 0,
-          name: 'arg_one',
-          typeArguments: null,
-        },
-        {
-          type: 1,
-          name: 'arg_two',
-          typeArguments: null,
-        },
-      ],
-      typeParameters: null,
-    },
-  ],
-  functions: [
-    {
-      name: 'main',
-      inputs: [
-        {
-          name: 'my_struct',
-          type: 2,
-          typeArguments: null,
-        },
-      ],
-      output: {
-        name: 'my_struct',
-        type: 2,
-        typeArguments: null,
-      },
-      attributes: [],
-    },
-  ],
-};
-
 export const jsonAbiMock: JsonAbi = {
-  types: [
+  programType: 'script',
+  specVersion: '1',
+  encodingVersion: '1',
+  concreteTypes: [
     {
-      typeId: 0,
       type: 'bool',
-      components: null,
-      typeParameters: null,
+      concreteTypeId: 'b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
     },
     {
-      typeId: 1,
       type: 'u8',
-      components: null,
-      typeParameters: null,
+      concreteTypeId: 'a760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
     },
   ],
+  metadataTypes: [],
   functions: [
     {
       inputs: [
         {
           name: 'inputed_fee',
-          type: 1,
-          typeArguments: null,
+          concreteTypeId: 'a760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
         },
       ],
       name: 'main',
-      output: {
-        name: '',
-        type: 0,
-        typeArguments: null,
-      },
+      output: 'b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
       attributes: null,
     },
   ],

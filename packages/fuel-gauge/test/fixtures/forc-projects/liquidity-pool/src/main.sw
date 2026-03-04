@@ -1,8 +1,6 @@
 // #region liquidity-pool-contract
 contract;
 
-use std::constants::ZERO_B256;
-
 use std::{
     call_frames::{
         contract_id,
@@ -54,7 +52,7 @@ impl LiquidityPool for Contract {
         let amount_to_mint = msg_amount() * 2;
 
         // Mint some LP token based upon the amount of the base token.
-        mint_to(recipient, ZERO_B256, amount_to_mint);
+        mint_to(recipient, b256::zero(), amount_to_mint);
     }
 
     #[storage(read), payable]

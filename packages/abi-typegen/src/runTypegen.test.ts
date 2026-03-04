@@ -57,15 +57,12 @@ describe('runTypegen.js', () => {
     // check if all files were created
     const files = [
       join(output, 'index.ts'),
-      join(output, 'common.d.ts'),
-      join(output, `${normalizedName}Abi.d.ts`),
-      join(output, `${normalizedName}2Abi.d.ts`),
-      join(output, 'factories', `${normalizedName}Abi__factory.ts`),
-      join(output, `${normalizedName}Abi.hex.ts`),
-      join(output, `${normalizedName}2Abi.hex.ts`),
+      join(output, 'common.ts'),
+      join(output, `${normalizedName}.ts`),
+      join(output, `${normalizedName}Factory.ts`),
     ];
 
-    expect(files.length).toEqual(7);
+    expect(files.length).toEqual(4);
 
     files.forEach((f) => {
       expect(existsSync(f)).toEqual(true);
@@ -104,13 +101,12 @@ describe('runTypegen.js', () => {
     // check if all files were created
     const files = [
       join(output, 'index.ts'),
-      join(output, 'common.d.ts'),
-      join(output, `${normalizedName}Abi.d.ts`),
-      join(output, 'factories', `${normalizedName}Abi__factory.ts`),
-      join(output, `${normalizedName}Abi.hex.ts`),
+      join(output, 'common.ts'),
+      join(output, `${normalizedName}.ts`),
+      join(output, `${normalizedName}Factory.ts`),
     ];
 
-    expect(files.length).toEqual(5);
+    expect(files.length).toEqual(4);
 
     files.forEach((f) => {
       expect(existsSync(f)).toEqual(true);
@@ -147,10 +143,7 @@ describe('runTypegen.js', () => {
     expect(error).toBeFalsy();
 
     // check if all files were created
-    const files = [
-      join(output, 'index.ts'),
-      join(output, 'factories', `${normalizedName}Abi__factory.ts`),
-    ];
+    const files = [join(output, 'index.ts'), join(output, `${normalizedName}.ts`)];
 
     expect(files.length).toEqual(2);
 
@@ -160,7 +153,7 @@ describe('runTypegen.js', () => {
   });
 
   test('should log messages to stdout', async () => {
-    const logSpy = vi.spyOn(console, 'log');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
     // setup temp sway project
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
@@ -279,7 +272,7 @@ describe('runTypegen.js', () => {
     cpSync(fromBin, toBin);
 
     // mocking
-    const logSpy = vi.spyOn(console, 'log');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
     // executes program
     const fn = () =>
@@ -299,15 +292,12 @@ describe('runTypegen.js', () => {
     // check if all files were created
     const files = [
       join(output, 'index.ts'),
-      join(output, 'common.d.ts'),
-      join(output, `${normalizedName}Abi.d.ts`),
-      join(output, `${normalizedName}2Abi.d.ts`),
-      join(output, 'factories', `${normalizedName}Abi__factory.ts`),
-      join(output, `${normalizedName}Abi.hex.ts`),
-      join(output, `${normalizedName}2Abi.hex.ts`),
+      join(output, 'common.ts'),
+      join(output, `${normalizedName}.ts`),
+      join(output, `${normalizedName}Factory.ts`),
     ];
 
-    expect(files.length).toEqual(7);
+    expect(files.length).toEqual(4);
 
     files.forEach((f) => {
       expect(existsSync(f)).toEqual(true);

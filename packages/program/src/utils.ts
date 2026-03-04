@@ -1,9 +1,8 @@
-import { getDecodedLogs } from '@fuel-ts/account';
-import type { TransactionResultReceipt, JsonAbisFromAllCalls } from '@fuel-ts/account';
+import { getAllDecodedLogs, getDecodedLogs } from '@fuel-ts/account';
+import type { TransactionResultReceipt, JsonAbisFromAllCalls, DecodedLogs } from '@fuel-ts/account';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractContract } from '@fuel-ts/interfaces';
 
-import type { CallConfig, InvocationScopeLike } from './types';
+import type { AbstractContract, CallConfig, InvocationScopeLike } from './types';
 
 /**
  * @hidden
@@ -42,7 +41,7 @@ export function getAbisFromAllCalls(
 
 /**
  * @hidden
- *
+ * @deprecated Use `getAllResultLogs` instead.
  */
 export const getResultLogs = (
   receipts: TransactionResultReceipt[],
@@ -54,4 +53,19 @@ export const getResultLogs = (
   }
   const { main, otherContractsAbis } = getAbisFromAllCalls(functionScopes);
   return getDecodedLogs(receipts, main, otherContractsAbis);
+};
+
+/** @hidden */
+export const getAllResultLogs = (opts: {
+  receipts: TransactionResultReceipt[];
+  mainCallConfig: CallConfig | undefined;
+  functionScopes: Array<InvocationScopeLike>;
+}): DecodedLogs => {
+  const { receipts, mainCallConfig, functionScopes } = opts;
+
+  if (!mainCallConfig) {
+    return { logs: [], groupedLogs: {} };
+  }
+  const { main, otherContractsAbis } = getAbisFromAllCalls(functionScopes);
+  return getAllDecodedLogs({ receipts, mainAbi: main, externalAbis: otherContractsAbis });
 };

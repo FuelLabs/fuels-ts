@@ -1,7 +1,9 @@
 import { getForcProject } from '@fuel-ts/utils/test-utils';
 import { join } from 'path';
 
-import type { IRawAbi } from '../../../src/index';
+import type { JsonAbiOld } from '../../../src';
+import type { JsonAbi } from '../../../src/types/interfaces/JsonAbiNew';
+import { transpileAbi } from '../../../src/utils/transpile-abi';
 
 export enum AbiTypegenProjectsEnum {
   ARRAY_OF_ENUMS = 'array-of-enums',
@@ -30,12 +32,19 @@ export enum AbiTypegenProjectsEnum {
   VECTOR_SIMPLE = 'vector-simple',
 }
 
-export const getTypegenForcProject = (
+export const getTypegenForcProject = <T extends boolean = false>(
   project: AbiTypegenProjectsEnum,
-  build: 'release' | 'debug' = 'release'
-) =>
-  getForcProject<IRawAbi>({
+  { transpile }: { transpile: T } = { transpile: false as T }
+) => {
+  const result = getForcProject<T extends true ? JsonAbiOld : JsonAbi>({
     projectDir: join(__dirname, project),
     projectName: project,
-    build,
+    build: 'release',
   });
+
+  if (transpile) {
+    result.abiContents = transpileAbi(result.abiContents);
+  }
+
+  return result;
+};

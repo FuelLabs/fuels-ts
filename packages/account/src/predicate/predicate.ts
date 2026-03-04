@@ -2,7 +2,7 @@ import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { BytesLike } from '@fuel-ts/interfaces';
+import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 
 import type { FakeResources } from '../account';
@@ -11,64 +11,87 @@ import {
   transactionRequestify,
   isRequestInputResource,
   isRequestInputResourceFromOwner,
+  isRequestInputCoinOrMessage,
 } from '../providers';
 import type {
   CallResult,
   CoinQuantityLike,
-  ExcludeResourcesOption,
+  ResourcesIdsToIgnore,
   Provider,
   Resource,
   TransactionRequest,
   TransactionRequestLike,
   TransactionResponse,
 } from '../providers';
+import { deployScriptOrPredicate } from '../utils/deployScriptOrPredicate';
 
 import { getPredicateRoot } from './utils';
 
-export type PredicateParams<T = InputValue[]> = {
+// Helper type to check if T is a tuple with a fixed, non-zero length
+type IsNonEmptyTuple<T extends unknown[]> = number extends T['length']
+  ? false
+  : T['length'] extends 0
+    ? false
+    : true;
+
+// Type for the 'data' property, required if TData is a non-empty tuple
+export type PredicateDataParam<TData extends InputValue[]> =
+  IsNonEmptyTuple<TData> extends true
+    ? { data: TData } // If TData is a non-empty tuple, 'data' is required
+    : { data?: TData }; // Otherwise (TData is []), 'data' is optional
+
+export type PredicateParams<
+  TData extends InputValue[] = InputValue[],
+  TConfigurables extends { [name: string]: unknown } | undefined = { [name: string]: unknown },
+> = PredicateDataParam<TData> & {
   bytecode: BytesLike;
   provider: Provider;
-  abi?: JsonAbi;
-  inputData?: T;
-  configurableConstants?: { [name: string]: unknown };
+  abi: JsonAbi;
+  configurableConstants?: TConfigurables;
 };
 
 /**
  * `Predicate` provides methods to populate transaction data with predicate information and sending transactions with them.
  */
-export class Predicate<TInputData extends InputValue[]> extends Account {
+export class Predicate<
+  TData extends InputValue[] = InputValue[],
+  TConfigurables extends { [name: string]: unknown } | undefined = { [name: string]: unknown },
+> extends Account {
   bytes: Uint8Array;
-  predicateData: TInputData = [] as unknown as TInputData;
-  interface?: Interface;
-
+  predicateData: TData = [] as unknown as TData;
+  interface: Interface;
+  initialBytecode: Uint8Array;
+  configurableConstants: TConfigurables | undefined;
   /**
    * Creates an instance of the Predicate class.
    *
    * @param bytecode - The bytecode of the predicate.
    * @param abi - The JSON ABI of the predicate.
    * @param provider - The provider used to interact with the blockchain.
-   * @param inputData - The predicate input data (optional).
+   * @param data - The predicate input data (optional).
    * @param configurableConstants - Optional configurable constants for the predicate.
    */
   constructor({
     bytecode,
     abi,
     provider,
-    inputData,
+    data,
     configurableConstants,
-  }: PredicateParams<TInputData>) {
+  }: PredicateParams<TData, TConfigurables>) {
     const { predicateBytes, predicateInterface } = Predicate.processPredicateData(
       bytecode,
       abi,
       configurableConstants
     );
-    const address = Address.fromB256(getPredicateRoot(predicateBytes));
+    const address = new Address(getPredicateRoot(predicateBytes));
     super(address, provider);
 
+    this.initialBytecode = arrayify(bytecode);
     this.bytes = predicateBytes;
     this.interface = predicateInterface;
-    if (inputData !== undefined && inputData.length > 0) {
-      this.predicateData = inputData;
+    this.configurableConstants = configurableConstants;
+    if (data !== undefined && data.length > 0) {
+      this.predicateData = data;
     }
   }
 
@@ -89,7 +112,7 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
       request.removeWitness(placeholderIndex);
     }
 
-    request.inputs.filter(isRequestInputResource).forEach((input) => {
+    request.inputs.filter(isRequestInputCoinOrMessage).forEach((input) => {
       if (isRequestInputResourceFromOwner(input, this.address)) {
         // eslint-disable-next-line no-param-reassign
         input.predicate = hexlify(this.bytes);
@@ -109,8 +132,11 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
    * @param transactionRequestLike - The transaction request-like object.
    * @returns A promise that resolves to the transaction response.
    */
-  sendTransaction(transactionRequestLike: TransactionRequestLike): Promise<TransactionResponse> {
+  override sendTransaction(
+    transactionRequestLike: TransactionRequestLike
+  ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+
     return super.sendTransaction(transactionRequest, { estimateTxDependencies: false });
   }
 
@@ -120,18 +146,53 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
    * @param transactionRequestLike - The transaction request-like object.
    * @returns A promise that resolves to the call result.
    */
-  simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
+  override simulateTransaction(
+    transactionRequestLike: TransactionRequestLike
+  ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     return super.simulateTransaction(transactionRequest, { estimateTxDependencies: false });
   }
 
-  private getPredicateData(): Uint8Array {
+  /**
+   * Retrieves the properly encoded predicate data.
+   *
+   * @returns A Uint8Array containing the encoded predicate data. If no predicate data is available, returns an empty Uint8Array.
+   */
+  getPredicateData(): Uint8Array {
     if (!this.predicateData.length) {
       return new Uint8Array();
     }
 
     const mainFn = this.interface?.functions.main;
     return mainFn?.encodeArguments(this.predicateData) || new Uint8Array();
+  }
+
+  /**
+   * Creates a new Predicate instance from an existing Predicate instance.
+   * @param overrides - The data and configurable constants to override.
+   * @returns A new Predicate instance with the same bytecode, ABI and provider but with the ability to set the data and configurable constants.
+   */
+  toNewInstance(
+    overrides: Partial<
+      Pick<PredicateParams<TData, TConfigurables>, 'data' | 'configurableConstants'>
+    > = {}
+  ) {
+    return new Predicate<TData, TConfigurables>({
+      bytecode: this.initialBytecode,
+      abi: this.interface.jsonAbi,
+      provider: this.provider,
+      data: overrides.data ?? this.predicateData,
+      configurableConstants: overrides.configurableConstants ?? this.configurableConstants,
+    });
+  }
+
+  /**
+   * Sets the predicate data.
+   *
+   * @param data - The data to be set for the predicate.
+   */
+  setData(data: TData) {
+    this.predicateData = data;
   }
 
   /**
@@ -144,20 +205,17 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
    */
   private static processPredicateData(
     bytes: BytesLike,
-    jsonAbi?: JsonAbi,
+    jsonAbi: JsonAbi,
     configurableConstants?: { [name: string]: unknown }
   ) {
     let predicateBytes = arrayify(bytes);
-    let abiInterface: Interface | undefined;
+    const abiInterface: Interface = new Interface(jsonAbi);
 
-    if (jsonAbi) {
-      abiInterface = new Interface(jsonAbi);
-      if (abiInterface.functions.main === undefined) {
-        throw new FuelError(
-          ErrorCode.ABI_MAIN_METHOD_MISSING,
-          'Cannot use ABI without "main" function.'
-        );
-      }
+    if (abiInterface.functions.main === undefined) {
+      throw new FuelError(
+        ErrorCode.ABI_MAIN_METHOD_MISSING,
+        'Cannot use ABI without "main" function.'
+      );
     }
 
     if (configurableConstants && Object.keys(configurableConstants).length) {
@@ -178,17 +236,17 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
    * Retrieves resources satisfying the spend query for the account.
    *
    * @param quantities - IDs of coins to exclude.
-   * @param excludedIds - IDs of resources to be excluded from the query.
+   * @param resourcesIdsToIgnore - IDs of resources to be excluded from the query.
    * @returns A promise that resolves to an array of Resources.
    */
-  async getResourcesToSpend(
-    quantities: CoinQuantityLike[] /** IDs of coins to exclude */,
-    excludedIds?: ExcludeResourcesOption
+  override async getResourcesToSpend(
+    quantities: CoinQuantityLike[],
+    resourcesIdsToIgnore?: ResourcesIdsToIgnore
   ): Promise<Resource[]> {
     const resources = await this.provider.getResourcesToSpend(
       this.address,
       quantities,
-      excludedIds
+      resourcesIdsToIgnore
     );
     return resources.map((resource) => ({
       ...resource,
@@ -203,7 +261,7 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
    * @param coins - An array of `FakeResources` objects representing the coins.
    * @returns An array of `Resource` objects with generated properties.
    */
-  generateFakeResources(coins: FakeResources[]): Array<Resource> {
+  override generateFakeResources(coins: FakeResources[]): Array<Resource> {
     return super.generateFakeResources(coins).map((coin) => ({
       ...coin,
       predicate: hexlify(this.bytes),
@@ -222,24 +280,24 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
   private static setConfigurableConstants(
     bytes: Uint8Array,
     configurableConstants: { [name: string]: unknown },
-    abiInterface?: Interface
+    abiInterface: Interface
   ) {
     const mutatedBytes = bytes;
 
     try {
-      if (!abiInterface) {
-        throw new Error(
-          'Cannot validate configurable constants because the Predicate was instantiated without a JSON ABI'
-        );
-      }
-
       if (Object.keys(abiInterface.configurables).length === 0) {
-        throw new Error('Predicate has no configurable constants to be set');
+        throw new FuelError(
+          ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
+          'Predicate has no configurable constants to be set'
+        );
       }
 
       Object.entries(configurableConstants).forEach(([key, value]) => {
         if (!abiInterface?.configurables[key]) {
-          throw new Error(`No configurable constant named '${key}' found in the Predicate`);
+          throw new FuelError(
+            ErrorCode.CONFIGURABLE_NOT_FOUND,
+            `No configurable constant named '${key}' found in the Predicate`
+          );
         }
 
         const { offset } = abiInterface.configurables[key];
@@ -295,5 +353,29 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
     }
 
     return index;
+  }
+
+  /**
+   *
+   * @param account - The account used to pay the deployment costs.
+   * @returns The _blobId_ and a _waitForResult_ callback that returns the deployed predicate
+   * once the blob deployment transaction finishes.
+   *
+   * The returned loader predicate will have the same configurable constants
+   * as the original predicate which was used to generate the loader predicate.
+   */
+  async deploy<T = this>(account: Account) {
+    return deployScriptOrPredicate<T>({
+      deployer: account,
+      abi: this.interface.jsonAbi,
+      bytecode: this.bytes,
+      loaderInstanceCallback: (loaderBytecode, newAbi) =>
+        new Predicate({
+          bytecode: loaderBytecode,
+          abi: newAbi,
+          provider: this.provider,
+          data: this.predicateData,
+        }) as T,
+    });
   }
 }

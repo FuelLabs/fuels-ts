@@ -16,8 +16,8 @@ export type Option<T> = T | undefined;
 
 export type Vec<T> = T[];
 
-/**  
+/**
  * Mimics Sway Result enum type.
  * Ok represents the success case, while Err represents the error case.
- */  
- export type Result<T, E> = Enum<{Ok: T, Err: E}>;
+ */
+export type Result<T, E> = Enum<{Ok: T, Err: E}>;

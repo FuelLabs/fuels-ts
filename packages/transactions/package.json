@@ -1,24 +1,24 @@
 {
   "name": "@fuel-ts/transactions",
-  "version": "0.91.0",
+  "version": "0.103.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "engines": {
-    "node": "^18.20.3 || ^20.0.0 || ^22.0.0"
+    "node": "^20.0.0 || ^22.0.0 || ^24.0.0"
   },
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "require": "./dist/index.js",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/index.mjs"
     },
     "./configs": {
+      "types": "./dist/configs.d.ts",
       "require": "./dist/configs.js",
-      "import": "./dist/configs.mjs",
-      "types": "./dist/configs.d.ts"
+      "import": "./dist/configs.mjs"
     }
   },
   "typesVersions": {
@@ -35,13 +35,16 @@
     "build": "tsup",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FuelLabs/fuels-ts.git"
+  },
   "license": "Apache-2.0",
   "dependencies": {
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
-    "@fuel-ts/hasher": "workspace:^",
-    "@fuel-ts/interfaces": "workspace:^",
+    "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/utils": "workspace:*"
   }

@@ -1,17 +1,17 @@
 #!/bin/bash
 
 main_dir=$(pwd)
-forc_tomls=$(find . -type f -name "Forc.toml")
+forc_tomls=$(find . -type f -name "Forc.toml" -not -path "./internal/**/*")
 forc_fmt=$(realpath ./internal/forc/forc-binaries/forc-fmt)
 expected_authors="authors = [\"Fuel Labs <contact@fuel.sh>\"]"
 
 for forc_toml in $forc_tomls; do
 
-     # cd into the respective forc project
+    # cd into the respective forc project
     cd ${forc_toml/Forc.toml/''}
 
     # fix forc formatting
-    eval "$forc_fmt"
+    eval "$forc_fmt --experimental error_type"
 
     # fix TOML `authors` (for projects only, ignores workspace)
     if [ "$(head -n 1 Forc.toml)" == "[project]" ]; then

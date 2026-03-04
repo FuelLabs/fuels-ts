@@ -13,11 +13,10 @@ import {
   Predicate,
   Provider,
 } from '@fuel-ts/account';
-import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
 import { Address } from '@fuel-ts/address';
 import { ContractFactory } from '@fuel-ts/contract';
 import { encrypt, decrypt } from '@fuel-ts/crypto';
-import { hashMessage } from '@fuel-ts/hasher';
+import { hashMessage } from '@fuel-ts/crypto';
 import { BN } from '@fuel-ts/math';
 import { DEFAULT_PRECISION, DEFAULT_MIN_PRECISION } from '@fuel-ts/math/configs';
 import { SparseMerkleTree, constructTree } from '@fuel-ts/merkle';
@@ -39,7 +38,6 @@ import {
   hexlify,
   createConfig,
 } from 'fuels';
-import { generateTestWallet, seedTestWallet } from 'fuels/test-utils';
 
 const { log } = console;
 
@@ -62,7 +60,7 @@ log(runCliAction);
  * address
  */
 log(Address);
-log(Address.fromPublicKey('asdfasdf'));
+log(new Address('asdfasdf'));
 
 /**
  * contract
@@ -168,9 +166,6 @@ log(WalletManager);
  * wallet
  */
 log(Wallet);
-log(generateTestWallet);
-log(seedTestWallet);
-log(FUEL_NETWORK_URL);
 
 /**
  * wordlists

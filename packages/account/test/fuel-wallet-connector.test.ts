@@ -2,16 +2,25 @@ import { Address } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
+import { hexlify, type BytesLike } from '@fuel-ts/utils';
 import { EventEmitter } from 'events';
 
-import type { ProviderOptions } from '../src';
-import { FUEL_NETWORK_URL } from '../src/configs';
+import {
+  Account,
+  assembleTransactionSummaryFromJson,
+  type Network,
+  type ProviderOptions,
+  type SelectNetworkArguments,
+} from '../src';
+import { TESTNET_NETWORK_URL } from '../src/configs';
 import { Fuel } from '../src/connectors/fuel';
+import type { FuelConnectorSendTxParams } from '../src/connectors/types';
 import { FuelConnectorEventType } from '../src/connectors/types';
-import { Provider, TransactionStatus } from '../src/providers';
+import { Provider, ScriptTransactionRequest, TransactionStatus } from '../src/providers';
+import { serializeProviderCache } from '../src/providers/utils/serialization';
+import { setupTestProviderAndWallets, TestMessage } from '../src/test-utils';
 import { Wallet } from '../src/wallet';
 
 import { MockConnector } from './fixtures/mocked-connector';
@@ -23,18 +32,18 @@ import { promiseCallback } from './fixtures/promise-callback';
  */
 describe('Fuel Connector', () => {
   it('should ensure is instantiated using default connectors', async () => {
-    const fuel = new Fuel();
+    const fuel = await new Fuel().init();
     const connectors = await fuel.connectors();
     expect(connectors.length).toBe(0);
   });
 
   it('should add connector using event of a custom EventBus', async () => {
     const eventBus = new EventEmitter();
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       targetObject: eventBus,
       connectors: [],
       storage: null,
-    });
+    }).init();
     let connectors = await fuel.connectors();
     expect(connectors.length).toBe(0);
 
@@ -56,44 +65,44 @@ describe('Fuel Connector', () => {
   });
 
   it('should ensure hasConnector works just fine', async () => {
-    let fuel = new Fuel({
+    let fuel = await new Fuel({
       connectors: [new MockConnector()],
       storage: null,
-    });
+    }).init();
     let hasConnector = await fuel.hasConnector();
     expect(hasConnector).toBeTruthy();
 
-    fuel = new Fuel({
+    fuel = await new Fuel({
       connectors: [],
       storage: null,
-    });
+    }).init();
     hasConnector = await fuel.hasConnector();
     expect(hasConnector).toBeFalsy();
   });
 
   it('should ensure isConnected works just fine', async () => {
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       connectors: [new MockConnector()],
       storage: null,
-    });
+    }).init();
     const isConnected = await fuel.isConnected();
     expect(isConnected).toBeTruthy();
   });
 
   it('should ensure isConnected works just fine', async () => {
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       connectors: [new MockConnector()],
       storage: null,
-    });
+    }).init();
     const isConnected = await fuel.ping();
     expect(isConnected).toBeTruthy();
   });
 
   it('should ensure connect works just fine', async () => {
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       storage: null,
       connectors: [new MockConnector()],
-    });
+    }).init();
 
     // listen to connection event
     const onConnection = promiseCallback();
@@ -106,9 +115,7 @@ describe('Fuel Connector', () => {
     const isConnected = await fuel.connect();
     expect(isConnected).toBeTruthy();
     const accounts = await fuel.accounts();
-    await onConnection.promise;
-    await onAccounts.promise;
-    await onCurrentAccount.promise;
+    await Promise.all([onConnection.promise, onAccounts.promise, onCurrentAccount.promise]);
 
     expect(onConnection).toBeCalledTimes(1);
     expect(onConnection).toBeCalledWith(true);
@@ -119,9 +126,9 @@ describe('Fuel Connector', () => {
   });
 
   it('should ensure disconnect works just fine', async () => {
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       connectors: [new MockConnector()],
-    });
+    }).init();
 
     // listen to connection event
     const onConnection = vi.fn();
@@ -140,50 +147,50 @@ describe('Fuel Connector', () => {
   });
 
   it('should ensure accounts returns all connected accounts', async () => {
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       storage: null,
       connectors: [new MockConnector()],
-    });
+    }).init();
     const accounts = await fuel.accounts();
     expect(accounts.length).toBeGreaterThan(0);
   });
 
   it('should ensure currentAccount returns current account', async () => {
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       storage: null,
       connectors: [new MockConnector()],
-    });
+    }).init();
     const [account] = await fuel.accounts();
     const currentAccount = await fuel.currentAccount();
     expect(currentAccount).toEqual(account);
   });
 
   it('should ensure networks returns all networks', async () => {
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       storage: null,
       connectors: [new MockConnector()],
-    });
+    }).init();
     const networks = await fuel.networks();
     expect(networks.length).toBeGreaterThan(0);
   });
 
   it('should ensure currentNetwork returns current network', async () => {
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       storage: null,
       connectors: [new MockConnector()],
-    });
+    }).init();
     const [network] = await fuel.networks();
     const currentNetwork = await fuel.currentNetwork();
     expect(currentNetwork).toEqual(network);
   });
 
   it('should ensure addNetwork works just fine', async () => {
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       storage: null,
       connectors: [new MockConnector()],
-    });
-    const networkUrl = 'https://testnet.fuel.network';
-    const newNetwork = {
+    }).init();
+    const networkUrl = TESTNET_NETWORK_URL;
+    const newNetwork: Network = {
       url: networkUrl,
       chainId: 0,
     };
@@ -205,12 +212,12 @@ describe('Fuel Connector', () => {
   });
 
   it('should ensure selectNetwork works just fine', async () => {
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       storage: null,
       connectors: [new MockConnector()],
-    });
-    const newNetwork = {
-      url: 'https://testnet.fuel.network/',
+    }).init();
+    const network: SelectNetworkArguments = {
+      url: TESTNET_NETWORK_URL,
       chainId: 0,
     };
 
@@ -218,17 +225,55 @@ describe('Fuel Connector', () => {
     const onCurrentNetwork = vi.fn();
     fuel.on(fuel.events.currentNetwork, onCurrentNetwork);
 
-    const networkHasSwitch = await fuel.selectNetwork(newNetwork);
+    const networkHasSwitch = await fuel.selectNetwork(network);
     expect(networkHasSwitch).toEqual(true);
     expect(onCurrentNetwork).toBeCalledTimes(1);
-    expect(onCurrentNetwork).toBeCalledWith(newNetwork);
+    expect(onCurrentNetwork).toBeCalledWith(network);
+  });
+
+  it('should ensure selectNetwork works just fine [only url]', async () => {
+    const fuel = await new Fuel({
+      storage: null,
+      connectors: [new MockConnector()],
+    }).init();
+    const network: SelectNetworkArguments = {
+      url: TESTNET_NETWORK_URL,
+    };
+
+    // listen to connection event
+    const onCurrentNetwork = vi.fn();
+    fuel.on(fuel.events.currentNetwork, onCurrentNetwork);
+
+    const networkHasSwitch = await fuel.selectNetwork(network);
+    expect(networkHasSwitch).toEqual(true);
+    expect(onCurrentNetwork).toBeCalledTimes(1);
+    expect(onCurrentNetwork).toBeCalledWith(network);
+  });
+
+  it('should ensure selectNetwork works just fine [only chainId]', async () => {
+    const fuel = await new Fuel({
+      storage: null,
+      connectors: [new MockConnector()],
+    }).init();
+    const network: SelectNetworkArguments = {
+      chainId: 123,
+    };
+
+    // listen to connection event
+    const onCurrentNetwork = vi.fn();
+    fuel.on(fuel.events.currentNetwork, onCurrentNetwork);
+
+    const networkHasSwitch = await fuel.selectNetwork(network);
+    expect(networkHasSwitch).toEqual(true);
+    expect(onCurrentNetwork).toBeCalledTimes(1);
+    expect(onCurrentNetwork).toBeCalledWith(network);
   });
 
   it('should ensure addAsset works just fine', async () => {
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       storage: null,
       connectors: [new MockConnector()],
-    });
+    }).init();
     const isAdded = await fuel.addAsset({
       name: 'Asset',
       symbol: 'AST',
@@ -246,10 +291,10 @@ describe('Fuel Connector', () => {
   });
 
   it('should ensure addAssets works just fine', async () => {
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       storage: null,
       connectors: [new MockConnector()],
-    });
+    }).init();
     const isAdded = await fuel.addAssets([
       {
         name: 'Asset',
@@ -269,21 +314,25 @@ describe('Fuel Connector', () => {
   });
 
   it('should ensure assets returns all assets', async () => {
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       storage: null,
       connectors: [new MockConnector()],
-    });
+    }).init();
     const assets = await fuel.assets();
     expect(assets.length).toEqual(0);
   });
 
   it('should ensure addABI works just fine', async () => {
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       storage: null,
       connectors: [new MockConnector()],
-    });
+    }).init();
     const isAdded = await fuel.addABI('0x001123', {
-      types: [],
+      concreteTypes: [],
+      metadataTypes: [],
+      encodingVersion: '1',
+      programType: 'contract',
+      specVersion: '1',
       loggedTypes: [],
       functions: [],
       messagesTypes: [],
@@ -293,38 +342,59 @@ describe('Fuel Connector', () => {
   });
 
   it('should ensure getABI works just fine', async () => {
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       storage: null,
       connectors: [new MockConnector()],
-    });
+    }).init();
     const abi = await fuel.getABI('0x001123');
     expect(abi).toStrictEqual(null);
   });
 
   it('should ensure hasABI works just fine', async () => {
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       storage: null,
       connectors: [new MockConnector()],
-    });
+    }).init();
     const hasFuel = await fuel.hasABI('0x001123');
     expect(hasFuel).toBeTruthy();
   });
 
   it('should throw if ping takes more than a second', async () => {
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       storage: null,
       connectors: [
         new MockConnector({
           pingDelay: 2000,
         }),
       ],
-    });
+    }).init();
     await expect(fuel.connect()).rejects.toThrowError();
   });
 
   it('should ensure getWallet return an wallet', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const baseAssetId = provider.getBaseAssetId();
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        snapshotConfig: {
+          stateConfig: {
+            messages: [
+              new TestMessage({
+                sender: Address.fromB256(
+                  '0xc43454aa38dd91f88109a4b7aef5efb96ce34e3f24992fe0f81d233ca686f80f'
+                ),
+                recipient: Address.fromB256(
+                  '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba'
+                ),
+                nonce: '0101010101010101010101010101010101010101010101010101010101010101',
+                amount: 100_000,
+                data: '',
+                da_height: 0,
+              }).toChainMessage(),
+            ],
+          },
+        },
+      },
+    });
+    const { provider } = launched;
 
     const wallets = [
       Wallet.fromPrivateKey(
@@ -336,7 +406,7 @@ describe('Fuel Connector', () => {
       chainId: await provider.getChainId(),
       url: provider.url,
     };
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       storage: null,
       connectors: [
         new MockConnector({
@@ -344,7 +414,7 @@ describe('Fuel Connector', () => {
           networks: [network],
         }),
       ],
-    });
+    }).init();
     const account = await fuel.currentAccount();
     if (!account) {
       throw new Error('Account not found');
@@ -352,10 +422,15 @@ describe('Fuel Connector', () => {
     const wallet = await fuel.getWallet(account);
     expect(wallet.provider.url).toEqual(network.url);
     const receiver = Wallet.fromAddress(Address.fromRandom(), provider);
-    const response = await wallet.transfer(receiver.address, bn(1000), baseAssetId, {
-      tip: bn(1),
-      gasLimit: bn(100_000),
-    });
+    const response = await wallet.transfer(
+      receiver.address,
+      bn(1000),
+      await provider.getBaseAssetId(),
+      {
+        tip: bn(1),
+        gasLimit: bn(100_000),
+      }
+    );
     const { status } = await response.waitForResult();
     expect(status).toEqual(TransactionStatus.success);
     expect((await receiver.getBalance()).toString()).toEqual('1000');
@@ -364,7 +439,7 @@ describe('Fuel Connector', () => {
   it('should be able to have switch between connectors', async () => {
     const thirdPartyConnectorName = 'Third Party Wallet';
     const walletConnectorName = 'Fuel Wallet';
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       storage: null,
       connectors: [
         new MockConnector({
@@ -375,7 +450,7 @@ describe('Fuel Connector', () => {
           name: thirdPartyConnectorName,
         }),
       ],
-    });
+    }).init();
 
     // Connectors should be available
     const connectors = await fuel.connectors();
@@ -412,10 +487,10 @@ describe('Fuel Connector', () => {
         },
       ],
     });
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       storage: null,
       connectors: [walletConnector, thirdPartyConnector],
-    });
+    }).init();
 
     async function expectEventsForConnector(connector: MockConnector) {
       const onCurrentConnector = promiseCallback();
@@ -479,7 +554,7 @@ describe('Fuel Connector', () => {
         },
       ],
     });
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       storage: null,
       connectors: [walletConnector, thirdPartyConnector],
     });
@@ -508,27 +583,26 @@ describe('Fuel Connector', () => {
   });
 
   it('should be able to getWallet with custom provider', async () => {
-    const defaultProvider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider: nodeProvider } = launched;
 
     const defaultWallet = Wallet.generate({
-      provider: defaultProvider,
+      provider: nodeProvider,
     });
     const connector = new MockConnector({
       wallets: [defaultWallet],
     });
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       connectors: [connector],
-    });
+    }).init();
 
     class CustomProvider extends Provider {
-      static async create(_url: string, opts?: ProviderOptions) {
-        const provider = new CustomProvider(FUEL_NETWORK_URL, opts);
-        await provider.fetchChainAndNodeInfo();
-        return provider;
+      constructor(_url: string, opts?: ProviderOptions) {
+        super(nodeProvider.url, opts);
       }
 
       // eslint-disable-next-line @typescript-eslint/require-await
-      async getBalance(_owner: AbstractAddress, _assetId: BytesLike = ZeroBytes32): Promise<BN> {
+      override async getBalance(_owner: Address, _assetId: BytesLike = ZeroBytes32): Promise<BN> {
         return bn(1234);
       }
     }
@@ -538,36 +612,40 @@ describe('Fuel Connector', () => {
       throw new Error('Account not found');
     }
 
-    const provider = await CustomProvider.create(FUEL_NETWORK_URL);
+    const provider = new CustomProvider(nodeProvider.url);
     const wallet = await fuel.getWallet(currentAccount, provider);
     expect(wallet.provider).toBeInstanceOf(CustomProvider);
     expect(await wallet.getBalance()).toEqual(bn(1234));
   });
 
   it('should ensure hasWallet works just fine', async () => {
-    const defaultProvider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const defaultWallet = Wallet.generate({
-      provider: defaultProvider,
+      provider,
     });
 
     const connector = new MockConnector({
       wallets: [defaultWallet],
     });
 
-    let hasWallet = await new Fuel().hasWallet();
+    let hasWallet = await (await new Fuel().init()).hasWallet();
 
     expect(hasWallet).toBeFalsy();
 
-    hasWallet = await new Fuel({
-      connectors: [connector],
-    }).hasWallet();
+    hasWallet = await (
+      await new Fuel({
+        connectors: [connector],
+      }).init()
+    ).hasWallet();
 
     expect(hasWallet).toBeTruthy();
   });
 
   it('should ensure getProvider works just fine', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const defaultWallet = Wallet.generate({
       provider,
@@ -598,5 +676,268 @@ describe('Fuel Connector', () => {
       () => fuel.getProvider([] as unknown as Provider),
       new FuelError(ErrorCode.INVALID_PROVIDER, 'Provider is not valid.')
     );
+  });
+
+  it('should ensure sendTransaction works just fine [state: funded]', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider,
+      wallets: [connectorWallet, receiverWallet],
+    } = launched;
+    const connector = new MockConnector({
+      wallets: [connectorWallet],
+    });
+    const fuel = await new Fuel({
+      connectors: [connector],
+    });
+
+    const account = new Account(connectorWallet.address.toString(), provider, fuel);
+
+    const sendTransactionSpy = vi.spyOn(connectorWallet, 'sendTransaction');
+
+    const request = new ScriptTransactionRequest();
+    request.addCoinOutput(receiverWallet.address, 1000, await provider.getBaseAssetId());
+    const { assembledRequest, gasPrice, rawReceipts } = await provider.assembleTx({
+      request,
+      feePayerAccount: connectorWallet,
+    });
+
+    // Store the initial transaction bytes for the assertion
+    // as these get modified (signed) by the connector
+    const initialTxBytes = assembledRequest.toTransactionBytes();
+
+    const response = await account.sendTransaction(assembledRequest);
+    expect(response).toBeDefined();
+    // transaction prepared and sent via connector
+
+    const chainId = await provider.getChainId();
+    const expectedParams: FuelConnectorSendTxParams = {
+      onBeforeSend: undefined,
+      skipCustomFee: false,
+      provider: {
+        url: provider.url,
+        cache: await serializeProviderCache(provider),
+      },
+      transactionState: 'funded',
+      transactionSummary: {
+        id: request.getTransactionId(chainId),
+        transactionBytes: hexlify(initialTxBytes),
+        receipts: rawReceipts,
+        gasPrice: gasPrice.toString(),
+      },
+    };
+
+    expect(sendTransactionSpy).toHaveBeenCalledWith(request, expectedParams);
+  });
+
+  it('should ensure sendTransaction works just fine [state: undefined]', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider,
+      wallets: [connectorWallet, receiverWallet],
+    } = launched;
+    const connector = new MockConnector({
+      wallets: [connectorWallet],
+    });
+    const fuel = await new Fuel({
+      connectors: [connector],
+    });
+
+    const account = new Account(connectorWallet.address.toString(), provider, fuel);
+
+    const sendTransactionSpy = vi.spyOn(connectorWallet, 'sendTransaction');
+
+    const request = new ScriptTransactionRequest();
+    request.addCoinOutput(receiverWallet.address, 1000, await provider.getBaseAssetId());
+    const { assembledRequest } = await provider.assembleTx({
+      request,
+      feePayerAccount: connectorWallet,
+    });
+    assembledRequest.addVariableOutputs(2);
+    const response = await account.sendTransaction(assembledRequest);
+    expect(response).toBeDefined();
+    // transaction prepared and sent via connector
+
+    const expectedParams: FuelConnectorSendTxParams = {
+      onBeforeSend: undefined,
+      skipCustomFee: false,
+      provider: {
+        url: provider.url,
+        cache: await serializeProviderCache(provider),
+      },
+      transactionState: undefined,
+      transactionSummary: undefined,
+    };
+
+    expect(sendTransactionSpy).toHaveBeenCalledWith(request, expectedParams);
+  });
+
+  it('should ensure transaction summary works just fine [state: funded]', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider,
+      wallets: [connectorWallet, receiverWallet],
+    } = launched;
+    const connector = new MockConnector({
+      wallets: [connectorWallet],
+    });
+    const fuel = await new Fuel({
+      connectors: [connector],
+    });
+
+    const account = new Account(connectorWallet.address.toString(), provider, fuel);
+
+    const sendTransactionSpy = vi.spyOn(connectorWallet, 'sendTransaction');
+
+    const request = new ScriptTransactionRequest();
+    request.addCoinOutput(receiverWallet.address, 1000, await provider.getBaseAssetId());
+
+    const { assembledRequest, gasPrice, rawReceipts } = await provider.assembleTx({
+      request,
+      feePayerAccount: connectorWallet,
+    });
+
+    const initialTxBytes = assembledRequest.toTransactionBytes();
+
+    const response = await account.sendTransaction(assembledRequest);
+    expect(response).toBeDefined();
+
+    const chainId = await provider.getChainId();
+
+    const transactionSummaryJson = {
+      id: assembledRequest.getTransactionId(chainId),
+      transactionBytes: hexlify(initialTxBytes),
+      receipts: rawReceipts,
+      gasPrice: gasPrice.toString(),
+    };
+
+    const expectedParams: FuelConnectorSendTxParams = {
+      onBeforeSend: undefined,
+      skipCustomFee: false,
+      provider: {
+        url: provider.url,
+        cache: await serializeProviderCache(provider),
+      },
+      transactionState: 'funded',
+      transactionSummary: transactionSummaryJson,
+    };
+
+    expect(sendTransactionSpy).toHaveBeenCalledWith(assembledRequest, expectedParams);
+
+    const jsonSummary = await assembleTransactionSummaryFromJson({
+      provider,
+      transactionSummary: transactionSummaryJson,
+    });
+    const responseSummary = await response.getTransactionSummary();
+
+    expect(jsonSummary.id).toBe(responseSummary.id);
+    expect(jsonSummary.gasUsed).toStrictEqual(responseSummary.gasUsed);
+    expect(jsonSummary.receipts).toStrictEqual(responseSummary.receipts);
+    expect(jsonSummary.transaction.scriptGasLimit).toStrictEqual(
+      responseSummary.transaction.scriptGasLimit
+    );
+  });
+
+  it('should ensure sendTransaction works just fine with preconfirmation', async () => {
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+    });
+    const {
+      provider,
+      wallets: [connectorWallet, receiverWallet],
+    } = launched;
+    const connector = new MockConnector({
+      wallets: [connectorWallet],
+    });
+    const fuel = await new Fuel({
+      connectors: [connector],
+    });
+
+    const account = new Account(connectorWallet.address.toString(), provider, fuel);
+
+    const sendTransactionSpy = vi.spyOn(connectorWallet, 'sendTransaction');
+
+    const request = new ScriptTransactionRequest();
+    request.addCoinOutput(receiverWallet.address, 1000, await provider.getBaseAssetId());
+
+    const { assembledRequest, gasPrice, rawReceipts } = await provider.assembleTx({
+      request,
+      feePayerAccount: connectorWallet,
+    });
+
+    const initialTxBytes = assembledRequest.toTransactionBytes();
+
+    const response = await account.sendTransaction(assembledRequest);
+    await response.waitForPreConfirmation();
+
+    expect(response).toBeDefined();
+
+    const chainId = await provider.getChainId();
+
+    const transactionSummaryJson = {
+      id: assembledRequest.getTransactionId(chainId),
+      transactionBytes: hexlify(initialTxBytes),
+      receipts: rawReceipts,
+      gasPrice: gasPrice.toString(),
+    };
+
+    const expectedParams: FuelConnectorSendTxParams = {
+      onBeforeSend: undefined,
+      skipCustomFee: false,
+      provider: {
+        url: provider.url,
+        cache: await serializeProviderCache(provider),
+      },
+      transactionState: 'funded',
+      transactionSummary: transactionSummaryJson,
+    };
+
+    expect(sendTransactionSpy).toHaveBeenCalledWith(assembledRequest, expectedParams);
+
+    const jsonSummary = await assembleTransactionSummaryFromJson({
+      provider,
+      transactionSummary: transactionSummaryJson,
+    });
+
+    const responseSummary = await response.getPreConfirmationTransactionSummary();
+
+    expect(jsonSummary.id).toBe(responseSummary.id);
+    expect(jsonSummary.receipts).toStrictEqual(responseSummary.receipts);
+    expect(responseSummary.status).toBe(TransactionStatus.preconfirmationSuccess);
+    expect(responseSummary.resolvedOutputs).toBeDefined();
+    expect(responseSummary.resolvedOutputs?.length).toBeGreaterThan(0);
+    expect(jsonSummary.transaction).toBeDefined();
+    expect(jsonSummary.gasUsed).toBeDefined();
+  });
+
+  // TODO: re-enable this test after rollout of fuel-core 0.44.1
+  it.todo('should start consolidation process', async () => {
+    const startConsolidation = vi.fn();
+    using launched = await setupTestProviderAndWallets({
+      walletsConfig: { amountPerCoin: 1, coinsPerAsset: 2_000 },
+    });
+    const {
+      provider,
+      wallets: [connectorWallet, receiver],
+    } = launched;
+    const connector = new MockConnector({
+      wallets: [connectorWallet],
+      mocks: { startConsolidation },
+    });
+    const fuel = await new Fuel({ connectors: [connector] });
+    const account = new Account(connectorWallet.address.toB256(), provider, fuel);
+    const baseAssetId = await provider.getBaseAssetId();
+
+    // Send transfer that will trigger auto consolidation
+    // Note: we still throw an error, this is due to the nature of the connector implementation.
+    await expectToThrowFuelError(() => account.transfer(receiver.address, 1_000, baseAssetId), {
+      code: ErrorCode.MAX_COINS_REACHED,
+    });
+    expect(startConsolidation).toBeCalledWith({
+      owner: account.address.toB256(),
+      assetId: baseAssetId,
+    });
   });
 });

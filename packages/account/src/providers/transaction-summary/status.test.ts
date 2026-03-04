@@ -1,11 +1,15 @@
+import { bn } from '@fuel-ts/math';
+
 import {
   MOCK_FAILURE_STATUS,
+  MOCK_PRECONFIRMATION_FAILURE_STATUS,
+  MOCK_PRECONFIRMATION_SUCCESS_STATUS,
   MOCK_SQUEEZEDOUT_STATUS,
   MOCK_SUBMITTED_STATUS,
   MOCK_SUCCESS_STATUS,
 } from '../../../test/fixtures/transaction-summary';
 
-import { getTransactionStatusName, processGraphqlStatus } from './status';
+import { getTotalFeeFromStatus, getTransactionStatusName, processGraphqlStatus } from './status';
 import type { GqlTransactionStatusesNames, GraphqlTransactionStatus } from './types';
 import { TransactionStatus } from './types';
 
@@ -25,6 +29,12 @@ describe('status', () => {
 
     status = getTransactionStatusName('SubmittedStatus');
     expect(status).toBe(TransactionStatus.submitted);
+
+    status = getTransactionStatusName('PreconfirmationSuccessStatus');
+    expect(status).toBe(TransactionStatus.preconfirmationSuccess);
+
+    status = getTransactionStatusName('PreconfirmationFailureStatus');
+    expect(status).toBe(TransactionStatus.preconfirmationFailure);
 
     expect(() =>
       getTransactionStatusName('UnknownStatus' as unknown as GqlTransactionStatusesNames)
@@ -46,6 +56,8 @@ describe('status', () => {
         blockIdType: 'string',
         status: TransactionStatus.success,
         timeType: 'string',
+        totalFee: bn(1000),
+        totalGas: bn(1000),
       },
     },
     {
@@ -58,6 +70,8 @@ describe('status', () => {
         blockIdType: 'string',
         status: TransactionStatus.failure,
         timeType: 'string',
+        totalFee: bn(1000),
+        totalGas: bn(1000),
       },
     },
     {
@@ -84,6 +98,38 @@ describe('status', () => {
         timeType: 'undefined',
       },
     },
+    {
+      name: 'PreconfirmationSuccessStatus',
+      status: MOCK_PRECONFIRMATION_SUCCESS_STATUS,
+      expected: {
+        isStatusFailure: false,
+        isStatusPending: false,
+        isStatusSuccess: false,
+        isStatusPreConfirmationSuccess: true,
+        isStatusPreConfirmationFailure: false,
+        blockIdType: 'undefined',
+        status: TransactionStatus.preconfirmationSuccess,
+        timeType: 'undefined',
+        totalFee: bn(1000),
+        totalGas: bn(1000),
+      },
+    },
+    {
+      name: 'PreconfirmationFailureStatus',
+      status: MOCK_PRECONFIRMATION_FAILURE_STATUS,
+      expected: {
+        isStatusFailure: false,
+        isStatusPending: false,
+        isStatusSuccess: false,
+        isStatusPreConfirmationSuccess: false,
+        isStatusPreConfirmationFailure: true,
+        blockIdType: 'undefined',
+        status: TransactionStatus.preconfirmationFailure,
+        timeType: 'undefined',
+        totalFee: bn(1000),
+        totalGas: bn(1000),
+      },
+    },
   ];
 
   statuses.forEach(({ name, status, expected }) => {
@@ -95,6 +141,8 @@ describe('status', () => {
         blockId,
         status: resultStatus,
         time,
+        totalFee,
+        totalGas,
       } = processGraphqlStatus(status);
 
       expect(isStatusFailure).toBe(expected.isStatusFailure);
@@ -103,6 +151,15 @@ describe('status', () => {
       expect(typeof blockId).toBe(expected.blockIdType);
       expect(resultStatus).toBe(expected.status);
       expect(typeof time).toBe(expected.timeType);
+      expect(totalFee).toStrictEqual(expected.totalFee);
+      expect(totalGas).toStrictEqual(expected.totalGas);
+    });
+  });
+
+  statuses.forEach(({ name, status, expected }) => {
+    it(`should ensure getTotalFeeFromStatus works fine for ${name}`, () => {
+      const totalFee = getTotalFeeFromStatus(status);
+      expect(totalFee).toStrictEqual(expected.totalFee);
     });
   });
 });

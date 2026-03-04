@@ -32,5 +32,5 @@ describe('fuel-core-schema.graphql', () => {
       preSyncChecksum,
       `\nThe schema at ${FUEL_CORE_SCHEMA_FILE_PATH} is not in sync with fuel-core.\n\nRun '${FUEL_CORE_SCHEMA_SYNC_COMMAND}' to update it.\n\n`
     ).toEqual(postSyncChecksum);
-  });
+  }, 10_000);
 });

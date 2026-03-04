@@ -1,5 +1,6 @@
-export { default as ContractFactory, DeployContractOptions } from './contract-factory';
-/**
- * @hidden
- */
-export * as ContractUtils from './util';
+export {
+  default as ContractFactory,
+  DeployContractOptions,
+  DeployContractResult,
+} from './contract-factory';
+export { getContractRoot, getContractStorageRoot, getContractId, hexlifyWithPrefix } from './util';

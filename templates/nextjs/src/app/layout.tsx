@@ -1,41 +1,58 @@
 "use client";
 
-import { Layout } from "@/components/Layout";
-import "@/styles/globals.css";
-import { FuelProvider } from "@fuels/react";
+import { FuelProvider, NetworkConfig } from "@fuels/react";
 import React, { ReactNode, useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { FuelConfig } from "fuels";
+import { ToastContainer } from "react-toastify";
+import { FuelConnector, Provider } from "fuels";
 import { defaultConnectors } from "@fuels/connectors";
-import { ENABLE_FUEL_DEV_CONNECTOR } from "@/lib";
-import { ActiveWalletProvider } from "@/hooks/useActiveWallet";
+
+import { providerChainId, providerUrl } from "../lib";
+
+import "react-toastify/dist/ReactToastify.css";
+import "@/styles/globals.css";
 
 const queryClient = new QueryClient();
 
+const connectors: FuelConnector[] = defaultConnectors({
+  devMode: true,
+  fuelProvider: new Provider(providerUrl),
+  chainId: providerChainId,
+});
+
+const networks: NetworkConfig[] = [{ url: providerUrl, chainId: providerChainId } as NetworkConfig];
 interface RootLayoutProps {
   children: ReactNode;
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
-  const [fuelConfig, setFuelConfig] = useState<FuelConfig>({});
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setFuelConfig({
-      connectors: defaultConnectors({
-        devMode: ENABLE_FUEL_DEV_CONNECTOR,
-      }),
-    });
+    setIsMounted(true);
   }, []);
 
+  // Only render the component if the page has been mounted.
+  if (!isMounted) return null;
+
   return (
-    <html lang="en" className="bg-black text-white">
+    <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.ico" />
+        <title>Fuel dApp</title>
+      </head>
       <body>
         <React.StrictMode>
           <QueryClientProvider client={queryClient}>
-            <FuelProvider fuelConfig={fuelConfig}>
-              <ActiveWalletProvider>
-                <Layout>{children}</Layout>
-              </ActiveWalletProvider>
+            <FuelProvider
+              theme="dark"
+              fuelConfig={{ connectors }}
+              uiConfig={{ suggestBridge: false }}
+              networks={networks}
+            >
+              {" "}
+              <ToastContainer theme="dark" />
+              <>{children}</>
             </FuelProvider>
           </QueryClientProvider>
         </React.StrictMode>

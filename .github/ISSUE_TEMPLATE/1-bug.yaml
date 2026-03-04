@@ -1,0 +1,62 @@
+name: Bug Report
+description: Open an issue for a problem you've identified with `fuels`.
+labels: ["triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping to improve our Typescript SDK!
+
+        Before submitting an issue, please ensure you are using the latest version of the SDK, as well as `forc` and `fuel-core`. Additionally, search through the [documentation](https://docs.fuel.network/docs/fuels-ts/) or on our [forum](https://forum.fuel.network/c/typescript-sdk) as it's possible your problem has already been solved there.
+
+        Failing that, please submit an issue using the form below.
+  - type: input
+    attributes:
+      label: fuels-ts SDK Version
+      description: What version of `fuels` are you using? Before opening an issue, please make sure you are up to date.
+      placeholder: e.g. fuels@x.y.z
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Toolchain Versions
+      description: Please share the result of running `fuelup show` in your terminal.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Node.js Version
+      description: Specify the version of Node.js you are using.
+      placeholder: e.g. Node.js v22.0.0
+  - type: input
+    attributes:
+      label: Browser
+      description: Specify the browser and version you are using.
+      placeholder: e.g. Chrome v5
+  - type: input
+    attributes:
+      label: Operating System
+      description: Specify your operating system and version.
+      placeholder: e.g. macOS 11.2, Windows 10
+  - type: textarea
+    attributes:
+      label: Describe the Problem
+      description: Please describe what you expected to happen vs what did happen? Please include steps to reproduce the problem.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Code Snippet
+      description: If possible, please include a **short and concise** code snippet that can reproduce this issue. Or even better, please share a link to a repo or gist with a minimal reproduction of the problem.
+      render: shell
+  - type: textarea
+    attributes:
+      label: Contract ABI
+      description: If this involves a contract, please include any **concise and relevant** ABI fragments.
+      render: shell
+  - type: textarea
+    id: errors
+    attributes:
+      label: Errors
+      description: If there is an error, please include the **entire error** (redacting any sensitive information).
+      render: shell

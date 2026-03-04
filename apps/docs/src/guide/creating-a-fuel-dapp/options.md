@@ -18,22 +18,14 @@ npm create fuels@{{fuels}} -- [project-name] [options]
 ```
 
 ```sh-vue [bun]
-bunx --bun create-fuels@{{fuels}} [project-name] [options]
+bun create fuels@{{fuels}} [project-name] [options]
 ```
 
 :::
 
-## `--pnpm`
+## `--template <template-name>`
 
-Notifies the tool to use pnpm as the package manager to install the necessary dependencies.
-
-## `--npm`
-
-Notifies the tool to use npm as the package manager to install the necessary dependencies.
-
-## `--bun`
-
-Notifies the tool to use bun as the package manager to install the necessary dependencies.
+Specifies the template to use for your project. The available templates are: `vite` and `nextjs`. The default template is `vite`.
 
 ## `--verbose`
 

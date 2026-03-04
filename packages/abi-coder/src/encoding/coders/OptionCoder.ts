@@ -6,12 +6,12 @@ type SwayOption<T> = { None: [] } | { Some: T };
 export type Option<T> = T | undefined;
 
 export class OptionCoder<TCoders extends Record<string, Coder>> extends EnumCoder<TCoders> {
-  encode(value: InputValueOf<TCoders>): Uint8Array {
+  override encode(value?: Option<unknown>): Uint8Array {
     const result = super.encode(this.toSwayOption(value) as unknown as InputValueOf<TCoders>);
     return result;
   }
 
-  private toSwayOption(input: InputValueOf<TCoders>): SwayOption<unknown> {
+  private toSwayOption(input?: Option<unknown>): SwayOption<unknown> {
     if (input !== undefined) {
       return { Some: input };
     }
@@ -19,7 +19,7 @@ export class OptionCoder<TCoders extends Record<string, Coder>> extends EnumCode
     return { None: [] };
   }
 
-  decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {
+  override decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {
     const [decoded, newOffset] = super.decode(data, offset);
     return [this.toOption(decoded) as DecodedValueOf<TCoders>, newOffset];
   }

@@ -6,9 +6,9 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "require": "./dist/index.js",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/index.mjs"
     }
   },
   "files": [
@@ -19,6 +19,10 @@
     "build": "tsup",
     "build:watch": "tsup --watch",
     "postbuild": "tsx ../../scripts/postbuild.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FuelLabs/fuels-ts.git"
   },
   "license": "Apache-2.0"
 }

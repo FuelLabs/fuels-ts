@@ -1,0 +1,18 @@
+[
+  {
+    "tag": "script",
+    "duration": 2.917
+  },
+  {
+    "tag": "missing-output-variable",
+    "duration": 3.068
+  },
+  {
+    "tag": "missing-4x-output-variable",
+    "duration": 3.969
+  },
+  {
+    "tag": "script-with-predicate",
+    "duration": 2.993
+  }
+]

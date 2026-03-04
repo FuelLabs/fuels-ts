@@ -1,6 +1,5 @@
-import type { IRawAbiFunction } from '../types/interfaces/IRawAbiFunction';
-import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
 import type { IType } from '../types/interfaces/IType';
+import type { JsonAbiFunction, JsonAbiType } from '../types/interfaces/JsonAbi';
 
 import { makeType } from './makeType';
 import { parseFunctions } from './parseFunctions';
@@ -10,14 +9,14 @@ import { parseFunctions } from './parseFunctions';
  */
 describe('functions.ts', () => {
   test('should parse an array of raw abi functions', () => {
-    const rawU8: IRawAbiTypeRoot = {
+    const rawU8: JsonAbiType = {
       typeId: 1,
       type: 'u8',
       components: null,
       typeParameters: null,
     };
 
-    const rawU16: IRawAbiTypeRoot = {
+    const rawU16: JsonAbiType = {
       typeId: 2,
       type: 'u16',
       components: null,
@@ -29,16 +28,18 @@ describe('functions.ts', () => {
 
     const types: IType[] = [typeU8, typeU16];
 
-    const rawF1: IRawAbiFunction = {
+    const rawF1: JsonAbiFunction = {
       name: 'f1',
       inputs: [{ name: 'u8', type: 1, typeArguments: null }],
       output: { name: 'u8', type: 1, typeArguments: null },
+      attributes: [],
     };
 
-    const rawF2: IRawAbiFunction = {
+    const rawF2: JsonAbiFunction = {
       name: 'f2',
       inputs: [{ name: 'u16', type: 2, typeArguments: null }],
       output: { name: 'u16', type: 2, typeArguments: null },
+      attributes: [],
     };
 
     const rawAbiFunctions = [rawF1, rawF2];

@@ -14,7 +14,7 @@ export class UtxoIdCoder extends StructCoder<{
   constructor() {
     super('UtxoId', {
       transactionId: new B256Coder(),
-      outputIndex: new NumberCoder('u8', { padToWordSize: true }),
+      outputIndex: new NumberCoder('u16', { padToWordSize: true }),
     });
   }
 }

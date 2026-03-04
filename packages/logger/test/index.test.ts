@@ -1,6 +1,6 @@
-import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { BN } from '@fuel-ts/math';
 import debug from 'debug';
+import type { MockInstance } from 'vitest';
 
 import { logger, prefixLogger, defaultLogger } from '../src/index';
 
@@ -8,23 +8,30 @@ import { logger, prefixLogger, defaultLogger } from '../src/index';
  * @group node
  */
 describe('Logger Tests', () => {
-  let debugSpy;
+  let debugSpy: MockInstance;
 
   beforeEach(() => {
     debug.enable('test');
-    debugSpy = vi.spyOn(debug, 'log');
+    debugSpy = vi.spyOn(debug, 'log').mockImplementation(() => ({}));
   });
 
   afterEach(() => {
     debugSpy.mockRestore();
   });
 
+  // Removes ANSI color codes from strings
+  function clean(s: string) {
+    // eslint-disable-next-line no-control-regex
+    const reg = /\u001b[^m]*?m/g;
+    return s.replace(reg, '');
+  }
+
   it('should log info messages correctly', () => {
     const log = logger('test');
     const message = 'This is a message';
     log(message);
     const callArgs = debugSpy.mock.calls[0][0];
-    expect(callArgs).toContain(`test ${message}`);
+    expect(clean(callArgs)).toContain(`test ${message}`);
   });
 
   it('should format a b256 string correctly', () => {
@@ -38,7 +45,7 @@ describe('Logger Tests', () => {
     log(formattedMessage, mockAddress);
 
     const callArgs = debugSpy.mock.calls[0][0];
-    expect(callArgs).toContain('0x123456789abcdef');
+    expect(clean(callArgs)).toContain('0x123456789abcdef');
   });
 
   it('should prefix log messages correctly using prefixLogger', () => {
@@ -52,7 +59,7 @@ describe('Logger Tests', () => {
 
     log(message);
     const callArgs = debugSpy.mock.calls[0][0];
-    expect(callArgs).toContain(`${prefix}:${component} ${message}`);
+    expect(clean(callArgs)).toContain(`${prefix}:${component} ${message}`);
   });
 
   it('should create a default logger and log messages correctly', () => {
@@ -64,7 +71,7 @@ describe('Logger Tests', () => {
     log(message);
 
     const callArgs = debugSpy.mock.calls[0][0];
-    expect(callArgs).toContain(`test-component ${message}`);
+    expect(clean(callArgs)).toContain(`test-component ${message}`);
   });
 
   it('should format BN values with commas correctly using formatter a', () => {
@@ -78,7 +85,7 @@ describe('Logger Tests', () => {
     expect(formatted).toBe('undefined');
   });
 
-  it('should format AbstractAddress to b256 string using formatter b', () => {
+  it('should format Address to b256 string using formatter b', () => {
     const mockAddress = {
       toB256: () => '0xabcdef1234567890',
     };
@@ -88,25 +95,6 @@ describe('Logger Tests', () => {
 
   it('should return undefined for null input using formatter b', () => {
     const formatted = debug.formatters.b(null);
-    expect(formatted).toBe('undefined');
-  });
-
-  it('should format AbstractAddress to bech32 string using formatter c', () => {
-    const mockAddress: AbstractAddress = {
-      toJSON: () => '',
-      toString: () => '0x000000000000000000000000000000000000000000000000000000000000002a',
-      toAddress: () => 'fuel1xyzabc123',
-      toB256: () => '',
-      toHexString: () => '',
-      toBytes: () => new Uint8Array(),
-      equals: () => false,
-    };
-    const formatted = debug.formatters.c(mockAddress);
-    expect(formatted).toBe('fuel1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq4qvpkv30');
-  });
-
-  it('should return undefined for null input using formatter c', () => {
-    const formatted = debug.formatters.c(null);
     expect(formatted).toBe('undefined');
   });
 

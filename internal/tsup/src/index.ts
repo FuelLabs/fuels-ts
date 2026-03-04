@@ -14,6 +14,12 @@ export const tsupDefaults: Options = {
   minify: false,
   sourcemap: true,
   splitting: false,
+  esbuildOptions: (options) => {
+    // eslint-disable-next-line no-param-reassign
+    options.keepNames = true;
+    // eslint-disable-next-line no-param-reassign
+    options.minifyIdentifiers = false;
+  },
 };
 
 export const index: Options = {

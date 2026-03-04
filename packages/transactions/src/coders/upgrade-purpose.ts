@@ -59,8 +59,8 @@ export class UpgradePurposeCoder extends Coder<UpgradePurpose, UpgradePurpose> {
 
       default: {
         throw new FuelError(
-          ErrorCode.INVALID_TRANSACTION_TYPE,
-          `Invalid transaction type: ${type}`
+          ErrorCode.UNSUPPORTED_TRANSACTION_TYPE,
+          `Unsupported transaction type: ${type}`
         );
       }
     }
@@ -94,8 +94,8 @@ export class UpgradePurposeCoder extends Coder<UpgradePurpose, UpgradePurpose> {
 
       default: {
         throw new FuelError(
-          ErrorCode.INVALID_TRANSACTION_TYPE,
-          `Invalid transaction type: ${type}`
+          ErrorCode.UNSUPPORTED_TRANSACTION_TYPE,
+          `Unsupported transaction type: ${type}`
         );
       }
     }

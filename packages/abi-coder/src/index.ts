@@ -2,7 +2,7 @@ export { Coder, InputValue, DecodedValue } from './encoding/coders/AbstractCoder
 export type { FunctionFragment } from './FunctionFragment';
 export * from './encoding/coders';
 export { Interface } from './Interface';
-export { JsonAbi, JsonAbiArgument } from './types/JsonAbi';
+export type { JsonAbi, ErrorCode as JsonAbiErrorCode } from './types/JsonAbiNew';
 export {
   SCRIPT_FIXED_SIZE,
   INPUT_COIN_FIXED_SIZE,
@@ -14,4 +14,5 @@ export {
   calculateVmTxMemory,
   ENCODING_V1,
 } from './utils/constants';
-export { AbiCoder } from './AbiCoder';
+export type { Bytes, RawSlice, StdString, StrSlice } from './utils/types';
+export { decodeScriptData, type DecodedScriptData } from './utils/scriptData';

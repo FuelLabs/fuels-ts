@@ -30,6 +30,11 @@ export function eq(version1: string, version2: string): boolean {
   return fullVersionDiff === 0;
 }
 
+export function gte(version1: string, version2: string): boolean {
+  const { fullVersionDiff } = versionDiffs(version1, version2);
+  return fullVersionDiff >= 0;
+}
+
 export function majorEq(version1: string, version2: string): boolean {
   const { major } = versionDiffs(version1, version2);
   return major === 0;

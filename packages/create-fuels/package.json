@@ -1,6 +1,6 @@
 {
   "name": "create-fuels",
-  "version": "0.91.0",
+  "version": "0.103.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -11,24 +11,30 @@
     "templates"
   ],
   "engines": {
-    "node": "^18.20.3 || ^20.0.0 || ^22.0.0"
+    "node": "^20.0.0 || ^22.0.0 || ^24.0.0"
   },
   "license": "Apache-2.0",
   "scripts": {
-    "build": "tsup",
+    "build": "run-s build:source",
+    "build:source": "tsup",
+    "type:check": "tsc --noEmit",
     "prepublishOnly": "tsx ./scripts/prepublish.ts"
   },
-  "dependencies": {
-    "@iarna/toml": "^2.2.5",
-    "chalk": "4",
-    "commander": "12.1.0",
-    "ora": "5.4.1",
-    "prompts": "^2.4.2"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FuelLabs/fuels-ts.git"
   },
-  "devDependencies": {
+  "dependencies": {
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "@types/prompts": "^2.4.8",
-    "glob": "^10.2.6"
+    "@iarna/toml": "2.2.5",
+    "chalk": "4",
+    "commander": "13.1.0",
+    "ora": "5.4.1",
+    "prompts": "2.4.2"
+  },
+  "devDependencies": {
+    "@types/prompts": "2.4.9",
+    "glob": "10.4.5"
   }
 }

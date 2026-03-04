@@ -2,7 +2,7 @@ import {
   AbiTypegenProjectsEnum,
   getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
-import type { IRawAbiTypeRoot } from '../../index';
+import type { JsonAbiType } from '../../index';
 import { findType } from '../../utils/findType';
 import { makeType } from '../../utils/makeType';
 import * as parseTypeArgumentsMod from '../../utils/parseTypeArguments';
@@ -18,10 +18,10 @@ describe('EvmAddressType.ts', () => {
   test('should properly parse type attributes', () => {
     const parseTypeArguments = vi.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.EVM_ADDRESS);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.EVM_ADDRESS, { transpile: true });
 
     const rawTypes = project.abiContents.types;
-    const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
+    const types = rawTypes.map((rawAbiType: JsonAbiType) => makeType({ rawAbiType }));
 
     const suitableForEvmAddress = EvmAddressType.isSuitableFor({ type: EvmAddressType.swayType });
     const suitableForStruct = EvmAddressType.isSuitableFor({ type: StructType.swayType });
@@ -33,7 +33,7 @@ describe('EvmAddressType.ts', () => {
 
     parseTypeArguments.mockClear();
 
-    const evmAddress = findType({ types, typeId: 1 }) as EvmAddressType;
+    const evmAddress = findType({ types, typeId: 0 }) as EvmAddressType;
 
     expect(evmAddress.attributes.inputLabel).toEqual('EvmAddress');
     expect(evmAddress.attributes.outputLabel).toEqual('EvmAddress');

@@ -1,11 +1,9 @@
-import { FUEL_NETWORK_URL } from '../src/configs';
-import Provider from '../src/providers/provider';
 import * as autoRetryFetchMod from '../src/providers/utils/auto-retry-fetch';
 import type { RetryOptions } from '../src/providers/utils/auto-retry-fetch';
+import { setupTestProviderAndWallets } from '../src/test-utils';
 
 /**
  * @group node
- * TODO: add browser group as well (https://github.com/FuelLabs/fuels-ts/pull/1654#discussion_r1456501593)
  */
 describe('Provider correctly', () => {
   afterEach(() => {
@@ -21,7 +19,12 @@ describe('Provider correctly', () => {
       backoff: 'exponential',
     };
 
-    const provider = await Provider.create(FUEL_NETWORK_URL, { retryOptions });
+    using launched = await setupTestProviderAndWallets({
+      providerOptions: {
+        retryOptions,
+      },
+    });
+    const { provider } = launched;
 
     expect(provider).toBeTruthy();
     expect(autoRetryFetchFn).toHaveBeenCalledTimes(1);

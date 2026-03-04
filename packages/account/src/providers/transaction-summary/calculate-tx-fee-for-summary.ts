@@ -25,7 +25,6 @@ export type CalculateTXFeeForSummaryParams = {
   gasPrice: BN;
   rawPayload: string;
   tip: BN;
-  totalFee?: BN;
   consensusParameters: Pick<ConsensusParameters, 'gasCosts'> & {
     feeParams: FeeParams;
     maxGasPerTx: BN;
@@ -37,17 +36,8 @@ export const calculateTXFeeForSummary = (params: CalculateTXFeeForSummaryParams)
     gasPrice,
     rawPayload,
     tip,
-    totalFee,
     consensusParameters: { gasCosts, feeParams, maxGasPerTx },
   } = params;
-
-  /**
-   * If totalFee is provided it means that the TX was already processed and we could extract the fee
-   * from its status
-   */
-  if (totalFee) {
-    return totalFee;
-  }
 
   const gasPerByte = bn(feeParams.gasPerByte);
   const gasPriceFactor = bn(feeParams.gasPriceFactor);

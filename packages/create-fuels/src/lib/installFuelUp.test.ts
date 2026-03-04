@@ -47,6 +47,10 @@ const mockAllDeps = (params: { shouldThrow: boolean }) => {
  * @group node
  */
 describe('installFuelUp', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should install fuelup successfully', () => {
     // Arrange
     const { execSync, ora, oraInstance } = mockAllDeps({ shouldThrow: false });

@@ -1,0 +1,8 @@
+[package]
+name = "original-example"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85.0"
+
+[dependencies]
+fuel-asm = "0.60.2"

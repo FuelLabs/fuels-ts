@@ -1,20 +1,8 @@
 import type { BigNumberish } from 'fuels';
-import { Provider, bn, Script, FUEL_NETWORK_URL } from 'fuels';
-import { generateTestWallet } from 'fuels/test-utils';
+import { bn, Script as FuelScript, ZeroBytes32 } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
-
-import { getScript } from './utils';
-
-const setup = async (balance = 500_000) => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
-  const baseAssetId = provider.getBaseAssetId();
-
-  // Create wallet
-  const wallet = await generateTestWallet(provider, [[balance, baseAssetId]]);
-
-  return wallet;
-};
+import { ScriptMainArgs, ScriptMainReturnStruct, Script } from '../test/typegen';
 
 type Baz = {
   x: number;
@@ -22,48 +10,71 @@ type Baz = {
 
 /**
  * @group node
+ * @group browser
  */
 describe('Script Coverage', () => {
-  const { binHexlified: scriptBin, abiContents: scriptAbi } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.SCRIPT_MAIN_ARGS
-  );
-
   it('can call script and use main arguments', async () => {
-    const wallet = await setup();
-    // #region script-call-factory
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
+
     const foo = 33;
-    const scriptInstance = new Script<BigNumberish[], BigNumberish>(scriptBin, scriptAbi, wallet);
+    const scriptInstance = new FuelScript<BigNumberish[], BigNumberish>(
+      ScriptMainArgs.bytecode,
+      ScriptMainArgs.abi,
+      wallet
+    );
 
-    const { value, logs } = await scriptInstance.functions.main(foo).call();
-    // #endregion script-call-factory
+    const { waitForResult } = await scriptInstance.functions.main(foo).call();
 
+    const { value, logs, groupedLogs } = await waitForResult();
+
+    const expectedLogs = ['u8 foo', 33];
     expect(value?.toString()).toEqual(bn(foo).toString());
-    expect(logs).toEqual(['u8 foo', 33]);
+    expect(logs).toStrictEqual(expectedLogs);
+    expect(groupedLogs).toStrictEqual({
+      [ZeroBytes32]: expectedLogs,
+    });
   });
 
   it('can call script and use main arguments [two args, read logs]', async () => {
-    const wallet = await setup();
-    const scriptInstance = getScript<[BigNumberish, Baz], Baz>('script-main-two-args', wallet);
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const scriptInstance = new Script(wallet);
     const foo = 33;
     const bar: Baz = {
       x: 12,
     };
 
-    const { value, logs } = await scriptInstance.functions.main(foo, bar).call();
+    const { waitForResult } = await scriptInstance.functions.main(foo, bar).call();
+    const { value, logs, groupedLogs } = await waitForResult();
 
+    const expectedLogs = ['u8 foo', 33, 'u8 bar', 12, 'u8 bar', 12];
     expect(value?.toString()).toEqual(bn(foo + bar.x).toString());
-    expect(logs).toEqual(['u8 foo', 33, 'u8 bar', 12, 'u8 bar', 12]);
+    expect(logs).toStrictEqual(expectedLogs);
+    expect(groupedLogs).toStrictEqual({
+      [ZeroBytes32]: expectedLogs,
+    });
   });
 
   it('can call script and use main arguments [two args, struct return]', async () => {
-    const wallet = await setup();
-    const scriptInstance = getScript<[BigNumberish, Baz], Baz>('script-main-return-struct', wallet);
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const scriptInstance = new ScriptMainReturnStruct(wallet);
     const foo = 1;
     const bar: Baz = {
       x: 2,
     };
 
-    const { value } = await scriptInstance.functions.main(foo, bar).call();
+    const { waitForResult } = await scriptInstance.functions.main(foo, bar).call();
+    const { value } = await waitForResult();
 
     expect(value).toEqual({
       x: 3,
@@ -71,8 +82,16 @@ describe('Script Coverage', () => {
   });
 
   it('can call script and use main arguments [tx params]', async () => {
-    const wallet = await setup();
-    const scriptInstance = new Script<BigNumberish[], BigNumberish>(scriptBin, scriptAbi, wallet);
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const scriptInstance = new FuelScript<BigNumberish[], BigNumberish>(
+      ScriptMainArgs.bytecode,
+      ScriptMainArgs.abi,
+      wallet
+    );
     const foo = 42;
 
     await expect(

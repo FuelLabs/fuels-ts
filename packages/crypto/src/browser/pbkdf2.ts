@@ -1,4 +1,4 @@
-import type { BytesLike } from '@fuel-ts/interfaces';
+import type { BytesLike } from '@fuel-ts/utils';
 import { hexlify } from '@fuel-ts/utils';
 import { pbkdf2 as pb } from '@noble/hashes/pbkdf2';
 import { sha256 } from '@noble/hashes/sha256';

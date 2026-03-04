@@ -1,5 +1,360 @@
 # Change Log
 
+## 0.103.0
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.103.0
+- @fuel-ts/errors@0.103.0
+- @fuel-ts/utils@0.103.0
+
+## 0.102.0
+
+### Patch Changes
+
+- Updated dependencies [f4be76c]
+  - @fuel-ts/utils@0.102.0
+  - @fuel-ts/crypto@0.102.0
+  - @fuel-ts/errors@0.102.0
+
+## 0.101.3
+
+### Patch Changes
+
+- Updated dependencies [4e018a5]
+- Updated dependencies [c8b6d0e]
+  - @fuel-ts/errors@0.101.3
+  - @fuel-ts/crypto@0.101.3
+  - @fuel-ts/utils@0.101.3
+
+## 0.101.2
+
+### Patch Changes
+
+- 8c19d93: chore: support Node 24 - depreciate Node 18
+- Updated dependencies [8c19d93]
+  - @fuel-ts/crypto@0.101.2
+  - @fuel-ts/errors@0.101.2
+  - @fuel-ts/utils@0.101.2
+
+## 0.101.1
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.101.1
+- @fuel-ts/errors@0.101.1
+- @fuel-ts/utils@0.101.1
+
+## 0.101.0
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.101.0
+- @fuel-ts/errors@0.101.0
+- @fuel-ts/utils@0.101.0
+
+## 0.100.6
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.100.6
+- @fuel-ts/errors@0.100.6
+- @fuel-ts/utils@0.100.6
+
+## 0.100.5
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.100.5
+- @fuel-ts/errors@0.100.5
+- @fuel-ts/utils@0.100.5
+
+## 0.100.4
+
+### Patch Changes
+
+- Updated dependencies [efcce41]
+- Updated dependencies [5a57b97]
+- Updated dependencies [f534210]
+  - @fuel-ts/errors@0.100.4
+  - @fuel-ts/crypto@0.100.4
+  - @fuel-ts/utils@0.100.4
+
+## 0.100.3
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.100.3
+- @fuel-ts/errors@0.100.3
+- @fuel-ts/utils@0.100.3
+
+## 0.100.2
+
+### Patch Changes
+
+- Updated dependencies [e909d54]
+  - @fuel-ts/errors@0.100.2
+  - @fuel-ts/crypto@0.100.2
+  - @fuel-ts/utils@0.100.2
+
+## 0.100.1
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.100.1
+- @fuel-ts/errors@0.100.1
+- @fuel-ts/utils@0.100.1
+
+## 0.100.0
+
+### Patch Changes
+
+- 6eb113c: chore: upgrade NPM package versions
+- Updated dependencies [1277ae6]
+- Updated dependencies [6eb113c]
+- Updated dependencies [f41887f]
+  - @fuel-ts/utils@0.100.0
+  - @fuel-ts/crypto@0.100.0
+  - @fuel-ts/errors@0.100.0
+
+## 0.99.0
+
+### Patch Changes
+
+- 86b8e94: chore: `Address` constructor now accepts a range of inputs.
+- Updated dependencies [d1825c9]
+- Updated dependencies [b3bb765]
+  - @fuel-ts/utils@0.99.0
+  - @fuel-ts/errors@0.99.0
+  - @fuel-ts/crypto@0.99.0
+
+## 0.98.0
+
+### Minor Changes
+
+- 4ccc628: chore!: remove Bech32 address
+
+### Patch Changes
+
+- 12e801e: chore: dependency pinning and auditing
+- 0b4c3ab: chore!: redistributed the `@fuel-ts/interfaces` package
+- Updated dependencies [12e801e]
+- Updated dependencies [4ccc628]
+- Updated dependencies [08a31d8]
+- Updated dependencies [0b4c3ab]
+- Updated dependencies [68ef74d]
+  - @fuel-ts/crypto@0.98.0
+  - @fuel-ts/utils@0.98.0
+  - @fuel-ts/errors@0.98.0
+
+## 0.97.2
+
+### Patch Changes
+
+- Updated dependencies [0970bc4]
+- Updated dependencies [896bf5b]
+- Updated dependencies [ebe5ecd]
+  - @fuel-ts/utils@0.97.2
+  - @fuel-ts/crypto@0.97.2
+  - @fuel-ts/errors@0.97.2
+  - @fuel-ts/interfaces@0.97.2
+
+## 0.97.1
+
+### Patch Changes
+
+- c904a98: chore: added noImplicitOverride option to config
+- 27e8808: chore: deprecate bech32 addresses
+- Updated dependencies [27e8808]
+  - @fuel-ts/interfaces@0.97.1
+  - @fuel-ts/errors@0.97.1
+  - @fuel-ts/crypto@0.97.1
+  - @fuel-ts/utils@0.97.1
+
+## 0.97.0
+
+### Patch Changes
+
+- Updated dependencies [9dba357]
+  - @fuel-ts/errors@0.97.0
+  - @fuel-ts/utils@0.97.0
+  - @fuel-ts/crypto@0.97.0
+  - @fuel-ts/interfaces@0.97.0
+
+## 0.96.1
+
+### Patch Changes
+
+- 4ae041e: chore: use `FuelError` instead of JS `Error`
+  - @fuel-ts/errors@0.96.1
+  - @fuel-ts/utils@0.96.1
+  - @fuel-ts/crypto@0.96.1
+  - @fuel-ts/interfaces@0.96.1
+
+## 0.96.0
+
+### Minor Changes
+
+- 5bf6621: fix!: checksum method to remove `0x` before hashing
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.96.0
+- @fuel-ts/errors@0.96.0
+- @fuel-ts/interfaces@0.96.0
+- @fuel-ts/utils@0.96.0
+
+## 0.95.0
+
+### Minor Changes
+
+- bf14023: chore!: made Address `toString` and `valueOf` returns checksum
+
+### Patch Changes
+
+- f7afa04: feat: add checksum utils for address
+- Updated dependencies [f7afa04]
+  - @fuel-ts/interfaces@0.95.0
+  - @fuel-ts/errors@0.95.0
+  - @fuel-ts/utils@0.95.0
+  - @fuel-ts/crypto@0.95.0
+
+## 0.94.9
+
+### Patch Changes
+
+- @fuel-ts/errors@0.94.9
+- @fuel-ts/utils@0.94.9
+- @fuel-ts/crypto@0.94.9
+- @fuel-ts/interfaces@0.94.9
+
+## 0.94.8
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.94.8
+- @fuel-ts/errors@0.94.8
+- @fuel-ts/interfaces@0.94.8
+- @fuel-ts/utils@0.94.8
+
+## 0.94.7
+
+### Patch Changes
+
+- 80df900: chore: fix exported types
+- Updated dependencies [80df900]
+  - @fuel-ts/interfaces@0.94.7
+  - @fuel-ts/crypto@0.94.7
+  - @fuel-ts/errors@0.94.7
+  - @fuel-ts/utils@0.94.7
+
+## 0.94.6
+
+### Patch Changes
+
+- a9f31ca: build(deps): bump the deps group across 1 directory with 38 updates
+- Updated dependencies [a9f31ca]
+- Updated dependencies [aef7282]
+  - @fuel-ts/crypto@0.94.6
+  - @fuel-ts/errors@0.94.6
+  - @fuel-ts/utils@0.94.6
+  - @fuel-ts/interfaces@0.94.6
+
+## 0.94.5
+
+### Patch Changes
+
+- @fuel-ts/errors@0.94.5
+- @fuel-ts/utils@0.94.5
+- @fuel-ts/crypto@0.94.5
+- @fuel-ts/interfaces@0.94.5
+
+## 0.94.4
+
+### Patch Changes
+
+- Updated dependencies [a059ea1]
+- Updated dependencies [482bbf0]
+  - @fuel-ts/errors@0.94.4
+  - @fuel-ts/crypto@0.94.4
+  - @fuel-ts/utils@0.94.4
+  - @fuel-ts/interfaces@0.94.4
+
+## 0.94.3
+
+### Patch Changes
+
+- @fuel-ts/errors@0.94.3
+- @fuel-ts/utils@0.94.3
+- @fuel-ts/crypto@0.94.3
+- @fuel-ts/interfaces@0.94.3
+
+## 0.94.2
+
+### Patch Changes
+
+- Updated dependencies [01e2f0e]
+- Updated dependencies [986a247]
+  - @fuel-ts/utils@0.94.2
+  - @fuel-ts/crypto@0.94.2
+  - @fuel-ts/errors@0.94.2
+  - @fuel-ts/interfaces@0.94.2
+
+## 0.94.1
+
+### Patch Changes
+
+- Updated dependencies [9bba305]
+  - @fuel-ts/utils@0.94.1
+  - @fuel-ts/crypto@0.94.1
+  - @fuel-ts/errors@0.94.1
+  - @fuel-ts/interfaces@0.94.1
+
+## 0.94.0
+
+### Patch Changes
+
+- Updated dependencies [0110fd8]
+- Updated dependencies [751d638]
+- Updated dependencies [1d2abd7]
+- Updated dependencies [a056da3]
+- Updated dependencies [03ac550]
+- Updated dependencies [b0c161f]
+  - @fuel-ts/errors@0.94.0
+  - @fuel-ts/utils@0.94.0
+  - @fuel-ts/crypto@0.94.0
+  - @fuel-ts/interfaces@0.94.0
+
+## 0.93.0
+
+### Patch Changes
+
+- Updated dependencies [d4c4e55]
+- Updated dependencies [f3453b9]
+  - @fuel-ts/interfaces@0.93.0
+  - @fuel-ts/errors@0.93.0
+  - @fuel-ts/utils@0.93.0
+  - @fuel-ts/crypto@0.93.0
+
+## 0.92.1
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.92.1
+- @fuel-ts/errors@0.92.1
+- @fuel-ts/interfaces@0.92.1
+- @fuel-ts/utils@0.92.1
+
+## 0.92.0
+
+### Patch Changes
+
+- Updated dependencies [638eae3]
+  - @fuel-ts/crypto@0.92.0
+  - @fuel-ts/errors@0.92.0
+  - @fuel-ts/utils@0.92.0
+  - @fuel-ts/interfaces@0.92.0
+
 ## 0.91.0
 
 ### Patch Changes

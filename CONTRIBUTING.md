@@ -109,21 +109,98 @@ See also:
 
 - [Developing](#developing)
 
+# Working with Unreleased Forc and Fuel-Core Functionality
+
+When you need to work with unreleased versions of `forc` or `fuel-core`, you can specify a git branch instead of a version number in the respective `VERSION` file.
+
+## Using Unreleased Forc
+
+To use an unreleased version of `forc`:
+
+1.  **Edit the `VERSION` File**
+    Open the `internal/forc/VERSION` file and replace the version number (e.g., `0.59.0`) with the desired git branch:
+
+        ```text
+        git:some/branch-name
+        ```
+
+1.  **Install and Build**
+    To download and build `forc` from the specified branch after updating `VERSION` file, run:
+
+        ```sh
+        pnpm install
+        pnpm build
+        ```
+
+The following directory will be updated or created: `internal/forc/sway-repo`
+
+## Using Unreleased Fuel-Core
+
+Similarly, to use an unreleased version of `fuel-core`:
+
+1.  **Edit the `VERSION` file:**
+    Open the `internal/fuel-core/VERSION` file and replace the version number with the desired git branch:
+
+        ```text
+        git:some/branch-name
+        ```
+
+1.  **Install and Build**
+    To download and build `fuel-core` from the specified branch after updating `VERSION` file, run:
+
+        ```sh
+        pnpm install
+        pnpm build
+        ```
+
+> [!Note]
+> The `internal/forc/sway-repo` and `internal/fuel-core/fuel-core-repo` directory will contain a local clone of the Sway and Fuel Core repository respectively, at the specific version or git branch you have specified in the `internal/forc/VERSION` and `internal/fuel-core/VERSION` file.
+
+## Unreleased Files and Directories Created After Installation
+
+After running `pnpm install` and `pnpm build`, the following files and directories are created:
+
+- Forc Repository:
+
+  - Located at `internal/forc/sway-repo`.
+  - Contains the source code for the version of `forc` you are using.
+
+- Fuel-Core Repository:
+  - Located at `internal/fuel-core/fuel-core-repo`.
+  - Contains the source code for the version of `fuel-core` you are using.
+
+## Switching Back to Standard Binaries
+
+If you switch back to using standard binaries you might encounter issues where the SDK still uses the previously downloaded unreleased binaries.
+
+To resolve the issue and ensure the SDK uses the correct binaries:
+
+1. **Delete the downloaded repositories**
+
+   ```sh
+   rm -rf internal/forc/sway-repo
+   rm -rf internal/fuel-core/fuel-core-repo
+   ```
+
+1. **Reinstall and build**
+   ```sh
+   pnpm install
+   pnpm build
+   ```
+
 # Testing
 
-In order to run tests locally, you need `fuel-core` running locally.
-
-To do that run this command in your terminal:
+In order to run tests locally, you can run the following commands:
 
 ```sh
-pnpm node:run
-```
+# run pretest to ensure all test dependencies are built
+pnpm pretest
 
-And then run the tests in another terminal tab:
-
-```sh
-# run all tests
+# run all tests in a node environment
 pnpm test
+
+# you may also run tests in a browser environment
+pnpm test:browser
 
 # watch all tests
 pnpm test:watch
@@ -138,16 +215,18 @@ pnpm test:filter packages/my-desired-package/src/my.test.ts
 pnpm test -- --coverage --my-other-flag
 ```
 
-Or if you want to start a local Fuel-Core node and run all tests serially you can do:
+# Benchmarking
+
+We currently use `vitest` 's [bench utility](https://vitest.dev/api/#bench) to run benchmarks. You can run them in both the browser and node environments.
 
 ```sh
-pnpm ci:test
+pnpm bench:node
 ```
 
-This will run `node:run`, `test` and then `node:clean`
-
-> The tests may break if you are running your tests locally using `node:run` in a separate terminal.
-> To reset your local fuel-core node data and start from scratch, run `node:clean`
+```sh
+# run benchmarks for a specific package
+pnpm bench:node packages/my-desired-package
+```
 
 ### CI Test
 
@@ -156,7 +235,7 @@ During the CI process an automated end-to-end (e2e) test is executed. This test 
 The e2e test can be found at:
 `packages/fuel-gauge/src/e2e-script.test.ts`
 
-The Bech32 address of this wallet is `fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg`. This address can be funded via the [faucet](https://faucet-testnet.fuel.network/).
+The B256 address of this wallet is `0x3463d9064f9128153b00072b4cc543f504372737d5dc04b29c9ebcf1b2a17ee7`. This address can be funded via the [faucet](https://faucet-testnet.fuel.network/).
 
 If you want to run an e2e test locally, you can provide your own wallet address and private key. For obvious security reasons, the private key should not be shared.
 
@@ -169,11 +248,15 @@ cp .env.example .env.test
 And changing the below variables:
 
 ```sh
-FUEL_NETWORK_URL=https://testnet.fuel.network/v1/graphql
-TEST_WALLET_PVT_KEY=0x...
+DEVNET_WALLET_PVT_KEY=0x...
+TESTNET_WALLET_PVT_KEY=0x...
 ```
 
-<!-- TODO: add/fix block explorer URL after testnet support- Checking Wallet Balance: https://fuellabs.github.io/block-explorer-v2/beta-5/?#/address/fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg -->
+This will enable you to run the e2e test locally against the live network:
+
+```sh
+pnpm test:filter e2e-script
+```
 
 # Commit Convention
 
@@ -184,11 +267,10 @@ When you create a commit we kindly ask you to follow the convention
 `category(scope or module): message` in your commit message while using one of
 the following categories:
 
-- `feat / feature`: all changes that introduce completely new code or new
+- `feat`: all changes that introduce completely new code or new
   features
 - `fix`: changes that fix a bug (ideally you will additionally reference an
   issue if present)
-- `refactor`: any code related change that is not a fix nor a feature
 - `docs`: changing existing or creating new documentation (i.e. README, docs for
   usage of a lib or cli usage)
 - `build`: all changes regarding the build of the software, changes to
@@ -245,7 +327,7 @@ Manually edit the `internal/fuel-core/VERSION` file, add the right version, and 
 
 ```sh
 pnpm install # will download new binaries
-pnpm test:ci
+pnpm test
 ```
 
 If all tests pass, that's it.
@@ -276,6 +358,106 @@ We'd follow the same approach as explained in the [Patching old releases](#patch
 - The automatically-created PR **must** be merged as soon as possible in order to
   - have the versions of packages on `master` match the `latest` released package versions,
   - have the released functionality on `master` as well
+
+# Network Testing
+
+The network test suite is designed to run locally against a specified network for validation purposes.
+
+You can find the test suite at: `packages/fuel-gauge/src/network.test.ts`.
+
+### Setup Instructions
+
+Before running the tests, you need to configure the `.env` file:
+
+1. Copy the `.env.example` file:
+
+```sh
+cp .env.example .env
+```
+
+2. Set the values for the following environment variables in the `.env` file:
+
+```env
+NETWORK_TEST_URL=https://testnet.fuel.network/v1/graphql
+NETWORK_TEST_PVT_KEY=0x...
+```
+
+- `NETWORK_TEST_URL`: The URL of which network the test should run (e.g., Fuel Testnet endpoint).
+- `NETWORK_TEST_PVT_KEY`: Your private key for the network.
+
+### Running the Test Suite
+
+Once the environment is set up, run the network tests using the following command:
+
+```sh
+pnpm test:network
+```
+
+# Transaction Time Measure
+
+A script designed to run locally is available to measure the time required to submit and process different types of transactions on a specified network.
+
+The script code is located at: `packages/fuel-gauge/scripts/latency-detection/main.ts`.
+
+### Setup Instructions
+
+Before running the tests, you need to configure the `.env` file:
+
+1. Copy the `.env.example` file:
+
+```sh
+cp .env.example .env
+```
+
+2. Set the values for the following environment variables in the `.env` file:
+
+```env
+PERFORMANCE_ANALYSIS_TEST_URL=https://testnet.fuel.network/v1/graphql
+PERFORMANCE_ANALYSIS_PVT_KEY=...
+```
+
+- `PERFORMANCE_ANALYSIS_TEST_URL`: The URL of which network the test should run (e.g., Fuel Testnet endpoint).
+- `PERFORMANCE_ANALYSIS_PVT_KEY`: Your private key for the network.
+
+### Running the Test Suite
+
+Once your environment is configured, run the operations with:
+
+```sh
+pnpm tx:perf
+```
+
+By default, each operation is executed once. To run the operation multiple times and calculate an average execution time, use the `--execution-count` flag:
+
+```sh
+pnpm tx:perf -- --execution-count 10
+```
+
+In this example, each operation will be executed 10 times, and the reported time will be the average across all runs.
+
+### Output and Results
+
+The test results are saved in the snapshots directory as a CSV file. The filename follows a timestamp format, such as:
+
+```
+2025-01-23T13:23.csv
+```
+
+A sample of the results is shown below:
+
+| Tag                              | Time (in seconds) |
+| -------------------------------- | ----------------- |
+| `simple-transfer`                | 1.907             |
+| `missing-4x-output-variable`     | 2.866             |
+| `inter-contract-call`            | 2.159             |
+| `predicate-signature-validation` | 2.142             |
+
+### Notes on Transaction Types
+
+- `simple-transfer`: A basic transfer between two accounts.
+- `missing-4x-output-variable`: Transfers assets to four recipients without specifying `OutputVariable`, resulting in four additional dry runs during estimation.
+- `inter-contract-call`: Executes a script that calls a contract function, which then calls another contract function. Contracts inputs and outputs are not explicitly provided and are going to be resolved during estimation.
+- `predicate-signature-validation`: Executes a transfer using a predicate that verifies a signature included in the transaction's witnesses. This mimics how non-native wallet connectors operate.
 
 # FAQ
 

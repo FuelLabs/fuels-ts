@@ -2,7 +2,7 @@ import {
   AbiTypegenProjectsEnum,
   getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects';
-import type { IRawAbiTypeRoot } from '../../types/interfaces/IRawAbiType';
+import type { JsonAbiType } from '../../types/interfaces/JsonAbi';
 import { findType } from '../../utils/findType';
 import { makeType } from '../../utils/makeType';
 import * as parseTypeArgumentsMod from '../../utils/parseTypeArguments';
@@ -29,10 +29,12 @@ describe('ArrayType.ts', () => {
   test('should properly parse type attributes: simple', () => {
     const parseTypeArguments = vi.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.STRUCT_WITH_ARRAY);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.STRUCT_WITH_ARRAY, {
+      transpile: true,
+    });
 
     const rawTypes = project.abiContents.types;
-    const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
+    const types = rawTypes.map((rawAbiType: JsonAbiType) => makeType({ rawAbiType }));
 
     // validating `struct B`, with simple tuples on property `x`
     const b = findType({ types, typeId: 0 }) as ArrayType;
@@ -47,12 +49,14 @@ describe('ArrayType.ts', () => {
   test('should properly parse type attributes: nested', () => {
     const parseTypeArguments = vi.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.ARRAY_WITH_GENERICS);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.ARRAY_WITH_GENERICS, {
+      transpile: true,
+    });
 
     const rawTypes = project.abiContents.types;
-    const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
+    const types = rawTypes.map((rawAbiType: JsonAbiType) => makeType({ rawAbiType }));
 
-    const a = findType({ types, typeId: 1 }) as ArrayType;
+    const a = findType({ types, typeId: 0 }) as ArrayType;
 
     expect(a.attributes.inputLabel).toEqual(
       '[Generic1Input<Generic2Input<BigNumberish>, string>, Generic1Input<Generic2Input<BigNumberish>, string>]'

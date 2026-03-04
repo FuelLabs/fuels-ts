@@ -1,3 +1,6 @@
+import { FuelError, ErrorCode } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+
 import type { BN } from './bn';
 import { bn } from './bn';
 import type { BigNumberish } from './types';
@@ -109,6 +112,18 @@ describe('Math - BN', () => {
     numberToConvert = 273;
     expect(bn(hexToConvert).toNumber()).toEqual(numberToConvert);
     expect(bn(numberToConvert).toHex()).toEqual(hexToConvert);
+  });
+
+  it('should convert safe numbers', () => {
+    let number = Number.MAX_SAFE_INTEGER;
+    let expectedHex = '0x1fffffffffffff';
+    expect(bn(number).toNumber()).toEqual(number);
+    expect(bn(number).toHex()).toEqual(expectedHex);
+
+    number = Number.MAX_SAFE_INTEGER - 0.5;
+    expectedHex = '0x1ffffffffffffe';
+    expect(bn(number).toNumber()).toEqual(number);
+    expect(bn(number).toHex()).toEqual(expectedHex);
   });
 
   it('should toHex accept bytePadding config', () => {
@@ -253,6 +268,20 @@ describe('Math - BN', () => {
     over = Uint8Array.from([1, 0, 0, 0, 0]);
     expect(bn(maxBytes).toBytes(4)).toEqual(maxBytes);
     expect(() => bn(over).toBytes(4)).toThrow();
+  });
+
+  it('should ensure max method works just like expected', () => {
+    // Using Number
+    const maxNumber = 100_000;
+    const exceedingNumber = maxNumber + 1;
+
+    let maxSafeNumber = bn(exceedingNumber).max(maxNumber);
+
+    expect(maxSafeNumber.toNumber()).toEqual(maxNumber);
+
+    // Using BN
+    maxSafeNumber = bn(maxNumber).add(1).max(bn(maxNumber));
+    expect(maxSafeNumber.toNumber()).toEqual(maxNumber);
   });
 
   it('should toHex break when value provided is bigger than bytePadding config', () => {
@@ -475,6 +504,10 @@ describe('Math - BN', () => {
     expect(bn.parseUnits('100,100,100.00002', 5).toHex()).toEqual(bn('10010010000002').toHex());
     expect(bn.parseUnits('.').toHex()).toEqual(bn('0').toHex());
     expect(bn.parseUnits('.', 5).toHex()).toEqual(bn('0').toHex());
+    expect(bn.parseUnits('1', 0).toHex()).toEqual(bn('1').toHex());
+    expect(bn.parseUnits('0.000000001', 0).toHex()).toEqual(bn('0').toHex());
+    expect(bn.parseUnits('100.00002', 0).toHex()).toEqual(bn('100').toHex());
+    expect(bn.parseUnits('100,100.00002', 0).toHex()).toEqual(bn('100100').toHex());
 
     expect(() => {
       bn.parseUnits('100,100.000002', 5);
@@ -494,5 +527,47 @@ describe('Math - BN', () => {
     expect(bn('100000020000').valueOf()).toEqual('100000020000');
     expect(bn('100100000020000').valueOf()).toEqual('100100000020000');
     expect(bn('-1').valueOf()).toEqual('-1');
+  });
+
+  it('should format properly with 0 units', () => {
+    expect(bn('1000000000').format({ units: 0 })).toEqual('1,000,000,000');
+  });
+
+  it('should format properly with 0 precision', () => {
+    expect(bn('1000000000').format({ units: 5, precision: 0 })).toEqual('10,000');
+  });
+
+  it('should format properly with 0 units and precision', () => {
+    expect(bn('1000000000').format({ units: 0, precision: 0 })).toEqual('1,000,000,000');
+  });
+
+  it('should format properly with 0 minPrecision', () => {
+    expect(bn('1000000000').format({ minPrecision: 0 })).toEqual('1');
+  });
+
+  it('should properly format with minPrecision 0 and precision 1', () => {
+    expect(bn('10010000').format({ units: 5, minPrecision: 0, precision: 1 })).toEqual('100.1');
+  });
+
+  it('should properly format with minPrecision 0 and precision 1 with a trailing zero', () => {
+    expect(bn('100000').format({ units: 5, minPrecision: 0, precision: 1 })).toEqual('1');
+  });
+
+  it('should return significant figures even if it exceeds the precision', () => {
+    expect(bn('4000000').format({ precision: 1 })).toEqual('0.004');
+  });
+
+  it('should throws expected error when using unsafe numbers', async () => {
+    const unsafeNumbers = [Number.MAX_SAFE_INTEGER + 1, Number.MAX_SAFE_INTEGER + 1.1];
+
+    for (const unsafeNumber of unsafeNumbers) {
+      await expectToThrowFuelError(
+        () => bn(unsafeNumber),
+        new FuelError(
+          ErrorCode.NUMBER_TOO_BIG,
+          `Value ${unsafeNumber} is too large to be represented as a number, use string instead.`
+        )
+      );
+    }
   });
 });

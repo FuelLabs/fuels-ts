@@ -1,5 +1,83 @@
 # Change Log
 
+## 0.89.9
+
+### Patch Changes
+
+- bfb62ad: feat: implement support for new ABI error codes
+- 0d71065: chore: Upgraded `forc` to `0.66.8`
+
+## 0.89.8
+
+### Patch Changes
+
+- dbed315: chore: upgrade `fuel-core` to `0.43.1`
+
+## 0.89.7
+
+### Patch Changes
+
+- 521292a: chore: updated `forc` to `0.67.0`
+- ff97a6e: chore: upgrade `forc` to `0.66.7`
+
+## 0.89.6
+
+### Patch Changes
+
+- ab56ded: chore: bump `forc` to `0.66.6`
+
+## 0.89.5
+
+### Patch Changes
+
+- 5ec254d: chore: updated forc version to `0.66.5`
+
+## 0.89.4
+
+### Patch Changes
+
+- 4e057d5: chore: upgrading `forc` to `0.66.4`
+- 7c162de: chore: upgrading `forc` to `0.66.2`
+
+## 0.89.3
+
+### Patch Changes
+
+- d4e839f: chore: `fuel-core@0.37.1`, `forc@0.65.1`, and `create-fuels` toolchains
+- 95a9650: chore: update to `forc@0.65.2`
+
+## 0.89.2
+
+### Patch Changes
+
+- 47b5cd3: chore: upgrade to forc `0.63.6`
+- 127ade0: chore: upgrade `forc@0.64.0`
+
+## 0.89.1
+
+### Patch Changes
+
+- 942b56b: chore: upgrading `forc` to `0.63.5`
+- cffa075: chore: upgrading `forc` to `0.63.4`
+
+## 0.89.0
+
+### Minor Changes
+
+- 4c653d0: feat!: adding `abi` transpiler
+
+## 0.88.5
+
+### Patch Changes
+
+- 99794e4: chore: upgrading `forc` to `0.62.0`
+
+## 0.88.4
+
+### Patch Changes
+
+- 44d51ee: chore: upgrading `forc` to `0.61.2`
+
 ## 0.88.3
 
 ### Patch Changes

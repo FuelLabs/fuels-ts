@@ -11,7 +11,7 @@ describe('templates/common', () => {
     const { versions, restore } = mockVersions();
 
     // executing
-    const rendered = renderCommonTemplate();
+    const rendered = renderCommonTemplate({ versions });
 
     // validating
     restore();

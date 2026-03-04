@@ -1,8 +1,9 @@
-import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
 import * as deployMod from '../../src/cli/commands/deploy/index';
 import { mockStartFuelCore } from '../utils/mockAutoStartFuelCore';
+import { mockCheckForUpdates } from '../utils/mockCheckForUpdates';
 import {
   bootstrapProject,
   resetConfigAndMocks,
@@ -14,148 +15,211 @@ import {
 /**
  * @group node
  */
-describe(
-  'build',
-  () => {
-    const paths = bootstrapProject(__filename);
+describe('build', { timeout: 180000 }, () => {
+  const paths = bootstrapProject(__filename);
 
-    afterEach(() => {
-      resetConfigAndMocks(paths.fuelsConfigPath);
+  beforeEach(() => {
+    mockCheckForUpdates();
+  });
+
+  afterEach(() => {
+    resetConfigAndMocks(paths.fuelsConfigPath);
+    rmSync(paths.outputDir, { recursive: true, force: true });
+  });
+
+  afterAll(() => {
+    resetDiskAndMocks(paths.root);
+  });
+
+  function mockAll() {
+    const { autoStartFuelCore, killChildProcess } = mockStartFuelCore();
+    const deploy = vi.spyOn(deployMod, 'deploy').mockResolvedValue({
+      contracts: [],
+      scripts: [],
+      predicates: [],
     });
 
-    afterAll(() => {
-      resetDiskAndMocks(paths.root);
+    return { autoStartFuelCore, killChildProcess, deploy };
+  }
+
+  it('should run `build` command', async () => {
+    const { autoStartFuelCore, killChildProcess, deploy } = mockAll();
+
+    await runInit({
+      root: paths.root,
+      workspace: paths.workspaceDir,
+      output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
     });
 
-    function mockAll() {
-      const { autoStartFuelCore, killChildProcess } = mockStartFuelCore();
-      const deploy = vi.spyOn(deployMod, 'deploy').mockResolvedValue([]);
+    await runBuild({ root: paths.root });
 
-      return { autoStartFuelCore, killChildProcess, deploy };
-    }
+    const files = [
+      'predicates/PredicateTrue.ts',
+      'predicates/index.ts',
+      'contracts/BarFoo.ts',
+      'contracts/FooBar.ts',
+      'contracts/FooBarFactory.ts',
+      'contracts/BarFooFactory.ts',
+      'contracts/index.ts',
+      'scripts/ScriptTrue.ts',
+      'scripts/index.ts',
+      'index.ts',
+    ].map((f) => join(paths.outputDir, f));
 
-    it('should run `build` command', async () => {
-      const { autoStartFuelCore, killChildProcess, deploy } = mockAll();
-
-      await runInit({
-        root: paths.root,
-        workspace: paths.workspaceDir,
-        output: paths.outputDir,
-        forcPath: paths.forcPath,
-        fuelCorePath: paths.fuelCorePath,
-      });
-
-      await runBuild({ root: paths.root });
-
-      const files = [
-        'predicates/factories/PredicateTrueAbi__factory.ts',
-        'predicates/index.ts',
-        'contracts/BarFooAbi.d.ts',
-        'contracts/BarFooAbi.hex.ts',
-        'contracts/FooBarAbi.hex.ts',
-        'contracts/FooBarAbi.d.ts',
-        'contracts/factories/FooBarAbi__factory.ts',
-        'contracts/factories/BarFooAbi__factory.ts',
-        'contracts/index.ts',
-        'scripts/factories/ScriptTrueAbi__factory.ts',
-        'scripts/index.ts',
-        'index.ts',
-      ].map((f) => join(paths.outputDir, f));
-
-      files.forEach((file) => {
-        expect(existsSync(file)).toBeTruthy();
-      });
-
-      expect(autoStartFuelCore).toHaveBeenCalledTimes(0);
-      expect(deploy).toHaveBeenCalledTimes(0);
-      expect(killChildProcess).toHaveBeenCalledTimes(0);
+    files.forEach((file) => {
+      expect(existsSync(file)).toBeTruthy();
     });
 
-    it('should run `build` command with contracts-only', async () => {
-      const { autoStartFuelCore, killChildProcess, deploy } = mockAll();
+    expect(autoStartFuelCore).toHaveBeenCalledTimes(0);
+    expect(deploy).toHaveBeenCalledTimes(0);
+    expect(killChildProcess).toHaveBeenCalledTimes(0);
+  });
 
-      await runInit({
-        root: paths.root,
-        contracts: paths.contractsDir,
-        output: paths.outputDir,
-        forcPath: paths.forcPath,
-        fuelCorePath: paths.fuelCorePath,
-      });
+  it('should run `build` command with contracts-only [single contract]', async () => {
+    const { autoStartFuelCore, killChildProcess, deploy } = mockAll();
 
-      await runBuild({ root: paths.root });
-
-      const files = [
-        'contracts/FooBarAbi.hex.ts',
-        'contracts/FooBarAbi.d.ts',
-        'contracts/factories/FooBarAbi__factory.ts',
-        'contracts/index.ts',
-        'index.ts',
-      ].map((f) => join(paths.outputDir, f));
-
-      files.forEach((file) => expect(existsSync(file)).toBeTruthy());
-
-      expect(autoStartFuelCore).toHaveBeenCalledTimes(0);
-      expect(deploy).toHaveBeenCalledTimes(0);
-      expect(killChildProcess).toHaveBeenCalledTimes(0);
+    await runInit({
+      root: paths.root,
+      contracts: paths.contractsFooDir,
+      output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
     });
 
-    it('should run `build` command with `--deploy` flag', async () => {
-      const { autoStartFuelCore, killChildProcess, deploy } = mockAll();
+    await runBuild({ root: paths.root });
 
-      await runInit({
-        root: paths.root,
-        workspace: paths.workspaceDir,
-        output: paths.outputDir,
-        forcPath: paths.forcPath,
-        fuelCorePath: paths.fuelCorePath,
-      });
+    const files = [
+      'contracts/FooBar.ts',
+      'contracts/FooBarFactory.ts',
+      'contracts/index.ts',
+      'index.ts',
+    ].map((f) => join(paths.outputDir, f));
 
-      await runBuild({ root: paths.root, deploy: true });
+    files.forEach((file) => expect(existsSync(file), `${file} does not exist`).toBeTruthy());
+    expect(readdirSync(paths.outputContractsDir)).toHaveLength(3);
 
-      expect(autoStartFuelCore).toHaveBeenCalledTimes(1);
-      expect(deploy).toHaveBeenCalledTimes(1);
-      expect(killChildProcess).toHaveBeenCalledTimes(1);
+    expect(autoStartFuelCore).toHaveBeenCalledTimes(0);
+    expect(deploy).toHaveBeenCalledTimes(0);
+    expect(killChildProcess).toHaveBeenCalledTimes(0);
+  });
+
+  it('should run `build` command with contracts-only [with glob]', async () => {
+    const { autoStartFuelCore, killChildProcess, deploy } = mockAll();
+
+    await runInit({
+      root: paths.root,
+      contracts: `${paths.contractsDir}/*`,
+      output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
     });
 
-    it("should run `build` with `forcBuildFlags: ['--release']`", async () => {
-      const { autoStartFuelCore, killChildProcess, deploy } = mockAll();
+    await runBuild({ root: paths.root });
 
-      await runInit({
-        root: paths.root,
-        workspace: paths.workspaceDir,
-        output: paths.outputDir,
-        forcPath: paths.forcPath,
-        fuelCorePath: paths.fuelCorePath,
-      });
+    const files = [
+      'contracts/UpgradableChunked.ts',
+      'contracts/UpgradableChunkedFactory.ts',
+      'contracts/Upgradable.ts',
+      'contracts/UpgradableFactory.ts',
+      'contracts/BarFoo.ts',
+      'contracts/BarFooFactory.ts',
+      'contracts/FooBar.ts',
+      'contracts/FooBarFactory.ts',
+      'contracts/index.ts',
+      'index.ts',
+    ].map((f) => join(paths.outputDir, f));
 
-      // inject `forcBuildFlags: ['--release']` in config file
-      const configFilepath = join(paths.root, 'fuels.config.ts');
-      const configContents = readFileSync(configFilepath, 'utf-8');
+    files.forEach((file) => expect(existsSync(file), `${file} does not exist`).toBeTruthy());
+    expect(readdirSync(paths.outputContractsDir)).toHaveLength(9);
 
-      const search = "  output: './output',";
-      const replace = [search, "  forcBuildFlags: ['--release'],"].join('\n');
-      const configContentsNew = configContents.replace(search, replace);
+    expect(autoStartFuelCore).toHaveBeenCalledTimes(0);
+    expect(deploy).toHaveBeenCalledTimes(0);
+    expect(killChildProcess).toHaveBeenCalledTimes(0);
+  });
 
-      writeFileSync(configFilepath, configContentsNew);
+  it('should run `build` command with contracts-only [with glob to a single program]', async () => {
+    const { autoStartFuelCore, killChildProcess, deploy } = mockAll();
 
-      // moving on
-      await runBuild({ root: paths.root });
-
-      const files = [
-        'contracts/FooBarAbi.hex.ts',
-        'contracts/FooBarAbi.d.ts',
-        'contracts/factories/FooBarAbi__factory.ts',
-        'contracts/index.ts',
-        'index.ts',
-      ].map((f) => join(paths.outputDir, f));
-
-      files.forEach((file) => expect(existsSync(file)).toBeTruthy());
-
-      expect(autoStartFuelCore).toHaveBeenCalledTimes(0);
-      expect(deploy).toHaveBeenCalledTimes(0);
-      expect(killChildProcess).toHaveBeenCalledTimes(0);
+    await runInit({
+      root: paths.root,
+      contracts: `${paths.upgradableContractPath}/*`,
+      output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
     });
-  },
 
-  { timeout: 180000 }
-);
+    await runBuild({ root: paths.root });
+
+    const files = [
+      'contracts/Upgradable.ts',
+      'contracts/UpgradableFactory.ts',
+      'contracts/index.ts',
+      'index.ts',
+    ].map((f) => join(paths.outputDir, f));
+
+    files.forEach((file) => expect(existsSync(file), `${file} does not exist`).toBeTruthy());
+    expect(readdirSync(paths.outputContractsDir)).toHaveLength(3);
+
+    expect(autoStartFuelCore).toHaveBeenCalledTimes(0);
+    expect(deploy).toHaveBeenCalledTimes(0);
+    expect(killChildProcess).toHaveBeenCalledTimes(0);
+  });
+
+  it('should run `build` command with `--deploy` flag', async () => {
+    const { autoStartFuelCore, killChildProcess, deploy } = mockAll();
+
+    await runInit({
+      root: paths.root,
+      workspace: paths.workspaceDir,
+      output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
+    });
+
+    await runBuild({ root: paths.root, deploy: true });
+
+    expect(autoStartFuelCore).toHaveBeenCalledTimes(1);
+    expect(deploy).toHaveBeenCalledTimes(1);
+    expect(killChildProcess).toHaveBeenCalledTimes(1);
+  });
+
+  it("should run `build` with `forcBuildFlags: ['--release']`", async () => {
+    const { autoStartFuelCore, killChildProcess, deploy } = mockAll();
+
+    await runInit({
+      root: paths.root,
+      workspace: paths.workspaceDir,
+      output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
+    });
+
+    // inject `forcBuildFlags: ['--release']` in config file
+    const configFilepath = join(paths.root, 'fuels.config.ts');
+    const configContents = readFileSync(configFilepath, 'utf-8');
+
+    const search = "  output: './output',";
+    const replace = [search, "  forcBuildFlags: ['--release'],"].join('\n');
+    const configContentsNew = configContents.replace(search, replace);
+
+    writeFileSync(configFilepath, configContentsNew);
+
+    // moving on
+    await runBuild({ root: paths.root });
+
+    const files = [
+      'contracts/FooBar.ts',
+      'contracts/FooBarFactory.ts',
+      'contracts/index.ts',
+      'index.ts',
+    ].map((f) => join(paths.outputDir, f));
+
+    files.forEach((file) => expect(existsSync(file)).toBeTruthy());
+
+    expect(autoStartFuelCore).toHaveBeenCalledTimes(0);
+    expect(deploy).toHaveBeenCalledTimes(0);
+    expect(killChildProcess).toHaveBeenCalledTimes(0);
+  });
+});

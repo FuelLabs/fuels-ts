@@ -1,21 +1,19 @@
 {
-  "ignore": [
-    "**/*/fuels.config.*",
-    "**/*/.vitepress/*",
-    "/apps/docs/*",
-    "/packages/abi-typegen/test/**",
-    "templates/**"
+  "entry": [
+    "apps/docs/src/versions.data.ts",
+    "apps/docs/src/guide/types/snippets/numbers/for-u8-u16-and-u32-2.ts",
+    "vitest.*"
   ],
+  "ignore": [".github/**"],
+  "ignoreBinaries": ["forc"],
   "ignoreDependencies": [
+    "@wagmi/connectors",
+    "fuels",
     "bun",
-    "@/sway-api/*",
-    "@fuel-ts/*",
-    "@internal/fuel-core",
-    "@internal/forc",
-    "@types/jest",
     "@types/rimraf",
-    "@graphql-codegen*",
-    "graphql-tag",
+    "@fuel-ts/abi-typegen",
+    "@internal/fuel-core",
+    "get-graphql-schema",
     "events",
     "eslint-plugin-jsdoc",
     "eslint-plugin-jsx-a11y",
@@ -25,11 +23,10 @@
     "dotenv",
     "memfs",
     "open",
-    "textlint",
-    "textlint-rule-no-dead-link",
-    "@elasticpath/textlint-rule-no-dead-relative-link",
-    "tree-kill",
+    "markdown-link-check",
     "ts-generator",
-    "webdriverio"
+    "vitepress-plugin-search",
+    "vue",
+    "@vitest/coverage-v8"
   ]
 }

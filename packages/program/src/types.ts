@@ -1,4 +1,5 @@
-import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
+/* eslint-disable max-classes-per-file */
+import type { FunctionFragment, JsonAbi, Interface } from '@fuel-ts/abi-coder';
 import type {
   CallResult,
   CoinQuantity,
@@ -6,17 +7,35 @@ import type {
   TransactionResponse,
   TransactionResult,
   TransactionType,
+  AbstractAccount,
+  Provider,
+  DecodedLogs,
+  PreConfirmationTransactionResult,
 } from '@fuel-ts/account';
-import type { AbstractProgram, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
+import type { Address, WithContractId } from '@fuel-ts/address';
 import type { BN, BigNumberish } from '@fuel-ts/math';
+import type { BytesLike } from '@fuel-ts/utils';
 
 import type { FunctionInvocationScope } from './functions/invocation-scope';
+
+/**
+ * @hidden
+ */
+export abstract class AbstractProgram {
+  abstract account: AbstractAccount | null;
+  abstract interface: Pick<Interface, 'jsonAbi'>;
+  abstract provider: Pick<Provider, 'sendTransaction' | 'getTransactionCost'> | null;
+}
+
+export abstract class AbstractContract extends AbstractProgram implements WithContractId {
+  abstract id: Address;
+}
 
 /**
  * Represents a contract call.
  */
 export type ContractCall = {
-  contractId: AbstractAddress;
+  contractId: Address;
   data: BytesLike;
   fnSelectorBytes: Uint8Array;
   amount?: BigNumberish;
@@ -40,6 +59,7 @@ export type TxParams = Partial<{
   tip: BigNumberish;
   gasLimit: BigNumberish;
   maturity?: number;
+  expiration?: number;
   maxFee?: BigNumberish;
   witnessLimit?: BigNumberish;
   variableOutputs: number;
@@ -105,7 +125,9 @@ export type TransactionCostOptions = Partial<{
 
 export type FunctionResult<TReturn> = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  readonly logs: Array<any>;
+  readonly logs: DecodedLogs<any>['logs'];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly groupedLogs: DecodedLogs<any>['groupedLogs'];
   readonly value: TReturn;
   readonly gasUsed: BN;
   readonly program: AbstractProgram;
@@ -114,6 +136,21 @@ export type FunctionResult<TReturn> = {
   readonly functionScopes: Array<InvocationScopeLike>;
   readonly transactionResponse: TransactionResponse;
   readonly transactionResult: TransactionResult<TransactionType.Script>;
+};
+
+export type PreConfirmationFunctionResult<TReturn> = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly logs?: DecodedLogs<any>['logs'];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly groupedLogs?: DecodedLogs<any>['groupedLogs'];
+  readonly value?: TReturn;
+  readonly gasUsed?: BN;
+  readonly program: AbstractProgram;
+  readonly isMultiCall: boolean;
+  readonly transactionId: string;
+  readonly functionScopes: Array<InvocationScopeLike>;
+  readonly transactionResponse: TransactionResponse;
+  readonly transactionResult: PreConfirmationTransactionResult;
 };
 
 export type DryRunResult<TReturn> = {

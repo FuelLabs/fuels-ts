@@ -1,6 +1,8 @@
-import { readFileSync, existsSync } from 'fs';
+import { FuelError } from '@fuel-ts/errors';
+import { readFileSync, existsSync, writeFileSync } from 'fs';
+import { globSync } from 'glob';
 import camelCase from 'lodash.camelcase';
-import { join } from 'path';
+import { dirname, join } from 'path';
 import toml from 'toml';
 
 import type { FuelsConfig } from '../types';
@@ -18,6 +20,10 @@ export type ForcToml = {
   dependencies: {
     [key: string]: string;
   };
+  proxy?: {
+    enabled: boolean;
+    address?: string;
+  };
 };
 
 export enum SwayType {
@@ -27,26 +33,68 @@ export enum SwayType {
   library = 'library',
 }
 
-export const forcFiles = new Map<string, ForcToml>();
-
 export const swayFiles = new Map<string, SwayType>();
 
-export function readForcToml(path: string) {
-  const forcPath = join(path, './Forc.toml');
+export const getClosestForcTomlDir = (dir: string): string => {
+  let forcPath = join(dir, 'Forc.toml');
+
+  if (existsSync(forcPath)) {
+    return forcPath;
+  }
+
+  const parent = join(dir, '..');
+  forcPath = getClosestForcTomlDir(parent);
+
+  if (parent === '/' && !existsSync(forcPath)) {
+    const msg = `TOML file not found:\n  ${dir}`;
+    throw new FuelError(FuelError.CODES.CONFIG_FILE_NOT_FOUND, msg);
+  }
+
+  return forcPath;
+};
+
+export function readForcToml(contractPath: string) {
+  if (!existsSync(contractPath)) {
+    throw new FuelError(
+      FuelError.CODES.CONFIG_FILE_NOT_FOUND,
+      `TOML file not found:\n  ${contractPath}`
+    );
+  }
+
+  const forcPath = getClosestForcTomlDir(contractPath);
 
   if (!existsSync(forcPath)) {
-    throw new Error(`Toml file not found:\n  ${forcPath}`);
+    throw new FuelError(
+      FuelError.CODES.CONFIG_FILE_NOT_FOUND,
+      `TOML file not found:\n  ${forcPath}`
+    );
   }
 
-  if (!forcFiles.has(forcPath)) {
-    const forcFile = readFileSync(forcPath, 'utf8');
-    const tomlParsed = toml.parse(forcFile);
-    forcFiles.set(forcPath, tomlParsed);
+  const forcFile = readFileSync(forcPath, 'utf8');
+  return toml.parse(forcFile) as ForcToml;
+}
+
+export function setForcTomlProxyAddress(contractPath: string, address: string) {
+  const forcPath = getClosestForcTomlDir(contractPath);
+  const tomlPristine = readFileSync(forcPath).toString();
+  const tomlJson = readForcToml(forcPath);
+
+  const isProxyEnabled = tomlJson.proxy?.enabled;
+  const hasProxyAddress = tomlJson.proxy?.address;
+
+  // never override address
+  if (isProxyEnabled && hasProxyAddress) {
+    return address;
   }
 
-  const tomlContents = forcFiles.get(forcPath) as ForcToml;
+  // injects address into toml string
+  const replaceReg = /(\[proxy\][\s\S]+^enabled.+$)/gm;
+  const replaceStr = `$1\naddress = "${address}"`;
+  const modifiedToml = tomlPristine.replace(replaceReg, replaceStr);
 
-  return tomlContents;
+  writeFileSync(forcPath, modifiedToml);
+
+  return address;
 }
 
 export function readSwayType(path: string) {
@@ -72,6 +120,16 @@ export function getContractName(contractPath: string) {
   return project.name;
 }
 
+export function getScriptName(scriptPath: string) {
+  const { project } = readForcToml(scriptPath);
+  return project.name;
+}
+
+export function getPredicateName(predicatePath: string) {
+  const { project } = readForcToml(predicatePath);
+  return project.name;
+}
+
 export function getContractCamelCase(contractPath: string) {
   const projectName = getContractName(contractPath);
   return camelCase(projectName);
@@ -94,4 +152,20 @@ export function getABIPaths(paths: string[], config: FuelsConfig) {
 export const getStorageSlotsPath = (contractPath: string, { buildMode }: FuelsConfig) => {
   const projectName = getContractName(contractPath);
   return join(contractPath, `/out/${buildMode}/${projectName}-storage_slots.json`);
+};
+
+export const findPrograms = (pathOrGlob: string, opts?: { cwd?: string }) => {
+  const pathWithoutGlob = pathOrGlob.replace(/[/][*]*$/, '').replace(opts?.cwd ?? '', '');
+  const absolutePath = join(opts?.cwd ?? '', pathWithoutGlob);
+  const allTomlPaths = globSync(`${absolutePath}/**/*.toml`);
+
+  return (
+    allTomlPaths
+      // Filter out the workspace
+      .map((path) => ({ path, isWorkspace: readForcToml(path).workspace !== undefined }))
+      .filter(({ isWorkspace }) => !isWorkspace)
+      // Parse the sway type and filter out the library
+      .map(({ path }) => ({ path: dirname(path), swayType: readSwayType(dirname(path)) }))
+      .filter(({ swayType }) => swayType !== SwayType.library)
+  );
 };

@@ -1,5 +1,852 @@
 # Change Log
 
+## 0.103.0
+
+### Minor Changes
+
+- 014a606: feat!: Update devnet Chain ID
+
+### Patch Changes
+
+- @fuel-ts/abi-coder@0.103.0
+- @fuel-ts/address@0.103.0
+- @fuel-ts/crypto@0.103.0
+- @fuel-ts/errors@0.103.0
+- @fuel-ts/hasher@0.103.0
+- @fuel-ts/math@0.103.0
+- @fuel-ts/merkle@0.103.0
+- @fuel-ts/transactions@0.103.0
+- @fuel-ts/utils@0.103.0
+- @fuel-ts/versions@0.103.0
+
+## 0.102.0
+
+### Minor Changes
+
+- f4be76c: chore!: upgrade `fuel-core` to `0.44.0`
+
+### Patch Changes
+
+- e0e4422: chore: expose `assembleTransferToContractScript` method
+- 215f9f2: feat: ensure that undecodable logs no longer throw
+- c9e0c5a: feat: add support for fuel-core v0.47.1
+- Updated dependencies [f4be76c]
+- Updated dependencies [c9e0c5a]
+  - @fuel-ts/utils@0.102.0
+  - @fuel-ts/versions@0.102.0
+  - @fuel-ts/transactions@0.102.0
+  - @fuel-ts/abi-coder@0.102.0
+  - @fuel-ts/address@0.102.0
+  - @fuel-ts/crypto@0.102.0
+  - @fuel-ts/hasher@0.102.0
+  - @fuel-ts/errors@0.102.0
+  - @fuel-ts/merkle@0.102.0
+  - @fuel-ts/math@0.102.0
+
+## 0.101.3
+
+### Patch Changes
+
+- 7def0a5: chore: add JSON ABI error entry to `FuelError.metadata`
+- 4e018a5: chore: handling for malformed response body
+- c8b6d0e: feat: added auto-consolidation of coins
+- b0aa106: chore: add object parameter support to `TransactionResponse` constructor
+- 55ad003: feat: consolidate non-base asset
+- Updated dependencies [4e018a5]
+- Updated dependencies [c8b6d0e]
+  - @fuel-ts/errors@0.101.3
+  - @fuel-ts/abi-coder@0.101.3
+  - @fuel-ts/address@0.101.3
+  - @fuel-ts/crypto@0.101.3
+  - @fuel-ts/math@0.101.3
+  - @fuel-ts/transactions@0.101.3
+  - @fuel-ts/utils@0.101.3
+  - @fuel-ts/hasher@0.101.3
+  - @fuel-ts/merkle@0.101.3
+  - @fuel-ts/versions@0.101.3
+
+## 0.101.2
+
+### Patch Changes
+
+- ec2ac46: fix: contract operation summary for multi-calls
+- 8c19d93: chore: support Node 24 - depreciate Node 18
+- bfb62ad: feat: implement support for new ABI error codes
+- Updated dependencies [8c19d93]
+- Updated dependencies [bfb62ad]
+- Updated dependencies [0d71065]
+  - @fuel-ts/transactions@0.101.2
+  - @fuel-ts/abi-coder@0.101.2
+  - @fuel-ts/versions@0.101.2
+  - @fuel-ts/address@0.101.2
+  - @fuel-ts/crypto@0.101.2
+  - @fuel-ts/errors@0.101.2
+  - @fuel-ts/hasher@0.101.2
+  - @fuel-ts/merkle@0.101.2
+  - @fuel-ts/utils@0.101.2
+  - @fuel-ts/math@0.101.2
+
+## 0.101.1
+
+### Patch Changes
+
+- 52dfa5b: chore: made `Account.signTransaction` returns `TransactionRequest`
+  - @fuel-ts/abi-coder@0.101.1
+  - @fuel-ts/address@0.101.1
+  - @fuel-ts/crypto@0.101.1
+  - @fuel-ts/errors@0.101.1
+  - @fuel-ts/hasher@0.101.1
+  - @fuel-ts/math@0.101.1
+  - @fuel-ts/merkle@0.101.1
+  - @fuel-ts/transactions@0.101.1
+  - @fuel-ts/utils@0.101.1
+  - @fuel-ts/versions@0.101.1
+
+## 0.101.0
+
+### Minor Changes
+
+- 4cbd72c: fix!: enforce `predicateData` when predicate has arguments
+
+### Patch Changes
+
+- 388ad98: feat: add `Predicate` method `setData`
+- e91eb6c: feat: support TX customization at BaseInvocationScope
+- 842e0f3: fix: close subscription after `Preconfirmation` status when applicable
+  - @fuel-ts/abi-coder@0.101.0
+  - @fuel-ts/address@0.101.0
+  - @fuel-ts/crypto@0.101.0
+  - @fuel-ts/errors@0.101.0
+  - @fuel-ts/hasher@0.101.0
+  - @fuel-ts/math@0.101.0
+  - @fuel-ts/merkle@0.101.0
+  - @fuel-ts/transactions@0.101.0
+  - @fuel-ts/utils@0.101.0
+  - @fuel-ts/versions@0.101.0
+
+## 0.100.6
+
+### Patch Changes
+
+- 303379c: chore: made connector returns `TransactionResponse` type
+  - @fuel-ts/abi-coder@0.100.6
+  - @fuel-ts/address@0.100.6
+  - @fuel-ts/crypto@0.100.6
+  - @fuel-ts/errors@0.100.6
+  - @fuel-ts/hasher@0.100.6
+  - @fuel-ts/math@0.100.6
+  - @fuel-ts/merkle@0.100.6
+  - @fuel-ts/transactions@0.100.6
+  - @fuel-ts/utils@0.100.6
+  - @fuel-ts/versions@0.100.6
+
+## 0.100.5
+
+### Patch Changes
+
+- 0a8b276: fix: ensure contract call receipt exists when decoding logs
+- 03b151b: fix: provider auto-refetch
+- 416e9e7: feat: implement methods to serialize/deserialize `TransactionResponse`
+  - @fuel-ts/abi-coder@0.100.5
+  - @fuel-ts/address@0.100.5
+  - @fuel-ts/crypto@0.100.5
+  - @fuel-ts/errors@0.100.5
+  - @fuel-ts/hasher@0.100.5
+  - @fuel-ts/math@0.100.5
+  - @fuel-ts/merkle@0.100.5
+  - @fuel-ts/transactions@0.100.5
+  - @fuel-ts/utils@0.100.5
+  - @fuel-ts/versions@0.100.5
+
+## 0.100.4
+
+### Patch Changes
+
+- efcce41: feat: integrate with new `AssembleTx` GQL end-point
+- 04fc7b5: chore: upgrading `@fuels/vm-asm` package
+- 5a57b97: chore: support RPC consistency mechanism
+- f534210: feat: add method for base asset coins consolidation
+- ec13d29: fix: provider async methods and tests
+- 3bb0eb7: chore: renaming method for consistency
+- dbed315: chore: upgrade `fuel-core` to `0.43.1`
+- Updated dependencies [efcce41]
+- Updated dependencies [5a57b97]
+- Updated dependencies [f534210]
+- Updated dependencies [dbed315]
+  - @fuel-ts/errors@0.100.4
+  - @fuel-ts/transactions@0.100.4
+  - @fuel-ts/versions@0.100.4
+  - @fuel-ts/abi-coder@0.100.4
+  - @fuel-ts/address@0.100.4
+  - @fuel-ts/crypto@0.100.4
+  - @fuel-ts/math@0.100.4
+  - @fuel-ts/utils@0.100.4
+  - @fuel-ts/hasher@0.100.4
+  - @fuel-ts/merkle@0.100.4
+
+## 0.100.3
+
+### Patch Changes
+
+- 5c40eb9: feat: added `groupedLogs`
+- e677921: fix: silent chain fetch request failures
+  - @fuel-ts/abi-coder@0.100.3
+  - @fuel-ts/address@0.100.3
+  - @fuel-ts/crypto@0.100.3
+  - @fuel-ts/errors@0.100.3
+  - @fuel-ts/hasher@0.100.3
+  - @fuel-ts/math@0.100.3
+  - @fuel-ts/merkle@0.100.3
+  - @fuel-ts/transactions@0.100.3
+  - @fuel-ts/utils@0.100.3
+  - @fuel-ts/versions@0.100.3
+
+## 0.100.2
+
+### Patch Changes
+
+- e909d54: fix: adjust feature detection for balances
+- Updated dependencies [e909d54]
+  - @fuel-ts/errors@0.100.2
+  - @fuel-ts/abi-coder@0.100.2
+  - @fuel-ts/address@0.100.2
+  - @fuel-ts/crypto@0.100.2
+  - @fuel-ts/math@0.100.2
+  - @fuel-ts/transactions@0.100.2
+  - @fuel-ts/utils@0.100.2
+  - @fuel-ts/hasher@0.100.2
+  - @fuel-ts/merkle@0.100.2
+  - @fuel-ts/versions@0.100.2
+
+## 0.100.1
+
+### Patch Changes
+
+- fdefaba: fix: skip decoding external contract logs without JSON ABI
+- bb6a76c: chore: eliminate chain requests across concurrent provider instances
+  - @fuel-ts/abi-coder@0.100.1
+  - @fuel-ts/address@0.100.1
+  - @fuel-ts/crypto@0.100.1
+  - @fuel-ts/errors@0.100.1
+  - @fuel-ts/hasher@0.100.1
+  - @fuel-ts/math@0.100.1
+  - @fuel-ts/merkle@0.100.1
+  - @fuel-ts/transactions@0.100.1
+  - @fuel-ts/utils@0.100.1
+  - @fuel-ts/versions@0.100.1
+
+## 0.100.0
+
+### Minor Changes
+
+- 260f64f: chore!: made `ResourceCache` consider resource owner
+- f41887f: chore!: upgrade `fuel-core` to `0.41.7`
+
+### Patch Changes
+
+- 3af8692: fix: ensure is possible to forward 0 amount to contract
+- 6668336: chore: merge gas price and predicate estimation requests
+- 68877c3: chore: revert "fix: ignored subscriptions not being read"
+- 0fd8a82: feat: consider `assetId` in check account utility
+- fc18871: feat: enable arbitrary data signing
+- 6eb113c: chore: upgrade NPM package versions
+- da33ca5: chore: remove call ops in tx summary
+- c5c8403: feat: improved connector JSON RPC interface
+- e48b0e9: feat: add receipts with the operations summary
+- 817bf13: fix: correct revert error name
+- 6d3cafb: chore: support BN input in block fetch methods
+- 194e31f: fix: contract operations in transaction summary
+- Updated dependencies [1277ae6]
+- Updated dependencies [b42f056]
+- Updated dependencies [fc18871]
+- Updated dependencies [6eb113c]
+- Updated dependencies [f41887f]
+- Updated dependencies [521292a]
+- Updated dependencies [ff97a6e]
+- Updated dependencies [194e31f]
+  - @fuel-ts/utils@0.100.0
+  - @fuel-ts/versions@0.100.0
+  - @fuel-ts/hasher@0.100.0
+  - @fuel-ts/abi-coder@0.100.0
+  - @fuel-ts/address@0.100.0
+  - @fuel-ts/crypto@0.100.0
+  - @fuel-ts/transactions@0.100.0
+  - @fuel-ts/errors@0.100.0
+  - @fuel-ts/merkle@0.100.0
+  - @fuel-ts/math@0.100.0
+
+## 0.99.0
+
+### Minor Changes
+
+- 4428556: chore!: remove `pageInfo` from `getBalances` GraphQl operations
+
+### Patch Changes
+
+- edefe59: chore: prepend version mismatch to GraphQL errors
+- f3d5240: fix: bind `waitForResult` in `TransactionResponse`
+- 86b8e94: chore: `Address` constructor now accepts a range of inputs.
+- e5251e2: feat: allow passing `gasPrice` to `getTransactionCost`
+- f986891: chore: un-deprecated network URLs
+- d35ccb7: feat: bytecode ID helpers
+- ec84b8a: feat: use configurable offset for blob ID
+- d1825c9: chore: update `amountPerCoin` prop in `WalletConfig` to accept BN
+- f7f0f0a: fix: s3 publishing
+- d591df0: chore: organized `assets` in account package
+- 8030180: feat: support Explorer Asset API
+- 45cc32e: chore: upgrade `fuel-core` to `0.40.4`
+- Updated dependencies [86b8e94]
+- Updated dependencies [ab56ded]
+- Updated dependencies [69e1ba8]
+- Updated dependencies [d1825c9]
+- Updated dependencies [56adcc5]
+- Updated dependencies [b3bb765]
+- Updated dependencies [45cc32e]
+  - @fuel-ts/address@0.99.0
+  - @fuel-ts/versions@0.99.0
+  - @fuel-ts/abi-coder@0.99.0
+  - @fuel-ts/utils@0.99.0
+  - @fuel-ts/transactions@0.99.0
+  - @fuel-ts/errors@0.99.0
+  - @fuel-ts/math@0.99.0
+  - @fuel-ts/crypto@0.99.0
+  - @fuel-ts/hasher@0.99.0
+  - @fuel-ts/merkle@0.99.0
+
+## 0.98.0
+
+### Minor Changes
+
+- 13977df: docs!: optimizing frontend apps
+- 68821a9: chore!: remove unused operations
+- 458b7cf: feat!: making `provider` initialization `sync` again
+- 254bf53: chore!: remove receipts deprecated properties
+- 8d8452e: feat!: `autoCost` for transaction estimation and funding
+- d404734: chore!: remove deprecated `submitAndAwait` operation
+- f2407dc: feat!: remove redundant gas price call for tx summary
+- 08a31d8: feat!: prevent implicit asset burn
+
+### Patch Changes
+
+- 12e801e: chore: dependency pinning and auditing
+- d5a696c: feat: added method to duplicate predicate
+- 0f138cd: feat: added `onBeforeSend` hook to the connector interface
+- 75fae34: chore: removing obsolete `Provider.create` method
+- a278e71: fix: unable to kill `fuels dev` with `pnpm`
+- 0b4c3ab: chore!: redistributed the `@fuel-ts/interfaces` package
+- Updated dependencies [12e801e]
+- Updated dependencies [04ca73e]
+- Updated dependencies [a7eb9b6]
+- Updated dependencies [254bf53]
+- Updated dependencies [f132203]
+- Updated dependencies [4ccc628]
+- Updated dependencies [08a31d8]
+- Updated dependencies [0b4c3ab]
+- Updated dependencies [68ef74d]
+  - @fuel-ts/transactions@0.98.0
+  - @fuel-ts/abi-coder@0.98.0
+  - @fuel-ts/versions@0.98.0
+  - @fuel-ts/address@0.98.0
+  - @fuel-ts/crypto@0.98.0
+  - @fuel-ts/hasher@0.98.0
+  - @fuel-ts/merkle@0.98.0
+  - @fuel-ts/utils@0.98.0
+  - @fuel-ts/math@0.98.0
+  - @fuel-ts/errors@0.98.0
+
+## 0.97.2
+
+### Patch Changes
+
+- ebe5ecd: chore: update internally used chain config
+- Updated dependencies [0970bc4]
+- Updated dependencies [5ec254d]
+- Updated dependencies [896bf5b]
+- Updated dependencies [ebe5ecd]
+  - @fuel-ts/utils@0.97.2
+  - @fuel-ts/versions@0.97.2
+  - @fuel-ts/abi-coder@0.97.2
+  - @fuel-ts/address@0.97.2
+  - @fuel-ts/crypto@0.97.2
+  - @fuel-ts/hasher@0.97.2
+  - @fuel-ts/transactions@0.97.2
+  - @fuel-ts/errors@0.97.2
+  - @fuel-ts/merkle@0.97.2
+  - @fuel-ts/math@0.97.2
+  - @fuel-ts/interfaces@0.97.2
+
+## 0.97.1
+
+### Patch Changes
+
+- 260274a: chore: upgrade `graphql-request@6.1.0`
+- c904a98: chore: added noImplicitOverride option to config
+- 7390114: fix: `transferToContract` method now allows big numbers
+- 3a178b0: chore: avoid re-estimate `gasPrice` at `estimateTxDependencies`
+- 4131e74: fix: enable `fuel-core` node cleanup to work in Bun
+- Updated dependencies [c904a98]
+- Updated dependencies [27e8808]
+- Updated dependencies [165c49c]
+  - @fuel-ts/abi-coder@0.97.1
+  - @fuel-ts/address@0.97.1
+  - @fuel-ts/math@0.97.1
+  - @fuel-ts/interfaces@0.97.1
+  - @fuel-ts/errors@0.97.1
+  - @fuel-ts/versions@0.97.1
+  - @fuel-ts/transactions@0.97.1
+  - @fuel-ts/crypto@0.97.1
+  - @fuel-ts/merkle@0.97.1
+  - @fuel-ts/utils@0.97.1
+  - @fuel-ts/hasher@0.97.1
+
+## 0.97.0
+
+### Minor Changes
+
+- f607ba2: fix!: remove unnecessary nonce from message gql queries
+- 82e35a4: chore!: mandate `abi` in `Predicate` constructor
+- 8c77765: chore!: optimize `getTransactions` query
+- efdc721: chore!: limit TX pagination number for `getTransactionsSummaries`
+- 9a17971: chore!: remove `blockId` in transaction list responses
+- 174876c: chore!: optimize coin gql queries
+
+### Patch Changes
+
+- 28e9ed8: build(deps): bump the deps-minor group with 20 updates
+- c009812: docs: migrated `provider` docs snippets
+- b0e9c84: chore!: refactor predicate and script deployment
+- 9dba357: chore: upgrading `fuel-core` to `0.40.0`
+- eede61c: feat: implement batch transfer to contracts
+- 1226ac3: chore: fix receipts properties and deprecate incorrect ones
+- Updated dependencies [9dba357]
+- Updated dependencies [4e057d5]
+- Updated dependencies [7c162de]
+- Updated dependencies [1226ac3]
+  - @fuel-ts/versions@0.97.0
+  - @fuel-ts/errors@0.97.0
+  - @fuel-ts/transactions@0.97.0
+  - @fuel-ts/utils@0.97.0
+  - @fuel-ts/abi-coder@0.97.0
+  - @fuel-ts/address@0.97.0
+  - @fuel-ts/crypto@0.97.0
+  - @fuel-ts/math@0.97.0
+  - @fuel-ts/hasher@0.97.0
+  - @fuel-ts/merkle@0.97.0
+  - @fuel-ts/interfaces@0.97.0
+
+## 0.96.1
+
+### Patch Changes
+
+- 85072f7: fix: setup listeners current connector
+- 6b7b6de: feat: ensure that we fetch node info per estimation
+- b78d032: chore: validate tx max number of inputs
+- 987aed3: feat: using gas modifier at `Provider.getTransactionCost`
+- Updated dependencies [eb3b6c9]
+- Updated dependencies [4ae041e]
+- Updated dependencies [bdfd009]
+- Updated dependencies [987aed3]
+  - @fuel-ts/versions@0.96.1
+  - @fuel-ts/address@0.96.1
+  - @fuel-ts/math@0.96.1
+  - @fuel-ts/errors@0.96.1
+  - @fuel-ts/utils@0.96.1
+  - @fuel-ts/transactions@0.96.1
+  - @fuel-ts/abi-coder@0.96.1
+  - @fuel-ts/crypto@0.96.1
+  - @fuel-ts/merkle@0.96.1
+  - @fuel-ts/hasher@0.96.1
+  - @fuel-ts/interfaces@0.96.1
+
+## 0.96.0
+
+### Patch Changes
+
+- Updated dependencies [5bf6621]
+  - @fuel-ts/address@0.96.0
+  - @fuel-ts/transactions@0.96.0
+  - @fuel-ts/abi-coder@0.96.0
+  - @fuel-ts/crypto@0.96.0
+  - @fuel-ts/errors@0.96.0
+  - @fuel-ts/hasher@0.96.0
+  - @fuel-ts/interfaces@0.96.0
+  - @fuel-ts/math@0.96.0
+  - @fuel-ts/merkle@0.96.0
+  - @fuel-ts/utils@0.96.0
+  - @fuel-ts/versions@0.96.0
+
+## 0.95.0
+
+### Minor Changes
+
+- 55bfa6d: chore!: slim down `chainInfoFragment` and `GasCostsFragment`
+- 87da048: chore!: optimize balance queries
+
+### Patch Changes
+
+- d4e839f: chore: `fuel-core@0.37.1`, `forc@0.65.1`, and `create-fuels` toolchains
+- 74991ad: chore: merge `chain` and `nodeInfo` queries into one
+- fcbcc22: feat: bump transaction pagination limit to 60
+- 45f4a86: fix: provider cache
+- d968532: feat: add feature to check if hex is an account
+- c84abb3: feat: add source request header
+- 735bb1c: chore: update `fuel-core` to `0.38.0`
+- 9c70eba: feat: add pagination limit to `getTransactions`
+- d1b4505: chore: optimize blockWithTransactions query
+- Updated dependencies [d4e839f]
+- Updated dependencies [95a9650]
+- Updated dependencies [b733e81]
+- Updated dependencies [bf14023]
+- Updated dependencies [f7afa04]
+- Updated dependencies [735bb1c]
+  - @fuel-ts/versions@0.95.0
+  - @fuel-ts/math@0.95.0
+  - @fuel-ts/address@0.95.0
+  - @fuel-ts/interfaces@0.95.0
+  - @fuel-ts/errors@0.95.0
+  - @fuel-ts/utils@0.95.0
+  - @fuel-ts/abi-coder@0.95.0
+  - @fuel-ts/crypto@0.95.0
+  - @fuel-ts/merkle@0.95.0
+  - @fuel-ts/transactions@0.95.0
+  - @fuel-ts/hasher@0.95.0
+
+## 0.94.9
+
+### Patch Changes
+
+- 5194a85: chore: deprecate unused operation names
+- c2f0599: feat: deploying scripts and predicates
+- Updated dependencies [c2f0599]
+  - @fuel-ts/versions@0.94.9
+  - @fuel-ts/errors@0.94.9
+  - @fuel-ts/utils@0.94.9
+  - @fuel-ts/abi-coder@0.94.9
+  - @fuel-ts/address@0.94.9
+  - @fuel-ts/crypto@0.94.9
+  - @fuel-ts/math@0.94.9
+  - @fuel-ts/transactions@0.94.9
+  - @fuel-ts/hasher@0.94.9
+  - @fuel-ts/merkle@0.94.9
+  - @fuel-ts/interfaces@0.94.9
+
+## 0.94.8
+
+### Patch Changes
+
+- f02fa88: fix: reduce flakiness by favoring port `0` over `portfinder` dependency
+  - @fuel-ts/abi-coder@0.94.8
+  - @fuel-ts/address@0.94.8
+  - @fuel-ts/crypto@0.94.8
+  - @fuel-ts/errors@0.94.8
+  - @fuel-ts/hasher@0.94.8
+  - @fuel-ts/interfaces@0.94.8
+  - @fuel-ts/math@0.94.8
+  - @fuel-ts/merkle@0.94.8
+  - @fuel-ts/transactions@0.94.8
+  - @fuel-ts/utils@0.94.8
+  - @fuel-ts/versions@0.94.8
+
+## 0.94.7
+
+### Patch Changes
+
+- f46334d: fix: removed sepolia assets and adjust decimal config
+- 20d2ac2: chore: upgraded to fuel-core 0.36.0
+- 80df900: chore: fix exported types
+- 3048099: chore: upgrading `@fuels/vm-asm` to `0.57.1`
+- b869ee8: feat: add flag to indicate if connector is external
+- 3668a26: fix: add missing receipts properties
+- Updated dependencies [47b5cd3]
+- Updated dependencies [431990d]
+- Updated dependencies [20d2ac2]
+- Updated dependencies [48db506]
+- Updated dependencies [80df900]
+- Updated dependencies [127ade0]
+- Updated dependencies [600b781]
+- Updated dependencies [3668a26]
+  - @fuel-ts/versions@0.94.7
+  - @fuel-ts/abi-coder@0.94.7
+  - @fuel-ts/transactions@0.94.7
+  - @fuel-ts/interfaces@0.94.7
+  - @fuel-ts/address@0.94.7
+  - @fuel-ts/crypto@0.94.7
+  - @fuel-ts/errors@0.94.7
+  - @fuel-ts/hasher@0.94.7
+  - @fuel-ts/merkle@0.94.7
+  - @fuel-ts/utils@0.94.7
+  - @fuel-ts/math@0.94.7
+
+## 0.94.6
+
+### Patch Changes
+
+- 99d39e9: feat: introduce upload and upgrade transaction request
+- a9f31ca: build(deps): bump the deps group across 1 directory with 38 updates
+- 5efe23d: chore: Include Ethereum asset in ETH Mainnet network
+- aef7282: feat: `provider.url` now returns auth url
+- c98461f: chore: deprecate network URLs, add asset ID and chain ID for mainnet
+- 6a920ee: chore: add new supported assets
+- c968ac0: chore: revert add `signTransaction` to `FuelConnectorMethods` enum
+- c21096c: chore: made `selectNetwork` arguments more flexible
+- 4bb8625: chore: update block explorer url
+- Updated dependencies [99d39e9]
+- Updated dependencies [a9f31ca]
+- Updated dependencies [9719c1b]
+- Updated dependencies [aef7282]
+  - @fuel-ts/transactions@0.94.6
+  - @fuel-ts/abi-coder@0.94.6
+  - @fuel-ts/address@0.94.6
+  - @fuel-ts/crypto@0.94.6
+  - @fuel-ts/hasher@0.94.6
+  - @fuel-ts/errors@0.94.6
+  - @fuel-ts/merkle@0.94.6
+  - @fuel-ts/math@0.94.6
+  - @fuel-ts/utils@0.94.6
+  - @fuel-ts/interfaces@0.94.6
+  - @fuel-ts/versions@0.94.6
+
+## 0.94.5
+
+### Patch Changes
+
+- 309b8d5: feat: use `submitAndAwaitStatus` to submit transactions
+- 2ce9ce5: fix: error handling in `Provider` for when a node is offline
+- 37eab14: chore: deprecate all receipt coders
+- Updated dependencies [942b56b]
+- Updated dependencies [37eab14]
+- Updated dependencies [cffa075]
+  - @fuel-ts/versions@0.94.5
+  - @fuel-ts/transactions@0.94.5
+  - @fuel-ts/errors@0.94.5
+  - @fuel-ts/utils@0.94.5
+  - @fuel-ts/abi-coder@0.94.5
+  - @fuel-ts/address@0.94.5
+  - @fuel-ts/crypto@0.94.5
+  - @fuel-ts/math@0.94.5
+  - @fuel-ts/hasher@0.94.5
+  - @fuel-ts/merkle@0.94.5
+  - @fuel-ts/interfaces@0.94.5
+
+## 0.94.4
+
+### Patch Changes
+
+- 7fc8d24: feat: return deep clone on transaction request `from` method
+- 24d4d03: ci: revert gas price estimation test flakiness
+- 121eca3: feat: add block header to responses in block-related queries
+- be1c43f: chore: deprecate `BaseTransactionRequest.fundWithFakeUtxos`
+- 7d74c8c: fix: TX estimation when `InputMessage` contains data
+- 6bef838: feat: validate blob IDs against chain in chunk deploys
+- b00fd02: chore: upgrade `fuel-core@0.35.0`
+- a059ea1: feat: map 'not enough coins' error
+- 90a1d0f: feat: support basic auth
+- 1b4db70: fix: assemble of transaction revert error message
+- 4cbba82: feat: parse message response from `getMessageByNonce`
+- Updated dependencies [b00fd02]
+- Updated dependencies [a059ea1]
+- Updated dependencies [482bbf0]
+  - @fuel-ts/versions@0.94.4
+  - @fuel-ts/errors@0.94.4
+  - @fuel-ts/crypto@0.94.4
+  - @fuel-ts/utils@0.94.4
+  - @fuel-ts/abi-coder@0.94.4
+  - @fuel-ts/address@0.94.4
+  - @fuel-ts/math@0.94.4
+  - @fuel-ts/transactions@0.94.4
+  - @fuel-ts/hasher@0.94.4
+  - @fuel-ts/merkle@0.94.4
+  - @fuel-ts/interfaces@0.94.4
+
+## 0.94.3
+
+### Patch Changes
+
+- a36626a: feat: added support for unknown txn types
+- Updated dependencies [b67ded2]
+- Updated dependencies [a36626a]
+- Updated dependencies [2b45e8d]
+- Updated dependencies [e286557]
+  - @fuel-ts/versions@0.94.3
+  - @fuel-ts/transactions@0.94.3
+  - @fuel-ts/abi-coder@0.94.3
+  - @fuel-ts/errors@0.94.3
+  - @fuel-ts/utils@0.94.3
+  - @fuel-ts/address@0.94.3
+  - @fuel-ts/crypto@0.94.3
+  - @fuel-ts/math@0.94.3
+  - @fuel-ts/hasher@0.94.3
+  - @fuel-ts/merkle@0.94.3
+  - @fuel-ts/interfaces@0.94.3
+
+## 0.94.2
+
+### Patch Changes
+
+- 3b59f1f: fix: avoid potential race-condition in fuel connectors init
+- ccd94fc: chore: upgrade `fuel-core@0.34.0`
+- Updated dependencies [01e2f0e]
+- Updated dependencies [ccd94fc]
+- Updated dependencies [986a247]
+  - @fuel-ts/utils@0.94.2
+  - @fuel-ts/versions@0.94.2
+  - @fuel-ts/abi-coder@0.94.2
+  - @fuel-ts/address@0.94.2
+  - @fuel-ts/crypto@0.94.2
+  - @fuel-ts/hasher@0.94.2
+  - @fuel-ts/transactions@0.94.2
+  - @fuel-ts/errors@0.94.2
+  - @fuel-ts/merkle@0.94.2
+  - @fuel-ts/math@0.94.2
+  - @fuel-ts/interfaces@0.94.2
+
+## 0.94.1
+
+### Patch Changes
+
+- Updated dependencies [9bba305]
+  - @fuel-ts/utils@0.94.1
+  - @fuel-ts/abi-coder@0.94.1
+  - @fuel-ts/address@0.94.1
+  - @fuel-ts/crypto@0.94.1
+  - @fuel-ts/hasher@0.94.1
+  - @fuel-ts/transactions@0.94.1
+  - @fuel-ts/merkle@0.94.1
+  - @fuel-ts/errors@0.94.1
+  - @fuel-ts/interfaces@0.94.1
+  - @fuel-ts/math@0.94.1
+  - @fuel-ts/versions@0.94.1
+
+## 0.94.0
+
+### Minor Changes
+
+- c7e01b4: feat!: consider message on resources cache
+- 799db38: feat!: prettify `typegen` api
+- 7f50d40: feat!: read malleable fields from transaction status on subscription
+- 56018e3: chore!: deprecate `FUEL_NETWORK_URL` and `LOCAL_NETWORK_URL`
+- 5e8a087: chore!: integrate `launchTestNode` in remaining packages
+- 80cb187: fix!: assembly process for account transfer operation
+- bbd794a: chore!: wrap subscriptions in promise
+- 03ac550: feat!: `fuel-core@0.32.1` and large contract deployments
+
+### Patch Changes
+
+- 26cb189: chore: refactor helpers related to transaction operations
+- 9309598: chore: upgrade `fuel-core@0.33.0`
+- d875416: build(deps): bump type-fest from 4.19.0 to 4.24.0
+- 2a8cb38: fix: avoid re-add fake resources at `Account.getTransactionCost`
+- 0110fd8: chore: handle exceeding maximum inputs when funding a transaction
+- c7104da: fix: transaction revert error
+- 2be4a5e: chore: improve node incompatibility warning
+- f6b12bd: fix: gas price estimation test flakiness
+- a467d54: fix: `Account.createTransfer` return type
+- 896add9: chore: default TestMessage to be spendable
+- 751d638: chore: switching `Error` to `FuelError`
+- 1d2abd7: chore: add validation for TX max outputs exceeded
+- fc39124: fix: return correct operations from coin and message inputs
+- b0c161f: feat: add randomUUID into `fuel-ts/crypto`
+- 25efc03: chore!: renamed `AssetId` to `TestAssetId`
+- Updated dependencies [9309598]
+- Updated dependencies [d875416]
+- Updated dependencies [84dfdc5]
+- Updated dependencies [29c556d]
+- Updated dependencies [0110fd8]
+- Updated dependencies [4c653d0]
+- Updated dependencies [95e7108]
+- Updated dependencies [751d638]
+- Updated dependencies [1e93dac]
+- Updated dependencies [1d2abd7]
+- Updated dependencies [a056da3]
+- Updated dependencies [9c07b00]
+- Updated dependencies [03ac550]
+- Updated dependencies [b0c161f]
+  - @fuel-ts/versions@0.94.0
+  - @fuel-ts/abi-coder@0.94.0
+  - @fuel-ts/transactions@0.94.0
+  - @fuel-ts/errors@0.94.0
+  - @fuel-ts/utils@0.94.0
+  - @fuel-ts/crypto@0.94.0
+  - @fuel-ts/address@0.94.0
+  - @fuel-ts/math@0.94.0
+  - @fuel-ts/hasher@0.94.0
+  - @fuel-ts/merkle@0.94.0
+  - @fuel-ts/interfaces@0.94.0
+
+## 0.93.0
+
+### Minor Changes
+
+- ad0a081: chore!: remove `awaitExecution` functionality
+- d4c4e55: chore!: refactored the `getTransactionCost` method
+- f3453b9: feat!: deploy contract validation
+
+### Patch Changes
+
+- 6b3df9d: build(deps): bump ramda and @types/ramda
+- c99f56b: docs: added connector documentation
+- 16ee1bf: chore: cache UTXOs by default upon TX submission
+- Updated dependencies [99794e4]
+- Updated dependencies [d4c4e55]
+- Updated dependencies [f3453b9]
+  - @fuel-ts/versions@0.93.0
+  - @fuel-ts/interfaces@0.93.0
+  - @fuel-ts/transactions@0.93.0
+  - @fuel-ts/errors@0.93.0
+  - @fuel-ts/utils@0.93.0
+  - @fuel-ts/abi-coder@0.93.0
+  - @fuel-ts/address@0.93.0
+  - @fuel-ts/crypto@0.93.0
+  - @fuel-ts/hasher@0.93.0
+  - @fuel-ts/math@0.93.0
+  - @fuel-ts/merkle@0.93.0
+
+## 0.92.1
+
+### Patch Changes
+
+- c62ae85: build(deps): bump @fuels/vm-asm from 0.54.0 to 0.55.0
+  - @fuel-ts/abi-coder@0.92.1
+  - @fuel-ts/address@0.92.1
+  - @fuel-ts/crypto@0.92.1
+  - @fuel-ts/errors@0.92.1
+  - @fuel-ts/hasher@0.92.1
+  - @fuel-ts/interfaces@0.92.1
+  - @fuel-ts/math@0.92.1
+  - @fuel-ts/merkle@0.92.1
+  - @fuel-ts/transactions@0.92.1
+  - @fuel-ts/utils@0.92.1
+  - @fuel-ts/versions@0.92.1
+
+## 0.92.0
+
+### Minor Changes
+
+- 98dbfbb: fix!: `launchNode.cleanup` not killing node in last test of test group
+- 17bd929: feat!: made `deployContract` a non-blocking call
+- aa7e656: feat!: implement pagination for `Account` methods
+
+### Patch Changes
+
+- d0b5446: chore: fix repetitive words
+- 369feef: build(deps): bump the deps group with 2 updates
+- 638eae3: build(deps-dev): bump the dev-deps group with 29 updates
+- 4a3c184: chore: upgrading `fuel-core` to `0.31.0`
+- Updated dependencies [638eae3]
+- Updated dependencies [4a3c184]
+- Updated dependencies [44d51ee]
+  - @fuel-ts/versions@0.92.0
+  - @fuel-ts/crypto@0.92.0
+  - @fuel-ts/errors@0.92.0
+  - @fuel-ts/utils@0.92.0
+  - @fuel-ts/abi-coder@0.92.0
+  - @fuel-ts/address@0.92.0
+  - @fuel-ts/hasher@0.92.0
+  - @fuel-ts/math@0.92.0
+  - @fuel-ts/transactions@0.92.0
+  - @fuel-ts/merkle@0.92.0
+  - @fuel-ts/interfaces@0.92.0
+
 ## 0.91.0
 
 ### Minor Changes

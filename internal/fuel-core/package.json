@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@internal/fuel-core",
-  "version": "0.88.3",
+  "version": "0.91.0",
   "description": "NPM bin wrapper around `fuel-core`",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -16,8 +16,12 @@
     "install": "node ./lib/install.js",
     "update": "node ./lib/update.js && node ./lib/install.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FuelLabs/fuels-ts.git"
+  },
   "license": "Apache-2.0",
   "dependencies": {
-    "node-fetch": "^3.3.2"
+    "node-fetch": "3.3.2"
   }
 }

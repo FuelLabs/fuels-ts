@@ -1,15 +1,13 @@
 import { Address, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import {
-  PredicateTrueAbi__factory,
-  PredicateFalseAbi__factory,
-} from '../../test/typegen/predicates';
+import { PredicateTrue, PredicateFalse } from '../../test/typegen/predicates';
 
-import { assertBalances, fundPredicate } from './utils/predicate';
+import { assertBalances, fundAccount } from './utils/predicate';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Predicate', () => {
   describe('Evaluations', () => {
@@ -21,19 +19,19 @@ describe('Predicate', () => {
         provider,
       } = launched;
 
-      const receiver = Wallet.fromAddress(Address.fromRandom(), provider);
+      const receiver = Wallet.generate({ provider });
       const initialReceiverBalance = await receiver.getBalance();
 
-      const predicate = PredicateTrueAbi__factory.createInstance(provider);
+      const predicate = new PredicateTrue({ provider });
 
-      await fundPredicate(wallet, predicate, 200_000);
+      await fundAccount(wallet, predicate, 200_000);
 
       const amountToReceiver = 50;
 
       const tx = await predicate.transfer(
         receiver.address,
         amountToReceiver,
-        provider.getBaseAssetId(),
+        await provider.getBaseAssetId(),
         {
           gasLimit: 1000,
         }
@@ -55,12 +53,12 @@ describe('Predicate', () => {
 
       const receiver = Wallet.fromAddress(Address.fromRandom(), provider);
 
-      const predicate = PredicateFalseAbi__factory.createInstance(provider);
+      const predicate = new PredicateFalse({ provider });
 
-      await fundPredicate(wallet, predicate, 200_000);
+      await fundAccount(wallet, predicate, 200_000);
 
       await expect(
-        predicate.transfer(receiver.address, 50, provider.getBaseAssetId(), {
+        predicate.transfer(receiver.address, 50, await provider.getBaseAssetId(), {
           gasLimit: 1000,
         })
       ).rejects.toThrow('PredicateVerificationFailed');

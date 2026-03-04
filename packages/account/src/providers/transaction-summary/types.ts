@@ -1,30 +1,108 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
-import type { B256Address } from '@fuel-ts/interfaces';
+import type { B256Address } from '@fuel-ts/address';
 import type { BN, BNInput } from '@fuel-ts/math';
-import type { Input, Output, Transaction, TransactionType } from '@fuel-ts/transactions';
-
 import type {
-  GqlFailureStatusFragment,
-  GqlGetTransactionQuery,
-  GqlSqueezedOutStatusFragment,
-  GqlSubmittedStatusFragment,
-  GqlSuccessStatusFragment,
-} from '../__generated__/operations';
+  Transaction,
+  Input,
+  Output,
+  TransactionType,
+  OutputChange,
+  OutputVariable,
+} from '@fuel-ts/transactions';
+
+import type { GqlSuccessStatusFragment } from '../__generated__/operations';
+import type { TransactionReceiptJson } from '../provider';
 import type { TransactionResultReceipt } from '../transaction-response';
 
-export type GqlTransaction = NonNullable<GqlGetTransactionQuery['transaction']>;
+export type SubmittedStatus = {
+  type: 'SubmittedStatus';
+  time: string;
+};
 
-export type GraphqlTransactionStatus = GqlTransaction['status'];
+export type SuccessStatus = {
+  type: 'SuccessStatus';
+  time: string;
+  programState?: GqlSuccessStatusFragment['programState'];
+  block?: {
+    id: string;
+  };
+  receipts: TransactionReceiptJson[];
+  totalGas: string;
+  totalFee: string;
+};
 
-export type SuccessStatus = GqlSuccessStatusFragment;
-export type FailureStatus = GqlFailureStatusFragment;
-export type SubmittedStatus = GqlSubmittedStatusFragment;
-export type SqueezedOutStatus = GqlSqueezedOutStatusFragment;
+export type FailureStatus = {
+  type: 'FailureStatus';
+  time: string;
+  reason: string;
+  block?: {
+    id: string;
+  };
+  receipts: TransactionReceiptJson[];
+  totalGas: string;
+  totalFee: string;
+};
+
+export type SqueezedOutStatus = {
+  type: 'SqueezedOutStatus';
+  reason: string;
+};
+
+export type SerializedResolvedOutput = {
+  utxoId: string;
+  output:
+    | { to: string; amount: string; assetId: string; type: 'ChangeOutput' }
+    | { to: string; amount: string; assetId: string; type: 'CoinOutput' }
+    | { contract: string; stateRoot: string; type: 'ContractCreated' }
+    | { inputIndex: string; balanceRoot: string; stateRoot: string; type: 'ContractOutput' }
+    | { to: string; amount: string; assetId: string; type: 'VariableOutput' };
+};
+
+// #region resolved-output-type
+export type ResolvedOutput = {
+  utxoId: string;
+  output: OutputChange | OutputVariable;
+};
+// #endregion resolved-output-type
+
+export type PreconfirmationSuccessStatus = {
+  type: 'PreconfirmationSuccessStatus';
+  totalFee: string;
+  totalGas: string;
+  resolvedOutputs?: SerializedResolvedOutput[] | null;
+  preconfirmationReceipts?: TransactionReceiptJson[] | null;
+  preconfirmationTransaction?: { rawPayload: string } | null;
+};
+
+export type PreconfirmationFailureStatus = {
+  type: 'PreconfirmationFailureStatus';
+  reason: string;
+  totalFee: string;
+  totalGas: string;
+  resolvedOutputs?: SerializedResolvedOutput[] | null;
+  preconfirmationReceipts?: TransactionReceiptJson[] | null;
+  preconfirmationTransaction?: { rawPayload: string } | null;
+};
+
+export type GraphqlTransactionStatus =
+  | SubmittedStatus
+  | SuccessStatus
+  | FailureStatus
+  | SqueezedOutStatus
+  | PreconfirmationSuccessStatus
+  | PreconfirmationFailureStatus
+  | null;
+
+export type GqlTransaction = {
+  id: string;
+  rawPayload: string;
+  status?: GraphqlTransactionStatus;
+};
 
 export type Reason = FailureStatus['reason'];
 export type ProgramState = SuccessStatus['programState'];
 export type Time = SubmittedStatus['time'] | SuccessStatus['time'] | FailureStatus['time'];
-export type BlockId = SuccessStatus['block']['id'] | FailureStatus['block']['id'];
+export type BlockId = string;
 
 /**
  * @hidden
@@ -35,6 +113,7 @@ export enum TransactionTypeName {
   Script = 'Script',
   Upgrade = 'Upgrade',
   Upload = 'Upload',
+  Blob = 'Blob',
 }
 
 /**
@@ -45,6 +124,8 @@ export enum TransactionStatus {
   success = 'success',
   squeezedout = 'squeezedout',
   failure = 'failure',
+  preconfirmationSuccess = 'preconfirmationSuccess',
+  preconfirmationFailure = 'preconfirmationFailure',
 }
 
 /**
@@ -54,7 +135,9 @@ export type GqlTransactionStatusesNames =
   | 'FailureStatus'
   | 'SubmittedStatus'
   | 'SuccessStatus'
-  | 'SqueezedOutStatus';
+  | 'SqueezedOutStatus'
+  | 'PreconfirmationSuccessStatus'
+  | 'PreconfirmationFailureStatus';
 
 /**
  * @hidden
@@ -65,10 +148,6 @@ export enum OperationName {
   transfer = 'Transfer asset',
   contractCall = 'Contract call',
   receive = 'Receive asset',
-  mint = 'Mint asset',
-  predicatecall = 'Predicate call',
-  script = 'Script',
-  sent = 'Sent asset',
   withdrawFromFuel = 'Withdraw from Fuel',
 }
 
@@ -89,6 +168,7 @@ export type Operation = {
   to?: OperationTransactionAddress;
   assetsSent?: Array<OperationCoin>;
   calls?: Array<OperationFunctionCall>;
+  receipts?: TransactionResultReceipt[];
 };
 
 /**
@@ -135,6 +215,7 @@ export type InputOutputParam = InputParam & OutputParam;
 
 export interface GetTransferOperationsParams extends InputOutputParam {
   receipts: TransactionResultReceipt[];
+  baseAssetId: string;
 }
 
 export type GetOperationParams = {
@@ -155,8 +236,35 @@ export interface MintedAsset {
 
 export type BurnedAsset = MintedAsset;
 
+export interface PreConfirmationTransactionSummary {
+  id: string;
+  status?: TransactionStatus;
+  isStatusPreConfirmationSuccess: boolean;
+  isStatusPreConfirmationFailure: boolean;
+  isStatusPending: boolean;
+  isStatusSuccess: boolean;
+  isStatusFailure: boolean;
+  receipts?: TransactionResultReceipt[];
+  isTypeMint?: boolean;
+  isTypeCreate?: boolean;
+  isTypeScript?: boolean;
+  isTypeUpgrade?: boolean;
+  isTypeUpload?: boolean;
+  isTypeBlob?: boolean;
+  errorReason?: string;
+  operations?: Operation[];
+  gasUsed?: BN;
+  mintedAssets?: MintedAsset[];
+  burnedAssets?: BurnedAsset[];
+  tip?: BN;
+  fee?: BN;
+  type?: TransactionTypeName;
+  transaction?: Transaction;
+  resolvedOutputs?: ResolvedOutput[];
+}
+
 export type TransactionSummary<TTransactionType = void> = {
-  id?: string;
+  id: string;
   time?: string;
   operations: Operation[];
   gasUsed: BN;
@@ -170,6 +278,7 @@ export type TransactionSummary<TTransactionType = void> = {
   isTypeScript: boolean;
   isTypeUpgrade: boolean;
   isTypeUpload: boolean;
+  isTypeBlob: boolean;
   isStatusPending: boolean;
   isStatusSuccess: boolean;
   isStatusFailure: boolean;

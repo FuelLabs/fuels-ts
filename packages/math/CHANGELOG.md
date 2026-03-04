@@ -1,5 +1,240 @@
 # Change Log
 
+## 0.103.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.103.0
+
+## 0.102.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.102.0
+
+## 0.101.3
+
+### Patch Changes
+
+- Updated dependencies [4e018a5]
+- Updated dependencies [c8b6d0e]
+  - @fuel-ts/errors@0.101.3
+
+## 0.101.2
+
+### Patch Changes
+
+- 8c19d93: chore: support Node 24 - depreciate Node 18
+- Updated dependencies [8c19d93]
+  - @fuel-ts/errors@0.101.2
+
+## 0.101.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.101.1
+
+## 0.101.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.101.0
+
+## 0.100.6
+
+### Patch Changes
+
+- @fuel-ts/errors@0.100.6
+
+## 0.100.5
+
+### Patch Changes
+
+- @fuel-ts/errors@0.100.5
+
+## 0.100.4
+
+### Patch Changes
+
+- Updated dependencies [efcce41]
+- Updated dependencies [5a57b97]
+- Updated dependencies [f534210]
+  - @fuel-ts/errors@0.100.4
+
+## 0.100.3
+
+### Patch Changes
+
+- @fuel-ts/errors@0.100.3
+
+## 0.100.2
+
+### Patch Changes
+
+- Updated dependencies [e909d54]
+  - @fuel-ts/errors@0.100.2
+
+## 0.100.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.100.1
+
+## 0.100.0
+
+### Patch Changes
+
+- Updated dependencies [f41887f]
+  - @fuel-ts/errors@0.100.0
+
+## 0.99.0
+
+### Patch Changes
+
+- b3bb765: fix: improve BN unsafe numbers error handling
+- Updated dependencies [b3bb765]
+  - @fuel-ts/errors@0.99.0
+
+## 0.98.0
+
+### Patch Changes
+
+- 12e801e: chore: dependency pinning and auditing
+- Updated dependencies [4ccc628]
+- Updated dependencies [08a31d8]
+- Updated dependencies [0b4c3ab]
+  - @fuel-ts/errors@0.98.0
+
+## 0.97.2
+
+### Patch Changes
+
+- @fuel-ts/errors@0.97.2
+
+## 0.97.1
+
+### Patch Changes
+
+- c904a98: chore: added noImplicitOverride option to config
+- Updated dependencies [27e8808]
+  - @fuel-ts/errors@0.97.1
+
+## 0.97.0
+
+### Patch Changes
+
+- Updated dependencies [9dba357]
+  - @fuel-ts/errors@0.97.0
+
+## 0.96.1
+
+### Patch Changes
+
+- bdfd009: fix: `parseUnits` bug with 0 units
+- 987aed3: feat: using gas modifier at `Provider.getTransactionCost`
+  - @fuel-ts/errors@0.96.1
+
+## 0.96.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.96.0
+
+## 0.95.0
+
+### Patch Changes
+
+- b733e81: fix: correct `bn` formatting bug with 0 units
+  - @fuel-ts/errors@0.95.0
+
+## 0.94.9
+
+### Patch Changes
+
+- @fuel-ts/errors@0.94.9
+
+## 0.94.8
+
+### Patch Changes
+
+- @fuel-ts/errors@0.94.8
+
+## 0.94.7
+
+### Patch Changes
+
+- 80df900: chore: fix exported types
+- 600b781: build(deps): bump the deps-patch group
+- Updated dependencies [80df900]
+  - @fuel-ts/errors@0.94.7
+
+## 0.94.6
+
+### Patch Changes
+
+- Updated dependencies [aef7282]
+  - @fuel-ts/errors@0.94.6
+
+## 0.94.5
+
+### Patch Changes
+
+- @fuel-ts/errors@0.94.5
+
+## 0.94.4
+
+### Patch Changes
+
+- Updated dependencies [a059ea1]
+- Updated dependencies [482bbf0]
+  - @fuel-ts/errors@0.94.4
+
+## 0.94.3
+
+### Patch Changes
+
+- @fuel-ts/errors@0.94.3
+
+## 0.94.2
+
+### Patch Changes
+
+- @fuel-ts/errors@0.94.2
+
+## 0.94.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.94.1
+
+## 0.94.0
+
+### Patch Changes
+
+- Updated dependencies [0110fd8]
+- Updated dependencies [1d2abd7]
+- Updated dependencies [03ac550]
+  - @fuel-ts/errors@0.94.0
+
+## 0.93.0
+
+### Patch Changes
+
+- Updated dependencies [f3453b9]
+  - @fuel-ts/errors@0.93.0
+
+## 0.92.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.92.1
+
+## 0.92.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.92.0
+
 ## 0.91.0
 
 ### Patch Changes

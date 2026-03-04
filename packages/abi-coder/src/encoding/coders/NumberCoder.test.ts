@@ -162,6 +162,7 @@ describe('NumberCoder', () => {
     const invalidNumber = 'u64';
 
     await expectToThrowFuelError(
+      // @ts-expect-error Expected to throw error
       () => new NumberCoder(invalidNumber),
       new FuelError(ErrorCode.TYPE_NOT_SUPPORTED, `Invalid number type: ${invalidNumber}`)
     );

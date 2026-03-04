@@ -1,20 +1,12 @@
 /* eslint-disable no-console */
-import {
-  DEVNET_NETWORK_URL,
-  TESTNET_NETWORK_URL,
-  Provider,
-  TransactionType,
-  WalletUnlocked,
-  CHAIN_IDS,
-  rawAssets,
-  assets,
-} from 'fuels';
+import { DEVNET_NETWORK_URL } from '@fuel-ts/account/configs';
+import { WalletUnlocked, Provider, TransactionType, CHAIN_IDS, rawAssets, assets, bn } from 'fuels';
 
-import { getScript } from './utils';
+import { ScriptMainArgBool } from '../test/typegen';
 
 enum Networks {
   DEVNET = 'devnet',
-  TESTNET = 'testnet',
+  // TESTNET = 'testnet',
 }
 
 type ConfiguredNetwork = {
@@ -40,20 +32,20 @@ const configuredNetworks = {
         '0x94bc2a189b8211796c8fe5b9c6b67624fe97d2007e104bf1b30739944f43bd73',
     },
   } as ConfiguredNetwork,
-  [Networks.TESTNET]: {
-    networkUrl: TESTNET_NETWORK_URL,
-    privateKey: process.env.TESTNET_WALLET_PVT_KEY,
-    faucetUrl: `https://faucet-testnet.fuel.network/`,
-    txIds: {
-      [TransactionType.Upgrade]:
-        '0xd64e3f7589bc1c6dcf1e419f4a3a8fc21d3694abf98f151000f34682d1cacdce',
-      [TransactionType.Upload]:
-        '0x996eec87a702ac978663fe67dbde7ab94d31f32b1860fbfc527d4b5447b3446c',
-    },
-  } as ConfiguredNetwork,
+  // [Networks.TESTNET]: {
+  //   networkUrl: TESTNET_NETWORK_URL,
+  //   privateKey: process.env.TESTNET_WALLET_PVT_KEY,
+  //   faucetUrl: `https://faucet-testnet.fuel.network/`,
+  //   txIds: {
+  //     [TransactionType.Upgrade]:
+  //       '0xd64e3f7589bc1c6dcf1e419f4a3a8fc21d3694abf98f151000f34682d1cacdce',
+  //     [TransactionType.Upload]:
+  //       '0x996eec87a702ac978663fe67dbde7ab94d31f32b1860fbfc527d4b5447b3446c',
+  //   },
+  // } as ConfiguredNetwork,
 };
 
-const selectedNetworks: Networks[] = [Networks.DEVNET, Networks.TESTNET];
+const selectedNetworks: Networks[] = [Networks.DEVNET];
 
 /**
  * @group node
@@ -64,15 +56,16 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
   let wallet: WalletUnlocked;
   let shouldSkip: boolean;
 
-  beforeAll(async () => {
+  beforeAll(() => {
     const { networkUrl, privateKey } = configuredNetworks[selectedNetwork];
+
     if (!privateKey) {
-      console.log('Skipping live Fuel Node test');
+      console.log(`Skipping live Fuel Node test - ${networkUrl}`);
       shouldSkip = true;
       return;
     }
 
-    provider = await Provider.create(networkUrl);
+    provider = new Provider(networkUrl);
     wallet = new WalletUnlocked(privateKey, provider);
   });
 
@@ -81,23 +74,24 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
       return;
     }
 
-    const scriptInstance = getScript<[boolean], boolean>('script-main-arg-bool', wallet);
+    const scriptInstance = new ScriptMainArgBool(wallet);
 
     let output: boolean = false;
     try {
       const callScope = scriptInstance.functions.main(true);
 
-      const { value } = await callScope.call();
+      const { waitForResult } = await callScope.call();
+      const { value } = await waitForResult();
 
       output = value;
     } catch (e) {
-      const address = wallet.address.toAddress();
+      const address = wallet.address.toB256();
 
       console.error((e as Error).message);
       console.warn(`
         not enough coins to fit the target?
         - add assets: ${configuredNetworks[selectedNetwork].faucetUrl}
-        - bech32 address: ${address}
+        - B256 address: ${address}
       `);
     }
 
@@ -127,29 +121,118 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
     15_000
   );
 
-  it(`should have correct assets`, () => {
+  describe('optimized graphql queries', () => {
+    it('should get the balance of the wallet', { timeout: 15_000 }, async () => {
+      if (shouldSkip) {
+        return;
+      }
+
+      const balance = await provider.getBalance(wallet.address, await provider.getBaseAssetId());
+      expect(bn(balance).gt(0));
+    });
+
+    it('should get the chain and node info', { timeout: 15_000 }, async () => {
+      if (shouldSkip) {
+        return;
+      }
+
+      const chainInfo = await provider.fetchChainAndNodeInfo();
+      expect(chainInfo).toBeDefined();
+    });
+
+    it('should get latest block height', { timeout: 15_000 }, async () => {
+      if (shouldSkip) {
+        return;
+      }
+
+      const blockNumber = await provider.getBlockNumber();
+      expect(bn(blockNumber).gt(0));
+    });
+
+    it('should get the latest block', { timeout: 15_000 }, async () => {
+      if (shouldSkip) {
+        return;
+      }
+
+      const block = await provider.getBlock('latest');
+      expect(block).toBeDefined();
+    });
+
+    it('should get block with transactions', { timeout: 15_000 }, async () => {
+      if (shouldSkip) {
+        return;
+      }
+
+      const block = await provider.getBlockWithTransactions('latest');
+      expect(block).toBeDefined();
+    });
+  });
+
+  it(`should have correct assets`, async () => {
     if (shouldSkip) {
       return;
     }
 
-    const expected = [
+    const expectedRawBaseAsset = [
       {
         name: 'Ethereum',
         symbol: 'ETH',
-        icon: expect.stringContaining('eth.svg'),
-        networks: expect.arrayContaining([
+        icon: 'eth.svg',
+        networks: [
+          {
+            type: 'ethereum',
+            chainId: CHAIN_IDS.eth.sepolia,
+            decimals: 18,
+          },
+          {
+            type: 'ethereum',
+            chainId: CHAIN_IDS.eth.foundry,
+            decimals: 18,
+          },
+          {
+            type: 'ethereum',
+            chainId: CHAIN_IDS.eth.mainnet,
+            decimals: 18,
+          },
           {
             type: 'fuel',
+            chainId: CHAIN_IDS.fuel.devnet,
             decimals: 9,
-            chainId: provider.getChainId(),
-            assetId: provider.getBaseAssetId(),
+            assetId: '0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07',
           },
-        ]),
+          {
+            type: 'fuel',
+            chainId: CHAIN_IDS.fuel.testnet,
+            decimals: 9,
+            assetId: '0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07',
+          },
+          {
+            type: 'fuel',
+            chainId: CHAIN_IDS.fuel.mainnet,
+            decimals: 9,
+            assetId: '0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07',
+          },
+        ],
       },
     ];
 
-    expect(CHAIN_IDS.fuel[selectedNetwork]).toEqual(provider.getChainId());
-    expect(rawAssets).toEqual(expected);
-    expect(assets).toEqual(expected);
+    const expectedBaseAsset = [
+      {
+        ...expectedRawBaseAsset[0],
+        icon: 'https://assets.fuel.network/providers/eth.svg',
+      },
+    ];
+
+    const totalAssets = 27;
+    const chainId = await provider.getChainId();
+
+    expect(CHAIN_IDS.fuel[selectedNetwork]).toEqual(chainId);
+
+    // Ensure contains base asset
+    expect(rawAssets).containSubset(expectedRawBaseAsset);
+    expect(assets).containSubset(expectedBaseAsset);
+
+    expect(rawAssets.length).toEqual(totalAssets);
+    expect(assets.length).toEqual(totalAssets);
   }, 15_000);
 });

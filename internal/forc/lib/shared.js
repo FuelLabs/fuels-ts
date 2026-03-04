@@ -20,6 +20,20 @@ const platforms = {
   },
 };
 
+const binaries = [
+  'forc',
+  'forc-crypto',
+  'forc-debug',
+  'forc-deploy',
+  'forc-doc',
+  'forc-fmt',
+  'forc-lsp',
+  'forc-migrate',
+  'forc-run',
+  'forc-submit',
+  'forc-tx',
+];
+
 export const getPkgPlatform = () => {
   if (process.platform !== 'darwin' && process.platform !== 'linux') {
     throw new Error(
@@ -34,7 +48,7 @@ export const getPkgPlatform = () => {
   return platforms[process.platform][process.arch];
 };
 
-const versionFilePath = join(__dirname, '../VERSION');
+export const versionFilePath = join(__dirname, '../VERSION');
 
 export const getCurrentVersion = () => {
   const versionContents = readFileSync(versionFilePath, 'utf8');
@@ -52,28 +66,33 @@ const swayRepoUrl = 'https://github.com/fuellabs/sway.git';
 
 export const buildFromGitBranch = (branchName) => {
   const swayRepoDir = join(__dirname, '..', 'sway-repo');
-  const swayRepoDebugDir = join(swayRepoDir, 'target', 'debug');
+  const swayRepoReleaseDir = join(swayRepoDir, 'target', 'release');
   const stdioOpts = { stdio: 'inherit' };
 
   if (existsSync(swayRepoDir)) {
-    execSync(`cd ${swayRepoDir} && git fetch origin && git checkout ${branchName}`, stdioOpts);
-    execSync(`cd ${swayRepoDir} && cargo build`, stdioOpts);
+    execSync(
+      [
+        `cd ${swayRepoDir}`,
+        `git fetch origin`,
+        `git checkout ${branchName}`,
+        `git pull origin ${branchName}`,
+      ].join('&&'),
+      stdioOpts
+    );
+
+    execSync(`cd ${swayRepoDir} && cargo build --release`, stdioOpts);
   } else {
     execSync(`git clone --branch ${branchName} ${swayRepoUrl} ${swayRepoDir}`, stdioOpts);
-    execSync(`cd ${swayRepoDir} && cargo build`, stdioOpts);
+    execSync(`cd ${swayRepoDir} && cargo build --release`, stdioOpts);
   }
 
-  const [from, to] = [swayRepoDebugDir, forcBinDirPath];
+  const [from, to] = [swayRepoReleaseDir, forcBinDirPath];
 
   rmSync(to, { recursive: true, force: true });
   mkdirSync(to, { recursive: true });
 
-  cpSync(join(from, 'forc'), join(to, 'forc'));
-  cpSync(join(from, 'forc-deploy'), join(to, 'forc-deploy'));
-  cpSync(join(from, 'forc-doc'), join(to, 'forc-doc'));
-  cpSync(join(from, 'forc-fmt'), join(to, 'forc-fmt'));
-  cpSync(join(from, 'forc-lsp'), join(to, 'forc-lsp'));
-  cpSync(join(from, 'forc-run'), join(to, 'forc-run'));
-  cpSync(join(from, 'forc-submit'), join(to, 'forc-submit'));
-  cpSync(join(from, 'forc-tx'), join(to, 'forc-tx'));
+  binaries.forEach((binaryFileName) => {
+    cpSync(join(from, binaryFileName), join(to, binaryFileName));
+  });
+  cpSync(versionFilePath, join(to, 'VERSION'));
 };

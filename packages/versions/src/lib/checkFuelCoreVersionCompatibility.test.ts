@@ -69,7 +69,7 @@ describe('getDifferenceToUserFuelCoreVersion', () => {
   });
 
   it("warns when the version doesn't conform to strict major.minor.patch versioning (e.g. nightly build)", () => {
-    const consoleWarnSpy = vi.spyOn(console, 'warn');
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     vi.spyOn(getBuiltinVersionsMod, 'getBuiltinVersions').mockImplementation(() => ({
       FUELS: '1', // not under test
@@ -92,7 +92,7 @@ This unreleased fuel-core build may include features and updates not yet support
       FUEL_CORE: '0.1.2',
     }));
 
-    const consoleWarnSpy = vi.spyOn(console, 'warn');
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     checkFuelCoreVersionCompatibility('0.1.2');
 

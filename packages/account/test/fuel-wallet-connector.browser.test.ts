@@ -15,10 +15,10 @@ describe('Fuel Connector on browser', () => {
   });
 
   it('should add connector using window events', async () => {
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       connectors: [],
       storage: null,
-    });
+    }).init();
     let connectors = await fuel.connectors();
     expect(connectors.length).toBe(0);
 
@@ -49,18 +49,18 @@ describe('Fuel Connector on browser', () => {
     const thirdPartyConnector = new MockConnector({
       name: 'Third Party Wallet',
     });
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       connectors: [walletConnector, thirdPartyConnector],
       storage,
-    });
+    }).init();
 
     // Select third party connector
     await fuel.selectConnector(thirdPartyConnector.name);
 
-    const fuelNewInstance = new Fuel({
+    const fuelNewInstance = await new Fuel({
       connectors: [walletConnector, thirdPartyConnector],
       storage,
-    });
+    }).init();
     await fuelNewInstance.hasConnector();
     expect(fuelNewInstance.currentConnector()?.name).toBe(thirdPartyConnector.name);
   });
@@ -73,10 +73,10 @@ describe('Fuel Connector on browser', () => {
     } as unknown as StorageAbstract;
 
     const connector = new MockConnector();
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       connectors: [connector],
       storage,
-    });
+    }).init();
 
     await fuel.hasConnector();
     expect(storage.getItem).toBeCalledTimes(1);
@@ -93,9 +93,9 @@ describe('Fuel Connector on browser', () => {
 
   it('should store on localStorage and remove on clean', async () => {
     const connector = new MockConnector();
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       connectors: [connector],
-    });
+    }).init();
 
     await fuel.hasConnector();
     const value = window.localStorage.getItem(Fuel.STORAGE_KEY);
@@ -108,9 +108,9 @@ describe('Fuel Connector on browser', () => {
 
   it('should remove all listeners', async () => {
     const connector = new MockConnector();
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       connectors: [connector],
-    });
+    }).init();
 
     await fuel.hasConnector();
     const onConnection = vi.fn();
@@ -130,9 +130,9 @@ describe('Fuel Connector on browser', () => {
 
   it('should remove all listeners and clean storage on destroy', async () => {
     const connector = new MockConnector();
-    const fuel = new Fuel({
+    const fuel = await new Fuel({
       connectors: [connector],
-    });
+    }).init();
 
     await fuel.hasConnector();
     const onConnection = vi.fn();

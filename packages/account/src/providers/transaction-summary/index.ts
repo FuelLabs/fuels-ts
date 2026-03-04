@@ -5,5 +5,6 @@ export * from './status';
 export * from './operations';
 export * from './get-transaction-summary';
 export * from './assemble-transaction-summary';
+export * from './assemble-transaction-summary-from-serialized';
 export * from './receipt';
 export * from './calculate-tx-fee-for-summary';

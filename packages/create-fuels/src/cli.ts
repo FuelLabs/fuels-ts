@@ -1,3 +1,4 @@
+import { FuelError } from '@fuel-ts/errors';
 import { versions } from '@fuel-ts/versions';
 import toml from '@iarna/toml';
 import chalk from 'chalk';
@@ -9,9 +10,11 @@ import ora from 'ora';
 import { join } from 'path';
 
 import { tryInstallFuelUp } from './lib';
+import { doesTemplateExist } from './lib/doesTemplateExist';
 import { getPackageManager } from './lib/getPackageManager';
 import { getPackageVersion } from './lib/getPackageVersion';
-import type { ProgramOptions } from './lib/setupProgram';
+import { defaultTemplate, templates } from './lib/setupProgram';
+import type { Template, ProgramOptions } from './lib/setupProgram';
 import { promptForProjectPath } from './prompts';
 import { error, log } from './utils/logger';
 
@@ -27,14 +30,13 @@ const processWorkspaceToml = (fileContents: string) => {
   return toml.stringify(parsed);
 };
 
-function writeEnvFile(envFilePath: string) {
-  let newFileContents = '';
+const writeEnvFile = (rootDirPath: string) => {
+  const envFilePath = join(rootDirPath, 'env');
+  const envFileContents = readFileSync(envFilePath, 'utf-8');
+  const newEnvFilePath = join(rootDirPath, '.env.local');
 
-  newFileContents += `\nNEXT_PUBLIC_FUEL_NODE_PORT=4000`;
-  newFileContents += `\nNEXT_PUBLIC_DAPP_ENVIRONMENT=local`;
-
-  writeFileSync(envFilePath, newFileContents);
-}
+  writeFileSync(newEnvFilePath, envFileContents);
+};
 
 export const runScaffoldCli = async ({
   program,
@@ -44,12 +46,24 @@ export const runScaffoldCli = async ({
   args: string[];
 }) => {
   program.parse(args);
+  const opts = program.opts<ProgramOptions>();
+
+  const templateOfChoice = (opts.template ?? defaultTemplate) as Template;
+
+  if (!doesTemplateExist(templateOfChoice)) {
+    error(`Template '${templateOfChoice}' does not exist.`);
+    log();
+    log('Available templates:');
+    for (const template of templates) {
+      log(`  - ${template}`);
+    }
+    process.exit(1);
+  }
 
   let projectPath = program.args[0] ?? (await promptForProjectPath());
 
-  const opts = program.opts<ProgramOptions>();
   const verboseEnabled = opts.verbose ?? false;
-  const packageManager = getPackageManager(opts);
+  const packageManager = getPackageManager();
 
   if (!process.env.VITEST) {
     await tryInstallFuelUp(verboseEnabled);
@@ -60,7 +74,10 @@ export const runScaffoldCli = async ({
 
     // Exit the program if we are testing to prevent hanging
     if (process.env.VITEST) {
-      throw new Error();
+      throw new FuelError(
+        FuelError.CODES.UNKNOWN,
+        'An error occurred due to the environmental variable `VITEST` was detected.'
+      );
     }
 
     projectPath = await promptForProjectPath();
@@ -71,7 +88,10 @@ export const runScaffoldCli = async ({
 
     // Exit the program if we are testing to prevent hanging
     if (process.env.VITEST) {
-      throw new Error();
+      throw new FuelError(
+        FuelError.CODES.UNKNOWN,
+        'An error occurred due to the environmental variable `VITEST` was detected.'
+      );
     }
 
     projectPath = await promptForProjectPath();
@@ -84,13 +104,14 @@ export const runScaffoldCli = async ({
 
   await mkdir(projectPath);
 
-  await cp(join(__dirname, '../templates/nextjs'), projectPath, {
+  const templateDir = join(__dirname, '..', 'templates', templateOfChoice);
+  await cp(templateDir, projectPath, {
     recursive: true,
     filter: (filename) => !filename.includes('CHANGELOG.md'),
   });
   await rename(join(projectPath, 'gitignore'), join(projectPath, '.gitignore'));
+  writeEnvFile(projectPath);
   await rename(join(projectPath, 'env'), join(projectPath, '.env.local'));
-  writeEnvFile(join(projectPath, '.env.local'));
 
   const forcTomlPath = join(projectPath, 'sway-programs', 'Forc.toml');
   const forcTomlContents = readFileSync(forcTomlPath, 'utf-8');
@@ -102,9 +123,23 @@ export const runScaffoldCli = async ({
   const packageJsonPath = join(projectPath, 'package.json');
   const packageJsonContents = readFileSync(packageJsonPath, 'utf-8');
   const fuelsVersion = getPackageVersion(args);
-  const newPackageJsonContents = packageJsonContents
+  let newPackageJsonContents = packageJsonContents
     .replace(`pnpm run prebuild`, packageManager.run('prebuild'))
     .replace(`"fuels": "${versions.FUELS}"`, `"fuels": "${fuelsVersion}"`);
+
+  // TODO: remove once upgraded to `graphql-request@v7`
+  // https://github.com/FuelLabs/fuels-ts/issues/3546
+  if (packageManager.name === 'pnpm') {
+    let newPackageJsonObject = JSON.parse(newPackageJsonContents);
+    newPackageJsonObject = {
+      ...newPackageJsonObject,
+      overrides: undefined,
+      pnpm: {
+        overrides: newPackageJsonObject.overrides,
+      },
+    };
+    newPackageJsonContents = JSON.stringify(newPackageJsonObject, null, 2);
+  }
 
   writeFileSync(packageJsonPath, newPackageJsonContents);
 
@@ -118,16 +153,23 @@ export const runScaffoldCli = async ({
 
   fileCopySpinner.succeed('Copied template files!');
 
-  if (opts['no-install'] === false) {
+  // Remove typegen files from gitignore
+  const gitignorePath = join(projectPath, '.gitignore');
+  const gitignoreContents = readFileSync(gitignorePath, 'utf-8');
+  const newGitIgnoreContents = gitignoreContents.replace(/^(src\/sway-api\/.+)$/gm, '# $1');
+  writeFileSync(gitignorePath, newGitIgnoreContents);
+
+  if (opts.install) {
     const installDepsSpinner = ora({
       text: 'Installing dependencies..',
       color: 'green',
     }).start();
-
     process.chdir(projectPath);
     execSync(packageManager.install, { stdio: verboseEnabled ? 'inherit' : 'pipe' });
-
     installDepsSpinner.succeed('Installed dependencies!');
+
+    // Generate typegen files
+    execSync(packageManager.run('prebuild'), { stdio: verboseEnabled ? 'inherit' : 'pipe' });
   }
 
   log();

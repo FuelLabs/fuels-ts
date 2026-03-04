@@ -1,21 +1,13 @@
 import { BYTES_32 } from '@fuel-ts/abi-coder';
-import { randomBytes } from '@fuel-ts/crypto';
+import { randomBytes, randomUUID } from '@fuel-ts/crypto';
 import { FuelError } from '@fuel-ts/errors';
 import type { SnapshotConfigs } from '@fuel-ts/utils';
 import { defaultConsensusKey, hexlify, defaultSnapshotConfigs } from '@fuel-ts/utils';
-import type { ChildProcessWithoutNullStreams } from 'child_process';
-import { randomUUID } from 'crypto';
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import os from 'os';
 import path from 'path';
-import { getPortPromise } from 'portfinder';
-import treeKill from 'tree-kill';
 
-import { Provider } from '../providers';
 import { Signer } from '../signer';
-import type { WalletUnlocked } from '../wallet';
-
-import { generateTestWallet } from './generateTestWallet';
 
 const getFlagValueFromArgs = (args: string[], flag: string) => {
   const flagIndex = args.indexOf(flag);
@@ -48,6 +40,8 @@ export type LaunchNodeOptions = {
    * Passing in a snapshot configuration path via the `--snapshot` flag in `args` will override this.
    * */
   snapshotConfig?: SnapshotConfigs;
+  includeInitialState?: boolean;
+  killProcessOnExit?: boolean;
 };
 
 export type LaunchNodeResult = Promise<{
@@ -56,36 +50,14 @@ export type LaunchNodeResult = Promise<{
   port: string;
   url: string;
   snapshotDir: string;
+  pid: number;
 }>;
 
-export type KillNodeParams = {
-  child: ChildProcessWithoutNullStreams;
-  configPath: string;
-  killFn: (pid: number) => void;
-  state: {
-    isDead: boolean;
-  };
-};
-
-export const killNode = (params: KillNodeParams) => {
-  const { child, configPath, state, killFn } = params;
-  if (!state.isDead) {
-    if (child.pid) {
-      state.isDead = true;
-      killFn(Number(child.pid));
-    }
-
-    // Remove all the listeners we've added.
-    child.stderr.removeAllListeners();
-
-    // Remove the temporary folder and all its contents.
-    if (existsSync(configPath)) {
-      rmSync(configPath, { recursive: true });
-    }
-  }
-};
-
-function getFinalStateConfigJSON({ stateConfig, chainConfig }: SnapshotConfigs) {
+function getFinalStateConfigJSON({
+  stateConfig,
+  chainConfig,
+  includeInitialState = false,
+}: SnapshotConfigs & { includeInitialState?: boolean }) {
   const defaultCoins = defaultSnapshotConfigs.stateConfig.coins.map((coin) => ({
     ...coin,
     amount: '18446744073709551615',
@@ -102,6 +74,28 @@ function getFinalStateConfigJSON({ stateConfig, chainConfig }: SnapshotConfigs) 
     .concat(stateConfig.messages.map((msg) => ({ ...msg, amount: msg.amount.toString() })))
     .filter((msg, index, self) => self.findIndex((m) => m.nonce === msg.nonce) === index);
 
+  if (includeInitialState) {
+    // Funds a couple of wallets. Useful for tools like the fuels CLI and create fuels.
+    coins.push({
+      tx_id: '0x0000000000000000000000000000000000000000000000000000000000000001',
+      output_index: 0,
+      tx_pointer_block_height: 0,
+      tx_pointer_tx_idx: 0,
+      owner: '0x94ffcc53b892684acefaebc8a3d4a595e528a8cf664eeb3ef36f1020b0809d0d',
+      amount: '18446744073709551615',
+      asset_id: '0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07',
+    });
+    coins.push({
+      tx_id: '0x0000000000000000000000000000000000000000000000000000000000000002',
+      output_index: 0,
+      tx_pointer_block_height: 0,
+      tx_pointer_tx_idx: 0,
+      owner: '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+      amount: '18446744073709551615',
+      asset_id: '0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07',
+    });
+  }
+
   // If there's no genesis key, generate one and some coins to the genesis block.
   if (!process.env.GENESIS_SECRET) {
     const pk = Signer.generatePrivateKey();
@@ -113,7 +107,7 @@ function getFinalStateConfigJSON({ stateConfig, chainConfig }: SnapshotConfigs) 
       owner: signer.address.toHexString(),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       amount: '18446744073709551615' as any,
-      asset_id: chainConfig.consensus_parameters.V1.base_asset_id,
+      asset_id: chainConfig.consensus_parameters.V2.base_asset_id,
       output_index: 0,
       tx_pointer_block_height: 0,
       tx_pointer_tx_idx: 0,
@@ -138,6 +132,7 @@ function getFinalStateConfigJSON({ stateConfig, chainConfig }: SnapshotConfigs) 
  * @param fuelCorePath - the path to the fuel-core binary. (optional, defaults to 'fuel-core')
  * @param loggingEnabled - whether the node should output logs. (optional, defaults to true)
  * @param basePath - the base path to use for the temporary folder. (optional, defaults to os.tmpdir())
+ * @param includeInitialState - whether to initialise the chain with some default initial state. (optional, defaults to false)
  * */
 // #endregion launchNode-launchNodeOptions
 export const launchNode = async ({
@@ -148,6 +143,8 @@ export const launchNode = async ({
   loggingEnabled = true,
   basePath,
   snapshotConfig = defaultSnapshotConfigs,
+  includeInitialState = false,
+  killProcessOnExit = false,
 }: LaunchNodeOptions = {}): LaunchNodeResult =>
   // eslint-disable-next-line no-async-promise-executor
   new Promise(async (resolve, reject) => {
@@ -157,6 +154,9 @@ export const launchNode = async ({
       '--consensus-key',
       '--db-type',
       '--poa-instant',
+      '--native-executor-version',
+      '--min-gas-price',
+      '--starting-gas-price',
     ]);
 
     const snapshotDir = getFlagValueFromArgs(args, '--snapshot');
@@ -170,6 +170,9 @@ export const launchNode = async ({
 
     const nativeExecutorVersion = getFlagValueFromArgs(args, '--native-executor-version') || '0';
 
+    const minGasPrice = getFlagValueFromArgs(args, '--min-gas-price') || '1';
+    const startingGasPrice = getFlagValueFromArgs(args, '--starting-gas-price') || '1';
+
     // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
     const graphQLStartSubstring = 'Binding GraphQL provider to';
 
@@ -177,14 +180,7 @@ export const launchNode = async ({
 
     const ipToUse = ip || '0.0.0.0';
 
-    const portToUse =
-      port ||
-      (
-        await getPortPromise({
-          port: 4000, // tries 4000 first, then 4001, then 4002, etc.
-          stopPort: 5000, // don't try ports above 5000
-        })
-      ).toString();
+    const portToUse = port || '0';
 
     let snapshotDirToUse: string;
 
@@ -206,7 +202,14 @@ export const launchNode = async ({
       const stateTransitionPath = path.join(tempDir, 'state_transition_bytecode.wasm');
 
       writeFileSync(chainConfigPath, JSON.stringify(snapshotConfig.chainConfig), 'utf8');
-      writeFileSync(stateConfigPath, getFinalStateConfigJSON(snapshotConfig), 'utf8');
+      writeFileSync(
+        stateConfigPath,
+        getFinalStateConfigJSON({
+          ...snapshotConfig,
+          includeInitialState,
+        }),
+        'utf8'
+      );
       writeFileSync(metadataPath, JSON.stringify(metadata), 'utf8');
       writeFileSync(stateTransitionPath, JSON.stringify(''));
 
@@ -222,7 +225,8 @@ export const launchNode = async ({
         ['--ip', ipToUse],
         ['--port', portToUse],
         useInMemoryDb ? ['--db-type', 'in-memory'] : ['--db-path', tempDir],
-        ['--min-gas-price', '1'],
+        ['--min-gas-price', minGasPrice],
+        ['--starting-gas-price', startingGasPrice],
         poaInstant ? ['--poa-instant', 'true'] : [],
         ['--native-executor-version', nativeExecutorVersion],
         ['--consensus-key', consensusKey],
@@ -232,7 +236,7 @@ export const launchNode = async ({
         '--debug',
         ...remainingArgs,
       ].flat(),
-      { stdio: 'pipe' }
+      { stdio: 'pipe', detached: true }
     );
 
     if (loggingEnabled) {
@@ -242,13 +246,50 @@ export const launchNode = async ({
       });
     }
 
-    const cleanupConfig: KillNodeParams = {
-      child,
-      configPath: tempDir,
-      killFn: treeKill,
-      state: {
-        isDead: false,
-      },
+    const removeChildListeners = () => {
+      child.stderr.removeAllListeners();
+    };
+    const removeTempDir = () => {
+      if (existsSync(tempDir)) {
+        rmSync(tempDir, { recursive: true });
+      }
+    };
+
+    const childState = {
+      isDead: false,
+    };
+
+    const cleanup = () => {
+      if (childState.isDead) {
+        return;
+      }
+      childState.isDead = true;
+
+      removeChildListeners();
+
+      if (child.pid !== undefined) {
+        try {
+          process.kill(-child.pid);
+        } catch (e) {
+          const error = e as Error & { code: string };
+          if (error.code === 'ESRCH') {
+            // eslint-disable-next-line no-console
+            console.log(
+              `fuel-core node under pid ${child.pid} does not exist. The node might have been killed before cleanup was called. Exiting cleanly.`
+            );
+          } else if (error.message.includes('pid must be a positive integer')) {
+            // This is a workaround for a bug with Bun.
+            // See: https://github.com/oven-sh/bun/issues/8787
+            process.kill(+child.pid);
+          } else {
+            throw e;
+          }
+        }
+      } else {
+        // eslint-disable-next-line no-console
+        console.error('No PID available for the child process, unable to kill launched node');
+      }
+      removeTempDir();
     };
 
     // Look for a specific graphql start point in the output.
@@ -264,11 +305,12 @@ export const launchNode = async ({
 
         // Resolve with the cleanup method.
         resolve({
-          cleanup: () => killNode(cleanupConfig),
+          cleanup,
           ip: realIp,
           port: realPort,
           url: `http://${realIp}:${realPort}/v1/graphql`,
           snapshotDir: snapshotDirToUse as string,
+          pid: child.pid as number,
         });
       }
       if (/error/i.test(text)) {
@@ -278,59 +320,33 @@ export const launchNode = async ({
       }
     });
 
+    // Increase the max listeners to avoid a warning
+    process.setMaxListeners(100);
+
     // Process exit.
-    process.on('exit', () => killNode(cleanupConfig));
+    process.on('exit', cleanup);
 
     // Catches ctrl+c event.
-    process.on('SIGINT', () => killNode(cleanupConfig));
+    process.on('SIGINT', cleanup);
 
     // Catches "kill pid" (for example: nodemon restart).
-    process.on('SIGUSR1', () => killNode(cleanupConfig));
-    process.on('SIGUSR2', () => killNode(cleanupConfig));
+    process.on('SIGUSR1', cleanup);
+    process.on('SIGUSR2', cleanup);
 
     // Catches uncaught exceptions.
-    process.on('beforeExit', () => killNode(cleanupConfig));
-    process.on('uncaughtException', () => killNode(cleanupConfig));
+    process.on('beforeExit', cleanup);
+    process.on('uncaughtException', cleanup);
 
-    child.on('error', reject);
+    child.on('exit', (code: number | null, _signal: NodeJS.Signals | null) => {
+      removeChildListeners();
+      removeTempDir();
+      if (killProcessOnExit) {
+        process.exit(code);
+      }
+    });
+    child.on('error', (err: Error) => {
+      removeChildListeners();
+      removeTempDir();
+      reject(err);
+    });
   });
-
-const generateWallets = async (count: number, provider: Provider) => {
-  const baseAssetId = provider.getBaseAssetId();
-  const wallets: WalletUnlocked[] = [];
-  for (let i = 0; i < count; i += 1) {
-    const wallet = await generateTestWallet(provider, [[100_000, baseAssetId]]);
-    wallets.push(wallet);
-  }
-  return wallets;
-};
-
-export type LaunchNodeAndGetWalletsResult = Promise<{
-  wallets: WalletUnlocked[];
-  stop: () => void;
-  provider: Provider;
-}>;
-
-/**
- * Launches a fuel-core node and returns a provider, 10 wallets, and a cleanup function to stop the node.
- * @param launchNodeOptions - options to launch the fuel-core node with.
- * @param walletCount - the number of wallets to generate. (optional, defaults to 10)
- * */
-export const launchNodeAndGetWallets = async ({
-  launchNodeOptions,
-  walletCount = 10,
-}: {
-  launchNodeOptions?: Partial<LaunchNodeOptions>;
-  walletCount?: number;
-} = {}): LaunchNodeAndGetWalletsResult => {
-  const { cleanup: closeNode, ip, port } = await launchNode(launchNodeOptions || {});
-
-  const provider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
-  const wallets = await generateWallets(walletCount, provider);
-
-  const cleanup = () => {
-    closeNode();
-  };
-
-  return { wallets, stop: cleanup, provider };
-};

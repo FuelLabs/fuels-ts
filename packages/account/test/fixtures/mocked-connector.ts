@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/require-await */
 
+import type { HashableMessage } from '@fuel-ts/crypto';
 import { setTimeout } from 'timers/promises';
+import type { PartialDeep } from 'type-fest';
 
 import type {
   TransactionRequestLike,
@@ -8,11 +10,14 @@ import type {
   FuelABI,
   ConnectorMetadata,
   Network,
+  SelectNetworkArguments,
+  AccountSendTxParams,
+  TransactionResponse,
+  StartConsolidateCoins,
 } from '../../src';
-import { FUEL_NETWORK_URL } from '../../src/configs';
+import type { Asset } from '../../src/assets/types';
 import { FuelConnector } from '../../src/connectors/fuel-connector';
 import { FuelConnectorEventTypes } from '../../src/connectors/types';
-import type { Asset } from '../../src/providers/assets/types';
 
 import { generateAccounts } from './generate-accounts';
 
@@ -23,6 +28,7 @@ type MockConnectorOptions = {
   wallets?: Array<WalletUnlocked>;
   pingDelay?: number;
   metadata?: Partial<ConnectorMetadata>;
+  mocks?: PartialDeep<Pick<FuelConnector, 'startConsolidation'>>;
 };
 
 export class MockConnector extends FuelConnector {
@@ -30,8 +36,9 @@ export class MockConnector extends FuelConnector {
   _networks: Array<Network>;
   _wallets: Array<WalletUnlocked>;
   _pingDelay: number;
-  name = 'Fuel Wallet';
-  metadata: ConnectorMetadata = {
+  _mocks: MockConnectorOptions['mocks'];
+  override name = 'Fuel Wallet';
+  override metadata: ConnectorMetadata = {
     image: '/connectors/fuel-wallet.svg',
     install: {
       action: 'Install',
@@ -51,7 +58,7 @@ export class MockConnector extends FuelConnector {
     this._networks = options.networks ?? [
       {
         chainId: 0,
-        url: FUEL_NETWORK_URL,
+        url: 'http://127.0.0.1/v1/graphql',
       },
     ];
     // Time should be under 1 second
@@ -61,43 +68,44 @@ export class MockConnector extends FuelConnector {
       ...this.metadata,
       ...options.metadata,
     };
+    this._mocks = options.mocks ?? {};
   }
 
-  async ping() {
+  override async ping() {
     await setTimeout(this._pingDelay);
     return true;
   }
 
-  async version() {
+  override async version() {
     return {
       app: '0.0.1',
       network: '>=0.12.4',
     };
   }
 
-  async isConnected() {
+  override async isConnected() {
     return true;
   }
 
-  async accounts() {
+  override async accounts() {
     return this._accounts;
   }
 
-  async connect() {
+  override async connect() {
     this.emit(FuelConnectorEventTypes.connection, true);
     this.emit(FuelConnectorEventTypes.accounts, this._accounts);
     this.emit(FuelConnectorEventTypes.currentAccount, this._accounts[0]);
     return true;
   }
 
-  async disconnect() {
+  override async disconnect() {
     this.emit(FuelConnectorEventTypes.connection, false);
     this.emit(FuelConnectorEventTypes.accounts, []);
     this.emit(FuelConnectorEventTypes.currentAccount, null);
     return false;
   }
 
-  async signMessage(_address: string, _message: string) {
+  override async signMessage(_address: string, _message: HashableMessage) {
     const wallet = this._wallets.find((w) => w.address.toString() === _address);
     if (!wallet) {
       throw new Error('Wallet is not found!');
@@ -105,32 +113,36 @@ export class MockConnector extends FuelConnector {
     return wallet.signMessage(_message);
   }
 
-  async sendTransaction(_address: string, _transaction: TransactionRequestLike) {
+  override async sendTransaction(
+    _address: string,
+    _transaction: TransactionRequestLike,
+    _params: AccountSendTxParams
+  ): Promise<string | TransactionResponse> {
     const wallet = this._wallets.find((w) => w.address.toString() === _address);
     if (!wallet) {
       throw new Error('Wallet is not found!');
     }
-    const { id } = await wallet.sendTransaction(_transaction);
+    const { id } = await wallet.sendTransaction(_transaction, _params);
     return id;
   }
 
-  async currentAccount() {
+  override async currentAccount() {
     return this._accounts[0];
   }
 
-  async assets() {
+  override async assets() {
     return [];
   }
 
-  async addAsset(_asset: Asset) {
+  override async addAsset(_asset: Asset) {
     return true;
   }
 
-  async addAssets(_assets: Array<Asset>) {
+  override async addAssets(_assets: Array<Asset>) {
     return true;
   }
 
-  async addNetwork(_network: string) {
+  override async addNetwork(_network: string) {
     const newNetwork = {
       chainId: 0,
       url: _network,
@@ -141,28 +153,40 @@ export class MockConnector extends FuelConnector {
     return true;
   }
 
-  async selectNetwork(_network: Network) {
+  override async selectNetwork(_network: SelectNetworkArguments) {
     this.emit(FuelConnectorEventTypes.currentNetwork, _network);
     return true;
   }
 
-  async networks() {
+  override async networks() {
     return this._networks ?? [];
   }
 
-  async currentNetwork() {
+  override async currentNetwork() {
     return this._networks[0];
   }
 
-  async addABI(_contractId: string, _abi: FuelABI) {
+  override async addABI(_contractId: string, _abi: FuelABI) {
     return true;
   }
 
-  async getABI(_id: string) {
+  override async getABI(_id: string) {
     return null;
   }
 
-  async hasABI(_id: string) {
+  override async hasABI(_id: string) {
     return true;
+  }
+
+  override async startConsolidation(_opts: StartConsolidateCoins): Promise<void> {
+    if (!this._mocks?.startConsolidation) {
+      const wallet = this._wallets.find((w) => w.address.toB256() === _opts.owner);
+      if (!wallet) {
+        throw new Error('Wallet is not found!');
+      }
+      await wallet.startConsolidation(_opts);
+    } else {
+      await this._mocks?.startConsolidation(_opts);
+    }
   }
 }

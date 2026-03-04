@@ -6,7 +6,7 @@ import { WORD_SIZE } from '../../utils/constants';
 
 import { Coder } from './AbstractCoder';
 
-type NumberCoderType = 'u8' | 'u16' | 'u32' | 'u64';
+type NumberCoderType = 'u8' | 'u16' | 'u32';
 
 const getLength = (baseType: NumberCoderType): number => {
   switch (baseType) {

@@ -1,9 +1,12 @@
-
 # Working with Predicates
 
 This guide builds on the [Creating a Fuel dApp](./index.md) guide. Once you've gotten the dApp there up and running, then you can continue here via clicking the Predicate Example link. We will modify the predicate we created in the previous guide. The final result will look like this:
 
 ![End result of this guide](../../public/working-with-predicates-end-result.png)
+
+You can also check it live, deployed to the Testnet:
+
+- [https://create-fuels-template.vercel.app/](https://create-fuels-template.vercel.app/)
 
 ## Adding a Configurable pin
 
@@ -13,34 +16,37 @@ The current predicate functionality we have is a simple one that checks if the u
 
 The first step is to modify the predicate contract to accept a configurable pin. We will use the [`configurable`](https://docs.fuel.network/guides/intro-to-predicates/configurables/#configurables) keyword to create an updatable constant to store the pin. We will also modify the main function to check this constant instead of a hardcoded pin.
 
-<<< @/../../docs-snippets/test/fixtures/forc-projects/configurable-pin/src/main.sw#predicate-with-configurable-pin-1{rust:line-numbers}
+<<< @/../../docs/sway/configurable-pin/src/main.sw#full{rust:line-numbers}
 
 2. Modifying the Frontend
 
-We will now add new button to the frontend that will update the `pin` in the predicate when clicked. To do this, we will modify the `./src/pages/predicate.tsx` file.
+We will now add new button to the frontend that will update the `pin` in the predicate when clicked. To do this, we will modify the `./src/components/Predicate.tsx` file.
 
 We will add a function called `changePin`, which will use the current pin in state to update the pin in the predicate as well as transfer 1000 to the predicate.
 
-<<< @/../../create-fuels-counter-guide/src/pages/predicate.tsx#change-pin-react-function{ts:line-numbers}
+<<< @/../../create-fuels-counter-guide/src/components/Predicate.tsx#change-pin-react-function{ts:line-numbers}
 
-It would also be useful to change the placeholder text to say "Enter a new pin" instead of "Hint - the correct pin is 1337".
+It would also be useful to change the placeholder text.
 
 ```tsx
-<Input
-  className="w-[300px] mt-8"
-  value={pin as string}
-  onChange={(e) => setPin(e.target.value)}
-  placeholder="Enter a new pin"
+<input
+  type="text"
+  value={predicatePin}
+  onChange={(e) => setPredicatePin(e.target.value)}
+  className="w-1/2 bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
+  placeholder="Enter current or new pin"
 />
 ```
 
 Finally, we will add a button that calls the `changePin` function when clicked.
 
 ```tsx
-<Button onClick={changePin}>Change Pin</Button>
+<Button onClick={changePin} className="w-full" disabled={isLoading}>
+  Change Pin
+</Button>
 ```
 
-Congratulations! That's all. You should now be able to see the modified predicate dApp running at `http://localhost:3000` with our newly added change pin functionality.
+Congratulations! That's all. You should now be able to see the modified predicate dApp running at `http://localhost:5173` with our newly added change pin functionality.
 
 You can find the complete source code of the dApp we built [here](https://github.com/FuelLabs/fuels-ts/tree/master/apps/create-fuels-counter-guide).
 

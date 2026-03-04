@@ -20,15 +20,39 @@ Check that the arguments supplied to the function match the required type.
 
 ### `ACCOUNT_REQUIRED`
 
-When an [`Account`](../../api/Account/Account.md) is required for an operation. This will usually be in the form of a [`Wallet`](../wallets/index.md).
+When an [`Account`](DOCS_API_URL/classes/_fuel_ts_account.Account.html) is required for an operation. This will usually be in the form of a [`Wallet`](../wallets/index.md).
 
 It could be caused during the deployments of contracts when an account is required to sign the transaction. This can be resolved by following the deployment guide [here](../contracts/deploying-contracts.md).
+
+### `ASSET_BURN_DETECTED`
+
+When you are trying to send a transaction that will result in an asset burn.
+
+Add relevant coin change outputs to the transaction, or enable asset burn in the transaction request.
+
+### `CONFIG_FILE_NOT_FOUND`
+
+When a configuration file is not found. This could either be a `fuels.config.[ts,js,mjs,cjs]` file or a TOML file.
+
+Ensure that the configuration file is present in the root directory of your project.
+
+### `CONFIG_FILE_ALREADY_EXISTS`
+
+When a configuration file already exists in the root directory of your project.
+
+You can not run `fuels init` more than once for a given project. Either remove the existing configuration file or update it.
 
 ### `CONVERTING_FAILED`
 
 When converting a big number into an incompatible format.
 
 Ensure that the value you've supplied to the big number is compatible with the value you are converting to.
+
+### `CONTRACT_SIZE_EXCEEDS_LIMIT`
+
+When the contract size exceeds the maximum contract size limit.
+
+Ensure that the contract size is less than the maximum contract size limit, of 100 KB. This can be validated by checking the bytecode length of the contract.
 
 ### `DUPLICATED_POLICY`
 
@@ -47,6 +71,12 @@ Check that only one of the above is passed.
 When the function with the given name, signature or selector is not found in the ABI.
 
 Check that the function name, signature or selector is correct and exits on the ABI.
+
+### `FUNDS_TOO_LOW`
+
+When the funds in the account are lower than the required amount.
+
+Ensure that the account has enough funds to cover the transaction.
 
 ### `GAS_LIMIT_TOO_LOW`
 
@@ -71,6 +101,12 @@ The error message will determine which element of the configuration is incorrect
 Checksum validation failed for the provided mnemonic.
 
 Ensure that the mnemonic is correct.
+
+### `INVALID_CHUNK_SIZE_MULTIPLIER`
+
+When the chunk size multiplier is not between 0 and 1.
+
+Ensure that the chunk size multiplier is a number that it is between 0 and 1.
 
 ### `INVALID_CONFIGURABLE_CONSTANTS`
 
@@ -132,6 +168,12 @@ When the supplied policy type is invalid for the given Script.
 
 Check the policy type is defined in `PolicyType`.
 
+### `INVALID_PROVIDER`
+
+When unable to connect to the `Provider` or `Network` supplied to a method on the [`Fuel`](../wallets/connectors.md) class.
+
+Check that the `Provider` or `Network` is supplied correctly.
+
 ### `INVALID_PUBLIC_KEY`
 
 When the provided public key is invalid.
@@ -174,11 +216,11 @@ When the transaction status received from the node is unexpected.
 
 Check the status received is within `TransactionStatus`.
 
-### `INVALID_TRANSACTION_TYPE`
+### `UNSUPPORTED_TRANSACTION_TYPE`
 
-When the transaction type from the Fuel Node is _not_ valid.
+When the transaction type from the Fuel Node is _not_ supported.
 
-The type is within [`TransactionType`](../../api/Account/TransactionType.md).
+The type is within [`TransactionType`](DOCS_API_URL/enums/_fuel_ts_account.TransactionType.html).
 
 ### `INVALID_TTL`
 
@@ -191,6 +233,12 @@ Ensure that the TTL is a number and that the TTL is greater than zero.
 When the word list length is not equal to 2048.
 
 The word list provided to the mnemonic length should be equal to 2048.
+
+### `INVALID_URL`
+
+When the URL provided is invalid.
+
+Ensure that the URL is valid.
 
 ### `JSON_ABI_ERROR`
 
@@ -214,7 +262,7 @@ Ensure that a connector has been supplied to the `Account` or `Wallet`.
 
 A provider is missing when it's required for a given operation.
 
-It could be caused by the provider not being set for either an [`Account`](../../api/Account/index.md) or a [`Wallet`](../wallets/index.md) - use the `connect` method to attach a provider.
+It could be caused by the provider not being set for either an [`Account`](DOCS_API_URL/modules/_fuel_ts_account.html) or a [`Wallet`](../wallets/index.md) - use the `connect` method to attach a provider.
 
 ### `MISSING_REQUIRED_PARAMETER`
 
@@ -227,6 +275,26 @@ The error message will determine which parameter is missing. This could be cause
 When the Fuel Node info cache is empty; This is usually caused by not being connected to the Fuel Node.
 
 Ensure that the provider has connected to a Fuel Node successfully.
+
+### `INSUFFICIENT_FUNDS_OR_MAX_COINS`
+
+This error can occur during a funding operation or when calling the `getResourcesToSpend` method. It indicates one of the following issues:
+
+`Insufficient Balance`: The specified account does not have enough balance to cover the required amount.
+
+`UTXO Limit Exceeded`: Although the account has enough total funds, the funds are spread across too many UTXOs (coins). The blockchain limits how many UTXOs can be used in a single transaction, and exceeding this limit prevents the transaction from being processed.
+
+First, to be sure what the real reason is, you can fetch the [balance](../wallets/checking-balances.md) of the `assetId` to ensure that the account has enough funds to cover the amount. After knowing the reason, to solve you can:
+
+`For Insufficient Balance`: Acquire additional funds in the required asset to meet the amount needed.
+
+`For UTXO Limit Exceeded`: Combine UTXOs to reduce their number and meet the network's requirements. You can follow [this guide](../cookbook/combining-utxos.md) to learn how to combine UTXOs effectively.
+
+### `TIMEOUT_EXCEEDED`
+
+When the timeout has been exceeded for a given operation.
+
+Check that you're connected to the network and that the network is stable.
 
 ### `TYPE_NOT_FOUND`
 
@@ -252,13 +320,40 @@ A wallet manager will throw for a multitude of reasons. The error message will d
 
 It could be that the passphrase is incorrect and/or the wallet does _not_ exist in the manager.
 
-### `HASHER_LOCKED`
+### `WORKSPACE_NOT_DETECTED`
 
-The hashing algorithm is currently locked, any subsequent attempts to register a new implementation will throw this error.
-The purpose of the lock function is to provide a way to ensure that the implementation of the specific hashing algorithm cannot be changed once it is locked. This can be useful in scenarios where you want to guarantee the integrity and consistency of the hashing function throughout your application.
+When the workspace is not detected in the directory indicated in the message.
+
+Ensure that the workspace is present in the directory specified.
 
 ### `UNKNOWN`
 
 In cases where the error hasn't been mapped yet, this code will be used.
 
 If you believe you found a bug, please report the [issue](https://github.com/FuelLabs/fuels-ts/issues/new/choose) to the team.
+
+### `MAX_INPUTS_EXCEEDED`
+
+When the number of transaction inputs exceeds the maximum limit allowed by the blockchain.
+
+### `MAX_OUTPUTS_EXCEEDED`
+
+When the number of transaction outputs exceeds the maximum limit allowed by the blockchain.
+
+### `CHANGE_OUTPUT_COLLISION`
+
+This error occurs when there's a conflict between the change output specified in the transaction request and the one specified in the `assembleTx` parameters:
+
+1. The transaction request already has a change output set for a specific asset ID and address
+2. The `assembleTx` parameters specify a different change output for the same asset ID
+
+### `DUPLICATE_CHANGE_OUTPUT_ACCOUNT`
+
+This error occurs when there are duplicate entries for the same asset ID with different `changeOutputAccount` values in the `accountCoinQuantities` parameter of the `assembleTx` method:
+
+1. The `accountCoinQuantities` parameter contains multiple entries for the same asset ID
+2. Each entry specifies a different `changeOutputAccount` for the same asset ID
+
+### `RESPONSE_BODY_EMPTY`
+
+This error occurs when the response from the server has an empty body. The issue will generally lie with the connection setup from your environment and the RPC.

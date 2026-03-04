@@ -108,7 +108,7 @@ describe('extractImports', () => {
         '// #import { AssetId };',
         '',
         'const assetId: AssetId = {',
-        '  value: Bits256,',
+        '  value: B256,',
         '};',
       ];
       const filepath = '/some/file/asset-id.test.ts';
@@ -197,7 +197,7 @@ describe('extractImports', () => {
         '    // #import { AssetId, Address };',
         '',
         '    const assetId: AssetId = {',
-        '      value: Bits256,',
+        '      value: B256,',
         '    };',
         '    const address: Address = new Address();',
       ];
@@ -207,7 +207,6 @@ describe('extractImports', () => {
         import type { AssetId, Contract, B256Address } from 'fuels';
 
         import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-        import { createAndDeployContractFromProject } from '../../utils';
 
         describe('AssetId', () => {
       `;

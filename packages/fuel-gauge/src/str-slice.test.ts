@@ -1,34 +1,31 @@
 import { bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import type { PredicateStrSliceAbiInputs } from '../test/typegen';
+import { StrSliceContractFactory, ScriptStrSlice } from '../test/typegen';
 import {
-  PredicateStrSliceAbi__factory,
-  ScriptStrSliceAbi__factory,
-  StrSliceAbi__factory,
-} from '../test/typegen';
-import contractBytes from '../test/typegen/contracts/StrSliceAbi.hex';
+  PredicateStrSlice,
+  type PredicateStrSliceInputs,
+} from '../test/typegen/predicates/PredicateStrSlice';
 
 /**
  * @group node
+ * @group browser
  */
 describe('str slice', () => {
   it('echoes a str slice [CONTRACT]', async () => {
     using launched = await launchTestNode({
-      contractsConfigs: [
-        {
-          deployer: StrSliceAbi__factory,
-          bytecode: contractBytes,
-        },
-      ],
+      contractsConfigs: [{ factory: StrSliceContractFactory }],
     });
+
     const {
       contracts: [strSliceContract],
     } = launched;
 
     const input = 'contract-input';
     const output = 'contract-return';
-    const { value } = await strSliceContract.functions.echoes_str_slice(input).call();
+    const { waitForResult } = await strSliceContract.functions.echoes_str_slice(input).call();
+    const { value } = await waitForResult();
+
     expect(value).toEqual(output);
   });
 
@@ -40,20 +37,31 @@ describe('str slice', () => {
       provider,
     } = launched;
 
-    const predicateData: PredicateStrSliceAbiInputs = ['predicate-input'];
-    const predicate = PredicateStrSliceAbi__factory.createInstance(provider, predicateData);
-    const baseAssetId = provider.getBaseAssetId();
+    const predicateData: PredicateStrSliceInputs = ['predicate-input'];
+    const predicate = new PredicateStrSlice({
+      provider,
+      data: predicateData,
+    });
+    const baseAssetId = await provider.getBaseAssetId();
 
     const amountToPredicate = 250_000;
     const amountToReceiver = 50_000;
 
-    const setupTx = await sender.transfer(predicate.address, amountToPredicate, baseAssetId);
-    await setupTx.waitForResult();
+    const { waitForResult: setupTx } = await sender.transfer(
+      predicate.address,
+      amountToPredicate,
+      baseAssetId
+    );
+    await setupTx();
 
     const initialReceiverBalance = await receiver.getBalance();
 
-    const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId);
-    const { isStatusSuccess } = await tx.waitForResult();
+    const { waitForResult } = await predicate.transfer(
+      receiver.address,
+      amountToReceiver,
+      baseAssetId
+    );
+    const { isStatusSuccess } = await waitForResult();
     const finalReceiverBalance = await receiver.getBalance();
     expect(bn(initialReceiverBalance).add(amountToReceiver).toHex()).toEqual(
       finalReceiverBalance.toHex()
@@ -68,10 +76,11 @@ describe('str slice', () => {
       wallets: [sender],
     } = launched;
 
-    const script = await ScriptStrSliceAbi__factory.createInstance(sender);
+    const script = new ScriptStrSlice(sender);
     const input = 'script-input';
     const output = 'script-return';
-    const { value } = await script.functions.main(input).call();
+    const { waitForResult } = await script.functions.main(input).call();
+    const { value } = await waitForResult();
     expect(value).toEqual(output);
   });
 });

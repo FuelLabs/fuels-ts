@@ -1,8 +1,10 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "./dist"
+    "module": "ES2022",
+    "outDir": "./dist",
+    "rootDir": "./",
+    "baseUrl": "./"
   },
-  "include": ["./src", "./.vitepress/**/*.ts", "./types"],
-  "exclude": ["./.vitepress/cache"]
+  "include": ["src", "test", "scripts", "./.vitepress/**/*.ts", "types"]
 }

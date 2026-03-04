@@ -1,7 +1,6 @@
 contract;
 
 use std::*;
-use core::*;
 use std::storage::*;
 use std::contract_id::ContractId;
 use std::vec::Vec;

@@ -5,7 +5,6 @@ import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 
 import {
-  CONTRACT_CALL_ABI,
   MOCK_INPUT_COIN,
   MOCK_INPUT_CONTRACT,
   MOCK_INPUT_MESSAGE,
@@ -21,7 +20,6 @@ import {
   MOCK_RECEIPT_RETURN_DATA_2,
   MOCK_RECEIPT_SCRIPT_RESULT,
   MOCK_RECEIPT_TRANSFER_OUT,
-  MOCK_TRANSACTION_RAWPAYLOAD,
 } from '../../../test/fixtures/transaction-summary';
 import type {
   TransactionResultMessageOutReceipt,
@@ -42,6 +40,7 @@ import {
   getTransactionTypeName,
   getWithdrawFromFuelOperations,
   isType,
+  isTypeBlob,
   isTypeCreate,
   isTypeMint,
   isTypeScript,
@@ -72,6 +71,7 @@ describe('operations', () => {
             assetId: ZeroBytes32,
           },
         ],
+        receipts: [MOCK_RECEIPT_CALL],
       };
 
       const receipts = [
@@ -87,72 +87,11 @@ describe('operations', () => {
         outputs: [MOCK_OUTPUT_CONTRACT, MOCK_OUTPUT_VARIABLE, MOCK_OUTPUT_CHANGE],
         receipts,
         maxInputs: bn(255),
+        baseAssetId: ZeroBytes32,
       });
 
       expect(operations.length).toEqual(1);
 
-      expect(operations[0]).toStrictEqual(expected);
-    });
-
-    // TODO: Make getOperation tests to be e2e
-    it.skip('should ensure getContractCallOperations return contract call operations with calls details', () => {
-      const expected: Operation = {
-        name: OperationName.contractCall,
-        calls: [
-          {
-            functionName: 'mint_to_address',
-            functionSignature: 'mint_to_address(u64,s(b256),u64)',
-            argumentsProvided: {
-              address: {
-                value: '0xa5a77a7d97c6708b08de873528ae6879ef5e9900fbc2e3f3cb74e28917bf7038',
-              },
-              amount: '0x64',
-              amount2: '0x64',
-            },
-            amount: bn('0x5f5e100'),
-            assetId: ZeroBytes32,
-          },
-        ],
-        from: {
-          type: AddressType.account,
-          address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
-        },
-        to: {
-          type: AddressType.contract,
-          address: '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1',
-        },
-        assetsSent: [
-          {
-            amount: bn(100000000),
-            assetId: ZeroBytes32,
-          },
-        ],
-      };
-
-      const receipts: TransactionResultReceipt[] = [
-        MOCK_RECEIPT_CALL,
-        {
-          ...MOCK_RECEIPT_CALL,
-          to: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        },
-        MOCK_RECEIPT_TRANSFER_OUT,
-        MOCK_RECEIPT_RETURN_DATA_1,
-        MOCK_RECEIPT_RETURN_DATA_2,
-        MOCK_RECEIPT_SCRIPT_RESULT,
-      ];
-
-      const operations = getContractCallOperations({
-        inputs: [MOCK_INPUT_CONTRACT, MOCK_INPUT_COIN],
-        outputs: [MOCK_OUTPUT_CONTRACT, MOCK_OUTPUT_VARIABLE, MOCK_OUTPUT_CHANGE],
-        receipts,
-        abiMap: {
-          '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1': CONTRACT_CALL_ABI,
-        },
-        rawPayload: MOCK_TRANSACTION_RAWPAYLOAD,
-        maxInputs: bn(255),
-      });
-
-      expect(operations.length).toEqual(1);
       expect(operations[0]).toStrictEqual(expected);
     });
 
@@ -162,6 +101,7 @@ describe('operations', () => {
         outputs: [MOCK_OUTPUT_COIN, MOCK_OUTPUT_CHANGE],
         receipts: [MOCK_RECEIPT_RETURN, MOCK_RECEIPT_SCRIPT_RESULT],
         maxInputs: bn(255),
+        baseAssetId: ZeroBytes32,
       });
 
       expect(operations.length).toEqual(0);
@@ -262,6 +202,7 @@ describe('operations', () => {
           chain: ChainName.ethereum,
           type: 1,
         },
+        receipts: [MOCK_RECEIPT_MESSAGE_OUT],
       };
 
       const operations = getWithdrawFromFuelOperations({
@@ -320,6 +261,7 @@ describe('operations', () => {
               assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
             },
           ],
+          receipts: [MOCK_RECEIPT_TRANSFER_OUT],
         },
         {
           name: OperationName.contractCall,
@@ -338,6 +280,7 @@ describe('operations', () => {
               assetId: ZeroBytes32,
             },
           ],
+          receipts: [MOCK_RECEIPT_CALL],
         },
       ];
 
@@ -396,6 +339,7 @@ describe('operations', () => {
       const operationsCallNoAmount: Operation = {
         ...expected,
         assetsSent: undefined,
+        receipts: [{ ...MOCK_RECEIPT_CALL, amount: bn(0) }],
       };
 
       const operations = getOperations({
@@ -818,6 +762,93 @@ describe('operations', () => {
       expect(operationsAddedSameContractCall.length).toEqual(1);
       expect(operationsAddedSameContractCall[0].calls?.length).toEqual(2);
     });
+
+    it('should merge receipts when adding operations', () => {
+      const receipt1: TransactionResultReceipt = {
+        type: ReceiptType.Transfer,
+        to: '0xabc',
+        amount: bn(100),
+        assetId: '0x0',
+        id: '0x123',
+        pc: bn(0),
+        is: bn(0),
+      };
+
+      const receipt2: TransactionResultReceipt = {
+        type: ReceiptType.Transfer,
+        to: '0xdef',
+        amount: bn(200),
+        assetId: '0x0',
+        id: '0x456',
+        pc: bn(0),
+        is: bn(0),
+      };
+
+      const op1: Operation = {
+        name: OperationName.transfer,
+        receipts: [receipt1],
+      };
+
+      const op2: Operation = {
+        name: OperationName.transfer,
+        receipts: [receipt2],
+      };
+
+      const operations = addOperation([op1], op2);
+      expect(operations[0].receipts).toHaveLength(2);
+      expect(operations[0].receipts).toContainEqual(receipt1);
+      expect(operations[0].receipts).toContainEqual(receipt2);
+    });
+
+    it('should not duplicate receipts when adding operations', () => {
+      const receipt: TransactionResultReceipt = {
+        type: ReceiptType.Transfer,
+        to: '0xabc',
+        amount: bn(100),
+        assetId: '0x0',
+        id: '0x123',
+        pc: bn(0),
+        is: bn(0),
+      };
+
+      const op1: Operation = {
+        name: OperationName.transfer,
+        receipts: [receipt],
+      };
+
+      const op2: Operation = {
+        name: OperationName.transfer,
+        receipts: [receipt],
+      };
+
+      const operations = addOperation([op1], op2);
+      expect(operations[0].receipts).toHaveLength(1);
+      expect(operations[0].receipts?.[0]).toEqual(receipt);
+    });
+
+    it('should handle operations without receipts', () => {
+      const op1: Operation = {
+        name: OperationName.transfer,
+      };
+
+      const op2: Operation = {
+        name: OperationName.transfer,
+        receipts: [
+          {
+            type: ReceiptType.Transfer,
+            to: '0xabc',
+            amount: bn(100),
+            assetId: '0x0',
+            id: '0x123',
+            pc: bn(0),
+            is: bn(0),
+          },
+        ],
+      };
+
+      const operations = addOperation([op1], op2);
+      expect(operations[0].receipts).toHaveLength(1);
+    });
   });
 
   describe('isType', () => {
@@ -828,6 +859,7 @@ describe('operations', () => {
       expect(isType(TransactionType.Script, TransactionTypeName.Create)).toBeFalsy();
       expect(isType(TransactionType.Mint, TransactionTypeName.Script)).toBeFalsy();
       expect(isType(TransactionType.Create, TransactionTypeName.Mint)).toBeFalsy();
+      expect(isType(TransactionType.Blob, TransactionTypeName.Blob)).toBeTruthy();
     });
 
     it('should isTypeMint return if is mint', () => {
@@ -846,6 +878,13 @@ describe('operations', () => {
       expect(isTypeScript(TransactionType.Script)).toBeTruthy();
       expect(isTypeScript(TransactionType.Mint)).toBeFalsy();
       expect(isTypeScript(TransactionType.Create)).toBeFalsy();
+    });
+
+    it('should isTypeBlob return if is Blob', () => {
+      expect(isTypeBlob(TransactionType.Blob)).toBeTruthy();
+      expect(isTypeBlob(TransactionType.Mint)).toBeFalsy();
+      expect(isTypeBlob(TransactionType.Create)).toBeFalsy();
+      expect(isTypeBlob(TransactionType.Script)).toBeFalsy();
     });
   });
 
@@ -869,7 +908,7 @@ describe('operations', () => {
       const expected: TransactionResultTransferOutReceipt = {
         amount: bn('0x5f5e100'),
         assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        from: '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1',
+        id: '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1',
         is: bn('0x4370'),
         pc: bn('0x57dc'),
         to: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
@@ -903,6 +942,7 @@ describe('operations', () => {
         nonce: '0x66c4d70c08ff30cd2d9dae0b6fd05972997579328529bb0605dd604afedfdf93',
         recipient: '0x000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb92266',
         sender: '0x4aec2335430f52d0314a03b244d285c675d790dfbf0bc853fd31e39548ad8b7d',
+        len: 0,
         type: 10,
       };
 
@@ -934,9 +974,10 @@ describe('operations', () => {
     expect(getTransactionTypeName(TransactionType.Create)).toBe(TransactionTypeName.Create);
     expect(getTransactionTypeName(TransactionType.Mint)).toBe(TransactionTypeName.Mint);
     expect(getTransactionTypeName(TransactionType.Script)).toBe(TransactionTypeName.Script);
+    expect(getTransactionTypeName(TransactionType.Blob)).toBe(TransactionTypeName.Blob);
 
     expect(() => getTransactionTypeName('' as unknown as TransactionType)).toThrowError(
-      'Invalid transaction type: '
+      'Unsupported transaction type: '
     );
   });
 });

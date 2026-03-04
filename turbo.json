@@ -1,6 +1,9 @@
 {
   "$schema": "https://turborepo.org/schema.json",
   "tasks": {
+    "type:check": {
+      "outputLogs": "errors-only"
+    },
     "preinstall": {
       "outputLogs": "new-only"
     },
@@ -28,6 +31,10 @@
     },
     "test": {
       "dependsOn": ["^test", "pretest"],
+      "outputLogs": "new-only"
+    },
+    "test:forc": {
+      "dependsOn": ["^test:forc", "build"],
       "outputLogs": "new-only"
     }
   }

@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Interface } from '@fuel-ts/abi-coder';
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
-import type { Account, Provider } from '@fuel-ts/account';
-import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { AbstractScript } from '@fuel-ts/interfaces';
-import type { BytesLike } from '@fuel-ts/interfaces';
+import { deployScriptOrPredicate, type Account, type Provider } from '@fuel-ts/account';
+import { FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import type { ScriptRequest } from '@fuel-ts/program';
+import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify } from '@fuel-ts/utils';
 
 import { ScriptInvocationScope } from './script-invocation-scope';
+import { AbstractScript } from './types';
 
 /**
  * Represents the result of a script execution.
@@ -91,12 +91,18 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
   setConfigurableConstants(configurables: { [name: string]: unknown }) {
     try {
       if (!Object.keys(this.interface.configurables).length) {
-        throw new Error(`The script does not have configurable constants to be set`);
+        throw new FuelError(
+          FuelError.CODES.INVALID_CONFIGURABLE_CONSTANTS,
+          `The script does not have configurable constants to be set`
+        );
       }
 
       Object.entries(configurables).forEach(([key, value]) => {
         if (!this.interface.configurables[key]) {
-          throw new Error(`The script does not have a configurable constant named: '${key}'`);
+          throw new FuelError(
+            FuelError.CODES.CONFIGURABLE_NOT_FOUND,
+            `The script does not have a configurable constant named: '${key}'`
+          );
         }
 
         const { offset } = this.interface.configurables[key];
@@ -107,11 +113,30 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
       });
     } catch (err) {
       throw new FuelError(
-        ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
+        FuelError.CODES.INVALID_CONFIGURABLE_CONSTANTS,
         `Error setting configurable constants: ${(<Error>err).message}.`
       );
     }
 
     return this;
+  }
+
+  /**
+   *
+   * @param account - The account used to pay the deployment costs.
+   * @returns The _blobId_ and a _waitForResult_ callback that returns the deployed predicate
+   * once the blob deployment transaction finishes.
+   *
+   * The returned loader script will have the same configurable constants
+   * as the original script which was used to generate the loader script.
+   */
+  deploy<T = this>(account: Account) {
+    return deployScriptOrPredicate<T>({
+      deployer: account,
+      abi: this.interface.jsonAbi,
+      bytecode: this.bytes,
+      loaderInstanceCallback: (loaderBytecode, newAbi) =>
+        new Script(loaderBytecode, newAbi, this.account) as T,
+    });
   }
 }

@@ -1,7 +1,9 @@
-export function getBuiltinVersions() {
+import type { Versions } from './types';
+
+export function getBuiltinVersions(): Versions {
   return {
-    FORC: '0.61.2',
-    FUEL_CORE: '0.31.0',
-    FUELS: '0.91.0',
+    FUEL_CORE: '0.47.1',
+    FORC: '0.68.7',
+    FUELS: '0.103.0',
   };
 }

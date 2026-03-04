@@ -1,6 +1,7 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
+import { mockCheckForUpdates } from '../../../test/utils/mockCheckForUpdates';
 import {
   runInit,
   bootstrapProject,
@@ -18,6 +19,10 @@ import { loadConfig } from './loadConfig';
  */
 describe('loadConfig', () => {
   const paths = bootstrapProject(__filename);
+
+  beforeEach(() => {
+    mockCheckForUpdates();
+  });
 
   afterEach(() => {
     resetConfigAndMocks(paths.fuelsConfigPath);
@@ -70,7 +75,7 @@ describe('loadConfig', () => {
 
     const config = await loadConfig(paths.root);
 
-    expect(config.contracts.length).toEqual(2);
+    expect(config.contracts.length).toEqual(4);
     expect(config.scripts.length).toEqual(1);
     expect(config.predicates.length).toEqual(1);
   });
@@ -88,7 +93,7 @@ describe('loadConfig', () => {
 
     const config = await loadConfig(paths.root);
 
-    expect(config.contracts.length).toEqual(2);
+    expect(config.contracts.length).toEqual(4);
     expect(config.scripts.length).toEqual(1);
     expect(config.predicates.length).toEqual(1);
   });
@@ -104,7 +109,23 @@ describe('loadConfig', () => {
 
     const config = await loadConfig(paths.root);
 
-    expect(config.contracts.length).toEqual(2);
+    expect(config.contracts.length).toEqual(4);
+    expect(config.scripts.length).toEqual(0);
+    expect(config.predicates.length).toEqual(0);
+  });
+
+  test(`should resolve a single contract`, async () => {
+    await runInit({
+      root: paths.root,
+      output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
+      contracts: 'workspace/contracts/bar/*',
+    });
+
+    const config = await loadConfig(paths.root);
+
+    expect(config.contracts.length).toEqual(1);
     expect(config.scripts.length).toEqual(0);
     expect(config.predicates.length).toEqual(0);
   });

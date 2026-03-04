@@ -1,26 +1,49 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
-import type { Provider, CoinQuantity, CallResult, Account, TransferParams } from '@fuel-ts/account';
-import { ScriptTransactionRequest } from '@fuel-ts/account';
+import type {
+  Provider,
+  CoinQuantity,
+  CallResult,
+  Account,
+  TransferParams,
+  TransactionResponse,
+  TransactionCost,
+  AbstractAccount,
+  AssembleTxParams,
+  ShouldConsolidateCoinsParams,
+} from '@fuel-ts/account';
+import {
+  consolidateCoinsIfRequired,
+  mergeQuantities,
+  ScriptTransactionRequest,
+  Wallet,
+  setAndValidateGasAndFeeForAssembledTx,
+} from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAccount, AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import { InputType, TransactionType } from '@fuel-ts/transactions';
+import { InputType, OutputType, TransactionType } from '@fuel-ts/transactions';
 import { isDefined } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
 import { clone } from 'ramda';
 
 import { getContractCallScript } from '../contract-call-script';
-import { buildDryRunResult, buildFunctionResult } from '../response';
+import {
+  buildDryRunResult,
+  buildFunctionResult,
+  buildPreConfirmationFunctionResult,
+} from '../response';
 import type {
   ContractCall,
   InvocationScopeLike,
   TxParams,
   FunctionResult,
   DryRunResult,
+  AbstractContract,
+  AbstractProgram,
+  PreConfirmationFunctionResult,
 } from '../types';
 import { assert, getAbisFromAllCalls } from '../utils';
 
@@ -53,10 +76,14 @@ export class BaseInvocationScope<TReturn = any> {
   protected program: AbstractProgram;
   protected functionInvocationScopes: Array<InvocationScopeLike> = [];
   protected txParameters?: TxParams;
+  protected assembleTxParameters?: Partial<Omit<AssembleTxParams, 'request'>>;
   protected requiredCoins: CoinQuantity[] = [];
   protected isMultiCall: boolean = false;
   protected hasCallParamsGasLimit: boolean = false; // flag to check if any of the callParams has gasLimit set
   protected externalAbis: Record<string, JsonAbi> = {};
+  /**
+   * @deprecated - Should be removed with `addSigners`
+   */
   private addSignersCallback?: (
     txRequest: ScriptTransactionRequest
   ) => Promise<ScriptTransactionRequest>;
@@ -79,28 +106,19 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns An array of contract calls.
    */
   protected get calls() {
-    const provider = this.getProvider();
-    const consensusParams = provider.getChain();
-    // TODO: Remove this error since it is already handled on Provider class
-    if (!consensusParams) {
-      throw new FuelError(
-        FuelError.CODES.CHAIN_INFO_CACHE_EMPTY,
-        'Provider chain info cache is empty. Please make sure to initialize the `Provider` properly by running `await Provider.create()``'
-      );
-    }
     return this.functionInvocationScopes.map((funcScope) => createContractCall(funcScope));
   }
 
   /**
    * Updates the script request with the current contract calls.
    */
-  protected updateScriptRequest() {
+  protected async updateScriptRequest() {
     const provider = this.getProvider();
     const {
       consensusParameters: {
         txParameters: { maxInputs },
       },
-    } = provider.getChain();
+    } = await provider.getChain();
     const contractCallScript = getContractCallScript(this.functionInvocationScopes, maxInputs);
     this.transactionRequest.setScript(contractCallScript, this.calls);
   }
@@ -116,7 +134,7 @@ export class BaseInvocationScope<TReturn = any> {
       }
       if (c.externalContractsAbis) {
         Object.keys(c.externalContractsAbis).forEach((contractId) =>
-          this.transactionRequest.addContractInputAndOutput(Address.fromB256(contractId))
+          this.transactionRequest.addContractInputAndOutput(new Address(contractId))
         );
       }
     });
@@ -190,7 +208,7 @@ export class BaseInvocationScope<TReturn = any> {
     await asm.initWasm();
 
     // Update request scripts before call
-    this.updateScriptRequest();
+    await this.updateScriptRequest();
 
     // Update required coins before call
     this.updateRequiredCoins();
@@ -221,48 +239,119 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
-   * Gets the transaction cost ny dry running the transaction.
+   * Gets the transaction cost for dry running the transaction.
    *
-   * @param options - Optional transaction cost options.
    * @returns The transaction cost details.
+   *
+   * @deprecated Use contract.fundWithRequiredCoins instead
+   * Check the migration guide https://docs.fuel.network/docs/fuels-ts/transactions/assemble-tx-migration-guide/ for more information.
    */
-  async getTransactionCost() {
-    const provider = this.getProvider();
-
-    const request = await this.getTransactionRequest();
-    const txCost = await provider.getTransactionCost(request, {
-      resourcesOwner: this.program.account as AbstractAccount,
-      quantitiesToContract: this.getRequiredCoins(),
+  async getTransactionCost(): Promise<TransactionCost> {
+    const request = clone(await this.getTransactionRequest());
+    const account: AbstractAccount =
+      this.program.account ?? Wallet.generate({ provider: this.getProvider() });
+    return account.getTransactionCost(request, {
+      quantities: this.getRequiredCoins(),
       signatureCallback: this.addSignersCallback,
     });
-
-    return txCost;
   }
 
   /**
-   * Funds the transaction with the required coins.
+   * Funds the transaction request with the required coins and returns it.
    *
-   * @returns The current instance of the class.
+   * @returns The transaction request.
    */
-  async fundWithRequiredCoins() {
+  async fundWithRequiredCoins({
+    skipAutoConsolidation,
+  }: ShouldConsolidateCoinsParams = {}): Promise<ScriptTransactionRequest> {
+    let request = await this.getTransactionRequest();
+    request = clone(request);
+
+    // eslint-disable-next-line prefer-const
+    let { feePayerAccount, accountCoinQuantities, ...restAssembleTxParams } =
+      this.assembleTxParameters ?? {};
+
+    request.maxFee = bn(0);
+    request.gasLimit = bn(0);
+
+    const provider = this.getProvider();
+    const account = (this.program.account ?? Wallet.generate({ provider })) as Account;
+    const baseAssetId = await provider.getBaseAssetId();
+
+    if (!feePayerAccount) {
+      feePayerAccount = account;
+    }
+
+    if (!accountCoinQuantities) {
+      const outputQuantities = request.outputs
+        .filter((o) => o.type === OutputType.Coin)
+        .map(({ amount, assetId }) => ({ assetId: String(assetId), amount: bn(amount) }));
+
+      accountCoinQuantities = mergeQuantities(outputQuantities, this.requiredCoins);
+
+      if (!accountCoinQuantities.length) {
+        accountCoinQuantities.push({ assetId: baseAssetId, amount: bn(0) });
+      }
+    }
+
+    const assembleTx = async () => {
+      const { assembledRequest, gasPrice } = await provider.assembleTx({
+        request,
+        feePayerAccount,
+        accountCoinQuantities,
+        ...restAssembleTxParams,
+      });
+
+      await setAndValidateGasAndFeeForAssembledTx({
+        gasPrice,
+        provider,
+        transactionRequest: assembledRequest,
+        setGasLimit: this.txParameters?.gasLimit,
+        setMaxFee: this.txParameters?.maxFee,
+      });
+
+      return assembledRequest;
+    };
+
+    try {
+      return await assembleTx();
+    } catch (error) {
+      const shouldRetry = await consolidateCoinsIfRequired({
+        error,
+        account,
+        skipAutoConsolidation,
+      });
+
+      if (!shouldRetry) {
+        throw error;
+      }
+
+      return await assembleTx();
+    }
+  }
+
+  /**
+   * @deprecated - Should be removed with `addSigners`
+   */
+  private async legacyFundWithRequiredCoins({
+    skipAutoConsolidation,
+  }: ShouldConsolidateCoinsParams = {}): Promise<ScriptTransactionRequest> {
     let transactionRequest = await this.getTransactionRequest();
     transactionRequest = clone(transactionRequest);
 
     const txCost = await this.getTransactionCost();
     const { gasUsed, missingContractIds, outputVariables, maxFee } = txCost;
     this.setDefaultTxParams(transactionRequest, gasUsed, maxFee);
-    // Clean coin inputs before add new coins to the request
-    transactionRequest.inputs = transactionRequest.inputs.filter((i) => i.type !== InputType.Coin);
 
     // Adding missing contract ids
     missingContractIds.forEach((contractId) => {
-      transactionRequest.addContractInputAndOutput(Address.fromString(contractId));
+      transactionRequest.addContractInputAndOutput(new Address(contractId));
     });
 
     // Adding required number of OutputVariables
     transactionRequest.addVariableOutputs(outputVariables);
 
-    await this.program.account?.fund(transactionRequest, txCost);
+    await this.program.account?.fund(transactionRequest, txCost, { skipAutoConsolidation });
 
     if (this.addSignersCallback) {
       await this.addSignersCallback(transactionRequest);
@@ -285,9 +374,21 @@ export class BaseInvocationScope<TReturn = any> {
     request.maxFee = txParams.maxFee ? bn(txParams.maxFee) : request.maxFee;
     request.witnessLimit = txParams.witnessLimit ? bn(txParams.witnessLimit) : request.witnessLimit;
     request.maturity = txParams.maturity || request.maturity;
+    request.expiration = txParams.expiration || request.expiration;
 
     request.addVariableOutputs(this.txParameters?.variableOutputs || 0);
 
+    return this;
+  }
+
+  /**
+   * Sets the transaction parameters.
+   *
+   * @param assembleTxParams - The assembleTx parameters to set when invoking the `provider.assembleTx` method.
+   * @returns The current instance of the class.
+   */
+  assembleTxParams(txParams: Partial<Omit<AssembleTxParams, 'request'>>) {
+    this.assembleTxParameters = txParams;
     return this;
   }
 
@@ -297,10 +398,14 @@ export class BaseInvocationScope<TReturn = any> {
    * @param contracts - An array of contracts to add.
    * @returns The current instance of the class.
    */
-  addContracts(contracts: Array<AbstractContract>) {
+  addContracts(contracts: Array<AbstractContract | string>) {
     contracts.forEach((contract) => {
-      this.transactionRequest.addContractInputAndOutput(contract.id);
-      this.externalAbis[contract.id.toB256()] = contract.interface.jsonAbi;
+      if (typeof contract === 'string') {
+        this.transactionRequest.addContractInputAndOutput(new Address(contract));
+      } else {
+        this.transactionRequest.addContractInputAndOutput(contract.id);
+        this.externalAbis[contract.id.toB256()] = contract.interface.jsonAbi;
+      }
     });
     return this;
   }
@@ -313,11 +418,10 @@ export class BaseInvocationScope<TReturn = any> {
    */
   addTransfer(transferParams: TransferParams) {
     const { amount, destination, assetId } = transferParams;
-    const baseAssetId = this.getProvider().getBaseAssetId();
     this.transactionRequest = this.transactionRequest.addCoinOutput(
-      Address.fromAddressOrString(destination),
+      new Address(destination),
       amount,
-      assetId || baseAssetId
+      assetId
     );
 
     return this;
@@ -330,20 +434,30 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The current instance of the class.
    */
   addBatchTransfer(transferParams: TransferParams[]) {
-    const baseAssetId = this.getProvider().getBaseAssetId();
     transferParams.forEach(({ destination, amount, assetId }) => {
       this.transactionRequest = this.transactionRequest.addCoinOutput(
-        Address.fromAddressOrString(destination),
+        new Address(destination),
         amount,
-        assetId || baseAssetId
+        assetId
       );
     });
 
     return this;
   }
 
+  /**
+   * Adds signers to the transaction request.
+   *
+   * @param signers - The signers to add.
+   * @returns The current instance of the class.
+   *
+   * @deprecated This method is deprecated and will be removed in a future versions.
+   * All signatures should be manually added to the transaction request witnesses. If your
+   * Sway program relies on in-code signature validation, visit this guide:
+   * https://docs.fuel.network/docs/fuels-ts/cookbook/sway-script-with-signature-validation/
+   */
   addSigners(signers: Account | Account[]) {
-    this.addSignersCallback = async (transactionRequest) =>
+    this.addSignersCallback = (transactionRequest) =>
       transactionRequest.addAccountWitnesses(signers);
 
     return this;
@@ -360,26 +474,78 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
-   * Submits a transaction.
+   * Sets the transaction request. Useful when you have used `getTransactionRequest` or
+   * `fundWithRequiredCoins` from the scope to apply customizations to the transaction request.
    *
-   * @returns The result of the function invocation.
+   * @param request - The transaction request to set.
+   * @returns The current instance of the class.
    */
-  async call<T = TReturn>(): Promise<FunctionResult<T>> {
+  fromRequest(request: ScriptTransactionRequest) {
+    this.transactionRequest = request;
+    return this;
+  }
+
+  /**
+   * Submits the contract call transaction and returns a promise that resolves to an object
+   * containing the transaction ID and a function to wait for the result. The promise will resolve
+   * as soon as the transaction is submitted to the node.
+   *
+   * @param params - Optional parameters for the call.
+   * - `skipAssembleTx`: A boolean indicating whether to skip assembling the transaction. This is useful
+   *   when customizations were made to the transaction request using the `assembleTx` method.
+   *
+   * @returns A promise that resolves to an object containing:
+   * - `transactionId`: The ID of the submitted transaction.
+   * - `waitForResult`: A function that waits for the transaction result.
+   * - `waitForPreConfirmation`: A function that waits for the transaction pre-confirmation.
+   * @template T - The type of the return value.
+   */
+  async call<T = TReturn>(params?: {
+    skipAssembleTx?: boolean;
+    skipAutoConsolidation?: boolean;
+  }): Promise<{
+    transactionId: string;
+    waitForResult: () => Promise<FunctionResult<T>>;
+    waitForPreConfirmation: () => Promise<PreConfirmationFunctionResult<T>>;
+  }> {
     assert(this.program.account, 'Wallet is required!');
 
-    const transactionRequest = await this.fundWithRequiredCoins();
+    let transactionRequest = await this.getTransactionRequest();
 
-    const response = await this.program.account.sendTransaction(transactionRequest, {
-      awaitExecution: true,
+    const skipAssembleTx = params?.skipAssembleTx;
+    const skipAutoConsolidation = params?.skipAutoConsolidation;
+
+    if (!skipAssembleTx) {
+      if (this.addSignersCallback) {
+        transactionRequest = await this.legacyFundWithRequiredCoins({ skipAutoConsolidation });
+      } else {
+        transactionRequest = await this.fundWithRequiredCoins({ skipAutoConsolidation });
+      }
+    }
+
+    const response = (await this.program.account.sendTransaction(transactionRequest, {
       estimateTxDependencies: false,
-    });
+    })) as TransactionResponse;
 
-    return buildFunctionResult<T>({
-      funcScope: this.functionInvocationScopes,
-      isMultiCall: this.isMultiCall,
-      program: this.program,
-      transactionResponse: response,
-    });
+    const transactionId = response.id;
+
+    return {
+      transactionId,
+      waitForResult: async () =>
+        buildFunctionResult<T>({
+          funcScope: this.functionInvocationScopes,
+          isMultiCall: this.isMultiCall,
+          program: this.program,
+          transactionResponse: response,
+        }),
+      waitForPreConfirmation: async () =>
+        buildPreConfirmationFunctionResult<T>({
+          funcScope: this.functionInvocationScopes,
+          isMultiCall: this.isMultiCall,
+          program: this.program,
+          transactionResponse: response,
+        }),
+    };
   }
 
   /**
@@ -413,6 +579,8 @@ export class BaseInvocationScope<TReturn = any> {
    * Executes a transaction in dry run mode.
    *
    * @returns The result of the invocation call.
+   *
+   * @deprecated Use .get instead
    */
   async dryRun<T = TReturn>(): Promise<DryRunResult<T>> {
     const { receipts } = await this.getTransactionCost();
@@ -429,15 +597,46 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   async get<T = TReturn>(): Promise<DryRunResult<T>> {
-    const { receipts } = await this.getTransactionCost();
+    let request = await this.getTransactionRequest();
+    request = clone(request);
 
-    const callResult: CallResult = {
-      receipts,
-    };
+    request.maxFee = bn(0);
+    request.gasLimit = bn(0);
+
+    request.inputs = request.inputs.filter((i) => i.type !== InputType.Coin);
+
+    const provider = this.getProvider();
+    const account = (this.program.account ?? Wallet.generate({ provider })) as Account;
+    const baseAssetId = await provider.getBaseAssetId();
+
+    const allQuantities = request.outputs
+      .filter((o) => o.type === OutputType.Coin)
+      .map(({ amount, assetId }) => ({ assetId: String(assetId), amount: bn(amount) }))
+      .concat(this.requiredCoins);
+
+    const resources = account.generateFakeResources(allQuantities);
+    const utxoForBaseAssetId = resources.find((utxo) => utxo.assetId === baseAssetId);
+    const amountForFee = bn('1000000000000000');
+
+    if (!utxoForBaseAssetId) {
+      const [baseAssetResource] = account.generateFakeResources([
+        { assetId: baseAssetId, amount: amountForFee },
+      ]);
+      resources.push(baseAssetResource);
+    } else {
+      utxoForBaseAssetId.amount = utxoForBaseAssetId.amount.add(amountForFee);
+    }
+
+    request.addResources(resources);
+
+    const { receipts } = await provider.assembleTx({
+      request,
+      feePayerAccount: account,
+    });
 
     return buildDryRunResult<T>({
       funcScopes: this.functionInvocationScopes,
-      callResult,
+      callResult: { receipts },
       isMultiCall: this.isMultiCall,
     });
   }
@@ -446,19 +645,6 @@ export class BaseInvocationScope<TReturn = any> {
     const provider = <Provider>this.program.provider;
 
     return provider;
-  }
-
-  /**
-   * Obtains the ID of a transaction.
-   *
-   * @param chainId - the chainId to use to hash the transaction with
-   * @returns the ID of the transaction.
-   */
-  async getTransactionId(chainId?: number): Promise<string> {
-    const chainIdToHash = chainId ?? (await this.getProvider().getChainId());
-
-    const transactionRequest = await this.getTransactionRequest();
-    return transactionRequest.getTransactionId(chainIdToHash);
   }
 
   /**

@@ -1,6 +1,6 @@
 import { execSync } from 'child_process';
 
-const versionReg = /[0-9]+\.[0-9]+\.[0-9]/;
+const versionReg = /[0-9]+\.[0-9]+\.[0-9]+/;
 const defaultForcCommand = 'forc';
 const defaultFuelCoreCommand = 'fuel-core';
 

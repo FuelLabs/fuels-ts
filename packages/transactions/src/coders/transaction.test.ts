@@ -531,4 +531,40 @@ describe('TransactionCoder', () => {
       JSON.parse(JSON.stringify(transaction))
     );
   });
+
+  it('can encode/decode TransactionBlob', () => {
+    const transaction: Transaction<TransactionType.Blob> = {
+      type: TransactionType.Blob,
+      blobId: B256,
+      witnessIndex: U16,
+      policyTypes: 5,
+      inputsCount: 0,
+      outputsCount: 0,
+      witnessesCount: 1,
+      policies: [
+        { type: PolicyType.Tip, data: bn(U32) },
+        { type: PolicyType.Maturity, data: U32 },
+      ],
+      inputs: [],
+      outputs: [],
+      witnesses: [
+        {
+          dataLength: 1,
+          data: '0x01',
+        },
+      ],
+    };
+
+    const encoded = hexlify(new TransactionCoder().encode(transaction));
+    expect(encoded).toEqual(
+      '0x0000000000000005d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000384000000000000000500000000000000000000000000000000000000000000000100000000000003e800000000000003e800000000000000010100000000000000'
+    );
+
+    const [decoded, offset] = new TransactionCoder().decode(arrayify(encoded), 0);
+
+    expect(offset).toEqual((encoded.length - 2) / 2);
+    expect(JSON.parse(JSON.stringify(decoded))).toMatchObject(
+      JSON.parse(JSON.stringify(transaction))
+    );
+  });
 });

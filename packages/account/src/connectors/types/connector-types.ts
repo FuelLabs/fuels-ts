@@ -10,6 +10,7 @@ export enum FuelConnectorMethods {
   accounts = 'accounts',
   currentAccount = 'currentAccount',
   // Signature methods
+  signTransaction = 'signTransaction',
   signMessage = 'signMessage',
   sendTransaction = 'sendTransaction',
   // Assets metadata methods
@@ -25,6 +26,8 @@ export enum FuelConnectorMethods {
   addABI = 'addABI',
   getABI = 'getABI',
   hasABI = 'hasABI',
+  // Coin consolidation
+  startConsolidation = 'startConsolidation',
 }
 
 export enum FuelConnectorEventTypes {
@@ -37,6 +40,7 @@ export enum FuelConnectorEventTypes {
   currentNetwork = 'currentNetwork',
   assets = 'assets',
   abis = 'abis',
+  consolidateCoins = 'consolidateCoins',
 }
 
 export const FuelConnectorEventType = 'FuelConnector';

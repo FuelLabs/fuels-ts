@@ -1,4 +1,4 @@
-import { hash } from '@fuel-ts/hasher';
+import { hash } from '@fuel-ts/crypto';
 import { toHex } from '@fuel-ts/math';
 
 import { DeepSparseMerkleSubTree } from './deepSparseMerkleSubTree';

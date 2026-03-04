@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/abi-typegen",
-  "version": "0.91.0",
+  "version": "0.103.0",
   "description": "Generates Typescript definitions from Sway ABI Json files",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -10,23 +10,23 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "engines": {
-    "node": "^18.20.3 || ^20.0.0 || ^22.0.0"
+    "node": "^20.0.0 || ^22.0.0 || ^24.0.0"
   },
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "require": "./dist/index.js",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/index.mjs"
     },
     "./cli": {
+      "types": "./dist/cli.d.ts",
       "require": "./dist/cli.js",
-      "import": "./dist/cli.mjs",
-      "types": "./dist/cli.d.ts"
+      "import": "./dist/cli.mjs"
     },
     "./runTypegen": {
+      "types": "./dist/runTypegen.d.ts",
       "require": "./dist/runTypegen.js",
-      "import": "./dist/runTypegen.mjs",
-      "types": "./dist/runTypegen.d.ts"
+      "import": "./dist/runTypegen.mjs"
     }
   },
   "typesVersions": {
@@ -43,29 +43,32 @@
     "dist"
   ],
   "scripts": {
-    "pretest": "run-s build:forc-callpaths build:forc",
+    "pretest": "pnpm build:forc",
+    "test": "cd ../.. && pnpm run test:filter packages/abi-typegen",
+    "test:update-fixtures": "UPDATE_FIXTURES=true pnpm run test",
     "build": "tsup",
     "build:forc": "pnpm fuels-forc build -p test/fixtures/forc-projects --release",
-    "build:forc-callpaths": "pnpm fuels-forc build -p test/fixtures/forc-projects --json-abi-with-callpaths",
     "postbuild": "tsx ../../scripts/postbuild.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FuelLabs/fuels-ts.git"
   },
   "license": "Apache-2.0",
   "dependencies": {
     "@fuel-ts/errors": "workspace:*",
-    "@fuel-ts/interfaces": "workspace:^",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "commander": "12.1.0",
-    "glob": "^10.2.6",
-    "handlebars": "^4.7.8",
-    "mkdirp": "^1.0.4",
-    "ramda": "^0.29.0",
-    "rimraf": "^5.0.7"
+    "commander": "13.1.0",
+    "glob": "10.4.5",
+    "handlebars": "4.7.8",
+    "mkdirp": "3.0.1",
+    "ramda": "0.30.1",
+    "rimraf": "5.0.10"
   },
   "devDependencies": {
     "@internal/forc": "workspace:*",
-    "@types/mkdirp": "^1.0.2",
-    "@types/ramda": "^0.29.3",
-    "@types/rimraf": "^3.0.2"
+    "@types/ramda": "0.30.2",
+    "@types/rimraf": "3.0.2"
   }
 }

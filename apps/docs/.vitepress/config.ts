@@ -1,12 +1,10 @@
 import { defineConfig } from 'vitepress';
 import { codeInContextPlugin } from './plugins/codeInContextPlugin';
 import { snippetPlugin } from './plugins/snippetPlugin';
-import apiLinks from '../.typedoc/api-links.json';
 
 export default defineConfig({
   title: 'Fuels-ts',
   description: 'Fuel Typescript SDK',
-  base: '/fuels-ts/',
   srcDir: 'src',
   outDir: 'dist',
   lang: 'en-US',
@@ -16,8 +14,21 @@ export default defineConfig({
       md.use(snippetPlugin);
       md.use(codeInContextPlugin);
       md.block.ruler.disable('snippet');
+      md.core.ruler.before('normalize', 'replace-docs-api-url', (state) => {
+        const apiUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:5174' : '/api';
+        state.src = state.src.replace(/DOCS_API_URL/g, apiUrl);
+      });
     },
   },
+  transformHtml: (code) => {
+    // make the API links open in a new tab
+    // because opening in the same tab doesn't work in the preview
+    return code.replace(/(<a\s+[^>]*href="\/api\/[^"]*")/g, '$1 target="_blank" rel="noreferrer"');
+  },
+  // Finds dead DOCS_API_URL links and fails,
+  // but they get replaced later in the markdown transformer.
+  // We have the md link checker workflow which covers this.
+  ignoreDeadLinks: true,
   head: [
     ['link', { rel: 'icon', href: '/fuels-ts/favicon.ico', type: 'image/png' }],
     ['meta', { property: 'og:type', content: 'website' }],
@@ -53,20 +64,24 @@ export default defineConfig({
                 link: '/guide/getting-started/installation',
               },
               {
-                text: 'Usage',
-                link: '/guide/getting-started/usage',
+                text: 'Connecting to the Network',
+                link: '/guide/getting-started/connecting-to-the-network',
               },
               {
-                text: 'Connecting to Testnet',
-                link: '/guide/getting-started/connecting-to-testnet',
+                text: 'Running a local Fuel node',
+                link: '/guide/getting-started/running-a-local-fuel-node',
               },
               {
-                text: 'Connecting to a Local Node',
-                link: '/guide/getting-started/connecting-to-a-local-node',
+                text: 'React Example',
+                link: '/guide/getting-started/react-example',
               },
               {
-                text: 'Further Resources',
-                link: '/guide/getting-started/further-resources',
+                text: 'CDN Usage',
+                link: '/guide/getting-started/cdn-usage',
+              },
+              {
+                text: 'Next Steps',
+                link: '/guide/getting-started/next-steps',
               },
             ],
           },
@@ -132,8 +147,16 @@ export default defineConfig({
                 link: '/guide/provider/provider-options',
               },
               {
+                text: 'Pagination',
+                link: '/guide/provider/pagination',
+              },
+              {
                 text: 'Querying the Chain',
                 link: '/guide/provider/querying-the-chain',
+              },
+              {
+                text: 'RPC Consistency',
+                link: '/guide/provider/rpc-consistency',
               },
             ],
           },
@@ -202,10 +225,6 @@ export default defineConfig({
                 link: '/guide/contracts/contract-balance',
               },
               {
-                text: 'Cost Estimation',
-                link: '/guide/contracts/cost-estimation',
-              },
-              {
                 text: 'Dependency Estimation',
                 link: '/guide/contracts/dependency-estimation',
               },
@@ -246,12 +265,20 @@ export default defineConfig({
                 link: '/guide/contracts/configurable-constants',
               },
               {
+                text: 'Custom Contract Calls',
+                link: '/guide/contracts/custom-contract-calls',
+              },
+              {
                 text: 'Minted Token Asset ID',
                 link: '/guide/contracts/minted-token-asset-id',
               },
               {
                 text: 'Managing Deployed Contracts',
                 link: '/guide/contracts/managing-deployed-contracts',
+              },
+              {
+                text: 'Proxy Contracts',
+                link: '/guide/contracts/proxy-contracts',
               },
               {
                 text: 'Understanding the FuelVM Binary File',
@@ -269,6 +296,10 @@ export default defineConfig({
                 link: '/guide/scripts/instantiating-a-script',
               },
               {
+                text: 'Deploying Scripts',
+                link: '/guide/scripts/deploying-scripts',
+              },
+              {
                 text: 'Configurable Constants',
                 link: '/guide/scripts/configurable-constants',
               },
@@ -279,6 +310,10 @@ export default defineConfig({
               {
                 text: 'Custom script Call',
                 link: '/guide/scripts/custom-script-call',
+              },
+              {
+                text: 'Logs',
+                link: '/guide/scripts/logs',
               },
             ],
           },
@@ -292,6 +327,10 @@ export default defineConfig({
                 link: '/guide/predicates/instantiating-a-predicate',
               },
               {
+                text: 'Deploying Predicates',
+                link: '/guide/predicates/deploying-predicates',
+              },
+              {
                 text: 'Configurable Constants',
                 link: '/guide/predicates/configurable-constants',
               },
@@ -303,6 +342,10 @@ export default defineConfig({
                 text: 'Methods',
                 link: '/guide/predicates/methods',
               },
+              {
+                text: 'Custom Transactions',
+                link: '/guide/predicates/custom-transactions',
+              },
             ],
           },
           {
@@ -311,20 +354,36 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Transaction Request',
-                link: '/guide/transactions/transaction-request',
+                text: 'Assemble TX',
+                link: '/guide/transactions/assemble-tx',
               },
               {
-                text: 'Transaction Response',
-                link: '/guide/transactions/transaction-response',
+                text: 'Assemble TX Migration Guide',
+                link: '/guide/transactions/assemble-tx-migration-guide',
               },
               {
-                text: 'Transaction Parameters',
-                link: '/guide/transactions/transaction-parameters',
+                text: 'Modifying the Request',
+                link: '/guide/transactions/modifying-the-request',
               },
               {
-                text: 'Transaction Policies',
-                link: '/guide/transactions/transaction-policies',
+                text: 'Adding Parameters',
+                link: '/guide/transactions/adding-parameters',
+              },
+              {
+                text: 'Adding Policies',
+                link: '/guide/transactions/adding-policies',
+              },
+              {
+                text: 'Getting the Response',
+                link: '/guide/transactions/getting-the-response',
+              },
+              {
+                text: 'Optimizing Frontend Apps',
+                link: '/guide/transactions/optimizing-frontend-apps',
+              },
+              {
+                text: 'Pre-Confirmations',
+                link: '/guide/transactions/pre-confirmations',
               },
             ],
           },
@@ -360,6 +419,14 @@ export default defineConfig({
                 text: 'Unit conversion',
                 link: '/guide/utilities/unit-conversion',
               },
+              {
+                text: 'Using assets',
+                link: '/guide/utilities/using-assets',
+              },
+              {
+                text: 'Asset API',
+                link: '/guide/utilities/asset-api',
+              },
             ],
           },
           {
@@ -388,12 +455,28 @@ export default defineConfig({
                 link: '/guide/cookbook/generate-fake-resources',
               },
               {
-                text: 'Transactions with Multiple Signers',
-                link: '/guide/cookbook/transactions-with-multiple-signers',
+                text: 'Sway Script with Signature Validation',
+                link: '/guide/cookbook/sway-script-with-signature-validation',
               },
               {
                 text: 'GraphQL Integration',
                 link: '/guide/cookbook/graphql-integration',
+              },
+              {
+                text: 'Resubmitting Failed Transactions',
+                link: '/guide/cookbook/resubmitting-failed-transactions',
+              },
+              {
+                text: 'Combining UTXOs',
+                link: '/guide/cookbook/combining-utxos',
+              },
+              {
+                text: 'Splitting UTXOs',
+                link: '/guide/cookbook/splitting-utxos',
+              },
+              {
+                text: 'Optimized React Example',
+                link: '/guide/cookbook/optimized-react-example',
               },
             ],
           },
@@ -426,6 +509,10 @@ export default defineConfig({
                 text: 'Custom Blocks',
                 link: '/guide/testing/custom-blocks',
               },
+              {
+                text: 'Setting up test wallets',
+                link: '/guide/testing/setting-up-test-wallets',
+              },
             ],
           },
           {
@@ -446,16 +533,12 @@ export default defineConfig({
                 link: '/guide/types/asset-id',
               },
               {
-                text: 'Bech32',
-                link: '/guide/types/bech32',
+                text: 'B256',
+                link: '/guide/types/b256',
               },
               {
-                text: 'Bits256',
-                link: '/guide/types/bits256',
-              },
-              {
-                text: 'Bits512',
-                link: '/guide/types/bits512',
+                text: 'B512',
+                link: '/guide/types/b512',
               },
               {
                 text: 'Bytes',
@@ -517,7 +600,12 @@ export default defineConfig({
             collapsed: false,
             items: [],
           },
-          apiLinks,
+          {
+            text: 'Fuel ASM',
+            link: '/guide/fuel-asm/',
+            collapsed: false,
+            items: [],
+          },
         ],
       },
     ],

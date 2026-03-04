@@ -1,7 +1,5 @@
-/* eslint-disable no-continue */
-import type { BytesLike } from '@fuel-ts/interfaces';
-
 import { arrayify } from './arrayify';
+import type { BytesLike } from './arrayify';
 
 /**
  *  These errors are logged when decoding a UTF-8 string fails.

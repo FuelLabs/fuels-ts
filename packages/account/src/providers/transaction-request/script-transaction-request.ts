@@ -1,15 +1,19 @@
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { addressify } from '@fuel-ts/address';
+import type { ContractIdLike } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
-import type { AbstractScriptRequest, ContractIdLike, BytesLike } from '@fuel-ts/interfaces';
 import { bn } from '@fuel-ts/math';
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import type { TransactionScript } from '@fuel-ts/transactions';
 import { InputType, OutputType, TransactionType } from '@fuel-ts/transactions';
+import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify } from '@fuel-ts/utils';
+import { clone } from 'ramda';
 
-import type { ChainInfo, GasCosts } from '../provider';
+import type { Account } from '../../account';
+import type { ShouldConsolidateCoinsParams } from '../../utils/consolidate-coins';
+import type { ChainInfo, GasCosts, TransactionCostParams } from '../provider';
 import { calculateMetadataGasForTxScript, getMaxGas } from '../utils/gas';
 
 import { hashTransaction } from './hash-transaction';
@@ -18,7 +22,7 @@ import type { ContractTransactionRequestOutput, VariableTransactionRequestOutput
 import { returnZeroScript } from './scripts';
 import type { BaseTransactionRequestLike } from './transaction-request';
 import { BaseTransactionRequest } from './transaction-request';
-import type { JsonAbisFromAllCalls } from './types';
+import type { AbstractScriptRequest, JsonAbisFromAllCalls } from './types';
 
 /**
  * @hidden
@@ -39,10 +43,7 @@ export interface ScriptTransactionRequestLike extends BaseTransactionRequestLike
  */
 export class ScriptTransactionRequest extends BaseTransactionRequest {
   static from(obj: ScriptTransactionRequestLike) {
-    if (obj instanceof this) {
-      return obj;
-    }
-    return new this(obj);
+    return new this(clone(obj));
   }
 
   /** Type of the transaction */
@@ -67,6 +68,34 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     this.script = arrayify(script ?? returnZeroScript.bytes);
     this.scriptData = arrayify(scriptData ?? returnZeroScript.encodeScriptData());
     this.abis = rest.abis;
+  }
+
+  /**
+   * Helper function to estimate and fund the transaction request with a specified account.
+   *
+   * @param account - The account to fund the transaction.
+   * @param params - The parameters for the transaction cost.
+   * @returns The current instance of the `ScriptTransactionRequest` funded.
+   *
+   * @deprecated Use `provider.assembleTx` instead.
+   * Check the migration guide https://docs.fuel.network/guide/assembling-transactions/migration-guide.html for more information.
+   */
+  async estimateAndFund(
+    account: Account,
+    {
+      signatureCallback,
+      quantities = [],
+      skipAutoConsolidation,
+    }: TransactionCostParams & ShouldConsolidateCoinsParams = {}
+  ): Promise<ScriptTransactionRequest> {
+    const txCost = await account.getTransactionCost(this, { signatureCallback, quantities });
+
+    this.maxFee = txCost.maxFee;
+    this.gasLimit = txCost.gasUsed;
+
+    await account.fund(this, txCost, { skipAutoConsolidation });
+
+    return this;
   }
 
   /**
@@ -153,13 +182,29 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
   }
 
   /**
+   * Adds a variable output to the transaction request.
+   *
+   * @param to - The recipient address as a BytesLike object. Defaults to ZeroBytes32 if not provided.
+   * @param amount - The amount to be transferred as a BigNumberish object. Defaults to 0 if not provided.
+   * @param assetId - The asset ID as a BytesLike object. Defaults to ZeroBytes32 if not provided.
+   */
+  addVariableOutput(to?: BytesLike, amount?: BigNumberish, assetId?: BytesLike) {
+    this.pushOutput({
+      type: OutputType.Variable,
+      to,
+      amount,
+      assetId,
+    });
+  }
+
+  /**
    * Calculates the maximum gas for the transaction.
    *
    * @param chainInfo - The chain information.
    * @param minGas - The minimum gas.
    * @returns the maximum gas.
    */
-  calculateMaxGas(chainInfo: ChainInfo, minGas: BN): BN {
+  override calculateMaxGas(chainInfo: ChainInfo, minGas: BN): BN {
     const { consensusParameters } = chainInfo;
     const {
       feeParameters: { gasPerByte },
@@ -233,7 +278,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     return this;
   }
 
-  metadataGas(gasCosts: GasCosts): BN {
+  override metadataGas(gasCosts: GasCosts): BN {
     return calculateMetadataGasForTxScript({
       gasCosts,
       txBytesSize: this.byteSize(),

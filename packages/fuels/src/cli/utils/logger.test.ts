@@ -8,9 +8,15 @@ import { configureLogging, debug, error, log, loggingConfig, warn } from './logg
  */
 describe('logger', () => {
   const loggingBackup = structuredClone(loggingConfig);
+
   beforeEach(() => {
     configureLogging(loggingBackup);
   });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('should configure logging', () => {
     configureLogging({ isLoggingEnabled: true, isDebugEnabled: false });
     expect(loggingConfig.isLoggingEnabled).toEqual(true);
@@ -26,7 +32,7 @@ describe('logger', () => {
   });
 
   test('should log', () => {
-    const logSpy = vi.spyOn(console, 'log');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     configureLogging({ isLoggingEnabled: true, isDebugEnabled: false });
     log('message');
     expect(logSpy).toHaveBeenCalledTimes(1);
@@ -34,7 +40,7 @@ describe('logger', () => {
   });
 
   test('should not log', () => {
-    const logSpy = vi.spyOn(console, 'log');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
     configureLogging({ isLoggingEnabled: false, isDebugEnabled: false });
     log('any message');
@@ -42,7 +48,7 @@ describe('logger', () => {
   });
 
   test('should debug', () => {
-    const logSpy = vi.spyOn(console, 'log');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
     configureLogging({ isLoggingEnabled: true, isDebugEnabled: true });
     debug('message');
@@ -51,7 +57,7 @@ describe('logger', () => {
   });
 
   test('should not log', () => {
-    const logSpy = vi.spyOn(console, 'log');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
     configureLogging({ isLoggingEnabled: false, isDebugEnabled: false });
     loggerMod.debug('any debug message');
@@ -59,14 +65,14 @@ describe('logger', () => {
   });
 
   test('should warn', () => {
-    const logSpy = vi.spyOn(console, 'log');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     warn('message1', 'message2');
     expect(logSpy).toHaveBeenCalledTimes(1);
     expect(logSpy).toHaveBeenCalledWith(chalk.yellow('message1 message2'));
   });
 
   test('should error', () => {
-    const logSpy = vi.spyOn(console, 'log');
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     error('message1', 'message2');
     expect(logSpy).toHaveBeenCalledTimes(1);
     expect(logSpy).toHaveBeenCalledWith(chalk.red('message1 message2'));

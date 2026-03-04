@@ -1,9 +1,9 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 
 import { arrayify } from './arrayify';
+import type { BytesLike } from './arrayify';
 
 const BN_0 = bn(0);
 const BN_58 = bn(58);

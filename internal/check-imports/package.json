@@ -7,6 +7,10 @@
   "scripts": {
     "build": "tsc --noEmit"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FuelLabs/fuels-ts.git"
+  },
   "license": "Apache-2.0",
   "dependencies": {
     "@fuel-ts/abi-coder": "workspace:*",
@@ -15,8 +19,6 @@
     "@fuel-ts/contract": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
-    "@fuel-ts/hasher": "workspace:*",
-    "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/program": "workspace:*",
@@ -27,5 +29,5 @@
     "@fuel-ts/account": "workspace:*",
     "fuels": "workspace:*"
   },
-  "version": null
+  "version": "0.0.32"
 }

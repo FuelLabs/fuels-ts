@@ -1,10 +1,10 @@
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { Output } from '@fuel-ts/transactions';
 import { OutputType } from '@fuel-ts/transactions';
+import type { BytesLike } from '@fuel-ts/utils';
 import { hexlify } from '@fuel-ts/utils';
 
 export type CoinTransactionRequestOutput = {
@@ -30,6 +30,12 @@ export type ChangeTransactionRequestOutput = {
 };
 export type VariableTransactionRequestOutput = {
   type: OutputType.Variable;
+  /** Receiving address or script hash */
+  to?: BytesLike;
+  /** Amount of coins to send */
+  amount?: BigNumberish;
+  /** Asset ID of coins */
+  assetId?: BytesLike;
 };
 export type ContractCreatedTransactionRequestOutput = {
   type: OutputType.ContractCreated;
@@ -77,9 +83,9 @@ export const outputify = (value: TransactionRequestOutput): Output => {
     case OutputType.Variable: {
       return {
         type: OutputType.Variable,
-        to: ZeroBytes32,
-        amount: bn(0),
-        assetId: ZeroBytes32,
+        to: hexlify(value.to || ZeroBytes32),
+        amount: bn(value.amount),
+        assetId: hexlify(value.assetId || ZeroBytes32),
       };
     }
     case OutputType.ContractCreated: {

@@ -1,142 +1,132 @@
 import { FuelError } from '@fuel-ts/errors';
-import { AbstractAddress } from '@fuel-ts/interfaces';
-import type { Bech32Address, B256Address, EvmAddress, AssetId } from '@fuel-ts/interfaces';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 import { sha256 } from '@noble/hashes/sha256';
 
+import type { B256Address, EvmAddress, AssetId, ChecksumAddress, AddressInput } from './types';
 import {
-  normalizeBech32,
-  isBech32,
-  toB256,
-  getBytesFromBech32,
-  toBech32,
   getRandomB256,
-  isPublicKey,
   isB256,
-  clearFirst12BytesFromB256,
   isEvmAddress,
-  padFirst12BytesOfEvmAddress,
+  toB256AddressEvm,
+  fromPublicKeyToB256,
+  fromDynamicInputToB256,
+  normalizeB256,
 } from './utils';
 
 /**
  * `Address` provides a type safe wrapper for converting between different address formats
  * ands comparing them for equality.
  */
-export default class Address extends AbstractAddress {
+export class Address {
   // #region address-2
-  readonly bech32Address: Bech32Address;
+  readonly b256Address: B256Address;
   // #endregion address-2
 
   /**
-   * @param address - A Bech32 address
+   * @param address - A B256 address, public key, EVM address, or Address instance
    */
-  constructor(address: Bech32Address) {
-    super();
-    this.bech32Address = normalizeBech32(address);
-
-    if (!isBech32(this.bech32Address)) {
-      throw new FuelError(
-        FuelError.CODES.INVALID_BECH32_ADDRESS,
-        `Invalid Bech32 Address: ${address}.`
-      );
-    }
+  constructor(address: AddressInput) {
+    const b256Address = fromDynamicInputToB256(address);
+    this.b256Address = normalizeB256(b256Address);
   }
 
   /**
-   * Returns the `bech32Address` property
+   * Takes an B256 Address and returns back an checksum address.
+   * The implementation follows the ERC-55 https://github.com/ethereum/ercs/blob/master/ERCS/erc-55.md.
    *
-   * @returns The `bech32Address` property
+   * @returns A new `ChecksumAddress` instance
    */
-  toAddress(): Bech32Address {
-    return this.bech32Address;
+  toChecksum(): ChecksumAddress {
+    return Address.toChecksum(this.b256Address);
   }
 
   /**
-   * Converts and returns the `bech32Address` property to a 256 bit hash string
+   * Returns the `b256Address` property
+   */
+  toAddress(): B256Address {
+    return this.b256Address;
+  }
+
+  /**
+   * Returns the B256 hash address as a string
    *
-   * @returns The `bech32Address` property as a 256 bit hash string
+   * @returns The B256 address
    */
   toB256(): B256Address {
-    return toB256(this.bech32Address);
+    return this.b256Address;
   }
 
   /**
-   * Converts and returns the `bech32Address` property to a byte array
+   * Returns the B256 hash address as a Uint8Array
    *
-   * @returns The `bech32Address` property as a byte array
+   * @returns The B256 address as a Uint8Array
    */
   toBytes(): Uint8Array {
-    return getBytesFromBech32(this.bech32Address);
+    return arrayify(this.b256Address);
   }
 
   /**
-   * Converts
+   * Returns the B256 hash address as a string
    *
-   * @returns The `bech32Address` property as a 256 bit hash string
+   * @returns The B256 address
    */
   toHexString(): B256Address {
     return this.toB256();
   }
 
   /**
-   * Converts and returns the `bech32Address` property as a string
+   * returns the address `checksum` as a string
    *
-   * @returns The `bech32Address` property as a string
+   * @returns The `b256Address` property as a string
    */
   toString(): string {
-    return this.bech32Address;
+    return this.toChecksum();
   }
 
   /**
-   * Converts and returns the `bech32Address` property as a string
-   *
-   * @returns The `bech32Address` property as a string
+   * Converts and returns the `b256Address` property as a string
+   * @returns The `b256Address` property as a JSON string
    */
   toJSON(): string {
-    return this.bech32Address;
+    return this.b256Address;
   }
 
   /**
-   * Clears the first 12 bytes of the `bech32Address` property and returns it as a `EvmAddress`
+   * Converts to an EVM address
    *
-   * @returns The `bech32Address` property as an {@link EvmAddress | `EvmAddress`}
+   * @returns an {@link EvmAddress | `EvmAddress`} representation of the address
    */
   toEvmAddress(): EvmAddress {
-    const b256Address = toB256(this.bech32Address);
-
     return {
-      bits: clearFirst12BytesFromB256(b256Address),
+      bits: toB256AddressEvm(this.b256Address),
     } as EvmAddress;
   }
 
   /**
-   * Wraps the `bech32Address` property and returns as an `AssetId`.
-   *
-   * @returns The `bech32Address` property as an {@link AssetId | `AssetId`}
+   * Wraps the B256 property and returns as an `AssetId`.
+   * @returns The B256 property as an {@link AssetId | `AssetId`}
    */
   toAssetId(): AssetId {
     return {
-      bits: this.toB256(),
+      bits: this.b256Address,
     } as AssetId;
   }
 
   /**
-   * Returns the value of the `bech32Address` property
-   *
-   * @returns The value of `bech32Address` property
+   * Wraps the B256 address `checksum` and returns it as a string
+   * @returns The B256 address `checksum` as a string
    */
   valueOf(): string {
-    return this.bech32Address;
+    return this.toChecksum();
   }
 
   /**
-   * Compares this the `bech32Address` property to another for direct equality
-   *
+   * Compares this the `b256Address` property to another for direct equality
    * @param other - Another address to compare against
    * @returns The equality of the comparison
    */
   equals(other: Address): boolean {
-    return this.bech32Address === other.bech32Address;
+    return this.toChecksum() === other.toChecksum();
   }
 
   /**
@@ -144,14 +134,12 @@ export default class Address extends AbstractAddress {
    *
    * @param publicKey - A wallets public key
    * @returns A new `Address` instance
+   *
+   * @deprecated Use `new Address` instead
    */
   static fromPublicKey(publicKey: string): Address {
-    if (!isPublicKey(publicKey)) {
-      throw new FuelError(FuelError.CODES.INVALID_PUBLIC_KEY, `Invalid Public Key: ${publicKey}.`);
-    }
-
-    const b256Address = hexlify(sha256(arrayify(publicKey)));
-    return new Address(toBech32(b256Address));
+    const b256Address = fromPublicKeyToB256(publicKey);
+    return new Address(b256Address);
   }
 
   /**
@@ -159,6 +147,8 @@ export default class Address extends AbstractAddress {
    *
    * @param b256Address - A b256 hash
    * @returns A new `Address` instance
+   *
+   * @deprecated Use `new Address` instead
    */
   static fromB256(b256Address: string): Address {
     if (!isB256(b256Address)) {
@@ -168,16 +158,16 @@ export default class Address extends AbstractAddress {
       );
     }
 
-    return new Address(toBech32(b256Address));
+    return new Address(b256Address);
   }
 
   /**
-   * Creates an `Address` with a randomized `bech32Address` property
+   * Creates an `Address` with a randomized `b256Address` property
    *
    * @returns A new `Address` instance
    */
   static fromRandom(): Address {
-    return this.fromB256(getRandomB256());
+    return new Address(getRandomB256());
   }
 
   /**
@@ -185,60 +175,43 @@ export default class Address extends AbstractAddress {
    *
    * @param address - An ambiguous string
    * @returns A new `Address` instance
+   *
+   * @deprecated Use `new Address` instead
    */
   static fromString(address: string): Address {
-    return isBech32(address) ? new Address(address as Bech32Address) : this.fromB256(address);
+    return new Address(address);
   }
 
   /**
    * Takes an ambiguous string or address and creates an `Address`
    *
    * @returns a new `Address` instance
+   *
+   * @deprecated Use `new Address` instead
    */
-  static fromAddressOrString(address: string | AbstractAddress): AbstractAddress {
-    return typeof address === 'string' ? this.fromString(address) : address;
+  static fromAddressOrString(address: string | Address): Address {
+    return new Address(address);
   }
 
   /**
-   * Takes a dynamic string or `AbstractAddress` and creates an `Address`
+   * Takes a dynamic string or `Address` and creates an `Address`
    *
-   * @param addressId - A string containing Bech32, B256, or Public Key
-   * @throws Error - Unknown address if the format is not recognised
+   * @param addressId - A string containing B256, or Public Key
+   * @throws Error - Unknown address if the format is not recognized
    * @returns A new `Address` instance
+   *
+   * @deprecated Use `new Address` instead
    */
-  static fromDynamicInput(address: string | AbstractAddress): Address {
-    // If address is a object than we assume it's a AbstractAddress
-    // we don't check by instanceof because it's possible to
-    // the host app to have a different reference to this same class type
-    if (typeof address !== 'string' && 'toB256' in address) {
-      return Address.fromB256(address.toB256());
-    }
-    if (isPublicKey(address)) {
-      return Address.fromPublicKey(address);
-    }
-
-    if (isBech32(address)) {
-      return new Address(address as Bech32Address);
-    }
-
-    if (isB256(address)) {
-      return Address.fromB256(address);
-    }
-
-    if (isEvmAddress(address)) {
-      return Address.fromEvmAddress(address);
-    }
-
-    throw new FuelError(
-      FuelError.CODES.PARSE_FAILED,
-      `Unknown address format: only 'Bech32', 'B256', or 'Public Key (512)' are supported.`
-    );
+  static fromDynamicInput(address: string | Address): Address {
+    return new Address(address);
   }
 
   /**
    * Takes an Evm Address and returns back an `Address`
    *
    * @returns A new `Address` instance
+   *
+   * @deprecated Use `new Address` instead
    */
   static fromEvmAddress(evmAddress: string): Address {
     if (!isEvmAddress(evmAddress)) {
@@ -248,8 +221,48 @@ export default class Address extends AbstractAddress {
       );
     }
 
-    const paddedAddress = padFirst12BytesOfEvmAddress(evmAddress);
+    return new Address(evmAddress);
+  }
 
-    return new Address(toBech32(paddedAddress));
+  /**
+   * Takes an ChecksumAddress and validates if it is a valid checksum address.
+   *
+   * @returns A `boolean` instance indicating if the address is valid.
+   */
+  static isChecksumValid(address: ChecksumAddress): boolean {
+    let addressParsed = address;
+
+    if (!address.startsWith('0x')) {
+      addressParsed = `0x${address}`;
+    }
+    if (addressParsed.trim().length !== 66) {
+      return false;
+    }
+
+    return Address.toChecksum(hexlify(addressParsed)) === addressParsed;
+  }
+
+  /** @hidden */
+  private static toChecksum(address: string) {
+    if (!isB256(address)) {
+      throw new FuelError(
+        FuelError.CODES.INVALID_B256_ADDRESS,
+        `Invalid B256 Address: ${address}.`
+      );
+    }
+
+    const addressHex = hexlify(address).toLowerCase().slice(2);
+    const checksum = sha256(addressHex);
+
+    let ret = '0x';
+    for (let i = 0; i < 32; ++i) {
+      const byte = checksum[i];
+      const ha = addressHex.charAt(i * 2);
+      const hb = addressHex.charAt(i * 2 + 1);
+      ret += (byte & 0xf0) >= 0x80 ? ha.toUpperCase() : ha;
+      ret += (byte & 0x0f) >= 0x08 ? hb.toUpperCase() : hb;
+    }
+
+    return ret;
   }
 }

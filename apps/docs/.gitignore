@@ -1,6 +1,7 @@
 .vitepress/cache
 .vitepress/.temp
 
-.typedoc/api-links.json
+src/typegend
+src/guide/**/*.test.ts
 
-src/api
+.fuels/

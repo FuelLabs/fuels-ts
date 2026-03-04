@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { AbstractContract } from '@fuel-ts/interfaces';
+import type { AbstractContract } from '../types';
 
 import { BaseInvocationScope } from './base-invocation-scope';
 import type { FunctionInvocationScope } from './invocation-scope';
@@ -27,7 +27,7 @@ export class MultiCallInvocationScope<TReturn = any> extends BaseInvocationScope
    * @param funcScope - The function invocation scope.
    * @returns The instance of MultiCallInvocationScope.
    */
-  addCall(funcScope: FunctionInvocationScope) {
+  override addCall(funcScope: FunctionInvocationScope) {
     return super.addCalls([funcScope]);
   }
 
@@ -37,7 +37,7 @@ export class MultiCallInvocationScope<TReturn = any> extends BaseInvocationScope
    * @param funcScopes - An array of function invocation scopes.
    * @returns The instance of MultiCallInvocationScope.
    */
-  addCalls(funcScopes: Array<FunctionInvocationScope>) {
+  override addCalls(funcScopes: Array<FunctionInvocationScope>) {
     return super.addCalls(funcScopes);
   }
 }

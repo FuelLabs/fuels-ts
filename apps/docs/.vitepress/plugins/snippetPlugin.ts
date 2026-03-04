@@ -2,7 +2,6 @@ import MarkdownIt from 'markdown-it';
 import path from 'path';
 import fs from 'fs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { RuleBlock } from 'markdown-it/lib/parser_block';
 import { extractImports, validateSnippetContent } from './utils/extractImports';
 
 // Regex to match import comments
@@ -79,7 +78,7 @@ export function findRegion(lines: string[], regionName: string) {
 }
 
 export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
-  const parser: RuleBlock = (state, startLine, endLine, silent) => {
+  const parser: MarkdownIt.ParserBlock.RuleBlock = (state, startLine, endLine, silent) => {
     // Character code for '<' used to identify the start code snippet
     const CH = '<'.charCodeAt(0);
     const pos = state.bMarks[startLine] + state.tShift[startLine];
@@ -107,7 +106,13 @@ export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
       const end = state.skipSpacesBack(max, pos);
       const rawPathRegexp =
         /^(.+(?:\.([a-z0-9]+)))(?:(#[\w-]+))?(?: ?(?:{(\d+(?:[,-]\d+)*)? ?(\S+)?}))? ?(?:\[(.+)\])?$/;
-      const rawPath = state.src.slice(start, end).trim().replace(/^@/, srcDir).trim();
+      const relativePath = path.dirname(state.env.path);
+      let rawPath = state.src
+        .slice(start, end)
+        .trim()
+        .replace(/^@\./, relativePath)
+        .replace(/^@/, srcDir)
+        .trim();
 
       // Parse the extracted path to get details about the snippet
       const [

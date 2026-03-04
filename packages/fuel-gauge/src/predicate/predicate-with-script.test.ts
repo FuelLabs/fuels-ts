@@ -1,39 +1,32 @@
-import type { BigNumberish, WalletUnlocked } from 'fuels';
-import { toNumber, Script, Provider, Predicate, FUEL_NETWORK_URL } from 'fuels';
-import { generateTestWallet, seedTestWallet } from 'fuels/test-utils';
+import type { BigNumberish } from 'fuels';
+import { toNumber, Script, Predicate, Wallet, FuelError, ErrorCode } from 'fuels';
+import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
+import { PredicateMainArgsStruct, ScriptMainArgs } from '../../test/typegen';
 import type { Validation } from '../types/predicate';
+
+import { fundAccount } from './utils/predicate';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Predicate', () => {
-  const { binHexlified: scriptBytes, abiContents: scriptAbi } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.SCRIPT_MAIN_ARGS
-  );
-
-  const { binHexlified: predicateBytesStruct, abiContents: predicateAbiMainArgsStruct } =
-    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_MAIN_ARGS_STRUCT);
-
   describe('With script', () => {
-    let wallet: WalletUnlocked;
-    let receiver: WalletUnlocked;
-    let provider: Provider;
-
-    let baseAssetId: string;
-    beforeAll(async () => {
-      provider = await Provider.create(FUEL_NETWORK_URL);
-      baseAssetId = provider.getBaseAssetId();
-      wallet = await generateTestWallet(provider, [[10_000_000, baseAssetId]]);
-      receiver = await generateTestWallet(provider);
-    });
-
     it('calls a predicate and uses proceeds for a script call', async () => {
+      using launched = await launchTestNode();
+      const {
+        provider,
+        wallets: [wallet],
+      } = launched;
+
+      const receiver = Wallet.generate({ provider });
+      const baseAssetId = await provider.getBaseAssetId();
+
       const initialReceiverBalance = toNumber(await receiver.getBalance());
       const scriptInstance = new Script<BigNumberish[], BigNumberish>(
-        scriptBytes,
-        scriptAbi,
+        ScriptMainArgs.bytecode,
+        ScriptMainArgs.abi,
         wallet
       );
 
@@ -41,18 +34,22 @@ describe('Predicate', () => {
       const scriptInput = 1;
       scriptInstance.account = receiver;
 
-      await expect(scriptInstance.functions.main(scriptInput).call()).rejects.toThrow(
-        /not enough coins to fit the target/
+      await expectToThrowFuelError(
+        () => scriptInstance.functions.main(scriptInput).call(),
+        new FuelError(
+          ErrorCode.INSUFFICIENT_FUNDS_OR_MAX_COINS,
+          `Insufficient funds or too many small value coins. Consider combining UTXOs.\nFor the following asset ID: '${baseAssetId}'.`
+        )
       );
 
       // setup predicate
       const amountToPredicate = 900_000;
       const amountToReceiver = 100_000;
       const predicate = new Predicate<[Validation]>({
-        bytecode: predicateBytesStruct,
         provider,
-        abi: predicateAbiMainArgsStruct,
-        inputData: [
+        abi: PredicateMainArgsStruct.abi,
+        bytecode: PredicateMainArgsStruct.bytecode,
+        data: [
           {
             has_account: true,
             total_complete: 100,
@@ -60,17 +57,24 @@ describe('Predicate', () => {
         ],
       });
 
-      await seedTestWallet(predicate, [[amountToPredicate, baseAssetId]], 3);
+      await fundAccount(wallet, predicate, amountToPredicate);
 
       // executing predicate to transfer resources to receiver
-      const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
-        gasLimit: 1000,
-      });
+      const tx = await predicate.transfer(
+        receiver.address,
+        amountToReceiver,
+        await provider.getBaseAssetId(),
+        {
+          gasLimit: 1000,
+        }
+      );
 
       const { isStatusSuccess } = await tx.waitForResult();
       expect(isStatusSuccess).toBeTruthy();
 
-      const res = await scriptInstance.functions.main(scriptInput).call();
+      const { waitForResult } = await scriptInstance.functions.main(scriptInput).call();
+      const res = await waitForResult();
+
       expect(res.transactionResult.isStatusSuccess).toBeTruthy();
 
       const receiverFinalBalance = await receiver.getBalance();

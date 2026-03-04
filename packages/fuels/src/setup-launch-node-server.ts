@@ -96,20 +96,35 @@ server.on('request', async (req, res) => {
 
 const port = process.argv[2] ? parseInt(process.argv[2], 10) : 49342;
 
-server.listen(port);
+try {
+  server.listen(port);
 
-server.on('listening', () => {
-  const usedPort = (server.address() as AddressInfo).port;
-  const serverUrl = `http://localhost:${usedPort}`;
-  console.log(serverUrl);
-  console.log(`Server is listening on: ${serverUrl}`);
-  console.log("To launch a new fuel-core node and get its url, make a POST request to '/'.");
-  console.log(
-    "To kill the node, make a POST request to '/cleanup/<url>' where <url> is the url of the node you want to kill."
-  );
-  console.log('All nodes will be killed when the server is closed.');
-  console.log('You can close the server by sending a request to /close-server.');
-});
+  server.on('error', (error: NodeJS.ErrnoException) => {
+    if (error.code === 'EADDRINUSE') {
+      console.log(`Port ${port} is already in use. Another server may be running.`);
+      process.exit(1);
+    } else {
+      console.error('Server error:', error);
+      process.exit(1);
+    }
+  });
+
+  server.on('listening', () => {
+    const usedPort = (server.address() as AddressInfo).port;
+    const serverUrl = `http://localhost:${usedPort}`;
+    console.log(serverUrl);
+    console.log(`Server is listening on: ${serverUrl}`);
+    console.log("To launch a new fuel-core node and get its url, make a POST request to '/'.");
+    console.log(
+      "To kill the node, make a POST request to '/cleanup/<url>' where <url> is the url of the node you want to kill."
+    );
+    console.log('All nodes will be killed when the server is closed.');
+    console.log('You can close the server by sending a request to /close-server.');
+  });
+} catch (err) {
+  console.error('Error starting server:', err);
+  process.exit(1);
+}
 
 process.on('exit', closeServer('exit'));
 process.on('SIGINT', closeServer('SIGINT'));

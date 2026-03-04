@@ -1,33 +1,32 @@
 matrix:
-    - name: SPCheck
-      aspell:
-        lang: en
-      dictionary:
-        encoding: utf-8
-        wordlists:
-          - apps/docs/spell-check-custom-words.txt
-      pipeline:
-        - pyspelling.filters.context:
-            context_visible_first: true
-            escapes: \\[\\`~]
-            delimiters:
+  - name: SPCheck
+    aspell:
+      lang: en
+    dictionary:
+      encoding: utf-8
+      wordlists:
+        - apps/docs/spell-check-custom-words.txt
+    pipeline:
+      - pyspelling.filters.context:
+          context_visible_first: true
+          escapes: \\[\\`~]
+          delimiters:
             # Ignore all code blocks
             - open: '(?s)^(?P<open> *`{3,}\s*(\w+\s*,?\s*)+.*?)$'
-              close: '^( *`{3,})$'
+              close: "^( *`{3,})$"
             # Ignore lines starting with <<< @
-            - open: '^(<<<.*)'
-              close: '$'
-        - pyspelling.filters.markdown:
-            markdown_extensions:
-              - pymdownx.superfences:
-        - pyspelling.filters.html:
-            comments: false
-            ignores:
-              - code
-              - pre
-      sources:
-        - 'apps/docs/src/*.md'
-        - 'apps/docs/src/**/*.md'
-        - 'apps/docs/src/**/**/*.md'
-      default_encoding: utf-8
-  
+            - open: "^(<<<.*)"
+              close: "$"
+      - pyspelling.filters.markdown:
+          markdown_extensions:
+            - pymdownx.superfences:
+      - pyspelling.filters.html:
+          comments: false
+          ignores:
+            - code
+            - pre
+    sources:
+      - "apps/docs/src/*.md"
+      - "apps/docs/src/**/*.md"
+      - "apps/docs/src/**/**/*.md"
+    default_encoding: utf-8

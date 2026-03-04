@@ -1,7 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { BytesLike } from '@fuel-ts/interfaces';
 
 import { arrayify } from './arrayify';
+import type { BytesLike } from './arrayify';
 import { hexlify } from './hexlify';
 
 /**

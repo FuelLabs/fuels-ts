@@ -1,22 +1,36 @@
-import { FUEL_NETWORK_URL, Provider, TransactionResponse, Wallet } from 'fuels';
-import { generateTestWallet } from 'fuels/test-utils';
+import { ErrorCode, FuelError, hexlify, TransactionResponse, Wallet, WalletUnlocked } from 'fuels';
+import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
-import { getSetupContract } from './utils';
+import { PredicateFalse } from '../test/typegen';
+import { CollisionInFnNamesFactory } from '../test/typegen/contracts';
+
+import { launchTestContract } from './utils';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Edge Cases', () => {
   it('can run collision_in_fn_names', async () => {
-    const contract = await getSetupContract('collision_in_fn_names')();
+    using contractInstance = await launchTestContract({
+      factory: CollisionInFnNamesFactory,
+    });
 
-    expect((await contract.functions.new().call()).value.toNumber()).toEqual(12345);
+    const { waitForResult } = await contractInstance.functions.new().call();
+    const { value } = await waitForResult();
+
+    expect(value.toNumber()).toEqual(12345);
   });
 
   test("SSE subscriptions that are closed by the node don't hang a for-await-of loop", async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const baseAssetId = provider.getBaseAssetId();
-    const adminWallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
+    using launched = await launchTestNode();
+
+    const {
+      provider,
+      wallets: [adminWallet],
+    } = launched;
+
+    const baseAssetId = await provider.getBaseAssetId();
 
     const destination = Wallet.generate({
       provider,
@@ -29,15 +43,40 @@ describe('Edge Cases', () => {
       { gasLimit: 10_000 }
     );
 
-    const response = new TransactionResponse(transactionId, provider);
+    const chainId = await provider.getChainId();
+    const response = new TransactionResponse(transactionId, provider, chainId);
 
     await response.waitForResult();
 
-    const subsciption = provider.operations.statusChange({ transactionId });
+    const subscription = await provider.operations.statusChange({ transactionId });
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    for await (const iterator of subsciption) {
+    for await (const iterator of subscription) {
       // we leave this intentionally empty so that we test that the subscription will end the loop when the connection is closed
     }
+  });
+
+  test('Submitting a failing transaction via submitAndAwaitStatus subscription throws immediately', async () => {
+    using launched = await launchTestNode();
+    const {
+      wallets: [funder],
+    } = launched;
+
+    const predicate = new PredicateFalse({ provider: launched.provider });
+    const res = await funder.transfer(predicate.address, 1_000_000);
+    await res.waitForResult();
+
+    const transferTx = await predicate.createTransfer(WalletUnlocked.generate().address, 1);
+
+    await expectToThrowFuelError(
+      () =>
+        launched.provider.operations.submitAndAwaitStatus({
+          encodedTransaction: hexlify(transferTx.toTransactionBytes()),
+        }),
+      new FuelError(
+        ErrorCode.INVALID_REQUEST,
+        'Invalid transaction data: PredicateVerificationFailed(Panic { index: 0, reason: PredicateReturnedNonOne })'
+      )
+    );
   });
 });

@@ -20,8 +20,10 @@ import {
   U64_CODER_TYPE,
   U8_CODER_TYPE,
   VEC_CODER_TYPE,
+  VOID_TYPE,
   arrayRegEx,
   enumRegEx,
+  fullNameRegExMatch,
   stringRegEx,
   structRegEx,
   tupleRegEx,
@@ -44,6 +46,7 @@ import { StringCoder } from '../coders/StringCoder';
 import { StructCoder } from '../coders/StructCoder';
 import { TupleCoder } from '../coders/TupleCoder';
 import { VecCoder } from '../coders/VecCoder';
+import { VoidCoder } from '../coders/VoidCoder';
 
 import { getCoders } from './getCoders';
 
@@ -82,6 +85,8 @@ export const getCoder: GetCoderFn = (
       return new StdStringCoder();
     case STR_SLICE_CODER_TYPE:
       return new StrSliceCoder();
+    case VOID_TYPE:
+      return new VoidCoder();
     default:
       break;
   }
@@ -122,21 +127,23 @@ export const getCoder: GetCoderFn = (
     return new VecCoder(itemCoder as Coder);
   }
 
-  const structMatch = structRegEx.exec(resolvedAbiType.type)?.groups;
-  if (structMatch) {
+  // component name
+  const coderName = resolvedAbiType.type.match(fullNameRegExMatch)?.[0];
+
+  const structMatch = structRegEx.test(resolvedAbiType.type);
+  if (structMatch && coderName) {
     const coders = getCoders(components, { getCoder });
-    return new StructCoder(structMatch.name, coders);
+    return new StructCoder(coderName, coders);
   }
 
-  const enumMatch = enumRegEx.exec(resolvedAbiType.type)?.groups;
-  if (enumMatch) {
+  const enumMatch = enumRegEx.test(resolvedAbiType.type);
+  if (enumMatch && coderName) {
     const coders = getCoders(components, { getCoder });
-
     const isOptionEnum = resolvedAbiType.type === OPTION_CODER_TYPE;
     if (isOptionEnum) {
-      return new OptionCoder(enumMatch.name, coders);
+      return new OptionCoder(coderName, coders);
     }
-    return new EnumCoder(enumMatch.name, coders);
+    return new EnumCoder(coderName, coders);
   }
 
   const tupleMatch = tupleRegEx.exec(resolvedAbiType.type)?.groups;

@@ -1,5 +1,7 @@
 import { Command } from 'commander';
 
+import { mockCheckForUpdates } from '../test/utils/mockCheckForUpdates';
+
 import * as cliMod from './cli';
 import { Commands } from './cli/types';
 import * as loggingMod from './cli/utils/logger';
@@ -77,6 +79,7 @@ describe('cli.js', () => {
       .mockReturnValue(Promise.resolve(command));
 
     const configureCli = vi.spyOn(cliMod, 'configureCli').mockImplementation(() => new Command());
+    mockCheckForUpdates();
 
     await run([]);
 

@@ -1,5 +1,259 @@
 # Change Log
 
+## 0.103.0
+
+### Patch Changes
+
+- @fuel-ts/hasher@0.103.0
+- @fuel-ts/math@0.103.0
+
+## 0.102.0
+
+### Patch Changes
+
+- @fuel-ts/hasher@0.102.0
+- @fuel-ts/math@0.102.0
+
+## 0.101.3
+
+### Patch Changes
+
+- @fuel-ts/math@0.101.3
+- @fuel-ts/hasher@0.101.3
+
+## 0.101.2
+
+### Patch Changes
+
+- 8c19d93: chore: support Node 24 - depreciate Node 18
+- Updated dependencies [8c19d93]
+  - @fuel-ts/hasher@0.101.2
+  - @fuel-ts/math@0.101.2
+
+## 0.101.1
+
+### Patch Changes
+
+- @fuel-ts/hasher@0.101.1
+- @fuel-ts/math@0.101.1
+
+## 0.101.0
+
+### Patch Changes
+
+- @fuel-ts/hasher@0.101.0
+- @fuel-ts/math@0.101.0
+
+## 0.100.6
+
+### Patch Changes
+
+- @fuel-ts/hasher@0.100.6
+- @fuel-ts/math@0.100.6
+
+## 0.100.5
+
+### Patch Changes
+
+- @fuel-ts/hasher@0.100.5
+- @fuel-ts/math@0.100.5
+
+## 0.100.4
+
+### Patch Changes
+
+- @fuel-ts/math@0.100.4
+- @fuel-ts/hasher@0.100.4
+
+## 0.100.3
+
+### Patch Changes
+
+- @fuel-ts/hasher@0.100.3
+- @fuel-ts/math@0.100.3
+
+## 0.100.2
+
+### Patch Changes
+
+- @fuel-ts/math@0.100.2
+- @fuel-ts/hasher@0.100.2
+
+## 0.100.1
+
+### Patch Changes
+
+- @fuel-ts/hasher@0.100.1
+- @fuel-ts/math@0.100.1
+
+## 0.100.0
+
+### Patch Changes
+
+- Updated dependencies [fc18871]
+- Updated dependencies [6eb113c]
+  - @fuel-ts/hasher@0.100.0
+  - @fuel-ts/math@0.100.0
+
+## 0.99.0
+
+### Patch Changes
+
+- Updated dependencies [b3bb765]
+  - @fuel-ts/math@0.99.0
+  - @fuel-ts/hasher@0.99.0
+
+## 0.98.0
+
+### Patch Changes
+
+- 12e801e: chore: dependency pinning and auditing
+- Updated dependencies [12e801e]
+- Updated dependencies [0b4c3ab]
+  - @fuel-ts/hasher@0.98.0
+  - @fuel-ts/math@0.98.0
+
+## 0.97.2
+
+### Patch Changes
+
+- @fuel-ts/hasher@0.97.2
+- @fuel-ts/math@0.97.2
+
+## 0.97.1
+
+### Patch Changes
+
+- Updated dependencies [c904a98]
+  - @fuel-ts/math@0.97.1
+  - @fuel-ts/hasher@0.97.1
+
+## 0.97.0
+
+### Patch Changes
+
+- @fuel-ts/math@0.97.0
+- @fuel-ts/hasher@0.97.0
+
+## 0.96.1
+
+### Patch Changes
+
+- Updated dependencies [bdfd009]
+- Updated dependencies [987aed3]
+  - @fuel-ts/math@0.96.1
+  - @fuel-ts/hasher@0.96.1
+
+## 0.96.0
+
+### Patch Changes
+
+- @fuel-ts/hasher@0.96.0
+- @fuel-ts/math@0.96.0
+
+## 0.95.0
+
+### Patch Changes
+
+- Updated dependencies [b733e81]
+  - @fuel-ts/math@0.95.0
+  - @fuel-ts/hasher@0.95.0
+
+## 0.94.9
+
+### Patch Changes
+
+- @fuel-ts/math@0.94.9
+- @fuel-ts/hasher@0.94.9
+
+## 0.94.8
+
+### Patch Changes
+
+- @fuel-ts/hasher@0.94.8
+- @fuel-ts/math@0.94.8
+
+## 0.94.7
+
+### Patch Changes
+
+- 80df900: chore: fix exported types
+- Updated dependencies [80df900]
+- Updated dependencies [600b781]
+  - @fuel-ts/hasher@0.94.7
+  - @fuel-ts/math@0.94.7
+
+## 0.94.6
+
+### Patch Changes
+
+- Updated dependencies [a9f31ca]
+  - @fuel-ts/hasher@0.94.6
+  - @fuel-ts/math@0.94.6
+
+## 0.94.5
+
+### Patch Changes
+
+- @fuel-ts/math@0.94.5
+- @fuel-ts/hasher@0.94.5
+
+## 0.94.4
+
+### Patch Changes
+
+- @fuel-ts/math@0.94.4
+- @fuel-ts/hasher@0.94.4
+
+## 0.94.3
+
+### Patch Changes
+
+- @fuel-ts/math@0.94.3
+- @fuel-ts/hasher@0.94.3
+
+## 0.94.2
+
+### Patch Changes
+
+- @fuel-ts/hasher@0.94.2
+- @fuel-ts/math@0.94.2
+
+## 0.94.1
+
+### Patch Changes
+
+- @fuel-ts/hasher@0.94.1
+- @fuel-ts/math@0.94.1
+
+## 0.94.0
+
+### Patch Changes
+
+- @fuel-ts/math@0.94.0
+- @fuel-ts/hasher@0.94.0
+
+## 0.93.0
+
+### Patch Changes
+
+- @fuel-ts/hasher@0.93.0
+- @fuel-ts/math@0.93.0
+
+## 0.92.1
+
+### Patch Changes
+
+- @fuel-ts/hasher@0.92.1
+- @fuel-ts/math@0.92.1
+
+## 0.92.0
+
+### Patch Changes
+
+- @fuel-ts/hasher@0.92.0
+- @fuel-ts/math@0.92.0
+
 ## 0.91.0
 
 ### Patch Changes

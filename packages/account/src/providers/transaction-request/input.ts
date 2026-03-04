@@ -1,11 +1,11 @@
 import { BYTES_32, UTXO_ID_LEN } from '@fuel-ts/abi-coder';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
 import type { Input } from '@fuel-ts/transactions';
 import { InputType } from '@fuel-ts/transactions';
+import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 
 export type CoinTransactionRequestInput = {
@@ -73,6 +73,9 @@ export type MessageTransactionRequestInput = {
 export type ContractTransactionRequestInput = {
   type: InputType.Contract;
 
+  /** ID of the last transaction that modified the contract state (It can be zeroed if unsure) */
+  txID?: BytesLike;
+
   /** Points to the TX whose output is being spent. (TxPointer) */
   txPointer: BytesLike;
 
@@ -114,7 +117,7 @@ export const inputify = (value: TransactionRequestInput): Input => {
     case InputType.Contract: {
       return {
         type: InputType.Contract,
-        txID: ZeroBytes32,
+        txID: hexlify(value.txID || ZeroBytes32),
         outputIndex: 0,
         balanceRoot: ZeroBytes32,
         stateRoot: ZeroBytes32,

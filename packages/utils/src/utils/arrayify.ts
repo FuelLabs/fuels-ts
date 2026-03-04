@@ -1,5 +1,6 @@
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
-import type { BytesLike } from '@fuel-ts/interfaces';
+
+export type BytesLike = Uint8Array | string;
 
 /**
  * Get a typed Uint8Array from a BytesLike object.

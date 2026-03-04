@@ -1,3 +1,4 @@
+import type { JsonAbi } from '@fuel-ts/abi-coder';
 import type { DeployContractOptions } from '@fuel-ts/contract';
 
 export enum Commands {
@@ -16,7 +17,7 @@ export type CommandEvent =
     }
   | {
       type: Commands.deploy;
-      data: DeployedContract[];
+      data: DeployedData;
     }
   | {
       type: Commands.dev;
@@ -40,6 +41,22 @@ export type DeployedContract = {
   contractId: string;
 };
 
+export type DeployedScript = {
+  path: string;
+  loaderBytecode: Uint8Array;
+  abi: JsonAbi;
+};
+
+export type DeployedPredicate = DeployedScript & {
+  predicateRoot: string;
+};
+
+export type DeployedData = {
+  contracts?: DeployedContract[];
+  scripts?: DeployedScript[];
+  predicates?: DeployedPredicate[];
+};
+
 export type ContractDeployOptions = {
   contracts: DeployedContract[];
   contractName: string;
@@ -53,7 +70,7 @@ export type OptionsFunction = (
 export type FuelsEventListener<CType extends Commands> = (
   config: FuelsConfig,
   data: Extract<CommandEvent, { type: CType }>['data']
-) => void;
+) => void | Promise<void>;
 
 export type UserFuelsConfig = {
   /** Relative directory path to Forc workspace */
@@ -75,7 +92,7 @@ export type UserFuelsConfig = {
 
   /**
    * Contracts will be deployed using this provider.
-   * Default: http://localhost:4000
+   * Default: http://localhost:4000/v1/graphql
    */
   providerUrl?: string;
 
@@ -147,7 +164,7 @@ export type UserFuelsConfig = {
    * @param config - Configuration in use
    * @param error - Original error object
    */
-  onFailure?: (config: FuelsConfig, error: Error) => void;
+  onFailure?: (config: FuelsConfig, error: Error) => void | Promise<void>;
 };
 
 export type FuelsConfig = UserFuelsConfig &

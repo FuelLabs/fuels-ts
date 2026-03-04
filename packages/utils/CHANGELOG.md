@@ -1,5 +1,389 @@
 # @fuel-ts/utils
 
+## 0.103.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.103.0
+- @fuel-ts/math@0.103.0
+- @fuel-ts/versions@0.103.0
+
+## 0.102.0
+
+### Minor Changes
+
+- f4be76c: chore!: upgrade `fuel-core` to `0.44.0`
+
+### Patch Changes
+
+- Updated dependencies [f4be76c]
+- Updated dependencies [c9e0c5a]
+  - @fuel-ts/versions@0.102.0
+  - @fuel-ts/errors@0.102.0
+  - @fuel-ts/math@0.102.0
+
+## 0.101.3
+
+### Patch Changes
+
+- Updated dependencies [4e018a5]
+- Updated dependencies [c8b6d0e]
+  - @fuel-ts/errors@0.101.3
+  - @fuel-ts/math@0.101.3
+  - @fuel-ts/versions@0.101.3
+
+## 0.101.2
+
+### Patch Changes
+
+- 8c19d93: chore: support Node 24 - depreciate Node 18
+- Updated dependencies [8c19d93]
+- Updated dependencies [bfb62ad]
+- Updated dependencies [0d71065]
+  - @fuel-ts/versions@0.101.2
+  - @fuel-ts/errors@0.101.2
+  - @fuel-ts/math@0.101.2
+
+## 0.101.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.101.1
+- @fuel-ts/math@0.101.1
+- @fuel-ts/versions@0.101.1
+
+## 0.101.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.101.0
+- @fuel-ts/math@0.101.0
+- @fuel-ts/versions@0.101.0
+
+## 0.100.6
+
+### Patch Changes
+
+- @fuel-ts/errors@0.100.6
+- @fuel-ts/math@0.100.6
+- @fuel-ts/versions@0.100.6
+
+## 0.100.5
+
+### Patch Changes
+
+- @fuel-ts/errors@0.100.5
+- @fuel-ts/math@0.100.5
+- @fuel-ts/versions@0.100.5
+
+## 0.100.4
+
+### Patch Changes
+
+- Updated dependencies [efcce41]
+- Updated dependencies [5a57b97]
+- Updated dependencies [f534210]
+- Updated dependencies [dbed315]
+  - @fuel-ts/errors@0.100.4
+  - @fuel-ts/versions@0.100.4
+  - @fuel-ts/math@0.100.4
+
+## 0.100.3
+
+### Patch Changes
+
+- @fuel-ts/errors@0.100.3
+- @fuel-ts/math@0.100.3
+- @fuel-ts/versions@0.100.3
+
+## 0.100.2
+
+### Patch Changes
+
+- Updated dependencies [e909d54]
+  - @fuel-ts/errors@0.100.2
+  - @fuel-ts/math@0.100.2
+  - @fuel-ts/versions@0.100.2
+
+## 0.100.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.100.1
+- @fuel-ts/math@0.100.1
+- @fuel-ts/versions@0.100.1
+
+## 0.100.0
+
+### Minor Changes
+
+- f41887f: chore!: upgrade `fuel-core` to `0.41.7`
+
+### Patch Changes
+
+- 1277ae6: chore: upgrade `vite` related dependencies
+- 6eb113c: chore: upgrade NPM package versions
+- Updated dependencies [b42f056]
+- Updated dependencies [f41887f]
+- Updated dependencies [521292a]
+- Updated dependencies [ff97a6e]
+  - @fuel-ts/versions@0.100.0
+  - @fuel-ts/errors@0.100.0
+  - @fuel-ts/math@0.100.0
+
+## 0.99.0
+
+### Patch Changes
+
+- d1825c9: chore: update `amountPerCoin` prop in `WalletConfig` to accept BN
+- Updated dependencies [ab56ded]
+- Updated dependencies [b3bb765]
+- Updated dependencies [45cc32e]
+  - @fuel-ts/versions@0.99.0
+  - @fuel-ts/errors@0.99.0
+  - @fuel-ts/math@0.99.0
+
+## 0.98.0
+
+### Patch Changes
+
+- 12e801e: chore: dependency pinning and auditing
+- 0b4c3ab: chore!: redistributed the `@fuel-ts/interfaces` package
+- Updated dependencies [12e801e]
+- Updated dependencies [04ca73e]
+- Updated dependencies [4ccc628]
+- Updated dependencies [08a31d8]
+- Updated dependencies [0b4c3ab]
+  - @fuel-ts/versions@0.98.0
+  - @fuel-ts/math@0.98.0
+  - @fuel-ts/errors@0.98.0
+
+## 0.97.2
+
+### Patch Changes
+
+- 0970bc4: fix: Vitest matcher integration
+- 896bf5b: chore: integrate vitest matchers globally
+- ebe5ecd: chore: update internally used chain config
+- Updated dependencies [5ec254d]
+  - @fuel-ts/versions@0.97.2
+  - @fuel-ts/errors@0.97.2
+  - @fuel-ts/math@0.97.2
+  - @fuel-ts/interfaces@0.97.2
+
+## 0.97.1
+
+### Patch Changes
+
+- Updated dependencies [c904a98]
+- Updated dependencies [27e8808]
+- Updated dependencies [165c49c]
+  - @fuel-ts/math@0.97.1
+  - @fuel-ts/interfaces@0.97.1
+  - @fuel-ts/errors@0.97.1
+  - @fuel-ts/versions@0.97.1
+
+## 0.97.0
+
+### Patch Changes
+
+- Updated dependencies [9dba357]
+- Updated dependencies [4e057d5]
+- Updated dependencies [7c162de]
+  - @fuel-ts/versions@0.97.0
+  - @fuel-ts/errors@0.97.0
+  - @fuel-ts/math@0.97.0
+  - @fuel-ts/interfaces@0.97.0
+
+## 0.96.1
+
+### Patch Changes
+
+- Updated dependencies [eb3b6c9]
+- Updated dependencies [bdfd009]
+- Updated dependencies [987aed3]
+  - @fuel-ts/versions@0.96.1
+  - @fuel-ts/math@0.96.1
+  - @fuel-ts/errors@0.96.1
+  - @fuel-ts/interfaces@0.96.1
+
+## 0.96.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.96.0
+- @fuel-ts/interfaces@0.96.0
+- @fuel-ts/math@0.96.0
+- @fuel-ts/versions@0.96.0
+
+## 0.95.0
+
+### Patch Changes
+
+- Updated dependencies [d4e839f]
+- Updated dependencies [95a9650]
+- Updated dependencies [b733e81]
+- Updated dependencies [f7afa04]
+- Updated dependencies [735bb1c]
+  - @fuel-ts/versions@0.95.0
+  - @fuel-ts/math@0.95.0
+  - @fuel-ts/interfaces@0.95.0
+  - @fuel-ts/errors@0.95.0
+
+## 0.94.9
+
+### Patch Changes
+
+- Updated dependencies [c2f0599]
+  - @fuel-ts/versions@0.94.9
+  - @fuel-ts/errors@0.94.9
+  - @fuel-ts/math@0.94.9
+  - @fuel-ts/interfaces@0.94.9
+
+## 0.94.8
+
+### Patch Changes
+
+- @fuel-ts/errors@0.94.8
+- @fuel-ts/interfaces@0.94.8
+- @fuel-ts/math@0.94.8
+- @fuel-ts/versions@0.94.8
+
+## 0.94.7
+
+### Patch Changes
+
+- 80df900: chore: fix exported types
+- Updated dependencies [47b5cd3]
+- Updated dependencies [431990d]
+- Updated dependencies [20d2ac2]
+- Updated dependencies [80df900]
+- Updated dependencies [127ade0]
+- Updated dependencies [600b781]
+  - @fuel-ts/versions@0.94.7
+  - @fuel-ts/interfaces@0.94.7
+  - @fuel-ts/errors@0.94.7
+  - @fuel-ts/math@0.94.7
+
+## 0.94.6
+
+### Patch Changes
+
+- Updated dependencies [aef7282]
+  - @fuel-ts/errors@0.94.6
+  - @fuel-ts/math@0.94.6
+  - @fuel-ts/interfaces@0.94.6
+  - @fuel-ts/versions@0.94.6
+
+## 0.94.5
+
+### Patch Changes
+
+- Updated dependencies [942b56b]
+- Updated dependencies [cffa075]
+  - @fuel-ts/versions@0.94.5
+  - @fuel-ts/errors@0.94.5
+  - @fuel-ts/math@0.94.5
+  - @fuel-ts/interfaces@0.94.5
+
+## 0.94.4
+
+### Patch Changes
+
+- Updated dependencies [b00fd02]
+- Updated dependencies [a059ea1]
+- Updated dependencies [482bbf0]
+  - @fuel-ts/versions@0.94.4
+  - @fuel-ts/errors@0.94.4
+  - @fuel-ts/math@0.94.4
+  - @fuel-ts/interfaces@0.94.4
+
+## 0.94.3
+
+### Patch Changes
+
+- Updated dependencies [b67ded2]
+  - @fuel-ts/versions@0.94.3
+  - @fuel-ts/errors@0.94.3
+  - @fuel-ts/math@0.94.3
+  - @fuel-ts/interfaces@0.94.3
+
+## 0.94.2
+
+### Patch Changes
+
+- 01e2f0e: fix: consistent typegen outputs
+- 986a247: chore: made `chainConfig` files match testnet configuration
+- Updated dependencies [ccd94fc]
+  - @fuel-ts/versions@0.94.2
+  - @fuel-ts/errors@0.94.2
+  - @fuel-ts/math@0.94.2
+  - @fuel-ts/interfaces@0.94.2
+
+## 0.94.1
+
+### Patch Changes
+
+- 9bba305: fix: made bytecode compression browser compatible
+  - @fuel-ts/errors@0.94.1
+  - @fuel-ts/interfaces@0.94.1
+  - @fuel-ts/math@0.94.1
+  - @fuel-ts/versions@0.94.1
+
+## 0.94.0
+
+### Minor Changes
+
+- 03ac550: feat!: `fuel-core@0.32.1` and large contract deployments
+
+### Patch Changes
+
+- 751d638: chore: switching `Error` to `FuelError`
+- a056da3: feat: improve typegen bytecode compression
+- Updated dependencies [9309598]
+- Updated dependencies [29c556d]
+- Updated dependencies [0110fd8]
+- Updated dependencies [4c653d0]
+- Updated dependencies [1d2abd7]
+- Updated dependencies [03ac550]
+  - @fuel-ts/versions@0.94.0
+  - @fuel-ts/errors@0.94.0
+  - @fuel-ts/math@0.94.0
+  - @fuel-ts/interfaces@0.94.0
+
+## 0.93.0
+
+### Patch Changes
+
+- Updated dependencies [99794e4]
+- Updated dependencies [d4c4e55]
+- Updated dependencies [f3453b9]
+  - @fuel-ts/versions@0.93.0
+  - @fuel-ts/interfaces@0.93.0
+  - @fuel-ts/errors@0.93.0
+  - @fuel-ts/math@0.93.0
+
+## 0.92.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.92.1
+- @fuel-ts/interfaces@0.92.1
+- @fuel-ts/math@0.92.1
+- @fuel-ts/versions@0.92.1
+
+## 0.92.0
+
+### Patch Changes
+
+- Updated dependencies [638eae3]
+- Updated dependencies [4a3c184]
+- Updated dependencies [44d51ee]
+  - @fuel-ts/versions@0.92.0
+  - @fuel-ts/errors@0.92.0
+  - @fuel-ts/math@0.92.0
+  - @fuel-ts/interfaces@0.92.0
+
 ## 0.91.0
 
 ### Patch Changes

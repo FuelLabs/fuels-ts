@@ -1,3 +1,4 @@
+import type { AddressInput } from '@fuel-ts/address';
 import { Address } from '@fuel-ts/address';
 import {
   bufferFromString,
@@ -7,11 +8,10 @@ import {
   stringFromBuffer,
   decryptJsonWalletData,
   encryptJsonWalletData,
+  randomUUID,
 } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { hexlify } from '@fuel-ts/utils';
-import { v4 as uuidv4 } from 'uuid';
 
 export type KeystoreWallet = {
   id: string;
@@ -58,12 +58,12 @@ export const removeHexPrefix = (hexString: string) => {
 
 export async function encryptKeystoreWallet(
   privateKey: string,
-  address: string | AbstractAddress,
+  address: AddressInput,
   password: string
 ): Promise<string> {
   // Convert the hexlified private key string to a Buffer.
   const privateKeyBuffer = bufferFromString(removeHexPrefix(privateKey), 'hex');
-  const ownerAddress = Address.fromAddressOrString(address);
+  const ownerAddress = new Address(address);
   // Generate a random salt.
   const salt = randomBytes(DEFAULT_KEY_SIZE);
 
@@ -90,7 +90,7 @@ export async function encryptKeystoreWallet(
 
   // Construct keystore.
   const keystore: KeystoreWallet = {
-    id: uuidv4(),
+    id: randomUUID(),
     version: 3,
     address: removeHexPrefix(ownerAddress.toHexString()),
     crypto: {
