@@ -1,5 +1,5 @@
 import { FuelError } from '@fuel-ts/errors';
-import { hash } from '@fuel-ts/hasher';
+import { hash } from '@fuel-ts/crypto';
 import type { BN } from '@fuel-ts/math';
 import {
   TransactionType,

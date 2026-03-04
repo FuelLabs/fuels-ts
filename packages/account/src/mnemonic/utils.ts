@@ -1,5 +1,5 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { sha256 } from '@fuel-ts/hasher';
+import { sha256 } from '@fuel-ts/crypto';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify } from '@fuel-ts/utils';
 

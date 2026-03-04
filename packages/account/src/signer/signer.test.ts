@@ -1,4 +1,4 @@
-import { hashMessage, sha256 } from '@fuel-ts/hasher';
+import { hashMessage, sha256 } from '@fuel-ts/crypto';
 import { arrayify } from '@fuel-ts/utils';
 
 import { Signer } from './signer';

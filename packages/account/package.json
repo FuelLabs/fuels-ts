@@ -56,7 +56,6 @@
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
-    "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
@@ -71,7 +70,6 @@
     "ramda": "0.30.1"
   },
   "devDependencies": {
-    "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@graphql-codegen/cli": "5.0.5",

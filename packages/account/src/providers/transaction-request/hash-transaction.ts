@@ -1,5 +1,5 @@
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
-import { uint64ToBytesBE, sha256 } from '@fuel-ts/hasher';
+import { uint64ToBytesBE, sha256 } from '@fuel-ts/crypto';
 import { bn } from '@fuel-ts/math';
 import { TransactionType, InputType, OutputType, TransactionCoder } from '@fuel-ts/transactions';
 import { concat } from '@fuel-ts/utils';

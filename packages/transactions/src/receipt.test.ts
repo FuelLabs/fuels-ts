@@ -1,7 +1,7 @@
 import { BigNumberCoder } from '@fuel-ts/abi-coder';
 import type { AssetId } from '@fuel-ts/address';
 import { getRandomB256 } from '@fuel-ts/address';
-import { sha256 } from '@fuel-ts/hasher';
+import { sha256 } from '@fuel-ts/crypto';
 import { bn } from '@fuel-ts/math';
 import { arrayify, concat } from '@fuel-ts/utils';
 

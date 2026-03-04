@@ -16,7 +16,7 @@ import {
 import { Address } from '@fuel-ts/address';
 import { ContractFactory } from '@fuel-ts/contract';
 import { encrypt, decrypt } from '@fuel-ts/crypto';
-import { hashMessage } from '@fuel-ts/hasher';
+import { hashMessage } from '@fuel-ts/crypto';
 import { BN } from '@fuel-ts/math';
 import { DEFAULT_PRECISION, DEFAULT_MIN_PRECISION } from '@fuel-ts/math/configs';
 import { SparseMerkleTree, constructTree } from '@fuel-ts/merkle';

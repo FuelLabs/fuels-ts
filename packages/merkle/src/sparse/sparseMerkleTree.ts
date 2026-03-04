@@ -1,6 +1,6 @@
 /// @dev The Fuel testing Merkle trees.
 /// A set of useful helper methods for testing and deploying Merkle trees.
-import { hash } from '@fuel-ts/hasher';
+import { hash } from '@fuel-ts/crypto';
 
 import { compactProof } from './proofs';
 import { isLeaf, hashLeaf, hashNode, parseLeaf, parseNode } from './treeHasher';

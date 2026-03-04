@@ -4,7 +4,7 @@ import type { AddressInput, WithAddress } from '@fuel-ts/address';
 import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { HashableMessage } from '@fuel-ts/hasher';
+import type { HashableMessage } from '@fuel-ts/crypto';
 import { bn } from '@fuel-ts/math';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { InputType, OutputType } from '@fuel-ts/transactions';

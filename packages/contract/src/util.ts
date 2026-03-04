@@ -1,4 +1,4 @@
-import { sha256 } from '@fuel-ts/hasher';
+import { sha256 } from '@fuel-ts/crypto';
 import { calcRoot, SparseMerkleTree } from '@fuel-ts/merkle';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import type { BytesLike } from '@fuel-ts/utils';

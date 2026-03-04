@@ -1,4 +1,4 @@
-import { hash } from '@fuel-ts/hasher';
+import { hash } from '@fuel-ts/crypto';
 
 export const leafPrefix = '0x00';
 export const nodePrefix = '0x01';

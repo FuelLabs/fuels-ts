@@ -18,3 +18,5 @@ export const {
   ripemd160,
   randomUUID,
 } = cryptoApi;
+
+export * from './hasher';

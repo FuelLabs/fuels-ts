@@ -1,6 +1,6 @@
 import { randomBytes, pbkdf2, computeHmac } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { sha256 } from '@fuel-ts/hasher';
+import { sha256 } from '@fuel-ts/crypto';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify, concat, dataSlice, encodeBase58, toUtf8Bytes } from '@fuel-ts/utils';
 

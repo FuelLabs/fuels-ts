@@ -74,7 +74,6 @@
     "@fuel-ts/contract": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
-    "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/program": "workspace:*",
     "@fuel-ts/script": "workspace:*",
