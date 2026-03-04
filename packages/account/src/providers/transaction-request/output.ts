@@ -1,4 +1,4 @@
-import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ZeroBytes32 } from '../../address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';

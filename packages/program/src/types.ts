@@ -12,7 +12,7 @@ import type {
   DecodedLogs,
   PreConfirmationTransactionResult,
 } from '@fuel-ts/account';
-import type { Address, WithContractId } from '@fuel-ts/address';
+import type { Address, WithContractId } from '@fuel-ts/account';
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import type { BytesLike } from '@fuel-ts/utils';
 

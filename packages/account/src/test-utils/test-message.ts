@@ -1,4 +1,4 @@
-import { Address } from '@fuel-ts/address';
+import { Address } from '../address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { bn, type BN } from '@fuel-ts/math';
 import type { SnapshotConfigs } from '@fuel-ts/utils';

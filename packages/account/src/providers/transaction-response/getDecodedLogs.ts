@@ -1,6 +1,6 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface, BigNumberCoder } from '@fuel-ts/abi-coder';
-import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ZeroBytes32 } from '../../address/configs';
 import { ReceiptType } from '@fuel-ts/transactions';
 
 import type {

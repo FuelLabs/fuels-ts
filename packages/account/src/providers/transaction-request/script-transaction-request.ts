@@ -1,8 +1,8 @@
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
-import { addressify } from '@fuel-ts/address';
-import type { ContractIdLike } from '@fuel-ts/address';
-import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import { addressify } from '../../address';
+import type { ContractIdLike } from '../../address';
+import { ZeroBytes32 } from '../../address/configs';
 import { bn } from '@fuel-ts/math';
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import type { TransactionScript } from '@fuel-ts/transactions';

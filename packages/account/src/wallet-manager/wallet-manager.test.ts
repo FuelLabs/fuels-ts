@@ -1,4 +1,4 @@
-import { Address } from '@fuel-ts/address';
+import { Address } from '../address';
 import { hashMessage } from '@fuel-ts/hasher';
 
 import WalletManagerSpec from '../../test/fixtures/wallet-manager-spec';

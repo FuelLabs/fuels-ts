@@ -1,5 +1,5 @@
-import { Address } from '@fuel-ts/address';
-import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import { Address } from '../../address';
+import { ZeroBytes32 } from '../../address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
 import { bn, toNumber } from '@fuel-ts/math';
 import { PolicyType, TransactionType, UpgradePurposeTypeEnum } from '@fuel-ts/transactions';

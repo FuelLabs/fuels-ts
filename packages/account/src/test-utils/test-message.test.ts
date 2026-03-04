@@ -1,4 +1,4 @@
-import { Address } from '@fuel-ts/address';
+import { Address } from '../address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { hexlify } from '@fuel-ts/utils';
 

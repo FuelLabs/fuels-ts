@@ -1,4 +1,4 @@
-import type { Address } from '@fuel-ts/address';
+import type { Address } from '../address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';

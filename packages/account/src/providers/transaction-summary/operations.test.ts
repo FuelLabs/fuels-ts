@@ -1,5 +1,5 @@
-import { getRandomB256 } from '@fuel-ts/address';
-import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import { getRandomB256 } from '../../address';
+import { ZeroBytes32 } from '../../address/configs';
 import { bn } from '@fuel-ts/math';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';

@@ -20,7 +20,7 @@ import {
   Wallet,
   setAndValidateGasAndFeeForAssembledTx,
 } from '@fuel-ts/account';
-import { Address } from '@fuel-ts/address';
+import { Address } from '@fuel-ts/account';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';

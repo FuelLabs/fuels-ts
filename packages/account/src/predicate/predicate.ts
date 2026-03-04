@@ -1,6 +1,6 @@
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
-import { Address } from '@fuel-ts/address';
+import { Address } from '../address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/utils';
 import { arrayify, hexlify } from '@fuel-ts/utils';
