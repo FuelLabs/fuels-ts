@@ -1,4 +1,4 @@
-import type { Address } from '@fuel-ts/address';
+import type { Address } from '@fuel-ts/account';
 
 import type { AddressLoggerOptions } from './index';
 

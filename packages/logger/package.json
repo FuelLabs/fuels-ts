@@ -34,7 +34,7 @@
     "dist"
   ],
   "dependencies": {
-    "@fuel-ts/address": "workspace:*",
+    "@fuel-ts/account": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "debug": "4.4.0"
   },
