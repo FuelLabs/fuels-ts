@@ -1,5 +1,5 @@
-import { Address } from '@fuel-ts/address';
-import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import { Address } from '../src/address';
+import { ZeroBytes32 } from '../src/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { BN } from '@fuel-ts/math';

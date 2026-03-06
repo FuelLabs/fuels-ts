@@ -13,7 +13,7 @@ const importReplacementMap = {
   Provider: '@fuel-ts/account',
   Account: '@fuel-ts/account',
   StorageSlot: '@fuel-ts/transactions',
-  Address: '@fuel-ts/address',
+  Address: '@fuel-ts/account',
   FunctionFragment: '@fuel-ts/abi-coder',
   InvokeFunction: '@fuel-ts/program',
   StrSlice: '@fuel-ts/abi-coder',

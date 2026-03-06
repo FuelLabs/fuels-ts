@@ -1,4 +1,4 @@
-import { Address } from '@fuel-ts/address';
+import { Address } from '../../src/address';
 import { bn } from '@fuel-ts/math';
 
 import {

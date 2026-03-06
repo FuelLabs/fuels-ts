@@ -1,5 +1,5 @@
 import { BYTES_32, UTXO_ID_LEN } from '@fuel-ts/abi-coder';
-import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ZeroBytes32 } from '../../address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';

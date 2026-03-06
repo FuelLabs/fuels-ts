@@ -1,5 +1,5 @@
-import { getRandomB256, Address } from '@fuel-ts/address';
-import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import { getRandomB256, Address } from '../../address';
+import { ZeroBytes32 } from '../../address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';

@@ -1,8 +1,8 @@
 import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { Account, Provider } from '@fuel-ts/account';
-import type { AddressInput } from '@fuel-ts/address';
-import { Address } from '@fuel-ts/address';
+import type { AddressInput } from '@fuel-ts/account';
+import { Address } from '@fuel-ts/account';
 import type { BytesLike } from '@fuel-ts/utils';
 
 import { FunctionInvocationScope } from './functions/invocation-scope';

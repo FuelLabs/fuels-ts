@@ -1,4 +1,4 @@
-import type { Address } from '@fuel-ts/address';
+import type { Address } from '../address';
 import type { BN } from '@fuel-ts/math';
 import type { BytesLike } from '@fuel-ts/utils';
 

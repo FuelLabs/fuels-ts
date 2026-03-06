@@ -30,7 +30,7 @@
  * ```
  */
 
-import type { Address } from '@fuel-ts/address';
+import type { Address } from '@fuel-ts/account';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import debug from 'debug';

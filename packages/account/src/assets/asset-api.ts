@@ -1,4 +1,4 @@
-import { B256Address } from "@fuel-ts/address";
+import { B256Address } from "../address";
 import { NetworkEthereum, NetworkFuel } from "./types";
 
 const networks = {

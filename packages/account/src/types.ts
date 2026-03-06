@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { Address } from '@fuel-ts/address';
+import type { Address } from './address';
 
 export abstract class AbstractAccount {
   abstract address: Address;

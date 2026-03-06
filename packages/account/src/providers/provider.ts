@@ -1,5 +1,5 @@
-import type { AddressInput } from '@fuel-ts/address';
-import { Address, isB256 } from '@fuel-ts/address';
+import type { AddressInput } from '../address';
+import { Address, isB256 } from '../address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';

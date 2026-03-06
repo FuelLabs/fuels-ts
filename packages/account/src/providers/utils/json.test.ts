@@ -1,4 +1,4 @@
-import { Address } from '@fuel-ts/address';
+import { Address } from '../../address';
 import { BN, bn } from '@fuel-ts/math';
 
 import { normalizeJSON } from './json';

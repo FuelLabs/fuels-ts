@@ -1,4 +1,4 @@
-import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ZeroBytes32 } from '../address/configs';
 import { BN } from '@fuel-ts/math';
 
 import { coinQuantityfy } from './coin-quantity';

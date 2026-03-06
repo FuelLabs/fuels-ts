@@ -53,7 +53,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@fuel-ts/abi-coder": "workspace:*",
-    "@fuel-ts/address": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
@@ -64,6 +63,7 @@
     "@fuel-ts/versions": "workspace:*",
     "@fuels/vm-asm": "0.62.0",
     "@noble/curves": "1.8.1",
+    "@noble/hashes": "1.7.1",
     "events": "3.3.0",
     "graphql": "16.10.0",
     "graphql-request": "6.1.0",

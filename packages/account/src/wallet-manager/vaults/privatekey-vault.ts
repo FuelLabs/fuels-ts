@@ -1,5 +1,5 @@
-import type { AddressInput } from '@fuel-ts/address';
-import { Address } from '@fuel-ts/address';
+import type { AddressInput } from '../../address';
+import { Address } from '../../address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import type { WalletUnlocked } from '../../wallet';

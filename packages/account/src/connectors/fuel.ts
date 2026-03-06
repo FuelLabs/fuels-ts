@@ -1,4 +1,4 @@
-import type { Address } from '@fuel-ts/address';
+import type { Address } from '../address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import { Account } from '../account';

@@ -1,4 +1,4 @@
-import { Address } from '@fuel-ts/address';
+import { Address } from '../../address';
 
 import type { WalletUnlocked } from '../../wallet';
 import { Wallet } from '../../wallet';

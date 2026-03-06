@@ -1,5 +1,5 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
-import type { B256Address } from '@fuel-ts/address';
+import type { B256Address } from '../../address';
 import type { BN, BNInput } from '@fuel-ts/math';
 import type {
   Transaction,

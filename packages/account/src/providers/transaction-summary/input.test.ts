@@ -1,4 +1,4 @@
-import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ZeroBytes32 } from '../../address/configs';
 import { bn } from '@fuel-ts/math';
 import type { InputCoin, InputMessage } from '@fuel-ts/transactions';
 import { ASSET_A } from '@fuel-ts/utils/test-utils';

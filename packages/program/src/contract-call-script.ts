@@ -14,8 +14,8 @@ import type {
   TransactionResultReturnDataReceipt,
   TransactionResultReturnReceipt,
 } from '@fuel-ts/account';
-import type { Address } from '@fuel-ts/address';
-import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import type { Address } from '@fuel-ts/account';
+import { ZeroBytes32 } from '@fuel-ts/account/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';

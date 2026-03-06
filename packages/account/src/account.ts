@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
-import type { AddressInput, WithAddress } from '@fuel-ts/address';
-import { Address } from '@fuel-ts/address';
+import type { AddressInput, WithAddress } from './address';
+import { Address } from './address';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { HashableMessage } from '@fuel-ts/hasher';

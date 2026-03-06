@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import type { Address } from '@fuel-ts/address';
+import type { Address } from '../address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import type { WalletUnlocked } from '../wallet';

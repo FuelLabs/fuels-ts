@@ -1,3 +1,4 @@
+export * from './address';
 export * from './assets';
 export * from './account';
 export * from './types';
