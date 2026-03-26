@@ -43,6 +43,6 @@
   "dependencies": {
     "@types/bn.js": "5.1.6",
     "@fuel-ts/errors": "workspace:*",
-    "bn.js": "5.2.1"
+    "bn.js": "5.2.3"
   }
 }
