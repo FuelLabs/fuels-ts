@@ -106,3 +106,4 @@ In-depth docs:
 # License
 
 The primary license for this repo is `Apache 2.0`, see [`LICENSE`](https://github.com/FuelLabs/fuels-ts/blob/master/LICENSE).
+
