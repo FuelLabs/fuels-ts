@@ -15,7 +15,7 @@ export class StdStringCoder extends Coder<string, string> {
 
   encode(value: string): Uint8Array {
     const bytes = toUtf8Bytes(value);
-    const lengthBytes = new BigNumberCoder('u64').encode(value.length);
+    const lengthBytes = new BigNumberCoder('u64').encode(bytes.length);
 
     return new Uint8Array([...lengthBytes, ...bytes]);
   }
