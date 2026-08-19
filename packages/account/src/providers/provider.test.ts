@@ -9,6 +9,7 @@ import { InputType, OutputType, ReceiptType } from '@fuel-ts/transactions';
 import { DateTime, arrayify, hexlify, sleep } from '@fuel-ts/utils';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import { versions } from '@fuel-ts/versions';
+import gql from 'graphql-tag';
 
 import type { CoinQuantity } from '..';
 import { Wallet } from '..';
@@ -83,6 +84,32 @@ const createBasicAuth = (launchNodeUrl: string) => {
 describe('Provider', () => {
   afterEach(() => {
     vi.restoreAllMocks();
+  });
+
+  it('supports custom GraphQL queries with variables', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql', {
+      fetch: async (_url, requestInit) => {
+        const body = JSON.parse(requestInit?.body as string);
+        expect(body.variables).toEqual({ limit: 2 });
+        expect(body.query).toContain('customBlocks');
+        return new Response(JSON.stringify({ data: { customBlocks: { count: 2 } } }), {
+          headers: { 'content-type': 'application/json' },
+        });
+      },
+    });
+
+    const result = await provider.operations.customQuery<{ customBlocks: { count: number } }>(
+      gql`
+        query customBlocks($limit: Int!) {
+          customBlocks(limit: $limit) {
+            count
+          }
+        }
+      `,
+      { limit: 2 }
+    );
+
+    expect(result).toEqual({ customBlocks: { count: 2 } });
   });
 
   it('should ensure supports basic auth', async () => {
