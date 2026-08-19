@@ -18,7 +18,7 @@ describe('templates/index', () => {
     // validating
     restore();
 
-    expect(rendered).toContain(`export { Contract } from './Contract';`);
-    expect(rendered).toContain(`export { ContractFactory } from './ContractFactory';`);
+    expect(rendered).toContain(`export { Contract } from './Contract.js';`);
+    expect(rendered).toContain(`export { ContractFactory } from './ContractFactory.js';`);
   });
 });
