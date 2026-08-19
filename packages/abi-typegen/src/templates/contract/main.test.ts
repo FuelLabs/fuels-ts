@@ -80,7 +80,7 @@ describe('templates/dts', () => {
 
     const rendered = renderMainTemplate({ abi, versions });
 
-    expect(rendered).toMatch(/^import type.+from ".\/common";$/m);
+    expect(rendered).toMatch(/^import type.+from ".\/common\.js";$/m);
   });
 
   test('should render dts cross-referencing for identical structs', () => {
