@@ -41,6 +41,38 @@ describe('launchNode', () => {
     cleanup();
   });
 
+  test('waits for GraphQL to serve requests after binding, including connection resets', async () => {
+    const realFetch = global.fetch;
+    let releaseHealth: () => void = () => undefined;
+    const healthGate = new Promise<void>((resolve) => {
+      releaseHealth = resolve;
+    });
+    const fetchSpy = vi
+      .spyOn(global, 'fetch')
+      .mockRejectedValueOnce(new TypeError('fetch failed'))
+      .mockImplementationOnce(async (...args) => {
+        await healthGate;
+        return realFetch(...args);
+      });
+    let settled = false;
+    const launchedPromise = launchNode({ loggingEnabled: false }).then((launched) => {
+      settled = true;
+      return launched;
+    });
+
+    try {
+      await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(2));
+      expect(settled).toBe(false);
+      releaseHealth();
+      const { url } = await launchedPromise;
+      expect(await new Provider(url).getChain()).toBeTruthy();
+    } finally {
+      releaseHealth();
+      (await launchedPromise).cleanup();
+      fetchSpy.mockRestore();
+    }
+  });
+
   it('cleanup kills the started node', async () => {
     const { cleanup, url } = await launchNode({ loggingEnabled: false });
     expect(await fetch(url)).toBeTruthy();
