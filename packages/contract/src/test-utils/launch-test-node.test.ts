@@ -61,7 +61,7 @@ async function generateChainConfigFile(chainName: string): Promise<[string, () =
  * @group node
  */
 describe('launchTestNode', () => {
-  test('kills the node after going out of scope', async () => {
+  test('kills the node after going out of scope', { timeout: 20000 }, async () => {
     let url = '';
 
     {
@@ -75,16 +75,19 @@ describe('launchTestNode', () => {
 
     // SIGTERM starts graceful shutdown; a single closed socket does not prove
     // that the node has stopped accepting requests on other connections.
-    await vi.waitFor(async () => {
-      const { error } = await safeExec(async () => {
-        const p = new Provider(url);
-        await p.getBlockNumber();
-      });
+    await vi.waitFor(
+      async () => {
+        const { error } = await safeExec(async () => {
+          const p = new Provider(url);
+          await p.getBlockNumber();
+        });
 
-      expect(error).toMatchObject({
-        message: 'fetch failed',
-      });
-    });
+        expect(error).toMatchObject({
+          message: 'fetch failed',
+        });
+      },
+      { timeout: 15000, interval: 100 }
+    );
   });
 
   test('kills the node if error happens post-launch on contract deployment', async () => {

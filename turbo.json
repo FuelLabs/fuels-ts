@@ -1,5 +1,6 @@
 {
   "$schema": "https://turborepo.org/schema.json",
+  "globalDependencies": ["internal/fuel-core/VERSION"],
   "tasks": {
     "type:check": {
       "outputLogs": "errors-only"
@@ -26,8 +27,7 @@
         "**/test/fixtures/forc-projects/Forc.toml",
         "**/test/fixtures/forc-projects/**/src/*.sw",
         "**/test/fixtures/forc-projects/**/Forc.toml",
-        "scripts/generate-state-transition-bytecode.ts",
-        "$TURBO_ROOT$/internal/fuel-core/VERSION"
+        "scripts/generate-state-transition-bytecode.ts"
       ],
       "outputs": [
         "**/test/fixtures/forc-projects/**/out/release/**",

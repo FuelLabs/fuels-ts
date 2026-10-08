@@ -8,6 +8,7 @@ import type { WalletUnlocked } from '../wallet';
 
 import type { LaunchNodeOptions } from './launchNode';
 import { launchNode } from './launchNode';
+import legacyGasCostsV4 from './legacy-gas-costs-v4.json';
 import { TestAssetId } from './test-asset-id';
 import type { WalletsConfigOptions } from './wallet-config';
 import { WalletsConfig } from './wallet-config';
@@ -79,13 +80,17 @@ export async function setupTestProviderAndWallets({
   const overriddenGasCosts =
     nodeOptions.snapshotConfig?.chainConfig?.consensus_parameters?.V2?.gas_costs;
   const { snapshotConfig } = launchNodeOptions;
-  if (overriddenGasCosts && snapshotConfig) {
-    const gasCosts = snapshotConfig.chainConfig.consensus_parameters.V2.gas_costs;
-    // Gas-cost versions are mutually exclusive enum variants. Deep merging an older
-    // snapshot with the default must not leave both V4 and V7 in the node config.
-    snapshotConfig.chainConfig.consensus_parameters.V2.gas_costs = Object.fromEntries(
-      Object.entries(gasCosts).filter(([version]) => version in overriddenGasCosts)
-    ) as typeof gasCosts;
+  if (
+    overriddenGasCosts &&
+    snapshotConfig &&
+    'V4' in overriddenGasCosts &&
+    !('V7' in overriddenGasCosts)
+  ) {
+    // Keep the SDK's previous V4 defaults for partial legacy overrides. Gas-cost
+    // versions are enum variants, so replace V7 rather than merging both variants.
+    snapshotConfig.chainConfig.consensus_parameters.V2.gas_costs = {
+      V4: mergeDeepRight(legacyGasCostsV4, overriddenGasCosts.V4 ?? {}),
+    };
   }
 
   let killNode: () => void;
