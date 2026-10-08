@@ -15,7 +15,7 @@
     "build:packages": "turbo run build --filter=!docs --filter=!template-*",
     "ci:test": "./scripts/tests-ci.sh",
     "pretest": "turbo run pretest",
-    "depcheck": "knip --include-libs --dependencies --tags=-knipignore",
+    "depcheck": "tsx ./packages/fuel-gauge/scripts/generate-state-transition-bytecode.ts && knip --include-libs --dependencies --tags=-knipignore",
     "knip:fix": "knip --fix",
     "depsync:lint": "syncpack list-mismatches",
     "depsync:fix": "syncpack fix-mismatches",
