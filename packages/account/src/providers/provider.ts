@@ -28,7 +28,7 @@ import type {
   GqlFeeParameters as FeeParameters,
   GqlGasCostsFragment as GasCosts,
   GqlPredicateParameters as PredicateParameters,
-  GqlScriptParameters as ScriptParameters,
+  GqlScriptParametersFragment as ScriptParameters,
   GqlTxParameters as TxParameters,
   GqlPageInfo,
   GqlRelayedTransactionFailed,

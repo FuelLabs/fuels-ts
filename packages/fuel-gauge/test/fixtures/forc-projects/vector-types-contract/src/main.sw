@@ -38,32 +38,6 @@ impl PartialEq for SomeStruct<u32> {
     }
 }
 
-impl PartialEq for [Vec<u32>; 2] {
-    fn eq(self, other: Self) -> bool {
-        let mut i = 0;
-        while i < 2 {
-            if self[i] != other[i] {
-                return false;
-            }
-            i += 1;
-        }
-        true
-    }
-}
-
-impl PartialEq for [u64; 2] {
-    fn eq(self, other: Self) -> bool {
-        let mut i = 0;
-        while i < 2 {
-            if self[i] != other[i] {
-                return false;
-            }
-            i += 1;
-        }
-        true
-    }
-}
-
 impl PartialEq for SomeEnum<Vec<u32>> {
     fn eq(self, other: Self) -> bool {
         match self {

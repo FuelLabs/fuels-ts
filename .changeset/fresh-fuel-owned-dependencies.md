@@ -1,0 +1,18 @@
+---
+"@fuel-ts/account": patch
+"@fuel-ts/contract": patch
+"@fuel-ts/program": patch
+"@fuel-ts/transactions": patch
+"@fuel-ts/versions": patch
+"@fuel-ts/utils": minor
+"fuels": patch
+"create-fuels": patch
+---
+
+Update Fuel-owned dependencies to VM ASM 0.66.4, Fuel Core 0.48.3, Forc 0.72.1, and React/connectors 0.45.0 in examples and templates. The assembler update reuses WASM initialization instead of allocating a module on each initialization request. Refresh the Core schema, panic reasons and local-node gas table, preserve panic error decoding for ABI 1.1 and 1.2, and migrate compiler fixtures to the newer standard library.
+
+Wait for a successful GraphQL health query before returning a launched local test node, avoiding connection resets while Fuel Core services are still starting.
+
+The default local-node snapshot now uses the V7 gas-cost table shipped in the Core 0.48.3 binary. Snapshot gas costs accept either V4 or V7; code that reads `gas_costs.V4` directly must first narrow the variant. Explicit V4 snapshots remain supported; partial V4 overrides retain the SDK’s previous V4 defaults, including nested operations. Empty overrides retain the new V7 defaults. Recompiling Sway with Forc 0.72.1 can change bytecode, gas usage and dynamic-bytes hashes, and older source may need standard-library migrations.
+
+chore(deps)!: update Fuel-owned dependencies and toolchains

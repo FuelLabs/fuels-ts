@@ -2,7 +2,7 @@ import { BYTES_32 } from '@fuel-ts/abi-coder';
 import { randomBytes, randomUUID } from '@fuel-ts/crypto';
 import { FuelError } from '@fuel-ts/errors';
 import type { SnapshotConfigs } from '@fuel-ts/utils';
-import { defaultConsensusKey, hexlify, defaultSnapshotConfigs } from '@fuel-ts/utils';
+import { defaultConsensusKey, hexlify, defaultSnapshotConfigs, sleep } from '@fuel-ts/utils';
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import os from 'os';
 import path from 'path';
@@ -173,7 +173,7 @@ export const launchNode = async ({
     const minGasPrice = getFlagValueFromArgs(args, '--min-gas-price') || '1';
     const startingGasPrice = getFlagValueFromArgs(args, '--starting-gas-price') || '1';
 
-    // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
+    // This log identifies the bound address, before GraphQL is ready to serve requests.
     const graphQLStartSubstring = 'Binding GraphQL provider to';
 
     const command = fuelCorePath || 'fuel-core';
@@ -292,26 +292,66 @@ export const launchNode = async ({
       removeTempDir();
     };
 
+    const waitForGraphQL = async (url: string) => {
+      const deadline = Date.now() + 30_000;
+      while (
+        Date.now() < deadline &&
+        !childState.isDead &&
+        child.exitCode === null &&
+        child.signalCode === null
+      ) {
+        try {
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query: '{ health }' }),
+            signal: AbortSignal.timeout(Math.min(1000, deadline - Date.now())),
+          });
+          const result = (await response.json()) as { data?: { health?: boolean } };
+          if (response.ok && result.data?.health === true) {
+            return;
+          }
+        } catch {
+          // Connections can be reset while the GraphQL service is still starting.
+        }
+        await sleep(100);
+      }
+      throw new FuelError(
+        FuelError.CODES.NODE_LAUNCH_FAILED,
+        'Fuel Core GraphQL API did not become ready'
+      );
+    };
+
+    let waitingForGraphQL = false;
+
     // Look for a specific graphql start point in the output.
     child.stderr.on('data', (chunk: string | Buffer) => {
       const text = typeof chunk === 'string' ? chunk : chunk.toString(); // chunk is sometimes Buffer and sometimes string...
       // Look for the graphql service start.
-      if (text.indexOf(graphQLStartSubstring) !== -1) {
+      if (text.indexOf(graphQLStartSubstring) !== -1 && !waitingForGraphQL) {
+        waitingForGraphQL = true;
         const rows = text.split('\n');
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const rowWithUrl = rows.find((row) => row.indexOf(graphQLStartSubstring) !== -1)!;
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const [realIp, realPort] = rowWithUrl.split(' ').at(-1)!.trim().split(':'); // e.g. "2024-02-13T12:31:44.445844Z  INFO new{name=fuel-core}: fuel_core::graphql_api::service: 216: Binding GraphQL provider to 127.0.0.1:35039"
 
-        // Resolve with the cleanup method.
-        resolve({
-          cleanup,
-          ip: realIp,
-          port: realPort,
-          url: `http://${realIp}:${realPort}/v1/graphql`,
-          snapshotDir: snapshotDirToUse as string,
-          pid: child.pid as number,
-        });
+        const url = `http://${realIp}:${realPort}/v1/graphql`;
+        waitForGraphQL(url)
+          .then(() =>
+            resolve({
+              cleanup,
+              ip: realIp,
+              port: realPort,
+              url,
+              snapshotDir: snapshotDirToUse as string,
+              pid: child.pid as number,
+            })
+          )
+          .catch((error) => {
+            cleanup();
+            reject(error);
+          });
       }
       if (/error/i.test(text)) {
         // eslint-disable-next-line no-console

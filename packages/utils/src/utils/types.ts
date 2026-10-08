@@ -161,6 +161,13 @@ interface Consensus {
   };
 }
 
+interface GasCostsV7 extends Omit<GasCosts, 'srw' | 'sww' | 'scwq' | 'srwq' | 'swwq'> {
+  storage_read_cold: Operation;
+  storage_read_hot: Operation;
+  storage_write: Operation;
+  storage_clear: Operation;
+}
+
 interface ConsensusParameters {
   chain_id: number;
   base_asset_id: string;
@@ -201,7 +208,7 @@ interface ConsensusParameters {
     };
   };
   block_gas_limit: number;
-  gas_costs: { V4: GasCosts };
+  gas_costs: { V4: GasCosts } | { V7: GasCostsV7 };
 }
 
 interface ChainConfig {

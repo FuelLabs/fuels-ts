@@ -446,7 +446,8 @@ describe('pre-confirmation', () => {
     const transactionRequest = await wallet.createTransfer(wallet.address, 700, baseAssetId);
     const txId = transactionRequest.getTransactionId(await provider.getChainId());
 
-    await wallet.sendTransaction(transactionRequest);
+    const response = await wallet.sendTransaction(transactionRequest);
+    await response.waitForResult();
 
     const { waitForPreConfirmation } = new TransactionResponse(txId, provider, chainId);
 

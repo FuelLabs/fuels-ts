@@ -15,7 +15,7 @@ for forc_toml in $forc_tomls; do
     cd ${forc_toml/Forc.toml/''}
 
     # validate forc formatting
-    eval "$forc_fmt --check --experimental error_type"
+    eval "$forc_fmt --check"
     if [ $? = "1" ]; then
         ERRORED=1
     fi

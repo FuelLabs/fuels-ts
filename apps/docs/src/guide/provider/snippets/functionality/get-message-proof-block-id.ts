@@ -1,13 +1,8 @@
 // #region getMessageProof-blockId
 import type { TransactionResultMessageOutReceipt } from 'fuels';
-import { sleep } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-using launched = await launchTestNode({
-  nodeOptions: {
-    args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
-  },
-});
+using launched = await launchTestNode();
 
 const {
   provider,
@@ -21,9 +16,9 @@ const withdrawTx = await sender.withdrawToBaseLayer(
 );
 const result = await withdrawTx.waitForResult();
 
-// Waiting for a new block to be committed (1 confirmation block)
+// Produce a confirmation block on this local test node
+await provider.produceBlocks(1);
 // Retrieves the latest block
-await sleep(1500);
 const latestBlock = await provider.getBlock('latest');
 
 // Retrieves the `nonce` via message out receipt from the initial transaction result

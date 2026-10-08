@@ -564,7 +564,7 @@ describe('consolidate-coins', { timeout: 10_000 }, () => {
          * However these UTXOs amount are not enough to cover only 1 consolidation TX.
          */
         feeParams: {
-          gas_price_factor: 92000,
+          gas_price_factor: 120000,
           gas_per_byte: 63,
         },
       });

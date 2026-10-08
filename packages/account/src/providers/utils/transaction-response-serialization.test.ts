@@ -63,9 +63,10 @@ describe('Transaction Response Serialization', () => {
       wallets: [wallet],
     } = launched;
 
-    const { id } = await wallet.transfer(wallet.address, 100_000);
+    const transfer = await wallet.transfer(wallet.address, 100_000);
+    await transfer.waitForResult();
 
-    const response = new TransactionResponse(id, provider, await provider.getChainId());
+    const response = new TransactionResponse(transfer.id, provider, await provider.getChainId());
     await response.waitForResult();
 
     // Serialize the response
@@ -104,7 +105,8 @@ describe('Transaction Response Serialization', () => {
     } = launched;
 
     const request = await wallet.createTransfer(wallet.address, 100_000);
-    await wallet.sendTransaction(request);
+    const submitted = await wallet.sendTransaction(request);
+    await submitted.waitForResult();
 
     const response = new TransactionResponse(request, provider, await provider.getChainId());
     await response.waitForResult();

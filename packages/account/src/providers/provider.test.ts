@@ -395,7 +395,7 @@ describe('Provider', () => {
       {
         type: ReceiptType.ScriptResult,
         result: bn(0),
-        gasUsed: bn(127),
+        gasUsed: bn(189),
       },
     ];
 

@@ -41,7 +41,7 @@ export type MyPredicateParameters = Omit<
 
 const abi = {
   "programType": "predicate",
-  "specVersion": "1",
+  "specVersion": "1.2",
   "encodingVersion": "1",
   "concreteTypes": [
     {
@@ -272,7 +272,8 @@ const abi = {
   "loggedTypes": [],
   "messagesTypes": [],
   "configurables": [],
-  "errorCodes": {}
+  "errorCodes": {},
+  "panickingCalls": {}
 };
 
 const bytecode = decompressBytecode('0x-bytecode-here');
