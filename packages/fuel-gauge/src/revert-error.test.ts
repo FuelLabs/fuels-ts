@@ -402,7 +402,7 @@ describe('Revert Error Testing', () => {
           receipts: expect.any(Array<TransactionResultReceipt>),
           panic: false,
           revert: true,
-          reason: '18446744069414584320',
+          reason: '9223372036854775808',
           abiError,
         }
       )
@@ -435,7 +435,7 @@ describe('Revert Error Testing', () => {
           receipts: expect.any(Array<TransactionResultReceipt>),
           panic: false,
           revert: true,
-          reason: '18446744069414584321',
+          reason: '9259400833873739776',
           abiError,
         }
       )
@@ -467,7 +467,7 @@ describe('Revert Error Testing', () => {
           receipts: expect.any(Array<TransactionResultReceipt>),
           panic: false,
           revert: true,
-          reason: '18446744069414584322',
+          reason: '9295429630892703744',
           abiError,
         }
       )
@@ -498,7 +498,7 @@ describe('Revert Error Testing', () => {
           receipts: expect.any(Array<TransactionResultReceipt>),
           panic: false,
           revert: true,
-          reason: '18446744069414584323',
+          reason: '9331458427911667712',
           abiError,
         }
       )

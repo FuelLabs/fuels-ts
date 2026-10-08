@@ -20,7 +20,9 @@ const connectors: FuelConnector[] = defaultConnectors({
   chainId: providerChainId,
 });
 
-const networks: NetworkConfig[] = [{ url: providerUrl, chainId: providerChainId } as NetworkConfig];
+const networks: NetworkConfig[] = [
+  { url: providerUrl, chainId: providerChainId } as NetworkConfig,
+];
 interface RootLayoutProps {
   children: ReactNode;
 }
@@ -32,9 +34,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
     setIsMounted(true);
   }, []);
 
-  // Only render the component if the page has been mounted.
-  if (!isMounted) return null;
-
   return (
     <html lang="en">
       <head>
@@ -42,20 +41,22 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <title>Fuel dApp</title>
       </head>
       <body>
-        <React.StrictMode>
-          <QueryClientProvider client={queryClient}>
-            <FuelProvider
-              theme="dark"
-              fuelConfig={{ connectors }}
-              uiConfig={{ suggestBridge: false }}
-              networks={networks}
-            >
-              {" "}
-              <ToastContainer theme="dark" />
-              <>{children}</>
-            </FuelProvider>
-          </QueryClientProvider>
-        </React.StrictMode>
+        {isMounted && (
+          <React.StrictMode>
+            <QueryClientProvider client={queryClient}>
+              <FuelProvider
+                theme="dark"
+                fuelConfig={{ connectors }}
+                uiConfig={{ suggestBridge: false }}
+                networks={networks}
+              >
+                {" "}
+                <ToastContainer theme="dark" />
+                <>{children}</>
+              </FuelProvider>
+            </QueryClientProvider>
+          </React.StrictMode>
+        )}
       </body>
     </html>
   );

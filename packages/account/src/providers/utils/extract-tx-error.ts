@@ -145,8 +145,17 @@ function buildAbiErrorMessage(
 
 function findErrorInAbis(statusReason: string, abis: JsonAbi[] = []): JsonAbiErrorCode | undefined {
   for (const abi of abis) {
-    if (abi.errorCodes?.[statusReason]) {
-      return abi.errorCodes[statusReason];
+    let errorCode = statusReason;
+    if (abi.specVersion === '1.2') {
+      const revertCode = BigInt(statusReason);
+      // ABI 1.2 encodes a panic bit, an 8-bit error index and call-site IDs.
+      if ((revertCode & (1n << 63n)) === 0n) {
+        continue;
+      }
+      errorCode = ((revertCode >> 55n) & 0xffn).toString();
+    }
+    if (abi.errorCodes?.[errorCode]) {
+      return abi.errorCodes[errorCode];
     }
   }
   return undefined;

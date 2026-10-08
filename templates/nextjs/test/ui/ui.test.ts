@@ -33,13 +33,12 @@ test('counter contract - increment function call works properly', async ({ page 
   const contractTab = page.getByText('Contract');
   await contractTab.click();
 
-  const initialCounterValue = +page.getByTestId('counter').textContent;
+  const initialCounterValue = Number(await page.getByTestId('counter').inputValue());
 
   const incrementButton = page.getByText('Increment', { exact: true });
   await incrementButton.click();
 
   await page.waitForTimeout(2000);
 
-  const counterValueAfterIncrement = +page.getByTestId('counter').textContent;
-  expect(counterValueAfterIncrement).toEqual(initialCounterValue + 1);
+  await expect(page.getByTestId('counter')).toHaveValue(String(initialCounterValue + 1));
 });

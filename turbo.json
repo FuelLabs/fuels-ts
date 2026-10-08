@@ -25,9 +25,14 @@
       "inputs": [
         "**/test/fixtures/forc-projects/Forc.toml",
         "**/test/fixtures/forc-projects/**/src/*.sw",
-        "**/test/fixtures/forc-projects/**/Forc.toml"
+        "**/test/fixtures/forc-projects/**/Forc.toml",
+        "scripts/generate-state-transition-bytecode.ts",
+        "$TURBO_ROOT$/internal/fuel-core/VERSION"
       ],
-      "outputs": ["**/test/fixtures/forc-projects/**/out/release/**"]
+      "outputs": [
+        "**/test/fixtures/forc-projects/**/out/release/**",
+        "**/test/fixtures/chain-config/*.generated.ts"
+      ]
     },
     "test": {
       "dependsOn": ["^test", "pretest"],

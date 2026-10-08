@@ -76,6 +76,18 @@ export async function setupTestProviderAndWallets({
     port: nodeOptions.port || '0',
   };
 
+  const overriddenGasCosts =
+    nodeOptions.snapshotConfig?.chainConfig?.consensus_parameters?.V2?.gas_costs;
+  const { snapshotConfig } = launchNodeOptions;
+  if (overriddenGasCosts && snapshotConfig) {
+    const gasCosts = snapshotConfig.chainConfig.consensus_parameters.V2.gas_costs;
+    // Gas-cost versions are mutually exclusive enum variants. Deep merging an older
+    // snapshot with the default must not leave both V4 and V7 in the node config.
+    snapshotConfig.chainConfig.consensus_parameters.V2.gas_costs = Object.fromEntries(
+      Object.entries(gasCosts).filter(([version]) => version in overriddenGasCosts)
+    ) as typeof gasCosts;
+  }
+
   let killNode: () => void;
   let url: string;
   if (launchNodeServerPort) {
