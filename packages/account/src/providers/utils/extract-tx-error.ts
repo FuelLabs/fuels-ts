@@ -1,4 +1,5 @@
 import type { JsonAbi, JsonAbiErrorCode } from '@fuel-ts/abi-coder';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 import { ReceiptType } from '@fuel-ts/transactions';
@@ -143,22 +144,21 @@ function buildAbiErrorMessage(
   });
 }
 
-function findErrorInAbis(statusReason: string, abis: JsonAbi[] = []): JsonAbiErrorCode | undefined {
-  for (const abi of abis) {
-    let errorCode = statusReason;
-    if (abi.specVersion === '1.2') {
-      const revertCode = BigInt(statusReason);
-      // ABI 1.2 encodes a panic bit, an 8-bit error index and call-site IDs.
-      if ((revertCode & (1n << 63n)) === 0n) {
-        continue;
-      }
-      errorCode = ((revertCode >> 55n) & 0xffn).toString();
-    }
-    if (abi.errorCodes?.[errorCode]) {
-      return abi.errorCodes[errorCode];
-    }
+function findErrorInAbi(statusReason: string, abi?: JsonAbi): JsonAbiErrorCode | undefined {
+  if (!abi) {
+    return undefined;
   }
-  return undefined;
+
+  let errorCode = statusReason;
+  if (abi.specVersion === '1.2') {
+    const revertCode = BigInt(statusReason);
+    // ABI 1.2 encodes a panic bit, an 8-bit error index and call-site IDs.
+    if ((revertCode & (1n << 63n)) === 0n) {
+      return undefined;
+    }
+    errorCode = ((revertCode >> 55n) & 0xffn).toString();
+  }
+  return abi.errorCodes?.[errorCode];
 }
 
 /**
@@ -168,7 +168,7 @@ function findErrorInAbis(statusReason: string, abis: JsonAbi[] = []): JsonAbiErr
  * @returns The error message.
  */
 export const assembleRevertError = (
-  _receipts: Array<TransactionResultReceipt>,
+  receipts: Array<TransactionResultReceipt>,
   logs: Array<unknown>,
   metadata: Record<string, unknown>,
   statusReason: string,
@@ -184,9 +184,25 @@ export const assembleRevertError = (
 
   let abiError: JsonAbiErrorCode | undefined;
 
-  if (abis) {
-    const abisArr = [abis.main, ...Object.values(abis.otherContractsAbis)];
-    abiError = findErrorInAbis(reason, abisArr);
+  const revertReceipt = receipts.find((receipt) => receipt.type === ReceiptType.Revert);
+  if (abis && revertReceipt?.type === ReceiptType.Revert) {
+    let abi: JsonAbi | undefined;
+    if (revertReceipt.id === ZeroBytes32) {
+      if (abis.main.programType === 'script') {
+        abi = abis.main;
+      }
+    } else if (abis.main.programType === 'contract') {
+      const firstCall = receipts.find(
+        (receipt) => receipt.type === ReceiptType.Call && receipt.id === ZeroBytes32
+      );
+      const mainContractId =
+        abis.mainContractId ?? (firstCall?.type === ReceiptType.Call ? firstCall.to : undefined);
+      abi =
+        revertReceipt.id === mainContractId ? abis.main : abis.otherContractsAbis[revertReceipt.id];
+    } else {
+      abi = abis.otherContractsAbis[revertReceipt.id];
+    }
+    abiError = findErrorInAbi(reason, abi);
   }
 
   if (abiError) {
