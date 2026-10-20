@@ -11,6 +11,7 @@ import { Signer } from '../signer';
 import { WalletUnlocked } from '../wallet';
 
 import * as launchNodeMod from './launchNode';
+import legacyGasCostsV4 from './legacy-gas-costs-v4.json';
 import { setupTestProviderAndWallets } from './setup-test-provider-and-wallets';
 import { TestAssetId } from './test-asset-id';
 import type { ChainMessage } from './test-message';
@@ -101,6 +102,77 @@ describe('setupTestProviderAndWallets', () => {
     expect(sutCoin.assetId).toEqual(coin.asset_id);
     expect(sutCoin.txCreatedIdx.toNumber()).toEqual(coin.tx_pointer_tx_idx);
     expect(sutCoin.blockCreated.toNumber()).toEqual(coin.tx_pointer_block_height);
+  });
+
+  it('preserves unmodified defaults in partial V4 gas-cost overrides', async () => {
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        snapshotConfig: {
+          chainConfig: { consensus_parameters: { V2: { gas_costs: { V4: { ecr1: 123 } } } } },
+        },
+      },
+    });
+    const { gasCosts } = (await launched.provider.getChain()).consensusParameters;
+    expect(gasCosts.ecr1).toBe('123');
+    expect(gasCosts.newStoragePerByte).toBe('63');
+    expect(gasCosts.contractRoot).toEqual({ type: 'LightOperation', base: '24', unitsPerGas: '3' });
+  });
+
+  it.each([
+    {
+      version: 'V4',
+      gasCosts: { V4: { ecr1: 123, s256: { LightOperation: { base: 40 } } } },
+      unitsPerGas: '5',
+    },
+    {
+      version: 'V7',
+      gasCosts: { V7: { ecr1: 123, s256: { LightOperation: { base: 40 } } } },
+      unitsPerGas: '3',
+    },
+  ])('merges nested partial $version gas-cost overrides', async ({ gasCosts, unitsPerGas }) => {
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        snapshotConfig: {
+          chainConfig: { consensus_parameters: { V2: { gas_costs: gasCosts } } },
+        },
+      },
+    });
+    const costs = (await launched.provider.getChain()).consensusParameters.gasCosts;
+    expect(costs.ecr1).toBe('123');
+    expect(costs.newStoragePerByte).toBe('63');
+    expect(costs.s256).toEqual({ type: 'LightOperation', base: '40', unitsPerGas });
+  });
+
+  it('supports complete V4 gas-cost overrides', async () => {
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        snapshotConfig: {
+          chainConfig: {
+            consensus_parameters: {
+              V2: {
+                gas_costs: { V4: { ...legacyGasCostsV4, ecr1: 123, new_storage_per_byte: 81 } },
+              },
+            },
+          },
+        },
+      },
+    });
+    const { gasCosts } = (await launched.provider.getChain()).consensusParameters;
+    expect(gasCosts.ecr1).toBe('123');
+    expect(gasCosts.newStoragePerByte).toBe('81');
+  });
+
+  it('retains the Core binary gas-cost defaults for an empty override', async () => {
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        snapshotConfig: {
+          chainConfig: { consensus_parameters: { V2: { gas_costs: {} } } },
+        },
+      },
+    });
+    const { gasCosts } = (await launched.provider.getChain()).consensusParameters;
+    expect(gasCosts.ecr1).toBe('31208');
+    expect(gasCosts.newStoragePerByte).toBe('63');
   });
 
   it('default: two wallets, three assets (BaseAssetId, TestAssetId.A, TestAssetId.B), one coin, 10_000_000_000_ amount', async () => {

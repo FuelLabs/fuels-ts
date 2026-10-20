@@ -3,7 +3,9 @@ import { safeExec, expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { defaultSnapshotConfigs, sleep } from '@fuel-ts/utils';
 import { waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
 import * as childProcessMod from 'child_process';
+import { EventEmitter } from 'events';
 import * as fsMod from 'fs';
+import { PassThrough } from 'stream';
 
 import { Provider } from '../providers';
 
@@ -40,6 +42,107 @@ describe('launchNode', () => {
 
     cleanup();
   });
+
+  test(
+    'waits for GraphQL to serve requests after binding, including connection resets',
+    { timeout: 20000 },
+    async () => {
+      const realFetch = global.fetch;
+      let releaseHealth: () => void = () => undefined;
+      const healthGate = new Promise<void>((resolve) => {
+        releaseHealth = resolve;
+      });
+      const fetchSpy = vi
+        .spyOn(global, 'fetch')
+        .mockRejectedValueOnce(new TypeError('fetch failed'))
+        .mockImplementationOnce(async (...args) => {
+          await healthGate;
+          return realFetch(...args);
+        });
+      let settled = false;
+      const launchedPromise = launchNode({ loggingEnabled: false }).then((launched) => {
+        settled = true;
+        return launched;
+      });
+
+      try {
+        await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(2), {
+          timeout: 15000,
+          interval: 100,
+        });
+        expect(settled).toBe(false);
+        releaseHealth();
+        const { url } = await launchedPromise;
+        expect(await new Provider(url).getChain()).toBeTruthy();
+      } finally {
+        releaseHealth();
+        (await launchedPromise).cleanup();
+        fetchSpy.mockRestore();
+      }
+    }
+  );
+
+  it.each(['stderr', 'exit', 'signal', 'error'])(
+    'cleans up and stops readiness polling after a child %s failure',
+    async (failure) => {
+      const child = Object.assign(new EventEmitter(), {
+        stderr: new PassThrough(),
+        pid: 12345,
+        exitCode: null as number | null,
+        signalCode: null as NodeJS.Signals | null,
+      });
+      const spawnSpy = vi
+        .spyOn(childProcessMod, 'spawn')
+        .mockReturnValueOnce(child as unknown as ReturnType<typeof childProcessMod.spawn>);
+      const killSpy = vi.spyOn(process, 'kill').mockReturnValue(true);
+      const mkdirSpy = vi.spyOn(fsMod, 'mkdirSync');
+      let releaseHealth: (response: Response) => void = () => undefined;
+      const fetchSpy = vi.spyOn(global, 'fetch').mockImplementationOnce(
+        () =>
+          new Promise<Response>((resolve) => {
+            releaseHealth = resolve;
+          })
+      );
+      const launch = safeExec(() => launchNode({ loggingEnabled: false }));
+
+      try {
+        await vi.waitFor(() => expect(spawnSpy).toHaveBeenCalled());
+        child.stderr.write('Binding GraphQL provider to 127.0.0.1:12345\n');
+        await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledOnce());
+        const signal = fetchSpy.mock.calls[0][1]?.signal;
+
+        if (failure === 'stderr') {
+          child.stderr.write('ERROR readiness failed\n');
+        } else if (failure === 'error') {
+          child.emit('error', new Error('child failed'));
+        } else {
+          child.exitCode = failure === 'exit' ? 7 : null;
+          child.signalCode = failure === 'signal' ? 'SIGTERM' : null;
+          child.emit('exit', child.exitCode, child.signalCode);
+        }
+
+        const { error } = await launch;
+        expect(error).toBeDefined();
+        expect(signal?.aborted).toBe(true);
+        expect(killSpy).toHaveBeenCalledWith(-child.pid);
+        expect(fsMod.existsSync(mkdirSpy.mock.calls[0][0])).toBe(false);
+        if (failure === 'exit' || failure === 'signal') {
+          expect(error?.message).toContain(failure === 'exit' ? '7' : 'SIGTERM');
+        }
+
+        // Even a fetch implementation that ignores cancellation must not revive the launch.
+        releaseHealth(new Response(JSON.stringify({ data: { health: true } })));
+        await sleep(150);
+        expect(fetchSpy).toHaveBeenCalledOnce();
+      } finally {
+        releaseHealth(new Response(JSON.stringify({ data: { health: true } })));
+        spawnSpy.mockRestore();
+        killSpy.mockRestore();
+        mkdirSpy.mockRestore();
+        fetchSpy.mockRestore();
+      }
+    }
+  );
 
   it('cleanup kills the started node', async () => {
     const { cleanup, url } = await launchNode({ loggingEnabled: false });

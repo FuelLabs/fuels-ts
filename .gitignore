@@ -150,6 +150,7 @@ Forc.lock
 
 # Ignore typegen test files
 **/test/typegen
+packages/fuel-gauge/test/fixtures/chain-config/state_transition_bytecode.generated.ts
 
 # Ignore [local] history directory (VsCode extension)
 .history

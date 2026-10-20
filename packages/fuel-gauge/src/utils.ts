@@ -1,5 +1,5 @@
 import { calcRoot, constructTree, getProof } from '@fuel-ts/merkle';
-import { arrayify, chunkAndPadBytes, hexlify } from '@fuel-ts/utils';
+import { arrayify, hexlify } from '@fuel-ts/utils';
 import type { DeployContractConfig, LaunchTestNodeOptions } from 'fuels/test-utils';
 import { launchTestNode } from 'fuels/test-utils';
 
@@ -23,10 +23,12 @@ export async function launchTestContract<T extends DeployContractConfig>(
 
 export function subsectionFromBytecode() {
   const subsectionSize = 90 * 1024;
-  const subsectionsChunk = chunkAndPadBytes(
-    arrayify(STATE_TRANSITION_BYTECODE),
-    subsectionSize
-  ).map(hexlify);
+  const bytecode = arrayify(STATE_TRANSITION_BYTECODE);
+  const subsectionsChunk: string[] = [];
+  // WASM must retain its exact length; padding the final subsection invalidates it.
+  for (let offset = 0; offset < bytecode.length; offset += subsectionSize) {
+    subsectionsChunk.push(hexlify(bytecode.slice(offset, offset + subsectionSize)));
+  }
 
   const merkleTree = constructTree(subsectionsChunk);
   const merkleRoot = calcRoot(subsectionsChunk);

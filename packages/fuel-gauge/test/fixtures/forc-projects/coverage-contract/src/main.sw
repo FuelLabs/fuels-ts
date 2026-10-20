@@ -137,20 +137,6 @@ pub fn vec_from(vals: [u32; 3]) -> Vec<u32> {
     vec
 }
 
-impl PartialEq for [Vec<u32>; 2] {
-    fn eq(self, other: Self) -> bool {
-        let mut i = 0;
-        while i < 2 {
-            if self[i] != other[i] {
-                return false;
-            }
-            i += 1;
-        }
-        true
-    }
-}
-impl Eq for [Vec<u32>; 2] {}
-
 impl CoverageContract for Contract {
     fn produce_logs_variables() -> () {
         let f: u64 = 64;

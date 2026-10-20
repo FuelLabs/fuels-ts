@@ -1,7 +1,6 @@
 // #region main
 import { FuelAsm } from 'fuels';
 
-// @ts-expect-error method reference missing in DTS
 await FuelAsm.initWasm();
 
 const programBytes = Uint8Array.from([

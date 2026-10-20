@@ -10,7 +10,7 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "engines": {
-    "node": "^20.0.0 || ^22.0.0 || ^24.0.0"
+    "node": "^20.18.0 || ^22.0.0 || ^24.0.0"
   },
   "exports": {
     ".": {
@@ -66,7 +66,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@fuels/vm-asm": "0.62.0",
+    "@fuels/vm-asm": "0.66.4",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/abi-typegen": "workspace:*",
     "@fuel-ts/account": "workspace:*",

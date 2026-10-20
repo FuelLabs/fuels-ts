@@ -2,6 +2,9 @@
   "name": "template-nextjs",
   "version": "0.1.3",
   "private": true,
+  "engines": {
+    "node": "^20.18.0 || ^22.0.0 || ^24.0.0"
+  },
   "scripts": {
     "xprebuild": "fuels build",
     "fuels:dev": "fuels dev",
@@ -15,8 +18,8 @@
     "test:ui": "sh ./test/ui/test-ui.sh"
   },
   "dependencies": {
-    "@fuels/connectors": "0.39.2",
-    "@fuels/react": "0.39.2",
+    "@fuels/connectors": "0.45.0",
+    "@fuels/react": "0.45.0",
     "@tanstack/react-query": "5.66.9",
     "@wagmi/connectors": "5.1.14",
     "clsx": "2.1.1",

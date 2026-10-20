@@ -28,6 +28,9 @@ export function getAbisFromAllCalls(
 
     if (i === 0) {
       acc.main = program.interface.jsonAbi;
+      if ('id' in program) {
+        acc.mainContractId = (program as AbstractContract).id.toB256();
+      }
       acc.otherContractsAbis = {};
     } else {
       acc.otherContractsAbis[(<AbstractContract>program).id.toB256()] = program.interface.jsonAbi;

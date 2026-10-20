@@ -1,8 +1,9 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
-import { Account } from '@fuel-ts/account';
+import { Account, Provider } from '@fuel-ts/account';
 import { setupTestProviderAndWallets } from '@fuel-ts/account/test-utils';
 
 import Contract from './contract';
+import { getAbisFromAllCalls } from './utils';
 
 const CONTRACT_ID = '0x0101010101010101010101010101010101010101010101010101010101010101';
 const ABI: JsonAbi = {
@@ -39,6 +40,19 @@ const ABI: JsonAbi = {
  * @group browser
  */
 describe('Contract', () => {
+  it('preserves the primary contract identity alongside external ABIs', () => {
+    const provider = new Provider('http://127.0.0.1:4000/v1/graphql');
+    const main = new Contract(CONTRACT_ID, ABI, provider);
+    const external = new Contract(`0x${'02'.repeat(32)}`, ABI, provider);
+    const abis = getAbisFromAllCalls([main.functions.foo(1), external.functions.foo(2)]);
+
+    expect(abis).toMatchObject({
+      mainContractId: main.id.toB256(),
+      main: main.interface.jsonAbi,
+      otherContractsAbis: { [external.id.toB256()]: external.interface.jsonAbi },
+    });
+  });
+
   test('Create contract instance with provider', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
