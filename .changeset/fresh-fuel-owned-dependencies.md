@@ -13,7 +13,7 @@ Update Fuel-owned dependencies to VM ASM 0.66.4, Fuel Core 0.48.3, Forc 0.72.1, 
 
 Wait for a successful GraphQL health query before returning a launched local test node, avoiding connection resets while Fuel Core services are still starting.
 
-Cancel readiness polling and clean up the child process and temporary snapshot when launching a local node fails. Include the exit code and signal when the node exits before becoming ready. Decode packed panic indices for ABI versions 1.2 and later while retaining legacy decoding for earlier ABIs.
+Cancel readiness polling and clean up the child process and temporary snapshot when launching a local node fails. Include the exit code and signal when the node exits before becoming ready. Decode packed panic indices for ABI versions 1.2 and later while retaining legacy decoding for earlier ABIs and ABIs without version metadata.
 
 Raise the SDK's Node.js 20 minimum to 20.18, consistently across published packages, create-fuels and both generated templates, matching the wallet connector dependencies used by the templates. Node.js 22 and 24 remain supported.
 

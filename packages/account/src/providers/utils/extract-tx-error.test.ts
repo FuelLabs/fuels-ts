@@ -129,6 +129,34 @@ describe('extractTxError', () => {
     expect(error.metadata.abiError).toEqual(main.errorCodes?.['0']);
   });
 
+  it.each([true, false])(
+    'handles ABIs without specVersion, with a matching legacy panic entry: %s',
+    (hasEntry) => {
+      const main = {
+        ...createAbi('legacy panic', hasEntry ? panicCode : '0'),
+        programType: 'script' as const,
+      };
+      Reflect.deleteProperty(main, 'specVersion');
+
+      const error = assembleRevertError(
+        [revertReceipt(ZeroBytes32)],
+        [],
+        {},
+        `Revert(${panicCode})`,
+        { main, otherContractsAbis: {} }
+      );
+
+      expect(error.code).toBe('script-reverted');
+      if (hasEntry) {
+        expect(error.metadata.abiError).toEqual(main.errorCodes?.[panicCode]);
+        expect(error.message).toContain('legacy panic');
+      } else {
+        expect(error.metadata.abiError).toBeUndefined();
+        expect(error.message).toBe(`The transaction reverted with reason: ${panicCode}.`);
+      }
+    }
+  );
+
   it('distinguishes a script panic from an external contract with the same index', () => {
     const main = { ...createAbi('script panic'), programType: 'script' as const };
     const external = createAbi('contract B panic');
