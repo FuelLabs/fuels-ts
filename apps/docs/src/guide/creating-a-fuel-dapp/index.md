@@ -15,6 +15,8 @@ You can also check it live, deployed to the Testnet:
 
 ## Initializing the project
 
+Use Node.js 20.18 or later in the Node 20, 22 or 24 release lines. The CLI and generated templates declare this requirement because their wallet connector dependencies require it.
+
 The first step is to run the command:
 
 ::: code-group

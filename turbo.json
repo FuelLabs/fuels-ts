@@ -1,6 +1,9 @@
 {
   "$schema": "https://turborepo.org/schema.json",
-  "globalDependencies": ["internal/fuel-core/VERSION"],
+  "globalDependencies": [
+    "internal/fuel-core/VERSION",
+    "internal/fuel-core/fuel-core-binaries/fuel-core-wasm-executor.wasm"
+  ],
   "tasks": {
     "type:check": {
       "outputLogs": "errors-only"

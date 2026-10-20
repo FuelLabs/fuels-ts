@@ -258,12 +258,15 @@ export const launchNode = async ({
     const childState = {
       isDead: false,
     };
+    const readinessAbort = new AbortController();
+    let launchSettled = false;
 
     const cleanup = () => {
       if (childState.isDead) {
         return;
       }
       childState.isDead = true;
+      readinessAbort.abort();
 
       removeChildListeners();
 
@@ -292,6 +295,15 @@ export const launchNode = async ({
       removeTempDir();
     };
 
+    const fail = (error: Error) => {
+      if (launchSettled) {
+        return;
+      }
+      launchSettled = true;
+      cleanup();
+      reject(error);
+    };
+
     const waitForGraphQL = async (url: string) => {
       const deadline = Date.now() + 30_000;
       while (
@@ -305,7 +317,10 @@ export const launchNode = async ({
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ query: '{ health }' }),
-            signal: AbortSignal.timeout(Math.min(1000, deadline - Date.now())),
+            signal: AbortSignal.any([
+              readinessAbort.signal,
+              AbortSignal.timeout(Math.max(1, Math.min(1000, deadline - Date.now()))),
+            ]),
           });
           const result = (await response.json()) as { data?: { health?: boolean } };
           if (response.ok && result.data?.health === true) {
@@ -318,7 +333,7 @@ export const launchNode = async ({
       }
       throw new FuelError(
         FuelError.CODES.NODE_LAUNCH_FAILED,
-        'Fuel Core GraphQL API did not become ready'
+        `Fuel Core GraphQL API did not become ready (exit code: ${child.exitCode}, signal: ${child.signalCode})`
       );
     };
 
@@ -327,6 +342,12 @@ export const launchNode = async ({
     // Look for a specific graphql start point in the output.
     child.stderr.on('data', (chunk: string | Buffer) => {
       const text = typeof chunk === 'string' ? chunk : chunk.toString(); // chunk is sometimes Buffer and sometimes string...
+      if (/error/i.test(text)) {
+        // eslint-disable-next-line no-console
+        console.log(text);
+        fail(new FuelError(FuelError.CODES.NODE_LAUNCH_FAILED, text));
+        return;
+      }
       // Look for the graphql service start.
       if (text.indexOf(graphQLStartSubstring) !== -1 && !waitingForGraphQL) {
         waitingForGraphQL = true;
@@ -338,7 +359,11 @@ export const launchNode = async ({
 
         const url = `http://${realIp}:${realPort}/v1/graphql`;
         waitForGraphQL(url)
-          .then(() =>
+          .then(() => {
+            if (launchSettled || childState.isDead) {
+              return;
+            }
+            launchSettled = true;
             resolve({
               cleanup,
               ip: realIp,
@@ -346,17 +371,9 @@ export const launchNode = async ({
               url,
               snapshotDir: snapshotDirToUse as string,
               pid: child.pid as number,
-            })
-          )
-          .catch((error) => {
-            cleanup();
-            reject(error);
-          });
-      }
-      if (/error/i.test(text)) {
-        // eslint-disable-next-line no-console
-        console.log(text);
-        reject(new FuelError(FuelError.CODES.NODE_LAUNCH_FAILED, text));
+            });
+          })
+          .catch(fail);
       }
     });
 
@@ -377,7 +394,13 @@ export const launchNode = async ({
     process.on('beforeExit', cleanup);
     process.on('uncaughtException', cleanup);
 
-    child.on('exit', (code: number | null, _signal: NodeJS.Signals | null) => {
+    child.on('exit', (code: number | null, signal: NodeJS.Signals | null) => {
+      fail(
+        new FuelError(
+          FuelError.CODES.NODE_LAUNCH_FAILED,
+          `Fuel Core exited before GraphQL became ready (exit code: ${code}, signal: ${signal})`
+        )
+      );
       removeChildListeners();
       removeTempDir();
       if (killProcessOnExit) {
@@ -385,8 +408,6 @@ export const launchNode = async ({
       }
     });
     child.on('error', (err: Error) => {
-      removeChildListeners();
-      removeTempDir();
-      reject(err);
+      fail(err);
     });
   });

@@ -54,6 +54,8 @@ describe('extractTxError', () => {
     ['1.1', '18446744069414584320', '18446744069414584320'],
     ['1.2', '0', '9223372036854775808'],
     ['1.2', '42', '10736581511651276803'],
+    ['1.3', '42', '10736581511651276803'],
+    ['1.10', '42', '10736581511651276803'],
   ])('decodes ABI %s panic metadata, including nested call sites', (specVersion, index, code) => {
     const abiError = {
       pos: { pkg: 'test', file: 'main.sw', line: 1, column: 1 },
@@ -86,6 +88,8 @@ describe('extractTxError', () => {
     ['1.1', '18446744069414584320', '18446744069414584320'],
     ['1.2', '0', panicCode],
     ['1.2', '42', '10736581511651276803'],
+    ['1.3', '42', '10736581511651276803'],
+    ['1.10', '42', '10736581511651276803'],
   ])('scopes ABI %s panic indices to the reverting contract', (specVersion, index, code) => {
     const main = createAbi('contract A panic', index, specVersion);
     const external = createAbi('contract B panic', index, specVersion);

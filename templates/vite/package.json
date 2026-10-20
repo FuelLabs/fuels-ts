@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.0.1",
   "type": "module",
+  "engines": {
+    "node": "^20.18.0 || ^22.0.0 || ^24.0.0"
+  },
   "scripts": {
     "xprebuild": "fuels build",
     "dev": "vite",

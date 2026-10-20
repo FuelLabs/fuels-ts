@@ -150,9 +150,10 @@ function findErrorInAbi(statusReason: string, abi?: JsonAbi): JsonAbiErrorCode |
   }
 
   let errorCode = statusReason;
-  if (abi.specVersion === '1.2') {
+  const [major, minor] = abi.specVersion.split('.').map(Number);
+  if (major > 1 || (major === 1 && minor >= 2)) {
     const revertCode = BigInt(statusReason);
-    // ABI 1.2 encodes a panic bit, an 8-bit error index and call-site IDs.
+    // Since ABI 1.2, panic codes encode a panic bit, an 8-bit index and call-site IDs.
     if ((revertCode & (1n << 63n)) === 0n) {
       return undefined;
     }
