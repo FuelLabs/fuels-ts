@@ -140,8 +140,7 @@ export const buildFunctionResult = async <T>(
   const functionScopes = Array.isArray(funcScope) ? funcScope : [funcScope];
   const mainCallConfig = functionScopes[0]?.getCallConfig();
 
-  const { main, otherContractsAbis } = getAbisFromAllCalls(functionScopes);
-  const abis = { main, otherContractsAbis };
+  const abis = getAbisFromAllCalls(functionScopes);
 
   const { logs, groupedLogs } = getAllResultLogs({ receipts, mainCallConfig, functionScopes });
   const value = extractInvocationResult<T>(

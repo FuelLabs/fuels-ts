@@ -1,6 +1,5 @@
 import { ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import { sleep } from '@fuel-ts/utils';
 
 import { Provider } from '../src/providers';
 import { type LaunchNodeOptions, setupTestProviderAndWallets } from '../src/test-utils';
@@ -10,7 +9,7 @@ import { getFetchOperationsByName } from './utils/getFetchOperation';
 const setupTest = async (
   opts: Partial<{ blockHeightTolerance: number; poaIntervalPeriod: string }> = {}
 ) => {
-  const { blockHeightTolerance = 10, poaIntervalPeriod = '50ms' } = opts;
+  const { blockHeightTolerance = 10, poaIntervalPeriod = '1h' } = opts;
   const defaultNodeOptions: LaunchNodeOptions = {
     args: [
       '--poa-instant',
@@ -156,7 +155,7 @@ describe('optimistic concurrency handling via block height', () => {
   });
 
   it(`waits when current block height is higher than actual [within node's tolerance]`, async () => {
-    using launched = await setupTest({ blockHeightTolerance: 10 });
+    using launched = await setupTest({ blockHeightTolerance: 10, poaIntervalPeriod: '50ms' });
     const { provider, wallet, baseAssetId } = launched;
 
     // Perform a write operation to ensure the block height is updated
@@ -237,17 +236,14 @@ describe('optimistic concurrency handling via block height', () => {
   }, 20_000);
 
   it('Current block height is tied to node url', async () => {
-    using launched1 = await setupTest({ poaIntervalPeriod: '50ms' });
-    using launched2 = await setupTest({ poaIntervalPeriod: '100ms' });
+    using launched1 = await setupTest();
+    using launched2 = await setupTest();
 
     const { provider: provider1, wallet: wallet1, baseAssetId } = launched1;
     const { provider: provider2, wallet: wallet2 } = launched2;
 
-    // allow for block production
-    await sleep(250);
-
     // Make a write operation to ensure the block height is updated
-    await provider1.operations.produceBlocks({ blocksToProduce: '1' });
+    await provider1.operations.produceBlocks({ blocksToProduce: '2' });
     await provider2.operations.produceBlocks({ blocksToProduce: '1' });
 
     const { fetch } = mockAll();

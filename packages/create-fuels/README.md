@@ -2,6 +2,8 @@
 
 A scaffolding CLI tool for creating new full-stack Fuel projects.
 
+Requires Node.js 20.18 or later in the Node 20, 22 or 24 release lines, including for generated projects.
+
 ## Usage
 
 ```bash

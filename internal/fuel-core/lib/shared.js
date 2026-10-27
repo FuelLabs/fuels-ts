@@ -61,18 +61,36 @@ export const buildFromGitBranch = (branchName) => {
   const fuelCoreRepoDir = join(__dirname, '..', 'fuel-core-repo');
   const fuelCoreRepoReleaseDir = join(fuelCoreRepoDir, 'target', 'release');
   const stdioOpts = { stdio: 'inherit' };
+  const run = (command, args, options = stdioOpts) => {
+    const result = spawnSync(command, args, options);
+    if (result.error) {
+      throw result.error;
+    }
+    if (result.status !== 0) {
+      throw new Error(`Fuel Core build command failed: ${command} ${args.join(' ')}`);
+    }
+  };
 
   if (existsSync(fuelCoreRepoDir)) {
-    spawnSync('git', ['checkout', branchName], { cwd: fuelCoreRepoDir, ...stdioOpts });
-    spawnSync('git', ['pull'], { cwd: fuelCoreRepoDir, ...stdioOpts });
-    spawnSync('cargo', ['build', '--release'], { cwd: fuelCoreRepoDir, ...stdioOpts });
+    run('git', ['checkout', branchName], { cwd: fuelCoreRepoDir, ...stdioOpts });
+    run('git', ['pull'], { cwd: fuelCoreRepoDir, ...stdioOpts });
   } else {
-    spawnSync(
-      'git',
-      ['clone', '--branch', branchName, fuelCoreRepoUrl, fuelCoreRepoDir],
-      stdioOpts
+    run('git', ['clone', '--branch', branchName, fuelCoreRepoUrl, fuelCoreRepoDir], stdioOpts);
+  }
+  run('cargo', ['build', '--release'], { cwd: fuelCoreRepoDir, ...stdioOpts });
+
+  // This is the same artifact packaged by Fuel Core's release workflow.
+  const wasmPath = join(
+    fuelCoreRepoReleaseDir,
+    'fuel-core-upgradable-executor-cache',
+    'wasm32-unknown-unknown',
+    'release',
+    'fuel-core-wasm-executor.wasm'
+  );
+  if (!existsSync(wasmPath)) {
+    throw new Error(
+      `Fuel Core build did not produce executor WASM at ${wasmPath}. Ensure the branch enables wasm-executor and the wasm32-unknown-unknown Rust target is installed.`
     );
-    spawnSync('cargo', ['build', '--release'], { cwd: fuelCoreRepoDir, ...stdioOpts });
   }
 
   const [from, to] = [fuelCoreRepoReleaseDir, fuelCoreBinDirPath];
@@ -81,5 +99,6 @@ export const buildFromGitBranch = (branchName) => {
   mkdirSync(to, { recursive: true });
 
   cpSync(join(from, 'fuel-core'), join(to, 'fuel-core'));
+  cpSync(wasmPath, join(to, 'fuel-core-wasm-executor.wasm'));
   cpSync(versionFilePath, join(to, 'VERSION'));
 };

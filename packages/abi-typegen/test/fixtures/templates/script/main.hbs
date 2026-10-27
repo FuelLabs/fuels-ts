@@ -33,7 +33,7 @@ export type MyScriptOutput = boolean;
 
 const abi = {
   "programType": "script",
-  "specVersion": "1",
+  "specVersion": "1.2",
   "encodingVersion": "1",
   "concreteTypes": [
     {
@@ -264,7 +264,8 @@ const abi = {
   "loggedTypes": [],
   "messagesTypes": [],
   "configurables": [],
-  "errorCodes": {}
+  "errorCodes": {},
+  "panickingCalls": {}
 };
 
 const bytecode = decompressBytecode('0x-bytecode-here');

@@ -4,9 +4,7 @@ This guide builds on the [Creating a Fuel dApp](./index.md) guide. Once you've g
 
 ![End result of this guide](../../public/working-with-predicates-end-result.png)
 
-You can also check it live, deployed to the Testnet:
-
-- [https://create-fuels-template.vercel.app/](https://create-fuels-template.vercel.app/)
+You can also explore the [Vite template source](https://github.com/FuelLabs/fuels-ts/tree/master/templates/vite).
 
 ## Adding a Configurable pin
 

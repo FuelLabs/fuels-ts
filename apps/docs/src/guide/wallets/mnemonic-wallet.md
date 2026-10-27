@@ -2,7 +2,7 @@
 
 A mnemonic phrase is a cryptographically-generated sequence of words that's used to derive a private key. For instance: `"oblige salon price punch saddle immune slogan rare snap desert retire surprise";` would generate the address `0xdf9d0e6c6c5f5da6e82e5e1a77974af6642bdb450a10c43f0c6910a212600185`.
 
-In addition to that, we also support [Hierarchical Deterministic Wallets](https://www.ledger.com/academy/crypto/what-are-hierarchical-deterministic-hd-wallets) and [derivation paths](https://learnmeabitcoin.com/technical/derivation-paths), allowing multiple wallets to be derived from a single root mnemonic. You may recognize a derivation path like:
+In addition to that, we also support [Hierarchical Deterministic Wallets](https://www.ledger.com/academy/crypto/what-are-hierarchical-deterministic-hd-wallets) and [derivation paths](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#the-key-tree), allowing multiple wallets to be derived from a single root mnemonic. You may recognize a derivation path like:
 
 ```text
 "m/44'/1179993420'/0'/0/0"

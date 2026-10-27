@@ -5,7 +5,7 @@
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "private": true,
   "engines": {
-    "node": "^20.0.0 || ^22.0.0 || ^24.0.0",
+    "node": "^20.18.0 || ^22.0.0 || ^24.0.0",
     "pnpm": "^9.4.0"
   },
   "packageManager": "pnpm@9.4.0",
@@ -15,7 +15,7 @@
     "build:packages": "turbo run build --filter=!docs --filter=!template-*",
     "ci:test": "./scripts/tests-ci.sh",
     "pretest": "turbo run pretest",
-    "depcheck": "knip --include-libs --dependencies --tags=-knipignore",
+    "depcheck": "tsx ./packages/fuel-gauge/scripts/generate-state-transition-bytecode.ts && knip --include-libs --dependencies --tags=-knipignore",
     "knip:fix": "knip --fix",
     "depsync:lint": "syncpack list-mismatches",
     "depsync:fix": "syncpack fix-mismatches",

@@ -2,7 +2,7 @@
 name = "original-example"
 version = "0.1.0"
 edition = "2024"
-rust-version = "1.85.0"
+rust-version = "1.93.0"
 
 [dependencies]
-fuel-asm = "0.60.2"
+fuel-asm = "0.66.4"

@@ -1,5 +1,5 @@
 import { deferPromise } from '@fuel-ts/account';
-import { spawn } from 'child_process';
+import { spawn, spawnSync } from 'child_process';
 import * as chokidar from 'chokidar';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'path';
@@ -122,6 +122,71 @@ describe('dev', () => {
     });
 
     expect(data.join('')).toContain('forc exited with error code 1');
+  });
+
+  it('finishes onFailure and exits with an error when the node fails to launch', () => {
+    const failureMarker = join(paths.root, 'failure-handled');
+    writeFileSync(
+      paths.fuelsConfigPath,
+      `import { writeFile } from 'fs/promises';
+export default {
+  output: ${JSON.stringify(paths.outputDir)},
+  fuelCorePath: ${JSON.stringify(paths.fuelCorePath)},
+  forcPath: ${JSON.stringify(paths.forcPath)},
+  fuelCorePort: 0,
+  snapshotDir: ${JSON.stringify(join(paths.root, 'missing-snapshot'))},
+  onFailure: async () => {
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    await writeFile(${JSON.stringify(failureMarker)}, 'complete');
+  },
+};`
+    );
+
+    const result = spawnSync(
+      process.execPath,
+      [join(cwd(), 'packages/fuels/fuels.js'), 'dev', '--path', paths.root],
+      { encoding: 'utf8', timeout: 15000 }
+    );
+
+    expect(result.error).toBeUndefined();
+    expect(result.status, result.stdout + result.stderr).toBe(1);
+    expect(readFileSync(failureMarker, 'utf8')).toBe('complete');
+  });
+
+  it('exits on the first Ctrl+C after starting the node', { timeout: 20000 }, async () => {
+    writeFileSync(
+      paths.fuelsConfigPath,
+      `export default {
+      output: ${JSON.stringify(paths.outputDir)},
+      fuelCorePath: ${JSON.stringify(paths.fuelCorePath)},
+      forcPath: ${JSON.stringify(paths.forcPath)},
+      fuelCorePort: 0,
+    };`
+    );
+    const devProcess = spawn(process.execPath, [
+      join(cwd(), 'packages/fuels/fuels.js'),
+      'dev',
+      '--path',
+      paths.root,
+    ]);
+    let output = '';
+    devProcess.stdout.on('data', (chunk) => {
+      output += chunk.toString();
+    });
+    devProcess.stderr.on('data', (chunk) => {
+      output += chunk.toString();
+    });
+    try {
+      await vi.waitFor(() => expect(output).toContain('Dev completed successfully'), {
+        timeout: 10000,
+      });
+      devProcess.kill('SIGINT');
+      await vi.waitFor(() => expect(devProcess.exitCode, output).toBe(130), { timeout: 5000 });
+    } finally {
+      if (devProcess.exitCode === null && devProcess.signalCode === null) {
+        devProcess.kill('SIGKILL');
+      }
+    }
   });
 
   test('`dev` command can work with ephemeral port 0', { timeout: 25000 }, async () => {

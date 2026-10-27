@@ -28,7 +28,6 @@ export const assembleTransferToContractScript = async (
 ) => {
   const scriptData = formatTransferToContractScriptData(transferParams);
 
-  // @ts-expect-error method reference missing in DTS
   await asm.initWasm();
 
   let script = new Uint8Array();

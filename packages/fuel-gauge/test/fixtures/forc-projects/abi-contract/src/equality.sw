@@ -3,13 +3,6 @@ library;
 use std::ops::Eq;
 use ::data_structures::*;
 
-impl PartialEq for [u8; 4] {
-    fn eq(self, other: Self) -> bool {
-        self[0] == other[0] && self[1] == other[1] && self[2] == other[2] && self[3] == other[3]
-    }
-}
-impl Eq for [u8; 4] {}
-
 impl PartialEq for StructSimple {
     fn eq(self, other: Self) -> bool {
         self.a == other.a && self.b == other.b
@@ -17,47 +10,12 @@ impl PartialEq for StructSimple {
 }
 impl Eq for StructSimple {}
 
-impl PartialEq for [StructSimple; 3] {
-    fn eq(self, other: Self) -> bool {
-        self[0] == other[0] && self[1] == other[1] && self[2] == other[2]
-    }
-}
-impl Eq for [StructSimple; 3] {}
-
 impl PartialEq for StructSingleGeneric<u64> {
     fn eq(self, other: Self) -> bool {
         self.a == other.a
     }
 }
 impl Eq for StructSingleGeneric<u64> {}
-
-impl PartialEq for [b256; 3] {
-    fn eq(self, other: Self) -> bool {
-        self[0] == other[0] && self[1] == other[1] && self[2] == other[2]
-    }
-}
-impl Eq for [b256; 3] {}
-
-impl PartialEq for str[1] {
-    fn eq(self, other: Self) -> bool {
-        from_str_array(self) == from_str_array(other)
-    }
-}
-impl Eq for str[1] {}
-
-impl PartialEq for str[3] {
-    fn eq(self, other: Self) -> bool {
-        from_str_array(self) == from_str_array(other)
-    }
-}
-impl Eq for str[3] {}
-
-impl PartialEq for str[5] {
-    fn eq(self, other: Self) -> bool {
-        from_str_array(self) == from_str_array(other)
-    }
-}
-impl Eq for str[5] {}
 
 impl PartialEq for StructDoubleGeneric<StructSingleGeneric<u64>, str[1]> {
     fn eq(self, other: Self) -> bool {
@@ -80,27 +38,6 @@ impl PartialEq for StructDoubleGeneric<u64, bool> {
 }
 impl Eq for StructDoubleGeneric<u64, bool> {}
 
-impl PartialEq for [StructDoubleGeneric<b256, u8>; 3] {
-    fn eq(self, other: Self) -> bool {
-        self[0] == other[0] && self[1] == other[1] && self[2] == other[2]
-    }
-}
-impl Eq for [StructDoubleGeneric<b256, u8>; 3] {}
-
-impl PartialEq for [StructDoubleGeneric<StructSingleGeneric<u64>, str[1]>; 2] {
-    fn eq(self, other: Self) -> bool {
-        self[0] == other[0] && self[1] == other[1]
-    }
-}
-impl Eq for [StructDoubleGeneric<StructSingleGeneric<u64>, str[1]>; 2] {}
-
-impl PartialEq for [StructDoubleGeneric<u64, bool>; 4] {
-    fn eq(self, other: Self) -> bool {
-        self[0] == other[0] && self[1] == other[1] && self[2] == other[2] && self[3] == other[3]
-    }
-}
-impl Eq for [StructDoubleGeneric<u64, bool>; 4] {}
-
 impl PartialEq for StructSingleGeneric<[b256; 3]> {
     fn eq(self, other: Self) -> bool {
         self.a == other.a
@@ -121,13 +58,6 @@ impl PartialEq for StructDoubleGeneric<StructSingleGeneric<[b256; 3]>, u8> {
     }
 }
 impl Eq for StructDoubleGeneric<StructSingleGeneric<[b256; 3]>, u8> {}
-
-impl PartialEq for [Vec<u32>; 1] {
-    fn eq(self, other: Self) -> bool {
-        self[0] == other[0]
-    }
-}
-impl Eq for [Vec<u32>; 1] {}
 
 impl PartialEq for StructSingleGeneric<StructSingleGeneric<u64>> {
     fn eq(self, other: Self) -> bool {
@@ -290,13 +220,6 @@ impl PartialEq for EnumWithStructs {
 }
 impl Eq for EnumWithStructs {}
 
-impl PartialEq for [Option<u8>; 5] {
-    fn eq(self, other: Self) -> bool {
-        self[0] == other[0] && self[1] == other[1] && self[2] == other[2] && self[3] == other[3] && self[4] == other[4]
-    }
-}
-impl Eq for [Option<u8>; 5] {}
-
 impl PartialEq for StructWithMultiOption {
     fn eq(self, other: Self) -> bool {
         self.a == other.a
@@ -324,13 +247,6 @@ impl PartialEq for StructWithVector {
     }
 }
 impl Eq for StructWithVector {}
-
-impl PartialEq for [EnumWithNative; 3] {
-    fn eq(self, other: Self) -> bool {
-        self[0] == other[0] && self[1] == other[1] && self[2] == other[2]
-    }
-}
-impl Eq for [EnumWithNative; 3] {}
 
 impl PartialEq for StructWithEnumArray {
     fn eq(self, other: Self) -> bool {

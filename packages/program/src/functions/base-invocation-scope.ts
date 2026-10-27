@@ -204,7 +204,6 @@ export class BaseInvocationScope<TReturn = any> {
    * Prepares the transaction by updating the script request, required coins, and checking the gas limit.
    */
   protected async prepareTransaction() {
-    // @ts-expect-error Property 'initWasm' does exist on type and is defined
     await asm.initWasm();
 
     // Update request scripts before call

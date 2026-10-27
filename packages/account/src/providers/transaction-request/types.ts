@@ -37,6 +37,8 @@ export type TransactionRequestLike =
 
 export type JsonAbisFromAllCalls = {
   main: JsonAbi;
+  /** The primary contract's ID; omitted when the main program is a script. */
+  mainContractId?: string;
   otherContractsAbis: Record<string, JsonAbi>;
 };
 

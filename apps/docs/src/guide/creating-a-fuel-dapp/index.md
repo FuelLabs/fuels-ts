@@ -9,11 +9,11 @@
 
 ![End result of this guide](../../public/creating-a-fuel-dapp-create-fuels-end-result.png)
 
-You can also check it live, deployed to the Testnet:
-
-- [https://create-fuels-template.vercel.app/](https://create-fuels-template.vercel.app/)
+You can also explore the [Vite template source](https://github.com/FuelLabs/fuels-ts/tree/master/templates/vite).
 
 ## Initializing the project
+
+Use Node.js 20.18 or later in the Node 20, 22 or 24 release lines. The CLI and generated templates declare this requirement because their wallet connector dependencies require it.
 
 The first step is to run the command:
 
