@@ -153,6 +153,135 @@ describe('launchNode', () => {
     await waitUntilUnreachable(url);
   });
 
+  it.each(['exit', 'stderr'])(
+    'rejects a startup %s failure even when cleanup throws EPERM',
+    async (failure) => {
+      const child = Object.assign(new EventEmitter(), {
+        stderr: new PassThrough(),
+        pid: 12345,
+        exitCode: null as number | null,
+        signalCode: null,
+      });
+      const spawnSpy = vi
+        .spyOn(childProcessMod, 'spawn')
+        .mockReturnValueOnce(child as unknown as ReturnType<typeof childProcessMod.spawn>);
+      const killSpy = vi.spyOn(process, 'kill').mockImplementation(() => {
+        throw Object.assign(new Error('kill EPERM'), { code: 'EPERM' });
+      });
+      const mkdirSpy = vi.spyOn(fsMod, 'mkdirSync');
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const listenersBefore = process.listenerCount('uncaughtException');
+      const launch = safeExec(() => launchNode({ loggingEnabled: false }));
+
+      try {
+        await vi.waitFor(() => expect(spawnSpy).toHaveBeenCalled());
+        expect(() => {
+          if (failure === 'exit') {
+            child.exitCode = 7;
+            child.emit('exit', 7, null);
+          } else {
+            child.stderr.write('ERROR invalid snapshot\n');
+          }
+        }).not.toThrow();
+        const { error } = await launch;
+        expect(error?.message).toContain(failure === 'exit' ? 'exit code: 7' : 'invalid snapshot');
+        expect(fsMod.existsSync(mkdirSpy.mock.calls[0][0])).toBe(false);
+        expect(process.listenerCount('uncaughtException')).toBe(listenersBefore);
+      } finally {
+        spawnSpy.mockRestore();
+        killSpy.mockRestore();
+        mkdirSpy.mockRestore();
+        consoleSpy.mockRestore();
+      }
+    }
+  );
+
+  it.each(['stderr', 'exit', 'error'])(
+    'a startup %s failure lets asynchronous error handling finish without exiting the parent',
+    async (failure) => {
+      const child = Object.assign(new EventEmitter(), {
+        stderr: new PassThrough(),
+        pid: 12345,
+        exitCode: null,
+        signalCode: null,
+      });
+      const spawnSpy = vi
+        .spyOn(childProcessMod, 'spawn')
+        .mockReturnValueOnce(child as unknown as ReturnType<typeof childProcessMod.spawn>);
+      const killSpy = vi.spyOn(process, 'kill').mockImplementation(() => {
+        setTimeout(() => child.emit('exit', null, 'SIGTERM'), 0);
+        return true;
+      });
+      const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => undefined as never);
+      let failureHandled = false;
+      const launch = launchNode({ loggingEnabled: false, killProcessOnExit: true }).catch(
+        async (error: Error) => {
+          await sleep(50);
+          failureHandled = true;
+          return error;
+        }
+      );
+      try {
+        await vi.waitFor(() => expect(spawnSpy).toHaveBeenCalled());
+        if (failure === 'stderr') {
+          child.stderr.write('ERROR invalid snapshot\n');
+        } else if (failure === 'exit') {
+          child.emit('exit', 7, null);
+        } else {
+          child.emit('error', new Error('spawn failed'));
+        }
+        const error = await launch;
+        expect(error).toBeInstanceOf(Error);
+        expect(failureHandled).toBe(true);
+        expect(exitSpy).not.toHaveBeenCalled();
+      } finally {
+        spawnSpy.mockRestore();
+        killSpy.mockRestore();
+        exitSpy.mockRestore();
+      }
+    }
+  );
+
+  it.each([0, 7, null, 'cleanup'] as const)(
+    'handles %s only after a successful launch',
+    async (code) => {
+      const child = Object.assign(new EventEmitter(), {
+        stderr: new PassThrough(),
+        pid: 12345,
+        exitCode: null,
+        signalCode: null,
+      });
+      const spawnSpy = vi
+        .spyOn(childProcessMod, 'spawn')
+        .mockReturnValueOnce(child as unknown as ReturnType<typeof childProcessMod.spawn>);
+      const killSpy = vi.spyOn(process, 'kill').mockReturnValue(true);
+      const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => undefined as never);
+      const fetchSpy = vi
+        .spyOn(global, 'fetch')
+        .mockResolvedValue(new Response(JSON.stringify({ data: { health: true } })));
+      const launch = launchNode({ loggingEnabled: false, killProcessOnExit: true });
+      try {
+        await vi.waitFor(() => expect(spawnSpy).toHaveBeenCalled());
+        child.stderr.write('Binding GraphQL provider to 127.0.0.1:12345\n');
+        const { cleanup } = await launch;
+        if (code === 'cleanup') {
+          cleanup();
+          child.emit('exit', null, 'SIGTERM');
+          expect(exitSpy).not.toHaveBeenCalled();
+        } else {
+          child.emit('exit', code, code === null ? 'SIGTERM' : null);
+          expect(exitSpy).toHaveBeenCalledExactlyOnceWith(code ?? 1);
+        }
+        cleanup();
+      } finally {
+        spawnSpy.mockRestore();
+        killSpy.mockRestore();
+        exitSpy.mockRestore();
+        fetchSpy.mockRestore();
+      }
+    }
+  );
+
   /**
    * Spawning the child process in a detached state
    * Results in the OS assigning a process group to the child.

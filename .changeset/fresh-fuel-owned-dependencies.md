@@ -15,6 +15,8 @@ Wait for a successful GraphQL health query before returning a launched local tes
 
 Cancel readiness polling and clean up the child process and temporary snapshot when launching a local node fails. Include the exit code and signal when the node exits before becoming ready. Decode packed panic indices for ABI versions 1.2 and later while retaining legacy decoding for earlier ABIs and ABIs without version metadata.
 
+Preserve startup errors even when process cleanup fails, and let CLI failure hooks finish before reporting failure. Only unexpected exits of a successfully launched node propagate to the CLI; intentional cleanup does not terminate the parent, and signal termination reports a nonzero status.
+
 Raise the SDK's Node.js 20 minimum to 20.18, consistently across published packages, create-fuels and both generated templates, matching the wallet connector dependencies used by the templates. Node.js 22 and 24 remain supported.
 
 Package the matching WASM executor when building Fuel Core from a Git branch and invalidate generated executor caches when its bytes change, even if the configured branch name remains the same.

@@ -260,6 +260,18 @@ export const launchNode = async ({
     };
     const readinessAbort = new AbortController();
     let launchSettled = false;
+    let nodeReady = false;
+    const processEvents = [
+      'exit',
+      'SIGINT',
+      'SIGUSR1',
+      'SIGUSR2',
+      'beforeExit',
+      'uncaughtException',
+    ] as const;
+    const removeProcessListeners = (listener: () => void) => {
+      processEvents.forEach((event) => process.removeListener(event, listener));
+    };
 
     const cleanup = () => {
       if (childState.isDead) {
@@ -267,32 +279,36 @@ export const launchNode = async ({
       }
       childState.isDead = true;
       readinessAbort.abort();
+      removeProcessListeners(cleanup);
 
       removeChildListeners();
 
-      if (child.pid !== undefined) {
-        try {
-          process.kill(-child.pid);
-        } catch (e) {
-          const error = e as Error & { code: string };
-          if (error.code === 'ESRCH') {
-            // eslint-disable-next-line no-console
-            console.log(
-              `fuel-core node under pid ${child.pid} does not exist. The node might have been killed before cleanup was called. Exiting cleanly.`
-            );
-          } else if (error.message.includes('pid must be a positive integer')) {
-            // This is a workaround for a bug with Bun.
-            // See: https://github.com/oven-sh/bun/issues/8787
-            process.kill(+child.pid);
-          } else {
-            throw e;
+      try {
+        if (child.pid !== undefined) {
+          try {
+            process.kill(-child.pid);
+          } catch (e) {
+            const error = e as Error & { code: string };
+            if (error.code === 'ESRCH') {
+              // eslint-disable-next-line no-console
+              console.log(
+                `fuel-core node under pid ${child.pid} does not exist. The node might have been killed before cleanup was called. Exiting cleanly.`
+              );
+            } else if (error.message.includes('pid must be a positive integer')) {
+              // This is a workaround for a bug with Bun.
+              // See: https://github.com/oven-sh/bun/issues/8787
+              process.kill(+child.pid);
+            } else {
+              throw e;
+            }
           }
+        } else {
+          // eslint-disable-next-line no-console
+          console.error('No PID available for the child process, unable to kill launched node');
         }
-      } else {
-        // eslint-disable-next-line no-console
-        console.error('No PID available for the child process, unable to kill launched node');
+      } finally {
+        removeTempDir();
       }
-      removeTempDir();
     };
 
     const fail = (error: Error) => {
@@ -300,8 +316,15 @@ export const launchNode = async ({
         return;
       }
       launchSettled = true;
-      cleanup();
-      reject(error);
+      try {
+        cleanup();
+      } catch (cleanupError) {
+        // Preserve the launch error even if the OS refuses to kill an exited process group.
+        // eslint-disable-next-line no-console
+        console.error('Failed to clean up Fuel Core after launch failure:', cleanupError);
+      } finally {
+        reject(error);
+      }
     };
 
     const waitForGraphQL = async (url: string) => {
@@ -364,6 +387,7 @@ export const launchNode = async ({
               return;
             }
             launchSettled = true;
+            nodeReady = true;
             resolve({
               cleanup,
               ip: realIp,
@@ -395,16 +419,19 @@ export const launchNode = async ({
     process.on('uncaughtException', cleanup);
 
     child.on('exit', (code: number | null, signal: NodeJS.Signals | null) => {
+      // Failed launches belong to the caller's error handler; cleanup also stops nodes intentionally.
+      const shouldExit = killProcessOnExit && nodeReady && !childState.isDead;
       fail(
         new FuelError(
           FuelError.CODES.NODE_LAUNCH_FAILED,
           `Fuel Core exited before GraphQL became ready (exit code: ${code}, signal: ${signal})`
         )
       );
+      removeProcessListeners(cleanup);
       removeChildListeners();
       removeTempDir();
-      if (killProcessOnExit) {
-        process.exit(code);
+      if (shouldExit) {
+        process.exit(code ?? 1);
       }
     });
     child.on('error', (err: Error) => {
