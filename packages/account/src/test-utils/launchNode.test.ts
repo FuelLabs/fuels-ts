@@ -5,6 +5,7 @@ import { waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
 import * as childProcessMod from 'child_process';
 import { EventEmitter } from 'events';
 import * as fsMod from 'fs';
+import { constants } from 'os';
 import { PassThrough } from 'stream';
 
 import { Provider } from '../providers';
@@ -281,6 +282,56 @@ describe('launchNode', () => {
       }
     }
   );
+
+  describe.each([true, false])('process events with killProcessOnExit=%s', (killProcessOnExit) => {
+    it.each(['SIGINT', 'SIGUSR1', 'SIGUSR2', 'uncaughtException'] as const)(
+      'handles %s independently of caller-initiated cleanup',
+      async (event) => {
+        const child = Object.assign(new EventEmitter(), {
+          stderr: new PassThrough(),
+          pid: 12345,
+          exitCode: null,
+          signalCode: null,
+        });
+        const getListeners = () => (process as EventEmitter).listeners(event);
+        const previousListeners = new Set(getListeners());
+        const spawnSpy = vi
+          .spyOn(childProcessMod, 'spawn')
+          .mockReturnValueOnce(child as unknown as ReturnType<typeof childProcessMod.spawn>);
+        const killSpy = vi.spyOn(process, 'kill').mockReturnValue(true);
+        const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => undefined as never);
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+        const fetchSpy = vi
+          .spyOn(global, 'fetch')
+          .mockResolvedValue(new Response(JSON.stringify({ data: { health: true } })));
+        const launch = launchNode({ loggingEnabled: false, killProcessOnExit });
+        try {
+          await vi.waitFor(() => expect(spawnSpy).toHaveBeenCalled());
+          child.stderr.write('Binding GraphQL provider to 127.0.0.1:12345\n');
+          const { cleanup } = await launch;
+          const handler = getListeners().find((listener) => !previousListeners.has(listener));
+          expect(handler).toBeDefined();
+          // Invoke only this launch's listener; emitting SIGINT would also interrupt Vitest.
+          handler?.(new Error('uncaught failure'));
+          expect(killSpy).toHaveBeenCalledExactlyOnceWith(-child.pid);
+          expect(getListeners()).toEqual([...previousListeners]);
+          if (killProcessOnExit) {
+            const code = event === 'uncaughtException' ? 1 : 128 + constants.signals[event];
+            expect(exitSpy).toHaveBeenCalledExactlyOnceWith(code);
+          } else {
+            expect(exitSpy).not.toHaveBeenCalled();
+          }
+          cleanup();
+        } finally {
+          spawnSpy.mockRestore();
+          killSpy.mockRestore();
+          exitSpy.mockRestore();
+          consoleSpy.mockRestore();
+          fetchSpy.mockRestore();
+        }
+      }
+    );
+  });
 
   /**
    * Spawning the child process in a detached state

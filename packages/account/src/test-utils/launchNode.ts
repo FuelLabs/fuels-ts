@@ -261,16 +261,9 @@ export const launchNode = async ({
     const readinessAbort = new AbortController();
     let launchSettled = false;
     let nodeReady = false;
-    const processEvents = [
-      'exit',
-      'SIGINT',
-      'SIGUSR1',
-      'SIGUSR2',
-      'beforeExit',
-      'uncaughtException',
-    ] as const;
-    const removeProcessListeners = (listener: () => void) => {
-      processEvents.forEach((event) => process.removeListener(event, listener));
+    const processHandlers = new Map<string, (error?: unknown) => void>();
+    const removeProcessListeners = () => {
+      processHandlers.forEach((listener, event) => process.removeListener(event, listener));
     };
 
     const cleanup = () => {
@@ -279,7 +272,7 @@ export const launchNode = async ({
       }
       childState.isDead = true;
       readinessAbort.abort();
-      removeProcessListeners(cleanup);
+      removeProcessListeners();
 
       removeChildListeners();
 
@@ -404,19 +397,28 @@ export const launchNode = async ({
     // Increase the max listeners to avoid a warning
     process.setMaxListeners(100);
 
-    // Process exit.
-    process.on('exit', cleanup);
-
-    // Catches ctrl+c event.
-    process.on('SIGINT', cleanup);
-
-    // Catches "kill pid" (for example: nodemon restart).
-    process.on('SIGUSR1', cleanup);
-    process.on('SIGUSR2', cleanup);
-
-    // Catches uncaught exceptions.
-    process.on('beforeExit', cleanup);
-    process.on('uncaughtException', cleanup);
+    const stopParent = (code: number) => {
+      try {
+        cleanup();
+      } finally {
+        if (killProcessOnExit) {
+          process.exit(code);
+        }
+      }
+    };
+    processHandlers.set('exit', cleanup);
+    processHandlers.set('beforeExit', cleanup);
+    (['SIGINT', 'SIGUSR1', 'SIGUSR2'] as const).forEach((signal) => {
+      processHandlers.set(signal, () => stopParent(128 + os.constants.signals[signal]));
+    });
+    processHandlers.set('uncaughtException', (error) => {
+      if (killProcessOnExit) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
+      stopParent(1);
+    });
+    processHandlers.forEach((listener, event) => process.on(event, listener));
 
     child.on('exit', (code: number | null, signal: NodeJS.Signals | null) => {
       // Failed launches belong to the caller's error handler; cleanup also stops nodes intentionally.
@@ -427,7 +429,8 @@ export const launchNode = async ({
           `Fuel Core exited before GraphQL became ready (exit code: ${code}, signal: ${signal})`
         )
       );
-      removeProcessListeners(cleanup);
+      // After readiness fail() is a no-op, so child exits still need their own teardown.
+      removeProcessListeners();
       removeChildListeners();
       removeTempDir();
       if (shouldExit) {
