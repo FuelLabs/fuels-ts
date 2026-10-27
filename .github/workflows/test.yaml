@@ -199,6 +199,7 @@ jobs:
           name: coverage-master
           path: coverage-master/coverage-summary.json
           if-no-files-found: error
+          overwrite: true
 
   test:
     if: ${{ !cancelled() && (github.base_ref == 'master' || github.ref_name == 'master') }}
@@ -262,6 +263,7 @@ jobs:
           name: coverage-master
           path: coverage-master/coverage-summary.json
           if-no-files-found: error
+          overwrite: true
 
       - name: Download Master Coverage Artifact
         uses: actions/download-artifact@v6
