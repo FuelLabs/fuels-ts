@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.104.0
+
+### Patch Changes
+
+- Updated dependencies [c822b1d]
+  - @fuel-ts/account@0.104.0
+  - @fuel-ts/contract@0.104.0
+  - @fuel-ts/program@0.104.0
+  - @fuel-ts/transactions@0.104.0
+  - @fuel-ts/utils@0.104.0
+  - @fuel-ts/abi-typegen@0.104.0
+  - @fuel-ts/abi-coder@0.104.0
+  - @fuel-ts/address@0.104.0
+
 ## 0.103.0
 
 ### Patch Changes
