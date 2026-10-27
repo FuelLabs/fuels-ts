@@ -6,6 +6,7 @@ import * as childProcessMod from 'child_process';
 import { EventEmitter } from 'events';
 import * as fsMod from 'fs';
 import { constants } from 'os';
+import { resolve as resolvePath } from 'path';
 import { PassThrough } from 'stream';
 
 import { Provider } from '../providers';
@@ -186,6 +187,7 @@ describe('launchNode', () => {
         }).not.toThrow();
         const { error } = await launch;
         expect(error?.message).toContain(failure === 'exit' ? 'exit code: 7' : 'invalid snapshot');
+        expect(killSpy).toHaveBeenCalledExactlyOnceWith(-child.pid);
         expect(fsMod.existsSync(mkdirSpy.mock.calls[0][0])).toBe(false);
         expect(process.listenerCount('uncaughtException')).toBe(listenersBefore);
       } finally {
@@ -278,6 +280,53 @@ describe('launchNode', () => {
         spawnSpy.mockRestore();
         killSpy.mockRestore();
         exitSpy.mockRestore();
+        fetchSpy.mockRestore();
+      }
+    }
+  );
+
+  it.each([0, 7, null])(
+    'cleanup after a ready node exits with code %s is safe to repeat',
+    async (code) => {
+      const child = Object.assign(new EventEmitter(), {
+        stderr: new PassThrough(),
+        pid: 12345,
+        exitCode: null,
+        signalCode: null,
+      });
+      const spawnSpy = vi
+        .spyOn(childProcessMod, 'spawn')
+        .mockReturnValueOnce(child as unknown as ReturnType<typeof childProcessMod.spawn>);
+      const killSpy = vi.spyOn(process, 'kill').mockImplementation(() => {
+        throw Object.assign(new Error('kill EPERM'), { code: 'EPERM' });
+      });
+      const mkdirSpy = vi.spyOn(fsMod, 'mkdirSync');
+      const fetchSpy = vi
+        .spyOn(global, 'fetch')
+        .mockResolvedValue(new Response(JSON.stringify({ data: { health: true } })));
+      const listenerCount = process.listenerCount('uncaughtException');
+      const launch = launchNode({ loggingEnabled: false });
+      try {
+        await vi.waitFor(() => expect(spawnSpy).toHaveBeenCalled());
+        child.stderr.write('Binding GraphQL provider to 127.0.0.1:12345\n');
+        const { cleanup } = await launch;
+        const signal = fetchSpy.mock.calls[0][1]?.signal;
+        child.emit('exit', code, code === null ? 'SIGTERM' : null);
+
+        expect(killSpy).toHaveBeenCalledExactlyOnceWith(-child.pid);
+        expect(() => {
+          cleanup();
+          cleanup();
+        }).not.toThrow();
+        expect(killSpy).toHaveBeenCalledTimes(1);
+        expect(signal?.aborted).toBe(true);
+        expect(fsMod.existsSync(mkdirSpy.mock.calls[0][0])).toBe(false);
+        expect(child.stderr.listenerCount('data')).toBe(0);
+        expect(process.listenerCount('uncaughtException')).toBe(listenerCount);
+      } finally {
+        spawnSpy.mockRestore();
+        killSpy.mockRestore();
+        mkdirSpy.mockRestore();
         fetchSpy.mockRestore();
       }
     }
@@ -524,21 +573,49 @@ describe('launchNode', () => {
     expect(fsMod.existsSync(tempDirPath)).toBeFalsy();
   });
 
+  test('killing only the wrapper also stops its remaining node process', async () => {
+    const { pid, url, cleanup } = await launchNode({
+      fuelCorePath: resolvePath(__dirname, '../../../../internal/fuel-core/lib/bin.js'),
+      loggingEnabled: false,
+    });
+    try {
+      process.kill(pid, 'SIGKILL');
+      await vi.waitFor(
+        async () => {
+          await expect(fetch(url)).rejects.toThrow();
+        },
+        { timeout: 3000 }
+      );
+      expect(() => {
+        cleanup();
+        cleanup();
+      }).not.toThrow();
+    } finally {
+      // Always stop this test's detached group, including when the regression is present.
+      try {
+        process.kill(-pid);
+      } catch {
+        /* Group is already gone. */
+      }
+      cleanup();
+    }
+  });
+
   test('calling cleanup on externally killed node does not throw', async () => {
     const mkdirSyncSpy = vi.spyOn(fsMod, 'mkdirSync');
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
     const { pid, cleanup } = await launchNode({ loggingEnabled: false });
+    const killSpy = vi.spyOn(process, 'kill');
     expect(mkdirSyncSpy).toHaveBeenCalledTimes(1);
 
     childProcessMod.execSync(`kill -- -${pid}`);
     // wait until cleanup finishes (done via events)
     await sleep(1500);
-    cleanup();
-
-    expect(logSpy).toHaveBeenCalledWith(
-      `fuel-core node under pid ${pid} does not exist. The node might have been killed before cleanup was called. Exiting cleanly.`
-    );
+    expect(() => {
+      cleanup();
+      cleanup();
+    }).not.toThrow();
+    expect(killSpy).toHaveBeenCalledExactlyOnceWith(-pid);
   });
 
   test('should clean up when unable to kill process with "RangeError: pid must be a positive integer" error', async () => {

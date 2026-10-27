@@ -19,6 +19,8 @@ Preserve startup errors even when process cleanup fails, and let CLI failure hoo
 
 Keep parent-process signal handling separate from caller-initiated node cleanup: Ctrl+C and restart signals terminate CLI commands on the first signal, and uncaught exceptions exit unsuccessfully.
 
+When a local-node launcher exits, stop any remaining processes in its group once, tolerating secondary signal errors, then record the exit. Repeated cleanup after a crash neither retries the signal nor throws a secondary teardown error.
+
 Raise the SDK's Node.js 20 minimum to 20.18, consistently across published packages, create-fuels and both generated templates, matching the wallet connector dependencies used by the templates. Node.js 22 and 24 remain supported.
 
 Package the matching WASM executor when building Fuel Core from a Git branch and invalidate generated executor caches when its bytes change, even if the configured branch name remains the same.

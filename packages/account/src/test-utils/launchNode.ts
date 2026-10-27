@@ -429,7 +429,17 @@ export const launchNode = async ({
           `Fuel Core exited before GraphQL became ready (exit code: ${code}, signal: ${signal})`
         )
       );
-      // After readiness fail() is a no-op, so child exits still need their own teardown.
+      // A wrapper may exit before its descendants. Sweep the group once without hiding its failure.
+      if (!childState.isDead && child.pid !== undefined) {
+        try {
+          process.kill(-child.pid);
+        } catch {
+          // The group is already gone, or the OS refuses the signal (e.g. macOS EPERM).
+        }
+      }
+      // Record the exit so later cleanup cannot signal this group again.
+      childState.isDead = true;
+      readinessAbort.abort();
       removeProcessListeners();
       removeChildListeners();
       removeTempDir();
