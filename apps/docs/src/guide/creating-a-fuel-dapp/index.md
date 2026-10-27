@@ -9,9 +9,7 @@
 
 ![End result of this guide](../../public/creating-a-fuel-dapp-create-fuels-end-result.png)
 
-You can also check it live, deployed to the Testnet:
-
-- [https://create-fuels-template.vercel.app/](https://create-fuels-template.vercel.app/)
+You can also explore the [Vite template source](https://github.com/FuelLabs/fuels-ts/tree/master/templates/vite).
 
 ## Initializing the project
 

@@ -48,12 +48,6 @@ UNIX time is the number of seconds that have elapsed since **00:00:00 Coordinate
 
 ### TAI Format
 
-TAI stands for _Temps Atomique International_ and is the current international real-time standard [Source](https://cr.yp.to/libtai/tai64.html).
+TAI stands for _Temps Atomique International_ (International Atomic Time).
 
-We use `TAI64` is a 64-bit integer representing the number of nanoseconds since the epoch.
-
-- the TAI second beginning exactly _(2^62 - s) seconds_ before the beginning of 1970 TAI, if s is between 0 inclusive and 2^62 exclusive; or
-
-- the TAI second beginning exactly _(2^62 + s) seconds_ after the beginning of 1970 TAI, if s is between -2^62 inclusive and 0 exclusive.
-
-[Source](https://cr.yp.to/libtai/tai64.html)
+`TAI64` uses a 64-bit integer to represent a TAI timestamp in seconds. See the [TAI64 reference](https://docs.rs/tai64/latest/tai64/struct.Tai64.html).
