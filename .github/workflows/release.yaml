@@ -62,9 +62,9 @@ jobs:
           echo "FORC_VERSION=$(cat ./internal/forc/VERSION)" >> $GITHUB_ENV
           git reset --hard
 
-      # Ensure latest NPM is installed to support OIDC publishing
+      # npm 11.5+ supports OIDC publishing; npm 12 rejects the --no-git-checks flag pnpm 9 passes to npm publish
       - name: Update npm
-        run: npm install -g npm@latest
+        run: npm install -g npm@11
 
       - name: Build
         run: pnpm build
