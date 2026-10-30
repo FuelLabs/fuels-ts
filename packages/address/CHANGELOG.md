@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.104.0
+
+### Patch Changes
+
+- Updated dependencies [c822b1d]
+  - @fuel-ts/utils@0.104.0
+  - @fuel-ts/errors@0.104.0
+  - @fuel-ts/crypto@0.104.0
+
 ## 0.103.0
 
 ### Patch Changes
