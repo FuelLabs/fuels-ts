@@ -443,6 +443,10 @@ type NodeInfoCache = Record<string, NodeInfo>;
 type Operations = ReturnType<typeof getOperationsSdk>;
 
 type SdkOperations = Omit<Operations, 'statusChange' | 'submitAndAwaitStatus'> & {
+  customQuery: <T = unknown>(
+    query: DocumentNode,
+    variables?: Record<string, unknown>
+  ) => Promise<T>;
   statusChange: (
     ...args: Parameters<Operations['statusChange']>
   ) => Promise<ReturnType<Operations['statusChange']>>;
@@ -943,6 +947,10 @@ export default class Provider {
     };
 
     const customOperations = (requester: Requester) => ({
+      customQuery<T = unknown>(query: DocumentNode, variables: Record<string, unknown> = {}) {
+        return requester<T>(query, variables);
+      },
+
       getBlobs(variables: { blobIds: string[] }) {
         const queryParams = variables.blobIds.map((_, i) => `$blobId${i}: BlobId!`).join(', ');
         const blobParams = variables.blobIds
