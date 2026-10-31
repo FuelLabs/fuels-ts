@@ -1,3 +1,4 @@
+// #region full
 contract;
 
 abi MyContract {
@@ -9,3 +10,4 @@ impl MyContract for Contract {
         true
     }
 }
+// #endregion full
