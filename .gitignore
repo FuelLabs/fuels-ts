@@ -172,3 +172,4 @@ packages/fuel-gauge/test/fixtures/chain-config/state_transition_bytecode.generat
 
 FUELS_VERSION
 .aider*
+.claude/
