@@ -100,9 +100,9 @@ In-depth docs:
 
 # Contribute
 
-- [./CONTRIBUTING.md](https://github.com/FuelLabs/fuels-ts/blob/master/CONTRIBUTING.md)
+- [./CONTRIBUTING.md](./CONTRIBUTING.md)
 
 
 # License
 
-The primary license for this repo is `Apache 2.0`, see [`LICENSE`](https://github.com/FuelLabs/fuels-ts/blob/master/LICENSE).
+The primary license for this repo is `Apache 2.0`, see [`LICENSE`](LICENSE).
