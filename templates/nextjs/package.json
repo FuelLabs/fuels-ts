@@ -3,7 +3,7 @@
   "version": "0.1.3",
   "private": true,
   "engines": {
-    "node": "^20.18.0 || ^22.0.0 || ^24.0.0"
+    "node": "^20.18.0 || ^22.0.0 || ^24.0.0 || ^26.0.0"
   },
   "scripts": {
     "xprebuild": "fuels build",

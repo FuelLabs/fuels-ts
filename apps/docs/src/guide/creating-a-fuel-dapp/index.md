@@ -13,7 +13,7 @@ You can also explore the [Vite template source](https://github.com/FuelLabs/fuel
 
 ## Initializing the project
 
-Use Node.js 20.18 or later in the Node 20, 22 or 24 release lines. The CLI and generated templates declare this requirement because their wallet connector dependencies require it.
+Use Node.js 20.18 or later in the Node 20, 22, 24 or 26 release lines. The CLI and generated templates declare this requirement because their wallet connector dependencies require it.
 
 The first step is to run the command:
 
