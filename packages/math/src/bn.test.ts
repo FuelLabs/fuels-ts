@@ -10,6 +10,49 @@ import type { BigNumberish } from './types';
  * @group browser
  */
 describe('Math - BN', () => {
+  it('preserves negative operands and results', () => {
+    const negative = bn(-3);
+    expect(bn(negative).toString()).toBe('-3');
+    expect(bn(10).add(negative).toString()).toBe('7');
+    expect(bn(10).sub(negative).toString()).toBe('13');
+    expect(bn(10).mul(negative).toString()).toBe('-30');
+    expect(bn(1).sub(5).toString()).toBe('-4');
+    expect(bn(-10).div(3).toString()).toBe('-3');
+    expect(bn(-10).mod(3).toString()).toBe('-1');
+    expect(bn(5).neg().toString()).toBe('-5');
+    expect(negative.clone().toString()).toBe('-3');
+    expect(bn(255).fromTwos(8).toString()).toBe('-1');
+    expect(bn(-3).toTwos(8).toString()).toBe('253');
+    expect(negative.eq(bn(-3))).toBe(true);
+    expect(bn(1).lt(bn(-5))).toBe(false);
+    expect(negative.toString()).toBe('-3');
+  });
+
+  it('copies BN inputs without sharing mutable words or interpreting base/endian', () => {
+    const original = bn(-258);
+    const copy = bn(original, 16, 'le');
+    copy.iaddn(1);
+    expect(copy.toString()).toBe('-257');
+    expect(original.toString()).toBe('-258');
+  });
+
+  it('keeps signs in extended arithmetic', () => {
+    expect(bn(-10).divmod(3).div.toString()).toBe('-3');
+    expect(bn(-10).divmod(3).mod.toString()).toBe('-1');
+    expect(bn(-3).mulTo(bn(2), bn(0)).toString()).toBe('-6');
+    const { a, b, gcd } = bn(30).egcd(bn(11));
+    expect(a.mul(30).add(b.mul(11)).eq(gcd)).toBe(true);
+  });
+
+  it('formats signed and zero-unit values', () => {
+    expect(bn(-2).formatUnits(6)).toBe('-0.000002');
+    expect(bn(-1500000000).formatUnits(9)).toBe('-1.500000000');
+    expect(bn(-1).format({ units: 1 })).toBe('-0.100');
+    expect(bn(5).formatUnits(0)).toBe('5');
+    expect(bn(-5).formatUnits(0)).toBe('-5');
+    expect(bn(0).formatUnits(0)).toBe('0');
+  });
+
   it('can execute operations without losing our BN reference', () => {
     let test: BN;
 

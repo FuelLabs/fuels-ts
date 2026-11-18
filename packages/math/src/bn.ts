@@ -47,9 +47,12 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
   constructor(value?: BNInput | null, base?: number | 'hex', endian?: BnJs.Endianness) {
     let bnValue = value;
     let bnBase = base;
+    let bnEndian = endian;
 
     if (BN.isBN(value)) {
       bnValue = value.toArray();
+      bnBase = 10;
+      bnEndian = 'be';
     }
     // trim '0x' from hex strings as BN doesn't support it - https://github.com/ChainSafe/web3.js/issues/3847
     else if (typeof value === 'string' && value.slice(0, 2) === '0x') {
@@ -64,7 +67,10 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
       );
     }
 
-    super(bnValue == null ? 0 : bnValue, bnBase, endian);
+    super(bnValue == null ? 0 : bnValue, bnBase, bnEndian);
+    if (BN.isBN(value) && value.isNeg()) {
+      this.ineg();
+    }
   }
 
   // ANCHOR: HELPERS
@@ -146,7 +152,7 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
 
     // Always return the first non-zero number if it exceeds the precision and the integer part is zero
     if (formattedFractional.length > precision) {
-      if (integerPart === '0') {
+      if (integerPart === '0' || integerPart === '-0') {
         const firstNonZeroIndex = formattedFractional.search(/[1-9]/);
         if (firstNonZeroIndex >= 0 && firstNonZeroIndex < precision) {
           formattedFractional = formattedFractional.slice(0, precision);
@@ -175,18 +181,22 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
   }
 
   formatUnits(units: number = DEFAULT_DECIMAL_UNITS): string {
-    const valueString = this.toString();
+    if (units === 0) {
+      return this.toString();
+    }
+    const sign = this.isNeg() ? '-' : '';
+    const valueString = this.toString().replace(/^-/, '');
     const valueLength = valueString.length;
 
     if (valueLength <= units) {
       const paddedZeros = '0'.repeat(units - valueLength);
-      return `0.${paddedZeros}${valueString}`;
+      return `${sign}0.${paddedZeros}${valueString}`;
     }
 
     const integerPart = valueString.slice(0, valueLength - units);
     const fractionalPart = valueString.slice(valueLength - units);
 
-    return `${integerPart}.${fractionalPart}`;
+    return `${sign}${integerPart}.${fractionalPart}`;
   }
   // END ANCHOR: HELPERS
 
@@ -246,23 +256,23 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
 
   // ANCHOR: OVERRIDES to output our BN type
   override sqr(): BN {
-    return new BN(super.sqr().toArray());
+    return new BN(super.sqr());
   }
 
   override neg(): BN {
-    return new BN(super.neg().toArray());
+    return new BN(super.neg());
   }
 
   override abs(): BN {
-    return new BN(super.abs().toArray());
+    return new BN(super.abs());
   }
 
   override toTwos(width: number): BN {
-    return new BN(super.toTwos(width).toArray());
+    return new BN(super.toTwos(width));
   }
 
   override fromTwos(width: number): BN {
-    return new BN(super.fromTwos(width).toArray());
+    return new BN(super.fromTwos(width));
   }
   // END ANCHOR: OVERRIDES to output our BN type
 
@@ -271,7 +281,7 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
     const output = super[methodName](new BN(v));
 
     if (BN.isBN(output)) {
-      return new BN(output.toArray());
+      return new BN(output);
     }
 
     if (typeof output === 'boolean') {
@@ -282,31 +292,35 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
   }
 
   override clone() {
-    return new BN(this.toArray());
+    return new BN(this);
   }
 
   mulTo(num: BN, out: BN) {
-    const output: BnJs = (new BnJs(this.toArray()) as BN).mulTo(num, out);
+    const output: BnJs = (new BnJs(super.toString(10), 10) as BN).mulTo(num, out);
 
-    return new BN(output.toArray());
+    return new BN(output);
   }
 
   override egcd(p: BnJs) {
-    const { a, b, gcd } = new BnJs(this.toArray()).egcd(p);
+    const { a, b, gcd } = new BnJs(super.toString(10), 10).egcd(p);
 
     return {
-      a: new BN(a.toArray()),
-      b: new BN(b.toArray()),
-      gcd: new BN(gcd.toArray()),
+      a: new BN(a),
+      b: new BN(b),
+      gcd: new BN(gcd),
     };
   }
 
   override divmod(num: BNInput, mode?: string, positive?: boolean): { mod: BN; div: BN } {
-    const { div, mod } = (new BnJs(this.toArray()) as BN).divmod(new BN(num), mode, positive);
+    const { div, mod } = (new BnJs(super.toString(10), 10) as BN).divmod(
+      new BN(num),
+      mode,
+      positive
+    );
 
     return {
-      div: new BN(div?.toArray()),
-      mod: new BN(mod?.toArray()),
+      div: new BN(div),
+      mod: new BN(mod),
     };
   }
 
